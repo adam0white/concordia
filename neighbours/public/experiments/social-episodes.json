@@ -12,13 +12,14 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "157c182225dd6ce47c5f4ec566156d916f820fb05dc38d49bc1800295fac29ee",
+  "sourceFingerprint": "c2dfb889283bcbe0f89cbf7b83442b224651ead4a69284775bebf0178d39e32e",
   "sources": {
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
     "scripts/profile-evenings.ts": "fd7865e8fe2bd114f0f77890c168b8fd72762852ba5895dca7846c1b231bd11c",
-    "src/contracts.ts": "2347bae3d1f6dac11b164be013406a415e34ebab477d2b776c77339abbc555a7",
+    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
+    "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
     "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
     "src/core/evening-news.ts": "42f0b294261c62109f4f9979f888aabb752e24b1b49c0a67a89fc4771396f34d",
@@ -29,18 +30,18 @@
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
-    "src/core/offers.ts": "8f5317ec79017713875016a184af8fa8cc474e6504592c85e178e5d840fc9a23",
+    "src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/restore.ts": "1cd92b29ff7c5276f67906461fe971d563c5450dcf3b354f7a5afcc9addcfeb3",
-    "src/core/runtime.ts": "4e3a24ab39960b994f45b2565e84dbd3e52fec8904a77649d91f5d1e925efb21",
+    "src/core/restore.ts": "d676ca6fd81b92a7573cb74b7f089989f49dc13217793f88cc384126a5fe9fc0",
+    "src/core/runtime.ts": "2fe5adf0fad1d4565c2c4425a082f7d7ca151ec2e7b13bbdf1c867f6fed13197",
     "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "92f7f6b174a5b74e178668dca8bf3e247958a499f8071f4c9126605b098425e8",
-    "src/core/stories.ts": "3afa8f1b6e5cc67c611fa57642c253725fc94acb0d04a4409fb580da23878487",
+    "src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
+    "src/core/stories.ts": "9d289868555b16c65d07b60ada1d1048672e295b2cac804c3688fe113d5a9fa3",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
-    "src/core/town-chronicle.ts": "692e1728aae2fc9c9c649f392d0991cc4d3293e45440b7bc6619d4f5997ef009",
-    "src/core/validation.ts": "8ee6b3486c654b4aa026acce20596ff1b5faad57a2fa71c9f30d6822c149d1bf",
+    "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
+    "src/core/validation.ts": "f2ba6af80ea227087630d28a6f98506a85c0353753dff633e1d1fdc4e6d90425",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -240,7 +241,7 @@
               "reason": "Keeping at it."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity."
+          "result": "Lea’s practical class: nobody received the planned activity."
         },
         {
           "id": "evening-0-meal",
@@ -342,7 +343,7 @@
               "reason": "I'm exhausted; I need to sleep."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "evening-1-class",
@@ -628,7 +629,7 @@
               "reason": "Another step toward what I want."
             }
           ],
-          "result": "Lea\u2019s practical class: Jamie Reed, Avery Lane, Noor, Charlie Rivera, Casey Diaz, Cameron Das, Jordan Rivera, Jamie Diaz, Alex Diaz received the practical lesson."
+          "result": "Lea’s practical class: Jamie Reed, Avery Lane, Noor, Charlie Rivera, Casey Diaz, Cameron Das, Jordan Rivera, Jamie Diaz, Alex Diaz received the practical lesson."
         },
         {
           "id": "evening-1-meal",
@@ -726,7 +727,7 @@
               "reason": "Time for something easier."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-0-class",
@@ -844,10 +845,10 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-0-meal",
@@ -1121,7 +1122,7 @@
               "reason": "Another step toward what I want."
             }
           ],
-          "result": "Sam\u2019s shared supper: Jamie Diaz, Hayden Reed, Ellis Lane, Avery Singh, Morgan Brooks, Hayden Khan, Alex Das, Jordan Chen, Lea ate supper with the host."
+          "result": "Sam’s shared supper: Jamie Diaz, Hayden Reed, Ellis Lane, Avery Singh, Morgan Brooks, Hayden Khan, Alex Das, Jordan Chen, Lea ate supper with the host."
         },
         {
           "id": "weekly-1-class",
@@ -1434,7 +1435,7 @@
               "reason": "Another step toward what I want."
             }
           ],
-          "result": "Lea\u2019s practical class: Jamie Reed, Morgan Brooks, Charlie Martin, Rowan Grant, Jordan Kim, Finley Lane, Charlie Silva, Jamie Diaz, Alex Lane received the practical lesson."
+          "result": "Lea’s practical class: Jamie Reed, Morgan Brooks, Charlie Martin, Rowan Grant, Jordan Kim, Finley Lane, Charlie Silva, Jamie Diaz, Alex Lane received the practical lesson."
         },
         {
           "id": "weekly-1-meal",
@@ -1548,7 +1549,7 @@
               "reason": "I'm exhausted; I need to sleep."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-2-class",
@@ -1748,7 +1749,7 @@
           "id": 25746,
           "at": 4890,
           "kind": "cart-observed",
-          "text": "Jo\u2019s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ravi",
@@ -1770,7 +1771,7 @@
           "id": 46569,
           "at": 8205,
           "kind": "cart-returned",
-          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo\u2019s completed supply trips.",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
           "causes": [
             46329
           ],
@@ -1835,36 +1836,36 @@
         "notice": {
           "at": 3705,
           "round": 215,
-          "sha256": "77c1549d9d5f3719a525c003d9ca36d8d9886cdb93634672707b613d2bc96f3f",
+          "sha256": "b5f9b097f5d8a306ff730266e76cd90b25b6b3d9398d7e096a85984fde168821",
           "milestone": "notice"
         },
         "prepared": {
           "at": 3735,
           "round": 217,
-          "sha256": "5ccfb13c9bd8f9578888dcb6293cf390c4b4e36a7ace27c2e7ed2bfe2bdebadf",
+          "sha256": "ebb3f754d697b9e63f7a2bd8afc13dda656932b8cef269940e5c11a11a373f67",
           "milestone": "prepared"
         },
         "accepted": {
           "at": 3975,
           "round": 233,
-          "sha256": "3ccef253a2b2740d6ebfd5a0d1fbb66fa211e215f63905e5ebc28d0a322cbf87",
+          "sha256": "e56bde29aabb45828d0492f9965a2081c1e2a67185aac9fa79134cd6be28c6a1",
           "milestone": "accepted"
         },
         "cartProgress": {
           "at": 5010,
           "round": 302,
-          "sha256": "cca79ba24d7105e29d471706bcd4e0af0bd633882a81aa952b6409a134b8ad37",
+          "sha256": "6991642b5ca5f26e84ed9e117a8562f25c26f4892aab3d8590a8463120bffae9",
           "milestone": "cartProgress"
         },
         "cartReturned": {
           "at": 8205,
           "round": 515,
-          "sha256": "cb26dc273a73f71614f9a77d1ff5002e7faf390a51ffc68207d2633bbf1338aa",
+          "sha256": "c72c2b57c5da4e28dfcf80305144664ddb3d18be009b1cd5a2c9a0dc641a070a",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "3898a79d8eeb4cdc54f3d7c120d661d69cb23c97bd7584409145c63ac512eab4",
-      "wallSeconds": 81.6876115
+      "finalCheckpointSha256": "b8d33ecde197fa695b846900169cb56e59c545ce4cbcfe53440a7e4e66ffae10",
+      "wallSeconds": 86.898517291
     },
     {
       "seed": 73,
@@ -1939,7 +1940,7 @@
                   ]
                 }
               ],
-              "reason": "I'm starving \u2014 eating first."
+              "reason": "I'm starving — eating first."
             },
             {
               "at": 6780,
@@ -2047,7 +2048,7 @@
                 "decline:evening-1-meal"
               ],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             },
             {
               "at": 6885,
@@ -2061,7 +2062,7 @@
               "reason": "Out of habit, really."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "evening-0-meal",
@@ -2126,7 +2127,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then. Nearly did otherwise."
+              "reason": "Thirsty — the well, then. Nearly did otherwise."
             },
             {
               "at": 6750,
@@ -2134,7 +2135,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             },
             {
               "at": 6765,
@@ -2344,7 +2345,7 @@
               "reason": "Another step toward what I want."
             }
           ],
-          "result": "Sam\u2019s shared supper: Reese Khan, Avery Evans, Blair Rivera, Quinn Diaz, Avery Diaz, Jordan Patel ate supper with the host."
+          "result": "Sam’s shared supper: Reese Khan, Avery Evans, Blair Rivera, Quinn Diaz, Avery Diaz, Jordan Patel ate supper with the host."
         },
         {
           "id": "evening-1-class",
@@ -2431,7 +2432,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             },
             {
               "at": 11160,
@@ -2466,7 +2467,7 @@
               "reason": "Out of habit, really."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "evening-1-meal",
@@ -2718,7 +2719,7 @@
               "reason": "I have to keep to it."
             }
           ],
-          "result": "Sam\u2019s shared supper: Charlie Martin, Hayden Diaz, Finley Lane, Jordan Ward, Casey Das, Jamie Chen, Hayden Grant ate supper with the host."
+          "result": "Sam’s shared supper: Charlie Martin, Hayden Diaz, Finley Lane, Jordan Ward, Casey Das, Jamie Chen, Hayden Grant ate supper with the host."
         },
         {
           "id": "weekly-0-class",
@@ -3045,7 +3046,7 @@
               "reason": "Keeping at it."
             }
           ],
-          "result": "Lea\u2019s practical class: Jamie Das, Ariel Martin, Jamie Singh, Cameron Singh, Quinn Das, Finley Evans, Rowan Diaz, Finley Martin, Rowan Das received the practical lesson."
+          "result": "Lea’s practical class: Jamie Das, Ariel Martin, Jamie Singh, Cameron Singh, Quinn Das, Finley Evans, Rowan Diaz, Finley Martin, Rowan Das received the practical lesson."
         },
         {
           "id": "weekly-0-meal",
@@ -3130,7 +3131,7 @@
                 "decline:weekly-0-class"
               ],
               "considered": [],
-              "reason": "I'm starving \u2014 eating first."
+              "reason": "I'm starving — eating first."
             },
             {
               "at": 21180,
@@ -3149,7 +3150,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "I'm starving \u2014 eating first."
+              "reason": "I'm starving — eating first."
             },
             {
               "at": 21240,
@@ -3184,7 +3185,7 @@
               "reason": "It's what I do at this hour."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-1-class",
@@ -3293,7 +3294,7 @@
               "reason": "Same as always."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-1-meal",
@@ -3510,7 +3511,7 @@
               "reason": "Another step toward what I want."
             }
           ],
-          "result": "Sam\u2019s shared supper: Quinn Stone, Rowan Lane, Jamie Rivera, Avery Carter, Blair Singh, Morgan Rivera, Ariel Martin, Blair Silva ate supper with the host."
+          "result": "Sam’s shared supper: Quinn Stone, Rowan Lane, Jamie Rivera, Avery Carter, Blair Singh, Morgan Rivera, Ariel Martin, Blair Silva ate supper with the host."
         },
         {
           "id": "weekly-2-class",
@@ -3639,7 +3640,7 @@
           "id": 43616,
           "at": 7770,
           "kind": "cart-observed",
-          "text": "Jo\u2019s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ravi",
@@ -3661,7 +3662,7 @@
           "id": 90226,
           "at": 15195,
           "kind": "cart-returned",
-          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo\u2019s completed supply trips.",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
           "causes": [
             89919
           ],
@@ -3723,36 +3724,36 @@
         "notice": {
           "at": 5700,
           "round": 348,
-          "sha256": "11f14b65bfb66e852561fc49f3cf83e1b3614371ef1c7c7226b6eb7118bb2836",
+          "sha256": "25255d98e3d7743cb1b51eae37dac30312cc4a7d236cbaa4369c3ca16a5dd9a9",
           "milestone": "notice"
         },
         "prepared": {
           "at": 5835,
           "round": 357,
-          "sha256": "4d9df99f5741ef75abc36949390e9c350590b032abc247028c24e9d7fe7650b8",
+          "sha256": "3224b5a93acf4254479d2db585b30cb1534eb0400dcb1441ce5c366a83b265e6",
           "milestone": "prepared"
         },
         "accepted": {
           "at": 6435,
           "round": 397,
-          "sha256": "f4092e41ae95ab90ab7c70b48aef6e620d72df6d71b7960d943824de712210b3",
+          "sha256": "2865aadf6fc2ecf2aa97936fcb88a0a483b0f551d07996cace88cd0de7a5ded5",
           "milestone": "accepted"
         },
         "cartProgress": {
           "at": 7890,
           "round": 494,
-          "sha256": "43831656d230c0de2006019deffe2a91826642c027ba994909873a6973df3da5",
+          "sha256": "ea7ad21238625a548d706eb66ae10c2975ce7c6da9859f51cf5030f4a4d245ea",
           "milestone": "cartProgress"
         },
         "cartReturned": {
           "at": 15195,
           "round": 981,
-          "sha256": "7c1fe7de741f975488d633ee500886ca3e839af6ce217b37240f5b5902f679db",
+          "sha256": "6c3480d1c3892b704fb43e7fa4b11e2ee16456bc3b8047c2226d2dcb814fa168",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "e1a39b809ea01db69d5389fce443a2e19009a7b6de93709172dc20c11be6334e",
-      "wallSeconds": 80.090570416
+      "finalCheckpointSha256": "4f9d5d276089f96f273e1757719a220c9fa7625844739281addd2add913b4fe7",
+      "wallSeconds": 74.36761437499999
     },
     {
       "seed": 9,
@@ -4069,7 +4070,7 @@
               "reason": "Time for something easier."
             }
           ],
-          "result": "Lea\u2019s practical class: Ellis Chen, Ariel Lane, Charlie Silva, Blair Evans, Reese Das received the practical lesson."
+          "result": "Lea’s practical class: Ellis Chen, Ariel Lane, Charlie Silva, Blair Evans, Reese Das received the practical lesson."
         },
         {
           "id": "evening-0-meal",
@@ -4147,7 +4148,7 @@
                 "decline:evening-1-class"
               ],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             },
             {
               "at": 9735,
@@ -4183,7 +4184,7 @@
               "reason": "Same as always."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "evening-1-class",
@@ -4341,7 +4342,7 @@
               "reason": "I said I would, so I will."
             }
           ],
-          "result": "Lea\u2019s practical class: Charlie Silva, Finley Stone, Reese Lane received the practical lesson."
+          "result": "Lea’s practical class: Charlie Silva, Finley Stone, Reese Lane received the practical lesson."
         },
         {
           "id": "evening-1-meal",
@@ -4465,7 +4466,7 @@
               "reason": "Same as always."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-0-class",
@@ -4586,7 +4587,7 @@
               "reason": "I'm parched. Water first."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-0-meal",
@@ -4905,7 +4906,7 @@
               "reason": "Keeping at it."
             }
           ],
-          "result": "Sam\u2019s shared supper: Blair Stone, Casey Khan, Morgan Lane, Jamie Singh, Hayden Silva, Quinn Khan, Charlie Rivera, Hayden Patel ate supper with the host."
+          "result": "Sam’s shared supper: Blair Stone, Casey Khan, Morgan Lane, Jamie Singh, Hayden Silva, Quinn Khan, Charlie Rivera, Hayden Patel ate supper with the host."
         },
         {
           "id": "weekly-1-class",
@@ -5248,7 +5249,7 @@
               "reason": "Another step toward what I want."
             }
           ],
-          "result": "Lea\u2019s practical class: Jordan Reed, Ariel Chen, Hayden Martin, Noor, Charlie Martin, Finley Stone, Frankie Chen, Casey Singh received the practical lesson."
+          "result": "Lea’s practical class: Jordan Reed, Ariel Chen, Hayden Martin, Noor, Charlie Martin, Finley Stone, Frankie Chen, Casey Singh received the practical lesson."
         },
         {
           "id": "weekly-1-meal",
@@ -5327,7 +5328,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "I'm starving \u2014 eating first. I remember: finished Eat a meal at the market."
+              "reason": "I'm starving — eating first. I remember: finished Eat a meal at the market."
             },
             {
               "at": 34140,
@@ -5335,7 +5336,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "I'm starving \u2014 eating first. I remember: finished Eat a meal at the market."
+              "reason": "I'm starving — eating first. I remember: finished Eat a meal at the market."
             },
             {
               "at": 34170,
@@ -5378,7 +5379,7 @@
               "reason": "Out of habit, really."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         }
       ],
       "chosenActions": {
@@ -5457,7 +5458,7 @@
           "id": 60721,
           "at": 10620,
           "kind": "cart-observed",
-          "text": "Jo\u2019s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ravi",
@@ -5479,7 +5480,7 @@
           "id": 91544,
           "at": 15435,
           "kind": "cart-returned",
-          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo\u2019s completed supply trips.",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
           "causes": [
             91258
           ],
@@ -5554,36 +5555,36 @@
         "notice": {
           "at": 8355,
           "round": 525,
-          "sha256": "ebfdd6957fb4686dd17a74258380d01d778ceaf422236948642d4975a45daf1f",
+          "sha256": "7dc4c96aa0dd477507495a4e9eaaa56fb2f7e31d151c7dcb36b5e62622ecbcb2",
           "milestone": "notice"
         },
         "prepared": {
           "at": 8400,
           "round": 528,
-          "sha256": "bfef955fa4a633416fd43edb2d98e331e5b57e4bfd23014721afd8e0837a3cbf",
+          "sha256": "49ecd5dd095d04a31661cfedf22445d24789fea9807d0883d613710c56a088d4",
           "milestone": "prepared"
         },
         "accepted": {
           "at": 8475,
           "round": 533,
-          "sha256": "69a2e5b91cf368a0b39fb8128bfbdf7caa1237a0c5423343476e2a7a64a9f434",
+          "sha256": "701a16250f161e4875db32071b96bd1e2e76da6b2240ae606767e446c982fdee",
           "milestone": "accepted"
         },
         "cartProgress": {
           "at": 10740,
           "round": 684,
-          "sha256": "917c7fe8d16b8d351e8b75693e5a3f686451c9c65c13340e132eda9083efa921",
+          "sha256": "bd9bc9739193e34c4c110b70c3a4b3fc9fe2c7dc6fbfc8fb2a26191f85f6e106",
           "milestone": "cartProgress"
         },
         "cartReturned": {
           "at": 15435,
           "round": 997,
-          "sha256": "dc5b0ca31923ba41be9cf3261736e0f9f0d325d2015759123d30dcdc169dab0b",
+          "sha256": "cc8440a62ee28deaeb7b004ae018032b55c761d36bd5c95b189efca56489dcb9",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "783d91b50030f4397a4e652029a29d8e9c7891b8d6c17db104ecdedfa66b80e9",
-      "wallSeconds": 62.39493437500001
+      "finalCheckpointSha256": "fef0c48bae273314e7d6a0e4d9255c135c93e51e7e6258881b6dc6a60dfd85ec",
+      "wallSeconds": 71.87168133299998
     },
     {
       "seed": 101,
@@ -5841,7 +5842,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             },
             {
               "at": 8280,
@@ -5876,7 +5877,7 @@
               "reason": "Same as always."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "evening-1-meal",
@@ -6138,7 +6139,7 @@
               "reason": "Keeping at it."
             }
           ],
-          "result": "Sam\u2019s shared supper: Robin Stone, Jordan Brooks, Blair Reed, Cameron Evans, Casey Grant, Hayden Martin, Charlie Brooks, Cameron Martin, Finley Lane ate supper with the host."
+          "result": "Sam’s shared supper: Robin Stone, Jordan Brooks, Blair Reed, Cameron Evans, Casey Grant, Hayden Martin, Charlie Brooks, Cameron Martin, Finley Lane ate supper with the host."
         },
         {
           "id": "weekly-0-class",
@@ -6223,7 +6224,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Thirsty \u2014 the well, then."
+              "reason": "Thirsty — the well, then."
             },
             {
               "at": 18285,
@@ -6469,7 +6470,7 @@
               "reason": "Keeping at it."
             }
           ],
-          "result": "Lea\u2019s practical class: Reese Singh, Blair Patel, Casey Martin, Casey Stone, Jordan Silva, Ellis Grant, Jamie Stone, Morgan Singh received the practical lesson."
+          "result": "Lea’s practical class: Reese Singh, Blair Patel, Casey Martin, Casey Stone, Jordan Silva, Ellis Grant, Jamie Stone, Morgan Singh received the practical lesson."
         },
         {
           "id": "weekly-0-meal",
@@ -6608,7 +6609,7 @@
               "reason": "It's what I do at this hour."
             }
           ],
-          "result": "Sam\u2019s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-1-class",
@@ -6719,10 +6720,10 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "I'm starving \u2014 eating first."
+              "reason": "I'm starving — eating first."
             }
           ],
-          "result": "Lea\u2019s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
         },
         {
           "id": "weekly-1-meal",
@@ -7013,7 +7014,7 @@
               "reason": "Keeping at it."
             }
           ],
-          "result": "Sam\u2019s shared supper: Finley Rivera, Casey Das, Blair Patel, Ellis Kim, Ada, Avery Evans, Charlie Brooks, Jamie Reed, Ellis Das ate supper with the host."
+          "result": "Sam’s shared supper: Finley Rivera, Casey Das, Blair Patel, Ellis Kim, Ada, Avery Evans, Charlie Brooks, Jamie Reed, Ellis Das ate supper with the host."
         },
         {
           "id": "weekly-2-class",
@@ -7109,7 +7110,7 @@
                 "id": 221589,
                 "at": 35955,
                 "kind": "evening-retold",
-                "text": "Sam told Jo about Sam\u2019s shared supper. Sam invited neighbours to Sam\u2019s shared supper in the hall on Day 27 at 18:00. Bring one coin for your meal. A reply is a promise to attend, not a command.",
+                "text": "Sam told Jo about Sam’s shared supper. Sam invited neighbours to Sam’s shared supper in the hall on Day 27 at 18:00. Bring one coin for your meal. A reply is a promise to attend, not a command.",
                 "causes": [
                   221503,
                   221551
@@ -7219,7 +7220,7 @@
           "id": 25878,
           "at": 4920,
           "kind": "cart-observed",
-          "text": "Jo\u2019s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ravi",
@@ -7230,7 +7231,7 @@
           "id": 46640,
           "at": 8235,
           "kind": "cart-returned",
-          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo\u2019s completed supply trips.",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
           "causes": [
             46336
           ],
@@ -7299,37 +7300,37 @@
         "notice": {
           "at": 4275,
           "round": 253,
-          "sha256": "6f57a07660e222f1a6104ed88ee1bfc887b5410ac3d4049d4674ab7a471c1130",
+          "sha256": "5bb8e70ba6a4eea3a6cac432b779519e63c9b5b1d8651ed652a2d4e798b2a6f0",
           "milestone": "notice"
         },
         "prepared": {
           "at": 4395,
           "round": 261,
-          "sha256": "4daef24b5946c36d39e2d8ddbca817bb4952b93c4e22d8c8cafebb3a62a839fd",
+          "sha256": "550e8b6f3a6250f31a1926a0a2eecb25a8e199f3d9289b5840cad336cf582339",
           "milestone": "prepared"
         },
         "cartProgress": {
           "at": 5040,
           "round": 304,
-          "sha256": "309b65baf3257629c4a88df7ffef01f81621494c409b254d56e3d0d229f74958",
+          "sha256": "eac9e8e802587bb6d68c3d8a8a1ea33a562ee7b62d3a61ce379b9bec122b1e49",
           "milestone": "cartProgress"
         },
         "accepted": {
           "at": 5385,
           "round": 327,
-          "sha256": "0e2e3cbb1dd46f8b7367654aea7ff050a87c92761e973226ba737bff215d7a7b",
+          "sha256": "15fea402253cfa27e5939d6e8e39bfb11d974bb3eade130b86277cc390e72d2d",
           "milestone": "accepted"
         },
         "cartReturned": {
           "at": 8235,
           "round": 517,
-          "sha256": "dc66c57daad0fc4eb252d612c4f9976767828339e31809a416bcf9aad1ea6806",
+          "sha256": "a1c4f3bb03351003145de38ea99ad636deffcbb151729d6cea58a3b38e5197c5",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "59ffe7488d1240c4ec9aa0e9aec8cd00e8deee139b49dcd6a4008a09e1c65c15",
-      "wallSeconds": 62.43969395800002
+      "finalCheckpointSha256": "83c1b020b28f1cfc4596e7270dc0b2f71b0396c2087bdbea226f7de4aeb16f6a",
+      "wallSeconds": 71.63725045799997
     }
   ],
-  "recordedAt": "2026-10-16T17:19:17.360590+00:00"
+  "recordedAt": "2026-10-16T19:42:24.035261+00:00"
 }

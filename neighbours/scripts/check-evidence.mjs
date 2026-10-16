@@ -11,6 +11,7 @@ if (!reports.length)
 		"public/experiments/social-episodes.json",
 		"public/experiments/cart-choice-probe.json",
 		"public/experiments/hf-config.json",
+		"public/experiments/received-assistance.json",
 	);
 for (const reportPath of reports) {
 	const report = JSON.parse(readFileSync(resolve(app, reportPath), "utf8"));
@@ -19,6 +20,7 @@ for (const reportPath of reports) {
 			"neighbours/evening-profile@1",
 			"neighbours/cart-choice-probe@1",
 			"neighbours/hf-config-probe@1",
+			"neighbours/assistance-probe@1",
 		].includes(report.schema),
 		"Unknown evidence schema",
 	);

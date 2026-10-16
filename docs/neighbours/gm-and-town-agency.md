@@ -24,7 +24,7 @@ The reusable `neighbours/scripts/probe-assistance.ts` screened all seven known r
 | Same request, only Ada's inspection rules removed | Ada visited at the same time but completed no inspection; capacity stayed ten. |
 | Request withheld | No annex visit or opening; capacity stayed ten. |
 
-The intact decision retained a `method:hall-section-inspection:lea` contribution of 0.291. All three arms continued exactly after restore for sixteen further rounds. The probe did not force an action, wake a resident or alter a score. It omits checkpoint contents and person snapshots from its aggregate. This is one selected checkpoint and an authored dry premise. It does not demonstrate general planning, a population effect, HF superiority, or that players will enjoy watching it.
+The intact decision retained a `method:hall-section-inspection:lea` contribution of 0.291. All three arms continued exactly after restore for sixteen further rounds. The probe did not force an action, wake a resident or alter a score. Its [published aggregate](../../neighbours/public/experiments/received-assistance.json) omits checkpoint contents and person snapshots. This is one selected checkpoint and an authored dry premise. It does not demonstrate general planning, a population effect, HF superiority, or that players will enjoy watching it.
 
 ## Review and corrections
 

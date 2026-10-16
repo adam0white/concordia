@@ -73,10 +73,18 @@ rule/evidence counts, plus upcoming social records with their actual stages.
 Those host records do not become shared resident knowledge. A retained count
 does not establish expertise, willingness or a future choice.
 
-An initial private `/tmp` integration probe made one real call through Claude
-CLI 2.1.299 using resolved model `claude-opus-5-5`. It proposed an `unsupported`
-cue with a 240-minute window. Validation accepted its schema, and exact
-zero-call upstream replay passed. That probe predates subsequent source edits;
-it is integration evidence only. Final publication requires a fresh genuine
-run after source changes stop. A short successful native proposal does not
-establish sustained generative game quality or a live browser GM.
+Three private integration probes each made one real call through Claude CLI
+2.1.299 using resolved model `claude-opus-5-5`. Each proposed an `unsupported`
+cue with a 240-minute window. They predate subsequent source edits and remain
+integration evidence only. A dependency failure before another attempted run
+made no model call. No rejected proposal was silently replaced.
+
+The fourth and final call ran against committed implementation
+`a994cc4fadfe0945a124cba26a9c0276c3d524ec`, with clean recorded source files.
+It proposed `wet-sound` with a 240-minute window. The actual upstream chain
+accepted the typed proposal and its zero-call replay passed. The published
+[complete report](../../neighbours/public/experiments/gm-director.json)
+retains the response tape, actual checkpoint context and source digests.
+This is a single native proposal offered to the browser as a recorded case.
+A short successful proposal does not establish sustained generative game
+quality or a live browser GM.

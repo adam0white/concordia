@@ -139,7 +139,7 @@ export default function InspectionSituation({
 						current.cue === "unsupported" &&
 						!current.opened && (
 							<p className="tiny muted">
-								Unknown timber or supports need another opinion.
+								Unknown timber or supports leave the annex closed.
 							</p>
 						)}
 					<p className="tiny muted">

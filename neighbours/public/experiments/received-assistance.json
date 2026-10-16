@@ -1,0 +1,1084 @@
+{
+  "schema": "neighbours/assistance-probe@1",
+  "runtime": "TypeScript host with released HF choices; no Python Concordia or model calls",
+  "hf": "2.2.1",
+  "node": "v26.12.0",
+  "checkpointRuntimeSha256": "600d6dea11b9636368fb0a488ab40bc5efcbe2fff8bcd01bf6a51fd80b9db64b",
+  "sourceFingerprint": "4940d1dd978333fbef976cf4c279f144cc6ce7027377fe30b7e36bbda543e7c9",
+  "sources": {
+    "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
+    "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
+    "scripts/probe-assistance.ts": "c865031ec8130269439998ada4bef80f0fe7b64c1f89efbd694ec1cb28afbed5",
+    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
+    "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
+    "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
+    "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
+    "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
+    "src/core/evening-news.ts": "42f0b294261c62109f4f9979f888aabb752e24b1b49c0a67a89fc4771396f34d",
+    "src/core/evenings.ts": "c854d64c928f6265f26040d2131b19b618a8e218e22dfd86072407f05461df9b",
+    "src/core/handcart-state.ts": "d39a81eaa68683a6f51bdc44d36cf962760f79ae6981f0f306cf43803b42cf85",
+    "src/core/handcart.ts": "5a58af5f25d6c79589e23f202ad316d6fa78be9e35c51edd8ac359d76e220f38",
+    "src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
+    "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
+    "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
+    "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
+    "src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
+    "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
+    "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
+    "src/core/restore.ts": "d676ca6fd81b92a7573cb74b7f089989f49dc13217793f88cc384126a5fe9fc0",
+    "src/core/runtime.ts": "2fe5adf0fad1d4565c2c4425a082f7d7ca151ec2e7b13bbdf1c867f6fed13197",
+    "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
+    "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
+    "src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
+    "src/core/stories.ts": "9d289868555b16c65d07b60ada1d1048672e295b2cac804c3688fe113d5a9fa3",
+    "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
+    "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
+    "src/core/validation.ts": "f2ba6af80ea227087630d28a6f98506a85c0353753dff633e1d1fdc4e6d90425",
+    "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
+  },
+  "startAt": 22830,
+  "endAt": 24270,
+  "rounds": 96,
+  "population": 208,
+  "screening": [
+    {
+      "id": "ada",
+      "name": "Ada",
+      "taughtByLea": true,
+      "eligible": true,
+      "reasons": [],
+      "receivedRuleCount": 2,
+      "evidenceSourceIds": [
+        "lea"
+      ]
+    },
+    {
+      "id": "musa",
+      "name": "Musa",
+      "taughtByLea": false,
+      "eligible": false,
+      "reasons": [
+        "No retained hall inspection lesson evidence from Lea",
+        "Recipient is not living and awake outside a sleeping activity"
+      ],
+      "receivedRuleCount": 0,
+      "evidenceSourceIds": []
+    },
+    {
+      "id": "elin",
+      "name": "Elin",
+      "taughtByLea": false,
+      "eligible": false,
+      "reasons": [
+        "No retained hall inspection lesson evidence from Lea",
+        "Recipient is not living and awake outside a sleeping activity"
+      ],
+      "receivedRuleCount": 0,
+      "evidenceSourceIds": []
+    },
+    {
+      "id": "sam",
+      "name": "Sam",
+      "taughtByLea": false,
+      "eligible": false,
+      "reasons": [
+        "No retained hall inspection lesson evidence from Lea"
+      ],
+      "receivedRuleCount": 0,
+      "evidenceSourceIds": []
+    },
+    {
+      "id": "jo",
+      "name": "Jo",
+      "taughtByLea": false,
+      "eligible": false,
+      "reasons": [
+        "No retained hall inspection lesson evidence from Lea"
+      ],
+      "receivedRuleCount": 0,
+      "evidenceSourceIds": []
+    },
+    {
+      "id": "ravi",
+      "name": "Ravi",
+      "taughtByLea": false,
+      "eligible": false,
+      "reasons": [
+        "No retained hall inspection lesson evidence from Lea",
+        "Recipient is not living and awake outside a sleeping activity"
+      ],
+      "receivedRuleCount": 0,
+      "evidenceSourceIds": []
+    },
+    {
+      "id": "noor",
+      "name": "Noor",
+      "taughtByLea": false,
+      "eligible": false,
+      "reasons": [
+        "No retained hall inspection lesson evidence from Lea"
+      ],
+      "receivedRuleCount": 0,
+      "evidenceSourceIds": []
+    }
+  ],
+  "candidates": [
+    {
+      "id": "ada",
+      "name": "Ada",
+      "taughtByLea": true,
+      "eligible": true,
+      "reasons": [],
+      "receivedRuleCount": 2,
+      "evidenceSourceIds": [
+        "lea"
+      ],
+      "arms": [
+        {
+          "arm": "received-learned",
+          "initialRuntimeSha256": "600d6dea11b9636368fb0a488ab40bc5efcbe2fff8bcd01bf6a51fd80b9db64b",
+          "finalRuntimeSha256": "3cb342e1c4145302b264d1138104d361ec656a268c1bdc70aa5458e7647c115d",
+          "removedInspectionRules": 0,
+          "received": true,
+          "visitedAt": 22890,
+          "resultAt": 22905,
+          "opened": true,
+          "action": "open-section",
+          "decisionSource": "HF 2.2.1",
+          "decisionId": "d535",
+          "methodTerms": [
+            {
+              "source": "method:hall-section-inspection:lea",
+              "value": 0.291
+            }
+          ],
+          "capacity": 14,
+          "finalInspectionRuleCount": 2,
+          "choices": [
+            {
+              "at": 22845,
+              "id": "annex-visit",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 22875,
+              "id": "annex-visit",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 22890,
+              "id": "annex-open-section",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 22905,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 22935,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 22950,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23070,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23190,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23310,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23325,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23355,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23385,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23400,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23430,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23460,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23475,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23595,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23625,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23655,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23685,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23715,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 23745,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 7,
+              "recordedCount": 7
+            },
+            {
+              "at": 23775,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 23790,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23820,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23835,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23850,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23880,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23895,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23910,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23940,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 23955,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 7,
+              "recordedCount": 7
+            },
+            {
+              "at": 24075,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 24090,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 24120,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 24135,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 24150,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 24180,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 13,
+              "recordedCount": 8
+            },
+            {
+              "at": 24210,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 13,
+              "recordedCount": 8
+            },
+            {
+              "at": 24225,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 13,
+              "recordedCount": 8
+            },
+            {
+              "at": 24255,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 14,
+              "recordedCount": 8
+            },
+            {
+              "at": 24270,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 14,
+              "recordedCount": 8
+            }
+          ],
+          "continuation": {
+            "rounds": 16,
+            "exact": true
+          }
+        },
+        {
+          "arm": "received-method-ablated",
+          "initialRuntimeSha256": "167fdc7d6284cf71b89b423f6aa825ddae720c10b05370216779b418dc6d405e",
+          "finalRuntimeSha256": "e1e7703b33d56b4a4b530e11d0fc2e8a2b29f35b33819f85d7dbd6575dc8098f",
+          "removedInspectionRules": 2,
+          "received": true,
+          "visitedAt": 22890,
+          "resultAt": null,
+          "opened": false,
+          "action": null,
+          "decisionSource": null,
+          "decisionId": null,
+          "methodTerms": [],
+          "capacity": 10,
+          "finalInspectionRuleCount": 0,
+          "choices": [
+            {
+              "at": 22845,
+              "id": "annex-visit",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 22875,
+              "id": "annex-visit",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 22890,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 22920,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 22935,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23055,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23175,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23295,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23310,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23340,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 14,
+              "recordedCount": 8
+            },
+            {
+              "at": 23370,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 14,
+              "recordedCount": 8
+            },
+            {
+              "at": 23385,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23415,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23445,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23460,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23580,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 23610,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23640,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23670,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23700,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23730,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23760,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 23775,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23805,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23820,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23835,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23865,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23880,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23895,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23925,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 23940,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 7,
+              "recordedCount": 7
+            },
+            {
+              "at": 24060,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 24075,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 24105,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 24120,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 24135,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 24165,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 24180,
+              "id": "eat",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 24210,
+              "id": "eat",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 24225,
+              "id": "accept:weekly-1-class",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 24255,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            }
+          ],
+          "continuation": {
+            "rounds": 16,
+            "exact": true
+          }
+        },
+        {
+          "arm": "request-withheld",
+          "initialRuntimeSha256": "600d6dea11b9636368fb0a488ab40bc5efcbe2fff8bcd01bf6a51fd80b9db64b",
+          "finalRuntimeSha256": "e5965963b987a16449aefdfdafdc141a314bd64709151935dcb42bd8a326c927",
+          "removedInspectionRules": 0,
+          "received": false,
+          "visitedAt": null,
+          "resultAt": null,
+          "opened": false,
+          "action": null,
+          "decisionSource": null,
+          "decisionId": null,
+          "methodTerms": [],
+          "capacity": 10,
+          "finalInspectionRuleCount": 2,
+          "choices": [
+            {
+              "at": 22845,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 22860,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 22980,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 23100,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23220,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23340,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23355,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23385,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23415,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23430,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23460,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23475,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 23595,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 23625,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23655,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23685,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23715,
+              "id": "work",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23745,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 5,
+              "recordedCount": 5
+            },
+            {
+              "at": 23775,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23790,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 23820,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23835,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23850,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23880,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23895,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23910,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 6,
+              "recordedCount": 6
+            },
+            {
+              "at": 23940,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 7,
+              "recordedCount": 7
+            },
+            {
+              "at": 23955,
+              "id": "sleep",
+              "source": "HF 2.2.1",
+              "offeredCount": 7,
+              "recordedCount": 7
+            },
+            {
+              "at": 24075,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 24090,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 24120,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 8,
+              "recordedCount": 8
+            },
+            {
+              "at": 24135,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 9,
+              "recordedCount": 8
+            },
+            {
+              "at": 24150,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 24180,
+              "id": "rest",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 24195,
+              "id": "drink",
+              "source": "HF 2.2.1",
+              "offeredCount": 10,
+              "recordedCount": 8
+            },
+            {
+              "at": 24210,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 12,
+              "recordedCount": 8
+            },
+            {
+              "at": 24240,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            },
+            {
+              "at": 24270,
+              "id": "gather",
+              "source": "HF 2.2.1",
+              "offeredCount": 11,
+              "recordedCount": 8
+            }
+          ],
+          "continuation": {
+            "rounds": 16,
+            "exact": true
+          }
+        }
+      ],
+      "observations": {
+        "learnedOpened": true,
+        "ablatedOpened": false,
+        "withheldOpened": false,
+        "openingDiffersUnderMethodAblation": true,
+        "firstChoiceDiffersUnderMethodAblation": false
+      }
+    }
+  ],
+  "summary": {
+    "knownNonLea": 7,
+    "taughtByLea": 1,
+    "eligible": 1,
+    "receivedLearnedOpenings": 1,
+    "methodAblatedOpenings": 0,
+    "withheldOpenings": 0
+  },
+  "limits": [
+    "All known non-Lea residents with retained inspection lesson evidence from Lea were screened; nobody was selected by searching for a successful outcome.",
+    "One selective checkpoint and one authored dry-annex premise are local case evidence, not a population benchmark, entertainment acceptance or HF superiority claim.",
+    "The request is authored. This run makes no generative-model calls and does not test a Concordia GM.",
+    "Only the selected person's hall-section-inspection rules are removed initially. Their other acquired state remains; later learning remains possible.",
+    "Every simulated choice uses the checkpoint's HF policy. No action, waking state, outcome or score was forced.",
+    "The host authors feasible actions and physical consequences. These controls do not demonstrate general planning.",
+    "Checkpoint contents and person snapshots are omitted. Digests and bounded fictional-resident outcome summaries are retained."
+  ],
+  "checkpointSha256": "52fa1c0898f2d7f10ff605bf005b9a0475722396c25f8dd53801feb6c39a04b0",
+  "recordedAt": "2026-10-16T19:38:10.361310+00:00"
+}

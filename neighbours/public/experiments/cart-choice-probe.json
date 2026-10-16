@@ -5,7 +5,7 @@
   "node": "v26.12.0",
   "seed": 42,
   "startRound": 217,
-  "inputSha256": "5ccfb13c9bd8f9578888dcb6293cf390c4b4e36a7ace27c2e7ed2bfe2bdebadf",
+  "inputSha256": "ebb3f754d697b9e63f7a2bd8afc13dda656932b8cef269940e5c11a11a373f67",
   "raviDecisions": 24,
   "opportunity": {
     "at": 5010,
@@ -89,7 +89,7 @@
       {
         "id": "cart-slow",
         "action": "cart-slow",
-        "label": "Restore one cart section on the side bench \u00b7 two hours",
+        "label": "Restore one cart section on the side bench · two hours",
         "placeId": "workshop",
         "duration": 120,
         "effort": 0.15,
@@ -195,9 +195,10 @@
   "sources": {
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
-    "scripts/probe-cart-choices.ts": "4d9b20b145d58a1c65c24085f9a2c02ac78813cd57597e007cf7d7d1d18af07d",
-    "src/contracts.ts": "2347bae3d1f6dac11b164be013406a415e34ebab477d2b776c77339abbc555a7",
+    "scripts/probe-cart-choices.ts": "66c04bd02fc2da4f9b5cbcbe2291600da8d934fe7a6c2c1bfe4ed53aabc91a3b",
+    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
+    "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
     "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
     "src/core/evening-news.ts": "42f0b294261c62109f4f9979f888aabb752e24b1b49c0a67a89fc4771396f34d",
@@ -208,26 +209,26 @@
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
-    "src/core/offers.ts": "8f5317ec79017713875016a184af8fa8cc474e6504592c85e178e5d840fc9a23",
+    "src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/restore.ts": "1cd92b29ff7c5276f67906461fe971d563c5450dcf3b354f7a5afcc9addcfeb3",
-    "src/core/runtime.ts": "4e3a24ab39960b994f45b2565e84dbd3e52fec8904a77649d91f5d1e925efb21",
+    "src/core/restore.ts": "d676ca6fd81b92a7573cb74b7f089989f49dc13217793f88cc384126a5fe9fc0",
+    "src/core/runtime.ts": "2fe5adf0fad1d4565c2c4425a082f7d7ca151ec2e7b13bbdf1c867f6fed13197",
     "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "92f7f6b174a5b74e178668dca8bf3e247958a499f8071f4c9126605b098425e8",
-    "src/core/stories.ts": "3afa8f1b6e5cc67c611fa57642c253725fc94acb0d04a4409fb580da23878487",
+    "src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
+    "src/core/stories.ts": "9d289868555b16c65d07b60ada1d1048672e295b2cac804c3688fe113d5a9fa3",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
-    "src/core/town-chronicle.ts": "692e1728aae2fc9c9c649f392d0991cc4d3293e45440b7bc6619d4f5997ef009",
-    "src/core/validation.ts": "8ee6b3486c654b4aa026acce20596ff1b5faad57a2fa71c9f30d6822c149d1bf",
+    "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
+    "src/core/validation.ts": "f2ba6af80ea227087630d28a6f98506a85c0353753dff633e1d1fdc4e6d90425",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "limitations": [
     "This is a probe of actual received choices in one restored town, not a generic planning benchmark.",
-    "An offered action can be absent from the considered subset; absence is not a zero utility or a considered rejection.",
+    "HF scores all supplied offers. An absent recorded top-ranked alternative does not establish that the option was not evaluated.",
     "The goal ablation changes only Ravi's selected goal status; it does not remove his remembered project or legal offers.",
     "The matched duration pair is explicitly hypothetical: access is supplied as an offer, not negotiated or enacted in the town.",
     "The pair records immediate decision terms, not completion speed or the future value of waiting for tomorrow's agreement."
   ],
-  "recordedAt": "2026-10-16T17:19:38.490762+00:00"
+  "recordedAt": "2026-10-16T19:37:41.187827+00:00"
 }
