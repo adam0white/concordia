@@ -1,5 +1,5 @@
 import { overlapMinutes, presentAt, receiveEvent } from "./encounters.ts";
-import { type EveningHost, eveningLabel } from "./evenings.ts";
+import { allEvenings, type EveningHost, eveningLabel } from "./evenings.ts";
 import type { Resident } from "./state.ts";
 
 /** An attended conversation can carry one invitation, never an acceptance. */
@@ -26,7 +26,7 @@ export function shareEveningNotice(
 		overlapMinutes(job, listener, s.now) < 15
 	)
 		return;
-	const evenings = s.socialEvenings?.events ?? [];
+	const evenings = allEvenings(s);
 	// Keep contact deduplication with durable invitation receipts, not the pruned feed.
 	if (
 		evenings.some((e) => {

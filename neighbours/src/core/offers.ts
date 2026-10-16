@@ -5,7 +5,7 @@ import {
 	receivedRequest,
 	waitingAtHall,
 } from "./encounters.ts";
-import { eveningOffers } from "./evenings.ts";
+import { allEvenings, eveningOffers } from "./evenings.ts";
 import {
 	blocksMainBench,
 	HANDCART_MINUTES,
@@ -356,7 +356,7 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 				if (offer.placeId !== "hall" || offer.tags?.includes("floor"))
 					return true;
 				const arrive = s.now + offer.duration - workMinutesFor(offer);
-				return !s.socialEvenings?.events.some(
+				return !allEvenings(s).some(
 					(e) =>
 						["preparing", "prepared"].includes(e.stage) &&
 						arrive < e.endsAt &&

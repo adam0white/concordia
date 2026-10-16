@@ -6,6 +6,7 @@ import {
 } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts.ts";
 import { overlapMinutes, presentAt, receiveEvent } from "./encounters.ts";
+import { allEvenings } from "./evenings.ts";
 import type { BenchRequest, HandcartSave } from "./handcart-state.ts";
 import { placeOf } from "./invariants.ts";
 import type { Resident, Save } from "./state.ts";
@@ -102,9 +103,7 @@ export function updateHandcart(host: HandcartHost): void {
 	const s = host.s;
 	if (
 		!s.handcart &&
-		s.socialEvenings?.events.some(
-			(e) => e.stage === "closed" && e.endsAt < s.now,
-		)
+		allEvenings(s).some((e) => e.stage === "closed" && e.endsAt < s.now)
 	)
 		s.handcart = {
 			version: 1,
@@ -560,7 +559,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		"handover",
 	]);
 	if (
-		!s.socialEvenings?.events.some(
+		!allEvenings(s).some(
 			(e) => e.stage === "closed" && e.endsAt < c.activatedAt,
 		) ||
 		c.version !== 1 ||

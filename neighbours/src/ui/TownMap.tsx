@@ -63,6 +63,37 @@ function PlaceBuilding({ place, town }: { place: PlaceView; town: TownView }) {
 				<circle cx="-56" cy="25" r="4" className="jetty-post" />
 			</g>
 		);
+	if (place.id === "homes")
+		return (
+			<g className="housing-district">
+				<title>Riverside housing district, several streets of homes</title>
+				<rect
+					x="-105"
+					y="-78"
+					width="210"
+					height="116"
+					rx="16"
+					className="building-shadow"
+				/>
+				{[-64, -22, 22, 64].flatMap((x) =>
+					[-45, 5].map((y) => (
+						<g key={`${x}:${y}`} transform={`translate(${x},${y})`}>
+							<rect
+								x="-17"
+								y="-19"
+								width="34"
+								height="32"
+								rx="2"
+								className="building"
+							/>
+							<path d="M-21-19L0-35L21-19Z" className="roof" />
+							<path d="M-11-10H-3V0H-11ZM5-10H13V0H5Z" className="window" />
+							<path d="M-3 4H5V13H-3Z" className="door" />
+						</g>
+					)),
+				)}
+			</g>
+		);
 	return (
 		<g>
 			<rect
@@ -337,15 +368,15 @@ export default function TownMap({
 				<rect width="1080" height="700" className="map-ground" />
 				<rect width="1080" height="700" fill="url(#grass)" />
 				<path
-					d="M0 580 Q210 535 370 600T710 615T1080 570V700H0Z"
+					d="M0 180Q65 205 92 260Q126 315 205 326Q275 337 205 370Q112 400 82 456Q72 530 100 640Q225 680 350 635Q360 615 370 615T710 615T1080 570V700H0Z"
 					className="river"
 				/>
 				<path
-					d="M0 580 Q210 535 370 600T710 615T1080 570V700H0Z"
+					d="M0 180Q65 205 92 260Q126 315 205 326Q275 337 205 370Q112 400 82 456Q72 530 100 640Q225 680 350 635Q360 615 370 615T710 615T1080 570V700H0Z"
 					fill="url(#water)"
 				/>
 				<text x="110" y="651" className="river-label">
-					THE ALDER
+					ALDER ESTUARY
 				</text>
 				<path d="M80 325H1000M320 60V572M740 60V575" className="road-edge" />
 				<path d="M80 325H1000M320 60V572M740 60V575" className="road" />

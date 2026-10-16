@@ -70,8 +70,11 @@ function StoryCard({
 				<summary>Sources · {s.eventIds.length} linked events</summary>
 				<p className="tiny muted">
 					{s.missingEventIds.length
-						? `${s.missingEventIds.length} older event details pruned from the current packet.`
-						: "Linked event details remain in the current packet."}
+						? "Earlier detail is no longer retained; the dated outcome is retained."
+						: "Linked event details remain available."}
+				</p>
+				<p className="tiny muted">
+					Source event IDs: {s.eventIds.map((id) => `#${id}`).join(", ")}
 				</p>
 			</details>
 		</article>

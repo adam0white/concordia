@@ -1829,3 +1829,22 @@ footer > div {
 .story-links .text-button {
 	min-height: 44px;
 }
+
+.hall-choices {
+	margin-top: 16px;
+	padding: 16px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: var(--paper);
+}
+.hall-choices summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+.hall-choice {
+	padding: 12px 0;
+	border-bottom: 1px solid var(--line);
+}
+.app .hall-choice button {
+	min-height: 44px;
+}

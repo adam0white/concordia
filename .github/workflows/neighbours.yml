@@ -57,7 +57,9 @@ jobs:
         run: node scripts/profile-evenings.ts --seeds 42 --population 208 --days 25 --output "$RUNNER_TEMP/evenings.json" --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
         working-directory: neighbours
       - name: Actual WASM and native parity and restored continuation
-        run: npm run test:parity -- --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
+        run: |
+          node scripts/capture-weekly.ts --output-directory "$RUNNER_TEMP/neighbours-weekly"
+          npm run test:parity -- --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones" --checkpoint-directory "$RUNNER_TEMP/neighbours-weekly"
         working-directory: neighbours
         env:
           PYTHON: python

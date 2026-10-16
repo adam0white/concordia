@@ -65,7 +65,7 @@ export default function SessionFooter({
 					<a
 						className="download-save"
 						href={downloadUrl}
-						download="alder-quay-save.json"
+						download="alder-quay-save.json.gz"
 					>
 						Download save ↓ <span className="tiny">({downloadLabel})</span>
 					</a>
@@ -74,7 +74,7 @@ export default function SessionFooter({
 					ref={file}
 					disabled={comparing || saveConflict}
 					type="file"
-					accept="application/json,.json"
+					accept="application/json,application/gzip,.json,.gz"
 					className="sr-only"
 					aria-label="Import town save"
 					onChange={async (e) => {

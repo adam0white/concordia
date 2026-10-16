@@ -138,7 +138,23 @@ export interface TownView {
 		attended: number;
 		result?: string;
 		participantIds: string[];
+		recurring?: boolean;
+		supportRemaining?: 0 | 1;
+		canOpenSlot?: boolean;
+		canAdvertise?: boolean;
+		advertised?: boolean;
+		originalStartsAt?: number;
+		slotReceipt?: TownEvent;
 	}[];
+	eveningSchedule?: {
+		cyclesGenerated: number;
+		cyclesCompleted: number;
+		weeklyDeliveredClasses: number;
+		weeklyDeliveredMeals: number;
+		cyclesLimit: number;
+		finished: boolean;
+		nextStartsAt?: number;
+	};
 	handcart?: {
 		progress: number;
 		total: number;
@@ -149,7 +165,13 @@ export interface TownView {
 	};
 }
 export interface Intervention {
-	kind: "restore-bus" | "lend-tools" | "share-news";
+	kind:
+		| "restore-bus"
+		| "lend-tools"
+		| "share-news"
+		| "open-evening-slot"
+		| "advertise-evening";
+	eventId?: string;
 	actorId?: string;
 }
 export interface Choice {
@@ -197,6 +219,7 @@ export type UiCommand =
 	| { type: "save"; requestId?: number }
 	| { type: "restore"; save: unknown }
 	| { type: "inspect"; actorId: string }
+	| { type: "cancel-comparison" }
 	| { type: "compare"; intervention: Intervention; rounds: number };
 export type UiReply =
 	| { type: "ready" | "state"; view: TownView; elapsedMs?: number }

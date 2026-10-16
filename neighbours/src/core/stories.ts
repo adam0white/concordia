@@ -1,9 +1,10 @@
 import type { TownEvent, TownView } from "../contracts.ts";
+import { allEvenings } from "./evenings.ts";
 import type { Save } from "./state.ts";
 import { CHRONICLE_KINDS } from "./town-chronicle.ts";
 
 function storyTitle(s: Save, e: TownEvent): string {
-	const evening = s.socialEvenings?.events.find(
+	const evening = allEvenings(s).find(
 		(candidate) =>
 			candidate.notice?.id === e.id || candidate.result?.id === e.id,
 	);
@@ -47,7 +48,7 @@ export function townStories(s: Save): TownView["stories"] {
 			...s.events.filter((e) => CHRONICLE_KINDS.has(e.kind)),
 		].map((e) => [e.id, e]),
 	);
-	for (const evening of s.socialEvenings?.events ?? []) {
+	for (const evening of allEvenings(s)) {
 		const retained = evening.result ?? evening.notice;
 		if (retained) events.set(retained.id, retained);
 	}

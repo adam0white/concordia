@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { gunzipSync } from "node:zlib";
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
 
 type Packet = { runtime: { seed: number; now: number } };
@@ -30,9 +31,9 @@ async function packet(
 	await expect(link).toBeVisible();
 	const pending = page.waitForEvent("download");
 	await link.click();
-	const path = info.outputPath(`${name}.json`);
+	const path = info.outputPath(`${name}.json.gz`);
 	await (await pending).saveAs(path);
-	return JSON.parse(await readFile(path, "utf8"));
+	return JSON.parse(gunzipSync(await readFile(path)).toString("utf8"));
 }
 async function importPacket(page: Page, value: unknown) {
 	await page.getByLabel("Import town save").setInputFiles({
@@ -94,7 +95,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	);
 	await page.getByRole("tab", { name: "Inspector", exact: true }).click();
 	await page
-		.getByText("Compare a day · hypothetical branches", { exact: true })
+		.getByText("Compare futures · hypothetical branches", { exact: true })
 		.click();
 	await page
 		.getByRole("button", { name: "Compare from here", exact: true })

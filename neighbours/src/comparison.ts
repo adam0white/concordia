@@ -23,14 +23,26 @@ export async function compareTown(
 	intervention: Intervention,
 	rounds: number,
 	progress: (message: string) => void = () => {},
+	cancelled: () => boolean = () => false,
 ): Promise<TownComparison> {
-	if (!Number.isSafeInteger(rounds) || rounds < 1 || rounds > 96)
-		throw Error("Comparison must cover between 1 and 96 rounds");
+	if (!Number.isSafeInteger(rounds) || rounds < 1 || rounds > 672)
+		throw Error("Comparison must cover between 1 and 672 rounds");
 	if (
 		!intervention ||
-		!["lend-tools", "restore-bus", "share-news"].includes(intervention.kind)
+		![
+			"lend-tools",
+			"restore-bus",
+			"share-news",
+			"open-evening-slot",
+			"advertise-evening",
+		].includes(intervention.kind)
 	)
 		throw Error("Unknown comparison intervention");
+	const checkCancellation = () => {
+		if (cancelled())
+			throw Error("Comparison cancelled. The live town is unchanged.");
+	};
+	checkCancellation();
 	const originalRuntime = port.runtime;
 	const start = originalRuntime.view();
 	if (start.people.some((p) => p.policy === "llm"))
@@ -50,16 +62,31 @@ export async function compareTown(
 	await py.runPythonAsync("comparison_original_engine = town_engine");
 	py.globals.set("comparison_rounds", rounds);
 	py.globals.set("comparison_intervention", JSON.stringify(intervention));
+	const advance = async (label: string) => {
+		for (let completed = 0; completed < rounds; ) {
+			checkCancellation();
+			const chunk = Math.min(8, rounds - completed);
+			py.globals.set("comparison_chunk", chunk);
+			await py.runPythonAsync("town_engine.advance(comparison_chunk)\nNone");
+			completed += chunk;
+			progress(
+				`${label}: ${completed} of ${rounds} rounds (${Math.round((completed / rounds) * 100)}%).`,
+			);
+			await new Promise((resolve) => setTimeout(resolve, 0));
+		}
+		checkCancellation();
+	};
 	try {
 		progress("Comparing the unchanged conditions…");
 		await restoreCheckpoint(py, port, JSON.parse(packet));
-		await py.runPythonAsync("town_engine.advance(comparison_rounds)\nNone");
+		await advance("Unchanged conditions");
 		const baseline = project(port.runtime.view());
 		progress("Comparing the intervention from the same checkpoint…");
 		await restoreCheckpoint(py, port, JSON.parse(packet));
 		await py.runPythonAsync(
-			"town_engine.intervene(json.loads(comparison_intervention))\ntown_engine.advance(comparison_rounds)\nNone",
+			"town_engine.intervene(json.loads(comparison_intervention))\nNone",
 		);
+		await advance("Changed conditions");
 		const result = port.runtime.view();
 		return {
 			schema: "town-comparison@1",
@@ -81,7 +108,7 @@ export async function compareTown(
 	} finally {
 		port.runtime = originalRuntime;
 		await py.runPythonAsync(
-			"town_engine = comparison_original_engine\ndel comparison_original_engine\nglobals().pop('comparison_rounds', None)\nglobals().pop('comparison_intervention', None)\nNone",
+			"town_engine = comparison_original_engine\ndel comparison_original_engine\nglobals().pop('comparison_rounds', None)\nglobals().pop('comparison_intervention', None)\nglobals().pop('comparison_chunk', None)\nNone",
 		);
 	}
 }

@@ -101,6 +101,34 @@ try {
 	const originalPacket = String(
 		await py.runPythonAsync("json.dumps(town_engine.save())"),
 	);
+	await assert.rejects(
+		compareTown(py, port, { kind: "lend-tools" }, 673),
+		/between 1 and 672/,
+	);
+	assert.equal(
+		port.runtime,
+		original,
+		"Out-of-bounds comparison touched live runtime",
+	);
+	assert.equal(
+		String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+		originalPacket,
+		"Out-of-bounds comparison changed live checkpoint",
+	);
+	await assert.rejects(
+		compareTown(py, port, { kind: "advertise-evening", eventId: "missing" }, 4),
+		/no longer available/,
+	);
+	assert.equal(
+		port.runtime,
+		original,
+		"Bad contextual comparison replaced live runtime",
+	);
+	assert.equal(
+		String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+		originalPacket,
+		"Bad contextual comparison changed live Python checkpoint",
+	);
 	const report = await compareTown(py, port, { kind: "lend-tools" }, 4);
 	assert.equal(port.runtime, original, "Comparison replaced live runtime");
 	assert.equal(
@@ -158,6 +186,7 @@ try {
 			checkpointPaths.push(...entries.map((name) => resolve(value, name)));
 		}
 	}
+	const contextualChecks = new Set();
 	for (const [i, sourcePath] of checkpointPaths.entries()) {
 		const source = JSON.parse(await readFile(sourcePath, "utf8"));
 		const checkpoint = source.checkpoint ?? source;
@@ -183,6 +212,45 @@ try {
 		);
 		const expected = JSON.parse(await readFile(expectedPath, "utf8"));
 		await restoreCheckpoint(py, port, checkpoint);
+		const contextualView = port.runtime.view();
+		for (const [kind, eligibility] of [
+			["open-evening-slot", "canOpenSlot"],
+			["advertise-evening", "canAdvertise"],
+		]) {
+			if (contextualChecks.has(kind) || !contextualView.controlsRemaining)
+				continue;
+			const evening = contextualView.evenings?.find(
+				(event) => event[eligibility],
+			);
+			if (!evening) continue;
+			const liveRuntime = port.runtime;
+			const livePacket = String(
+				await py.runPythonAsync("json.dumps(town_engine.save())"),
+			);
+			const input = { kind, eventId: evening.id };
+			const paired = await compareTown(py, port, input, 672);
+			assert.deepEqual(
+				paired.intervention,
+				input,
+				"Context event target was dropped",
+			);
+			assert.equal(paired.rounds, 672);
+			assert.equal(paired.endAt - paired.startAt, 7 * 1440);
+			assert.equal(
+				port.runtime,
+				liveRuntime,
+				"Week comparison replaced the live runtime",
+			);
+			assert.equal(
+				String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+				livePacket,
+				"Week comparison changed the complete live Python checkpoint",
+			);
+			contextualChecks.add(kind);
+			console.log(
+				`PASS: actual WASM paired seven-day ${kind} (${evening.id}) preserves live checkpoint from ${sourcePath}`,
+			);
+		}
 		await py.runPythonAsync("town_engine.advance(16)\nNone");
 		const actual = JSON.parse(
 			String(await py.runPythonAsync("json.dumps(town_engine.save())")),
@@ -212,6 +280,40 @@ try {
 		);
 	}
 
+	const cancellationRuntime = port.runtime;
+	const cancellationPacket = String(
+		await py.runPythonAsync("json.dumps(town_engine.save())"),
+	);
+	let stopComparison = false;
+	await assert.rejects(
+		compareTown(
+			py,
+			port,
+			{ kind: "lend-tools" },
+			16,
+			(message) => {
+				if (message.includes("8 of 16")) stopComparison = true;
+			},
+			() => stopComparison,
+		),
+		/Comparison cancelled/,
+	);
+	assert(
+		stopComparison,
+		"Cancellation did not occur after actual branch advancement",
+	);
+	assert.equal(port.runtime, cancellationRuntime);
+	assert.equal(
+		String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+		cancellationPacket,
+	);
+	console.log(
+		"PASS: cancellation after actual WASM branch advancement restores the full live checkpoint",
+	);
+	if (checkpointPaths.length)
+		console.log(
+			`Contextual seven-day checks exercised: ${[...contextualChecks].join(", ") || "none eligible in supplied checkpoints"}`,
+		);
 	console.log(
 		"PASS: 208 HF people match across native/WASM Python; restore, interrupted-engine recovery and isolated comparisons pass.",
 	);

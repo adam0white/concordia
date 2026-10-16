@@ -5,6 +5,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { townDiagnostics } from "../src/core/diagnostics.ts";
+import { allEvenings } from "../src/core/evenings.ts";
 import { createRuntime, restoreRuntime, type Save } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 
@@ -103,7 +104,7 @@ function run(seed: number) {
 	for (let round = 0; round < days * 96; round++) {
 		for (const id of runtime.prepareRound()) {
 			const person = runtime.actor(id);
-			const near = (runtime.s.socialEvenings?.events ?? []).filter(
+			const near = allEvenings(runtime.s).filter(
 				(e) =>
 					e.organiserId === id &&
 					runtime.s.now >= e.startsAt - 120 &&
@@ -154,7 +155,7 @@ function run(seed: number) {
 			runtime.apply(id, action);
 		}
 		if (checkpointDirectory) {
-			const candidates = runtime.s.socialEvenings?.events ?? [];
+			const candidates = allEvenings(runtime.s);
 			const milestones = {
 				notice: candidates.some((e) => e.notice),
 				cartProgress: (runtime.s.handcart?.progress ?? 0) > 0,
@@ -216,7 +217,7 @@ function run(seed: number) {
 		restoredContinuation.error =
 			error instanceof Error ? error.message : String(error);
 	}
-	const candidates = (checkpoint.socialEvenings?.events ?? []).map((e) => {
+	const candidates = allEvenings(checkpoint).map((e) => {
 		const others = Object.entries(e.replies).filter(
 			([id]) => id !== e.organiserId,
 		);
@@ -262,6 +263,7 @@ function run(seed: number) {
 		hf: checkpoint.hf,
 		hallSafe: checkpoint.hallSafe,
 		activatedAt: checkpoint.socialEvenings?.openedAt ?? null,
+		recurringCycles: checkpoint.socialEvenings?.recurrence?.cycles.length ?? 0,
 		candidates,
 		chosenActions: chosen,
 		startedActions,

@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { gunzipSync } from "node:zlib";
 import { expect, test } from "@playwright/test";
 
 test.use({ hasTouch: true });
@@ -43,9 +44,9 @@ test("actual town offers optional story stops and keyboard/mobile access to reta
 	await page.getByRole("button", { name: "Export", exact: true }).click();
 	const download = page.waitForEvent("download");
 	await page.getByRole("link", { name: /Download save/ }).click();
-	const path = info.outputPath("story-stop.json");
+	const path = info.outputPath("story-stop.json.gz");
 	await (await download).saveAs(path);
-	const saved = await readFile(path);
+	const saved = gunzipSync(await readFile(path));
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "same-town.json",
 		mimeType: "application/json",

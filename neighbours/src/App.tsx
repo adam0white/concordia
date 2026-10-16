@@ -3,7 +3,9 @@ import Comparison from "./ui/Comparison";
 import DayComparison from "./ui/DayComparison";
 import ErrorMessage from "./ui/ErrorMessage";
 import EveningBoard from "./ui/EveningBoard";
+import EvidencePanel from "./ui/EvidencePanel";
 import { clock, initial, metricLabel, number, placeName } from "./ui/format";
+import HallChoices from "./ui/HallChoices";
 import HandcartCard from "./ui/HandcartCard";
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
@@ -48,6 +50,14 @@ export default function App() {
 	const [tab, setTab] = useState<"town" | "stories" | "inspector">("town");
 	const [storyFocus, setStoryFocus] = useState<{ id: string }>();
 	const [storyPersonFocus, setStoryPersonFocus] = useState<{ id: string }>();
+	const [comparisonFocus, setComparisonFocus] = useState(false);
+	useEffect(() => {
+		if (!comparisonFocus || tab !== "inspector") return;
+		const panel = document.getElementById("town-info-panel");
+		panel?.focus({ preventScroll: true });
+		panel?.scrollIntoView({ block: "start", behavior: "instant" });
+		setComparisonFocus(false);
+	}, [comparisonFocus, tab]);
 	useEffect(() => {
 		if (!storyPersonFocus || selected !== storyPersonFocus.id) return;
 		const panel = document.querySelector<HTMLElement>(".person-panel");
@@ -254,6 +264,16 @@ export default function App() {
 							</nav>
 							<HandcartCard town={town} select={setSelected} />
 							<EveningBoard town={town} select={setSelected} />
+							<HallChoices
+								town={town}
+								disabled={comparing || saveConflict}
+								onAction={intervene}
+								onCompare={(input) => {
+									setTab("inspector");
+									setComparisonFocus(true);
+									compare(input, 672);
+								}}
+							/>
 						</section>
 						{person ? (
 							<PersonPanel
@@ -409,16 +429,20 @@ export default function App() {
 								role="tabpanel"
 								id="town-info-panel"
 								aria-label="Town inspector"
+								tabIndex={-1}
 							>
 								<TownHealth history={healthHistory} />
+								<EvidencePanel />
 								<DayComparison
 									report={branchReport}
+									request={session.branchRequest}
 									busy={comparing}
 									disabled={saveConflict}
 									progress={branchProgress}
 									error={branchError}
 									selected={selected}
 									onRun={compare}
+									onCancel={session.cancelComparison}
 								/>
 								<Comparison />
 								<div>

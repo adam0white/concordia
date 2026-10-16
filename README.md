@@ -6,7 +6,11 @@ A riverside town after a flood. Eight familiar neighbours and two hundred other 
 
 This is a fork of Google DeepMind Concordia. Upstream history and code remain intact. Our application is in `neighbours/`; its custom Python engine is in `concordia/contrib/neighbours/`. Development branch: `neighbours`. Human Framework is consumed as an exact published package. Recorded native LLM experiments are labelled separately from the live all-HF browser town.
 
-The project is under active development. Adam accepts how the town feels; automated checks do not establish that it is enjoyable or that HF outperforms another controller.
+The next reviewed local candidate adds twelve weekly hall conflicts after the original four evenings. Each week gives one support choice: fund an unposted alternate date or advertise a posted invitation. This remains available when a returning town has spent its original three interventions. People still choose whether to propose, prepare, accept and attend. Contextual seven-day comparisons show progress and support cancellation while preserving the live town.
+
+Person History folds routine start/finish traces and retains distinct dated outcomes. The map shows the estuary and housing district. The Inspector separates live diagnostics from recorded experiments and their limits. Export produces a lossless `.json.gz` file; Import also accepts older plain JSON. See [player agency and verification](docs/neighbours/player-agency.md).
+
+This increment has passed local review and verification; public delivery is pending. Adam accepts how the new play balance feels. Automated checks do not establish that it is enjoyable or that HF outperforms another controller.
 
 ---
 

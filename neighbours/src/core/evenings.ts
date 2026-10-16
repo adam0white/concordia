@@ -1,5 +1,6 @@
 import {
 	type Affordance,
+	AGENDA_DEFAULTS,
 	adoptGoal,
 	promise,
 	socialEvent,
@@ -12,6 +13,7 @@ import { validateEvent } from "./validation.ts";
 
 export type EveningReply = {
 	heardAt: number;
+	bulletinEvent?: number;
 	sourceId?: string;
 	heardEvent?: TownEvent;
 	reply?: "accepted" | "declined";
@@ -20,7 +22,29 @@ export type EveningReply = {
 	attempted?: boolean;
 	delivered?: boolean;
 };
+export type HallPurpose = { notice: TownEvent; goalId?: string };
+export type EveningSupport = {
+	version: 1;
+	kind: "open-evening-slot" | "advertise-evening";
+	eventId: string;
+	receipt: TownEvent;
+};
+export type EveningCycle = {
+	supportSpent?: EveningSupport;
+	index: number;
+	purposes: Record<string, HallPurpose>;
+	events: EveningEvent[];
+	openedSlot?: {
+		eventId: string;
+		from: number;
+		to: number;
+		receipt: TownEvent;
+	};
+};
+export const MAX_EVENING_CYCLES = 12;
 export type EveningEvent = {
+	cycle?: number;
+	advertisement?: TownEvent;
 	id: string;
 	kind: "class" | "meal";
 	organiserId: "lea" | "sam";
@@ -37,7 +61,13 @@ export type SocialEvenings = {
 	version: 1;
 	openedAt: number;
 	lastCountAt: number;
-	purposes?: Record<string, { notice: TownEvent; goalId?: string }>;
+	purposes?: Record<string, HallPurpose>;
+	recurrence?: {
+		version: 1;
+		startedAt: number;
+		firstStartsAt: number;
+		cycles: EveningCycle[];
+	};
 	events: EveningEvent[];
 };
 export interface EveningHost {
@@ -56,12 +86,19 @@ export function eveningLabel(e: EveningEvent): string {
 function clock(at: number) {
 	return `Day ${Math.floor(at / 1440) + 1} at ${String(Math.floor((at % 1440) / 60)).padStart(2, "0")}:00`;
 }
+/** Keep the original four records intact; all host consumers use this enumeration. */
+export function allEvenings(s: Save): EveningEvent[] {
+	return [
+		...(s.socialEvenings?.events ?? []),
+		...(s.socialEvenings?.recurrence?.cycles.flatMap((c) => c.events) ?? []),
+	];
+}
 export function eveningFor(s: Save, offer: Affordance) {
 	const id = offer.id.slice(offer.id.indexOf(":") + 1);
-	return s.socialEvenings?.events.find((e) => e.id === id);
+	return allEvenings(s).find((e) => e.id === id);
 }
 export function roomBooking(s: Save, e: EveningEvent) {
-	return s.socialEvenings?.events.find(
+	return allEvenings(s).find(
 		(other) =>
 			other.id !== e.id &&
 			["preparing", "prepared"].includes(other.stage) &&
@@ -93,6 +130,34 @@ export function updateEvenings(host: EveningHost): void {
 	}
 	const pilot = s.socialEvenings;
 	if (!pilot) return;
+	pilot.recurrence ??= {
+		version: 1,
+		startedAt: s.now,
+		firstStartsAt: Math.max(
+			(pilot.events[3]?.startsAt ?? s.now) + 7 * 1440,
+			(Math.floor(s.now / 1440) + 4) * 1440 + 1080,
+		),
+		cycles: [],
+	};
+	const recurring = pilot.recurrence;
+	const next = recurring.cycles.length;
+	const start = recurring.firstStartsAt + next * 7 * 1440;
+	if (next < MAX_EVENING_CYCLES && s.now >= start - 4 * 1440) {
+		recurring.cycles.push({
+			index: next,
+			purposes: {},
+			events: (["class", "meal"] as const).map((kind) => ({
+				id: `weekly-${next}-${kind}`,
+				cycle: next,
+				kind,
+				organiserId: kind === "class" ? "lea" : "sam",
+				startsAt: start,
+				endsAt: start + 60,
+				stage: "candidate",
+				replies: {},
+			})),
+		});
+	}
 	pilot.purposes ??= {};
 	for (const [id, kind] of [
 		["sam", "meal"],
@@ -142,7 +207,59 @@ export function updateEvenings(host: EveningHost): void {
 				s.now,
 			).id;
 	}
-	for (const e of pilot.events) {
+	for (const cycle of recurring.cycles) {
+		for (const [id, kind] of [
+			["sam", "meal"],
+			["lea", "class"],
+		] as const) {
+			const resident = s.people.find((r) => r.person.id === id);
+			const latestOpportunity = Math.max(...cycle.events.map((e) => e.endsAt));
+			// One weekly purpose allows either legal date from its first received observation.
+			// Opening a slot therefore never rewrites a person’s existing goal.
+			const deadline =
+				recurring.firstStartsAt + cycle.index * 7 * 1440 + 1440 + 60;
+			if (
+				!resident ||
+				!s.hallSafe ||
+				!presentAt(resident, "hall", s.now) ||
+				s.now >= latestOpportunity
+			)
+				continue;
+			let purpose = cycle.purposes[id];
+			if (purpose?.goalId) continue;
+			if (!purpose) {
+				const eventId = host.event(
+					"hall-purpose",
+					`${id === "sam" ? "Sam can arrange another shared supper" : "Lea can arrange another practical class"}. ${cycle.openedSlot ? "A second hall evening is now available for this week." : "Sam’s supper and Lea’s class need the hall’s same weekly hour."}`,
+					id,
+					"hall",
+				);
+				purpose = {
+					notice: structuredClone(
+						s.events.find((e) => e.id === eventId) as TownEvent,
+					),
+				};
+				cycle.purposes[id] = purpose;
+			}
+			if (receiveEvent(resident, purpose.notice, "saw"))
+				purpose.goalId = adoptGoal(
+					resident.person,
+					{
+						label: `${kind === "meal" ? "Arrange this week’s shared supper" : "Arrange this week’s practical class"} (week ${cycle.index + 1})`,
+						serves: ["meaning", "belonging"],
+						importance: 0.6,
+						deadline,
+						advancedBy: [
+							{ action: `propose-${kind}`, amount: 0.15 },
+							{ action: `prepare-${kind}`, amount: 0.25 },
+							{ action: `host-${kind}`, amount: 0.6 },
+						],
+					},
+					s.now,
+				).id;
+		}
+	}
+	for (const e of allEvenings(s)) {
 		if (e.notice && e.stage !== "closed" && s.now < e.startsAt) {
 			for (const r of s.people) {
 				if (e.replies[r.person.id] || !presentAt(r, "hall", s.now)) continue;
@@ -268,7 +385,7 @@ export function eveningOffers(
 		if (
 			!historical &&
 			!noticeboard &&
-			s.socialEvenings?.events.some(
+			allEvenings(s).some(
 				(other) =>
 					other.id !== e.id &&
 					["preparing", "prepared"].includes(other.stage) &&
@@ -289,14 +406,16 @@ export function eveningOffers(
 			...(noticeboard ? { tags: [...(extra.tags ?? []), "noticeboard"] } : {}),
 		});
 	};
-	for (const e of s.socialEvenings?.events ?? []) {
+	for (const e of allEvenings(s)) {
 		if (historical && !historical.id.endsWith(`:${e.id}`)) continue;
 		const own = r.person.id === e.organiserId;
 		const reply = e.replies[r.person.id];
 		const before = s.now + travel + 15 < e.startsAt;
+		const canPropose = s.now + travel + 15 + 30 <= e.startsAt;
+		const canPrepare = s.now + travel + 30 <= e.startsAt;
 		if (
 			own &&
-			(historical || (s.hallSafe && before && e.stage === "candidate"))
+			(historical || (s.hallSafe && canPropose && e.stage === "candidate"))
 		)
 			add(
 				e,
@@ -335,7 +454,8 @@ export function eveningOffers(
 		}
 		if (
 			own &&
-			(historical || (before && e.stage === "proposed" && !roomBooking(s, e)))
+			(historical ||
+				(canPrepare && e.stage === "proposed" && !roomBooking(s, e)))
 		)
 			add(
 				e,
@@ -392,6 +512,128 @@ export function eveningOffers(
 	}
 	return offers;
 }
+/** Opening a second date cannot move an invitation or an existing appointment. */
+export function canOpenEveningSlot(s: Save, e: EveningEvent): boolean {
+	const cycle = s.socialEvenings?.recurrence?.cycles.find(
+		(c) => c.index === e.cycle,
+	);
+	return (
+		!!cycle &&
+		!cycle.openedSlot &&
+		e.stage === "candidate" &&
+		!e.notice &&
+		s.now < e.startsAt &&
+		!s.people.some((r) => r.job?.offer.id.endsWith(`:${e.id}`)) &&
+		!allEvenings(s).some(
+			(other) =>
+				other.id !== e.id &&
+				!!other.notice &&
+				other.startsAt < e.endsAt + 1440 &&
+				other.endsAt > e.startsAt + 1440,
+		)
+	);
+}
+export function canAdvertiseEvening(s: Save, e: EveningEvent): boolean {
+	return (
+		!!e.notice && !e.advertisement && e.stage !== "closed" && s.now < e.startsAt
+	);
+}
+/** The two options share one weekly credit. Ordinary interventions never use it. */
+export function weeklySupportRemaining(s: Save, e: EveningEvent): 0 | 1 {
+	const cycle = s.socialEvenings?.recurrence?.cycles.find(
+		(c) => c.index === e.cycle,
+	);
+	return cycle &&
+		!cycle.supportSpent &&
+		cycle.events.some(
+			(candidate) => candidate.stage !== "closed" && s.now < candidate.startsAt,
+		)
+		? 1
+		: 0;
+}
+/** A scarce observer action changes circumstances; HF still owns attention and choice. */
+export function interveneEvening(
+	host: EveningHost,
+	kind: "open-evening-slot" | "advertise-evening",
+	eventId?: string,
+): void {
+	const s = host.s;
+	const e = allEvenings(s).find((candidate) => candidate.id === eventId);
+	if (
+		!e ||
+		(kind === "open-evening-slot"
+			? !canOpenEveningSlot(s, e)
+			: !canAdvertiseEvening(s, e))
+	)
+		throw Error("Evening intervention is no longer available");
+	const cycle = s.socialEvenings?.recurrence?.cycles.find(
+		(c) => c.index === e.cycle,
+	);
+	const weekly = weeklySupportRemaining(s, e) === 1;
+	if (!weekly && !s.controls) throw Error("No intervention allowance remains");
+	if (!weekly) s.controls--;
+	let receipt: TownEvent;
+	if (kind === "open-evening-slot") {
+		if (!cycle) throw Error("Missing evening cycle");
+		const from = e.startsAt;
+		e.startsAt += 1440;
+		e.endsAt += 1440;
+		const id = host.event(
+			"intervention",
+			`Opened a second hall evening for ${eveningLabel(e)}: ${clock(from)} moved to ${clock(e.startsAt)} before any invitation was posted.`,
+			undefined,
+			"hall",
+		);
+		receipt = structuredClone(
+			s.events.find((event) => event.id === id) as TownEvent,
+		);
+		cycle.openedSlot = {
+			eventId: e.id,
+			from,
+			to: e.startsAt,
+			receipt: structuredClone(
+				s.events.find((event) => event.id === id) as TownEvent,
+			),
+		};
+	} else {
+		const notice = e.notice;
+		if (!notice) throw Error("Missing evening invitation");
+		const id = host.event(
+			"intervention",
+			`Town bulletin shares the posted invitation: ${notice.text}`,
+			undefined,
+			"hall",
+			[notice.id],
+		);
+		const bulletin = s.events.find((event) => event.id === id) as TownEvent;
+		bulletin.source = "town-bulletin";
+		e.advertisement = structuredClone(bulletin);
+		receipt = e.advertisement;
+		for (const resident of s.people) {
+			if (
+				!resident.person.body.alive ||
+				resident.person.body.asleep ||
+				resident.job?.offer.mode === "sleep" ||
+				e.replies[resident.person.id]
+			)
+				continue;
+			if (receiveEvent(resident, bulletin, "told"))
+				e.replies[resident.person.id] = {
+					heardAt: s.now,
+					attendedMinutes: 0,
+					bulletinEvent: id,
+				};
+		}
+	}
+	if (weekly && cycle)
+		cycle.supportSpent = {
+			version: 1,
+			kind,
+			eventId: e.id,
+			receipt: structuredClone(receipt),
+		};
+}
+
 export function beginEvening(s: Save, r: Resident): void {
 	const job = r.job;
 	if (!job) return;
@@ -551,11 +793,19 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 		if (
 			!object ||
 			typeof object !== "object" ||
+			Array.isArray(object) ||
 			Object.keys(object).some((key) => !allowed.includes(key))
 		)
 			throw Error("Invalid evening fields");
 	};
-	fields(pilot, ["version", "openedAt", "lastCountAt", "events", "purposes"]);
+	fields(pilot, [
+		"version",
+		"openedAt",
+		"lastCountAt",
+		"events",
+		"purposes",
+		"recurrence",
+	]);
 	if (
 		pilot.version !== 1 ||
 		!Number.isSafeInteger(pilot.openedAt) ||
@@ -568,15 +818,20 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 		pilot.events.length !== 4
 	)
 		throw Error("Invalid evening clock");
-	if (pilot.purposes !== undefined) {
-		fields(pilot.purposes, ["sam", "lea"]);
-		for (const [id, purpose] of Object.entries(pilot.purposes)) {
+	const purposeGoalIds = new Set<string>();
+	const validatePurposes = (
+		purposes: Record<string, HallPurpose>,
+		earliest: number,
+	) => {
+		fields(purposes, ["sam", "lea"]);
+		for (const [id, purpose] of Object.entries(purposes)) {
 			fields(purpose, ["notice", "goalId"]);
 			validateEvent(purpose.notice, s, ids);
 			if (
 				purpose.notice.kind !== "hall-purpose" ||
 				purpose.notice.actorId !== id ||
-				purpose.notice.at < pilot.openedAt ||
+				purpose.notice.placeId !== "hall" ||
+				purpose.notice.at < earliest ||
 				(purpose.goalId !== undefined &&
 					!s.people
 						.find((r) => r.person.id === id)
@@ -586,11 +841,124 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 						))
 			)
 				throw Error("Invalid received hall purpose");
+			if (purpose.goalId !== undefined) {
+				if (purposeGoalIds.has(`${id}:${purpose.goalId}`))
+					throw Error("Repeated hall purpose goal");
+				purposeGoalIds.add(`${id}:${purpose.goalId}`);
+			}
+		}
+	};
+	if (pilot.purposes !== undefined)
+		validatePurposes(pilot.purposes, pilot.openedAt);
+	const recurrence = pilot.recurrence;
+	if (recurrence !== undefined) {
+		fields(recurrence, ["version", "startedAt", "firstStartsAt", "cycles"]);
+		if (
+			recurrence.version !== 1 ||
+			!Number.isSafeInteger(recurrence.startedAt) ||
+			recurrence.startedAt < pilot.openedAt ||
+			recurrence.startedAt > s.now ||
+			recurrence.firstStartsAt !==
+				Math.max(
+					(pilot.events[3]?.startsAt ?? s.now) + 7 * 1440,
+					(Math.floor(recurrence.startedAt / 1440) + 4) * 1440 + 1080,
+				) ||
+			!Array.isArray(recurrence.cycles) ||
+			recurrence.cycles.length > MAX_EVENING_CYCLES
+		)
+			throw Error("Invalid recurring evening clock");
+		for (const [index, cycle] of recurrence.cycles.entries()) {
+			fields(cycle, [
+				"index",
+				"purposes",
+				"events",
+				"openedSlot",
+				"supportSpent",
+			]);
+			const base = recurrence.firstStartsAt + index * 7 * 1440;
+			if (
+				cycle.index !== index ||
+				!Array.isArray(cycle.events) ||
+				cycle.events.length !== 2 ||
+				s.now < base - 4 * 1440
+			)
+				throw Error("Invalid evening cycle");
+			validatePurposes(
+				cycle.purposes,
+				Math.max(recurrence.startedAt, base - 4 * 1440),
+			);
+			if (
+				!cycle.supportSpent &&
+				(cycle.openedSlot || cycle.events.some((e) => e.advertisement))
+			)
+				throw Error("Missing weekly support receipt");
+			if (cycle.supportSpent !== undefined) {
+				const spent = cycle.supportSpent;
+				fields(spent, ["version", "kind", "eventId", "receipt"]);
+				validateEvent(spent.receipt, s, ids);
+				const target = cycle.events.find((e) => e.id === spent.eventId);
+				const expectedReceipt =
+					spent.kind === "open-evening-slot"
+						? cycle.openedSlot?.eventId === spent.eventId
+							? cycle.openedSlot.receipt
+							: undefined
+						: target?.advertisement;
+				const signature = (e: TownEvent) =>
+					JSON.stringify([
+						e.id,
+						e.at,
+						e.kind,
+						e.source,
+						e.actorId,
+						e.targetId,
+						e.placeId,
+						e.text,
+						e.causes,
+						e.importance,
+					]);
+				if (
+					spent.version !== 1 ||
+					!["open-evening-slot", "advertise-evening"].includes(spent.kind) ||
+					!target ||
+					!expectedReceipt ||
+					signature(spent.receipt) !== signature(expectedReceipt) ||
+					spent.receipt.at < Math.max(recurrence.startedAt, base - 4 * 1440)
+				)
+					throw Error("Invalid weekly support receipt");
+			}
+			if (cycle.openedSlot !== undefined) {
+				const opened = cycle.openedSlot;
+				fields(opened, ["eventId", "from", "to", "receipt"]);
+				validateEvent(opened.receipt, s, ids);
+				if (
+					!cycle.events.some((e) => e.id === opened.eventId) ||
+					opened.from !== base ||
+					opened.to !== base + 1440 ||
+					opened.receipt.kind !== "intervention" ||
+					opened.receipt.actorId !== undefined ||
+					opened.receipt.targetId !== undefined ||
+					opened.receipt.source !== undefined ||
+					opened.receipt.causes.length !== 0 ||
+					opened.receipt.at >= base ||
+					opened.receipt.at < Math.max(recurrence.startedAt, base - 4 * 1440) ||
+					opened.receipt.placeId !== "hall"
+				)
+					throw Error("Invalid opened evening slot");
+			}
 		}
 	}
-	for (const [index, e] of pilot.events.entries()) {
+	const knownActions =
+		allEvenings(s).filter((e) => e.advertisement).length +
+		(recurrence?.cycles.filter((c) => c.openedSlot).length ?? 0);
+	const weeklyActions =
+		recurrence?.cycles.filter((c) => c.supportSpent).length ?? 0;
+	if (knownActions - weeklyActions > 3 - s.controls)
+		throw Error("Unfunded evening intervention");
+	for (const [index, e] of allEvenings(s).entries()) {
 		fields(e, [
 			"id",
+			"cycle",
+			"advertisement",
 			"kind",
 			"organiserId",
 			"startsAt",
@@ -603,11 +971,21 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 			"replies",
 		]);
 		const kind = index % 2 === 0 ? "class" : "meal";
-		const expectedStart =
-			(Math.floor(pilot.openedAt / 1440) + 1 + (index < 2 ? 0 : 3)) * 1440 +
-			1080;
+		const cycleIndex = index < 4 ? undefined : Math.floor((index - 4) / 2);
+		const cycle =
+			cycleIndex === undefined ? undefined : recurrence?.cycles[cycleIndex];
+		const expectedStart = cycle
+			? (recurrence?.firstStartsAt ?? 0) +
+				cycle.index * 7 * 1440 +
+				(cycle.openedSlot?.eventId === e.id ? 1440 : 0)
+			: (Math.floor(pilot.openedAt / 1440) + 1 + (index < 2 ? 0 : 3)) * 1440 +
+				1080;
 		if (
-			e.id !== `evening-${Math.floor(index / 2)}-${kind}` ||
+			e.id !==
+				(cycle
+					? `weekly-${cycle.index}-${kind}`
+					: `evening-${Math.floor(index / 2)}-${kind}`) ||
+			e.cycle !== cycleIndex ||
 			e.kind !== kind ||
 			e.organiserId !== (kind === "class" ? "lea" : "sam") ||
 			e.startsAt !== expectedStart ||
@@ -635,6 +1013,21 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 			Object.keys(e.replies).length
 		)
 			throw Error("Missing evening invitation");
+		if (e.advertisement !== undefined) {
+			validateEvent(e.advertisement, s, ids);
+			if (
+				!e.notice ||
+				e.advertisement.kind !== "intervention" ||
+				e.advertisement.source !== "town-bulletin" ||
+				e.advertisement.actorId !== undefined ||
+				e.advertisement.targetId !== undefined ||
+				e.advertisement.placeId !== "hall" ||
+				e.advertisement.at < e.notice.at ||
+				e.advertisement.at >= e.startsAt ||
+				e.advertisement.causes.join() !== String(e.notice.id)
+			)
+				throw Error("Invalid evening advertisement");
+		}
 		if (
 			e.bookingEvent !== undefined &&
 			(!e.notice ||
@@ -673,6 +1066,7 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 		for (const [id, reply] of Object.entries(e.replies)) {
 			fields(reply, [
 				"heardAt",
+				"bulletinEvent",
 				"sourceId",
 				"heardEvent",
 				"reply",
@@ -701,6 +1095,14 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 				(reply.attendedMinutes > 0 && !["prepared", "closed"].includes(e.stage))
 			)
 				throw Error("Invalid evening reply");
+			if (
+				reply.bulletinEvent !== undefined &&
+				(reply.bulletinEvent !== e.advertisement?.id ||
+					reply.heardAt !== e.advertisement?.at ||
+					reply.sourceId !== undefined ||
+					reply.heardEvent !== undefined)
+			)
+				throw Error("Invalid broadcast invitation receipt");
 			if (reply.sourceId !== undefined || reply.heardEvent !== undefined) {
 				if (
 					!reply.sourceId ||
@@ -722,16 +1124,31 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 					throw Error("Invalid retold invitation");
 			}
 			if (reply.reply === "accepted") {
-				const c = s.people
-					.find((r) => r.person.id === id)
-					?.person.agenda.commitments.find((c) => c.id === reply.commitmentId);
+				const agenda = s.people.find((r) => r.person.id === id)?.person.agenda;
+				const c = agenda?.commitments.find((c) => c.id === reply.commitmentId);
+				const closed =
+					agenda?.commitments.filter((item) => item.status !== "pending") ?? [];
+				// HF drops the oldest closed promises. A retained host outcome is not
+				// a reason to keep that person's entire agenda indefinitely.
+				const pruned =
+					!c &&
+					agenda &&
+					e.stage === "closed" &&
+					e.result &&
+					e.endsAt < s.now &&
+					typeof reply.commitmentId === "string" &&
+					/^c[1-9]\d*$/.test(reply.commitmentId) &&
+					Number(reply.commitmentId.slice(1)) < agenda.nextId &&
+					closed.length >= AGENDA_DEFAULTS.maxClosedCommitments &&
+					closed.every((item) => item.until >= e.endsAt);
 				if (
-					!c ||
-					c.targetId !== e.organiserId ||
-					c.toId !== e.organiserId ||
-					c.from !== e.startsAt ||
-					c.until !== e.endsAt ||
-					c.actions.join() !== `attend-${e.kind}`
+					(!c && !pruned) ||
+					(c &&
+						(c.targetId !== e.organiserId ||
+							c.toId !== e.organiserId ||
+							c.from !== e.startsAt ||
+							c.until !== e.endsAt ||
+							c.actions.join() !== `attend-${e.kind}`))
 				)
 					throw Error("Evening promise differs from reply");
 			} else if (reply.commitmentId !== undefined)

@@ -10,6 +10,7 @@ import { RuntimeClient } from "../runtime-client";
 import { datedClock } from "./format";
 import { type ObservedFeed, observe } from "./observations";
 import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
+import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
 
 // Own the runtime and device checkpoint lifecycle together. In particular, startup
@@ -23,6 +24,10 @@ export function useVisitorSession() {
 	const [comparing, setComparing] = useState(false);
 	const [branchReport, setBranchReport] = useState<TownComparison>();
 	const [branchProgress, setBranchProgress] = useState("");
+	const [branchRequest, setBranchRequest] = useState<{
+		label: string;
+		rounds: number;
+	}>();
 	const [branchError, setBranchError] = useState("");
 	const comparisonPending = useRef(false);
 	const [speed, setSpeed] = useState(1200);
@@ -46,6 +51,7 @@ export function useVisitorSession() {
 	const interventionPending = useRef<{
 		kind: Intervention["kind"];
 		remaining: number;
+		spent: number;
 	} | null>(null);
 	const [saveConflict, setSaveConflict] = useState(false);
 	const saveConflictRef = useRef(false);
@@ -107,6 +113,7 @@ export function useVisitorSession() {
 		}
 		setInterventionNotice("");
 		setBranchReport(undefined);
+		setBranchRequest(undefined);
 		setBranchProgress("");
 		setBranchError("");
 		setSaved("");
@@ -209,14 +216,20 @@ export function useVisitorSession() {
 				const intervention = interventionPending.current;
 				if (
 					intervention &&
-					reply.view.controlsRemaining < intervention.remaining
+					(reply.view.controlsRemaining < intervention.remaining ||
+						(reply.view.stats.interventionsSpent ??
+							3 - reply.view.controlsRemaining) > intervention.spent)
 				) {
 					setInterventionNotice(
 						intervention.kind === "lend-tools"
 							? `Tools added. ${reply.view.stats.tools ?? "Updated"} tools now available.`
 							: intervention.kind === "restore-bus"
 								? "Bus restored. Future trips can use it; current activities keep their durations."
-								: "Hall news broadcast to awake neighbours. Each decides whether to act on it.",
+								: intervention.kind === "open-evening-slot"
+									? "Extra hall slot funded. The unposted opportunity moves to the next day; hosting remains their choice."
+									: intervention.kind === "advertise-evening"
+										? "Invitation advertised to awake neighbours. Hearing it does not mean accepting or attending."
+										: "Hall news broadcast to awake neighbours. Each decides whether to act on it.",
 					);
 					interventionPending.current = null;
 				}
@@ -319,20 +332,44 @@ export function useVisitorSession() {
 					exportRequest.current !== null &&
 					reply.requestId === exportRequest.current
 				) {
-					downloadGeneration.current = generation;
-					const packet = reply.save as { runtime?: { now?: number } } | null;
-					const at = packet?.runtime?.now;
-					setDownloadLabel(
-						typeof at === "number" ? datedClock(at) : "Current checkpoint",
+					const requestId = reply.requestId;
+					const revision = errorRevision.current;
+					void encodeSave(reply.save).then(
+						(blob) => {
+							if (
+								!active ||
+								exportRequest.current !== requestId ||
+								generation < acceptedGeneration.current
+							)
+								return;
+							downloadGeneration.current = generation;
+							const packet = reply.save as {
+								runtime?: { now?: number };
+							} | null;
+							const at = packet?.runtime?.now;
+							setDownloadLabel(
+								typeof at === "number" ? datedClock(at) : "Current checkpoint",
+							);
+							setDownloadUrl(URL.createObjectURL(blob));
+							exportRequest.current = null;
+						},
+						(failure: unknown) => {
+							if (
+								!active ||
+								exportRequest.current !== requestId ||
+								generation < acceptedGeneration.current
+							)
+								return;
+							exportRequest.current = null;
+							if (revision !== errorRevision.current) return;
+							errorRevision.current++;
+							setError(
+								failure instanceof SaveFileError
+									? failure.message
+									: "This save could not be compressed. The current town is unchanged.",
+							);
+						},
 					);
-					setDownloadUrl(
-						URL.createObjectURL(
-							new Blob([JSON.stringify(reply.save)], {
-								type: "application/json",
-							}),
-						),
-					);
-					exportRequest.current = null;
 				}
 			}
 		};
@@ -408,24 +445,41 @@ export function useVisitorSession() {
 			dispatch(command);
 		}
 	};
-	const compare = (intervention: Intervention, rounds: 24 | 96) => {
+	const compare = (intervention: Intervention, rounds: 24 | 96 | 672) => {
 		if (comparisonPending.current || saveConflictRef.current) return;
 		if (replaceAfterSave.current) {
 			setBranchError("Wait for the new town to finish starting, then compare.");
 			return;
 		}
 		setPlaying(false);
+		const evening = town?.evenings?.find((e) => e.id === intervention.eventId);
+		setBranchReport(undefined);
+		setBranchRequest({
+			rounds,
+			label:
+				intervention.kind === "open-evening-slot"
+					? `Extra slot for ${evening?.title ?? "the selected evening"}`
+					: intervention.kind === "advertise-evening"
+						? `Advertising ${evening?.title ?? "the selected invitation"}`
+						: intervention.kind.replaceAll("-", " "),
+		});
 		setComparing(true);
 		setBranchError("");
 		setBranchProgress("Pausing the live town and taking its checkpoint…");
 		comparisonPending.current = true;
 		client.current?.send({ type: "compare", intervention, rounds });
 	};
+	const cancelComparison = () => {
+		if (!comparisonPending.current) return;
+		setBranchProgress("Stopping comparison and restoring the live town…");
+		client.current?.send({ type: "cancel-comparison" });
+	};
 	const intervene = (intervention: Intervention) => {
 		if (!town || comparisonPending.current) return;
 		interventionPending.current = {
 			kind: intervention.kind,
 			remaining: town.controlsRemaining,
+			spent: town.stats.interventionsSpent ?? 3 - town.controlsRemaining,
 		};
 		setInterventionNotice("Changing the circumstance…");
 		send({ type: "intervene", intervention });
@@ -488,21 +542,15 @@ export function useVisitorSession() {
 		if (saveConflictRef.current || comparisonPending.current) return;
 		const intent = ++replacementIntent.current;
 		replaceAfterSave.current = null;
-		if (file.size > 50 * 1024 * 1024) {
-			reportLocalError(
-				"This save is larger than the 50 MiB import limit. The current town is unchanged.",
-			);
-			return;
-		}
 		setPlaying(false);
 		try {
-			const save = JSON.parse(await file.text());
+			const save = await decodeSave(file);
 			if (intent !== replacementIntent.current) return;
 			send({ type: "restore", save });
-		} catch {
+		} catch (failure) {
 			if (intent !== replacementIntent.current) return;
 			reportLocalError(
-				"This file is not valid JSON. The current town is unchanged.",
+				`${failure instanceof SaveFileError ? failure.message : "This save could not be read."} The current town is unchanged.`,
 			);
 		}
 	};
@@ -514,6 +562,7 @@ export function useVisitorSession() {
 		playing,
 		comparing,
 		branchReport,
+		branchRequest,
 		branchProgress,
 		branchError,
 		speed,
@@ -533,6 +582,7 @@ export function useVisitorSession() {
 		trends,
 		send,
 		compare,
+		cancelComparison,
 		intervene,
 		pause,
 		play,

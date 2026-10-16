@@ -36,11 +36,17 @@ import {
 	receiveEvent,
 } from "./encounters.ts";
 import {
+	allEvenings,
 	beginEvening,
+	canAdvertiseEvening,
+	canOpenEveningSlot,
 	eveningLabel,
 	finishEvening,
 	interruptEvening,
+	interveneEvening,
+	MAX_EVENING_CYCLES,
 	updateEvenings,
+	weeklySupportRemaining,
 } from "./evenings.ts";
 import {
 	cartSupplyBonus,
@@ -927,6 +933,13 @@ export class Runtime implements TownRuntime {
 			: "Clear";
 	}
 	intervene(input: Intervention) {
+		if (
+			input.kind === "open-evening-slot" ||
+			input.kind === "advertise-evening"
+		) {
+			interveneEvening(this, input.kind, input.eventId);
+			return;
+		}
 		if (!this.s.controls) throw Error("No intervention allowance remains");
 		if (!["restore-bus", "lend-tools", "share-news"].includes(input.kind))
 			throw Error("Unknown intervention");
@@ -1091,7 +1104,7 @@ export class Runtime implements TownRuntime {
 						? "initial"
 						: "observed") as "initial" | "observed",
 				})),
-				invitations: (this.s.socialEvenings?.events ?? [])
+				invitations: allEvenings(this.s)
 					.filter(
 						(e) => e.replies[r.person.id] && e.organiserId !== r.person.id,
 					)
@@ -1143,10 +1156,35 @@ export class Runtime implements TownRuntime {
 			})),
 			events: this.s.events.slice(-100),
 			stories: townStories(this.s),
-			evenings: (this.s.socialEvenings?.events ?? [])
-				.filter((e) => e.notice)
+			evenings: allEvenings(this.s)
+				.filter(
+					(e) =>
+						e.notice ||
+						(e.cycle !== undefined &&
+							e.stage === "candidate" &&
+							e.startsAt > this.s.now),
+				)
 				.map((e) => ({
 					id: e.id,
+					recurring: e.cycle !== undefined,
+					...(e.cycle === undefined
+						? {}
+						: { supportRemaining: weeklySupportRemaining(this.s, e) }),
+					canOpenSlot: canOpenEveningSlot(this.s, e),
+					canAdvertise: canAdvertiseEvening(this.s, e),
+					advertised: !!e.advertisement,
+					...(this.s.socialEvenings?.recurrence?.cycles.find(
+						(c) => c.openedSlot?.eventId === e.id,
+					)?.openedSlot
+						? {
+								originalStartsAt: this.s.socialEvenings.recurrence.cycles.find(
+									(c) => c.openedSlot?.eventId === e.id,
+								)?.openedSlot?.from,
+								slotReceipt: this.s.socialEvenings.recurrence.cycles.find(
+									(c) => c.openedSlot?.eventId === e.id,
+								)?.openedSlot?.receipt,
+							}
+						: {}),
 					kind: e.kind,
 					organiserId: e.organiserId,
 					title: eveningLabel(e),
@@ -1166,6 +1204,51 @@ export class Runtime implements TownRuntime {
 						.filter(([id, r]) => id !== e.organiserId && r.delivered)
 						.map(([id]) => id),
 				})),
+			...(this.s.socialEvenings?.recurrence
+				? {
+						eveningSchedule: {
+							cyclesGenerated: this.s.socialEvenings.recurrence.cycles.length,
+							cyclesCompleted: this.s.socialEvenings.recurrence.cycles.filter(
+								(c) => c.events.every((e) => e.stage === "closed"),
+							).length,
+							weeklyDeliveredClasses: allEvenings(this.s)
+								.filter((e) => e.cycle !== undefined && e.kind === "class")
+								.reduce(
+									(sum, e) =>
+										sum +
+										Object.entries(e.replies).filter(
+											([id, reply]) => id !== e.organiserId && reply.delivered,
+										).length,
+									0,
+								),
+							weeklyDeliveredMeals: allEvenings(this.s)
+								.filter((e) => e.cycle !== undefined && e.kind === "meal")
+								.reduce(
+									(sum, e) =>
+										sum +
+										Object.entries(e.replies).filter(
+											([id, reply]) => id !== e.organiserId && reply.delivered,
+										).length,
+									0,
+								),
+							cyclesLimit: MAX_EVENING_CYCLES,
+							finished:
+								this.s.socialEvenings.recurrence.cycles.length ===
+									MAX_EVENING_CYCLES &&
+								this.s.socialEvenings.recurrence.cycles.every((c) =>
+									c.events.every((e) => e.stage === "closed"),
+								),
+							...(this.s.socialEvenings.recurrence.cycles.length <
+							MAX_EVENING_CYCLES
+								? {
+										nextStartsAt:
+											this.s.socialEvenings.recurrence.firstStartsAt +
+											this.s.socialEvenings.recurrence.cycles.length * 7 * 1440,
+									}
+								: {}),
+						},
+					}
+				: {}),
 			...(this.s.handcart?.observation
 				? {
 						handcart: {
@@ -1194,6 +1277,12 @@ export class Runtime implements TownRuntime {
 					}
 				: {}),
 			stats: {
+				interventionsSpent:
+					3 -
+					this.s.controls +
+					(this.s.socialEvenings?.recurrence?.cycles.filter(
+						(c) => c.supportSpent,
+					).length ?? 0),
 				cartSections: this.s.handcart?.progress ?? 0,
 				cartReturned: this.s.handcart?.handover ? 1 : 0,
 				benchRequests: this.s.handcart?.requests.length ?? 0,

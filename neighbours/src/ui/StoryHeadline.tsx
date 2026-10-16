@@ -16,19 +16,28 @@ export default function StoryHeadline({
 	open: (id: string) => void;
 }) {
 	if (!story) return null;
+	const invitationDate =
+		story.kind === "evening-proposed"
+			? story.summaries
+					.map((text) => text.match(/\bon (Day \d+ at \d{2}:\d{2})\./)?.[1])
+					.find(Boolean)
+			: undefined;
 	return (
 		<div className="story-watch">
 			<button
 				type="button"
 				className="story-headline"
 				onClick={() => open(story.id)}
-				aria-label={`Read story: ${story.title}${story.at === undefined ? "" : `. ${datedClock(story.at)}`}`}
+				aria-label={`Read story: ${story.title}${invitationDate ? `. ${invitationDate}` : ""}${story.at === undefined ? "" : `. Posted ${datedClock(story.at)}`}`}
 			>
 				<span className="eyebrow">
 					{story.at === undefined ? "Recorded story" : datedClock(story.at)}
 				</span>
 				<span>
 					{story.title} <span aria-hidden="true">↗</span>
+					{invitationDate && (
+						<span className="tiny muted"> · {invitationDate}</span>
+					)}
 				</span>
 			</button>
 			{watch && (

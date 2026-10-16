@@ -62,7 +62,15 @@ let queue = boot().catch((error) => {
 	send({ type: "error", message: `Python could not start: ${String(error)}` });
 	throw error;
 });
+const comparisons = new Set<{ cancelled: boolean }>();
 self.onmessage = (event: MessageEvent<UiCommand>) => {
+	if (event.data.type === "cancel-comparison") {
+		for (const comparison of comparisons) comparison.cancelled = true;
+		return;
+	}
+	const comparison =
+		event.data.type === "compare" ? { cancelled: false } : undefined;
+	if (comparison) comparisons.add(comparison);
 	queue = queue
 		.then(async () => {
 			const q = event.data;
@@ -117,8 +125,10 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						q.intervention,
 						q.rounds,
 						(message) => send({ type: "progress", message }),
+						() => comparison?.cancelled ?? false,
 					);
 					send({ type: "comparison", report });
+					if (comparison) comparisons.delete(comparison);
 					break;
 				}
 
@@ -132,6 +142,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			}
 		})
 		.catch((error) => {
+			if (comparison) comparisons.delete(comparison);
 			send({
 				type: "error",
 				message: error instanceof Error ? error.message : String(error),

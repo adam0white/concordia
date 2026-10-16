@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { gunzipSync } from "node:zlib";
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
 import { transformWithOxc } from "vite";
 
@@ -38,9 +39,11 @@ async function packet(
 	const downloadPromise = page.waitForEvent("download");
 	await link.click();
 	const download = await downloadPromise;
-	const path = info.outputPath(`${name}.json`);
+	const path = info.outputPath(`${name}.json.gz`);
 	await download.saveAs(path);
-	const result = JSON.parse(await readFile(path, "utf8")) as Packet;
+	const result = JSON.parse(
+		gunzipSync(await readFile(path)).toString("utf8"),
+	) as Packet;
 	expect(result.schema).toBe("neighbours/concordia@1");
 	expect(result.runtime.people).toHaveLength(208);
 	expect(result.runtime.hf).toBe("2.2.1");

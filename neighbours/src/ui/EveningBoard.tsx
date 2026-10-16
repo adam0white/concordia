@@ -5,6 +5,7 @@ type Evening = NonNullable<TownView["evenings"]>[number];
 type Invitation = NonNullable<PersonView["invitations"]>[number];
 type BoardTown = Pick<TownView, "now" | "evenings"> & {
 	people: Pick<PersonView, "id" | "name">[];
+	places?: TownView["places"];
 };
 const stageLabel = (stage: string) =>
 	({
@@ -31,6 +32,9 @@ function Notice({
 	select: (id: string) => void;
 }) {
 	const host = town.people.find((person) => person.id === evening.organiserId);
+	const guestPlaces = town.places?.find(
+		(place) => place.id === "hall",
+	)?.capacity;
 	return (
 		<article className="evening-notice">
 			<div className="evening-heading">
@@ -64,9 +68,17 @@ function Notice({
 			<details className="evening-record">
 				<summary>Replies and attendance</summary>
 				<p className="tiny">
-					{evening.heard} received · {evening.accepted} accepted ·{" "}
-					{evening.attended} attended
+					{evening.heard} heard · {evening.accepted} accepted
+					{town.now < evening.startsAt
+						? " · Has not started"
+						: ` · ${evening.attended} received the ${evening.kind === "meal" ? "meal" : "lesson"}`}
 				</p>
+				{guestPlaces !== undefined && (
+					<p className="tiny muted">
+						Room for {Math.max(0, guestPlaces - 1)} guests and the host.
+						Accepting an invitation does not reserve a place.
+					</p>
+				)}
 				{evening.result && <p className="tiny">{evening.result}</p>}
 				{evening.participantIds.length > 0 && (
 					<section

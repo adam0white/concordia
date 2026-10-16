@@ -1,4 +1,5 @@
 import type { TownEvent } from "../contracts.ts";
+import { allEvenings } from "./evenings.ts";
 import type { Save } from "./state.ts";
 import { validateEvent } from "./validation.ts";
 export interface TownChronicle {
@@ -62,7 +63,7 @@ export function validateTownChronicle(s: Save, ids: Set<string>): void {
 		...s.people.flatMap((r) =>
 			r.inspection?.event ? [r.inspection.event] : [],
 		),
-		...(s.socialEvenings?.events ?? []).flatMap((e) => [
+		...allEvenings(s).flatMap((e) => [
 			...(e.notice ? [e.notice] : []),
 			...(e.result ? [e.result] : []),
 		]),

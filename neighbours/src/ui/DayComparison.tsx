@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Intervention, TownComparison } from "../contracts";
 
 const at = (minutes: number) =>
@@ -27,26 +27,42 @@ const interventions: Record<Intervention["kind"], string> = {
 	"lend-tools": "Add 3 shared tools",
 	"restore-bus": "Restore bus service",
 	"share-news": "Broadcast hall news",
+	"open-evening-slot": "Open a second hall evening",
+	"advertise-evening": "Share the posted evening invitation",
 };
+const genericInterventions = [
+	"lend-tools",
+	"restore-bus",
+	"share-news",
+] as const;
 export default function DayComparison({
 	report,
+	request,
 	busy,
 	disabled = false,
 	progress,
 	error,
 	selected,
 	onRun,
+	onCancel,
 }: {
 	report?: TownComparison;
+	request?: { label: string; rounds: number };
 	busy: boolean;
 	disabled?: boolean;
 	progress: string;
 	error: string;
 	selected: string;
-	onRun: (intervention: Intervention, rounds: 24 | 96) => void;
+	onRun: (intervention: Intervention, rounds: 24 | 96 | 672) => void;
+	onCancel?: () => void;
 }) {
 	const [kind, setKind] = useState<Intervention["kind"]>("lend-tools");
-	const [rounds, setRounds] = useState<24 | 96>(24);
+	const [rounds, setRounds] = useState<24 | 96 | 672>(24);
+	const disclosure = useRef<HTMLDetailsElement>(null);
+	useEffect(() => {
+		if ((busy || report || error) && disclosure.current)
+			disclosure.current.open = true;
+	}, [busy, report, error]);
 	const keys = report
 		? [
 				...new Set([
@@ -73,59 +89,89 @@ export default function DayComparison({
 	const treatmentPerson = report?.treatment.known.find(
 		(person) => person.id === selected,
 	);
+	const setup = (
+		<form
+			hidden={busy}
+			className="branch-controls"
+			onSubmit={(event) => {
+				event.preventDefault();
+				if (!busy && !disabled) onRun({ kind }, rounds);
+			}}
+		>
+			<label>
+				Change in the second run
+				<select
+					disabled={busy || disabled}
+					value={kind}
+					onChange={(event) =>
+						setKind(event.target.value as Intervention["kind"])
+					}
+				>
+					{genericInterventions.map((id) => (
+						<option key={id} value={id}>
+							{interventions[id]}
+						</option>
+					))}
+				</select>
+			</label>
+			<label>
+				Simulated time
+				<select
+					disabled={busy || disabled}
+					value={rounds}
+					onChange={(event) =>
+						setRounds(Number(event.target.value) as 24 | 96 | 672)
+					}
+				>
+					<option value={24}>6 hours · 24 rounds</option>
+					<option value={96}>A day · 96 rounds</option>
+					<option value={672}>Seven days · 672 rounds</option>
+				</select>
+			</label>
+			<button type="submit" disabled={busy || disabled}>
+				{busy ? "Comparing…" : "Compare from here"}
+			</button>
+		</form>
+	);
 	return (
-		<details className="comparison day-comparison">
-			<summary>Compare a day · hypothetical branches</summary>
+		<details ref={disclosure} className="comparison day-comparison">
+			<summary>Compare futures · hypothetical branches</summary>
+			{request && (
+				<p>
+					{busy ? "Comparing: " : "Last request: "}
+					<strong>{request.label}</strong> · {request.rounds / 96} simulated
+					days
+				</p>
+			)}
 			<p className="tiny muted">
 				Two hypothetical runs from this checkpoint; the live town stays
 				unchanged. One run carries on as it is. The other receives one
 				intervention. Both use the actual simulation, with no LLM calls.
 			</p>
-			<form
-				className="branch-controls"
-				onSubmit={(event) => {
-					event.preventDefault();
-					if (!busy && !disabled) onRun({ kind }, rounds);
-				}}
-			>
-				<label>
-					Change in the second run
-					<select
-						disabled={busy || disabled}
-						value={kind}
-						onChange={(event) =>
-							setKind(event.target.value as Intervention["kind"])
-						}
-					>
-						{Object.entries(interventions).map(([id, name]) => (
-							<option key={id} value={id}>
-								{name}
-							</option>
-						))}
-					</select>
-				</label>
-				<label>
-					Simulated time
-					<select
-						disabled={busy || disabled}
-						value={rounds}
-						onChange={(event) =>
-							setRounds(Number(event.target.value) as 24 | 96)
-						}
-					>
-						<option value={24}>6 hours · 24 rounds</option>
-						<option value={96}>A day · 96 rounds</option>
-					</select>
-				</label>
-				<button type="submit" disabled={busy || disabled}>
-					{busy ? "Comparing…" : "Compare from here"}
-				</button>
-			</form>
+			<p className="tiny muted">
+				A seven-day comparison runs two towns and can take several minutes. You
+				can cancel it without changing the live town.
+			</p>
+			{!busy && request && !report && <p className="eyebrow">New comparison</p>}
+			{!busy &&
+				(report ? (
+					<details>
+						<summary>Try another comparison</summary>
+						{setup}
+					</details>
+				) : (
+					setup
+				))}
 			{busy && (
 				<p className="tiny" role="status">
 					{progress ||
 						"Running both hypothetical branches. The live town is paused."}
 				</p>
+			)}
+			{busy && onCancel && (
+				<button type="button" onClick={onCancel}>
+					Cancel comparison
+				</button>
 			)}
 			{error && (
 				<p className="error" role="alert">

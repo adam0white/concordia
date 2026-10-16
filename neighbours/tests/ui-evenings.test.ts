@@ -49,7 +49,7 @@ it("shows the next notice and host while keeping counts, participants and later 
 	expect(visible).not.toContain("Shared meal");
 	expect(visible).not.toContain("Recorded outcome");
 	expect(visible).not.toContain("Sam");
-	expect(html).toContain("3 received · 2 accepted · 0 attended");
+	expect(html).toContain("3 heard · 2 accepted · Has not started");
 	expect(html).toContain("Recorded participants");
 	expect(html).toContain("Other hall notices · 1");
 	expect(html).not.toContain("<details open");

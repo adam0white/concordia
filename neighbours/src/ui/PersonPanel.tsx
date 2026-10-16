@@ -6,6 +6,7 @@ import type { ObservedFeed } from "./observations";
 import PersonLessons from "./PersonLessons";
 import PersonPromises from "./PersonPromises";
 import PersonPurposes from "./PersonPurposes";
+import { eventDetail, personHistory } from "./person-history";
 import { activityLabel, canAct } from "./person-status";
 
 export default function PersonPanel({
@@ -33,17 +34,7 @@ export default function PersonPanel({
 	const place = town.places.find((p) => p.id === person.placeId);
 	const destination = town.places.find((p) => p.id === person.journey?.toId);
 
-	const history = [
-		...new Map(
-			[
-				...person.history,
-				...(observed?.events.filter((event) => event.actorId === person.id) ??
-					[]),
-			].map((event) => [event.id, event]),
-		).values(),
-	]
-		.sort((a, b) => b.at - a.at || b.id - a.id)
-		.slice(0, 12);
+	const history = personHistory(person, town, observed);
 	return (
 		<aside
 			ref={panel}
@@ -171,15 +162,49 @@ export default function PersonPanel({
 			)}
 			<details>
 				<summary>
-					History <span>{history.length}</span>
+					History <span>{history.meaningful.length}</span>
 				</summary>
 				<div className="received">
-					{history.map((e) => (
-						<p key={e.id}>
+					{history.meaningful.slice(0, 12).map((e) => (
+						<p key={e.key}>
 							<time>{datedClock(e.at)}</time> {e.text}
 						</p>
 					))}
-					{!history.length && <p>No recorded history yet.</p>}
+					{!history.meaningful.length && (
+						<p>No consequential outcomes recorded yet.</p>
+					)}
+					{history.meaningful.length > 12 && (
+						<details>
+							<summary>
+								Earlier outcomes · {history.meaningful.length - 12}
+							</summary>
+							{history.meaningful.slice(12).map((e) => (
+								<p key={e.key}>
+									<time>{datedClock(e.at)}</time> {e.text}
+								</p>
+							))}
+						</details>
+					)}
+					{history.routine.length > 0 && (
+						<details>
+							<summary>Routine activity · {history.routine.length}</summary>
+							{history.routine.map((e) => (
+								<p key={e.id}>
+									<time>{datedClock(e.at)}</time> {e.text}
+								</p>
+							))}
+						</details>
+					)}
+					<details>
+						<summary>Recorded event details · {history.raw.length}</summary>
+						{history.raw.map((e) => (
+							<p key={e.id}>
+								<time>{datedClock(e.at)}</time> {e.text}
+								<br />
+								<span className="tiny muted">{eventDetail(e)}</span>
+							</p>
+						))}
+					</details>
 				</div>
 			</details>
 			<details>
