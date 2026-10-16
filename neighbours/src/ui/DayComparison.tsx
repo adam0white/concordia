@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Intervention, TownComparison } from "../contracts";
+import { comparisonOutcomes } from "./comparison-outcomes";
 
 const at = (minutes: number) =>
 	`Day ${Math.floor(minutes / 1440) + 1}, ${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
@@ -68,6 +69,7 @@ export default function DayComparison({
 		if ((busy || report || error) && disclosure.current)
 			disclosure.current.open = true;
 	}, [busy, report, error]);
+	const outcomes = report ? comparisonOutcomes(report) : undefined;
 	const keys = report
 		? [
 				...new Set([
@@ -141,32 +143,16 @@ export default function DayComparison({
 	return (
 		<details ref={disclosure} className="comparison day-comparison">
 			<summary>Compare futures · hypothetical branches</summary>
-			{request && (
+			{(request || report) && (
 				<p>
-					{busy ? "Comparing: " : "Last request: "}
-					<strong>{request.label}</strong> · {request.rounds / 96} simulated
-					days
+					<strong>
+						{request?.label ??
+							(report ? interventions[report.intervention.kind] : "")}
+					</strong>
 				</p>
 			)}
-			<p className="tiny muted">
-				Two hypothetical runs from this checkpoint; the live town stays
-				unchanged. One run carries on as it is. The other receives one
-				intervention. Both use the actual simulation, with no LLM calls.
-			</p>
-			<p className="tiny muted">
-				A seven-day comparison runs two towns and can take several minutes. You
-				can cancel it without changing the live town.
-			</p>
-			{!busy && request && !report && <p className="eyebrow">New comparison</p>}
-			{!busy &&
-				(report ? (
-					<details>
-						<summary>Try another comparison</summary>
-						{setup}
-					</details>
-				) : (
-					setup
-				))}
+			<p className="tiny muted">Hypothetical · Your town is unchanged</p>
+			{!busy && !report && setup}
 			{busy && (
 				<p className="tiny" role="status">
 					{progress ||
@@ -183,111 +169,220 @@ export default function DayComparison({
 					{error}
 				</p>
 			)}
-			{report && (
+			{report && !busy && (
 				<>
-					<p className="tiny muted">
-						Last comparison · seed {report.seed} · {at(report.startAt)} →{" "}
-						{at(report.endAt)} · {interventions[report.intervention.kind]}
-					</p>
-					<div className="comparison-table-wrap">
-						<table>
-							<caption>State at the end of each recorded branch</caption>
-							<thead>
-								<tr>
-									<th scope="col">Town fact</th>
-									<th scope="col">No intervention</th>
-									<th scope="col">Intervention</th>
-									<th scope="col">Difference</th>
-								</tr>
-							</thead>
-							<tbody>
-								{keys.map((key) => {
-									const before = report.baseline.stats[key] ?? 0,
-										after = report.treatment.stats[key] ?? 0,
-										diff = after - before;
-									return (
-										<tr key={key}>
-											<th scope="row">
-												{names[key] ??
-													key.replaceAll(/([a-z])([A-Z])/g, "$1 $2")}
-											</th>
-											<td>
-												{key === "hallSafe"
-													? before
-														? "Yes"
-														: "No"
-													: numeric(before)}
-											</td>
-											<td>
-												{key === "hallSafe"
-													? after
-														? "Yes"
-														: "No"
-													: numeric(after)}
-											</td>
-											<td>
-												{diff > 0 ? "+" : ""}
-												{numeric(diff)}
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-					</div>
-					{baselinePerson && treatmentPerson && (
-						<div className="branch-person">
-							<strong>{baselinePerson.name} at the end</strong>
-							<p>
-								No intervention: {baselinePerson.activity} · money{" "}
-								{numeric(baselinePerson.wealth)}
-							</p>
-							<p>
-								Intervention: {treatmentPerson.activity} · money{" "}
-								{numeric(treatmentPerson.wealth)}
-							</p>
-						</div>
+					{outcomes && (
+						<section aria-label="Changed outcomes">
+							<h3>What differed during this comparison</h3>
+							{outcomes.baseline.length || outcomes.treatment.length ? (
+								<div className="event-grid">
+									{(["baseline", "treatment"] as const).map((branch) => (
+										<div className="trial" key={branch}>
+											<h4>
+												{branch === "baseline" ? "Without help" : "With help"}
+											</h4>
+											{outcomes[branch].length ? (
+												outcomes[branch].map((story) => (
+													<article
+														aria-label={story.title}
+														key={
+															story.id ??
+															JSON.stringify([
+																story.at,
+																story.title,
+																story.summary,
+															])
+														}
+													>
+														<p>
+															<time className="tiny muted">
+																{at(story.at ?? report.startAt)}
+															</time>
+															<br />
+															{story.summary}
+														</p>
+													</article>
+												))
+											) : (
+												<p>No differing outcome recorded in this interval.</p>
+											)}
+										</div>
+									))}
+								</div>
+							) : (
+								<p>
+									No differing dated outcome was reported during this interval.
+								</p>
+							)}
+							{outcomes.shared.length > 0 && (
+								<details>
+									<summary>
+										Same outcomes in both runs · {outcomes.shared.length}
+									</summary>
+									{outcomes.shared.map((story) => (
+										<article
+											aria-label={story.title}
+											key={
+												story.id ??
+												JSON.stringify([story.at, story.title, story.summary])
+											}
+										>
+											<p>
+												<time className="tiny muted">
+													{at(story.at ?? report.startAt)}
+												</time>
+												<br />
+												{story.summary}
+											</p>
+										</article>
+									))}
+								</details>
+							)}
+							{outcomes.undated.baseline.length +
+								outcomes.undated.treatment.length +
+								outcomes.undated.shared.length >
+								0 && (
+								<details>
+									<summary>Stories without recorded dates</summary>
+									<p className="tiny muted">
+										These reports lack story times. They may include history
+										from before the checkpoint.
+									</p>
+									{(["baseline", "treatment", "shared"] as const).map(
+										(branch) =>
+											outcomes.undated[branch].length > 0 && (
+												<div key={branch}>
+													<h4>
+														{branch === "baseline"
+															? "Without help"
+															: branch === "treatment"
+																? "Intervention"
+																: "Both runs"}
+													</h4>
+													{outcomes.undated[branch].map((story) => (
+														<article
+															aria-label={story.title}
+															key={
+																story.id ??
+																JSON.stringify([story.title, story.summary])
+															}
+														>
+															<p>{story.summary}</p>
+														</article>
+													))}
+												</div>
+											),
+									)}
+								</details>
+							)}
+						</section>
 					)}
 					<details>
-						<summary>Neighbour outcomes & recorded stories</summary>
-						{report.baseline.known.map((person) => {
-							const other = report.treatment.known.find(
-								(p) => p.id === person.id,
-							);
-							return (
-								<div className="trial" key={person.id}>
-									<strong>{person.name}</strong>
-									<p>
-										No intervention: {person.activity} · money{" "}
-										{numeric(person.wealth)}
-									</p>
-									<p>
-										Intervention: {other?.activity ?? "Not reported"} · money{" "}
-										{other ? numeric(other.wealth) : "Not reported"}
-									</p>
-								</div>
-							);
-						})}
-						{(["baseline", "treatment"] as const).map((branch) => (
-							<div className="trial" key={branch}>
-								<strong>
-									{branch === "baseline" ? "No intervention" : "Intervention"} ·
-									recorded stories
-								</strong>
-								{report[branch].stories.length ? (
-									report[branch].stories.map((story) => (
-										<p key={`${story.title}-${story.summary}`}>
-											<b>{story.title}</b> {story.summary}
-										</p>
-									))
-								) : (
-									<p>No detected story was reported.</p>
-								)}
+						<summary>Resources and neighbour state at the end</summary>
+						<div className="comparison-table-wrap">
+							<table>
+								<caption>State at the end of each recorded branch</caption>
+								<thead>
+									<tr>
+										<th scope="col">Town fact</th>
+										<th scope="col">No intervention</th>
+										<th scope="col">Intervention</th>
+										<th scope="col">Difference</th>
+									</tr>
+								</thead>
+								<tbody>
+									{keys.map((key) => {
+										const before = report.baseline.stats[key] ?? 0,
+											after = report.treatment.stats[key] ?? 0,
+											diff = after - before;
+										return (
+											<tr key={key}>
+												<th scope="row">
+													{names[key] ??
+														key.replaceAll(/([a-z])([A-Z])/g, "$1 $2")}
+												</th>
+												<td>
+													{key === "hallSafe"
+														? before
+															? "Yes"
+															: "No"
+														: numeric(before)}
+												</td>
+												<td>
+													{key === "hallSafe"
+														? after
+															? "Yes"
+															: "No"
+														: numeric(after)}
+												</td>
+												<td>
+													{diff > 0 ? "+" : ""}
+													{numeric(diff)}
+												</td>
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+						{baselinePerson && treatmentPerson && (
+							<div className="branch-person">
+								<strong>{baselinePerson.name} at the end</strong>
+								<p>
+									No intervention: {baselinePerson.activity} · money{" "}
+									{numeric(baselinePerson.wealth)}
+								</p>
+								<p>
+									Intervention: {treatmentPerson.activity} · money{" "}
+									{numeric(treatmentPerson.wealth)}
+								</p>
 							</div>
-						))}
+						)}
+						<details>
+							<summary>All neighbour states</summary>
+							{report.baseline.known.map((person) => {
+								const other = report.treatment.known.find(
+									(p) => p.id === person.id,
+								);
+								return (
+									<div className="trial" key={person.id}>
+										<strong>{person.name}</strong>
+										<p>
+											No intervention: {person.activity} · money{" "}
+											{numeric(person.wealth)}
+										</p>
+										<p>
+											Intervention: {other?.activity ?? "Not reported"} · money{" "}
+											{other ? numeric(other.wealth) : "Not reported"}
+										</p>
+									</div>
+								);
+							})}
+						</details>
 					</details>
 					<details>
-						<summary>Checkpoint & limits</summary>
+						<summary>Checkpoint &amp; limits</summary>
+						<p className="tiny muted">
+							Seed {report.seed} · {at(report.startAt)} → {at(report.endAt)} ·{" "}
+							{interventions[report.intervention.kind]}
+						</p>
+						<p className="tiny muted">
+							Two hypothetical runs from this checkpoint. One carries on as it
+							is; the other receives one intervention. Both use the actual
+							simulation with no LLM calls.
+						</p>
+						<p className="tiny muted">
+							Only recorded outcomes within this interval appear above.
+							Differences describe these two runs; they do not establish a
+							general effect.
+						</p>
+						<a
+							className="text-button"
+							download={`town-comparison-${report.seed}-${report.startAt}.json`}
+							href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report, null, 2))}`}
+						>
+							Download full comparison
+						</a>
 						<p className="tiny checkpoint-hash">
 							Starting state: {report.startHash}
 						</p>
@@ -296,6 +391,10 @@ export default function DayComparison({
 								{limit}
 							</p>
 						))}
+					</details>
+					<details>
+						<summary>Try another comparison</summary>
+						{setup}
 					</details>
 				</>
 			)}

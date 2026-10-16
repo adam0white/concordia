@@ -16,7 +16,12 @@ function project(view: TownView): TownComparison["baseline"] {
 			totalKnownWealth: known.reduce((n, p) => n + p.wealth, 0),
 		},
 		known,
-		stories: view.stories.map(({ title, summary }) => ({ title, summary })),
+		stories: view.stories.map(({ id, at, title, summary }) => ({
+			id,
+			at,
+			title,
+			summary,
+		})),
 	};
 }
 /** Two isolated futures. The original runtime and Python engine are never advanced. */

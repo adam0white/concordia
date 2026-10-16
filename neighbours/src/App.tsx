@@ -1,59 +1,48 @@
-import { useEffect, useState } from "react";
-import Comparison from "./ui/Comparison";
-import DayComparison from "./ui/DayComparison";
+import { useCallback, useEffect, useState } from "react";
+import type { Intervention } from "./contracts";
 import ErrorMessage from "./ui/ErrorMessage";
-import EveningBoard from "./ui/EveningBoard";
-import EvidencePanel from "./ui/EvidencePanel";
-import { clock, initial, metricLabel, number, placeName } from "./ui/format";
-import HallChoices from "./ui/HallChoices";
-import HandcartCard from "./ui/HandcartCard";
-import InspectionSituation from "./ui/InspectionSituation";
+import { clock } from "./ui/format";
+import HelpPanel from "./ui/HelpPanel";
 import { groupStories } from "./ui/observations";
-import PersonPanel from "./ui/PersonPanel";
-import { activityLabel, canAct } from "./ui/person-status";
-import SessionFooter from "./ui/SessionFooter";
+import SessionMenu from "./ui/SessionMenu";
 import Stories from "./ui/Stories";
 import StoryHeadline, { storyAnchor } from "./ui/StoryHeadline";
-import TownHealth from "./ui/TownHealth";
-import TownMap from "./ui/TownMap";
+import TownInspector from "./ui/TownInspector";
+import TownNavigation, { type TownTab } from "./ui/TownNavigation";
+import TownOverview from "./ui/TownOverview";
 import { useStoryWatch } from "./ui/useStoryWatch";
 import { useVisitorSession } from "./ui/useVisitorSession";
 import Welcome from "./ui/Welcome";
 
 export default function App() {
 	const [hasEnteredTown, setHasEnteredTown] = useState(false);
+	const focusLoading = useCallback((heading: HTMLHeadingElement | null) => {
+		heading?.focus();
+	}, []);
 	const session = useVisitorSession({ enabled: hasEnteredTown });
 	const {
 		town,
-		healthHistory,
-		progress,
-		error,
 		playing,
 		comparing,
 		saveConflict,
-		branchReport,
-		branchProgress,
-		branchError,
-		speed,
-		setSpeed,
 		selected,
 		setSelected,
 		observed,
-		seedInput,
-		setSeedInput,
-		interventionNotice,
-		trends,
-		send,
-		compare,
-		intervene,
 		pause,
 		play,
-		startTown,
 	} = session;
-	const [tab, setTab] = useState<"town" | "stories" | "inspector">("town");
-	const [storyFocus, setStoryFocus] = useState<{ id: string }>();
-	const [storyPersonFocus, setStoryPersonFocus] = useState<{ id: string }>();
+	const [tab, setTab] = useState<TownTab>("town");
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [storyFocus, setStoryFocus] = useState<string>();
+	const [personFocus, setPersonFocus] = useState<string>();
 	const [comparisonFocus, setComparisonFocus] = useState(false);
+	const [hallExpanded, setHallExpanded] = useState(false);
+	const person = town?.people.find((resident) => resident.id === selected);
+	const stories = town ? groupStories(town, observed) : [];
+	const storyWatch = useStoryWatch(
+		{ playing, seed: town?.seed, now: town?.now, storyId: stories[0]?.id },
+		pause,
+	);
 	useEffect(() => {
 		if (!comparisonFocus || tab !== "inspector") return;
 		const panel = document.getElementById("town-info-panel");
@@ -62,47 +51,61 @@ export default function App() {
 		setComparisonFocus(false);
 	}, [comparisonFocus, tab]);
 	useEffect(() => {
-		if (!storyPersonFocus || selected !== storyPersonFocus.id) return;
+		if (!personFocus || selected !== personFocus || tab !== "town") return;
 		const panel = document.querySelector<HTMLElement>(".person-panel");
 		panel?.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
 		panel?.scrollIntoView({ block: "start", behavior: "instant" });
-		setStoryPersonFocus(undefined);
-	}, [storyPersonFocus, selected]);
+		setPersonFocus(undefined);
+	}, [personFocus, selected, tab]);
 	useEffect(() => {
 		if (tab !== "stories" || !storyFocus) return;
-		const target = document.getElementById(storyAnchor(storyFocus.id));
+		const target = document.getElementById(storyAnchor(storyFocus));
 		target?.focus({ preventScroll: true });
 		target?.scrollIntoView({ block: "start", behavior: "instant" });
 		setStoryFocus(undefined);
 	}, [tab, storyFocus]);
-
-	const person = town?.people.find((p) => p.id === selected);
-	const selectedPlace = town?.places.find((p) => p.id === person?.placeId);
-	const hallOpen = town?.places.some(
-		(p) => (p.id.includes("hall") || p.kind.includes("hall")) && p.open,
-	);
-	const stories = town ? groupStories(town, observed) : [];
-	const storyWatch = useStoryWatch(
-		{ playing, seed: town?.seed, now: town?.now, storyId: stories[0]?.id },
-		pause,
-	);
-	const familiarEvents = observed?.events ?? [];
-	const followedEvents = selected
-		? familiarEvents.filter(
-				(e) => e.actorId === selected || e.targetId === selected,
-			)
-		: familiarEvents;
-	const recentEvents = (
-		followedEvents.length
-			? followedEvents
-			: familiarEvents.length
-				? familiarEvents
-				: (town?.events ?? [])
-	)
-		.slice(-3)
-		.reverse();
+	const follow = (id: string) => {
+		setSelected(id);
+		setTab("town");
+		setPersonFocus(id);
+	};
+	const closePerson = () => {
+		const previous = selected;
+		setSelected("");
+		requestAnimationFrame(() => {
+			const button = [
+				...document.querySelectorAll<HTMLButtonElement>(".neighbour"),
+			].find((candidate) => candidate.dataset.personId === previous);
+			(button ?? document.getElementById("tab-town"))?.focus({
+				preventScroll: true,
+			});
+			document
+				.getElementById("town-info-panel")
+				?.scrollIntoView({ block: "start", behavior: "instant" });
+		});
+	};
+	const changeTab = (next: TownTab) => {
+		if (next === "town") setSelected("");
+		setTab(next);
+		requestAnimationFrame(() =>
+			document
+				.getElementById("town-info-panel")
+				?.scrollIntoView({ block: "start", behavior: "instant" }),
+		);
+	};
+	const compare = (input: Intervention, rounds: 96 | 672) => {
+		setTab("inspector");
+		setComparisonFocus(true);
+		session.compare(input, rounds);
+	};
+	const readStory = (id: string) => {
+		setTab("stories");
+		setStoryFocus(id);
+	};
 	return (
-		<div className={`app ${hasEnteredTown ? "town-entered" : ""}`}>
+		<div
+			className={`app ${hasEnteredTown ? "town-entered mobile-focused" : ""}`}
+		>
 			<header className="masthead">
 				<a className="brand" href="./">
 					<span className="brand-mark">n.</span>
@@ -118,18 +121,28 @@ export default function App() {
 						}
 					/>
 					{town
-						? "Browser live · Concordia + HF"
+						? "Live on this device"
 						: hasEnteredTown
-							? "Starting browser runtime"
+							? "Starting town"
 							: "A town on your device"}
 				</div>
+				{town && (
+					<button
+						type="button"
+						className="save-menu-trigger"
+						aria-label="Save and town options"
+						onClick={() => setMenuOpen(true)}
+					>
+						Save <span aria-hidden="true">⋯</span>
+					</button>
+				)}
 				<button
 					type="button"
 					className="icon-button theme-toggle"
+					aria-label="Switch colour theme"
 					onClick={() =>
 						document.documentElement.classList.toggle("alternate-theme")
 					}
-					aria-label="Switch colour theme"
 				>
 					◐
 				</button>
@@ -139,30 +152,20 @@ export default function App() {
 			) : !town ? (
 				<main className="loading-screen">
 					<div className="loading-house">⌂</div>
-					<span className="eyebrow">A town, coming to life</span>
-					<h2 tabIndex={-1} ref={(heading) => heading?.focus()}>
-						Ordinary lives.
-						<br />
-						Shared possibilities.
+					<h2 tabIndex={-1} ref={focusLoading}>
+						Bringing Alder Quay to life.
 					</h2>
-					<p>
-						Eight neighbours. Two hundred other lives.
-						<br />
-						One community hall waiting to reopen.
-					</p>
 					<div className="loading-progress">
 						<span className="status-dot loading" />
-						{progress}
+						{session.progress}
 					</div>
-					<p className="muted tiny">
-						Python Concordia and Human Framework run here in your browser.
-						<br />
+					<p className="tiny muted">
 						The first visit downloads the Python runtime.
 					</p>
-					{error && (
+					{session.error && (
 						<div className="error" role="alert">
 							<strong>The town could not start.</strong>
-							<ErrorMessage message={error} />
+							<ErrorMessage message={session.error} />
 							<button type="button" onClick={() => location.reload()}>
 								Try again
 							</button>
@@ -173,7 +176,7 @@ export default function App() {
 				<>
 					<div className="town-toolbar">
 						<div className="town-time">
-							<span className="eyebrow">Day {town.day} in Alder Quay</span>
+							<span className="eyebrow">Day {town.day}</span>
 							<strong>{clock(town.now)}</strong>
 							<span className="weather">{town.weather}</span>
 						</div>
@@ -181,34 +184,31 @@ export default function App() {
 							<button
 								type="button"
 								className="play-button"
-								onClick={() => {
-									if (playing) pause();
-									else {
-										play();
-									}
-								}}
-								disabled={comparing || saveConflict}
 								aria-label={playing ? "Pause town" : "Play town"}
+								disabled={comparing || saveConflict}
+								onClick={() => (playing ? pause() : play())}
 							>
 								{playing ? "Ⅱ" : "▶"} <span>{playing ? "Pause" : "Play"}</span>
 							</button>
 							<button
 								type="button"
+								aria-label="Step: Advance one round"
+								disabled={comparing || saveConflict}
 								onClick={() => {
 									storyWatch.resetBaseline();
 									pause();
-									send({ type: "step" });
+									session.send({ type: "step" });
 								}}
-								disabled={comparing || saveConflict}
-								aria-label="Advance one round"
 							>
 								Step →
 							</button>
 							<label className="speed">
 								<span className="sr-only">Playback speed</span>
 								<select
-									value={speed}
-									onChange={(e) => setSpeed(Number(e.target.value))}
+									value={session.speed}
+									onChange={(event) =>
+										session.setSpeed(Number(event.target.value))
+									}
 								>
 									<option value={2400}>½×</option>
 									<option value={1200}>1×</option>
@@ -218,467 +218,116 @@ export default function App() {
 							</label>
 						</div>
 					</div>
-					<StoryHeadline
-						story={stories[0]}
-						watch={storyWatch}
-						open={(id) => {
-							setTab("stories");
-							setStoryFocus({ id });
-						}}
-					/>
-					<main className="town-layout">
-						<section className="map-section" aria-label="Town overview">
-							<div className="map-heading">
-								<div>
-									<span className="eyebrow">Life beside the river</span>
-									<h2>Alder Quay, after the flood.</h2>
-								</div>
-								<span className="population">
-									{town.people.filter((p) => p.lifeState !== "dead").length}{" "}
-									living residents
-								</span>
-							</div>
-							<div className="map-frame">
-								<TownMap town={town} selected={selected} select={setSelected} />
-								<div className="map-caption">
-									<span>
-										<i className="legend-dot" /> Background neighbours · actual
-										locations
-									</span>
-									<span>
-										{person
-											? `Following ${person.name} · ${!canAct(person) ? activityLabel(person) : selectedPlace ? placeName(selectedPlace) : person.placeId}`
-											: "Select a neighbour to follow their day"}
-									</span>
-								</div>
-							</div>
-							<nav className="neighbour-strip" aria-label="Familiar neighbours">
-								{town.people
-									.filter((p) => p.known)
-									.map((p) => (
-										<button
-											type="button"
-											key={p.id}
-											className={`neighbour life-${p.lifeState ?? "awake"} ${selected === p.id ? "active" : ""}`}
-											onClick={() => setSelected(selected === p.id ? "" : p.id)}
-										>
-											<span
-												className="mini-avatar"
-												style={{ background: p.color }}
-											>
-												{initial(p.name)}
-											</span>
-											<span>
-												<strong>{p.name.split(" ")[0]}</strong>
-												<small>{activityLabel(p)}</small>
-											</span>
-										</button>
-									))}
-							</nav>
-							<HandcartCard town={town} select={setSelected} />
-							<EveningBoard town={town} select={setSelected} />
-							<InspectionSituation
-								town={town}
-								disabled={comparing || saveConflict}
-								onAction={intervene}
-								onCompare={(input) => {
-									setTab("inspector");
-									setComparisonFocus(true);
-									compare(input, 96);
-								}}
-							/>
-							<HallChoices
-								town={town}
-								disabled={comparing || saveConflict}
-								onAction={intervene}
-								onCompare={(input) => {
-									setTab("inspector");
-									setComparisonFocus(true);
-									compare(input, 672);
-								}}
-							/>
-						</section>
-						{person ? (
-							<PersonPanel
-								person={person}
-								observed={observed}
-								town={town}
-								close={() => setSelected("")}
-							/>
-						) : (
-							<aside className="town-notes">
-								<span className="eyebrow">The shared work</span>
-								<h2>
-									{hallOpen ? "The doors are open." : "The hall is quiet."}
-									<br />
-									{hallOpen ? "Life carries on." : "The town isn’t."}
-								</h2>
-								<p>
-									The flood closed a place for evening classes and shared meals.
-									Life carried on elsewhere. Reopening it has to fit around
-									people’s own lives.
-								</p>
-								{town.places
-									.filter(
-										(p) => p.id.includes("hall") || p.kind.includes("hall"),
-									)
-									.map((p) => (
-										<div key={p.id} className="hall-state">
-											<span className="eyebrow">{placeName(p)}</span>
-											<strong>
-												{p.open
-													? "Safely inspected"
-													: (town.stats.hallRepairs ?? 0) >= 12
-														? "Ready for inspection"
-														: "Still waiting for repair"}
-											</strong>
-											<p>{p.description}</p>
-											<span className="tiny muted">
-												{p.occupants} here · {p.reserved ?? p.occupants}{" "}
-												activity places reserved
-											</span>
-										</div>
-									))}
-							</aside>
-						)}
-					</main>
-					<section className="lower-section">
-						<div
-							className="section-tabs"
-							role="tablist"
-							aria-label="Town information"
-						>
-							{(["town", "stories", "inspector"] as const).map((t) => (
-								<button
-									type="button"
-									key={t}
-									role="tab"
-									aria-selected={tab === t}
-									aria-controls="town-info-panel"
-									tabIndex={tab === t ? 0 : -1}
-									onKeyDown={(e) => {
-										const tabs = ["town", "stories", "inspector"] as const;
-										const index = tabs.indexOf(t);
-										const next =
-											e.key === "ArrowRight"
-												? (index + 1) % 3
-												: e.key === "ArrowLeft"
-													? (index + 2) % 3
-													: e.key === "Home"
-														? 0
-														: e.key === "End"
-															? 2
-															: -1;
-										const target = tabs[next];
-										if (target) {
-											e.preventDefault();
-											setTab(target);
-											e.currentTarget.parentElement
-												?.querySelectorAll<HTMLButtonElement>("[role=tab]")
-												[next]?.focus();
-										}
-									}}
-									onClick={() => setTab(t)}
-								>
-									{t === "town"
-										? person
-											? `${person.name}’s day`
-											: "Happening now"
-										: t === "stories"
-											? "Stories"
-											: "Inspector"}
-									{t === "inspector" &&
-										town.diagnostics.some((d) => d.severity === "error") &&
-										" •"}
-								</button>
-							))}
-						</div>
-						{tab === "town" && (
-							<div
-								className="event-grid"
-								role="tabpanel"
-								id="town-info-panel"
-								aria-label="Town information"
+					<TownNavigation active={tab} change={changeTab} />
+					{storyWatch.paused && (
+						<div className="paused-story">
+							<span role="status">Paused for a new story</span>
+							<button
+								type="button"
+								className="text-button"
+								onClick={() => stories[0] && readStory(stories[0].id)}
 							>
-								{recentEvents.map((e) => (
-									<article className="event" key={e.id}>
-										<span className="eyebrow">
-											Day {Math.floor(e.at / 1440) + 1} · {clock(e.at)} ·{" "}
-											{e.kind.replaceAll("-", " ")}
-										</span>
-										<p>{e.text}</p>
-										{e.actorId && (
-											<button
-												type="button"
-												className="text-button"
-												onClick={() => setSelected(e.actorId || "")}
-											>
-												Follow neighbour ↗
-											</button>
-										)}
-									</article>
-								))}
-								{!recentEvents.length && (
-									<p className="muted">No recent events to show.</p>
-								)}
-							</div>
-						)}
-						{tab === "stories" && (
-							<div
-								className="event-grid"
-								role="tabpanel"
-								id="town-info-panel"
-								aria-label="Town information"
+								Read story
+							</button>
+							<button
+								type="button"
+								className="text-button"
+								onClick={() => setMenuOpen(true)}
 							>
-								<Stories
-									stories={stories}
-									town={town}
-									select={(id) => {
-										setSelected(id);
-										setStoryPersonFocus({ id });
-									}}
-								/>
-								{!stories.length && (
-									<p className="muted">
-										Stories will appear when the town’s recorded events form a
-										pattern.
-									</p>
-								)}
-							</div>
-						)}
-						{tab === "inspector" && (
-							<div
-								className="inspector"
-								role="tabpanel"
-								id="town-info-panel"
-								aria-label="Town inspector"
-								tabIndex={-1}
-							>
-								<TownHealth history={healthHistory} />
-								<EvidencePanel />
-								<DayComparison
-									report={branchReport}
-									request={session.branchRequest}
-									busy={comparing}
-									disabled={saveConflict}
-									progress={branchProgress}
-									error={branchError}
-									selected={selected}
-									onRun={compare}
-									onCancel={session.cancelComparison}
-								/>
-								<Comparison />
-								<div>
-									<form
-										className="seed-form"
-										onSubmit={(e) => {
-											e.preventDefault();
-											storyWatch.resetBaseline();
-											startTown();
-										}}
-									>
-										<label htmlFor="town-seed">New town seed</label>
-										<div>
-											<input
-												disabled={comparing || saveConflict}
-												id="town-seed"
-												type="number"
-												min="0"
-												max="2147483647"
-												step="1"
-												value={seedInput}
-												onChange={(e) => setSeedInput(e.target.value)}
-												required
-											/>
-											<button
-												type="submit"
-												disabled={comparing || saveConflict}
-											>
-												Start town
-											</button>
-										</div>
-										<p className="tiny muted">
-											Same seed, same starting circumstances. Your current town
-											is saved before replacing it.
-										</p>
-									</form>
-									<h3>Shared resources</h3>
-									{town.places.map((p) => (
-										<div className="resource" key={p.id}>
-											<span>{placeName(p)}</span>
-											<span>
-												{p.occupants} here
-												{p.reserved !== undefined
-													? ` · ${p.reserved}/${p.capacity} reserved`
-													: ""}{" "}
-												· {number(p.stock)} stock
-											</span>
-										</div>
-									))}
-								</div>
-								<div>
-									<h3>Observed trends</h3>
-									{Object.entries(trends)
-										.slice(0, 5)
-										.map(([key, values]) => {
-											const min = Math.min(...values),
-												range = Math.max(...values) - min || 1;
-											return (
-												<div className="trend" key={key}>
-													<span>{metricLabel(key)}</span>
-													<svg
-														viewBox="0 0 160 30"
-														role="img"
-														aria-label={`${metricLabel(key)}: ${values.map(number).join(", ")}`}
-													>
-														<polyline
-															points={values
-																.map(
-																	(v, i) =>
-																		`${(i / Math.max(values.length - 1, 1)) * 160},${27 - ((v - min) / range) * 24}`,
-																)
-																.join(" ")}
-															fill="none"
-															stroke="currentColor"
-															strokeWidth="2"
-														/>
-													</svg>
-													<strong>{number(values.at(-1) || 0)}</strong>
-												</div>
-											);
-										})}
-								</div>
-								<div>
-									<h3>Runtime evidence</h3>
-									<p className="tiny muted">
-										Live Python Concordia orchestration · published Human
-										Framework decisions. Background residents use their labelled
-										policy. Device-local world, not a shared server.
-									</p>
-									<div className="resource">
-										<span>Seed</span>
-										<strong>{town.seed}</strong>
-									</div>
-									{Object.entries(town.metrics).map(([k, v]) => (
-										<div className="resource" key={k}>
-											<span>{metricLabel(k)}</span>
-											<strong>{number(v)}</strong>
-										</div>
-									))}
-									{town.diagnostics.map((d) => (
-										<p
-											className={`diagnostic ${d.severity}`}
-											key={`${d.code}-${d.message}`}
-										>
-											<strong>{d.code}</strong> {d.message}
-										</p>
-									))}
-									{!town.diagnostics.length && (
-										<p className="tiny muted">No runtime anomalies reported.</p>
-									)}
-								</div>
-							</div>
-						)}
-					</section>
-					<section className="interventions">
-						<div>
-							<span className="eyebrow">Change a circumstance</span>
-							<p>A little help. Their own decisions.</p>
+								Pause settings
+							</button>
 						</div>
-						<div className="intervention-buttons">
-							<div className="intervention-option">
-								<button
-									type="button"
-									disabled={
-										!town.controlsRemaining ||
-										town.canRestoreBus === false ||
-										comparing ||
-										saveConflict
-									}
-									onClick={() => intervene({ kind: "restore-bus" })}
-								>
-									Restore public bus
-								</button>
-								<small>
-									{town.canRestoreBus === false
-										? "Public transport is already running."
-										: "Restore public transport for faster future trips."}
-								</small>
-							</div>
-							<div className="intervention-option">
-								<button
-									type="button"
-									disabled={
-										!town.controlsRemaining ||
-										town.canLendTools === false ||
-										comparing ||
-										saveConflict
-									}
-									onClick={() => intervene({ kind: "lend-tools" })}
-								>
-									Lend tools
-								</button>
-								<small>
-									{town.canLendTools === false
-										? "The hall’s repair work is complete."
-										: "Add 3 shared repair tools for neighbours to use."}
-								</small>
-							</div>
-							<div className="intervention-option">
-								<button
-									type="button"
-									disabled={
-										!town.controlsRemaining ||
-										town.canShareNews === false ||
-										comparing ||
-										saveConflict
-									}
-									onClick={() => intervene({ kind: "share-news" })}
-								>
-									Share hall news
-								</button>
-								<small>
-									{town.canShareNews === false
-										? "No awake neighbour needs this news now."
-										: "Tell awake neighbours about the hall’s repair needs."}
-								</small>
-							</div>
-						</div>
-						<span className="tiny muted">
-							{town.controlsRemaining} interventions left
-						</span>
-					</section>
-					{interventionNotice && (
-						<p className="intervention-result" role="status">
-							{interventionNotice}
-						</p>
 					)}
-					{error && (
+					{session.error && !menuOpen && (
 						<div className="error" role="alert">
-							<ErrorMessage message={error} />
+							<ErrorMessage message={session.error} />
 						</div>
 					)}
-					{saveConflict && (
+					{saveConflict && !menuOpen && (
 						<div className="error" role="status">
 							<p>
-								Another tab saved the device town. This tab is paused and cannot
-								save. Export to keep this version, or load the device town.
+								Another tab saved the device town. This tab is paused. Export to
+								keep this version, or load the device town.
 							</p>
+							<button type="button" onClick={() => setMenuOpen(true)}>
+								Save options
+							</button>
 							<button type="button" onClick={() => location.reload()}>
 								Load device town
 							</button>
 						</div>
 					)}
-					<SessionFooter
-						{...session}
-						importSave={(file) => {
-							storyWatch.resetBaseline();
-							return session.importSave(file);
-						}}
-						restoreSave={(slot) => {
-							storyWatch.resetBaseline();
-							session.restoreSave(slot);
-						}}
+					<div
+						className={`active-view view-${tab}`}
+						id="town-info-panel"
+						role="tabpanel"
+						aria-labelledby={`tab-${tab}`}
+						tabIndex={-1}
+					>
+						{tab === "town" && (
+							<>
+								<TownOverview
+									town={town}
+									selected={selected}
+									person={person}
+									observed={observed}
+									select={follow}
+									close={closePerson}
+									help={() => {
+										if (
+											town.places.some(
+												(place) => place.id === "hall" && place.open,
+											)
+										)
+											setHallExpanded(true);
+										changeTab("help");
+									}}
+								/>
+								{!person && (
+									<StoryHeadline story={stories[0]} open={readStory} />
+								)}
+							</>
+						)}
+						{tab === "help" && (
+							<>
+								<HelpPanel
+									hallExpanded={hallExpanded}
+									setHallExpanded={setHallExpanded}
+									town={town}
+									disabled={comparing || saveConflict || session.intervening}
+									action={session.intervene}
+									compare={compare}
+									select={follow}
+								/>
+								{session.interventionNotice && (
+									<p className="intervention-result" role="status">
+										{session.interventionNotice}
+									</p>
+								)}
+							</>
+						)}
+						{tab === "stories" && (
+							<section className="stories-view">
+								<h2>Stories</h2>
+								<div className="event-grid">
+									<Stories stories={stories} town={town} select={follow} />
+									{!stories.length && (
+										<p className="muted">
+											Play or step to see what happens next.
+										</p>
+									)}
+								</div>
+							</section>
+						)}
+						{tab === "inspector" && <TownInspector session={session} />}
+					</div>
+					<SessionMenu
+						session={session}
+						open={menuOpen}
+						close={() => setMenuOpen(false)}
+						storyPauses={storyWatch.enabled}
+						setStoryPauses={storyWatch.setEnabled}
+						resetStory={storyWatch.resetBaseline}
 					/>
 				</>
 			)}

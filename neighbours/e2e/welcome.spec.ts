@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { closeSaves, openSaves } from "./session-helpers";
 
 test("welcome explains the town before starting any runtime, with keyboard entry and compact mobile controls", async ({
 	page,
@@ -66,17 +67,16 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 					.welcomeWorkerCount,
 		),
 	).toBe(1);
-	await page
-		.getByRole("button", { name: "Import", exact: true })
-		.scrollIntoViewIfNeeded();
+	await openSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Import", exact: true }),
 	).toBeInViewport();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeInViewport();
 	await expect(
-		page.getByRole("button", { name: "Advance one round" }),
+		page.getByRole("button", { name: "Step: Advance one round" }),
 	).toBeInViewport();
 	expect(
 		await page.evaluate(
@@ -84,11 +84,14 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 		),
 	).toBe(true);
 	const toolbar = await page.locator(".town-toolbar").boundingBox();
-	expect(toolbar?.y).toBe(60);
+	const header = await page.locator(".masthead").boundingBox();
+	expect(header).not.toBeNull();
+	expect(toolbar?.y).toBe((header?.y ?? 0) + (header?.height ?? 0));
 	expect(toolbar?.height).toBeLessThanOrEqual(70);
 	await page.screenshot({ path: info.outputPath("footer-mobile-sticky.png") });
 	for (const width of [1280, 390]) {
 		await page.setViewportSize({ width, height: 844 });
+		await openSaves(page);
 		const importButton = page.getByRole("button", {
 			name: "Import",
 			exact: true,
@@ -100,6 +103,7 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 				() => document.documentElement.scrollWidth <= innerWidth,
 			),
 		).toBe(true);
+		await closeSaves(page);
 	}
 });
 
@@ -111,7 +115,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
-	await page.getByRole("tab", { name: "Inspector", exact: true }).click();
+	await openSaves(page);
 	await page.getByLabel("New town seed").fill("71");
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
 	const latest = () =>

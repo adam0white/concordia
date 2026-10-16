@@ -52,7 +52,10 @@ export function useVisitorSession({
 	} | null>(null);
 	const [saved, setSaved] = useState("");
 	const [interventionNotice, setInterventionNotice] = useState("");
+	const [intervening, setIntervening] = useState(false);
+	const interventionSequence = useRef(0);
 	const interventionPending = useRef<{
+		id: number;
 		kind: Intervention["kind"];
 		remaining: number;
 		spent: number;
@@ -80,6 +83,8 @@ export function useVisitorSession({
 			replacement: number | null;
 			errorRevision: number;
 			commandType: UiCommand["type"];
+			interventionId?: number;
+			generation: number;
 		}[]
 	>([]);
 	// Save replies may arrive after a replacement or its canceled backup.
@@ -101,6 +106,11 @@ export function useVisitorSession({
 			if (replacement) worldGeneration.current++;
 			stateCommands.current.push({
 				commandType: command.type,
+				interventionId:
+					command.type === "intervene"
+						? interventionPending.current?.id
+						: undefined,
+				generation: worldGeneration.current,
 				replacement: replacement ? worldGeneration.current : null,
 				errorRevision: errorRevision.current,
 			});
@@ -116,6 +126,7 @@ export function useVisitorSession({
 		)
 			exportRequest.current = null;
 		interventionPending.current = null;
+		setIntervening(false);
 		if (downloadGeneration.current < generation) {
 			setDownloadUrl("");
 			setDownloadLabel("");
@@ -177,6 +188,7 @@ export function useVisitorSession({
 				const failed = !comparisonPending.current
 					? stateCommands.current.shift()
 					: undefined;
+				if (failed && failed.generation < acceptedGeneration.current) return;
 				persistenceAfterState.current = false;
 				if (restoringStartup && freshAtStartup) {
 					restoringStartup = false;
@@ -187,7 +199,7 @@ export function useVisitorSession({
 					setPlaying(false);
 					pending.current = false;
 					setError(
-						`The saved town could not be restored. Its device save is preserved while this fresh town is paused. Continuing with Play, Step or an intervention will replace that save. You can also import a compatible save or choose Start town in Inspector. ${reply.message}`,
+						`The saved town could not be restored. Its device save is preserved while this fresh town is paused. Continuing with Play, Step or an intervention will replace that save. You can also import a compatible save or choose Start town in Save and town options. ${reply.message}`,
 					);
 					return;
 				}
@@ -197,12 +209,20 @@ export function useVisitorSession({
 					setBranchError(reply.message);
 					return;
 				}
-				if (failed?.commandType === "intervene") {
+				if (
+					failed?.commandType === "intervene" &&
+					failed.interventionId === interventionPending.current?.id
+				) {
 					interventionPending.current = null;
+					setIntervening(false);
 					setInterventionNotice("");
 				}
 				if (!failed || failed.errorRevision === errorRevision.current)
-					setError(reply.message);
+					setError(
+						failed?.commandType === "restore"
+							? `This save could not be loaded. Your current town is unchanged. ${reply.message}`
+							: reply.message,
+					);
 				setPlaying(false);
 				pending.current = false;
 			}
@@ -230,6 +250,8 @@ export function useVisitorSession({
 				const intervention = interventionPending.current;
 				if (
 					intervention &&
+					completed?.commandType === "intervene" &&
+					completed.interventionId === intervention.id &&
 					((intervention.kind === "request-inspection" &&
 						reply.view.assistance !== undefined) ||
 						reply.view.controlsRemaining < intervention.remaining ||
@@ -252,6 +274,17 @@ export function useVisitorSession({
 											: "Hall news broadcast to awake neighbours. Each decides whether to act on it.",
 					);
 					interventionPending.current = null;
+					setIntervening(false);
+				} else if (
+					intervention &&
+					completed?.commandType === "intervene" &&
+					completed.interventionId === intervention.id
+				) {
+					interventionPending.current = null;
+					setIntervening(false);
+					setInterventionNotice(
+						"That intervention was not applied. No allowance was spent.",
+					);
 				}
 				setObserved((old) => observe(old, reply.view));
 				if (!completed || completed.errorRevision === errorRevision.current)
@@ -495,12 +528,20 @@ export function useVisitorSession({
 		client.current?.send({ type: "cancel-comparison" });
 	};
 	const intervene = (intervention: Intervention) => {
-		if (!town || comparisonPending.current) return;
+		if (
+			!town ||
+			comparisonPending.current ||
+			saveConflictRef.current ||
+			interventionPending.current
+		)
+			return;
 		interventionPending.current = {
+			id: ++interventionSequence.current,
 			kind: intervention.kind,
 			remaining: town.controlsRemaining,
 			spent: town.stats.interventionsSpent ?? 3 - town.controlsRemaining,
 		};
+		setIntervening(true);
 		setInterventionNotice("Changing the circumstance…");
 		send({ type: "intervene", intervention });
 	};
@@ -596,6 +637,7 @@ export function useVisitorSession({
 		downloadLabel,
 		saved,
 		interventionNotice,
+		intervening,
 		saveConflict,
 		hasSave,
 		hasPrevious,

@@ -2,13 +2,16 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, test } from "@playwright/test";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
+import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 const genuine = captureWeekly().candidate;
 async function exported(page: Page) {
+	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const previous = (await link.count())
 		? await link.getAttribute("href")
 		: null;
+	await openSaves(page);
 	await page.getByRole("button", { name: "Export", exact: true }).click();
 	await expect
 		.poll(async () => {
@@ -30,11 +33,13 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "genuine-town.json",
 		mimeType: "application/json",
 		buffer: Buffer.from(JSON.stringify(genuine)),
 	});
+	await showTab(page, "Help");
 	const card = page.locator(".inspection-situation");
 	await card.locator(":scope > summary").click();
 	await card
@@ -43,6 +48,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	await card.getByLabel("Situation", { exact: true }).selectOption("dry-sound");
 	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("lea");
 	const before = await exported(page);
+	await closeSaves(page);
 	await card
 		.getByRole("button", {
 			name: "Compare a day with this request",
@@ -51,12 +57,28 @@ test("a real WASM annex request comparison preserves the live town and the reque
 		.click();
 	const comparison = page.locator(".day-comparison");
 	await expect(comparison).toContainText("Annex inspection requested from Lea");
-	await expect(comparison.getByRole("table")).toBeVisible({ timeout: 60000 });
+	await expect(
+		comparison.getByText("Resources and neighbour state at the end", {
+			exact: true,
+		}),
+	).toBeVisible({
+		timeout: 60000,
+	});
+	await comparison
+		.getByText("Resources and neighbour state at the end", { exact: true })
+		.click();
+	await expect(comparison.getByRole("table")).toBeVisible();
 	await expect(
 		comparison.getByRole("row", { name: /Annex requests sent/ }),
 	).toContainText("+1");
 	expect(await exported(page)).toEqual(before);
-	await page.getByRole("tab").first().click();
+	await showTab(page, "Help");
+	await card.locator(":scope > summary").click();
+	await card
+		.getByText("Situation source and controlled cases", { exact: true })
+		.click();
+	await card.getByLabel("Situation", { exact: true }).selectOption("dry-sound");
+	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("lea");
 	await card
 		.getByRole("button", { name: "Ask Lea to inspect", exact: true })
 		.click();

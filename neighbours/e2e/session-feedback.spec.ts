@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
+import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 type Packet = { runtime: { seed: number; now: number } };
 type SaveGate = {
@@ -11,8 +12,10 @@ type SaveGate = {
 	restores: number;
 };
 async function pause(page: Page) {
+	await closeSaves(page);
 	const button = page.getByRole("button", { name: "Pause town", exact: true });
 	if (await button.isVisible()) await button.click();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
@@ -22,8 +25,10 @@ async function packet(
 	info: TestInfo,
 	name: string,
 ): Promise<Packet> {
+	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
+	await openSaves(page);
 	await page.getByRole("button", { name: "Export", exact: true }).click();
 	await expect
 		.poll(() => link.getAttribute("href", { timeout: 500 }).catch(() => null))
@@ -36,6 +41,7 @@ async function packet(
 	return JSON.parse(gunzipSync(await readFile(path)).toString("utf8"));
 }
 async function importPacket(page: Page, value: unknown) {
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "town.json",
 		mimeType: "application/json",
@@ -83,48 +89,62 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await installGate(page);
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "original");
-	await page
-		.getByRole("button", { name: "Restore public bus", exact: true })
-		.click();
+	await showTab(page, "Help");
+	await page.getByRole("button", { name: /^Restore public bus/ }).click();
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Bus restored",
 	);
-	await page.getByRole("tab", { name: "Inspector", exact: true }).click();
+	await showTab(page, "Inspector");
 	await page
 		.getByText("Compare futures · hypothetical branches", { exact: true })
 		.click();
 	await page
 		.getByRole("button", { name: "Compare from here", exact: true })
 		.click();
-	await expect(page.getByText(/Last comparison · seed/)).toBeVisible();
+	await expect(
+		page.getByText("Checkpoint & limits", { exact: true }),
+	).toBeVisible();
 	const changed = await packet(page, info, "changed");
 	const oldLink = await page
 		.getByRole("link", { name: /Download save/ })
 		.getAttribute("href");
 	await importPacket(page, { schema: "invalid" });
 	await expect(page.getByRole("alert")).toBeVisible();
+	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Bus restored",
 	);
-	await expect(page.getByText(/Last comparison · seed/)).toBeVisible();
+	await showTab(page, "Inspector");
+	await expect(
+		page.getByText("Checkpoint & limits", { exact: true }),
+	).toBeVisible();
+	await openSaves(page);
 	await expect(
 		page.getByRole("link", { name: /Download save/ }),
 	).toHaveAttribute("href", oldLink ?? "missing-download-link");
 	expect(await packet(page, info, "failed-import-preserved")).toEqual(changed);
 	await importPacket(page, original);
+	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toHaveCount(0);
-	await expect(page.getByText(/Last comparison · seed/)).toHaveCount(0);
+	await showTab(page, "Inspector");
+	await expect(
+		page.getByText("Checkpoint & limits", { exact: true }),
+	).toHaveCount(0);
+	await openSaves(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
 		0,
 	);
 	expect(await packet(page, info, "successful-import")).toEqual(original);
+	await openSaves(page);
 	await page.getByLabel("New town seed").fill("73");
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
@@ -137,7 +157,9 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 		(window as unknown as { sessionSaveGate: SaveGate }).sessionSaveGate.hold =
 			true;
 	});
+	await openSaves(page);
 	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await openSaves(page);
 	await page.getByLabel("New town seed").fill("99");
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
 	await expect
@@ -161,6 +183,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 		0,
 	);
 	expect(await packet(page, info, "after-delayed-replies")).toEqual(original);
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
@@ -172,6 +195,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 	await installGate(page);
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
@@ -181,6 +205,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 		(window as unknown as { sessionSaveGate: SaveGate }).sessionSaveGate.hold =
 			true;
 	});
+	await openSaves(page);
 	await page.getByRole("button", { name: "Export", exact: true }).click();
 	await expect
 		.poll(() =>
@@ -237,7 +262,8 @@ test("exports survive rejected imports and exports from a replacement survive it
 			window as unknown as { sessionSaveGate: SaveGate }
 		).sessionSaveGate.holdState = true;
 	});
-	await page.getByRole("button", { name: "Advance one round" }).click();
+	await closeSaves(page);
+	await page.getByRole("button", { name: "Step: Advance one round" }).click();
 	await expect
 		.poll(() =>
 			page.evaluate(
@@ -247,6 +273,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 			),
 		)
 		.toBe(1);
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "broken.json",
 		mimeType: "application/json",

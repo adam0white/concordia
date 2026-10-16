@@ -1,15 +1,18 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
+import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 type Packet = {
 	runtime: { now: number; people: unknown[] };
 };
 async function exportFile(page: Page, info: TestInfo, name: string) {
+	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const previous = (await link.count())
 		? await link.getAttribute("href")
 		: null;
+	await openSaves(page);
 	await page.getByRole("button", { name: "Export", exact: true }).click();
 	await expect
 		.poll(async () => {
@@ -38,9 +41,11 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 async function startPaused(page: Page) {
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
@@ -57,9 +62,11 @@ test("actual browser gzip export preserves the complete town across import and d
 	expect(original.compressed.byteLength).toBeLessThan(
 		original.json.byteLength / 2,
 	);
-	await page.getByRole("button", { name: "Advance one round" }).click();
+	await closeSaves(page);
+	await page.getByRole("button", { name: "Step: Advance one round" }).click();
 	const advanced = await exportFile(page, info, "advanced");
 	expect(advanced.packet.runtime.now).toBe(original.packet.runtime.now + 15);
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "complete-town.json.gz",
 		mimeType: "application/gzip",
@@ -93,12 +100,14 @@ test("actual browser gzip export preserves the complete town across import and d
 		.toBe(original.packet.runtime.now);
 	await page.reload();
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	expect(
 		(await exportFile(page, info, "reload")).json.equals(original.json),
 	).toBe(true);
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "truncated.json.gz",
 		mimeType: "application/gzip",
@@ -154,6 +163,7 @@ test("compression finishing after a newer export or accepted import cannot publi
 				window as unknown as { compressionGate: CompressionGate }
 			).compressionGate.hold = true;
 		});
+		await openSaves(page);
 		await page.getByRole("button", { name: "Export", exact: true }).click();
 		await expect
 			.poll(() =>
@@ -187,18 +197,21 @@ test("compression finishing after a newer export or accepted import cannot publi
 	const newer = await link.getAttribute("href");
 	await release();
 	await expect(link).toHaveAttribute("href", newer ?? "missing-newer-export");
-	await page.getByRole("button", { name: "Lend tools", exact: true }).click();
+	await showTab(page, "Help");
+	await page.getByRole("button", { name: /^Lend tools/ }).click();
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Tools added",
 	);
 	await hold();
 	// A valid legacy JSON import accepts a replacement while the old compressor is still running.
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "legacy.json",
 		mimeType: "application/json",
 		buffer: original.json,
 	});
 	await expect(link).toHaveCount(0);
+	await closeSaves(page);
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();

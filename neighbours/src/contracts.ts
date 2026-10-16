@@ -244,7 +244,7 @@ export interface TownComparison {
 	baseline: {
 		stats: Record<string, number>;
 		known: { id: string; name: string; activity: string; wealth: number }[];
-		stories: { title: string; summary: string }[];
+		stories: { id?: string; at?: number; title: string; summary: string }[];
 	};
 	treatment: TownComparison["baseline"];
 	limits: string[];

@@ -2,13 +2,22 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, test } from "@playwright/test";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
+import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 let genuine: ReturnType<typeof captureWeekly>["candidate"];
 test.beforeAll(() => {
 	genuine = captureWeekly(true).candidate;
 });
 async function exported(page: Page) {
+	await openSaves(page);
+	const link = page.getByRole("link", { name: /Download save/ });
+	const previous = (await link.count())
+		? await link.getAttribute("href")
+		: null;
 	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await expect
+		.poll(() => link.getAttribute("href").catch(() => null))
+		.not.toBe(previous);
 	const download = page.waitForEvent("download");
 	await page.getByRole("link", { name: /Download save/ }).click();
 	const path = await (await download).path();
@@ -23,25 +32,28 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
+	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "genuine-week.json",
 		mimeType: "application/json",
 		buffer: Buffer.from(JSON.stringify(genuine)),
 	});
+	await showTab(page, "Help");
 	const choices = page.locator(".hall-choices");
 	await expect(choices).toBeVisible();
-	await choices.locator(":scope > summary").click();
+	if ((await choices.getAttribute("open")) === null)
+		await choices.locator(":scope > summary").click();
 	const before = await exported(page);
 	expect(before.runtime.controls).toBe(0);
+	await closeSaves(page);
 	await page.getByRole("button", { name: /Compare a week with Lea/ }).click();
 	const comparison = page.locator(".day-comparison");
 	await expect(comparison).toHaveAttribute("open", "");
 	await expect(comparison).toContainText("Extra slot for Lea");
-	await expect(comparison).toContainText("7 simulated days");
+	await expect(comparison.getByRole("status")).toContainText(/of 672 rounds/);
 	await expect(
 		comparison.getByLabel("Change in the second run"),
 	).not.toBeVisible();
-	await expect(comparison.getByRole("status")).toContainText(/of 672 rounds/);
 	await comparison
 		.getByRole("button", { name: "Cancel comparison", exact: true })
 		.click();
@@ -49,6 +61,8 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 		"Comparison cancelled",
 	);
 	expect(await exported(page)).toEqual(before);
+	await showTab(page, "Help");
+	await expect(choices).toHaveAttribute("open", "");
 	await page.getByRole("button", { name: /Fund another slot for Lea/ }).click();
 	await expect(
 		page.getByRole("status").filter({ hasText: "Extra hall slot funded" }),

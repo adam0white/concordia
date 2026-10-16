@@ -56,7 +56,7 @@ it("exposes scarce alternative-slot and notice choices without implying acceptan
 	expect(content).toContain("Hall choices");
 	expect(content).toContain("Fund another slot for Lea");
 	expect(content).toContain("Advertise Sam’s invitation");
-	expect(content).toContain("1 intervention");
+	expect(content).toContain("1 town credit");
 	expect(content).toContain("does not make anyone attend");
 	expect(content).not.toContain("<details open");
 });
@@ -73,6 +73,6 @@ it("offers the weekly choice even after the original allowance is exhausted", ()
 	for (const evening of view.evenings ?? []) evening.supportRemaining = 1;
 	const content = html(view);
 	expect(content).not.toContain('disabled=""');
-	expect(content).toContain("1 weekly support choice");
-	expect(content).toContain("This week’s support choice is available");
+	expect(content).toContain("1 weekly choice");
+	expect(content).toContain("1 weekly choice available");
 });

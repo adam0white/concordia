@@ -78,7 +78,7 @@ it("promotes the latest grouped story and has no initial empty headline", () => 
 		renderToStaticMarkup(createElement(StoryHeadline, { open: () => {} })),
 	).toBe("");
 });
-it("keeps a settled Day 1 promise visible on Day 2 with its actual result and deadline", () => {
+it("folds a settled Day 1 promise beside the current promise without repeating either", () => {
 	const commitments = [
 		{ label: "Repair doors before evening", at: 1080, status: "broken" },
 		{ label: "Bring tools tomorrow", at: 2520, status: "pending" },
@@ -86,10 +86,12 @@ it("keeps a settled Day 1 promise visible on Day 2 with its actual result and de
 	const html = renderToStaticMarkup(
 		createElement(PersonPromises, { person: { commitments }, now: 1920 }),
 	);
-	expect(html).toContain("Promise result · Broken");
+	expect(html).toContain("Broken · deadline Day 1 · 18:00");
+	expect(html.match(/Repair doors before evening/g)).toHaveLength(1);
+	expect(html.match(/Bring tools tomorrow/g)).toHaveLength(1);
 	expect(html).toContain("Repair doors before evening");
-	expect(html).toContain("Deadline · Day 1 · 18:00");
-	expect(html).toContain("Promise history · 2");
+	expect(html).toContain("deadline Day 1 · 18:00");
+	expect(html).toContain("Other promises · 1");
 	expect(html).not.toContain("<details open");
 });
 it("never calls an overdue pending promise broken before HF settles it", () => {
@@ -145,7 +147,11 @@ it("folds raw choice terms while retaining the current activity and controller l
 		'<details class="reason"><summary>Why this choice · Day 1 · 08:00</summary>',
 	);
 	expect(html).toContain("HF numeric evidence 0.345678");
-	expect(html).toContain("A neighbour · HF");
+	expect(html).toContain("A neighbour</div>");
+	expect(html).toContain("Controller · HF");
+	expect(html.indexOf("Controller · HF")).toBeGreaterThan(
+		html.indexOf("Details &amp; evidence"),
+	);
 	expect(html).toContain("Right now");
 });
 
@@ -270,4 +276,62 @@ it("renders six recent stories and keeps dated older actors and sources in a clo
 	expect(html.slice(archive)).toContain("Day 1 · 01:50");
 	expect(html.slice(archive)).toContain("Follow Ada");
 	expect(html).not.toContain('<details class="story-archive" open');
+});
+
+it("shows activity and current promise before one evidence disclosure, preserving the evidence inside", () => {
+	const town = createRuntime(42, 8).view();
+	const person = {
+		...town.people[0],
+		activity: "Actual active job",
+		commitments: [{ label: "Current pledge", at: 900, status: "pending" }],
+		observations: [event(300, 500, "lesson", "ada")],
+	} as PersonView;
+	const html = renderToStaticMarkup(
+		createElement(PersonPanel, {
+			person,
+			town,
+			observed: undefined,
+			close: () => {},
+		}),
+	);
+	const disclosure = html.indexOf('<details class="person-evidence">');
+	expect(disclosure).toBeGreaterThan(html.indexOf("Actual active job"));
+	expect(disclosure).toBeGreaterThan(html.indexOf("Current pledge"));
+	expect(html.slice(0, disclosure)).not.toContain("<details");
+	expect(html.slice(disclosure)).toContain("Details &amp; evidence");
+	expect(html.slice(disclosure)).toContain("Received observations");
+	expect(html.slice(disclosure)).toContain(
+		"Need urgency &amp; decision evidence",
+	);
+	expect(html.match(/Current pledge/g)).toHaveLength(1);
+});
+
+it("keeps one person link per story and removes repeated actor and participant captions", async () => {
+	const { default: Stories } = await import("../src/ui/Stories");
+	const town = storyTown();
+	const html = renderToStaticMarkup(
+		createElement(Stories, {
+			town,
+			select: () => {},
+			stories: [
+				{
+					id: "one",
+					title: "Actual outcome",
+					kind: "lesson",
+					at: 600,
+					actorIds: ["ada"],
+					participantIds: ["ada", "noor"],
+					summaries: ["Recorded teaching"],
+					eventIds: [],
+					missingEventIds: [],
+				},
+			],
+		}),
+	);
+	expect(html.match(/Follow Ada/g)).toHaveLength(1);
+	expect(html.match(/Follow Noor/g)).toHaveLength(1);
+	expect(html).not.toContain("Recorded actor:");
+	expect(html).not.toContain("Recorded participants:");
+	expect(html).toContain("Recorded teaching");
+	expect(html).toContain("Day 1 · 10:00");
 });

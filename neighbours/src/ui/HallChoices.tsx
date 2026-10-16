@@ -6,11 +6,15 @@ export default function HallChoices({
 	disabled,
 	onAction,
 	onCompare,
+	expanded,
+	onExpandedChange,
 }: {
 	town: TownView;
 	disabled: boolean;
 	onAction: (input: Intervention) => void;
 	onCompare?: (input: Intervention) => void;
+	expanded?: boolean;
+	onExpandedChange?: (open: boolean) => void;
 }) {
 	const opportunities = (town.evenings ?? [])
 		.filter((e) => e.recurring && e.endsAt > town.now && e.stage !== "closed")
@@ -26,7 +30,11 @@ export default function HallChoices({
 		opportunities.length === 2 &&
 		opportunities[0]?.startsAt === opportunities[1]?.startsAt;
 	return (
-		<details className="hall-choices">
+		<details
+			className="hall-choices"
+			open={expanded}
+			onToggle={(event) => onExpandedChange?.(event.currentTarget.open)}
+		>
 			<summary>
 				Hall choices
 				{opportunities[0] ? ` · ${datedClock(opportunities[0].startsAt)}` : ""}
@@ -77,9 +85,7 @@ export default function HallChoices({
 								}
 							>
 								Fund another slot for {name} ·{" "}
-								{evening.supportRemaining
-									? "1 weekly support choice"
-									: "1 intervention"}
+								{evening.supportRemaining ? "1 weekly choice" : "1 town credit"}
 							</button>
 						)}
 						{evening.canOpenSlot && onCompare && (
@@ -109,9 +115,7 @@ export default function HallChoices({
 								}
 							>
 								Advertise {name}’s invitation ·{" "}
-								{evening.supportRemaining
-									? "1 weekly support choice"
-									: "1 intervention"}
+								{evening.supportRemaining ? "1 weekly choice" : "1 town credit"}
 							</button>
 						)}
 						{evening.canAdvertise && onCompare && (
@@ -141,30 +145,20 @@ export default function HallChoices({
 					</div>
 				);
 			})}
-			<p className="tiny muted">
-				{opportunities.length > 0 &&
-					(supportRemaining
-						? "This week’s support choice is available. "
-						: "This week’s support choice has been used. ")}
-				One weekly support choice: fund a slot or advertise. After that, an
-				original intervention can pay for another change.
-			</p>
-			<p className="tiny muted">
-				Funding moves an unposted opportunity to the next day. Advertising
-				informs awake neighbours; it does not make anyone attend.
-			</p>
-			<p className="tiny muted">
-				{town.controlsRemaining}{" "}
-				{town.controlsRemaining === 1
-					? "original intervention"
-					: "original interventions"}{" "}
-				left, shared with bus restoration and tools. You can leave the
-				competition alone.
-			</p>
-			{onCompare && (
-				<p className="tiny muted">
-					Comparisons leave your live town and allowance unchanged.
-				</p>
+			{opportunities.length > 0 && (
+				<>
+					<p className="tiny muted">
+						{supportRemaining
+							? "1 weekly choice available"
+							: "No weekly choice available"}
+						{` · ${town.controlsRemaining} town credits left.`} Fund a slot or
+						advertise. Further changes cost a town credit.
+					</p>
+					<p className="tiny muted">
+						Funding moves an unposted opportunity to the next day. Advertising
+						informs awake neighbours; it does not make anyone attend.
+					</p>
+				</>
 			)}
 		</details>
 	);

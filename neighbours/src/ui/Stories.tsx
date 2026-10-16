@@ -19,24 +19,6 @@ function StoryCard({
 					? s.kind
 					: `${datedClock(s.at)} · ${s.kind.replaceAll("-", " ")}`}
 			</span>
-			{s.actorIds.length > 0 && (
-				<p className="story-people tiny muted">
-					{s.actorIds.length === 1 ? "Recorded actor: " : "Recorded people: "}
-					{s.actorIds
-						.map((id) => town.people.find((person) => person.id === id)?.name)
-						.filter(Boolean)
-						.join(", ")}
-				</p>
-			)}
-			{s.participantIds.length > 0 && (
-				<p className="story-people tiny muted">
-					Recorded participants:{" "}
-					{s.participantIds
-						.map((id) => town.people.find((person) => person.id === id)?.name)
-						.filter(Boolean)
-						.join(", ")}
-				</p>
-			)}
 			<h3>{s.title}</h3>
 			<div className="story-links">
 				{[...new Set([...s.actorIds, ...s.participantIds])].map((id) => {
