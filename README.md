@@ -12,7 +12,7 @@ The delivered town now adds a welcome screen before runtime downloads, paused en
 
 The browser can apply one authored or recorded GM proposal after host validation. A separate native experiment runs real upstream Concordia GM components with one genuine model call and exact response replay. It proposes a scenario premise; it cannot declare repairs, learning, consent or attendance. Live browser residents still use HF, with no live browser LLM. Isolated HF configuration probes preserve production defaults and report negative results. See [the current increment](docs/neighbours/gm-and-town-agency.md) and [the native GM contract](docs/neighbours/gm-director.md).
 
-The current increment is deployed and passed public browser and asset checks. Local verification and hosted CI pass. See [independent visitor and public checks](docs/neighbours/visitor-2026-10-16-gm.md). Adam accepts game feel; tests do not establish sustained enjoyment, human realism or HF superiority.
+The mobile increment separates Town, Help, Stories and Inspector. The opening goal and help stay reachable, selecting a person focuses their card, and comparisons lead with changed outcomes. Save, import and town settings live in one dialog. Independent adversarial, speedrunner, entertainment and wildcard visitors tested separate agendas. See [mobile design](docs/neighbours/mobile-focus.md) and [review and verification](docs/neighbours/visitor-2026-10-16-mobile.md). Adam accepts game feel; tests do not establish sustained enjoyment, human realism or HF superiority.
 
 ---
 

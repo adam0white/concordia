@@ -16,13 +16,13 @@ Person cards show activity, concise biography and a current promise/result. Grou
 
 ## Work and verification plan
 
-- [ ] Baseline: four source-unread player agendas with independent reports and actual actions.
-- [ ] Navigation and mobile layout: extract focused view components, persistent keyboard-accessible tabs, a single save menu and concise goal. Add a browser regression that fails on the old stacked layout and hidden Help navigation.
-- [ ] Detail and comparison projection: independent bounded implementation, actual story IDs/times, changed interval outcomes first, shared history folded, tests for interval/dedup/unknown metadata and promise duplication.
-- [ ] Feedback and action safety: reproduce malformed valid-JSON import messaging; correct action ownership/feedback where needed. Guard accidental duplicate requests without preventing deliberate repeatable actions.
-- [ ] Browser checks: actual installed Firefox Nightly using geckodriver and a throwaway profile, plus isolated Chromium at 320/390/desktop; keyboard, save, replacement, comparison/cancel and story focus. User's own browser profile stays untouched.
-- [ ] Independent review and source-unread retests. Keep negative entertainment findings and dated follow-ups.
-- [ ] Full appropriate gates, current-source experiment evidence, clean public build, served-asset comparison, actual hosted browser checks and CI. Commit/push the delivery ledger and Beads.
+- [x] Baseline: four source-unread player agendas with independent reports and actual actions.
+- [x] Navigation and mobile layout: extract focused view components, persistent keyboard-accessible tabs, a single save menu and concise goal. Add a browser regression that fails on the old stacked layout and hidden Help navigation.
+- [x] Detail and comparison projection: independent bounded implementation, actual story IDs/times, changed interval outcomes first, shared history folded, tests for interval/dedup/unknown metadata and promise duplication.
+- [x] Feedback and action safety: reproduce malformed valid-JSON import messaging; correct action ownership/feedback where needed. Guard accidental duplicate requests without preventing deliberate repeatable actions.
+- [x] Browser checks: actual installed Firefox Nightly using geckodriver and a throwaway profile, plus isolated Chromium at 320/390/desktop; keyboard, save, replacement, comparison/cancel and story focus. User's own browser profile stays untouched.
+- [x] Independent review and source-unread retests. Keep negative entertainment findings and dated follow-ups.
+- [x] Final gate: local checks, refreshed evidence, clean public deployment, served asset/shell checks, hosted Chromium/Nightly and [hosted CI 38962857513](https://github.com/adam0white/concordia/actions/runs/38962857513) pass. Delivery ledger and Beads close the technical increment; Adam accepts feel separately.
 
 The physical simulation and published HF defaults remain outside this UI increment unless a reproduced correctness defect requires a bounded correction. A comparison metadata change is output bookkeeping, not a new resident capability. If it changes recorded source fingerprints, regenerate genuine evidence rather than rewriting digests.
 
@@ -33,3 +33,5 @@ The adversarial visitor found no crash or corrupted save, but valid JSON `[]` pr
 The speedrunner opened the hall by Day2 through mostly passive fast playback. Help was below the initial mobile viewport. Their seven-day comparison preserved the live town and allowance, but the actual supper/class difference was buried under totals and repeated old stories; the page was 5026 pixels before expanding outcomes. They corrected an initial unsupported claim about sticky playback: playback did stay visible.
 
 The entertainment visitor cared about Ada's saved tables and door promise. The question to Lea and inspection were interesting. Opening support felt like three beneficial switches, without an obvious reason to reserve a credit. They independently selected Sam's later extra slot and found the meaningful comparison payoff buried. These are bounded play observations, not Adam's acceptance.
+
+Delivery: clean build `17dec9264435fdb582d138063d5e699bda77351e`, Cloudflare version `c6eab565-c4a5-4309-8426-e021b9090d97`. [Independent play and verification](visitor-2026-10-16-mobile.md) retain negative findings and browser limits.
