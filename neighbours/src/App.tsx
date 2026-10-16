@@ -47,9 +47,11 @@ function ErrorMessage({ message }: { message: string }) {
 	return (
 		<>
 			<p>
-				{message.includes("restore:")
-					? "This save could not be loaded. Your current town is unchanged."
-					: "The town could not complete that action. You can reload and restore your latest save."}
+				{message.startsWith("The saved town could not be restored.")
+					? "The saved town could not be restored. Its device save is preserved. This fresh town is paused; import a compatible save or choose Start town in Inspector."
+					: message.includes("restore:")
+						? "This save could not be loaded. Your current town is unchanged."
+						: "The town could not complete that action. You can reload and restore your latest save."}
 			</p>
 			<details>
 				<summary>Technical details</summary>
@@ -755,9 +757,19 @@ export default function App() {
 	const saveRequestId = useRef(0);
 	const exportRequest = useRef<number | null>(null);
 	const rounds = useRef(0);
+	const autosaveEnabled = useRef(false);
+	const persistenceAfterState = useRef(false);
 	const file = useRef<HTMLInputElement>(null);
 	useEffect(() => {
 		let active = true;
+		let runtime: RuntimeClient | null = null;
+		let initialSavedPacket: unknown;
+		let savedReadFailed = false;
+		let firstReady = true;
+		let restoringStartup = false;
+		let freshAtStartup: TownView | undefined;
+		autosaveEnabled.current = false;
+		setProgress("Checking the saved town on this device…");
 		const receive = (reply: UiReply) => {
 			if (!active) return;
 			if (reply.type === "progress") {
@@ -770,7 +782,31 @@ export default function App() {
 				setBranchReport(reply.report);
 				setBranchProgress("");
 			}
+			if (reply.type === "ready" && firstReady) {
+				firstReady = false;
+				if (initialSavedPacket !== undefined) {
+					freshAtStartup = reply.view;
+					restoringStartup = true;
+					setProgress("Restoring the town saved on this device…");
+					runtime?.send({ type: "restore", save: initialSavedPacket });
+					return;
+				}
+			}
 			if (reply.type === "error") {
+				persistenceAfterState.current = false;
+				if (restoringStartup && freshAtStartup) {
+					restoringStartup = false;
+					autosaveEnabled.current = false;
+					setTown(freshAtStartup);
+					setHealthHistory(sampleHealth(undefined, freshAtStartup));
+					setObserved(observe(undefined, freshAtStartup));
+					setPlaying(false);
+					pending.current = false;
+					setError(
+						`The saved town could not be restored. Its device save is preserved. This fresh town is paused; import a compatible save or choose Start town in Inspector. ${reply.message}`,
+					);
+					return;
+				}
 				if (comparisonPending.current) {
 					comparisonPending.current = false;
 					setComparing(false);
@@ -782,6 +818,18 @@ export default function App() {
 				pending.current = false;
 			}
 			if (reply.type === "ready" || reply.type === "state") {
+				if (persistenceAfterState.current) {
+					autosaveEnabled.current = true;
+					persistenceAfterState.current = false;
+				}
+				const restoredAtStartup = restoringStartup && reply.type === "state";
+				if (restoredAtStartup) {
+					restoringStartup = false;
+					autosaveEnabled.current = true;
+					setPlaying(false);
+					setSaved("Restored town from this device");
+				}
+				if (reply.type === "ready") autosaveEnabled.current = !savedReadFailed;
 				setTown(reply.view);
 				setHealthHistory((previous) => sampleHealth(previous, reply.view));
 				const intervention = interventionPending.current;
@@ -799,7 +847,11 @@ export default function App() {
 					interventionPending.current = null;
 				}
 				setObserved((old) => observe(old, reply.view));
-				setError("");
+				setError(
+					savedReadFailed
+						? "The device save could not be read. This fresh town is paused; device saving may be unavailable."
+						: "",
+				);
 				pending.current = false;
 				setTrends((old) => {
 					const next = { ...old };
@@ -807,48 +859,61 @@ export default function App() {
 						next[key] = [...(old[key] || []), value].slice(-40);
 					return next;
 				});
-				if (reply.type === "ready") setPlaying(true);
-				if (++rounds.current % 6 === 0) client.current?.send({ type: "save" });
+				if (reply.type === "ready") {
+					setPlaying(!savedReadFailed);
+					savedReadFailed = false;
+				}
+				if (++rounds.current % 6 === 0 && autosaveEnabled.current)
+					runtime?.send({ type: "save" });
 			}
 			if (reply.type === "save") {
 				const replacement = replaceAfterSave.current;
 				const replace =
 					replacement?.requestId === reply.requestId ? replacement : null;
-				void localSave(reply.save, replace ? "previous" : "latest")
-					.then(() => {
-						setSaved("Saved on this device");
-						if (
-							replace &&
-							replaceAfterSave.current?.requestId === replace.requestId
-						) {
-							replaceAfterSave.current = null;
-							setHasPrevious(true);
-							setObserved(undefined);
-							setTrends({});
-							setHealthHistory(undefined);
-							client.current?.send(replace.command);
-						}
-						setHasSave(true);
-					})
-					.catch(() => {
-						setSaved("Device save unavailable");
-						if (
-							replace &&
-							replaceAfterSave.current?.requestId === replace.requestId
-						) {
-							replaceAfterSave.current = null;
+				if (autosaveEnabled.current || replace)
+					void localSave(reply.save, replace ? "previous" : "latest")
+						.then(() => {
+							if (!active) return;
+							const checkpoint = reply.save as { runtime?: { now?: unknown } };
+							const savedAt = checkpoint?.runtime?.now;
+							setSaved(
+								typeof savedAt === "number" && Number.isFinite(savedAt)
+									? `Saved · ${datedClock(savedAt)}`
+									: "Saved on this device",
+							);
 							if (
-								window.confirm(
-									"The current town could not be saved on this device. Replace it with a new town anyway?",
-								)
+								replace &&
+								replaceAfterSave.current?.requestId === replace.requestId
 							) {
+								replaceAfterSave.current = null;
+								setHasPrevious(true);
 								setObserved(undefined);
 								setTrends({});
 								setHealthHistory(undefined);
 								client.current?.send(replace.command);
 							}
-						}
-					});
+							setHasSave(true);
+						})
+						.catch(() => {
+							if (!active) return;
+							setSaved("Device save unavailable");
+							if (
+								replace &&
+								replaceAfterSave.current?.requestId === replace.requestId
+							) {
+								replaceAfterSave.current = null;
+								if (
+									window.confirm(
+										"The current town could not be saved on this device. Replace it with a new town anyway?",
+									)
+								) {
+									setObserved(undefined);
+									setTrends({});
+									setHealthHistory(undefined);
+									client.current?.send(replace.command);
+								}
+							}
+						});
 				if (
 					exportRequest.current !== null &&
 					reply.requestId === exportRequest.current
@@ -869,12 +934,25 @@ export default function App() {
 				}
 			}
 		};
-		client.current = new RuntimeClient(receive);
-		void localSave()
-			.then((value) => {
-				if (active) setHasSave(value !== undefined);
-			})
-			.catch(() => {});
+		const startRuntime = () => {
+			if (!active) return;
+			runtime = new RuntimeClient(receive);
+			client.current = runtime;
+		};
+		void localSave().then(
+			(value) => {
+				if (!active) return;
+				initialSavedPacket = value;
+				setHasSave(value !== undefined);
+				startRuntime();
+			},
+			() => {
+				if (!active) return;
+				savedReadFailed = true;
+				setSaved("Device save unavailable");
+				startRuntime();
+			},
+		);
 		void localSave(undefined, "previous")
 			.then((value) => {
 				if (active) setHasPrevious(value !== undefined);
@@ -882,8 +960,8 @@ export default function App() {
 			.catch(() => {});
 		return () => {
 			active = false;
-			client.current?.close();
-			client.current = null;
+			runtime?.close();
+			if (client.current === runtime) client.current = null;
 		};
 	}, []);
 	useEffect(() => {
@@ -909,7 +987,16 @@ export default function App() {
 		return () => clearInterval(timer);
 	}, [playing, speed, hasTown]);
 	const send = (command: UiCommand) => {
-		if (!comparisonPending.current) client.current?.send(command);
+		if (!comparisonPending.current) {
+			if (
+				command.type === "step" ||
+				command.type === "intervene" ||
+				command.type === "restore" ||
+				command.type === "new"
+			)
+				persistenceAfterState.current = true;
+			client.current?.send(command);
+		}
 	};
 	const compare = (intervention: Intervention, rounds: 24 | 96) => {
 		if (comparisonPending.current) return;
@@ -1028,7 +1115,14 @@ export default function App() {
 							<button
 								type="button"
 								className="play-button"
-								onClick={() => (playing ? pause() : setPlaying(true))}
+								onClick={() => {
+									if (playing) pause();
+									else {
+										autosaveEnabled.current = true;
+										setError("");
+										setPlaying(true);
+									}
+								}}
 								disabled={comparing}
 								aria-label={playing ? "Pause town" : "Play town"}
 							>

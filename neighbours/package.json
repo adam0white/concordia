@@ -9,13 +9,14 @@
 	"scripts": {
 		"dev": "vite --host 127.0.0.1",
 		"build": "node scripts/prepare-runtime.mjs && tsc --noEmit && vite build",
-		"typecheck": "tsc --noEmit",
-		"test": "vitest run",
-		"lint": "biome check --error-on-warnings src tests scripts *.ts *.json",
+		"typecheck": "tsc --noEmit && tsc --noEmit -p e2e/tsconfig.json",
+		"test": "vitest run tests",
+		"lint": "biome check --error-on-warnings src tests scripts e2e *.ts *.json",
 		"check": "npm run lint && npm run typecheck && npm test && npm run build",
 		"test:parity": "node scripts/check-parity.mjs",
 		"build:cloudflare": "node scripts/prepare-runtime.mjs && tsc --noEmit && CF_BUILD=1 cf build",
-		"deploy": "cf deploy --prebuilt --mode production"
+		"deploy": "cf deploy --prebuilt --mode production",
+		"test:e2e": "playwright test"
 	},
 	"dependencies": {
 		"@adam0white/human-framework": "2.2.1",
@@ -26,6 +27,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.5.15",
 		"@cloudflare/vite-plugin": "2.0.0-beta.v.0",
+		"@playwright/test": "1.64.1",
 		"@types/node": "26.6.4",
 		"@types/react": "19.3.0",
 		"@types/react-dom": "19.3.0",

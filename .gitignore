@@ -49,3 +49,7 @@ neighbours/public/third-party-notices.txt
 .codex/
 .cursor/
 CLAUDE.md
+
+# Isolated browser regression artifacts
+neighbours/test-results/
+neighbours/playwright-report/

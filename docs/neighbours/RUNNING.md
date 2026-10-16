@@ -17,6 +17,8 @@ python3 -m venv .venv
 .venv/bin/python -m pip install absl-py==2.4.0
 cd neighbours
 npm run check
+npx playwright install chromium
+npm run test:e2e
 node scripts/profile-town.ts --days 30 --population 208 --seed 42 --max-deaths 0
 PYTHON=../.venv/bin/python npm run test:parity
 cd ..
@@ -24,6 +26,8 @@ PYTHONPATH=. NEIGHBOURS_NATIVE_TEST=1 NODE=node .venv/bin/python -m unittest con
 ```
 
 The parity check runs actual native CPython and WASM Python over the same 208-person state, compares complete checkpoints, restores a continuation, recovers an interrupted engine, and verifies that a rejected import leaves subsequent progress usable. The long-run profile reports population health, finite food stock, checkpoint size and elapsed time every five days, checks host invariants, and verifies exact restored continuation. Change its seed to sample a different town; these measurements do not establish human realism. Unit controls also cover physical conservation, legal choices, acquired-method removal and malformed checkpoint fields. Runtime diagnostics report violations separately from valid delayed outcomes.
+
+The browser suite builds production assets and opens an isolated Chromium profile. It runs actual Python WASM and HF, downloads and imports packets through the UI, checks save ownership and exact paused restoration on reload, recovers the previous seed, rejects a bad import without losing progress, and checks mobile layout and keyboard controls. It does not inspect a user's browser profile or read application storage directly. Failed runs retain traces and screenshots under ignored test-output directories. CI installs Chromium's Linux dependencies and uses one test worker, following [Playwright's CI guidance](https://playwright.dev/docs/ci).
 
 For a native artifact:
 
@@ -34,7 +38,7 @@ python neighbours/scripts/run-town.py --seed 42 --population 208 --rounds 288 --
 
 The live browser uses HF choices for every resident. The recorded Inspector comparison contains real limited native Claude calls and explicitly reports its limits. It does not establish broad superiority. The native mixed-town adapter labels external choices, validates only feasible actions and saves the exact response tape. Replaying it must not call a model. See the experiment scripts and their `--help` before opting into fresh authenticated model calls.
 
-The town is saved in IndexedDB on the current device. Export a file to keep an independent copy. Imports are size-limited and validate host state; they are user-supplied game data, not authenticated evidence of an unmodified historical run. Keep recorded experiment provenance separate from imported towns.
+The town is saved in IndexedDB on the current device. A returning visitor restores that checkpoint before the town appears and starts paused. The footer reports the time of the committed device save. Export a file to keep an independent copy. Imports are size-limited and validate host state; they are user-supplied game data, not authenticated evidence of an unmodified historical run. Keep recorded experiment provenance separate from imported towns.
 
 Production uses `cloudflare.config.ts` and the official cf CLI. Run `npm run build:cloudflare`, inspect `cf deploy --prebuilt --dry-run --mode production`, then deploy with an authorized Cloudflare credential. No credential belongs in source or browser assets. `/release.json` identifies the commit, dirty flag, exact HF version and Python bundle digest. `/third-party-notices.txt` contains the distributed licenses.
 

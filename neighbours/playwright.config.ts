@@ -1,0 +1,26 @@
+import { defineConfig } from "@playwright/test";
+
+export default defineConfig({
+	testDir: "./e2e",
+	fullyParallel: false,
+	workers: 1,
+	retries: 0,
+	timeout: 120_000,
+	globalTimeout: 300_000,
+	expect: { timeout: 30_000 },
+	reporter: [["list"], ["html", { open: "never" }]],
+	use: {
+		baseURL: "http://127.0.0.1:5286",
+		browserName: "chromium",
+		trace: "retain-on-failure",
+		screenshot: "only-on-failure",
+		viewport: { width: 1280, height: 900 },
+	},
+	webServer: {
+		command:
+			"npm run build && npx vite preview --host 127.0.0.1 --port 5286 --strictPort",
+		url: "http://127.0.0.1:5286",
+		reuseExistingServer: false,
+		timeout: 120_000,
+	},
+});
