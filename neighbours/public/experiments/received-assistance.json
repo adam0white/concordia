@@ -4,12 +4,12 @@
   "hf": "2.2.1",
   "node": "v26.12.0",
   "checkpointRuntimeSha256": "600d6dea11b9636368fb0a488ab40bc5efcbe2fff8bcd01bf6a51fd80b9db64b",
-  "sourceFingerprint": "4940d1dd978333fbef976cf4c279f144cc6ce7027377fe30b7e36bbda543e7c9",
+  "sourceFingerprint": "2ab70c6710ba29076cf1d6f9fe5c7ed6625c586197399c28f3890c8f7a20b0b6",
   "sources": {
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
     "scripts/probe-assistance.ts": "c865031ec8130269439998ada4bef80f0fe7b64c1f89efbd694ec1cb28afbed5",
-    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
+    "src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
@@ -1080,5 +1080,5 @@
     "Checkpoint contents and person snapshots are omitted. Digests and bounded fictional-resident outcome summaries are retained."
   ],
   "checkpointSha256": "52fa1c0898f2d7f10ff605bf005b9a0475722396c25f8dd53801feb6c39a04b0",
-  "recordedAt": "2026-10-16T19:38:10.361310+00:00"
+  "recordedAt": "2026-10-16T20:23:52.909020+00:00"
 }

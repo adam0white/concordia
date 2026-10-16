@@ -196,7 +196,7 @@
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
     "scripts/probe-cart-choices.ts": "66c04bd02fc2da4f9b5cbcbe2291600da8d934fe7a6c2c1bfe4ed53aabc91a3b",
-    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
+    "src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
@@ -230,5 +230,5 @@
     "The matched duration pair is explicitly hypothetical: access is supplied as an offer, not negotiated or enacted in the town.",
     "The pair records immediate decision terms, not completion speed or the future value of waiting for tomorrow's agreement."
   ],
-  "recordedAt": "2026-10-16T19:37:41.187827+00:00"
+  "recordedAt": "2026-10-16T20:24:50.945080+00:00"
 }

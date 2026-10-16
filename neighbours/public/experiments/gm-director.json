@@ -1,6 +1,6 @@
 {
   "schema": "native-concordia-gm@1",
-  "recordedAt": "2026-10-16T19:39:16.670656+00:00",
+  "recordedAt": "2026-10-16T20:30:10.953423+00:00",
   "runtime": "Native upstream Concordia EventResolution + MakeObservation + real Claude CLI",
   "upstreamSha": "6fbfbc58f324aa74f78568c488713210889a801e",
   "runtimeSources": {
@@ -105,7 +105,7 @@
       "neighbours/scripts/capture-weekly.ts": "d27a00aef57fb5af30c8c5a182014ca917599113e52e97d70467cdb917e48545",
       "neighbours/scripts/run-gm-director.py": "145786f7d9f66c3995103c010ef2f2cc16b036c981251f382ceb10b72b5c494a",
       "neighbours/src/bridge-port.ts": "efaa97812f956bc4792c7a460c81aac0c1874069e496e55386a2088f98633dc3",
-      "neighbours/src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
+      "neighbours/src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
       "neighbours/src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
       "neighbours/src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
       "neighbours/src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
@@ -136,7 +136,7 @@
       "name": "@adam0white/human-framework",
       "version": "2.2.1"
     },
-    "sha256": "d94591dc77224cc1e77a4ee388af4dbb918d22c1fc76ff1823f2e5c77b685185"
+    "sha256": "ddcc50f81c9de93971807ea8564196c19e7c865632efa01e622500c531d2d781"
   },
   "runtimes": {
     "python": "3.12.13",
@@ -149,8 +149,8 @@
     "termcolor": "3.3.0",
     "typing_extensions": "4.16.0"
   },
-  "sourceFingerprint": "d94591dc77224cc1e77a4ee388af4dbb918d22c1fc76ff1823f2e5c77b685185",
-  "gitHeadAtRun": "a994cc4fadfe0945a124cba26a9c0276c3d524ec",
+  "sourceFingerprint": "ddcc50f81c9de93971807ea8564196c19e7c865632efa01e622500c531d2d781",
+  "gitHeadAtRun": "ca5879bb063bc01bd0465d32e6e05aaf41661eb5",
   "sourceWorkingTreeDirty": false,
   "checkpoint": {
     "schema": "neighbours/concordia@1",

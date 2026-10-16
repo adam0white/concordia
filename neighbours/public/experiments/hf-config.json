@@ -3,12 +3,12 @@
   "runtime": "typescript-host-released-hf",
   "hf": "2.2.1",
   "node": "v26.12.0",
-  "sourceFingerprint": "2b55b7c8106cc0b07f76ac3a14bdcdda112a5d44722d6f3e27dbe251eaf6af0d",
+  "sourceFingerprint": "4bc7d7ce25847c78f9f8134ddc40049a644ac289f89d0c49d6668b2f41ecc1e7",
   "sources": {
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
     "scripts/probe-hf-config.ts": "75941e08a5b85cd4c89713a82f4933d2762b290311b8a2c70ba41c56c4babaa3",
-    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
+    "src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
@@ -47,7 +47,7 @@
       101
     ]
   },
-  "wallSeconds": 9.012415500000001,
+  "wallSeconds": 9.601917041999998,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -59,7 +59,7 @@
   ],
   "arms": [
     {
-      "pid": 11554,
+      "pid": 13477,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -21230,7 +21230,7 @@
       ]
     },
     {
-      "pid": 11558,
+      "pid": 13874,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -42401,7 +42401,7 @@
       ]
     },
     {
-      "pid": 11574,
+      "pid": 14224,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -63572,5 +63572,5 @@
       ]
     }
   ],
-  "recordedAt": "2026-10-16T19:37:29.411114+00:00"
+  "recordedAt": "2026-10-16T20:23:42.006063+00:00"
 }

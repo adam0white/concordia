@@ -79,7 +79,7 @@ cue with a 240-minute window. They predate subsequent source edits and remain
 integration evidence only. A dependency failure before another attempted run
 made no model call. No rejected proposal was silently replaced.
 
-The fourth and final call ran against committed implementation
+The fourth call ran against committed implementation
 `a994cc4fadfe0945a124cba26a9c0276c3d524ec`, with clean recorded source files.
 It proposed `wet-sound` with a 240-minute window. The actual upstream chain
 accepted the typed proposal and its zero-call replay passed. The published
@@ -88,3 +88,9 @@ retains the response tape, actual checkpoint context and source digests.
 This is a single native proposal offered to the browser as a recorded case.
 A short successful proposal does not establish sustained generative game
 quality or a live browser GM.
+
+The mobile-focus delivery refresh made a fifth genuine call against committed
+implementation `ca5879bb063bc01bd0465d32e6e05aaf41661eb5`, with clean recorded sources.
+It again proposed `wet-sound`, 240 minutes, and replayed exactly with zero calls.
+The linked published report now contains this fifth recording. The fourth remains
+historical evidence; no generated response was replaced to obtain a preferred cue.

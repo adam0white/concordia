@@ -12,12 +12,12 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "c2dfb889283bcbe0f89cbf7b83442b224651ead4a69284775bebf0178d39e32e",
+  "sourceFingerprint": "976733606570e72f1d18a5a10935166e3283923dccc9fd8533511488947de83a",
   "sources": {
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
     "scripts/profile-evenings.ts": "fd7865e8fe2bd114f0f77890c168b8fd72762852ba5895dca7846c1b231bd11c",
-    "src/contracts.ts": "8b3e5d3eb219515c23551a18147b53dce12d0db8831aa75039d8d6db6e32aad4",
+    "src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
@@ -1865,7 +1865,7 @@
         }
       },
       "finalCheckpointSha256": "b8d33ecde197fa695b846900169cb56e59c545ce4cbcfe53440a7e4e66ffae10",
-      "wallSeconds": 86.898517291
+      "wallSeconds": 70.987452916
     },
     {
       "seed": 73,
@@ -3753,7 +3753,7 @@
         }
       },
       "finalCheckpointSha256": "4f9d5d276089f96f273e1757719a220c9fa7625844739281addd2add913b4fe7",
-      "wallSeconds": 74.36761437499999
+      "wallSeconds": 120.97949858400001
     },
     {
       "seed": 9,
@@ -5584,7 +5584,7 @@
         }
       },
       "finalCheckpointSha256": "fef0c48bae273314e7d6a0e4d9255c135c93e51e7e6258881b6dc6a60dfd85ec",
-      "wallSeconds": 71.87168133299998
+      "wallSeconds": 85.85868674999999
     },
     {
       "seed": 101,
@@ -7329,8 +7329,8 @@
         }
       },
       "finalCheckpointSha256": "83c1b020b28f1cfc4596e7270dc0b2f71b0396c2087bdbea226f7de4aeb16f6a",
-      "wallSeconds": 71.63725045799997
+      "wallSeconds": 90.81259487500002
     }
   ],
-  "recordedAt": "2026-10-16T19:42:24.035261+00:00"
+  "recordedAt": "2026-10-16T20:29:39.960026+00:00"
 }
