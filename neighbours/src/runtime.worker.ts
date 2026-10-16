@@ -91,6 +91,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 				case "save":
 					send({
 						type: "save",
+						...(q.requestId === undefined ? {} : { requestId: q.requestId }),
 						save: JSON.parse(
 							String(await py.runPythonAsync("json.dumps(town_engine.save())")),
 						),

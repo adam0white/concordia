@@ -41,6 +41,25 @@ const metricLabel = (key: string) =>
 		hfPeople: "HF-controlled residents",
 		persistentPeople: "Persistent residents",
 	})[key] ?? key.replaceAll("_", " ").replace(/([a-z])([A-Z])/g, "$1 $2");
+function ErrorMessage({ message }: { message: string }) {
+	if (message.length < 240 && !message.includes("Traceback"))
+		return <p>{message}</p>;
+	return (
+		<>
+			<p>
+				{message.includes("restore:")
+					? "This save could not be loaded. Your current town is unchanged."
+					: "The town could not complete that action. You can reload and restore your latest save."}
+			</p>
+			<details>
+				<summary>Technical details</summary>
+				<p className="tiny" style={{ overflowWrap: "anywhere" }}>
+					{message}
+				</p>
+			</details>
+		</>
+	);
+}
 function PlaceBuilding({ place, town }: { place: PlaceView; town: TownView }) {
 	const is = (kind: string) =>
 		place.id.includes(kind) || place.kind.includes(kind);
@@ -494,6 +513,17 @@ function PersonPanel({
 	const next = person.commitments.find(
 		(c) => c.at >= town.now && c.status === "pending",
 	);
+	const history = [
+		...new Map(
+			[
+				...person.history,
+				...(observed?.events.filter((event) => event.actorId === person.id) ??
+					[]),
+			].map((event) => [event.id, event]),
+		).values(),
+	]
+		.sort((a, b) => b.at - a.at || b.id - a.id)
+		.slice(0, 12);
 	return (
 		<aside
 			ref={panel}
@@ -558,13 +588,13 @@ function PersonPanel({
 						Last timber decision · {datedClock(person.inspection.at)}
 					</span>
 					<h3>{person.inspection.result.replaceAll("-", " ")}</h3>
-					<p>
-						Observed timber: {person.inspection.observations.moisture}. Support:{" "}
-						{person.inspection.observations.support}.
-					</p>
-					<p>Chose to {person.inspection.action.replaceAll("-", " ")}.</p>
 					<details>
 						<summary>Decision evidence</summary>
+						<p>
+							Observed timber: {person.inspection.observations.moisture}.
+							Support: {person.inspection.observations.support}.
+						</p>
+						<p>Chose to {person.inspection.action.replaceAll("-", " ")}.</p>
 						<p className="tiny muted">{person.inspection.source}</p>
 						{person.inspection.methodTerms.length ? (
 							person.inspection.methodTerms.map((term) => (
@@ -624,41 +654,17 @@ function PersonPanel({
 					</div>
 				</details>
 			)}
-			<details open>
-				<summary>Observed actions</summary>
-				<div className="received">
-					{observed?.events
-						.filter((e) => e.actorId === person.id)
-						.slice(-6)
-						.reverse()
-						.map((e) => (
-							<p key={e.id}>
-								<time>
-									Day {Math.floor(e.at / 1440) + 1} · {clock(e.at)}
-								</time>{" "}
-								{e.text}
-							</p>
-						))}
-					<p className="tiny muted">
-						Recorded events received while watching this town.
-					</p>
-				</div>
-			</details>
 			<details>
 				<summary>
-					Recorded history for {person.name.split(" ")[0]}{" "}
-					<span>{person.history.length}</span>
+					History <span>{history.length}</span>
 				</summary>
 				<div className="received">
-					{person.history
-						.slice(-8)
-						.reverse()
-						.map((e) => (
-							<p key={e.id}>
-								<time>{clock(e.at)}</time> {e.text}
-							</p>
-						))}
-					{!person.history.length && <p>No recorded history yet.</p>}
+					{history.map((e) => (
+						<p key={e.id}>
+							<time>{datedClock(e.at)}</time> {e.text}
+						</p>
+					))}
+					{!history.length && <p>No recorded history yet.</p>}
 				</div>
 			</details>
 			<details>
@@ -730,7 +736,10 @@ export default function App() {
 	const [seedInput, setSeedInput] = useState("42");
 	const [downloadUrl, setDownloadUrl] = useState("");
 	const [downloadLabel, setDownloadLabel] = useState("");
-	const replaceAfterSave = useRef<UiCommand | null>(null);
+	const replaceAfterSave = useRef<{
+		command: UiCommand;
+		requestId: number;
+	} | null>(null);
 	const [tab, setTab] = useState<"town" | "stories" | "inspector">("town");
 	const [saved, setSaved] = useState("");
 	const [interventionNotice, setInterventionNotice] = useState("");
@@ -743,7 +752,8 @@ export default function App() {
 	const [trends, setTrends] = useState<Record<string, number[]>>({});
 	const client = useRef<RuntimeClient | null>(null);
 	const pending = useRef(false);
-	const exportNext = useRef(false);
+	const saveRequestId = useRef(0);
+	const exportRequest = useRef<number | null>(null);
 	const rounds = useRef(0);
 	const file = useRef<HTMLInputElement>(null);
 	useEffect(() => {
@@ -801,40 +811,53 @@ export default function App() {
 				if (++rounds.current % 6 === 0) client.current?.send({ type: "save" });
 			}
 			if (reply.type === "save") {
-				void localSave(
-					reply.save,
-					replaceAfterSave.current ? "previous" : "latest",
-				)
+				const replacement = replaceAfterSave.current;
+				const replace =
+					replacement?.requestId === reply.requestId ? replacement : null;
+				void localSave(reply.save, replace ? "previous" : "latest")
 					.then(() => {
 						setSaved("Saved on this device");
-						const replace = replaceAfterSave.current;
-						replaceAfterSave.current = null;
-						if (replace) {
+						if (
+							replace &&
+							replaceAfterSave.current?.requestId === replace.requestId
+						) {
+							replaceAfterSave.current = null;
 							setHasPrevious(true);
 							setObserved(undefined);
 							setTrends({});
 							setHealthHistory(undefined);
-							client.current?.send(replace);
+							client.current?.send(replace.command);
 						}
 						setHasSave(true);
 					})
 					.catch(() => {
 						setSaved("Device save unavailable");
-						const replace = replaceAfterSave.current;
-						replaceAfterSave.current = null;
 						if (
 							replace &&
-							window.confirm(
-								"The current town could not be saved on this device. Replace it with a new town anyway?",
-							)
+							replaceAfterSave.current?.requestId === replace.requestId
 						) {
-							setObserved(undefined);
-							setTrends({});
-							setHealthHistory(undefined);
-							client.current?.send(replace);
+							replaceAfterSave.current = null;
+							if (
+								window.confirm(
+									"The current town could not be saved on this device. Replace it with a new town anyway?",
+								)
+							) {
+								setObserved(undefined);
+								setTrends({});
+								setHealthHistory(undefined);
+								client.current?.send(replace.command);
+							}
 						}
 					});
-				if (exportNext.current) {
+				if (
+					exportRequest.current !== null &&
+					reply.requestId === exportRequest.current
+				) {
+					const packet = reply.save as { runtime?: { now?: number } } | null;
+					const at = packet?.runtime?.now;
+					setDownloadLabel(
+						typeof at === "number" ? datedClock(at) : "Current checkpoint",
+					);
 					setDownloadUrl(
 						URL.createObjectURL(
 							new Blob([JSON.stringify(reply.save)], {
@@ -842,7 +865,7 @@ export default function App() {
 							}),
 						),
 					);
-					exportNext.current = false;
+					exportRequest.current = null;
 				}
 			}
 		};
@@ -986,7 +1009,7 @@ export default function App() {
 					{error && (
 						<div className="error" role="alert">
 							<strong>The town could not start.</strong>
-							<p>{error}</p>
+							<ErrorMessage message={error} />
 							<button type="button" onClick={() => location.reload()}>
 								Try again
 							</button>
@@ -1285,8 +1308,12 @@ export default function App() {
 												return;
 											}
 											setPlaying(false);
-											replaceAfterSave.current = { type: "new", seed };
-											send({ type: "save" });
+											const requestId = ++saveRequestId.current;
+											replaceAfterSave.current = {
+												command: { type: "new", seed },
+												requestId,
+											};
+											send({ type: "save", requestId });
 										}}
 									>
 										<label htmlFor="town-seed">New town seed</label>
@@ -1439,7 +1466,7 @@ export default function App() {
 					)}
 					{error && (
 						<div className="error" role="alert">
-							{error}
+							<ErrorMessage message={error} />
 						</div>
 					)}
 					<footer>
@@ -1495,9 +1522,9 @@ export default function App() {
 								disabled={comparing}
 								onClick={() => {
 									setDownloadUrl("");
-									setDownloadLabel(`Day ${town.day} · ${clock(town.now)}`);
-									exportNext.current = true;
-									send({ type: "save" });
+									const requestId = ++saveRequestId.current;
+									exportRequest.current = requestId;
+									send({ type: "save", requestId });
 								}}
 							>
 								Export

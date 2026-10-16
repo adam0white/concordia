@@ -1,6 +1,6 @@
 {
   "schema": "native-mixed-town@1",
-  "recordedAt": "2026-10-16T09:14:05.038141+00:00",
+  "recordedAt": "2026-10-16T09:25:46.728664+00:00",
   "runtime": "Python Concordia + persistent Node + real Claude CLI",
   "population": 8,
   "hfControllers": 7,
@@ -15,7 +15,7 @@
       "neighbours/scripts/mixed-bridge.ts": "4e08e8693edbaedcbea61ccc531d1fd7a94a246f60bc0b0056f4881aae799a9b",
       "neighbours/scripts/run-mixed-town.py": "28207ef422c740f3f81a115cce6e66ebe9dff5dacf7991b4c3de3ca427cc3b8b",
       "neighbours/src/bridge-port.ts": "efaa97812f956bc4792c7a460c81aac0c1874069e496e55386a2088f98633dc3",
-      "neighbours/src/contracts.ts": "61266192367c6221db80cbec7f0afae7ea3fbf698e6d18d111514c6a2df5c79f",
+      "neighbours/src/contracts.ts": "c1ad38f2f478f203a8a45ed6046d758a27cb5b6473c2faec29a61d3e2773f634",
       "neighbours/src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
       "neighbours/src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
       "neighbours/src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
@@ -39,7 +39,7 @@
       "name": "@adam0white/human-framework",
       "version": "2.2.1"
     },
-    "sha256": "58462ef80b1a6665015a81d05ee643fb34b38fd4fa9960182d012da4a1530fb2"
+    "sha256": "83ca6436f3917f66205f5589aaa6fb1e004bdf70bb1c56e0f6b9f1bb5c07768c"
   },
   "runtimes": {
     "node": "v26.12.0",
@@ -48,7 +48,7 @@
     "platform": "darwin",
     "architecture": "arm64"
   },
-  "gitHeadAtRun": "6fbfbc58f324aa74f78568c488713210889a801e",
+  "gitHeadAtRun": "a7a31c5a3389af74d96362c47b3da3dd1ce9285a",
   "sourceWorkingTreeDirty": true,
   "llmActor": "ada",
   "rounds": 12,
@@ -61,32 +61,32 @@
     "cursor": 2,
     "entries": [
       {
-        "rawResponse": "{\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"action\":\"repair\",\"reason\":\"Needs are all low, and the hall doors must be repaired before evening. Starting the flood repairs now makes progress on that commitment and leaves time to be at the hall after Lea's class to compare the damage.\"}",
+        "rawResponse": "{\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"action\":\"repair\",\"reason\":\"Needs are all low, so I'm free to make progress on my main commitment: repairing the hall doors before evening. Starting the flood repairs now leaves time to meet Lea at the hall after her class.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 2864,
-          "reportedCostUsd": 0.005842000000000001
+          "reportedDurationMs": 3019,
+          "reportedCostUsd": 0.005802
         },
         "requestHash": "3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e",
         "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"observation\":{\"at\":495,\"name\":\"Ada\",\"place\":\"workshop\",\"activity\":\"Free\",\"weather\":\"Rain\",\"nearby\":[\"Ada\",\"Ravi\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.003625701224705241,\"water\":0.002126551323071046,\"sleep\":0.010741858547107137,\"rest\":0.000006645445806724101,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007362249614131971,\"esteem\":0.0128230736391065,\"autonomy\":0.007200000000000002,\"competence\":0.0128230736391065,\"leisure\":0.012800000000000002,\"meaning\":0.012855471725933517},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea\u2019s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water at home\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"inspect\",\"label\":\"Go and inspect the hall timber\"}],\"response\":{\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       },
       {
-        "rawResponse": "{\"contextId\":\"9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276\",\"action\":\"repair\",\"reason\":\"Hall is still unsafe and I'm already here; needs are low. Continuing repairs serves my goal of fixing the doors and keeps me at the hall ahead of the 840 meeting with Lea to compare flood damage.\"}",
+        "rawResponse": "{\"contextId\":\"7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb\",\"action\":\"repair\",\"reason\":\"Hall is still unsafe after one repair pass. Continuing repairs builds competence and meaning, keeps me at the hall for comparing flood damage after Lea's class at 840, and my needs are all low right now.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 2465,
-          "reportedCostUsd": 0.016716
+          "reportedDurationMs": 2651,
+          "reportedCostUsd": 0.016564000000000002
         },
-        "requestHash": "9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":1,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea\u2019s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished repair the flood-damaged hall.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water at home\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":1,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea\u2019s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished repair the flood-damaged hall.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water at home\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       }
     ]
   },
@@ -2866,7 +2866,7 @@
                 {
                   "at": 615,
                   "action": "repair",
-                  "intention": "Needs are all low, and the hall doors must be repaired before evening. Starting the flood repairs now makes progress on that commitment and leaves time to be at the hall after Lea's class to compare the damage."
+                  "intention": "Needs are all low, so I'm free to make progress on my main commitment: repairing the hall doors before evening. Starting the flood repairs now leaves time to meet Lea at the hall after her class."
                 }
               ],
               "nextBreach": 0
@@ -3205,7 +3205,7 @@
               "focus": 0,
               "mode": "awake",
               "decisionId": "external-ada-9",
-              "intention": "Hall is still unsafe and I'm already here; needs are low. Continuing repairs serves my goal of fixing the doors and keeps me at the hall ahead of the 840 meeting with Lea to compare flood damage.",
+              "intention": "Hall is still unsafe after one repair pass. Continuing repairs builds competence and meaning, keeps me at the hall for comparing flood damage after Lea's class at 840, and my needs are all low right now.",
               "reviewAt": 645
             },
             "trace": [],
@@ -3259,7 +3259,7 @@
             "decidedAt": 615,
             "round": 9,
             "label": "Repair the flood-damaged hall",
-            "reason": "Hall is still unsafe and I'm already here; needs are low. Continuing repairs serves my goal of fixing the doors and keeps me at the hall ahead of the 840 meeting with Lea to compare flood damage.",
+            "reason": "Hall is still unsafe after one repair pass. Continuing repairs builds competence and meaning, keeps me at the hall for comparing flood damage after Lea's class at 840, and my needs are all low right now.",
             "options": [],
             "source": "LLM policy with HF person state: claude-opus-5-5"
           },
@@ -11670,32 +11670,32 @@
         "cursor": 2,
         "entries": [
           {
-            "rawResponse": "{\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"action\":\"repair\",\"reason\":\"Needs are all low, and the hall doors must be repaired before evening. Starting the flood repairs now makes progress on that commitment and leaves time to be at the hall after Lea's class to compare the damage.\"}",
+            "rawResponse": "{\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"action\":\"repair\",\"reason\":\"Needs are all low, so I'm free to make progress on my main commitment: repairing the hall doors before evening. Starting the flood repairs now leaves time to meet Lea at the hall after her class.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 2864,
-              "reportedCostUsd": 0.005842000000000001
+              "reportedDurationMs": 3019,
+              "reportedCostUsd": 0.005802
             },
             "requestHash": "3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e",
             "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"observation\":{\"at\":495,\"name\":\"Ada\",\"place\":\"workshop\",\"activity\":\"Free\",\"weather\":\"Rain\",\"nearby\":[\"Ada\",\"Ravi\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.003625701224705241,\"water\":0.002126551323071046,\"sleep\":0.010741858547107137,\"rest\":0.000006645445806724101,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007362249614131971,\"esteem\":0.0128230736391065,\"autonomy\":0.007200000000000002,\"competence\":0.0128230736391065,\"leisure\":0.012800000000000002,\"meaning\":0.012855471725933517},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea\u2019s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water at home\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"inspect\",\"label\":\"Go and inspect the hall timber\"}],\"response\":{\"contextId\":\"3edd6ce6d2a0f29521aeeff4094a001e01ade1ebbe85f259ee9576df5b94e29e\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           },
           {
-            "rawResponse": "{\"contextId\":\"9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276\",\"action\":\"repair\",\"reason\":\"Hall is still unsafe and I'm already here; needs are low. Continuing repairs serves my goal of fixing the doors and keeps me at the hall ahead of the 840 meeting with Lea to compare flood damage.\"}",
+            "rawResponse": "{\"contextId\":\"7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb\",\"action\":\"repair\",\"reason\":\"Hall is still unsafe after one repair pass. Continuing repairs builds competence and meaning, keeps me at the hall for comparing flood damage after Lea's class at 840, and my needs are all low right now.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 2465,
-              "reportedCostUsd": 0.016716
+              "reportedDurationMs": 2651,
+              "reportedCostUsd": 0.016564000000000002
             },
-            "requestHash": "9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":1,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea\u2019s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished repair the flood-damaged hall.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water at home\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"9f3a51d13cb2989a17b8e924558a7999cee4c5f23b1c6e2501db32da228b1276\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":1,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea\u2019s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished repair the flood-damaged hall.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water at home\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"7f57869bfccd97e42d06b0099c9645391e530097d6cfad52cb2177345e9d43fb\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           }
         ]
       }
@@ -11810,7 +11810,7 @@
           "decidedAt": 615,
           "round": 9,
           "label": "Repair the flood-damaged hall",
-          "reason": "Hall is still unsafe and I'm already here; needs are low. Continuing repairs serves my goal of fixing the doors and keeps me at the hall ahead of the 840 meeting with Lea to compare flood damage.",
+          "reason": "Hall is still unsafe after one repair pass. Continuing repairs builds competence and meaning, keeps me at the hall for comparing flood damage after Lea's class at 840, and my needs are all low right now.",
           "options": [],
           "source": "LLM policy with HF person state: claude-opus-5-5"
         }
@@ -13633,7 +13633,7 @@
       "persistentPeople": 8
     }
   },
-  "checkpointSha256": "8c71507bef2989e151ebe485b65adf72082845b59d05a69b5a6aaaee76b88df4",
+  "checkpointSha256": "cc5f0de15a64d5224b4d3ef5158e58118cea9b1268fd624957dd556c73995679",
   "limits": [
     "One short native run, not an HF-versus-LLM superiority result.",
     "The LLM actor uses HF body and person state but an explicitly external choice record.",
@@ -13648,8 +13648,8 @@
       "validatedModelDecisions": 2
     },
     "priorRecordingHistory": {
-      "recordedAt": "2026-10-16T09:12:20.884377+00:00",
-      "runtimeSourceSha256": "d0abc0700dcfd35f0f314b024f773007a746f98fd820965a7f23050fdc7d37d0",
+      "recordedAt": "2026-10-16T09:14:05.038141+00:00",
+      "runtimeSourceSha256": "58462ef80b1a6665015a81d05ee643fb34b38fd4fa9960182d012da4a1530fb2",
       "recordingAttempts": {
         "currentSourceRun": {
           "successfulRuns": 1,
@@ -13658,31 +13658,47 @@
           "validatedModelDecisions": 2
         },
         "priorRecordingHistory": {
-          "recordedAt": "2026-10-16T09:05:49.763442+00:00",
-          "runtimeSourceSha256": "82d5c3049182786ccc520583ad1099c717c9bf19d228eef22a06c741158e9f65",
+          "recordedAt": "2026-10-16T09:12:20.884377+00:00",
+          "runtimeSourceSha256": "d0abc0700dcfd35f0f314b024f773007a746f98fd820965a7f23050fdc7d37d0",
           "recordingAttempts": {
             "currentSourceRun": {
               "successfulRuns": 1,
               "rejectedRuns": 0,
               "observedMalformedResponses": 0,
-              "validatedModelDecisions": 3
+              "validatedModelDecisions": 2
             },
             "priorRecordingHistory": {
-              "recordedAt": "2026-10-16T08:42:54.553368+00:00",
-              "runtimeSourceSha256": "5202ef827fd305fdee262c8d93ba6d7101d5b3e1aab3c9b69be612ecc9bdaff6",
+              "recordedAt": "2026-10-16T09:05:49.763442+00:00",
+              "runtimeSourceSha256": "82d5c3049182786ccc520583ad1099c717c9bf19d228eef22a06c741158e9f65",
               "recordingAttempts": {
-                "successfulRuns": 1,
-                "rejectedRuns": 1,
-                "observedMalformedResponses": 1,
-                "rejection": "The prior recording attempt returned Markdown-fenced JSON. The strict parser rejected it; no action was substituted and no report was published.",
-                "correction": "The system and task prompts now explicitly require a plain JSON object without Markdown fences.",
-                "successfulRunModelDecisions": 3,
-                "totalCallsInRejectedRun": null,
-                "limit": "The failed run did not persist its response tape, so its total call count is unavailable. This report is not an estimate of model reliability."
+                "currentSourceRun": {
+                  "successfulRuns": 1,
+                  "rejectedRuns": 0,
+                  "observedMalformedResponses": 0,
+                  "validatedModelDecisions": 3
+                },
+                "priorRecordingHistory": {
+                  "recordedAt": "2026-10-16T08:42:54.553368+00:00",
+                  "runtimeSourceSha256": "5202ef827fd305fdee262c8d93ba6d7101d5b3e1aab3c9b69be612ecc9bdaff6",
+                  "recordingAttempts": {
+                    "successfulRuns": 1,
+                    "rejectedRuns": 1,
+                    "observedMalformedResponses": 1,
+                    "rejection": "The prior recording attempt returned Markdown-fenced JSON. The strict parser rejected it; no action was substituted and no report was published.",
+                    "correction": "The system and task prompts now explicitly require a plain JSON object without Markdown fences.",
+                    "successfulRunModelDecisions": 3,
+                    "totalCallsInRejectedRun": null,
+                    "limit": "The failed run did not persist its response tape, so its total call count is unavailable. This report is not an estimate of model reliability."
+                  }
+                },
+                "limits": [
+                  "The previous source revision required one retry after a Markdown-fenced response failed strict JSON validation. That rejection remains documented here.",
+                  "The rejected historical run did not persist a tape, so its total call count is unknown. This successful recording is not an estimate of model reliability."
+                ]
               }
             },
             "limits": [
-              "The previous source revision required one retry after a Markdown-fenced response failed strict JSON validation. That rejection remains documented here.",
+              "The earlier source revision required one retry after a Markdown-fenced response failed strict JSON validation. Historical recording attempts are retained separately from this current-world run.",
               "The rejected historical run did not persist a tape, so its total call count is unknown. This successful recording is not an estimate of model reliability."
             ]
           }

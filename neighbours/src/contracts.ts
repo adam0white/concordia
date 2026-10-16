@@ -156,14 +156,14 @@ export type UiCommand =
 	| { type: "step"; rounds?: number }
 	| { type: "new"; seed: number; population?: number }
 	| { type: "intervene"; intervention: Intervention }
-	| { type: "save" }
+	| { type: "save"; requestId?: number }
 	| { type: "restore"; save: unknown }
 	| { type: "inspect"; actorId: string }
 	| { type: "compare"; intervention: Intervention; rounds: number };
 export type UiReply =
 	| { type: "ready" | "state"; view: TownView; elapsedMs?: number }
 	| { type: "progress"; message: string }
-	| { type: "save"; save: unknown }
+	| { type: "save"; save: unknown; requestId?: number }
 	| { type: "inspection"; actorId: string; data: unknown }
 	| { type: "comparison"; report: TownComparison }
 	| { type: "error"; message: string };
