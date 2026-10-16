@@ -1,5 +1,8 @@
 import { restore } from "@adam0white/human-framework";
 import type { TownRuntime } from "../contracts";
+import { reviewDue } from "./activity-reviews.ts";
+import { validateEvenings } from "./evenings.ts";
+import { validateHandcart } from "./handcart.ts";
 import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
 import { Runtime } from "./runtime.ts";
 import { known, placeSpecs, type Save, SCHEMA } from "./state.ts";
@@ -28,7 +31,12 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		"produced",
 		"consumed",
 	];
-	if (Object.keys(s).sort().join() !== keys.sort().join())
+	if (
+		Object.keys(s)
+			.filter((key) => key !== "socialEvenings" && key !== "handcart")
+			.sort()
+			.join() !== keys.sort().join()
+	)
 		throw Error("Unexpected or missing save fields");
 	if (
 		s.schema !== SCHEMA ||
@@ -111,6 +119,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 							"food",
 							"tools",
 							"inspectionCues",
+							"socialContacts",
 						].includes(key),
 				) ||
 				!Number.isSafeInteger(j.event) ||
@@ -118,6 +127,60 @@ export function restoreRuntime(input: unknown): TownRuntime {
 				j.event >= s.nextEvent
 			)
 				throw Error("Invalid physical job fields");
+
+			if (
+				j.socialContacts !== undefined &&
+				(!["talk", "gather"].includes(j.offer.action) ||
+					!Array.isArray(j.socialContacts) ||
+					j.socialContacts.length > s.people.length * 10 ||
+					new Set(j.socialContacts.map((c) => `${c.otherId}:${c.event}`))
+						.size !== j.socialContacts.length ||
+					j.socialContacts.some(
+						(c) =>
+							!c ||
+							typeof c !== "object" ||
+							Object.keys(c).sort().join() !== "event,otherId" ||
+							c.otherId === r.person.id ||
+							!s.people.some((o) => o.person.id === c.otherId) ||
+							!Number.isSafeInteger(c.event) ||
+							c.event < 1 ||
+							c.event >= s.nextEvent ||
+							c.event === j.event ||
+							!r.person.social.relationships.some(
+								(rel) => rel.otherId === c.otherId,
+							),
+					))
+			)
+				throw Error("Invalid social contact receipt");
+			for (const contact of j.socialContacts ?? []) {
+				const event = s.events.find((e) => e.id === contact.event);
+				const counterpart = s.people.find(
+					(other) => other.job?.event === contact.event,
+				);
+				const otherJob = counterpart?.job;
+				// Completed counterpart jobs may have left the bounded event feed. Reject
+				// contradictions in retained evidence without inventing missing history.
+				if (
+					s.now - j.arrive < 15 ||
+					(event &&
+						(event.kind !== "started" ||
+							event.actorId !== contact.otherId ||
+							event.placeId !== j.offer.placeId ||
+							event.at > s.now - 15)) ||
+					(otherJob &&
+						(counterpart.person.id !== contact.otherId ||
+							!["talk", "gather"].includes(otherJob.offer.action) ||
+							otherJob.offer.placeId !== j.offer.placeId ||
+							Math.min(j.end, otherJob.end, s.now) -
+								Math.max(j.arrive, otherJob.arrive) <
+								15 ||
+							!otherJob.socialContacts?.some(
+								(receipt) =>
+									receipt.otherId === r.person.id && receipt.event === j.event,
+							)))
+				)
+					throw Error("Invalid social contact receipt");
+			}
 			if (
 				j.inspectionCues &&
 				(!["open-section", "keep-closed", "ask-inspector"].includes(
@@ -206,7 +269,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 				j.from !== r.place ||
 				!s.places.some((p) => p.id === j.offer.placeId) ||
 				j.food !==
-					(j.offer.action === "eat" || j.offer.action === "gather" ? 1 : 0) ||
+					(["eat", "gather", "attend-meal"].includes(j.offer.action) ? 1 : 0) ||
 				j.tools !== (j.offer.action === "repair" ? 1 : 0) ||
 				!r.person.activity ||
 				r.person.activity.affordance.id !== j.offer.id
@@ -245,15 +308,19 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		placeIds.add(p.id);
 	}
 	if (
-		s.pending.some(
-			(id) =>
+		s.pending.some((id) => {
+			const resident = s.people.find((r) => r.person.id === id);
+			return (
 				!ids.has(id) ||
-				s.people.find((r) => r.person.id === id)?.job ||
-				!s.people.find((r) => r.person.id === id)?.person.body.alive,
-		) ||
+				!resident?.person.body.alive ||
+				(!!resident.job && !reviewDue(resident, s.now))
+			);
+		}) ||
 		new Set(s.pending).size !== s.pending.length
 	)
 		throw Error("Invalid pending actors");
+	validateEvenings(s, ids);
+	validateHandcart(s, ids);
 	for (const r of s.people) validateResidentEvidence(r, s, ids);
 	let last = 0;
 	for (const e of s.events) {

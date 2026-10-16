@@ -16,7 +16,8 @@ function actor(s: Save, id: string): Resident {
 	return r;
 }
 function settleRound(r: Runtime, overrides: Record<string, string> = {}) {
-	for (const id of r.prepareRound()) r.apply(id, overrides[id] ?? "rest");
+	for (const id of r.prepareRound())
+		r.apply(id, overrides[id] ?? r.actor(id).job?.offer.id ?? "rest");
 }
 function fixture() {
 	const s = exported(createRuntime(42, 8));

@@ -1514,3 +1514,269 @@ footer > div {
 		width: 110px;
 	}
 }
+
+.evening-board {
+	margin: 16px 0 0;
+	padding: 16px 18px;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	background: var(--panel);
+}
+.evening-notice {
+	min-width: 0;
+	margin-top: 10px;
+}
+.evening-heading {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+.evening-heading > div {
+	min-width: 0;
+}
+.evening-icon {
+	color: var(--accent);
+	font-size: 25px;
+	line-height: 1.2;
+}
+.evening-heading h3 {
+	font-size: 18px;
+	overflow-wrap: anywhere;
+}
+.app .evening-heading p {
+	margin: 3px 0 6px;
+}
+.evening-record,
+.evening-archive {
+	margin-top: 9px;
+	font-size: 11px;
+}
+.evening-archive > .evening-notice {
+	padding: 12px 0;
+	border-top: 1px solid var(--line);
+}
+.evening-participants {
+	display: flex;
+	gap: 4px 14px;
+	flex-wrap: wrap;
+}
+.person-invitations {
+	padding: 14px 0;
+	border-top: 1px solid var(--line);
+}
+.invitation-receipt {
+	padding: 6px 0;
+	overflow-wrap: anywhere;
+}
+.app .invitation-receipt p {
+	margin: 0 0 3px;
+	font-size: 12px;
+}
+@media (max-width: 760px) {
+	.evening-board {
+		padding: 13px 14px;
+	}
+}
+
+.evening-icon svg {
+	display: block;
+	width: 24px;
+	height: 24px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.evening-board .text-button {
+	min-height: 32px;
+	font-size: 11px;
+	text-align: left;
+}
+.map-leader {
+	stroke: var(--ink);
+	stroke-opacity: 0.35;
+	stroke-dasharray: 3 3;
+	vector-effect: non-scaling-stroke;
+	pointer-events: none;
+}
+.person-hit {
+	fill: transparent;
+}
+.map-cluster {
+	cursor: pointer;
+}
+.app .map-cluster circle {
+	fill: var(--accent);
+	stroke: var(--panel);
+	stroke-width: 2;
+}
+.app .map-cluster text {
+	fill: var(--panel);
+	font-size: 16px;
+	font-weight: 600;
+	pointer-events: none;
+}
+.map-chooser {
+	background: var(--panel);
+	padding: 12px;
+	border-top: 1px solid var(--line);
+}
+.map-chooser-heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 8px;
+	font-size: 12px;
+}
+.app .map-chooser-heading button {
+	min-width: 44px;
+	min-height: 44px;
+}
+.map-chooser-people {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 6px;
+}
+.app .map-chooser-people button {
+	min-height: 44px;
+	text-align: left;
+	padding: 7px 10px;
+}
+.app .map-chooser-people strong,
+.app .map-chooser-people small {
+	display: block;
+	overflow-wrap: anywhere;
+}
+.app .map-chooser-people strong {
+	font-size: 12px;
+}
+.app .map-chooser-people small {
+	margin-top: 3px;
+	font-size: 10px;
+	color: var(--muted);
+}
+.handcart-card {
+	margin-top: 16px;
+	padding: 14px 18px;
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	background: var(--panel);
+}
+.handcart-overview {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+.handcart-overview svg {
+	width: 100px;
+	flex: 0 0 100px;
+}
+.handcart-overview > div {
+	min-width: 0;
+}
+.handcart-overview h3 {
+	font-size: 18px;
+}
+.app .handcart-overview p {
+	margin: 4px 0;
+}
+.cart-drawing {
+	stroke: var(--ink);
+	stroke-width: 2;
+	fill: var(--panel);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.cart-section {
+	fill: var(--ground);
+	stroke: var(--muted);
+}
+.cart-section-complete {
+	fill: var(--accent);
+	stroke: var(--accent);
+}
+.handcart-people {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	margin-top: 5px;
+}
+.handcart-people .text-button {
+	min-height: 32px;
+	font-size: 11px;
+}
+.handcart-card details {
+	margin-top: 8px;
+	font-size: 11px;
+}
+.purpose-state {
+	padding: 8px 0;
+}
+.app .purpose-state p {
+	margin: 0 0 4px;
+	font-size: 12px;
+}
+.purpose-state progress {
+	display: block;
+	width: 100%;
+	height: 5px;
+	margin-top: 7px;
+	accent-color: var(--accent);
+}
+.map-cart {
+	pointer-events: none;
+}
+.story-headline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 5px 14px;
+	width: 100%;
+	margin: 0 0 18px;
+	padding: 10px 13px;
+	border-left: 3px solid var(--accent);
+	text-align: left;
+	background: var(--panel);
+}
+.story-headline > span:last-child {
+	font-size: 13px;
+}
+.event:focus {
+	outline: 2px solid var(--accent);
+	outline-offset: 5px;
+}
+.app .story-people {
+	margin: 6px 0;
+}
+.promise-result {
+	border-left: 2px solid var(--accent);
+	padding: 10px 12px;
+	margin-top: 12px;
+}
+.app .promise-result p {
+	font-size: 12px;
+	margin: 6px 0;
+}
+.promise-history {
+	margin-top: 12px;
+}
+.promise-history > div {
+	padding: 8px 0;
+}
+.app .promise-history p {
+	font-size: 12px;
+	margin: 0 0 4px;
+}
+.lesson-evidence {
+	padding: 9px 0;
+	border-top: 1px solid var(--line);
+}
+.app .lesson-evidence p {
+	margin: 5px 0;
+}
+.story-sources {
+	margin-top: 10px;
+	font-size: 11px;
+}

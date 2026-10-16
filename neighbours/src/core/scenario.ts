@@ -8,6 +8,7 @@ import type { TownRuntime } from "../contracts";
 import { teachHallInspection } from "../experiments/inspection.ts";
 import { keyed } from "./hash.ts";
 import { required } from "./invariants.ts";
+import { neighbourNames } from "./neighbour-names.ts";
 import { Runtime } from "./runtime.ts";
 import {
 	known,
@@ -38,12 +39,14 @@ export function createRuntime(seed = 42, population = 208): TownRuntime {
 			reserved: 0,
 		}),
 	);
+	const backgroundNames = neighbourNames(seed);
 	const people: Resident[] = Array.from({ length: population }, (_, i) => {
 		const k = known[i];
 		const id = k?.[0] ?? `resident-${i - 7}`;
 		const person = createPerson({
 			id,
-			name: k?.[1] ?? `Resident ${i - 7}`,
+			name:
+				k?.[1] ?? required(backgroundNames[i - 8], "Missing neighbour name"),
 			seed: (seed + i * 7919) >>> 0,
 			now: 480,
 			bornAt: -1440 * 365 * (23 + (i % 47)),

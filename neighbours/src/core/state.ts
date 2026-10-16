@@ -4,6 +4,8 @@ import type {
 	Person,
 } from "@adam0white/human-framework";
 import type { PersonView, Policy, TownEvent } from "../contracts";
+import type { SocialEvenings } from "./evenings.ts";
+import type { Handcart } from "./handcart-state.ts";
 export const SCHEMA = "neighbours-1";
 export const known = [
 	[
@@ -80,6 +82,7 @@ export type Job = {
 	food: number;
 	tools: number;
 	inspectionCues?: { moisture: string; support: string };
+	socialContacts?: { otherId: string; event: number }[];
 };
 export type Resident = {
 	person: Person;
@@ -140,4 +143,7 @@ export type Save = {
 	initialFood: number;
 	produced: number;
 	consumed: number;
+	/** Optional in first public saves. Activation never reconstructs past events. */
+	socialEvenings?: SocialEvenings;
+	handcart?: Handcart;
 };

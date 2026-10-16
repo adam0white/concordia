@@ -49,6 +49,14 @@ export interface PersonView {
 	wealth: number;
 	history: TownEvent[];
 	observations?: TownEvent[];
+	lessons?: {
+		id: string;
+		label: string;
+		at: number;
+		sourceIds: string[];
+		successes: number;
+		failures: number;
+	}[];
 	inspection?: {
 		at: number;
 		action: string;
@@ -72,6 +80,13 @@ export interface PersonView {
 		origin?: "initial" | "observed";
 	}[];
 	commitments: { label: string; at: number; status: string }[];
+	purposes?: { id: string; label: string; progress: number; status: string }[];
+	invitations?: {
+		eventId: string;
+		title: string;
+		startsAt: number;
+		status: "heard" | "accepted" | "declined" | "attended" | "missed";
+	}[];
 	decision?: {
 		decidedAt?: number;
 		round?: number;
@@ -109,6 +124,28 @@ export interface TownView {
 	weather: string;
 	controlsRemaining: number;
 	metrics: Record<string, number>;
+	evenings?: {
+		id: string;
+		kind: "class" | "meal";
+		organiserId: string;
+		title: string;
+		startsAt: number;
+		endsAt: number;
+		stage: string;
+		heard: number;
+		accepted: number;
+		attended: number;
+		result?: string;
+		participantIds: string[];
+	}[];
+	handcart?: {
+		progress: number;
+		total: number;
+		returned: boolean;
+		bench?: { from: number; until: number };
+		latest?: TownEvent;
+		requests: number;
+	};
 }
 export interface Intervention {
 	kind: "restore-bus" | "lend-tools" | "share-news";

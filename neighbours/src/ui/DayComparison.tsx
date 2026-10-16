@@ -31,6 +31,7 @@ const interventions: Record<Intervention["kind"], string> = {
 export default function DayComparison({
 	report,
 	busy,
+	disabled = false,
 	progress,
 	error,
 	selected,
@@ -38,6 +39,7 @@ export default function DayComparison({
 }: {
 	report?: TownComparison;
 	busy: boolean;
+	disabled?: boolean;
 	progress: string;
 	error: string;
 	selected: string;
@@ -83,13 +85,13 @@ export default function DayComparison({
 				className="branch-controls"
 				onSubmit={(event) => {
 					event.preventDefault();
-					if (!busy) onRun({ kind }, rounds);
+					if (!busy && !disabled) onRun({ kind }, rounds);
 				}}
 			>
 				<label>
 					Change in the second run
 					<select
-						disabled={busy}
+						disabled={busy || disabled}
 						value={kind}
 						onChange={(event) =>
 							setKind(event.target.value as Intervention["kind"])
@@ -105,7 +107,7 @@ export default function DayComparison({
 				<label>
 					Simulated time
 					<select
-						disabled={busy}
+						disabled={busy || disabled}
 						value={rounds}
 						onChange={(event) =>
 							setRounds(Number(event.target.value) as 24 | 96)
@@ -115,7 +117,7 @@ export default function DayComparison({
 						<option value={96}>A day · 96 rounds</option>
 					</select>
 				</label>
-				<button type="submit" disabled={busy}>
+				<button type="submit" disabled={busy || disabled}>
 					{busy ? "Comparing…" : "Compare from here"}
 				</button>
 			</form>

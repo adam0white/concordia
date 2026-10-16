@@ -6,6 +6,10 @@ Alder Quay is a riverside town reopening its flood-damaged community hall. It us
 
 The map is the default view. Eight known people have distinct ordinary lives, relationships and commitments. Two hundred persistent background people create actual demand and occupy shared resources. Their controller and fidelity must be labelled honestly. Actions have duration, destination and physical costs. People may refuse a suggestion. Events and story detectors expose actual causal chains and anomalies rather than scripted success or LLM-authored facts.
 
+After the hall opens, Sam and Lea can propose competing supper and class evenings. Notices must be received, acceptance creates an appointment, and actual preparation reserves the one room. Awake physical overlap determines delivery. The next small conflict concerns Jo's handcart: Ravi can use a slow side bench or ask Ada to give up a four-hour window at the paid carpentry bench. A returned cart changes Jo's later supply trips. Neither project forces cooperation or success. See [the social episode](evenings.md).
+
+These episodes also exercise the existing HF activity-review contract. The host offers a new decision at `reviewAt`, preserves continued physical jobs, and reconciles real reservations when plans change. It waits for arrival before optional replanning during a journey. A due review is not an instruction to cancel the current activity.
+
 ## Architecture decision
 
 Fork upstream at 6fbfbc58 after reviewing public forks; borrow specific ideas later. None of the sampled forks supplies a verified general dashboard and deterministic runtime worth inheriting its older base.

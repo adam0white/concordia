@@ -51,7 +51,13 @@ describe("causal controls", () => {
 		expect(r.view().people.find((p) => p.id === "ada")?.activity).toContain(
 			"Eat",
 		);
-		for (let i = 0; i < 4; i++) r.step();
+		for (let i = 0; i < 4; i++)
+			for (const id of r.prepareRound()) {
+				const active = (r.export() as Save).people.find(
+					(p) => p.person.id === id,
+				)?.job;
+				r.apply(id, active?.offer.id ?? "rest");
+			}
 		expect(r.view().stats.foodConsumed).toBeGreaterThan(before ?? 0);
 	});
 	it("rejects corruption without mutating the active runtime", () => {

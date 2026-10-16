@@ -76,7 +76,7 @@ export function demonstrateHallInspection(
 			: { attention: example.attention }),
 	});
 }
-/** Call only for an attended lesson. Each lesson contains four explained examples. */
+/** Call only for an attended lesson. Explain two cases, each demonstrated twice. */
 export function teachHallInspection(
 	person: Person,
 	sourceId: string,

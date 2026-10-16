@@ -13,7 +13,8 @@ function town() {
 	return new Runtime(createRuntime(42, 8).export() as Save);
 }
 function round(r: Runtime, choices: Record<string, string> = {}) {
-	for (const id of r.prepareRound()) r.apply(id, choices[id] ?? "rest");
+	for (const id of r.prepareRound())
+		r.apply(id, choices[id] ?? r.actor(id).job?.offer.id ?? "rest");
 }
 describe("paid shift availability", () => {
 	it("permits only two daytime paid shifts without changing the wage", () => {
@@ -23,13 +24,14 @@ describe("paid shift availability", () => {
 			for (const id of r.prepareRound()) {
 				if (id === "ada") {
 					const p = resident(r, id);
-					if ((p.paidWork?.starts ?? 0) < 2) r.apply(id, "work");
+					if (p.job) r.apply(id, p.job.offer.id);
+					else if ((p.paidWork?.starts ?? 0) < 2) r.apply(id, "work");
 					else {
 						expect(r.getChoices(id).some((c) => c.id === "work")).toBe(false);
 						sawLimit = true;
 						r.apply(id, "rest");
 					}
-				} else r.apply(id, "rest");
+				} else r.apply(id, r.actor(id).job?.offer.id ?? "rest");
 			}
 		expect(sawLimit).toBe(true);
 		expect(resident(r, "ada").paidWork).toMatchObject({

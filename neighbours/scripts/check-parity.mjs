@@ -1,7 +1,7 @@
 /** Exercise actual WASM Python, native Python, the shared bridge and restore. */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { loadPyodide } from "pyodide";
@@ -136,6 +136,81 @@ try {
 		"Failed comparison changed live checkpoint",
 	);
 	await py.runPythonAsync("town_engine.advance(1)\nNone");
+
+	// Optional real, late-world checkpoints exercise reservations, invitations and
+	// repaired objects through the actual Python engine in both runtimes.
+	const checkpointArgs = process.argv.slice(2);
+	assert(
+		checkpointArgs.length % 2 === 0,
+		"Use --checkpoint PATH or --checkpoint-directory DIR pairs",
+	);
+	const checkpointPaths = [];
+	for (let i = 0; i < checkpointArgs.length; i += 2) {
+		const flag = checkpointArgs[i],
+			value = checkpointArgs[i + 1];
+		if (flag === "--checkpoint") checkpointPaths.push(resolve(value));
+		else {
+			assert.equal(flag, "--checkpoint-directory");
+			const entries = (await readdir(value))
+				.filter((name) => name.endsWith(".json"))
+				.sort();
+			assert(entries.length > 0, "No late-world checkpoints were produced");
+			checkpointPaths.push(...entries.map((name) => resolve(value, name)));
+		}
+	}
+	for (const [i, sourcePath] of checkpointPaths.entries()) {
+		const source = JSON.parse(await readFile(sourcePath, "utf8"));
+		const checkpoint = source.checkpoint ?? source;
+		assert.equal(checkpoint.schema, "neighbours/concordia@1");
+		assert.equal(checkpoint.runtime.pending.length, 0);
+		const expectedPath = resolve(temporary, `continued-${i}.json`);
+		execFileSync(
+			process.env.PYTHON ?? "python3",
+			[
+				resolve(app, "scripts/run-town.py"),
+				"--restore",
+				sourcePath,
+				"--rounds",
+				"16",
+				"--output",
+				expectedPath,
+			],
+			{
+				cwd: root,
+				env: { ...process.env, NODE: process.execPath },
+				stdio: "pipe",
+			},
+		);
+		const expected = JSON.parse(await readFile(expectedPath, "utf8"));
+		await restoreCheckpoint(py, port, checkpoint);
+		await py.runPythonAsync("town_engine.advance(16)\nNone");
+		const actual = JSON.parse(
+			String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+		);
+		assert.deepEqual(
+			actual,
+			expected.checkpoint,
+			`Late-world native/WASM mismatch: ${sourcePath}`,
+		);
+		const actualView = JSON.parse(
+			String(await py.runPythonAsync("json.dumps(town_engine.view())")),
+		);
+		assert.deepEqual(
+			actualView,
+			expected.view,
+			`Late-world native/WASM view mismatch: ${sourcePath}`,
+		);
+		await restoreCheckpoint(py, port, actual);
+		assert.deepEqual(
+			JSON.parse(
+				String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+			),
+			actual,
+		);
+		console.log(
+			`PASS: native/WASM sixteen-round continuation and restore from ${sourcePath}`,
+		);
+	}
 
 	console.log(
 		"PASS: 208 HF people match across native/WASM Python; restore, interrupted-engine recovery and isolated comparisons pass.",

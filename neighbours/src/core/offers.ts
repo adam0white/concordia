@@ -5,8 +5,15 @@ import {
 	receivedRequest,
 	waitingAtHall,
 } from "./encounters.ts";
+import { eveningOffers } from "./evenings.ts";
+import {
+	blocksMainBench,
+	HANDCART_MINUTES,
+	handcartOffers,
+} from "./handcart.ts";
 import { placeOf, required } from "./invariants.ts";
 export const WORK_MINUTES: Record<string, number> = {
+	...HANDCART_MINUTES,
 	rest: 45,
 	sleep: 120,
 	drink: 15,
@@ -26,12 +33,22 @@ export const WORK_MINUTES: Record<string, number> = {
 	"ask-inspector": 120,
 	"wait-inspector": 30,
 	"answer-inspection": 30,
+	"propose-class": 15,
+	"propose-meal": 15,
+	"accept-evening": 15,
+	"decline-evening": 15,
+	"prepare-class": 30,
+	"prepare-meal": 30,
+	"host-class": 120,
+	"host-meal": 120,
+	"attend-class": 45,
+	"attend-meal": 45,
 };
 
 import { type Affordance, inBreak } from "@adam0white/human-framework";
 import type { Save } from "./state.ts";
 export function usesActivitySlot(offer: Affordance): boolean {
-	return !offer.tags?.includes("floor");
+	return !offer.tags?.includes("floor") && !offer.tags?.includes("noticeboard");
 }
 export function workMinutesFor(offer: Affordance): number {
 	return required(
@@ -333,5 +350,44 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 				},
 			);
 		}
-	return list;
+	const ordinary = historical
+		? list
+		: list.filter((offer) => {
+				if (offer.placeId !== "hall" || offer.tags?.includes("floor"))
+					return true;
+				const arrive = s.now + offer.duration - workMinutesFor(offer);
+				return !s.socialEvenings?.events.some(
+					(e) =>
+						["preparing", "prepared"].includes(e.stage) &&
+						arrive < e.endsAt &&
+						s.now + offer.duration > e.startsAt,
+				);
+			});
+	return [
+		...ordinary.filter((offer) => historical || !blocksMainBench(s, id, offer)),
+		...eveningOffers(s, r, historical),
+		...handcartOffers(s, r, historical),
+	];
+}
+
+/** Expected company is decision context, never a claim that contact occurred. */
+export function socialPreview(
+	s: Save,
+	id: string,
+	offer: Affordance,
+): Affordance {
+	if (offer.action !== "talk" && offer.action !== "gather") return offer;
+	const r = s.people.find((p) => p.person.id === id);
+	if (!r) return offer;
+	const arrival = s.now + offer.duration - workMinutesFor(offer);
+	const end = s.now + offer.duration;
+	const companions = s.people.filter(
+		(o) =>
+			o.person.id !== id &&
+			o.job &&
+			(o.job.offer.action === "talk" || o.job.offer.action === "gather") &&
+			presentAt(o, offer.placeId ?? "", s.now) &&
+			Math.min(end, o.job.end) - Math.max(arrival, o.job.arrive) >= 15,
+	);
+	return { ...offer, with: companions.map((o) => o.person.id).sort() };
 }

@@ -3,6 +3,23 @@ import type { TownEvent } from "../contracts.ts";
 import type { Resident, Save } from "./state.ts";
 
 const EVENT_KINDS = new Set([
+	"cart-observed",
+	"bench-work",
+	"bench-request",
+	"bench-reply",
+	"cart-progress",
+	"bench-used",
+	"cart-returned",
+	"evening-retold",
+	"hall-purpose",
+	"evening-attended",
+	"attempt-failed",
+	"evening-proposed",
+	"evening-accepted",
+	"evening-declined",
+	"evening-prepared",
+	"evening-ended",
+	"evening-missed",
 	"death",
 	"incapacity",
 	"interrupted",
@@ -272,7 +289,13 @@ export function validateResidentEvidence(
 		validateRecord(r.record, s);
 		if (
 			!s.pending.includes(r.person.id) ||
-			r.job ||
+			(r.job &&
+				!(
+					r.person.activity &&
+					(r.person.activity.reviewAt <= s.now ||
+						r.person.activity.interrupt) &&
+					r.job.arrive <= s.now
+				)) ||
 			r.decision?.chosen !== r.record.chosenAffordanceId
 		)
 			throw Error("Decision is not pending");

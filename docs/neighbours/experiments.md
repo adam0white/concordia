@@ -78,7 +78,7 @@ This checks the runtime source digest before replay. A source change requires re
 
 The mixed artifact is a short demonstration of a working native controller boundary. It is not a fair performance estimate for HF versus LLMs, and it does not enable public live LLM inhabitants.
 
-An earlier recording revision required a retry: the model returned Markdown-fenced JSON, which the strict parser refused. An explicit plain-JSON instruction resolved that attempt. The final world recording then succeeded on its first attempt and contains two legal model decisions. The artifact retains the earlier rejection separately. That failed run did not persist a tape, so its total call count is unknown; the successful tape alone cannot estimate format reliability.
+An earlier recording revision required a retry: the model returned Markdown-fenced JSON, which the strict parser refused. An explicit plain-JSON instruction resolved that attempt. The final world recording then succeeded on its first attempt and contains six legal model decisions. The artifact retains the earlier rejection separately. That failed run did not persist a tape, so its total call count is unknown; the successful tape alone cannot estimate format reliability.
 
 ## Food supply and access controls
 
@@ -96,3 +96,18 @@ A separate seed-73 run exposed access starvation despite a full pantry. All eigh
 The keyed arm restored access to paid work and meals for all eight initially hungry residents. Both arms kept the same initial state, HF parameters, food supply and venue capacities. No actor was forced to eat. This supports correcting scheduling bias; it does not establish general planning or eliminate all possible scarcity.
 
 The measured fixture was the local, uncommitted `/tmp/neighbours-30day-seed73.json` checkpoint from before the scheduling correction. It is not distributed as a historical reproducibility artifact. The control explicitly sorted each `prepareRound()` result by the original `people` array before calling `choose` and `apply`; the treatment used `keyed(seed, round, 'ready-priority:' + actorId)` order. Each ran 480 rounds from a separately restored copy. The current baseline can be checked with `node scripts/profile-town.ts --seed 73 --population 208 --days 30 --output /tmp/town-profile.json` from `neighbours/`. A fresh current baseline is not the historical fixed-order fixture.
+
+## Social episodes and project choices
+
+The [episode design](evenings.md) distinguishes proposed events, received notices, voluntary appointments, physical room reservations and actual delivery. The multi-seed TypeScript host profiler records successes and failures, retained health samples, source digests and exact restored continuation. It does not execute Python; native/WASM controls separately exercise genuine milestone packets.
+
+```sh
+cd neighbours
+node scripts/profile-evenings.ts --seeds 42,73,9,101 --population 208 --days 25 --output /tmp/evenings.json --checkpoint-directory /tmp/town-milestones
+PYTHON=../.venv/bin/python npm run test:parity -- --checkpoint-directory /tmp/town-milestones
+node scripts/probe-cart-choices.ts /tmp/town-milestones/seed-42-first-prepared.json /tmp/cart-choices.json
+```
+
+The choice probe finds a real idle Ravi/Ada workshop opportunity with both asking and side-bench work feasible. It records the actual considered subset and removes only Ravi's cart goal in a separate branch. Its second comparison supplies hypothetical fast access as a matched offer pair; it does not pretend an agreement occurred. No input packet or fabricated grant is imported into the visitor's live town.
+
+In the measured opportunity, Ravi chose side-bench work and did not consider the request. Goal ablation changed his choice to paid work. The hypothetical fast/slow pair had identical immediate terms despite different durations. These are narrow representation findings. They do not establish rational anticipation, autonomous negotiation, or a generic planner defect.

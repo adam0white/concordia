@@ -53,13 +53,19 @@ jobs:
         env:
           PYTHONPATH: .
           NEIGHBOURS_NATIVE_TEST: '1'
+      - name: Real social episode milestones and restored continuation
+        run: node scripts/profile-evenings.ts --seeds 42 --population 208 --days 25 --output "$RUNNER_TEMP/evenings.json" --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
+        working-directory: neighbours
       - name: Actual WASM and native parity and restored continuation
-        run: npm run test:parity
+        run: npm run test:parity -- --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
         working-directory: neighbours
         env:
           PYTHON: python
       - name: Recorded mixed-town replay (zero model calls)
         run: python neighbours/scripts/run-mixed-town.py --node node --replay neighbours/public/experiments/native-mixed-town.json
+      - name: Recorded episode and project source provenance
+        run: node scripts/check-evidence.mjs
+        working-directory: neighbours
       - name: Cloudflare build without deployment
         run: npm run build:cloudflare
         working-directory: neighbours

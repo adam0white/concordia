@@ -1,0 +1,3621 @@
+{
+  "schema": "neighbours/evening-profile@1",
+  "runtime": "typescript-host-released-hf",
+  "arguments": {
+    "seeds": [
+      42,
+      73,
+      9,
+      101
+    ],
+    "population": 208,
+    "days": 25
+  },
+  "node": "v26.12.0",
+  "sourceFingerprint": "059882d0c39684b04ba512c09c9cd8e3699721dad5005b03fb814c748245d478",
+  "sources": {
+    "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
+    "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
+    "scripts/profile-evenings.ts": "6226c7bbe335d608776c5bf577544b7c395ff9e1eb301032e19f998ad6ac665f",
+    "src/contracts.ts": "ce5f307652bc3130b81a05e3bf41e45ff3c9a5ba273e8a6a5d88ddcf6116bf56",
+    "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
+    "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
+    "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
+    "src/core/evening-news.ts": "569c5b4f311d35cf6bcd9096139714f83e60b699a2ebf6ad7030bd2a84dd1e6d",
+    "src/core/evenings.ts": "b0d7d44f50dc34b330de4567da43cf4af1a5e6233ea75eebec331286fef92199",
+    "src/core/handcart-state.ts": "d39a81eaa68683a6f51bdc44d36cf962760f79ae6981f0f306cf43803b42cf85",
+    "src/core/handcart.ts": "8e21d855f4c156eadf327bf36043ece023e32de28d8907da8eeb535d26e60cb3",
+    "src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
+    "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
+    "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
+    "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
+    "src/core/offers.ts": "0421fbadf93cc9b1f4670ac0e0e9468920e2cf20c9b8be3e3b868e3fbaf43c16",
+    "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
+    "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
+    "src/core/restore.ts": "7de6fc82fa41d88befde57918430170011b4d206e254888818e4b5e154b17bb7",
+    "src/core/runtime.ts": "e59b18f8a6b666a14847eacb1f5676f4089fc15441928681eb4204f60baa4ce1",
+    "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
+    "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
+    "src/core/state.ts": "895b852a90f1501e44df31515f74a083ea6b5f52e39d12c635bdaed54d900b9e",
+    "src/core/stories.ts": "35f873c04363049d3c8b8df412b400900335b4692fdf7d3b9976130bf154dfad",
+    "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
+    "src/core/validation.ts": "8ee6b3486c654b4aa026acce20596ff1b5faad57a2fa71c9f30d6822c149d1bf",
+    "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
+  },
+  "sourcesStableDuringRun": true,
+  "limitations": [
+    "Requested seeds are scenario measurements, not statistical or human-realism proof.",
+    "Checkpoints use the Python-compatible packet schema; this profiler does not execute Python Concordia.",
+    "Health and diagnostics are sampled at daily boundaries. Up to eight organiser traces per candidate retain the first four and last four choices in the two hours before its scheduled hour and that hour. Choice totals include continuation reviews; startedActions excludes those continuations.",
+    "Method learners are delivered participants retaining methods at the final boundary; they may have learned those methods earlier."
+  ],
+  "results": [
+    {
+      "seed": 42,
+      "population": 208,
+      "elapsedDays": 25,
+      "at": 36480,
+      "rounds": 2400,
+      "hf": "2.2.1",
+      "hallSafe": true,
+      "activatedAt": 2640,
+      "candidates": [
+        {
+          "id": "evening-0-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 3960,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 35,
+          "accepted": 0,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "sam",
+              "heardAt": 3735,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 3705,
+              "attendedMinutes": 0,
+              "delivered": false
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 1,
+            "host": 5
+          },
+          "organiserTraces": [
+            {
+              "at": 3855,
+              "actor": "lea",
+              "chosen": "prepare:evening-1-class",
+              "offered": [
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "prepare:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 3885,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "Time for something easier."
+            },
+            {
+              "at": 3930,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "host:evening-0-class",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 0.7405,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0006
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.6364
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0043
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0208
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 3975,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 0.9542,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0003
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.3319
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.6422
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0027
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0229
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 4005,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 1.2,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.5756
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.646
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.002
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0238
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            }
+          ],
+          "result": "Lea’s practical class: nobody received the planned activity."
+        },
+        {
+          "id": "evening-0-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 3960,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 28,
+          "accepted": 0,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "sam",
+              "heardAt": 3750,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 3855,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 2
+          },
+          "organiserTraces": [
+            {
+              "at": 3855,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-0-class",
+                "decline:evening-0-class",
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Time for something easier."
+            },
+            {
+              "at": 3870,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-0-class",
+                "decline:evening-0-class",
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "It's what I do at this hour."
+            },
+            {
+              "at": 3885,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-0-class",
+                "decline:evening-0-class",
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 3915,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "It's what I do at this hour."
+            },
+            {
+              "at": 3930,
+              "actor": "sam",
+              "chosen": "sleep",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "I'm exhausted; I need to sleep. It was a close call."
+            },
+            {
+              "at": 4005,
+              "actor": "sam",
+              "chosen": "sleep",
+              "offered": [],
+              "considered": [],
+              "reason": "I'm exhausted; I need to sleep."
+            }
+          ],
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+        },
+        {
+          "id": "evening-1-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 8280,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 203,
+          "accepted": 81,
+          "declined": 0,
+          "attempted": 9,
+          "delivered": 9,
+          "methodLearners": 9,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 5985,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c5"
+            },
+            {
+              "id": "musa",
+              "heardAt": 4110,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "elin",
+              "heardAt": 4380,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 3765,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c5"
+            },
+            {
+              "id": "jo",
+              "heardAt": 4260,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c2"
+            },
+            {
+              "id": "lea",
+              "heardAt": 3750,
+              "attendedMinutes": 60,
+              "delivered": true
+            },
+            {
+              "id": "ravi",
+              "heardAt": 4815,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 4200,
+              "attendedMinutes": 45,
+              "reply": "accepted",
+              "commitmentId": "c2",
+              "attempted": true,
+              "delivered": true
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 2,
+            "accept": 160,
+            "attend": 25,
+            "host": 5
+          },
+          "organiserTraces": [
+            {
+              "at": 8190,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Same as always."
+            },
+            {
+              "at": 8220,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 8235,
+              "actor": "lea",
+              "chosen": "host:evening-1-class",
+              "offered": [
+                "host:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-class",
+                  "utility": 1.3019,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.013
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0005
+                    },
+                    {
+                      "source": "expectation",
+                      "value": -0.0094
+                    },
+                    {
+                      "source": "commitment:c6",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 1.1866
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.007
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0158
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 8280,
+              "actor": "lea",
+              "chosen": "host:evening-1-class",
+              "offered": [
+                "host:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-class",
+                  "utility": 1.3859,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0065
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0005
+                    },
+                    {
+                      "source": "expectation",
+                      "value": -0.0094
+                    },
+                    {
+                      "source": "commitment:c6",
+                      "value": 0.21
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 1.1923
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.005
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0191
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 8310,
+              "actor": "lea",
+              "chosen": "host:evening-1-class",
+              "offered": [
+                "host:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-class",
+                  "utility": 1.6283,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0041
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0006
+                    },
+                    {
+                      "source": "expectation",
+                      "value": -0.0094
+                    },
+                    {
+                      "source": "commitment:c6",
+                      "value": 0.4538
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 1.1962
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0034
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0205
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 8340,
+              "actor": "lea",
+              "chosen": "host:evening-1-class",
+              "offered": [
+                "host:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-class",
+                  "utility": 1.7745,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0026
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0006
+                    },
+                    {
+                      "source": "expectation",
+                      "value": -0.0094
+                    },
+                    {
+                      "source": "commitment:c6",
+                      "value": 0.6
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 1.2
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0023
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0217
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            }
+          ],
+          "result": "Lea’s practical class: Jamie Reed, Avery Lane, Noor, Charlie Rivera, Casey Diaz, Cameron Das, Jordan Rivera, Jamie Diaz, Alex Diaz received the practical lesson."
+        },
+        {
+          "id": "evening-1-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 8280,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 203,
+          "accepted": 31,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 5985,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "musa",
+              "heardAt": 4110,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "elin",
+              "heardAt": 4380,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 3765,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "jo",
+              "heardAt": 4260,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 3855,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c7"
+            },
+            {
+              "id": "ravi",
+              "heardAt": 4815,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 4200,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "accept": 65
+          },
+          "organiserTraces": [
+            {
+              "at": 8175,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "I'm parched. Water first."
+            },
+            {
+              "at": 8190,
+              "actor": "sam",
+              "chosen": "sleep",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 8310,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "I need a break from all this."
+            },
+            {
+              "at": 8340,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Time for something easier."
+            }
+          ],
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+        }
+      ],
+      "chosenActions": {
+        "propose": 5,
+        "prepare": 3,
+        "host": 10,
+        "accept": 225,
+        "attend": 25
+      },
+      "startedActions": {
+        "propose": 4,
+        "prepare": 2,
+        "host": 2,
+        "accept": 120,
+        "attend": 9
+      },
+      "handcart": {
+        "version": 1,
+        "activatedAt": 4035,
+        "progress": 3,
+        "work": [
+          {
+            "event": {
+              "id": 26777,
+              "at": 5010,
+              "kind": "cart-progress",
+              "text": "Ravi restored 1 of three cart sections using the side bench.",
+              "causes": [
+                25879
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 4890,
+            "endedAt": 5010
+          },
+          {
+            "event": {
+              "id": 27715,
+              "at": 5130,
+              "kind": "cart-progress",
+              "text": "Ravi restored 2 of three cart sections using the side bench.",
+              "causes": [
+                26860
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 5010,
+            "endedAt": 5130
+          },
+          {
+            "event": {
+              "id": 28526,
+              "at": 5250,
+              "kind": "cart-progress",
+              "text": "Ravi restored 3 of three cart sections using the side bench.",
+              "causes": [
+                27822
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 5130,
+            "endedAt": 5250
+          }
+        ],
+        "requests": [],
+        "observation": {
+          "id": 25746,
+          "at": 4890,
+          "kind": "cart-observed",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "workshop"
+        },
+        "raviGoalId": "g3",
+        "adaObservation": {
+          "id": 25747,
+          "at": 4890,
+          "kind": "bench-work",
+          "text": "Ada can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "workshop"
+        },
+        "adaGoalId": "g4",
+        "handover": {
+          "id": 46569,
+          "at": 8205,
+          "kind": "cart-returned",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
+          "causes": [
+            46329
+          ],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "quay"
+        }
+      },
+      "knownParticipation": {
+        "lea": {
+          "propose": 2,
+          "prepare": 3,
+          "host": 10,
+          "accept": 2
+        },
+        "sam": {
+          "propose": 3,
+          "accept": 2
+        },
+        "noor": {
+          "accept": 2,
+          "attend": 2
+        },
+        "jo": {
+          "accept": 2
+        },
+        "ada": {
+          "accept": 2
+        }
+      },
+      "methodLearners": 11,
+      "health": {
+        "final": {
+          "at": 36480,
+          "alive": 208,
+          "dead": 0,
+          "lowHealth": 0,
+          "underfed": 0,
+          "minimumHealth": 1,
+          "minimumSatiety": 0.3406221733693431
+        },
+        "minimumAliveAtDailyBoundaries": 208,
+        "maximumLowHealthAtDailyBoundaries": 0,
+        "maximumUnderfedAtDailyBoundaries": 33
+      },
+      "diagnostics": {
+        "PERSISTENT_PERSONS": {
+          "severity": "info",
+          "boundaries": 25,
+          "firstAt": 1920,
+          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+        }
+      },
+      "restoredContinuation": {
+        "passed": true,
+        "rounds": 8
+      },
+      "checkpoints": {
+        "notice": {
+          "at": 3705,
+          "round": 215,
+          "sha256": "454566b1f1339dd05d48bfdd5057d389a4a4f6953b3ad5d981390e84f37dfd7f",
+          "milestone": "notice"
+        },
+        "prepared": {
+          "at": 3735,
+          "round": 217,
+          "sha256": "fe0698ab5063383637bc6345613e3bf8ff5062a006564d3d63730ff012a035b5",
+          "milestone": "prepared"
+        },
+        "accepted": {
+          "at": 3975,
+          "round": 233,
+          "sha256": "07fb33cb29adf07e8f99c0ab0b8cdf353c032effa87e38e6cc6db03598e112a9",
+          "milestone": "accepted"
+        },
+        "cartProgress": {
+          "at": 5010,
+          "round": 302,
+          "sha256": "a1e87c748bc2f7d683c7ac45f4bdf92639cd7bdda6bb186ed236f8c8b972a6ce",
+          "milestone": "cartProgress"
+        },
+        "cartReturned": {
+          "at": 8205,
+          "round": 515,
+          "sha256": "c85e6a7f4f93751d69e60ed8afec858587978329dce98cd05370c1641edb231d",
+          "milestone": "cartReturned"
+        }
+      },
+      "finalCheckpointSha256": "49ec923969cb992465b022d6d548a14c4eaf7a5f73ec67aaa193a82d7a51dae8",
+      "wallSeconds": 67.928012417
+    },
+    {
+      "seed": 73,
+      "population": 208,
+      "elapsedDays": 25,
+      "at": 36480,
+      "rounds": 2400,
+      "hf": "2.2.1",
+      "hallSafe": true,
+      "activatedAt": 5685,
+      "candidates": [
+        {
+          "id": "evening-0-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 6840,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 8,
+          "accepted": 0,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "sam",
+              "heardAt": 6825,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 6810,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1
+          },
+          "organiserTraces": [
+            {
+              "at": 6750,
+              "actor": "lea",
+              "chosen": "gather",
+              "offered": [
+                "propose:evening-0-class",
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "propose:evening-1-class",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "propose:evening-0-class",
+                  "utility": 0.4306,
+                  "terms": [
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0004
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.45
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0198
+                    }
+                  ]
+                }
+              ],
+              "reason": "I'm starving — eating first."
+            },
+            {
+              "at": 6780,
+              "actor": "lea",
+              "chosen": "gather",
+              "offered": [
+                "propose:evening-0-class",
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "propose:evening-1-class",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "propose:evening-0-class",
+                  "utility": 0.432,
+                  "terms": [
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0004
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.453
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0215
+                    }
+                  ]
+                }
+              ],
+              "reason": "My stomach is growling. Food first."
+            },
+            {
+              "at": 6795,
+              "actor": "lea",
+              "chosen": "propose:evening-0-class",
+              "offered": [
+                "propose:evening-0-class",
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "propose:evening-1-class",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "propose:evening-0-class",
+                  "utility": 0.4325,
+                  "terms": [
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.4545
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0221
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it. It was a close call."
+            },
+            {
+              "at": 6810,
+              "actor": "lea",
+              "chosen": "propose:evening-1-class",
+              "offered": [
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "propose:evening-1-class",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 6825,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "I need a drink of water."
+            },
+            {
+              "at": 6870,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "Thirsty — the well, then."
+            },
+            {
+              "at": 6885,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "Out of habit, really."
+            }
+          ],
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
+        },
+        {
+          "id": "evening-0-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 6840,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 124,
+          "accepted": 12,
+          "declined": 0,
+          "attempted": 6,
+          "delivered": 6,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "musa",
+              "heardAt": 5805,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 5700,
+              "attendedMinutes": 60,
+              "delivered": true
+            },
+            {
+              "id": "jo",
+              "heardAt": 6435,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 6750,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "ravi",
+              "heardAt": 6165,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 6360,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c2"
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 2,
+            "accept": 27,
+            "host": 5,
+            "attend": 17
+          },
+          "organiserTraces": [
+            {
+              "at": 6720,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Thirsty — the well, then. Nearly did otherwise."
+            },
+            {
+              "at": 6750,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Thirsty — the well, then."
+            },
+            {
+              "at": 6765,
+              "actor": "sam",
+              "chosen": "host:evening-0-meal",
+              "offered": [
+                "host:evening-0-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-meal",
+                  "utility": 0.7016,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0008
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 0.7171
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0045
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0209
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 6810,
+              "actor": "sam",
+              "chosen": "host:evening-0-meal",
+              "offered": [
+                "host:evening-0-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-meal",
+                  "utility": 0.8234,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0004
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 0.722
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0031
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0222
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 6840,
+              "actor": "sam",
+              "chosen": "host:evening-0-meal",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class",
+                "host:evening-0-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-meal",
+                  "utility": 0.915,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0003
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.21
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 0.7252
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0023
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.023
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 6870,
+              "actor": "sam",
+              "chosen": "host:evening-0-meal",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class",
+                "host:evening-0-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-meal",
+                  "utility": 1.1607,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.4538
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 0.7285
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0017
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0237
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 6900,
+              "actor": "sam",
+              "chosen": "host:evening-0-meal",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class",
+                "host:evening-0-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-meal",
+                  "utility": 1.309,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.6
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 0.7317
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0013
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0243
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            }
+          ],
+          "result": "Sam’s shared supper: Reese Khan, Avery Evans, Blair Rivera, Quinn Diaz, Avery Diaz, Jordan Patel ate supper with the host."
+        },
+        {
+          "id": "evening-1-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 11160,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 207,
+          "accepted": 72,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 7260,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c4"
+            },
+            {
+              "id": "musa",
+              "heardAt": 8130,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "elin",
+              "heardAt": 7245,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 6840,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "jo",
+              "heardAt": 7470,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 6825,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "ravi",
+              "heardAt": 9420,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 7740,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "accept": 150
+          },
+          "organiserTraces": [
+            {
+              "at": 11100,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "I need a break from all this."
+            },
+            {
+              "at": 11130,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Time for something easier."
+            },
+            {
+              "at": 11145,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Thirsty — the well, then."
+            },
+            {
+              "at": 11160,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Why not."
+            },
+            {
+              "at": 11175,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 11205,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "It's what I do at this hour."
+            },
+            {
+              "at": 11220,
+              "actor": "lea",
+              "chosen": "sleep",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            }
+          ],
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
+        },
+        {
+          "id": "evening-1-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 11160,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 207,
+          "accepted": 59,
+          "declined": 0,
+          "attempted": 9,
+          "delivered": 7,
+          "methodLearners": 1,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 7260,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c6"
+            },
+            {
+              "id": "musa",
+              "heardAt": 5805,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "elin",
+              "heardAt": 7245,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 5715,
+              "attendedMinutes": 30,
+              "delivered": true
+            },
+            {
+              "id": "jo",
+              "heardAt": 6435,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 6750,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c7"
+            },
+            {
+              "id": "ravi",
+              "heardAt": 6165,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 6360,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c3"
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 2,
+            "accept": 127,
+            "attend": 27,
+            "host": 5
+          },
+          "organiserTraces": [
+            {
+              "at": 11055,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 11085,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Same as always."
+            },
+            {
+              "at": 11100,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 11130,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 0.1138,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0076
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.001
+                    },
+                    {
+                      "source": "commitment:c4",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0063
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0211
+                    }
+                  ]
+                }
+              ],
+              "reason": "Same as always."
+            },
+            {
+              "at": 11145,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 0.1146,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0078
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0011
+                    },
+                    {
+                      "source": "commitment:c4",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0067
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.021
+                    }
+                  ]
+                }
+              ],
+              "reason": "I have to keep to it."
+            },
+            {
+              "at": 11190,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 0.4405,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0039
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0012
+                    },
+                    {
+                      "source": "commitment:c4",
+                      "value": 0.4538
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0049
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0233
+                    }
+                  ]
+                }
+              ],
+              "reason": "I said I would, so I will."
+            },
+            {
+              "at": 11220,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 0.5827,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0025
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0012
+                    },
+                    {
+                      "source": "commitment:c4",
+                      "value": 0.6
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0034
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0244
+                    }
+                  ]
+                }
+              ],
+              "reason": "I have to keep to it."
+            }
+          ],
+          "result": "Sam’s shared supper: Charlie Martin, Hayden Diaz, Finley Lane, Jordan Ward, Casey Das, Jamie Chen, Hayden Grant ate supper with the host."
+        }
+      ],
+      "chosenActions": {
+        "propose": 4,
+        "prepare": 4,
+        "accept": 304,
+        "host": 10,
+        "attend": 44
+      },
+      "startedActions": {
+        "propose": 4,
+        "prepare": 2,
+        "accept": 163,
+        "host": 2,
+        "attend": 15
+      },
+      "handcart": {
+        "version": 1,
+        "activatedAt": 6915,
+        "progress": 3,
+        "work": [
+          {
+            "event": {
+              "id": 44665,
+              "at": 7890,
+              "kind": "cart-progress",
+              "text": "Ravi restored 1 of three cart sections using the side bench.",
+              "causes": [
+                43706
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 7770,
+            "endedAt": 7890
+          },
+          {
+            "event": {
+              "id": 45636,
+              "at": 8010,
+              "kind": "cart-progress",
+              "text": "Ravi restored 2 of three cart sections using the side bench.",
+              "causes": [
+                44758
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 7890,
+            "endedAt": 8010
+          },
+          {
+            "event": {
+              "id": 46520,
+              "at": 8130,
+              "kind": "cart-progress",
+              "text": "Ravi restored 3 of three cart sections using the side bench.",
+              "causes": [
+                45736
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 8010,
+            "endedAt": 8130
+          }
+        ],
+        "requests": [],
+        "observation": {
+          "id": 43616,
+          "at": 7770,
+          "kind": "cart-observed",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "workshop"
+        },
+        "raviGoalId": "g3",
+        "adaObservation": {
+          "id": 43617,
+          "at": 7770,
+          "kind": "bench-work",
+          "text": "Ada can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "workshop"
+        },
+        "adaGoalId": "g5",
+        "handover": {
+          "id": 90226,
+          "at": 15195,
+          "kind": "cart-returned",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
+          "causes": [
+            89919
+          ],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "quay"
+        }
+      },
+      "knownParticipation": {
+        "sam": {
+          "propose": 2,
+          "prepare": 4,
+          "host": 10
+        },
+        "noor": {
+          "accept": 3
+        },
+        "lea": {
+          "propose": 2,
+          "accept": 2
+        },
+        "ada": {
+          "accept": 3
+        }
+      },
+      "methodLearners": 11,
+      "health": {
+        "final": {
+          "at": 36480,
+          "alive": 208,
+          "dead": 0,
+          "lowHealth": 0,
+          "underfed": 0,
+          "minimumHealth": 0.9986879157291959,
+          "minimumSatiety": 0.2971674201983387
+        },
+        "minimumAliveAtDailyBoundaries": 208,
+        "maximumLowHealthAtDailyBoundaries": 0,
+        "maximumUnderfedAtDailyBoundaries": 37
+      },
+      "diagnostics": {
+        "PERSISTENT_PERSONS": {
+          "severity": "info",
+          "boundaries": 25,
+          "firstAt": 1920,
+          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+        }
+      },
+      "restoredContinuation": {
+        "passed": true,
+        "rounds": 8
+      },
+      "checkpoints": {
+        "notice": {
+          "at": 5700,
+          "round": 348,
+          "sha256": "1026acc0a55e1be217a0641833e9a71c64aaabde13ace7bfb564909180fad19d",
+          "milestone": "notice"
+        },
+        "prepared": {
+          "at": 5835,
+          "round": 357,
+          "sha256": "b03114a9546b237f3d33dd4d0de9f99a83502281c67076218d10301a94744493",
+          "milestone": "prepared"
+        },
+        "accepted": {
+          "at": 6435,
+          "round": 397,
+          "sha256": "845fe063c79e8590a0c512a554e2abc18567eece57bc2d4f2a0a55c0541ebf37",
+          "milestone": "accepted"
+        },
+        "cartProgress": {
+          "at": 7890,
+          "round": 494,
+          "sha256": "9bb6c79ab6adc43425cc88d78526eecd6fbca394184ae9e1af43db90b52ddfcd",
+          "milestone": "cartProgress"
+        },
+        "cartReturned": {
+          "at": 15195,
+          "round": 981,
+          "sha256": "20aeec0abd7bd6f50beb247bf33eacc475bfa27768990bd284dc73e246759ee1",
+          "milestone": "cartReturned"
+        }
+      },
+      "finalCheckpointSha256": "33eb6c5a099bdbe94a943b656e2a84d3928580fe90714defad01b89ab011bcdf",
+      "wallSeconds": 62.948576124999995
+    },
+    {
+      "seed": 9,
+      "population": 208,
+      "elapsedDays": 25,
+      "at": 36480,
+      "rounds": 2400,
+      "hf": "2.2.1",
+      "hallSafe": true,
+      "activatedAt": 8040,
+      "candidates": [
+        {
+          "id": "evening-0-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 9720,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 131,
+          "accepted": 11,
+          "declined": 0,
+          "attempted": 5,
+          "delivered": 5,
+          "methodLearners": 5,
+          "knownParticipation": [
+            {
+              "id": "musa",
+              "heardAt": 8445,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 9210,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "jo",
+              "heardAt": 8865,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 8355,
+              "attendedMinutes": 60,
+              "delivered": true
+            },
+            {
+              "id": "ravi",
+              "heardAt": 9675,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 8370,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 1,
+            "accept": 21,
+            "host": 5,
+            "attend": 15
+          },
+          "organiserTraces": [
+            {
+              "at": 9600,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "I need a drink of water."
+            },
+            {
+              "at": 9615,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 0.7238,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0035
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0005
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.7328
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0082
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0212
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 9660,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 0.8424,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0018
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0005
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.7375
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0052
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0227
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 9690,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "accept:evening-0-meal",
+                "decline:evening-0-meal",
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 0.8426,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0011
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0006
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.7406
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0037
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0235
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 9720,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 0.9335,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0007
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0006
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.21
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.7437
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0026
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0242
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 9750,
+              "actor": "lea",
+              "chosen": "host:evening-0-class",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal",
+                "host:evening-0-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-0-class",
+                  "utility": 1.179,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0004
+                    },
+                    {
+                      "source": "need:competence",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0007
+                    },
+                    {
+                      "source": "commitment:c5",
+                      "value": 0.4538
+                    },
+                    {
+                      "source": "goal:g4",
+                      "value": 0.7469
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0019
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0248
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 9780,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "Time for something easier."
+            }
+          ],
+          "result": "Lea’s practical class: Ellis Chen, Ariel Lane, Charlie Silva, Blair Evans, Reese Das received the practical lesson."
+        },
+        {
+          "id": "evening-0-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 9720,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 67,
+          "accepted": 0,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "musa",
+              "heardAt": 9645,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 9225,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 9660,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "ravi",
+              "heardAt": 9675,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 9240,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1
+          },
+          "organiserTraces": [
+            {
+              "at": 9675,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "I need a break from all this."
+            },
+            {
+              "at": 9705,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Time for something easier."
+            },
+            {
+              "at": 9720,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Thirsty — the well, then."
+            },
+            {
+              "at": 9735,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 9765,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 9780,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Same as always."
+            }
+          ],
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+        },
+        {
+          "id": "evening-1-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 14040,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 207,
+          "accepted": 91,
+          "declined": 0,
+          "attempted": 9,
+          "delivered": 3,
+          "methodLearners": 3,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 10905,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c5"
+            },
+            {
+              "id": "musa",
+              "heardAt": 8445,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c2"
+            },
+            {
+              "id": "elin",
+              "heardAt": 9960,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 9210,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "jo",
+              "heardAt": 8865,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c2"
+            },
+            {
+              "id": "lea",
+              "heardAt": 8370,
+              "attendedMinutes": 15
+            },
+            {
+              "id": "ravi",
+              "heardAt": 9675,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 8385,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 1,
+            "accept": 189,
+            "attend": 26,
+            "host": 2
+          },
+          "organiserTraces": [
+            {
+              "at": 13920,
+              "actor": "lea",
+              "chosen": "sleep",
+              "offered": [
+                "accept:evening-1-meal",
+                "decline:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "I'm exhausted; I need to sleep."
+            },
+            {
+              "at": 14040,
+              "actor": "lea",
+              "chosen": "host:evening-1-class",
+              "offered": [
+                "host:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-class",
+                  "utility": 0.2001,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0037
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0005
+                    },
+                    {
+                      "source": "commitment:c6",
+                      "value": 0.21
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0021
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0162
+                    }
+                  ]
+                }
+              ],
+              "reason": "I have to keep to it."
+            },
+            {
+              "at": 14085,
+              "actor": "lea",
+              "chosen": "host:evening-1-class",
+              "offered": [
+                "host:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-class",
+                  "utility": 0.5607,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0018
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0005
+                    },
+                    {
+                      "source": "commitment:c6",
+                      "value": 0.5756
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0025
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0197
+                    }
+                  ]
+                }
+              ],
+              "reason": "I said I would, so I will."
+            }
+          ],
+          "result": "Lea’s practical class: Charlie Silva, Finley Stone, Reese Lane received the practical lesson."
+        },
+        {
+          "id": "evening-1-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 14040,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 207,
+          "accepted": 35,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 10905,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c6"
+            },
+            {
+              "id": "musa",
+              "heardAt": 9645,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "elin",
+              "heardAt": 9960,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 9240,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "jo",
+              "heardAt": 9780,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 9660,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "ravi",
+              "heardAt": 9675,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c4"
+            },
+            {
+              "id": "noor",
+              "heardAt": 9255,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "accept": 70
+          },
+          "organiserTraces": [
+            {
+              "at": 13980,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Same as always."
+            },
+            {
+              "at": 13995,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "This will do."
+            },
+            {
+              "at": 14010,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Might as well."
+            },
+            {
+              "at": 14025,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "I need a break from all this."
+            },
+            {
+              "at": 14055,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "It's what I do at this hour."
+            },
+            {
+              "at": 14070,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Same as always."
+            },
+            {
+              "at": 14085,
+              "actor": "sam",
+              "chosen": "sleep",
+              "offered": [],
+              "considered": [],
+              "reason": "Same as always."
+            }
+          ],
+          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+        }
+      ],
+      "chosenActions": {
+        "propose": 4,
+        "prepare": 2,
+        "accept": 280,
+        "host": 7,
+        "attend": 41
+      },
+      "startedActions": {
+        "propose": 4,
+        "prepare": 2,
+        "accept": 149,
+        "host": 2,
+        "attend": 14
+      },
+      "handcart": {
+        "version": 1,
+        "activatedAt": 9795,
+        "progress": 3,
+        "work": [
+          {
+            "event": {
+              "id": 61737,
+              "at": 10740,
+              "kind": "cart-progress",
+              "text": "Ravi restored 1 of three cart sections using the side bench.",
+              "causes": [
+                60798
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 10620,
+            "endedAt": 10740
+          },
+          {
+            "event": {
+              "id": 62742,
+              "at": 10860,
+              "kind": "cart-progress",
+              "text": "Ravi restored 2 of three cart sections using the side bench.",
+              "causes": [
+                61880
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 10740,
+            "endedAt": 10860
+          },
+          {
+            "event": {
+              "id": 63686,
+              "at": 10980,
+              "kind": "cart-progress",
+              "text": "Ravi restored 3 of three cart sections using the side bench.",
+              "causes": [
+                62875
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 10860,
+            "endedAt": 10980
+          }
+        ],
+        "requests": [],
+        "observation": {
+          "id": 60721,
+          "at": 10620,
+          "kind": "cart-observed",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "workshop"
+        },
+        "raviGoalId": "g3",
+        "adaObservation": {
+          "id": 61234,
+          "at": 10680,
+          "kind": "bench-work",
+          "text": "Ada can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "workshop"
+        },
+        "adaGoalId": "g4",
+        "handover": {
+          "id": 91544,
+          "at": 15435,
+          "kind": "cart-returned",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
+          "causes": [
+            91258
+          ],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "quay"
+        }
+      },
+      "knownParticipation": {
+        "lea": {
+          "propose": 2,
+          "prepare": 2,
+          "host": 7
+        },
+        "sam": {
+          "propose": 2,
+          "accept": 1
+        },
+        "ravi": {
+          "accept": 2
+        },
+        "ada": {
+          "accept": 5
+        },
+        "jo": {
+          "accept": 2
+        },
+        "musa": {
+          "accept": 2
+        }
+      },
+      "methodLearners": 9,
+      "health": {
+        "final": {
+          "at": 36480,
+          "alive": 208,
+          "dead": 0,
+          "lowHealth": 0,
+          "underfed": 0,
+          "minimumHealth": 1,
+          "minimumSatiety": 0.3427202616079542
+        },
+        "minimumAliveAtDailyBoundaries": 208,
+        "maximumLowHealthAtDailyBoundaries": 0,
+        "maximumUnderfedAtDailyBoundaries": 37
+      },
+      "diagnostics": {
+        "PERSISTENT_PERSONS": {
+          "severity": "info",
+          "boundaries": 25,
+          "firstAt": 1920,
+          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+        },
+        "INSPECTION_PENDING": {
+          "severity": "info",
+          "boundaries": 2,
+          "firstAt": 6240,
+          "message": "The repairs are finished. The hall has not yet received a safe inspection; people may have other priorities."
+        }
+      },
+      "restoredContinuation": {
+        "passed": true,
+        "rounds": 8
+      },
+      "checkpoints": {
+        "notice": {
+          "at": 8355,
+          "round": 525,
+          "sha256": "9f0a25377168dd827aa819ccaca164919b52279afad1fc236788c76c1638b801",
+          "milestone": "notice"
+        },
+        "prepared": {
+          "at": 8400,
+          "round": 528,
+          "sha256": "8c396e7259d2305cb3fcea8f561e85786d904901d48c9f445f8b4f51f0362b61",
+          "milestone": "prepared"
+        },
+        "accepted": {
+          "at": 8475,
+          "round": 533,
+          "sha256": "1a4d9ae9ac51d8f4951d036fb9086db90bfe7f7e5bc91aefb79cc727edb0c65a",
+          "milestone": "accepted"
+        },
+        "cartProgress": {
+          "at": 10740,
+          "round": 684,
+          "sha256": "a1157d9db93e7ac64a1e8e5b04e63d2e41ed9c0374639eecf6bd0c4107c9937a",
+          "milestone": "cartProgress"
+        },
+        "cartReturned": {
+          "at": 15435,
+          "round": 997,
+          "sha256": "a44a1945b003c01a36c045a17e0bf554e3dd2a759ceee30d44cd5a1024e871a5",
+          "milestone": "cartReturned"
+        }
+      },
+      "finalCheckpointSha256": "2fc425983ccbb905a05ab9e42c0bf748681621ec3ca1c1ec749eb20d308f1854",
+      "wallSeconds": 62.18914595799999
+    },
+    {
+      "seed": 101,
+      "population": 208,
+      "elapsedDays": 25,
+      "at": 36480,
+      "rounds": 2400,
+      "hf": "2.2.1",
+      "hallSafe": true,
+      "activatedAt": 2595,
+      "candidates": [
+        {
+          "id": "evening-0-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 3960,
+          "stage": "closed",
+          "notice": false,
+          "booking": false,
+          "heard": 0,
+          "accepted": 0,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [],
+          "chosenActions": {},
+          "organiserTraces": [
+            {
+              "at": 3855,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [
+                "propose:evening-0-class",
+                "propose:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "propose:evening-0-class",
+                  "utility": -0.0186,
+                  "terms": [
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0017
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0203
+                    }
+                  ]
+                }
+              ],
+              "reason": "Same as always."
+            },
+            {
+              "at": 3870,
+              "actor": "lea",
+              "chosen": "sleep",
+              "offered": [
+                "propose:evening-0-class",
+                "propose:evening-1-class"
+              ],
+              "considered": [
+                {
+                  "id": "propose:evening-0-class",
+                  "utility": -0.0184,
+                  "terms": [
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0017
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0201
+                    }
+                  ]
+                }
+              ],
+              "reason": "I'm exhausted; I need to sleep."
+            },
+            {
+              "at": 3990,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [
+                "propose:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 4005,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [
+                "propose:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "It's what I do at this hour."
+            }
+          ]
+        },
+        {
+          "id": "evening-0-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 3960,
+          "stage": "closed",
+          "notice": false,
+          "booking": false,
+          "heard": 0,
+          "accepted": 0,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [],
+          "chosenActions": {},
+          "organiserTraces": [
+            {
+              "at": 3900,
+              "actor": "sam",
+              "chosen": "learn",
+              "offered": [
+                "propose:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "I've been alone too long. I want company."
+            },
+            {
+              "at": 3960,
+              "actor": "sam",
+              "chosen": "learn",
+              "offered": [
+                "propose:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "Let me find someone to talk to."
+            },
+            {
+              "at": 3990,
+              "actor": "sam",
+              "chosen": "learn",
+              "offered": [
+                "propose:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "I've been alone too long. I want company."
+            },
+            {
+              "at": 4020,
+              "actor": "sam",
+              "chosen": "drink",
+              "offered": [
+                "propose:evening-1-meal"
+              ],
+              "considered": [],
+              "reason": "I need a drink of water. It was a close call."
+            }
+          ]
+        },
+        {
+          "id": "evening-1-class",
+          "kind": "class",
+          "organiserId": "lea",
+          "startsAt": 8280,
+          "stage": "closed",
+          "notice": true,
+          "booking": false,
+          "heard": 199,
+          "accepted": 34,
+          "declined": 0,
+          "attempted": 0,
+          "delivered": 0,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 5310,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c5"
+            },
+            {
+              "id": "musa",
+              "heardAt": 5085,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c2"
+            },
+            {
+              "id": "elin",
+              "heardAt": 6945,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "sam",
+              "heardAt": 7920,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "jo",
+              "heardAt": 7065,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 4605,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "ravi",
+              "heardAt": 6885,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "noor",
+              "heardAt": 4935,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "accept": 73
+          },
+          "organiserTraces": [
+            {
+              "at": 8160,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "I need a drink of water."
+            },
+            {
+              "at": 8175,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "It's what I do at this hour."
+            },
+            {
+              "at": 8205,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 8220,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Thirsty — the well, then."
+            },
+            {
+              "at": 8280,
+              "actor": "lea",
+              "chosen": "drink",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 8295,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Same as always."
+            },
+            {
+              "at": 8325,
+              "actor": "lea",
+              "chosen": "rest",
+              "offered": [],
+              "considered": [],
+              "reason": "Out of habit, really."
+            },
+            {
+              "at": 8340,
+              "actor": "lea",
+              "chosen": "sleep",
+              "offered": [],
+              "considered": [],
+              "reason": "Same as always."
+            }
+          ],
+          "result": "Lea’s practical class: nobody received the planned activity. The room was never prepared."
+        },
+        {
+          "id": "evening-1-meal",
+          "kind": "meal",
+          "organiserId": "sam",
+          "startsAt": 8280,
+          "stage": "closed",
+          "notice": true,
+          "booking": true,
+          "heard": 199,
+          "accepted": 30,
+          "declined": 0,
+          "attempted": 9,
+          "delivered": 9,
+          "methodLearners": 0,
+          "knownParticipation": [
+            {
+              "id": "ada",
+              "heardAt": 5310,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c6"
+            },
+            {
+              "id": "musa",
+              "heardAt": 5085,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "elin",
+              "heardAt": 6945,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c2"
+            },
+            {
+              "id": "sam",
+              "heardAt": 4275,
+              "attendedMinutes": 60,
+              "delivered": true
+            },
+            {
+              "id": "jo",
+              "heardAt": 7065,
+              "attendedMinutes": 0
+            },
+            {
+              "id": "lea",
+              "heardAt": 4590,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c6"
+            },
+            {
+              "id": "ravi",
+              "heardAt": 4380,
+              "attendedMinutes": 0,
+              "reply": "accepted",
+              "commitmentId": "c4"
+            },
+            {
+              "id": "noor",
+              "heardAt": 4290,
+              "attendedMinutes": 0
+            }
+          ],
+          "chosenActions": {
+            "propose": 1,
+            "prepare": 2,
+            "accept": 63,
+            "host": 5,
+            "attend": 27
+          },
+          "organiserTraces": [
+            {
+              "at": 8160,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "I need a break from all this."
+            },
+            {
+              "at": 8190,
+              "actor": "sam",
+              "chosen": "rest",
+              "offered": [
+                "accept:evening-1-class",
+                "decline:evening-1-class"
+              ],
+              "considered": [],
+              "reason": "Time for something easier."
+            },
+            {
+              "at": 8220,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 1.2859,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0007
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 1.1824
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0036
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0209
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 8265,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 1.2898,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0004
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.12
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 1.189
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0031
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0228
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            },
+            {
+              "at": 8295,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 1.5042,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.3319
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 1.1934
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0023
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0237
+                    }
+                  ]
+                }
+              ],
+              "reason": "Another step toward what I want."
+            },
+            {
+              "at": 8325,
+              "actor": "sam",
+              "chosen": "host:evening-1-meal",
+              "offered": [
+                "host:evening-1-meal"
+              ],
+              "considered": [
+                {
+                  "id": "host:evening-1-meal",
+                  "utility": 1.751,
+                  "terms": [
+                    {
+                      "source": "need:belonging",
+                      "value": 0.0001
+                    },
+                    {
+                      "source": "need:meaning",
+                      "value": 0.0002
+                    },
+                    {
+                      "source": "commitment:c3",
+                      "value": 0.5756
+                    },
+                    {
+                      "source": "goal:g2",
+                      "value": 1.1978
+                    },
+                    {
+                      "source": "emotion:joy:social",
+                      "value": 0.0017
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0244
+                    }
+                  ]
+                }
+              ],
+              "reason": "Keeping at it."
+            }
+          ],
+          "result": "Sam’s shared supper: Robin Stone, Jordan Brooks, Blair Reed, Cameron Evans, Casey Grant, Hayden Martin, Charlie Brooks, Cameron Martin, Finley Lane ate supper with the host."
+        }
+      ],
+      "chosenActions": {
+        "propose": 2,
+        "prepare": 2,
+        "accept": 136,
+        "host": 5,
+        "attend": 27
+      },
+      "startedActions": {
+        "propose": 2,
+        "prepare": 1,
+        "accept": 72,
+        "host": 1,
+        "attend": 9
+      },
+      "handcart": {
+        "version": 1,
+        "activatedAt": 4035,
+        "progress": 3,
+        "work": [
+          {
+            "event": {
+              "id": 26851,
+              "at": 5040,
+              "kind": "cart-progress",
+              "text": "Ravi restored 1 of three cart sections using the side bench.",
+              "causes": [
+                26003
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 4920,
+            "endedAt": 5040
+          },
+          {
+            "event": {
+              "id": 27783,
+              "at": 5160,
+              "kind": "cart-progress",
+              "text": "Ravi restored 2 of three cart sections using the side bench.",
+              "causes": [
+                26939
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 5040,
+            "endedAt": 5160
+          },
+          {
+            "event": {
+              "id": 28582,
+              "at": 5280,
+              "kind": "cart-progress",
+              "text": "Ravi restored 3 of three cart sections using the side bench.",
+              "causes": [
+                27881
+              ],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "workshop"
+            },
+            "mode": "side",
+            "startedAt": 5160,
+            "endedAt": 5280
+          }
+        ],
+        "requests": [],
+        "adaObservation": {
+          "id": 25737,
+          "at": 4905,
+          "kind": "bench-work",
+          "text": "Ada can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "workshop"
+        },
+        "adaGoalId": "g4",
+        "observation": {
+          "id": 25878,
+          "at": 4920,
+          "kind": "cart-observed",
+          "text": "Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "workshop"
+        },
+        "raviGoalId": "g3",
+        "handover": {
+          "id": 46640,
+          "at": 8235,
+          "kind": "cart-returned",
+          "text": "Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
+          "causes": [
+            46336
+          ],
+          "importance": 0.15,
+          "actorId": "ravi",
+          "placeId": "quay"
+        }
+      },
+      "knownParticipation": {
+        "sam": {
+          "propose": 1,
+          "prepare": 2,
+          "host": 5
+        },
+        "lea": {
+          "propose": 1,
+          "accept": 2
+        },
+        "musa": {
+          "accept": 2
+        },
+        "ada": {
+          "accept": 4
+        },
+        "ravi": {
+          "accept": 2
+        },
+        "elin": {
+          "accept": 2
+        }
+      },
+      "methodLearners": 2,
+      "health": {
+        "final": {
+          "at": 36480,
+          "alive": 208,
+          "dead": 0,
+          "lowHealth": 0,
+          "underfed": 0,
+          "minimumHealth": 1,
+          "minimumSatiety": 0.36068905300892534
+        },
+        "minimumAliveAtDailyBoundaries": 208,
+        "maximumLowHealthAtDailyBoundaries": 0,
+        "maximumUnderfedAtDailyBoundaries": 39
+      },
+      "diagnostics": {
+        "PERSISTENT_PERSONS": {
+          "severity": "info",
+          "boundaries": 25,
+          "firstAt": 1920,
+          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+        }
+      },
+      "restoredContinuation": {
+        "passed": true,
+        "rounds": 8
+      },
+      "checkpoints": {
+        "notice": {
+          "at": 4275,
+          "round": 253,
+          "sha256": "209a980d1addc17a43f72bb37491eedf2afceb252e2bbbf33658631ca0cc5cfc",
+          "milestone": "notice"
+        },
+        "prepared": {
+          "at": 4395,
+          "round": 261,
+          "sha256": "63ca6e244045b08bb68dc575f835708f89f9b51705ccb8a0d985edb0eed04f86",
+          "milestone": "prepared"
+        },
+        "cartProgress": {
+          "at": 5040,
+          "round": 304,
+          "sha256": "d8a09cc5792e8b6e9733dcbd2bf29353ddb7b87d1c2389d93a12f8280b664ff2",
+          "milestone": "cartProgress"
+        },
+        "accepted": {
+          "at": 5385,
+          "round": 327,
+          "sha256": "0f04a2c5a5404fc29d10d99c43eb0041c57d8a2a3752f185a6daee9e075c439c",
+          "milestone": "accepted"
+        },
+        "cartReturned": {
+          "at": 8235,
+          "round": 517,
+          "sha256": "d02e0702b8ee8a20ee22be130fbebe3ff09e0670737df4f1af52386797ac97d1",
+          "milestone": "cartReturned"
+        }
+      },
+      "finalCheckpointSha256": "733ee1724b6b77f3923b872d561b7380b608b3921d14f96d2a8e803ad455ba36",
+      "wallSeconds": 66.456307125
+    }
+  ],
+  "recordedAt": "2026-10-16T11:27:23.235471+00:00"
+}

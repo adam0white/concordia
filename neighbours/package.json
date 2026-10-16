@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "vite --host 127.0.0.1",
 		"build": "node scripts/prepare-runtime.mjs && tsc --noEmit && vite build",
-		"typecheck": "tsc --noEmit && tsc --noEmit -p e2e/tsconfig.json",
+		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json && tsc --noEmit -p e2e/tsconfig.json",
 		"test": "vitest run tests",
 		"lint": "biome check --error-on-warnings src tests scripts e2e *.ts *.json",
 		"check": "npm run lint && npm run typecheck && npm test && npm run build",

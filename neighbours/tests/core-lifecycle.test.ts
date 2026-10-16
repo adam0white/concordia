@@ -41,8 +41,18 @@ it("returns a repair tool on interruption without inventing completed repairs", 
 	const ada = r.actor("ada");
 	assert(ada.person.activity);
 	ada.person.activity.interrupt = { at: r.s.now, reason: "injury" };
-	r.prepareRound();
-	expect(ada.job).toBeUndefined();
+	let stopped = false;
+	for (let i = 0; i < 16 && !stopped; i++) {
+		for (const id of r.prepareRound()) {
+			r.apply(
+				id,
+				id === "ada" ? "rest" : (r.actor(id).job?.offer.id ?? "rest"),
+			);
+			if (id === "ada") stopped = true;
+		}
+	}
+	expect(stopped).toBe(true);
+	expect(ada.job?.offer.action).toBe("rest");
 	expect(r.s.tools).toBe(3);
 	expect(r.s.hall).toBe(0);
 	expect(() => restoreRuntime(r.export())).not.toThrow();
