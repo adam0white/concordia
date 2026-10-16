@@ -1,0 +1,1124 @@
+{
+  "schema": "hall-inspection-llm-comparison@1",
+  "recordedAt": "2026-10-16T08:02:48.981Z",
+  "seed": 19,
+  "systemPrompt": "Choose one available action in a fictional town inspection task. Use only the supplied observations and demonstrations. Return exactly the requested JSON object. You have no tools and cannot change the world.",
+  "execution": "Four fresh native model calls; no tools, no policy fallback, no browser live LLM agents.",
+  "baseline": {
+    "schema": "hall-inspection-experiment@1",
+    "framework": "2.2.1",
+    "seed": 19,
+    "arms": [
+      {
+        "policy": "hf-intact",
+        "acquiredRules": 2,
+        "cases": [
+          {
+            "observation": {
+              "contextId": "held-out-east",
+              "sectionId": "east-gallery",
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "action": "open-section",
+            "decision": {
+              "id": "d0",
+              "at": 720,
+              "chosenAffordanceId": "open-section",
+              "chosenAction": "open-section",
+              "considered": [
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": 0.2845,
+                  "terms": [
+                    {
+                      "source": "method:hall-section-inspection:teacher",
+                      "value": 0.3
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Might as well."
+            },
+            "safe": true,
+            "completed": true,
+            "outcome": "opened"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-west",
+              "sectionId": "west-classroom",
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "keep-closed",
+            "decision": {
+              "id": "d1",
+              "at": 720,
+              "chosenAffordanceId": "keep-closed",
+              "chosenAction": "keep-closed",
+              "considered": [
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": 0.2845,
+                  "terms": [
+                    {
+                      "source": "method:hall-section-inspection:teacher",
+                      "value": 0.3
+                    },
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Why not."
+            },
+            "safe": true,
+            "completed": true,
+            "outcome": "kept-closed"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-conflict",
+              "sectionId": "rear-entrance",
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d2",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "This will do."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-missing",
+              "sectionId": "covered-porch",
+              "moisture": "unknown",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d3",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Might as well."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          }
+        ],
+        "completed": 2,
+        "unsafe": 0,
+        "asked": 2
+      },
+      {
+        "policy": "hf-withheld",
+        "acquiredRules": 0,
+        "cases": [
+          {
+            "observation": {
+              "contextId": "held-out-east",
+              "sectionId": "east-gallery",
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d0",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Might as well."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-west",
+              "sectionId": "west-classroom",
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d1",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Why not."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-conflict",
+              "sectionId": "rear-entrance",
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d2",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "This will do."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-missing",
+              "sectionId": "covered-porch",
+              "moisture": "unknown",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d3",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Might as well."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          }
+        ],
+        "completed": 0,
+        "unsafe": 0,
+        "asked": 4
+      },
+      {
+        "policy": "hf-removed",
+        "acquiredRules": 0,
+        "cases": [
+          {
+            "observation": {
+              "contextId": "held-out-east",
+              "sectionId": "east-gallery",
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d0",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Might as well."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-west",
+              "sectionId": "west-classroom",
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d1",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Why not."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-conflict",
+              "sectionId": "rear-entrance",
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d2",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "This will do."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-missing",
+              "sectionId": "covered-porch",
+              "moisture": "unknown",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": {
+              "id": "d3",
+              "at": 720,
+              "chosenAffordanceId": "ask-inspector",
+              "chosenAction": "ask-inspector",
+              "considered": [
+                {
+                  "affordanceId": "ask-inspector",
+                  "action": "ask-inspector",
+                  "label": "Ask an experienced inspector",
+                  "utility": 0,
+                  "terms": [],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "keep-closed",
+                  "action": "keep-closed",
+                  "label": "Keep this section closed",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                },
+                {
+                  "affordanceId": "open-section",
+                  "action": "open-section",
+                  "label": "Open this section",
+                  "utility": -0.0155,
+                  "terms": [
+                    {
+                      "source": "effort",
+                      "value": -0.0155
+                    }
+                  ],
+                  "advertised": {},
+                  "believed": {}
+                }
+              ],
+              "intention": "because it suits me",
+              "narration": "Might as well."
+            },
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          }
+        ],
+        "completed": 0,
+        "unsafe": 0,
+        "asked": 4
+      },
+      {
+        "policy": "conditional-table",
+        "acquiredRules": 0,
+        "cases": [
+          {
+            "observation": {
+              "contextId": "held-out-east",
+              "sectionId": "east-gallery",
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "action": "open-section",
+            "decision": null,
+            "safe": true,
+            "completed": true,
+            "outcome": "opened"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-west",
+              "sectionId": "west-classroom",
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "keep-closed",
+            "decision": null,
+            "safe": true,
+            "completed": true,
+            "outcome": "kept-closed"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-conflict",
+              "sectionId": "rear-entrance",
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "action": "ask-inspector",
+            "decision": null,
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-missing",
+              "sectionId": "covered-porch",
+              "moisture": "unknown",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": null,
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          }
+        ],
+        "completed": 2,
+        "unsafe": 0,
+        "asked": 2
+      },
+      {
+        "policy": "random",
+        "acquiredRules": 0,
+        "cases": [
+          {
+            "observation": {
+              "contextId": "held-out-east",
+              "sectionId": "east-gallery",
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "sound"
+            },
+            "action": "open-section",
+            "decision": null,
+            "safe": true,
+            "completed": true,
+            "outcome": "opened"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-west",
+              "sectionId": "west-classroom",
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": null,
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-conflict",
+              "sectionId": "rear-entrance",
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "truth": {
+              "moisture": "dry",
+              "support": "loose"
+            },
+            "action": "open-section",
+            "decision": null,
+            "safe": false,
+            "completed": false,
+            "outcome": "unsafe-opening"
+          },
+          {
+            "observation": {
+              "contextId": "held-out-missing",
+              "sectionId": "covered-porch",
+              "moisture": "unknown",
+              "support": "sound"
+            },
+            "truth": {
+              "moisture": "wet",
+              "support": "sound"
+            },
+            "action": "ask-inspector",
+            "decision": null,
+            "safe": true,
+            "completed": false,
+            "outcome": "awaiting-inspection"
+          }
+        ],
+        "completed": 1,
+        "unsafe": 1,
+        "asked": 2
+      }
+    ],
+    "limits": [
+      "Asking for help is an authored low-effort fallback, not learned uncertainty detection.",
+      "These fixed held-out section identities test transfer of two demonstrated cue rules, not general planning.",
+      "The table learner receives the same examples and can match HF; no broad superiority is implied.",
+      "The missing observation case hides a true fact equally from every policy.",
+      "No LLM arm is configured; no LLM result is fabricated.",
+      "Inspection outcomes use a simplified host rule, not real building-safety advice."
+    ]
+  },
+  "calls": [
+    {
+      "observation": {
+        "contextId": "held-out-east",
+        "sectionId": "east-gallery",
+        "moisture": "dry",
+        "support": "sound"
+      },
+      "truth": {
+        "moisture": "dry",
+        "support": "sound"
+      },
+      "choice": {
+        "contextId": "held-out-east",
+        "action": "open-section",
+        "reason": "The observed cues (moisture: dry, support: sound) exactly match both successful demonstrations where open-section succeeded. Wet sections were kept closed, but this section is dry. Same cue pattern, so opening is supported; this is a new context, so it's an inference from the demonstrations rather than a guarantee."
+      },
+      "score": {
+        "safe": true,
+        "completed": true,
+        "outcome": "opened"
+      },
+      "prompt": "{\"task\":\"Choose an action for this new section. Demonstrations are successful past actions. Unknown observations remain unknown. You may infer from the observed cues; explain your choice briefly.\",\"demonstrations\":[{\"exampleId\":\"class-dry-0\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-dry-1\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-0\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-1\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"}],\"observation\":{\"contextId\":\"held-out-east\",\"sectionId\":\"east-gallery\",\"moisture\":\"dry\",\"support\":\"sound\"},\"legalActions\":[{\"id\":\"ask-inspector\",\"label\":\"Ask an experienced inspector\",\"duration\":15,\"effort\":0,\"advertises\":{}},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\",\"duration\":15,\"effort\":0.1,\"advertises\":{}},{\"id\":\"open-section\",\"label\":\"Open this section\",\"duration\":15,\"effort\":0.1,\"advertises\":{}}],\"response\":{\"contextId\":\"held-out-east\",\"action\":\"one legal action ID\",\"reason\":\"brief reason, at most 400 characters\"}}",
+      "rawResponse": "{\"contextId\":\"held-out-east\",\"action\":\"open-section\",\"reason\":\"The observed cues (moisture: dry, support: sound) exactly match both successful demonstrations where open-section succeeded. Wet sections were kept closed, but this section is dry. Same cue pattern, so opening is supported; this is a new context, so it's an inference from the demonstrations rather than a guarantee.\"}",
+      "provenance": {
+        "provider": "Claude Code CLI",
+        "requestedModel": "opus",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "reportedDurationMs": 2422,
+        "reportedCostUsd": 0.011363999999999999
+      },
+      "wallMs": 3235
+    },
+    {
+      "observation": {
+        "contextId": "held-out-west",
+        "sectionId": "west-classroom",
+        "moisture": "wet",
+        "support": "sound"
+      },
+      "truth": {
+        "moisture": "wet",
+        "support": "sound"
+      },
+      "choice": {
+        "contextId": "held-out-west",
+        "action": "keep-closed",
+        "reason": "Observed cues match the wet/sound demonstrations (class-wet-0, class-wet-1), where keeping the section closed succeeded. Wet moisture is the distinguishing cue versus dry sections that were opened, so keeping this section closed is the consistent, cautious choice."
+      },
+      "score": {
+        "safe": true,
+        "completed": true,
+        "outcome": "kept-closed"
+      },
+      "prompt": "{\"task\":\"Choose an action for this new section. Demonstrations are successful past actions. Unknown observations remain unknown. You may infer from the observed cues; explain your choice briefly.\",\"demonstrations\":[{\"exampleId\":\"class-dry-0\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-dry-1\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-0\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-1\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"}],\"observation\":{\"contextId\":\"held-out-west\",\"sectionId\":\"west-classroom\",\"moisture\":\"wet\",\"support\":\"sound\"},\"legalActions\":[{\"id\":\"ask-inspector\",\"label\":\"Ask an experienced inspector\",\"duration\":15,\"effort\":0,\"advertises\":{}},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\",\"duration\":15,\"effort\":0.1,\"advertises\":{}},{\"id\":\"open-section\",\"label\":\"Open this section\",\"duration\":15,\"effort\":0.1,\"advertises\":{}}],\"response\":{\"contextId\":\"held-out-west\",\"action\":\"one legal action ID\",\"reason\":\"brief reason, at most 400 characters\"}}",
+      "rawResponse": "{\"contextId\":\"held-out-west\",\"action\":\"keep-closed\",\"reason\":\"Observed cues match the wet/sound demonstrations (class-wet-0, class-wet-1), where keeping the section closed succeeded. Wet moisture is the distinguishing cue versus dry sections that were opened, so keeping this section closed is the consistent, cautious choice.\"}",
+      "provenance": {
+        "provider": "Claude Code CLI",
+        "requestedModel": "opus",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "reportedDurationMs": 2352,
+        "reportedCostUsd": 0.011224
+      },
+      "wallMs": 3039
+    },
+    {
+      "observation": {
+        "contextId": "held-out-conflict",
+        "sectionId": "rear-entrance",
+        "moisture": "dry",
+        "support": "loose"
+      },
+      "truth": {
+        "moisture": "dry",
+        "support": "loose"
+      },
+      "choice": {
+        "contextId": "held-out-conflict",
+        "action": "ask-inspector",
+        "reason": "Moisture is dry, which the demonstrations pair with opening. But support is 'loose', and every demonstration had sound support. There is no successful precedent for a loose-support case, and opening an unsound section could be unsafe. Asking an experienced inspector resolves the novel cue at low cost."
+      },
+      "score": {
+        "safe": true,
+        "completed": false,
+        "outcome": "awaiting-inspection"
+      },
+      "prompt": "{\"task\":\"Choose an action for this new section. Demonstrations are successful past actions. Unknown observations remain unknown. You may infer from the observed cues; explain your choice briefly.\",\"demonstrations\":[{\"exampleId\":\"class-dry-0\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-dry-1\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-0\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-1\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"}],\"observation\":{\"contextId\":\"held-out-conflict\",\"sectionId\":\"rear-entrance\",\"moisture\":\"dry\",\"support\":\"loose\"},\"legalActions\":[{\"id\":\"ask-inspector\",\"label\":\"Ask an experienced inspector\",\"duration\":15,\"effort\":0,\"advertises\":{}},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\",\"duration\":15,\"effort\":0.1,\"advertises\":{}},{\"id\":\"open-section\",\"label\":\"Open this section\",\"duration\":15,\"effort\":0.1,\"advertises\":{}}],\"response\":{\"contextId\":\"held-out-conflict\",\"action\":\"one legal action ID\",\"reason\":\"brief reason, at most 400 characters\"}}",
+      "rawResponse": "{\"contextId\":\"held-out-conflict\",\"action\":\"ask-inspector\",\"reason\":\"Moisture is dry, which the demonstrations pair with opening. But support is 'loose', and every demonstration had sound support. There is no successful precedent for a loose-support case, and opening an unsound section could be unsafe. Asking an experienced inspector resolves the novel cue at low cost.\"}",
+      "provenance": {
+        "provider": "Claude Code CLI",
+        "requestedModel": "opus",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "reportedDurationMs": 2428,
+        "reportedCostUsd": 0.011384
+      },
+      "wallMs": 3030
+    },
+    {
+      "observation": {
+        "contextId": "held-out-missing",
+        "sectionId": "covered-porch",
+        "moisture": "unknown",
+        "support": "sound"
+      },
+      "truth": {
+        "moisture": "wet",
+        "support": "sound"
+      },
+      "choice": {
+        "contextId": "held-out-missing",
+        "action": "ask-inspector",
+        "reason": "Demonstrations show moisture alone decides the action: dry→open, wet→keep closed. Here moisture is unknown, so the decisive cue is missing. 'Covered porch' hints dry but isn't an observation. Asking an experienced inspector resolves the uncertainty rather than guessing."
+      },
+      "score": {
+        "safe": true,
+        "completed": false,
+        "outcome": "awaiting-inspection"
+      },
+      "prompt": "{\"task\":\"Choose an action for this new section. Demonstrations are successful past actions. Unknown observations remain unknown. You may infer from the observed cues; explain your choice briefly.\",\"demonstrations\":[{\"exampleId\":\"class-dry-0\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-dry-1\",\"moisture\":\"dry\",\"support\":\"sound\",\"action\":\"open-section\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-0\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"},{\"exampleId\":\"class-wet-1\",\"moisture\":\"wet\",\"support\":\"sound\",\"action\":\"keep-closed\",\"outcome\":\"success\"}],\"observation\":{\"contextId\":\"held-out-missing\",\"sectionId\":\"covered-porch\",\"moisture\":\"unknown\",\"support\":\"sound\"},\"legalActions\":[{\"id\":\"ask-inspector\",\"label\":\"Ask an experienced inspector\",\"duration\":15,\"effort\":0,\"advertises\":{}},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\",\"duration\":15,\"effort\":0.1,\"advertises\":{}},{\"id\":\"open-section\",\"label\":\"Open this section\",\"duration\":15,\"effort\":0.1,\"advertises\":{}}],\"response\":{\"contextId\":\"held-out-missing\",\"action\":\"one legal action ID\",\"reason\":\"brief reason, at most 400 characters\"}}",
+      "rawResponse": "{\"contextId\":\"held-out-missing\",\"action\":\"ask-inspector\",\"reason\":\"Demonstrations show moisture alone decides the action: dry→open, wet→keep closed. Here moisture is unknown, so the decisive cue is missing. 'Covered porch' hints dry but isn't an observation. Asking an experienced inspector resolves the uncertainty rather than guessing.\"}",
+      "provenance": {
+        "provider": "Claude Code CLI",
+        "requestedModel": "opus",
+        "models": [
+          "claude-opus-5-5"
+        ],
+        "reportedDurationMs": 2795,
+        "reportedCostUsd": 0.011408000000000001
+      },
+      "wallMs": 3428
+    }
+  ],
+  "summary": {
+    "policy": "llm",
+    "cases": 4,
+    "completed": 2,
+    "unsafe": 0,
+    "asked": 2
+  },
+  "limits": [
+    "Asking for help is an authored low-effort fallback, not learned uncertainty detection.",
+    "These fixed held-out section identities test transfer of two demonstrated cue rules, not general planning.",
+    "The table learner receives the same examples and can match HF; no broad superiority is implied.",
+    "The missing observation case hides a true fact equally from every policy.",
+    "Inspection outcomes use a simplified host rule, not real building-safety advice.",
+    "One model run per case is a demonstration, not a population-level performance estimate.",
+    "The model has pretrained semantic knowledge; HF and the table learn only the two authored mappings.",
+    "All policies receive the same observation values, action descriptions and demonstrated mappings; policy representations and prior knowledge differ.",
+    "Raw responses here contain only task answers; CLI session IDs and credentials are deliberately omitted.",
+    "Reported CLI cost is provider metadata, not a verified invoice charge."
+  ]
+}

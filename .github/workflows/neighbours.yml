@@ -1,0 +1,52 @@
+name: Neighbours
+on:
+  push:
+    branches: [neighbours]
+    paths: ['neighbours/**', 'concordia/contrib/neighbours/**', '.github/workflows/neighbours.yml']
+  pull_request:
+    paths: ['neighbours/**', 'concordia/contrib/neighbours/**', '.github/workflows/neighbours.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: neighbours-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '26.12.0'
+          cache: npm
+          cache-dependency-path: neighbours/package-lock.json
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12.13'
+      - run: npm ci
+        working-directory: neighbours
+      - run: python -m pip install absl-py==2.4.0
+      - run: npm run check
+        working-directory: neighbours
+      - name: Thirty-day population and restored-continuation stress check
+        run: node scripts/profile-town.ts --days 30 --population 208 --seed 42 --max-deaths 0
+        working-directory: neighbours
+      - name: Actual native HF bridge and upstream ActionSpec controls
+        run: python -m unittest concordia.environment.engine_test concordia.contrib.neighbours.engine_test concordia.contrib.neighbours.bridge_test
+        env:
+          PYTHONPATH: .
+          NEIGHBOURS_NATIVE_TEST: '1'
+      - name: Actual WASM and native parity and restored continuation
+        run: npm run test:parity
+        working-directory: neighbours
+        env:
+          PYTHON: python
+      - name: Recorded mixed-town replay (zero model calls)
+        run: python neighbours/scripts/run-mixed-town.py --node node --replay neighbours/public/experiments/native-mixed-town.json
+      - name: Cloudflare build without deployment
+        run: npm run build:cloudflare
+        working-directory: neighbours
+      - run: npm audit --audit-level=high
+        working-directory: neighbours

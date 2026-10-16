@@ -1,3 +1,15 @@
+# Neighbours: Alder Quay
+
+[Watch the town](https://neighbours.adamwhite.work) · [Design and milestones](docs/neighbours/DESIGN.md) · [Run and debug](docs/neighbours/RUNNING.md) · [Prior art](docs/neighbours/PRIOR_ART.md)
+
+A riverside town after a flood. Eight familiar neighbours and two hundred other residents balance ordinary needs, promises and the work of reopening a community hall. The public town runs actual Python Concordia and Human Framework locally in your browser. It is not a shared server town. The optional Inspector exposes resources, decisions, diagnostics and recorded policy experiments.
+
+This is a fork of Google DeepMind Concordia. Upstream history and code remain intact. Our application is in `neighbours/`; its custom Python engine is in `concordia/contrib/neighbours/`. Development branch: `neighbours`. Human Framework is consumed as an exact published package. Recorded native LLM experiments are labelled separately from the live all-HF browser town.
+
+The project is under active development. Adam accepts how the town feels; automated checks do not establish that it is enjoyable or that HF outperforms another controller.
+
+---
+
 # Concordia
 
 *A library for generative social simulation*

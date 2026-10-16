@@ -1,0 +1,89 @@
+import type { TownView } from "../contracts.ts";
+import { usesActivitySlot } from "./offers.ts";
+import type { Save } from "./state.ts";
+
+type Diagnostic = TownView["diagnostics"][number];
+/** Derived checks never alter a person's state or force a desired outcome. */
+export function townDiagnostics(s: Save): Diagnostic[] {
+	const out: Diagnostic[] = [];
+	const error = (code: string, message: string) =>
+		out.push({ code, message, severity: "error" });
+	if (
+		s.now !== 480 + s.round * 15 ||
+		s.people.some((r) => r.person.now !== s.now)
+	)
+		error("CLOCK_DIVERGENCE", "The town and resident clocks disagree.");
+	const reservedFood = s.people.reduce((n, r) => n + (r.job?.food ?? 0), 0);
+	const stock = s.places.reduce((n, p) => n + p.stock, 0);
+	if (
+		stock + reservedFood + s.consumed !== s.initialFood + s.produced ||
+		s.places.some((p) => p.stock < 0)
+	)
+		error(
+			"FOOD_CONSERVATION",
+			"Food stock, reservations and consumption do not balance.",
+		);
+	for (const p of s.places) {
+		const reserved = s.people.filter(
+			(r) => r.job?.offer.placeId === p.id && usesActivitySlot(r.job.offer),
+		).length;
+		if (p.reserved !== reserved || p.reserved > p.capacity || p.reserved < 0)
+			error(
+				"ACTIVITY_RESERVATION",
+				`${p.name} has inconsistent activity reservations.`,
+			);
+	}
+	const tools = s.tools + s.people.reduce((n, r) => n + (r.job?.tools ?? 0), 0);
+	if (
+		s.tools < 0 ||
+		tools < 3 ||
+		tools > 3 + 3 * (3 - s.controls) ||
+		tools % 3 !== 0
+	)
+		error(
+			"TOOL_CONSERVATION",
+			"Available tools and tools in use do not balance.",
+		);
+	if (
+		s.people.some(
+			(r) =>
+				Boolean(r.job) !== Boolean(r.person.activity) ||
+				(r.job && r.job.end <= s.now),
+		)
+	)
+		error(
+			"ACTIVITY_TRACKING",
+			"A physical job and its person's activity disagree.",
+		);
+	if (s.hall < 0 || s.hall > 12 || (s.hallSafe && s.hall < 12))
+		error("HALL_STATE", "The hall's repair or opening state is inconsistent.");
+	if (s.hall === 12 && !s.hallSafe) {
+		const lastInspection = s.people
+			.flatMap((r) => (r.inspection ? [r.inspection] : []))
+			.sort(
+				(a, b) => b.at - a.at || (b.event?.id ?? 0) - (a.event?.id ?? 0),
+			)[0];
+		out.push({
+			code: "INSPECTION_PENDING",
+			message: lastInspection
+				? `${lastInspection.result} Reopening needs safe conditions and another inspection; people may have other priorities.`
+				: "The repairs are finished. The hall has not yet received a safe inspection; people may have other priorities.",
+			severity: "info",
+		});
+	}
+	const market = s.places.find((p) => p.id === "market");
+	if (market?.stock === 0)
+		out.push({
+			code: "MEALS_RESERVED",
+			message:
+				"No unreserved market meals remain. Gardening, deliveries and carrying food can replenish them.",
+			severity: "warning",
+		});
+	out.push({
+		code: "PERSISTENT_PERSONS",
+		message:
+			"Every resident has a persistent HF person. Decision policies are labelled per person.",
+		severity: "info",
+	});
+	return out;
+}

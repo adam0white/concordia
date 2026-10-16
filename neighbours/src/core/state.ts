@@ -1,0 +1,143 @@
+import type {
+	Affordance,
+	DecisionRecord,
+	Person,
+} from "@adam0white/human-framework";
+import type { PersonView, Policy, TownEvent } from "../contracts";
+export const SCHEMA = "neighbours-1";
+export const known = [
+	[
+		"ada",
+		"Ada",
+		"carpenter",
+		"workshop",
+		"Kept the hall tables dry; wants to repair its doors.",
+	],
+	[
+		"musa",
+		"Musa",
+		"gardener",
+		"garden",
+		"Lost seedlings in the flood; grows food for neighbours.",
+	],
+	[
+		"elin",
+		"Elin",
+		"nurse",
+		"clinic",
+		"Moved evening care into a small clinic.",
+	],
+	[
+		"sam",
+		"Sam",
+		"cook",
+		"market",
+		"Promised a shared meal when the hall opens.",
+	],
+	["jo", "Jo", "ferry keeper", "quay", "Carries supplies from the quay."],
+	["lea", "Lea", "teacher", "school", "Evening classes need somewhere dry."],
+	[
+		"ravi",
+		"Ravi",
+		"mechanic",
+		"workshop",
+		"Shares a crowded workshop with Ada.",
+	],
+	[
+		"noor",
+		"Noor",
+		"organiser",
+		"homes",
+		"Visits neighbours who have not heard the hall news.",
+	],
+];
+export const placeSpecs = [
+	["homes", "Riverside homes", 12, 65, 300, "home"],
+	["market", "Market kitchen", 42, 60, 16, "food"],
+	["clinic", "Clinic", 68, 62, 6, "care"],
+	["workshop", "Workshop", 74, 35, 8, "work"],
+	["quay", "Quay", 14, 35, 12, "supply"],
+	["garden", "Community garden", 30, 18, 18, "grow"],
+	["school", "School", 58, 18, 14, "learn"],
+	["hall", "Flooded hall", 47, 39, 10, "community"],
+] as const;
+export type Place = {
+	id: string;
+	name: string;
+	x: number;
+	y: number;
+	capacity: number;
+	kind: string;
+	stock: number;
+	reserved: number;
+};
+export type Job = {
+	offer: Affordance;
+	end: number;
+	arrive: number;
+	from: string;
+	event: number;
+	food: number;
+	tools: number;
+	inspectionCues?: { moisture: string; support: string };
+};
+export type Resident = {
+	person: Person;
+	role: string;
+	description: string;
+	known: boolean;
+	place: string;
+	idleSince?: number;
+	lifeEvent?: TownEvent;
+	wealth: number;
+	policy: Policy;
+	job?: Job;
+	decision?: PersonView["decision"];
+	record?: DecisionRecord;
+	received?: TownEvent[];
+	question?: {
+		event: number;
+		at: number;
+		note: TownEvent;
+		status: "waiting" | "answered" | "missed";
+		answeredBy?: string;
+		lessonEvent?: number;
+	};
+	inspection?: {
+		key: string;
+		action: string;
+		at: number;
+		event?: TownEvent;
+		observations?: { moisture: string; support: string };
+		result?: string;
+		source?: string;
+		methodTerms?: { source: string; value: number }[];
+	};
+	paidWork?: {
+		day: number;
+		starts: number;
+		minutes: number;
+		totalMinutes: number;
+	};
+};
+export type Save = {
+	schema: string;
+	hf: string;
+	seed: number;
+	now: number;
+	round: number;
+	controls: number;
+	bus: boolean;
+	tools: number;
+	hall: number;
+	hallSafe: boolean;
+	firstMealAt: number | null;
+	events: TownEvent[];
+	nextEvent: number;
+	people: Resident[];
+	places: Place[];
+	pending: string[];
+	initialFood: number;
+	produced: number;
+	consumed: number;
+};
