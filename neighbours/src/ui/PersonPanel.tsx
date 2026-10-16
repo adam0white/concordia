@@ -67,7 +67,7 @@ export default function PersonPanel({
 					{initial(person.name)}
 				</span>
 				<div>
-					<h2>{person.name}</h2>
+					<h2 tabIndex={-1}>{person.name}</h2>
 					<p>{person.role}</p>
 				</div>
 			</div>

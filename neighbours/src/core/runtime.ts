@@ -62,6 +62,7 @@ import { recordSocialContacts } from "./social-contact.ts";
 import { known, type Save, SCHEMA } from "./state.ts";
 import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
+import { recordTownEvent } from "./town-chronicle.ts";
 export class Runtime implements TownRuntime {
 	s: Save;
 	records = new Map<string, DecisionRecord>();
@@ -109,6 +110,7 @@ export class Runtime implements TownRuntime {
 			...(placeId ? { placeId } : {}),
 		};
 		this.s.events.push(e);
+		recordTownEvent(this.s, e);
 		if (this.s.events.length > 400) {
 			const landmarks = this.s.events
 				.filter((e) =>

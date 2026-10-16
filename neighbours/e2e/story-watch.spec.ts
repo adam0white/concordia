@@ -1,0 +1,108 @@
+import { readFile } from "node:fs/promises";
+import { expect, test } from "@playwright/test";
+
+test.use({ hasTouch: true });
+
+test("actual town offers optional story stops and keyboard/mobile access to retained older stories", async ({
+	page,
+}, info) => {
+	await page.goto("/");
+	const play = page.getByRole("button", { name: "Play town", exact: true });
+	const pause = page.getByRole("button", { name: "Pause town", exact: true });
+	await expect(pause).toBeVisible();
+	await pause.click();
+	const speed = page.getByRole("combobox", { name: "Playback speed" });
+	await speed.selectOption("120");
+	const headline = page.locator(".story-headline");
+	const watch = page.getByRole("checkbox", { name: "Pause on new stories" });
+	const stopped = page
+		.getByRole("status")
+		.filter({ hasText: "Paused for a new story" });
+	if (!(await headline.count())) {
+		await expect(watch).toHaveCount(0);
+		await play.click();
+		await expect(headline).toBeVisible();
+		await expect(pause).toBeVisible();
+		await pause.click();
+	}
+	await expect(watch).not.toBeChecked();
+	await watch.check();
+	await expect(stopped).toHaveCount(0);
+	await page.getByRole("button", { name: "Advance one round" }).click();
+	await expect(stopped).toHaveCount(0);
+	await play.click();
+	await expect(stopped).toBeVisible({ timeout: 60_000 });
+	await expect(play).toBeVisible();
+	await expect(speed).toHaveValue("120");
+	await page.screenshot({ path: info.outputPath("story-stop-desktop.png") });
+	const held = await headline.innerText();
+	await page.waitForTimeout(400);
+	expect(await headline.innerText()).toBe(held);
+	await expect(play).toBeVisible();
+	// Exact same-world import must clear the old stop reason and stay ordinary paused.
+	await page.getByRole("button", { name: "Export", exact: true }).click();
+	const download = page.waitForEvent("download");
+	await page.getByRole("link", { name: /Download save/ }).click();
+	const path = info.outputPath("story-stop.json");
+	await (await download).saveAs(path);
+	const saved = await readFile(path);
+	await page.getByLabel("Import town save").setInputFiles({
+		name: "same-town.json",
+		mimeType: "application/json",
+		buffer: saved,
+	});
+	await expect(stopped).toHaveCount(0);
+	await expect(play).toBeVisible();
+	await watch.uncheck();
+	await page.getByRole("tab", { name: "Stories", exact: true }).click();
+	await play.click();
+	// Continuous mode remains running while new stories arrive and the archive grows.
+	await expect
+		.poll(() => headline.innerText(), { timeout: 60_000 })
+		.not.toBe(held);
+	await expect(pause).toBeVisible();
+	await expect(stopped).toHaveCount(0);
+	const archive = page.locator(".story-archive");
+	await expect(archive).toBeVisible({ timeout: 90_000 });
+	await pause.click();
+	await expect(archive).not.toHaveAttribute("open");
+	const summary = archive.locator(":scope > summary");
+	await summary.focus();
+	await page.keyboard.press("Enter");
+	await expect(archive).toHaveAttribute("open", "");
+	await expect(archive.locator("article .eyebrow").last()).toContainText(
+		"Day ",
+	);
+	const firstFollow = archive.getByRole("button", { name: /Follow / }).first();
+	await firstFollow.focus();
+	await page.keyboard.press("Enter");
+	await expect(page.locator(".person-panel")).toBeVisible();
+	await expect(page.locator(".person-panel h2")).toBeFocused();
+	const closeDetails = page.getByRole("button", {
+		name: "Close person details",
+	});
+	await expect(closeDetails).toBeInViewport();
+	expect((await closeDetails.boundingBox())?.y).toBeGreaterThanOrEqual(0);
+	await page.setViewportSize({ width: 390, height: 844 });
+	await summary.click();
+	await summary.tap();
+	await expect(archive).toHaveAttribute("open", "");
+	await expect(archive.locator("article").last()).toBeVisible();
+	await firstFollow.tap();
+	await expect(page.locator(".person-panel h2")).toBeFocused();
+	await expect(closeDetails).toBeInViewport();
+	expect((await closeDetails.boundingBox())?.y).toBeGreaterThanOrEqual(0);
+	expect(
+		await page.evaluate(
+			() => document.documentElement.scrollWidth <= innerWidth,
+		),
+	).toBe(true);
+	await page.screenshot({
+		path: info.outputPath("older-stories-mobile.png"),
+		fullPage: true,
+	});
+	await page.reload();
+	await expect(play).toBeVisible();
+	await expect(watch).not.toBeChecked();
+	await expect(stopped).toHaveCount(0);
+});

@@ -6,6 +6,7 @@ import type {
 import type { PersonView, Policy, TownEvent } from "../contracts";
 import type { SocialEvenings } from "./evenings.ts";
 import type { Handcart } from "./handcart-state.ts";
+import type { TownChronicle } from "./town-chronicle.ts";
 export const SCHEMA = "neighbours-1";
 export const known = [
 	[
@@ -124,6 +125,8 @@ export type Resident = {
 	};
 };
 export type Save = {
+	/** Observer history begins with the next selected event, including in legacy saves. */
+	townChronicle?: TownChronicle;
 	schema: string;
 	hf: string;
 	seed: number;

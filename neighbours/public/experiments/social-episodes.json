@@ -12,12 +12,12 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "059882d0c39684b04ba512c09c9cd8e3699721dad5005b03fb814c748245d478",
+  "sourceFingerprint": "a86983114c07b49b53e42978a431366761032b926f59cb91269e922e3be7a357",
   "sources": {
     "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
     "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
     "scripts/profile-evenings.ts": "6226c7bbe335d608776c5bf577544b7c395ff9e1eb301032e19f998ad6ac665f",
-    "src/contracts.ts": "ce5f307652bc3130b81a05e3bf41e45ff3c9a5ba273e8a6a5d88ddcf6116bf56",
+    "src/contracts.ts": "61b4026fa59c3b94ab32a29165b14c2020b893d4f65aff1c1b3a6162b5efa184",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
     "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
@@ -32,13 +32,14 @@
     "src/core/offers.ts": "0421fbadf93cc9b1f4670ac0e0e9468920e2cf20c9b8be3e3b868e3fbaf43c16",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/restore.ts": "7de6fc82fa41d88befde57918430170011b4d206e254888818e4b5e154b17bb7",
-    "src/core/runtime.ts": "e59b18f8a6b666a14847eacb1f5676f4089fc15441928681eb4204f60baa4ce1",
+    "src/core/restore.ts": "1cd92b29ff7c5276f67906461fe971d563c5450dcf3b354f7a5afcc9addcfeb3",
+    "src/core/runtime.ts": "ffe34faf54913222d07899e4ffeb4464ee8836cf8c5a8ade46c9766ff325a95c",
     "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "895b852a90f1501e44df31515f74a083ea6b5f52e39d12c635bdaed54d900b9e",
-    "src/core/stories.ts": "35f873c04363049d3c8b8df412b400900335b4692fdf7d3b9976130bf154dfad",
+    "src/core/state.ts": "92f7f6b174a5b74e178668dca8bf3e247958a499f8071f4c9126605b098425e8",
+    "src/core/stories.ts": "205dc4e8717cadcb7832b34a37c92ec39b367c55456875be386706fc88606451",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
+    "src/core/town-chronicle.ts": "50f10e7feff8cafa1ace05e9327aa2bce6223a3bc795d4dbe49811535ba5d947",
     "src/core/validation.ts": "8ee6b3486c654b4aa026acce20596ff1b5faad57a2fa71c9f30d6822c149d1bf",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
@@ -887,36 +888,36 @@
         "notice": {
           "at": 3705,
           "round": 215,
-          "sha256": "454566b1f1339dd05d48bfdd5057d389a4a4f6953b3ad5d981390e84f37dfd7f",
+          "sha256": "e149b3f28310f391d9449c0a57a4bf51c8d3e305bee427a5f902fc45daf299c4",
           "milestone": "notice"
         },
         "prepared": {
           "at": 3735,
           "round": 217,
-          "sha256": "fe0698ab5063383637bc6345613e3bf8ff5062a006564d3d63730ff012a035b5",
+          "sha256": "f97a8cd23247abfd285c3726d193ef16143f6cecda70c59ae0755d740b3aec60",
           "milestone": "prepared"
         },
         "accepted": {
           "at": 3975,
           "round": 233,
-          "sha256": "07fb33cb29adf07e8f99c0ab0b8cdf353c032effa87e38e6cc6db03598e112a9",
+          "sha256": "84d974f608e8f56f6de43fa63fc56e763cf55660fbefc40f3cf2bdad37e18122",
           "milestone": "accepted"
         },
         "cartProgress": {
           "at": 5010,
           "round": 302,
-          "sha256": "a1e87c748bc2f7d683c7ac45f4bdf92639cd7bdda6bb186ed236f8c8b972a6ce",
+          "sha256": "0628132dbd1d71940915c7f0c4e41f935312f3b9055e9508e1cec4d226653fc8",
           "milestone": "cartProgress"
         },
         "cartReturned": {
           "at": 8205,
           "round": 515,
-          "sha256": "c85e6a7f4f93751d69e60ed8afec858587978329dce98cd05370c1641edb231d",
+          "sha256": "1aba9e82382d33c63aec073ccbbc0f7c26e6c607117dc09d52ee004ad9230663",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "49ec923969cb992465b022d6d548a14c4eaf7a5f73ec67aaa193a82d7a51dae8",
-      "wallSeconds": 67.928012417
+      "finalCheckpointSha256": "51c0343edeaff627b2c1d8e4dda9a013102fce5c1f68b76a51dd21bdc594e9a8",
+      "wallSeconds": 92.85999979099999
     },
     {
       "seed": 73,
@@ -1927,36 +1928,36 @@
         "notice": {
           "at": 5700,
           "round": 348,
-          "sha256": "1026acc0a55e1be217a0641833e9a71c64aaabde13ace7bfb564909180fad19d",
+          "sha256": "e46fd01a2420f72f63b966a80fedf67979e3159c7236219ae528cdaea49e5686",
           "milestone": "notice"
         },
         "prepared": {
           "at": 5835,
           "round": 357,
-          "sha256": "b03114a9546b237f3d33dd4d0de9f99a83502281c67076218d10301a94744493",
+          "sha256": "4f07d5169aa40b230249778812b24f7e7451bc78045d05a7124b3035ac38f344",
           "milestone": "prepared"
         },
         "accepted": {
           "at": 6435,
           "round": 397,
-          "sha256": "845fe063c79e8590a0c512a554e2abc18567eece57bc2d4f2a0a55c0541ebf37",
+          "sha256": "6f9208fd7ff4ff49047fb9cdd520f192c8520cf8feb76f801f4e1a1d74861ddc",
           "milestone": "accepted"
         },
         "cartProgress": {
           "at": 7890,
           "round": 494,
-          "sha256": "9bb6c79ab6adc43425cc88d78526eecd6fbca394184ae9e1af43db90b52ddfcd",
+          "sha256": "7d45951b3be077d7a0e42a5ec5046254844f6985fc10bb7d3a3eee7824048d66",
           "milestone": "cartProgress"
         },
         "cartReturned": {
           "at": 15195,
           "round": 981,
-          "sha256": "20aeec0abd7bd6f50beb247bf33eacc475bfa27768990bd284dc73e246759ee1",
+          "sha256": "d738796b062512c554fc15dd9d1798620251a30e44750490d364533c82363d8e",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "33eb6c5a099bdbe94a943b656e2a84d3928580fe90714defad01b89ab011bcdf",
-      "wallSeconds": 62.948576124999995
+      "finalCheckpointSha256": "64b5ecfc7088545f0ebf592c1535184007555f3fd0dd56910206359b77dc07f1",
+      "wallSeconds": 80.78755470899999
     },
     {
       "seed": 9,
@@ -2838,36 +2839,36 @@
         "notice": {
           "at": 8355,
           "round": 525,
-          "sha256": "9f0a25377168dd827aa819ccaca164919b52279afad1fc236788c76c1638b801",
+          "sha256": "a7e341837a370152b8da86ef453797df9f249b133119fc77d00da44e04f5737b",
           "milestone": "notice"
         },
         "prepared": {
           "at": 8400,
           "round": 528,
-          "sha256": "8c396e7259d2305cb3fcea8f561e85786d904901d48c9f445f8b4f51f0362b61",
+          "sha256": "cf9b374f49a4cd963224bcc2dd0a3085fede68816f0bc26f68b16817e35ae4e7",
           "milestone": "prepared"
         },
         "accepted": {
           "at": 8475,
           "round": 533,
-          "sha256": "1a4d9ae9ac51d8f4951d036fb9086db90bfe7f7e5bc91aefb79cc727edb0c65a",
+          "sha256": "6a9e3bdfabf76c7abf4d7834360e3b122d5e976bff4334049c2290803cd6d584",
           "milestone": "accepted"
         },
         "cartProgress": {
           "at": 10740,
           "round": 684,
-          "sha256": "a1157d9db93e7ac64a1e8e5b04e63d2e41ed9c0374639eecf6bd0c4107c9937a",
+          "sha256": "66594b7fe918ac3803a17ee005d5889dda35f990071b92947c71d943c3257794",
           "milestone": "cartProgress"
         },
         "cartReturned": {
           "at": 15435,
           "round": 997,
-          "sha256": "a44a1945b003c01a36c045a17e0bf554e3dd2a759ceee30d44cd5a1024e871a5",
+          "sha256": "fede5ce659ebef456d39b1937d274ae9975fe6c3619a451c25f8fefb617532c0",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "2fc425983ccbb905a05ab9e42c0bf748681621ec3ca1c1ec749eb20d308f1854",
-      "wallSeconds": 62.18914595799999
+      "finalCheckpointSha256": "29e370677e3759161652af2cff157d0e9eb476f3c242aa5147bba74445491be6",
+      "wallSeconds": 68.26074437500002
     },
     {
       "seed": 101,
@@ -3585,37 +3586,37 @@
         "notice": {
           "at": 4275,
           "round": 253,
-          "sha256": "209a980d1addc17a43f72bb37491eedf2afceb252e2bbbf33658631ca0cc5cfc",
+          "sha256": "15bf46e64143416f10bd740034fbd019e1e8666815eef24988e73e606abfb036",
           "milestone": "notice"
         },
         "prepared": {
           "at": 4395,
           "round": 261,
-          "sha256": "63ca6e244045b08bb68dc575f835708f89f9b51705ccb8a0d985edb0eed04f86",
+          "sha256": "968da9945e089e3fccab5b0c1e7349d89948277ef918f51e6b759a8efcccabc2",
           "milestone": "prepared"
         },
         "cartProgress": {
           "at": 5040,
           "round": 304,
-          "sha256": "d8a09cc5792e8b6e9733dcbd2bf29353ddb7b87d1c2389d93a12f8280b664ff2",
+          "sha256": "46ace276402a891e8b8ee01a7b86bdcc8b6263c901e129fd7be54a5fcae448a7",
           "milestone": "cartProgress"
         },
         "accepted": {
           "at": 5385,
           "round": 327,
-          "sha256": "0f04a2c5a5404fc29d10d99c43eb0041c57d8a2a3752f185a6daee9e075c439c",
+          "sha256": "b847b5bdef6e92fb0fbdbbb0d0ac0e383966b283d93fcf8b746734534702d0b6",
           "milestone": "accepted"
         },
         "cartReturned": {
           "at": 8235,
           "round": 517,
-          "sha256": "d02e0702b8ee8a20ee22be130fbebe3ff09e0670737df4f1af52386797ac97d1",
+          "sha256": "313e72d80622fa8b5442597054a652f8389d12f8584bc82a268b830c99ec2b0e",
           "milestone": "cartReturned"
         }
       },
-      "finalCheckpointSha256": "733ee1724b6b77f3923b872d561b7380b608b3921d14f96d2a8e803ad455ba36",
-      "wallSeconds": 66.456307125
+      "finalCheckpointSha256": "79ce2e5f2b54f57db037d48ff43bda70fbcf8112dcf5fd105d3b7ec0c8256889",
+      "wallSeconds": 72.37222854100001
     }
   ],
-  "recordedAt": "2026-10-16T11:27:23.235471+00:00"
+  "recordedAt": "2026-10-16T11:44:44.854120+00:00"
 }

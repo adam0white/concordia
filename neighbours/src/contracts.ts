@@ -107,6 +107,7 @@ export interface TownView {
 	events: TownEvent[];
 	stories: {
 		id: string;
+		actorId?: string;
 		title: string;
 		summary: string;
 		eventIds: number[];

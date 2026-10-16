@@ -6,6 +6,7 @@ import { validateHandcart } from "./handcart.ts";
 import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
 import { Runtime } from "./runtime.ts";
 import { known, placeSpecs, type Save, SCHEMA } from "./state.ts";
+import { validateTownChronicle } from "./town-chronicle.ts";
 import { validateEvent, validateResidentEvidence } from "./validation.ts";
 export function restoreRuntime(input: unknown): TownRuntime {
 	if (!input || typeof input !== "object") throw Error("Invalid town save");
@@ -33,7 +34,12 @@ export function restoreRuntime(input: unknown): TownRuntime {
 	];
 	if (
 		Object.keys(s)
-			.filter((key) => key !== "socialEvenings" && key !== "handcart")
+			.filter(
+				(key) =>
+					key !== "socialEvenings" &&
+					key !== "handcart" &&
+					key !== "townChronicle",
+			)
 			.sort()
 			.join() !== keys.sort().join()
 	)
@@ -321,6 +327,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		throw Error("Invalid pending actors");
 	validateEvenings(s, ids);
 	validateHandcart(s, ids);
+	validateTownChronicle(s, ids);
 	for (const r of s.people) validateResidentEvidence(r, s, ids);
 	let last = 0;
 	for (const e of s.events) {

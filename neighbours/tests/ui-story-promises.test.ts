@@ -229,3 +229,45 @@ it("uses only a unique matching recorded evening result for attendance", () => {
 	const repair = storyTown();
 	expect(groupStories(repair, undefined)[0]?.participantIds).toEqual([]);
 });
+
+it("retains only explicit canonical story actors after source details are pruned", () => {
+	const town = storyTown();
+	town.events = [];
+	town.people = town.people.map((person) => ({
+		...person,
+		history: [],
+		observations: [],
+		inspection: undefined,
+	}));
+	const story = town.stories[0];
+	if (story) story.actorId = "ada";
+	expect(groupStories(town, undefined)[0]?.actorIds).toEqual(["ada"]);
+	if (story) story.actorId = "unknown-person";
+	expect(groupStories(town, undefined)[0]?.actorIds).toEqual([]);
+});
+
+it("renders six recent stories and keeps dated older actors and sources in a closed archive", async () => {
+	const { default: Stories } = await import("../src/ui/Stories");
+	const town = storyTown();
+	const stories = Array.from({ length: 8 }, (_, i) => ({
+		id: `record-${i}`,
+		title: `Recorded story ${i}`,
+		kind: "lesson",
+		at: 200 - i * 15,
+		actorIds: ["ada"],
+		participantIds: [],
+		summaries: ["Actual result"],
+		eventIds: [i],
+		missingEventIds: [],
+	}));
+	const html = renderToStaticMarkup(
+		createElement(Stories, { stories, town, select: () => {} }),
+	);
+	const archive = html.indexOf('<details class="story-archive">');
+	expect(archive).toBeGreaterThan(0);
+	expect(html.slice(0, archive).match(/<article/g)).toHaveLength(6);
+	expect(html.slice(archive)).toContain("Older stories · 2");
+	expect(html.slice(archive)).toContain("Day 1 · 01:50");
+	expect(html.slice(archive)).toContain("Follow Ada");
+	expect(html).not.toContain('<details class="story-archive" open');
+});

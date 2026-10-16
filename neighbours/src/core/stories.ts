@@ -1,5 +1,6 @@
 import type { TownEvent, TownView } from "../contracts.ts";
 import type { Save } from "./state.ts";
+import { CHRONICLE_KINDS } from "./town-chronicle.ts";
 
 function storyTitle(s: Save, e: TownEvent): string {
 	const evening = s.socialEvenings?.events.find(
@@ -40,20 +41,11 @@ export function townStories(s: Save): TownView["stories"] {
 		.filter((r) => r.known && r.inspection?.event)
 		.map((r) => r.inspection?.event)
 		.filter((event): event is TownEvent => !!event);
-	const events = new Map(
-		s.events
-			.filter((e) =>
-				[
-					"hall-open",
-					"hall-repaired",
-					"lesson",
-					"shared-meal",
-					"hall-explanation",
-					"missed-encounter",
-				].includes(e.kind),
-			)
-			.slice(-6)
-			.map((e) => [e.id, e]),
+	const events = new Map<number, TownEvent>(
+		[
+			...(s.townChronicle?.events ?? []),
+			...s.events.filter((e) => CHRONICLE_KINDS.has(e.kind)),
+		].map((e) => [e.id, e]),
 	);
 	for (const evening of s.socialEvenings?.events ?? []) {
 		const retained = evening.result ?? evening.notice;
@@ -65,6 +57,7 @@ export function townStories(s: Save): TownView["stories"] {
 	const visible = new Set(s.events.slice(-100).map((e) => e.id));
 	return [...events.values()]
 		.sort((a, b) => b.at - a.at || b.id - a.id)
+		.slice(0, 64)
 		.map((e) => {
 			const inspection = s.people.find(
 				(r) => r.inspection?.event?.id === e.id,
@@ -81,6 +74,7 @@ export function townStories(s: Save): TownView["stories"] {
 					: `${inspection ? ` Decision source: ${inspection.source}.` : ""}`;
 			return {
 				id: `story-${e.id}`,
+				...(e.actorId ? { actorId: e.actorId } : {}),
 				at: e.at,
 				groupId:
 					e.kind === "lesson"

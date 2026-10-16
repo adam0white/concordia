@@ -3,22 +3,17 @@ import Comparison from "./ui/Comparison";
 import DayComparison from "./ui/DayComparison";
 import ErrorMessage from "./ui/ErrorMessage";
 import EveningBoard from "./ui/EveningBoard";
-import {
-	clock,
-	datedClock,
-	initial,
-	metricLabel,
-	number,
-	placeName,
-} from "./ui/format";
+import { clock, initial, metricLabel, number, placeName } from "./ui/format";
 import HandcartCard from "./ui/HandcartCard";
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
 import { activityLabel, canAct } from "./ui/person-status";
 import SessionFooter from "./ui/SessionFooter";
+import Stories from "./ui/Stories";
 import StoryHeadline, { storyAnchor } from "./ui/StoryHeadline";
 import TownHealth from "./ui/TownHealth";
 import TownMap from "./ui/TownMap";
+import { useStoryWatch } from "./ui/useStoryWatch";
 import { useVisitorSession } from "./ui/useVisitorSession";
 
 export default function App() {
@@ -52,6 +47,14 @@ export default function App() {
 	} = session;
 	const [tab, setTab] = useState<"town" | "stories" | "inspector">("town");
 	const [storyFocus, setStoryFocus] = useState<{ id: string }>();
+	const [storyPersonFocus, setStoryPersonFocus] = useState<{ id: string }>();
+	useEffect(() => {
+		if (!storyPersonFocus || selected !== storyPersonFocus.id) return;
+		const panel = document.querySelector<HTMLElement>(".person-panel");
+		panel?.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
+		panel?.scrollIntoView({ block: "start", behavior: "instant" });
+		setStoryPersonFocus(undefined);
+	}, [storyPersonFocus, selected]);
 	useEffect(() => {
 		if (tab !== "stories" || !storyFocus) return;
 		const target = document.getElementById(storyAnchor(storyFocus.id));
@@ -66,6 +69,10 @@ export default function App() {
 		(p) => (p.id.includes("hall") || p.kind.includes("hall")) && p.open,
 	);
 	const stories = town ? groupStories(town, observed) : [];
+	const storyWatch = useStoryWatch(
+		{ playing, seed: town?.seed, now: town?.now, storyId: stories[0]?.id },
+		pause,
+	);
 	const familiarEvents = observed?.events ?? [];
 	const followedEvents = selected
 		? familiarEvents.filter(
@@ -165,6 +172,7 @@ export default function App() {
 							<button
 								type="button"
 								onClick={() => {
+									storyWatch.resetBaseline();
 									pause();
 									send({ type: "step" });
 								}}
@@ -189,6 +197,7 @@ export default function App() {
 					</div>
 					<StoryHeadline
 						story={stories[0]}
+						watch={storyWatch}
 						open={(id) => {
 							setTab("stories");
 							setStoryFocus({ id });
@@ -378,72 +387,14 @@ export default function App() {
 								id="town-info-panel"
 								aria-label="Town information"
 							>
-								{stories.map((s) => (
-									<article
-										className="event"
-										key={s.id}
-										id={storyAnchor(s.id)}
-										tabIndex={-1}
-									>
-										<span className="eyebrow">
-											{s.at === undefined
-												? s.kind
-												: `${datedClock(s.at)} · ${s.kind.replaceAll("-", " ")}`}
-										</span>
-										{s.actorIds.length > 0 && (
-											<p className="story-people tiny muted">
-												{s.actorIds.length === 1
-													? "Recorded actor: "
-													: "Recorded people: "}
-												{s.actorIds
-													.map(
-														(id) =>
-															town.people.find((person) => person.id === id)
-																?.name,
-													)
-													.filter(Boolean)
-													.join(", ")}
-											</p>
-										)}
-										{s.participantIds.length > 0 && (
-											<p className="story-people tiny muted">
-												Recorded participants:{" "}
-												{s.participantIds
-													.map(
-														(id) =>
-															town.people.find((person) => person.id === id)
-																?.name,
-													)
-													.filter(Boolean)
-													.join(", ")}
-											</p>
-										)}
-										<h3>{s.title}</h3>
-										<p>
-											{s.summaries.length === 1
-												? s.summaries[0]
-												: `${s.summaries.length} recorded outcomes from the same class.`}
-										</p>
-										{s.summaries.length > 1 && (
-											<details>
-												<summary>Recorded outcomes</summary>
-												{s.summaries.map((summary) => (
-													<p key={summary}>{summary}</p>
-												))}
-											</details>
-										)}
-										<details className="story-sources">
-											<summary>
-												Sources · {s.eventIds.length} linked events
-											</summary>
-											<p className="tiny muted">
-												{s.missingEventIds.length
-													? `${s.missingEventIds.length} older event details pruned from the current packet.`
-													: "Linked event details remain in the current packet."}
-											</p>
-										</details>
-									</article>
-								))}
+								<Stories
+									stories={stories}
+									town={town}
+									select={(id) => {
+										setSelected(id);
+										setStoryPersonFocus({ id });
+									}}
+								/>
 								{!stories.length && (
 									<p className="muted">
 										Stories will appear when the town’s recorded events form a
@@ -475,6 +426,7 @@ export default function App() {
 										className="seed-form"
 										onSubmit={(e) => {
 											e.preventDefault();
+											storyWatch.resetBaseline();
 											startTown();
 										}}
 									>
@@ -651,7 +603,17 @@ export default function App() {
 							</button>
 						</div>
 					)}
-					<SessionFooter {...session} />
+					<SessionFooter
+						{...session}
+						importSave={(file) => {
+							storyWatch.resetBaseline();
+							return session.importSave(file);
+						}}
+						restoreSave={(slot) => {
+							storyWatch.resetBaseline();
+							session.restoreSave(slot);
+						}}
+					/>
 				</>
 			)}
 		</div>

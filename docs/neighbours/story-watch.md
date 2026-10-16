@@ -1,0 +1,22 @@
+# Retained stories and optional pauses
+
+Task: `nbh-01z.34`. Technical acceptance is a retained, dated observer history with checked restore/continuation, ordinary continuous playback, optional single story stops, accessible older records, independent review and public delivery. Adam accepts feel separately.
+
+The core retains a bounded journal of actual consequential events. It supplies existing story records with their original time and optional canonical direct actor. The UI uses those records; it does not classify new events or infer past events from current state. Canonical actor metadata can survive pruned source details. A received bulletin or causal ancestor does not establish participation.
+
+Stories shows six recent grouped records. A native closed Older stories disclosure keeps the rest in the same panel, with dates, recorded sources and actual person links. The existing headline opens and focuses its story.
+
+The native Pause on new stories checkbox appears only beside a real headline. It starts off for each visit. Enabling it establishes the current baseline. Only a different latest grouped story ID across uninterrupted forward playback calls the existing pause callback, which also requests a checkpoint. It retains the chosen playback speed. A small status explains the stop. Resuming retains the same story baseline, preventing repeated stops for a held headline.
+
+Paused updates, initial loading, play transitions, seed changes and time rewinds establish baselines. Explicit Step, import, device restore and new-town actions clear the baseline and old explanation, including an identical-world import. The session persistence/request protocol stays in its existing hook.
+
+Verification covers the watch transition boundaries, canonical actor retention, six recent records and closed archive rendering. Actual browser coverage uses genuine engine progression, exact-world import, disabled continuous play, keyboard archive/follow links, mobile access and reload. Core restore, boundedness and unchanged choices are checked separately by the core agent.
+
+Checked 2026-10-16 with Node 26.12.0: strict lint, all three typechecks, 207 unit tests and production build pass. All eleven real-WASM Chromium tests pass on the corrected source (1.6 minutes). The new scenario stops at an actual Day 2 repair headline, keeps 10×, imports that exact save without retaining the explanation, continues with the option off, and opens the first teaching story from Day 1 in the older archive on Day 3. Keyboard and 390px touch access and reload defaults pass. Screenshots are `/tmp/neighbours-chronicle-stop-desktop.png` and `/tmp/neighbours-chronicle-mobile.png`. Immutable UI review build: port 5294, `/tmp/neighbours-chronicle-preview.C3eoT1`. Public delivery is recorded in HANDOFF.md; this record does not claim owner feel acceptance.
+
+Independent Sol core and UI reviewers found no concrete defect. A focused Opus review raised one pending-worker-round edge case that reproduced: a same-story forward tick after the stop cleared its explanation. The watch now keeps that explanation across monotonic paused updates and clears on resume, rewind or explicit manual/replacement reset. A red-green transition test checks the pending tick and a rewind still later than the original stop. Strict checks now pass with 207 unit tests.
+
+The source-unread visitor also reproduced an older-story Follow action that changed the person above the viewport but left keyboard focus below it. Story Follow now focuses the selected person's name heading and scrolls the panel into view after rendering. Map and roster selection remain unchanged. The corrected immutable review preview is port 5295, `/tmp/neighbours-chronicle-reviewed.Bmi5vb`; the earlier port 5294 stays intact. Browser regression asserts focused person heading and on-screen Close after desktop keyboard and mobile touch Follow.
+
+
+At the genuine Day 6 cart-return checkpoint (minute 8205), the journal retains eleven events in 2,682 compact JSON bytes; six are already outside the live feed. The first teaching remains at minute 570. The bound is 128 journal events and 64 story records, so this is retained history rather than an unlimited archive. Imports without the field start recording future events and do not fabricate missing history.

@@ -91,7 +91,7 @@ export function groupStories(
 		if (at !== undefined) group.at = Math.max(group.at ?? at, at);
 		// Only direct actors/targets on matching story events count. Causal
 		// ancestry can include earlier repairs and is not an attendance list.
-		for (const id of [source?.actorId, source?.targetId])
+		for (const id of [story.actorId, source?.actorId, source?.targetId])
 			if (
 				id &&
 				town.people.some((person) => person.id === id) &&
