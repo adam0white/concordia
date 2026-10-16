@@ -9,6 +9,8 @@ export interface TownChronicle {
 export const TOWN_CHRONICLE_LIMIT = 128;
 /** Inspection failures remain in the current inspection record, rather than filling history. */
 export const CHRONICLE_KINDS: ReadonlySet<string> = new Set([
+	"annex-observed",
+	"annex-inspected",
 	"hall-repaired",
 	"hall-open",
 	"lesson",
@@ -60,6 +62,8 @@ export function validateTownChronicle(s: Save, ids: Set<string>): void {
 		throw Error("Invalid town chronicle");
 	const canonical = [
 		...s.events,
+		...(s.assistance?.visit ? [s.assistance.visit] : []),
+		...(s.assistance?.result ? [s.assistance.result] : []),
 		...s.people.flatMap((r) =>
 			r.inspection?.event ? [r.inspection.event] : [],
 		),

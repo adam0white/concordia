@@ -10,20 +10,27 @@ if (!reports.length)
 	reports.push(
 		"public/experiments/social-episodes.json",
 		"public/experiments/cart-choice-probe.json",
+		"public/experiments/hf-config.json",
 	);
 for (const reportPath of reports) {
 	const report = JSON.parse(readFileSync(resolve(app, reportPath), "utf8"));
 	assert(
-		["neighbours/evening-profile@1", "neighbours/cart-choice-probe@1"].includes(
-			report.schema,
-		),
+		[
+			"neighbours/evening-profile@1",
+			"neighbours/cart-choice-probe@1",
+			"neighbours/hf-config-probe@1",
+		].includes(report.schema),
 		"Unknown evidence schema",
 	);
 	assert(
 		report.sources && Object.keys(report.sources).length > 5,
 		"Missing evidence source digests",
 	);
-	if (report.schema === "neighbours/evening-profile@1")
+	if (
+		["neighbours/evening-profile@1", "neighbours/hf-config-probe@1"].includes(
+			report.schema,
+		)
+	)
 		assert.equal(
 			report.sourcesStableDuringRun,
 			true,

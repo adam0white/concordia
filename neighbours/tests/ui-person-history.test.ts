@@ -114,7 +114,7 @@ it("renders outcomes before folded routine activity and preserves raw IDs and ev
 	expect(history).toContain("#3 · completed");
 	expect(history).not.toContain("<details open");
 });
-it("explains missing source detail without claiming the retained outcome disappeared", () => {
+it("retains the story outcome without empty source explanations or raw event IDs", () => {
 	const { town } = fixture();
 	const html = renderToStaticMarkup(
 		createElement(Stories, {
@@ -135,9 +135,9 @@ it("explains missing source detail without claiming the retained outcome disappe
 			],
 		}),
 	);
-	expect(html).toContain(
-		"Earlier detail is no longer retained; the dated outcome is retained.",
-	);
-	expect(html).toContain("#2, #9");
+	expect(html).not.toContain("Earlier detail is no longer retained");
+	expect(html).not.toContain("Source event IDs:");
+	expect(html).not.toContain("#2, #9");
+	expect(html).toContain("The room was never prepared.");
 	expect(html).not.toContain("packet");
 });

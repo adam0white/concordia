@@ -7,6 +7,10 @@ const numeric = (value: number) =>
 	Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
 const names: Record<string, string> = {
 	hallRepairs: "Hall repairs completed",
+	hallCapacity: "Hall places available",
+	inspectionRequests: "Annex requests sent",
+	annexOpened: "Annex opened",
+	interventionsSpent: "Support credits spent",
 	hallSafe: "Hall safe for use",
 	tools: "Shared tools available",
 	totalTools: "Tools owned, including in use",
@@ -25,6 +29,7 @@ const names: Record<string, string> = {
 };
 const interventions: Record<Intervention["kind"], string> = {
 	"lend-tools": "Add 3 shared tools",
+	"request-inspection": "Request an annex inspection",
 	"restore-bus": "Restore bus service",
 	"share-news": "Broadcast hall news",
 	"open-evening-slot": "Open a second hall evening",

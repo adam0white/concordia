@@ -66,17 +66,6 @@ function StoryCard({
 					))}
 				</details>
 			)}
-			<details className="story-sources">
-				<summary>Sources · {s.eventIds.length} linked events</summary>
-				<p className="tiny muted">
-					{s.missingEventIds.length
-						? "Earlier detail is no longer retained; the dated outcome is retained."
-						: "Linked event details remain available."}
-				</p>
-				<p className="tiny muted">
-					Source event IDs: {s.eventIds.map((id) => `#${id}`).join(", ")}
-				</p>
-			</details>
 		</article>
 	);
 }

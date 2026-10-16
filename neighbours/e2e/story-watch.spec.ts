@@ -8,10 +8,10 @@ test("actual town offers optional story stops and keyboard/mobile access to reta
 	page,
 }, info) => {
 	await page.goto("/");
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	const play = page.getByRole("button", { name: "Play town", exact: true });
 	const pause = page.getByRole("button", { name: "Pause town", exact: true });
-	await expect(pause).toBeVisible();
-	await pause.click();
+	await expect(play).toBeVisible();
 	const speed = page.getByRole("combobox", { name: "Playback speed" });
 	await speed.selectOption("120");
 	const headline = page.locator(".story-headline");
@@ -23,12 +23,9 @@ test("actual town offers optional story stops and keyboard/mobile access to reta
 		await expect(watch).toHaveCount(0);
 		await play.click();
 		await expect(headline).toBeVisible();
-		await expect(pause).toBeVisible();
-		await pause.click();
+		await expect(stopped).toBeVisible();
 	}
-	await expect(watch).not.toBeChecked();
-	await watch.check();
-	await expect(stopped).toHaveCount(0);
+	await expect(watch).toBeChecked();
 	await page.getByRole("button", { name: "Advance one round" }).click();
 	await expect(stopped).toHaveCount(0);
 	await play.click();
@@ -103,7 +100,8 @@ test("actual town offers optional story stops and keyboard/mobile access to reta
 		fullPage: true,
 	});
 	await page.reload();
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(play).toBeVisible();
-	await expect(watch).not.toBeChecked();
+	await expect(watch).toBeChecked();
 	await expect(stopped).toHaveCount(0);
 });

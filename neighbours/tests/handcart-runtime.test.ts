@@ -127,6 +127,10 @@ function completeProduction(
 it("a returned cart adds one unit only on Jo's completed supply trip and restores exactly", () => {
 	const r = setup();
 	expect(r.s.handcart?.handover).toBeUndefined();
+	expect(r.view().handcart?.completedAt).toBe(
+		r.s.handcart?.work.at(-1)?.endedAt,
+	);
+	expect(r.view().handcart?.returnedAt).toBeUndefined();
 	completeProduction(r, "jo", 5);
 	until(
 		r,
@@ -137,6 +141,8 @@ it("a returned cart adds one unit only on Jo's completed supply trip and restore
 	const returned = r.s.handcart?.handover;
 	assert(returned);
 	expect(returned.kind).toBe("cart-returned");
+	expect(r.view().handcart?.returnedAt).toBe(returned.at);
+	expect(r.view().handcart?.completedAt).toBeLessThan(returned.at);
 	expect(r.actor("jo").received?.some((e) => e.id === returned.id)).toBe(true);
 	conserved(r);
 	const copy = restoreRuntime(r.export()) as Runtime;

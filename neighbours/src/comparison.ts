@@ -9,6 +9,9 @@ function project(view: TownView): TownComparison["baseline"] {
 	return {
 		stats: {
 			...view.stats,
+			hallCapacity: view.places.find((p) => p.id === "hall")?.capacity ?? 0,
+			inspectionRequests: view.assistance ? 1 : 0,
+			annexOpened: view.assistance?.opened ? 1 : 0,
 			availableFood: view.places.reduce((n, p) => n + p.stock, 0),
 			totalKnownWealth: known.reduce((n, p) => n + p.wealth, 0),
 		},
@@ -35,6 +38,7 @@ export async function compareTown(
 			"share-news",
 			"open-evening-slot",
 			"advertise-evening",
+			"request-inspection",
 		].includes(intervention.kind)
 	)
 		throw Error("Unknown comparison intervention");

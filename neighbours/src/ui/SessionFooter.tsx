@@ -29,9 +29,9 @@ export default function SessionFooter({
 }: Props) {
 	const file = useRef<HTMLInputElement>(null);
 	return (
-		<footer>
+		<footer className="session-footer">
 			<span>Neighbours · A live town, on your device.</span>
-			<div>
+			<div className="session-actions">
 				<span className="save-status">{saved}</span>
 				{hasPrevious && (
 					<button
@@ -75,7 +75,7 @@ export default function SessionFooter({
 					disabled={comparing || saveConflict}
 					type="file"
 					accept="application/json,application/gzip,.json,.gz"
-					className="sr-only"
+					hidden
 					aria-label="Import town save"
 					onChange={async (e) => {
 						const input = e.currentTarget;

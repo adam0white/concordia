@@ -24,7 +24,16 @@ export interface PlaceView {
 	reserved?: number;
 	description: string;
 }
+export type ProposalOrigin =
+	| { kind: "authored" }
+	| {
+			kind: "recorded-gm";
+			recordedAt: string;
+			sourceFingerprint: string;
+			modelIds: string[];
+	  };
 export interface PersonView {
+	canReceiveInspectionRequest?: boolean;
 	id: string;
 	name: string;
 	role: string;
@@ -88,6 +97,8 @@ export interface PersonView {
 		status: "heard" | "accepted" | "declined" | "attended" | "missed";
 	}[];
 	decision?: {
+		offeredCount?: number;
+		recordedCount?: number;
 		decidedAt?: number;
 		round?: number;
 		chosen: string;
@@ -98,6 +109,21 @@ export interface PersonView {
 	};
 }
 export interface TownView {
+	assistance?: {
+		origin: ProposalOrigin;
+		decisionSource?: string;
+		methodTerms?: { source: string; value: number }[];
+		decisionId?: string;
+		actorId: string;
+		expiresAt: number;
+		received: boolean;
+		visitedAt?: number;
+		opened: boolean;
+		action?: string;
+		result?: TownEvent;
+		request: TownEvent;
+		cue: string;
+	};
 	schema: string;
 	seed: number;
 	now: number;
@@ -124,6 +150,9 @@ export interface TownView {
 	}[];
 	weather: string;
 	controlsRemaining: number;
+	canShareNews?: boolean;
+	canLendTools?: boolean;
+	canRestoreBus?: boolean;
 	metrics: Record<string, number>;
 	evenings?: {
 		id: string;
@@ -143,6 +172,9 @@ export interface TownView {
 		canOpenSlot?: boolean;
 		canAdvertise?: boolean;
 		advertised?: boolean;
+		advertisementReceipt?: TownEvent;
+		roomReserved?: boolean;
+		roomReservedBy?: string;
 		originalStartsAt?: number;
 		slotReceipt?: TownEvent;
 	}[];
@@ -159,13 +191,18 @@ export interface TownView {
 		progress: number;
 		total: number;
 		returned: boolean;
+		completedAt?: number;
+		returnedAt?: number;
 		bench?: { from: number; until: number };
 		latest?: TownEvent;
 		requests: number;
 	};
 }
 export interface Intervention {
+	proposal?: unknown;
+	proposalOrigin?: ProposalOrigin;
 	kind:
+		| "request-inspection"
 		| "restore-bus"
 		| "lend-tools"
 		| "share-news"

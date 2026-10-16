@@ -216,6 +216,10 @@ describe("scarce player influence", () => {
 		delete meal.replies.musa;
 		host.intervene({ kind: "advertise-evening", eventId: meal.id });
 		expect(host.s.controls).toBe(3);
+		expect(host.view().evenings?.find((e) => e.id === meal.id)).toMatchObject({
+			advertisementReceipt: meal.advertisement,
+			roomReserved: false,
+		});
 		expect(meal.advertisement).toMatchObject({
 			source: "town-bulletin",
 			causes: [meal.notice?.id],
@@ -393,7 +397,11 @@ it("restores beyond a full programme after HF prunes old closed promises", () =>
 }, 30000);
 
 function exhaustOriginalControls(host: Runtime) {
+	// Model tools lent before the repairs finished, then resume the completed hall.
+	const hall = host.s.hall;
+	host.s.hall = 0;
 	for (let i = 0; i < 3; i++) host.intervene({ kind: "lend-tools" });
+	host.s.hall = hall;
 	expect(host.s.controls).toBe(0);
 }
 

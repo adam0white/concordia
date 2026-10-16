@@ -75,6 +75,11 @@ export type Place = {
 	reserved: number;
 };
 export type Job = {
+	assistanceDecision?: {
+		id: string;
+		source: string;
+		methodTerms: { source: string; value: number }[];
+	};
 	offer: Affordance;
 	end: number;
 	arrive: number;
@@ -125,6 +130,7 @@ export type Resident = {
 	};
 };
 export type Save = {
+	assistance?: import("./assistance.ts").Assistance;
 	/** Observer history begins with the next selected event, including in legacy saves. */
 	townChronicle?: TownChronicle;
 	schema: string;

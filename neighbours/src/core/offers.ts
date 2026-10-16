@@ -1,4 +1,5 @@
 import { hallInspectionOffers } from "../experiments/inspection.ts";
+import { assistanceOffers } from "./assistance.ts";
 import {
 	inspectionKey,
 	presentAt,
@@ -367,6 +368,7 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 		...ordinary.filter((offer) => historical || !blocksMainBench(s, id, offer)),
 		...eveningOffers(s, r, historical),
 		...handcartOffers(s, r, historical),
+		...assistanceOffers(s, r, historical),
 	];
 }
 

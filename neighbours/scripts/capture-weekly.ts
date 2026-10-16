@@ -12,8 +12,10 @@ import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 
 type Packet = { schema: string; rounds: number; runtime: Save };
-export function captureWeekly() {
-	const host = new Runtime(createRuntime(42, 8).export() as Save);
+export function captureWeekly(exhaustOriginal = false, seed = 42) {
+	const host = new Runtime(createRuntime(seed, 8).export() as Save);
+	if (exhaustOriginal)
+		for (let i = 0; i < 3; i++) host.intervene({ kind: "lend-tools" });
 	let candidate: Packet | undefined;
 	for (let round = 0; round < 96 * 40; round++) {
 		host.step();
@@ -49,7 +51,14 @@ if (
 	if (!process.argv.includes("--output-directory") || !directory)
 		throw Error("Use --output-directory PATH");
 	mkdirSync(directory, { recursive: true });
-	for (const [name, packet] of Object.entries(captureWeekly())) {
+	for (const [name, packet] of Object.entries(
+		captureWeekly(
+			false,
+			process.argv.includes("--seed")
+				? Number(process.argv[process.argv.indexOf("--seed") + 1])
+				: 42,
+		),
+	)) {
 		writeFileSync(
 			resolve(directory, `${name}.json`),
 			`${JSON.stringify(packet)}\n`,

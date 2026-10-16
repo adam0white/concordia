@@ -40,8 +40,8 @@ export default function HallChoices({
 			</p>
 			{schedule && (
 				<p className="tiny muted">
-					{schedule.cyclesCompleted} of {schedule.cyclesLimit} recurring weeks
-					finished · {schedule.weeklyDeliveredMeals} meals received ·{" "}
+					Hall programme · {schedule.cyclesCompleted} of {schedule.cyclesLimit}{" "}
+					weeks finished · {schedule.weeklyDeliveredMeals} meals received ·{" "}
 					{schedule.weeklyDeliveredClasses} lessons received.
 					{!opportunities.length && schedule.nextStartsAt !== undefined
 						? ` Next opportunity: ${datedClock(schedule.nextStartsAt)}.`

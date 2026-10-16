@@ -108,9 +108,9 @@ PYTHON=../.venv/bin/python npm run test:parity -- --checkpoint-directory /tmp/to
 node scripts/probe-cart-choices.ts /tmp/town-milestones/seed-42-first-prepared.json /tmp/cart-choices.json
 ```
 
-The choice probe finds a real idle Ravi/Ada workshop opportunity with both asking and side-bench work feasible. It records the actual considered subset and removes only Ravi's cart goal in a separate branch. Its second comparison supplies hypothetical fast access as a matched offer pair; it does not pretend an agreement occurred. No input packet or fabricated grant is imported into the visitor's live town.
+The choice probe finds a real idle Ravi/Ada workshop opportunity with both asking and side-bench work feasible. It records the recorded top-ranked alternatives and removes only Ravi's cart goal in a separate branch. Its second comparison supplies hypothetical fast access as a matched offer pair; it does not pretend an agreement occurred. No input packet or fabricated grant is imported into the visitor's live town.
 
-In the measured opportunity, Ravi chose side-bench work and did not consider the request. Goal ablation changed his choice to paid work. The hypothetical fast/slow pair had identical immediate terms despite different durations. These are narrow representation findings. They do not establish rational anticipation, autonomous negotiation, or a generic planner defect.
+In the measured opportunity, Ravi chose side-bench work; the request did not appear in the retained top-ranked alternatives. HF scored every supplied offer, so this does not establish a failure to evaluate asking. Goal ablation changed his choice to paid work. The hypothetical fast/slow pair had identical immediate terms despite different durations. These are narrow representation findings. They do not establish rational anticipation, autonomous negotiation, or a generic planner defect.
 
 
 ## Next candidate: received learning changes who can help

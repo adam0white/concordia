@@ -55,7 +55,7 @@ export function useStoryWatch(
 	input: Omit<StoryWatchInput, "enabled">,
 	pause: () => void,
 ) {
-	const [enabled, setEnabled] = useState(false);
+	const [enabled, setEnabled] = useState(true);
 	const [pausedFor, setPausedFor] = useState<StoryStop>();
 	const previous = useRef<StoryWatchState | undefined>(undefined);
 	const { playing, seed, now, storyId } = input;

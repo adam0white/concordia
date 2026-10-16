@@ -3,6 +3,8 @@ import type { TownEvent } from "../contracts.ts";
 import type { Resident, Save } from "./state.ts";
 
 const EVENT_KINDS = new Set([
+	"annex-observed",
+	"annex-inspected",
 	"cart-observed",
 	"bench-work",
 	"bench-request",
@@ -254,6 +256,8 @@ export function validateResidentEvidence(
 			"source",
 			"decidedAt",
 			"round",
+			"offeredCount",
+			"recordedCount",
 		]);
 		if (
 			!text(d.chosen, 200) ||
@@ -274,6 +278,17 @@ export function validateResidentEvidence(
 			)
 		)
 			throw Error("Invalid decision evidence");
+		if (
+			(d.offeredCount !== undefined || d.recordedCount !== undefined) &&
+			(d.source !== "HF 2.2.1" ||
+				!Number.isSafeInteger(d.offeredCount) ||
+				!Number.isSafeInteger(d.recordedCount) ||
+				Number(d.offeredCount) < 1 ||
+				Number(d.offeredCount) > 1000 ||
+				Number(d.recordedCount) !== d.options.length ||
+				Number(d.recordedCount) > Number(d.offeredCount))
+		)
+			throw Error("Invalid recorded option counts");
 		if (
 			d.source === "HF 2.2.1" &&
 			!r.person.trace.some(

@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
 import { createRuntime, restoreRuntime, stateHash } from "../src/core";
+import { Runtime } from "../src/core/runtime.ts";
+import type { Save } from "../src/core/state.ts";
 
 describe("physical town", () => {
 	it("has 208 brains and defers consequences", () => {
@@ -71,4 +73,72 @@ it("restores a checkpoint between choosing and applying", () => {
 		b.apply(id, b.choose(id));
 	}
 	expect(stateHash(a.export())).toBe(stateHash(b.export()));
+});
+
+it("does not spend allowance or tell stale hall news after repairs finish", () => {
+	const runtime = new Runtime(createRuntime(42, 8).export() as Save);
+	expect(runtime.view().canShareNews).toBe(true);
+	runtime.s.hall = 12;
+	const before = stateHash(runtime.export());
+	expect(runtime.view().canShareNews).toBe(false);
+	expect(() => runtime.intervene({ kind: "share-news" })).toThrow(
+		"Hall repairs are complete",
+	);
+	expect(stateHash(runtime.export())).toBe(before);
+	runtime.s.hallSafe = true;
+	expect(runtime.view().canShareNews).toBe(false);
+	expect(() => runtime.intervene({ kind: "share-news" })).toThrow(
+		"Hall repairs are complete",
+	);
+});
+
+it("does not spend allowance lending tools with no hall repair work remaining", () => {
+	const runtime = new Runtime(createRuntime(42, 8).export() as Save);
+	expect(runtime.view().canLendTools).toBe(true);
+	runtime.s.hall = 12;
+	const before = stateHash(runtime.export());
+	expect(runtime.view().canLendTools).toBe(false);
+	expect(() => runtime.intervene({ kind: "lend-tools" })).toThrow(
+		"Hall repairs are complete",
+	);
+	expect(stateHash(runtime.export())).toBe(before);
+});
+it("does not share hall news or spend allowance when no living listener is awake", () => {
+	const runtime = new Runtime(createRuntime(42, 8).export() as Save);
+	for (const r of runtime.s.people) r.person.body.asleep = true;
+	const before = stateHash(runtime.export());
+	expect(runtime.view().canShareNews).toBe(false);
+	expect(() => runtime.intervene({ kind: "share-news" })).toThrow(
+		"No awake neighbours",
+	);
+	expect(stateHash(runtime.export())).toBe(before);
+	runtime.actor("ada").person.body.asleep = false;
+	runtime.actor("ada").person.body.alive = false;
+	expect(runtime.view().canShareNews).toBe(false);
+	runtime.actor("ada").person.body.alive = true;
+	expect(runtime.view().canShareNews).toBe(true);
+});
+it("excludes a sleeping activity from both hall-news eligibility and delivery", () => {
+	const runtime = new Runtime(createRuntime(42, 8).export() as Save);
+	runtime.actor("ada").place = "homes";
+	for (const id of runtime.prepareRound())
+		runtime.apply(id, id === "ada" ? "sleep" : "rest");
+	for (const r of runtime.s.people) r.person.body.asleep = true;
+	runtime.actor("ada").person.body.asleep = false;
+	expect(runtime.actor("ada").job?.offer.mode).toBe("sleep");
+	const before = stateHash(runtime.export());
+	expect(runtime.view().canShareNews).toBe(false);
+	expect(() => runtime.intervene({ kind: "share-news" })).toThrow(
+		"No awake neighbours",
+	);
+	expect(stateHash(runtime.export())).toBe(before);
+	runtime.actor("lea").person.body.asleep = false;
+	const adaBefore = structuredClone(runtime.actor("ada").person);
+	expect(runtime.view().canShareNews).toBe(true);
+	runtime.intervene({ kind: "share-news" });
+	expect(runtime.actor("ada").person).toEqual(adaBefore);
+	expect(
+		runtime.actor("ada").received?.some((e) => e.source === "town-bulletin"),
+	).not.toBe(true);
+	expect(runtime.s.controls).toBe(2);
 });

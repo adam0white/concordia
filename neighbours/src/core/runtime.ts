@@ -26,6 +26,13 @@ import {
 	teachHallInspection,
 } from "../experiments/inspection.ts";
 import { reviewDue, reviewOffers } from "./activity-reviews.ts";
+import {
+	assistanceDecision,
+	canReceiveInspectionRequest,
+	finishAssistance,
+	observeAssistance,
+	requestInspection,
+} from "./assistance.ts";
 import { townDiagnostics } from "./diagnostics.ts";
 import {
 	inspectionKey,
@@ -45,6 +52,7 @@ import {
 	interruptEvening,
 	interveneEvening,
 	MAX_EVENING_CYCLES,
+	roomBooking,
 	updateEvenings,
 	weeklySupportRemaining,
 } from "./evenings.ts";
@@ -69,6 +77,17 @@ import { known, type Save, SCHEMA } from "./state.ts";
 import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
 import { recordTownEvent } from "./town-chronicle.ts";
+
+function awakeHallNewsListener(r: Save["people"][number]): boolean {
+	return (
+		r.person.body.alive &&
+		!r.person.body.asleep &&
+		r.job?.offer.mode !== "sleep"
+	);
+}
+export function canShareHallNews(s: Save): boolean {
+	return s.hall < 12 && s.people.some(awakeHallNewsListener);
+}
 export class Runtime implements TownRuntime {
 	s: Save;
 	records = new Map<string, DecisionRecord>();
@@ -278,6 +297,7 @@ export class Runtime implements TownRuntime {
 				r.place = p.id;
 				const evening = finishEvening(this, r);
 				const cart = finishHandcart(this, r);
+				const assistance = finishAssistance(this, r);
 				this.s.tools += j.tools;
 				if (j.food) {
 					if (evening.handled && !evening.delivered) {
@@ -313,7 +333,7 @@ export class Runtime implements TownRuntime {
 						);
 				}
 
-				if (j.offer.action === "open-section") {
+				if (j.offer.action === "open-section" && !assistance) {
 					const safe = this.weather() === "Clear" && this.s.hall >= 12;
 					this.s.hallSafe = safe;
 					inspectionEvent = this.event(
@@ -326,7 +346,7 @@ export class Runtime implements TownRuntime {
 						[j.event],
 					);
 				}
-				if (j.offer.action === "keep-closed") {
+				if (j.offer.action === "keep-closed" && !assistance) {
 					this.s.hallSafe = false;
 					inspectionEvent = this.event(
 						"hall-closed",
@@ -505,7 +525,8 @@ export class Runtime implements TownRuntime {
 							overlapMinutes(j, o, this.s.now) >= 15,
 					).length;
 				const status =
-					(j.offer.action === "open-section" && !this.s.hallSafe) ||
+					(j.offer.action === "open-section" &&
+						!(assistance ? this.s.assistance?.opened : this.s.hallSafe)) ||
 					(evening.handled && !evening.delivered) ||
 					(cart.handled && !cart.delivered)
 						? ("failed" as const)
@@ -689,6 +710,7 @@ export class Runtime implements TownRuntime {
 				moisture: this.weather() === "Clear" ? "dry" : "wet",
 				support: this.s.hall >= 12 ? "sound" : "loose",
 			});
+		observeAssistance(this.s, r);
 		const choices = this.affordances(id).map((offer) =>
 			socialPreview(this.s, id, offer),
 		);
@@ -780,6 +802,12 @@ export class Runtime implements TownRuntime {
 				utility: c.utility,
 			})),
 			source: policy === "hf" ? "HF 2.2.1" : policy,
+			...(hfRecord
+				? {
+						offeredCount: choices.length,
+						recordedCount: hfRecord.considered.length,
+					}
+				: {}),
 		};
 		return chosen;
 	}
@@ -912,9 +940,11 @@ export class Runtime implements TownRuntime {
 			),
 			food,
 			tools,
-			...(["open-section", "keep-closed", "ask-inspector"].includes(
-				offer.action,
-			)
+			...(offer.targetId === "hall-annex" && offer.id !== "annex-visit"
+				? { assistanceDecision: assistanceDecision(r, selected) }
+				: {}),
+			...(offer.targetId !== "hall-annex" &&
+			["open-section", "keep-closed", "ask-inspector"].includes(offer.action)
 				? {
 						inspectionCues: {
 							moisture: this.weather() === "Clear" ? "dry" : "wet",
@@ -924,7 +954,8 @@ export class Runtime implements TownRuntime {
 				: {}),
 		};
 		beginEvening(this.s, r);
-		if (offer.action === "ask-inspector") this.postQuestion(id, r.job.event);
+		if (offer.action === "ask-inspector" && offer.targetId !== "hall-annex")
+			this.postQuestion(id, r.job.event);
 		this.s.pending = this.s.pending.filter((a) => a !== id);
 	}
 	weather() {
@@ -933,6 +964,15 @@ export class Runtime implements TownRuntime {
 			: "Clear";
 	}
 	intervene(input: Intervention) {
+		if (input.kind === "request-inspection") {
+			requestInspection(
+				this,
+				input.actorId,
+				input.proposal,
+				input.proposalOrigin,
+			);
+			return;
+		}
 		if (
 			input.kind === "open-evening-slot" ||
 			input.kind === "advertise-evening"
@@ -945,6 +985,12 @@ export class Runtime implements TownRuntime {
 			throw Error("Unknown intervention");
 		if (input.kind === "restore-bus" && this.s.bus)
 			throw Error("Bus already restored");
+		if (["share-news", "lend-tools"].includes(input.kind) && this.s.hall >= 12)
+			throw Error(
+				"Hall repairs are complete; repair news and extra tools are no longer needed",
+			);
+		if (input.kind === "share-news" && !canShareHallNews(this.s))
+			throw Error("No awake neighbours can hear the hall news");
 		this.s.controls--;
 		if (input.kind === "restore-bus") this.s.bus = true;
 		if (input.kind === "lend-tools") this.s.tools += 3;
@@ -962,7 +1008,7 @@ export class Runtime implements TownRuntime {
 			event.source = "town-bulletin";
 			for (const r of this.s.people) {
 				// This spoken bulletin is delivered to waking listeners; HF owns attention.
-				if (!r.person.body.alive || r.person.body.asleep) continue;
+				if (!awakeHallNewsListener(r)) continue;
 				const attended = perceive(r.person, [
 					{
 						at: this.s.now,
@@ -1018,6 +1064,7 @@ export class Runtime implements TownRuntime {
 				role: r.role,
 				description: r.description,
 				color: r.known ? "#bf784c" : "#82998e",
+				canReceiveInspectionRequest: canReceiveInspectionRequest(r),
 				policy: r.policy,
 				placeId:
 					r.job && this.s.now >= r.job.arrive
@@ -1173,6 +1220,9 @@ export class Runtime implements TownRuntime {
 					canOpenSlot: canOpenEveningSlot(this.s, e),
 					canAdvertise: canAdvertiseEvening(this.s, e),
 					advertised: !!e.advertisement,
+					advertisementReceipt: e.advertisement,
+					roomReserved: ["preparing", "prepared"].includes(e.stage),
+					roomReservedBy: roomBooking(this.s, e)?.organiserId,
 					...(this.s.socialEvenings?.recurrence?.cycles.find(
 						(c) => c.openedSlot?.eventId === e.id,
 					)?.openedSlot
@@ -1255,6 +1305,11 @@ export class Runtime implements TownRuntime {
 							progress: this.s.handcart.progress,
 							total: 3,
 							returned: !!this.s.handcart.handover,
+							completedAt:
+								this.s.handcart.progress === 3
+									? this.s.handcart.work.at(-1)?.endedAt
+									: undefined,
+							returnedAt: this.s.handcart.handover?.at,
 							bench: this.s.handcart.bench
 								? {
 										from: this.s.handcart.bench.from,
@@ -1317,7 +1372,29 @@ export class Runtime implements TownRuntime {
 			},
 			diagnostics: townDiagnostics(this.s),
 			weather: this.weather(),
+			...(this.s.assistance
+				? {
+						assistance: {
+							actorId: this.s.assistance.actorId,
+							origin: this.s.assistance.origin,
+							decisionSource: this.s.assistance.decisionSource,
+							methodTerms: this.s.assistance.methodTerms,
+							decisionId: this.s.assistance.decisionId,
+							expiresAt: this.s.assistance.expiresAt,
+							received: this.s.assistance.received,
+							visitedAt: this.s.assistance.visit?.at,
+							opened: this.s.assistance.opened,
+							action: this.s.assistance.action,
+							result: this.s.assistance.result,
+							request: this.s.assistance.request,
+							cue: this.s.assistance.proposal.cue,
+						},
+					}
+				: {}),
 			controlsRemaining: this.s.controls,
+			canShareNews: canShareHallNews(this.s),
+			canLendTools: this.s.hall < 12,
+			canRestoreBus: !this.s.bus,
 			metrics: {
 				active: this.s.people.filter((r) => r.job).length,
 				hfPeople: this.s.people.filter((r) => r.policy === "hf").length,

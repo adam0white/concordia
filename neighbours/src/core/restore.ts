@@ -1,6 +1,7 @@
 import { restore } from "@adam0white/human-framework";
 import type { TownRuntime } from "../contracts";
 import { reviewDue } from "./activity-reviews.ts";
+import { validateAssistance } from "./assistance.ts";
 import { validateEvenings } from "./evenings.ts";
 import { validateHandcart } from "./handcart.ts";
 import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
@@ -38,7 +39,8 @@ export function restoreRuntime(input: unknown): TownRuntime {
 				(key) =>
 					key !== "socialEvenings" &&
 					key !== "handcart" &&
-					key !== "townChronicle",
+					key !== "townChronicle" &&
+					key !== "assistance",
 			)
 			.sort()
 			.join() !== keys.sort().join()
@@ -109,6 +111,11 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		ids.add(r.person.id);
 		if (r.job) {
 			const j = r.job;
+			if (
+				j.assistanceDecision &&
+				(j.offer.targetId !== "hall-annex" || j.offer.id === "annex-visit")
+			)
+				throw Error("Decision provenance on unrelated activity");
 			const canonical = buildOffers(s, r.person.id, j.offer).find(
 				(a) => a.id === j.offer.id,
 			);
@@ -125,6 +132,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 							"food",
 							"tools",
 							"inspectionCues",
+							"assistanceDecision",
 							"socialContacts",
 						].includes(key),
 				) ||
@@ -300,7 +308,8 @@ export function restoreRuntime(input: unknown): TownRuntime {
 			p.name !== spec[1] ||
 			p.x !== spec[2] ||
 			p.y !== spec[3] ||
-			p.capacity !== spec[4] ||
+			p.capacity !==
+				spec[4] + (p.id === "hall" && s.assistance?.opened ? 4 : 0) ||
 			p.kind !== spec[5] ||
 			!Number.isInteger(p.stock) ||
 			p.stock < 0 ||
@@ -325,6 +334,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		new Set(s.pending).size !== s.pending.length
 	)
 		throw Error("Invalid pending actors");
+	validateAssistance(s, ids);
 	validateEvenings(s, ids);
 	validateHandcart(s, ids);
 	validateTownChronicle(s, ids);

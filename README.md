@@ -6,11 +6,13 @@ A riverside town after a flood. Eight familiar neighbours and two hundred other 
 
 This is a fork of Google DeepMind Concordia. Upstream history and code remain intact. Our application is in `neighbours/`; its custom Python engine is in `concordia/contrib/neighbours/`. Development branch: `neighbours`. Human Framework is consumed as an exact published package. Recorded native LLM experiments are labelled separately from the live all-HF browser town.
 
-The current town adds twelve weekly hall conflicts after the original four evenings. Each week gives one support choice: fund an unposted alternate date or advertise a posted invitation. This remains available when a returning town has spent its original three interventions. People still choose whether to propose, prepare, accept and attend. Contextual seven-day comparisons show progress and support cancellation while preserving the live town.
+The delivered player-agency town has twelve weekly hall conflicts after the original four evenings. Each week supplies one support choice: fund an unposted alternate date or advertise a posted invitation. People choose whether to propose, prepare, accept and attend. Contextual comparisons preserve the live town. History retains distinct dated outcomes; exports are lossless `.json.gz` files, and imports also accept plain JSON. See [player agency and verification](docs/neighbours/player-agency.md).
 
-Person History folds routine start/finish traces and retains distinct dated outcomes. The map shows the estuary and housing district. The Inspector separates live diagnostics from recorded experiments and their limits. Export produces a lossless `.json.gz` file; Import also accepts older plain JSON. See [player agency and verification](docs/neighbours/player-agency.md).
+The next local candidate adds a welcome screen before runtime downloads, paused entry/new-town/import/restore, compact sticky controls and story stops enabled by default. Dates, news eligibility and cart status describe actual host state. A bounded annex inspection lets a neighbour receive a request, travel, observe timber and use retained HF methods. A safe completed inspection can open four extra hall places. The request supplies no method and guarantees no help.
 
-This increment is publicly delivered and locally verified. Adam accepts how the new play balance feels. Automated checks do not establish that it is enjoyable or that HF outperforms another controller.
+The browser can apply one authored or recorded GM proposal after host validation. A separate native experiment runs real upstream Concordia GM components with one genuine model call and exact response replay. It proposes a scenario premise; it cannot declare repairs, learning, consent or attendance. Live browser residents still use HF, with no live browser LLM. Isolated HF configuration probes preserve production defaults and report negative results. See [the current increment](docs/neighbours/gm-and-town-agency.md) and [the native GM contract](docs/neighbours/gm-director.md).
+
+Public delivery of this new candidate is pending. Local verification is still in progress. Adam accepts game feel; tests do not establish sustained enjoyment, human realism or HF superiority.
 
 ---
 

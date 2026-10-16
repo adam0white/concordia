@@ -2,15 +2,10 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, test } from "@playwright/test";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
-import { restoreRuntime } from "../src/core/index.ts";
-import type { Save } from "../src/core/state.ts";
 
 let genuine: ReturnType<typeof captureWeekly>["candidate"];
 test.beforeAll(() => {
-	const captured = captureWeekly().candidate;
-	const host = restoreRuntime(captured.runtime);
-	for (let i = 0; i < 3; i++) host.intervene({ kind: "lend-tools" });
-	genuine = { ...captured, runtime: host.export() as Save };
+	genuine = captureWeekly(true).candidate;
 });
 async function exported(page: Page) {
 	await page.getByRole("button", { name: "Export", exact: true }).click();
@@ -24,7 +19,10 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Pause town", exact: true }).click();
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await expect(
+		page.getByRole("button", { name: "Play town", exact: true }),
+	).toBeVisible();
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "genuine-week.json",
 		mimeType: "application/json",
@@ -66,6 +64,7 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 			after.runtime.socialEvenings.recurrence.cycles[0].openedSlot.from,
 	).toBe(1440);
 	await page.reload();
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();

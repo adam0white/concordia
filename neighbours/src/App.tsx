@@ -7,6 +7,7 @@ import EvidencePanel from "./ui/EvidencePanel";
 import { clock, initial, metricLabel, number, placeName } from "./ui/format";
 import HallChoices from "./ui/HallChoices";
 import HandcartCard from "./ui/HandcartCard";
+import InspectionSituation from "./ui/InspectionSituation";
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
 import { activityLabel, canAct } from "./ui/person-status";
@@ -17,9 +18,11 @@ import TownHealth from "./ui/TownHealth";
 import TownMap from "./ui/TownMap";
 import { useStoryWatch } from "./ui/useStoryWatch";
 import { useVisitorSession } from "./ui/useVisitorSession";
+import Welcome from "./ui/Welcome";
 
 export default function App() {
-	const session = useVisitorSession();
+	const [hasEnteredTown, setHasEnteredTown] = useState(false);
+	const session = useVisitorSession({ enabled: hasEnteredTown });
 	const {
 		town,
 		healthHistory,
@@ -99,7 +102,7 @@ export default function App() {
 		.slice(-3)
 		.reverse();
 	return (
-		<div className="app">
+		<div className={`app ${hasEnteredTown ? "town-entered" : ""}`}>
 			<header className="masthead">
 				<a className="brand" href="./">
 					<span className="brand-mark">n.</span>
@@ -109,8 +112,16 @@ export default function App() {
 					</div>
 				</a>
 				<div className="runtime-label">
-					<span className={town ? "status-dot" : "status-dot loading"} />
-					{town ? "Browser live · Concordia + HF" : "Starting browser runtime"}
+					<span
+						className={
+							hasEnteredTown && !town ? "status-dot loading" : "status-dot"
+						}
+					/>
+					{town
+						? "Browser live · Concordia + HF"
+						: hasEnteredTown
+							? "Starting browser runtime"
+							: "A town on your device"}
 				</div>
 				<button
 					type="button"
@@ -123,11 +134,13 @@ export default function App() {
 					◐
 				</button>
 			</header>
-			{!town ? (
+			{!hasEnteredTown ? (
+				<Welcome onEnter={() => setHasEnteredTown(true)} />
+			) : !town ? (
 				<main className="loading-screen">
 					<div className="loading-house">⌂</div>
 					<span className="eyebrow">A town, coming to life</span>
-					<h2>
+					<h2 tabIndex={-1} ref={(heading) => heading?.focus()}>
 						Ordinary lives.
 						<br />
 						Shared possibilities.
@@ -264,6 +277,16 @@ export default function App() {
 							</nav>
 							<HandcartCard town={town} select={setSelected} />
 							<EveningBoard town={town} select={setSelected} />
+							<InspectionSituation
+								town={town}
+								disabled={comparing || saveConflict}
+								onAction={intervene}
+								onCompare={(input) => {
+									setTab("inspector");
+									setComparisonFocus(true);
+									compare(input, 96);
+								}}
+							/>
 							<HallChoices
 								town={town}
 								disabled={comparing || saveConflict}
@@ -567,38 +590,57 @@ export default function App() {
 								<button
 									type="button"
 									disabled={
-										!town.controlsRemaining || comparing || saveConflict
+										!town.controlsRemaining ||
+										town.canRestoreBus === false ||
+										comparing ||
+										saveConflict
 									}
 									onClick={() => intervene({ kind: "restore-bus" })}
 								>
-									Restore the bus
+									Restore public bus
 								</button>
-								<small>Faster future trips. No instant arrivals.</small>
+								<small>
+									{town.canRestoreBus === false
+										? "Public transport is already running."
+										: "Restore public transport for faster future trips."}
+								</small>
 							</div>
 							<div className="intervention-option">
 								<button
 									type="button"
 									disabled={
-										!town.controlsRemaining || comparing || saveConflict
+										!town.controlsRemaining ||
+										town.canLendTools === false ||
+										comparing ||
+										saveConflict
 									}
 									onClick={() => intervene({ kind: "lend-tools" })}
 								>
 									Lend tools
 								</button>
-								<small>Add 3 tools to the shared supply.</small>
+								<small>
+									{town.canLendTools === false
+										? "The hall’s repair work is complete."
+										: "Add 3 shared repair tools for neighbours to use."}
+								</small>
 							</div>
 							<div className="intervention-option">
 								<button
 									type="button"
 									disabled={
-										!town.controlsRemaining || comparing || saveConflict
+										!town.controlsRemaining ||
+										town.canShareNews === false ||
+										comparing ||
+										saveConflict
 									}
 									onClick={() => intervene({ kind: "share-news" })}
 								>
 									Share hall news
 								</button>
 								<small>
-									Tell awake neighbours. Repair remains their choice.
+									{town.canShareNews === false
+										? "No awake neighbour needs this news now."
+										: "Tell awake neighbours about the hall’s repair needs."}
 								</small>
 							</div>
 						</div>

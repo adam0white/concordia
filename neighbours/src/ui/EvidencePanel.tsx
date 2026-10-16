@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-type EvidenceKind = "social" | "native" | "cart" | "release";
+type EvidenceKind = "social" | "native" | "cart" | "release" | "gm" | "config";
 interface EvidenceSummary {
 	rows: [string, string][];
 	limits: string[];
@@ -28,6 +28,18 @@ const reports: {
 		title: "Ravi’s cart choice probe",
 		url: "/experiments/cart-choice-probe.json",
 		schema: "neighbours/cart-choice-probe@1",
+	},
+	{
+		kind: "gm",
+		title: "Concordia game-master proposal",
+		url: "/experiments/gm-director.json",
+		schema: "native-concordia-gm@1",
+	},
+	{
+		kind: "config",
+		title: "HF configuration sensitivity",
+		url: "/experiments/hf-config.json",
+		schema: "neighbours/hf-config-probe@1",
 	},
 	{ kind: "release", title: "Published build metadata", url: "/release.json" },
 ];
@@ -121,6 +133,47 @@ export function summarizeEvidence(
 			],
 		);
 	}
+	if (kind === "gm")
+		rows.push(
+			["Actual model calls", scalar(data.modelCalls)],
+			[
+				"Model",
+				Array.isArray(data.modelIds)
+					? data.modelIds.map(scalar).join(", ")
+					: "Not recorded",
+			],
+			["Proposal accepted", yesNo(data.rejection === null && !!data.proposal)],
+			["Replay exact", yesNo(data.replayExact)],
+			["Replay model calls", scalar(data.replayModelCalls)],
+			["Upstream revision", scalar(data.upstreamSha)],
+			["Source SHA-256", scalar(data.sourceFingerprint)],
+		);
+	if (kind === "config")
+		rows.push(
+			["HF version", scalar(data.hf)],
+			[
+				"Isolated settings",
+				Array.isArray(data.arms)
+					? data.arms.map((arm) => scalar(record(arm).socialScale)).join(", ")
+					: "Not recorded",
+			],
+			[
+				"Training seeds",
+				Array.isArray(record(data.seeds).training)
+					? (record(data.seeds).training as unknown[]).map(scalar).join(", ")
+					: "Not recorded",
+			],
+			[
+				"Holdout seeds",
+				Array.isArray(record(data.seeds).holdout)
+					? (record(data.seeds).holdout as unknown[]).map(scalar).join(", ")
+					: "Not recorded",
+			],
+			["Days per ordinary town", scalar(data.days)],
+			["Production weights", "Unchanged; this is a sensitivity probe"],
+			["Source SHA-256", scalar(data.sourceFingerprint)],
+		);
+
 	if (kind === "release") {
 		rows.splice(0, 1);
 		rows.push(

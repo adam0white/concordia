@@ -1830,14 +1830,16 @@ footer > div {
 	min-height: 44px;
 }
 
-.hall-choices {
+.hall-choices,
+.inspection-situation {
 	margin-top: 16px;
 	padding: 16px;
 	border: 1px solid var(--line);
 	border-radius: 8px;
 	background: var(--paper);
 }
-.hall-choices summary {
+.hall-choices summary,
+.inspection-situation summary {
 	cursor: pointer;
 	font-weight: 600;
 }
@@ -1847,4 +1849,144 @@ footer > div {
 }
 .app .hall-choice button {
 	min-height: 44px;
+}
+
+/* Keep playback within reach while the town and its stories scroll. */
+.masthead {
+	min-height: 60px;
+	padding: 8px 0;
+}
+.brand-mark {
+	font-size: 36px;
+}
+.brand h1 {
+	font-size: 21px;
+}
+.brand span:not(.brand-mark) {
+	margin-top: 2px;
+}
+.town-entered .masthead {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	background: var(--paper);
+	height: 60px;
+}
+.town-toolbar {
+	position: sticky;
+	top: 60px;
+	z-index: 19;
+	min-height: 62px;
+	padding: 8px 0;
+	background: var(--paper);
+	border-bottom: 1px solid var(--line);
+	margin-bottom: 16px;
+	gap: 12px;
+}
+.person-panel,
+#town-info-panel,
+.story-card {
+	scroll-margin-top: 134px;
+}
+.session-footer,
+.session-actions {
+	min-width: 0;
+	max-width: 100%;
+	flex-wrap: wrap;
+}
+.session-actions {
+	justify-content: flex-end;
+}
+.save-status,
+.download-save {
+	overflow-wrap: anywhere;
+}
+.welcome-screen {
+	max-width: 680px;
+	margin: 64px auto;
+}
+.welcome-screen h2 {
+	font-size: clamp(28px, 5vw, 42px);
+	margin: 12px 0;
+}
+.welcome-intro {
+	font-size: 17px;
+}
+.welcome-steps {
+	list-style: none;
+	padding: 0;
+	margin: 28px 0;
+	display: grid;
+	gap: 20px;
+}
+.welcome-steps li {
+	display: grid;
+	gap: 5px;
+	padding-left: 16px;
+	border-left: 2px solid var(--accent);
+	line-height: 1.55;
+	font-size: 14px;
+}
+.enter-town {
+	background: var(--ink);
+	color: var(--paper);
+	padding: 12px 24px;
+}
+.enter-town:hover {
+	background: var(--accent);
+}
+.welcome-device,
+.welcome-details {
+	font-size: 12px;
+	line-height: 1.6;
+}
+.welcome-device {
+	margin-top: 16px;
+}
+.welcome-details summary {
+	cursor: pointer;
+	padding: 8px 0;
+}
+@media (max-width: 760px) {
+	.masthead {
+		gap: 8px;
+	}
+	.town-time {
+		gap: 2px 8px;
+	}
+	.town-time > .eyebrow {
+		letter-spacing: 0.4px;
+	}
+	.town-time strong {
+		font-size: 19px;
+	}
+	.town-toolbar .weather {
+		display: none;
+	}
+	.playback {
+		flex-shrink: 0;
+	}
+	.playback button,
+	.speed select {
+		min-height: 42px;
+	}
+	.welcome-screen {
+		margin: 32px auto;
+	}
+	.welcome-intro {
+		font-size: 15px;
+	}
+	.welcome-steps {
+		margin: 24px 0;
+		gap: 16px;
+	}
+	.session-actions {
+		justify-content: flex-start;
+	}
+}
+@media (min-width: 761px) {
+	.person-panel {
+		top: 134px;
+		max-height: calc(100vh - 154px);
+	}
 }

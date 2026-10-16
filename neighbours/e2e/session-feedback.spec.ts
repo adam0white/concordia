@@ -82,13 +82,14 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 }, info) => {
 	await installGate(page);
 	await page.goto("/");
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Pause town", exact: true }),
+		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "original");
 	await page
-		.getByRole("button", { name: "Restore the bus", exact: true })
+		.getByRole("button", { name: "Restore public bus", exact: true })
 		.click();
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Bus restored",
@@ -125,7 +126,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await page.getByLabel("New town seed").fill("73");
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Pause town", exact: true }),
+		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
@@ -170,8 +171,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 }, info) => {
 	await installGate(page);
 	await page.goto("/");
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Pause town", exact: true }),
+		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "edge-original");

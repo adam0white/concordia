@@ -15,7 +15,11 @@ import { type HealthHistory, sampleHealth } from "./TownHealth";
 
 // Own the runtime and device checkpoint lifecycle together. In particular, startup
 // recovery must keep autosaves locked until an explicit visitor action succeeds.
-export function useVisitorSession() {
+export function useVisitorSession({
+	enabled = true,
+}: {
+	enabled?: boolean;
+} = {}) {
 	const [town, setTown] = useState<TownView>();
 	const [healthHistory, setHealthHistory] = useState<HealthHistory>();
 	const [progress, setProgress] = useState("Preparing the live town…");
@@ -72,7 +76,11 @@ export function useVisitorSession() {
 	const errorRevision = useRef(0);
 	// Worker replies keep command order; reset feedback on a successful replacement, never a rejected import.
 	const stateCommands = useRef<
-		{ replacement: number | null; errorRevision: number }[]
+		{
+			replacement: number | null;
+			errorRevision: number;
+			commandType: UiCommand["type"];
+		}[]
 	>([]);
 	// Save replies may arrive after a replacement or its canceled backup.
 	const saveRequests = useRef(
@@ -92,6 +100,7 @@ export function useVisitorSession() {
 			const replacement = command.type === "restore" || command.type === "new";
 			if (replacement) worldGeneration.current++;
 			stateCommands.current.push({
+				commandType: command.type,
 				replacement: replacement ? worldGeneration.current : null,
 				errorRevision: errorRevision.current,
 			});
@@ -122,6 +131,7 @@ export function useVisitorSession() {
 		setHealthHistory(undefined);
 	}, []);
 	useEffect(() => {
+		if (!enabled) return;
 		let active = true;
 		const saves = new DeviceSaves(() => {
 			if (!active) return;
@@ -187,6 +197,10 @@ export function useVisitorSession() {
 					setBranchError(reply.message);
 					return;
 				}
+				if (failed?.commandType === "intervene") {
+					interventionPending.current = null;
+					setInterventionNotice("");
+				}
 				if (!failed || failed.errorRevision === errorRevision.current)
 					setError(reply.message);
 				setPlaying(false);
@@ -216,20 +230,26 @@ export function useVisitorSession() {
 				const intervention = interventionPending.current;
 				if (
 					intervention &&
-					(reply.view.controlsRemaining < intervention.remaining ||
+					((intervention.kind === "request-inspection" &&
+						reply.view.assistance !== undefined) ||
+						reply.view.controlsRemaining < intervention.remaining ||
 						(reply.view.stats.interventionsSpent ??
 							3 - reply.view.controlsRemaining) > intervention.spent)
 				) {
 					setInterventionNotice(
-						intervention.kind === "lend-tools"
-							? `Tools added. ${reply.view.stats.tools ?? "Updated"} tools now available.`
-							: intervention.kind === "restore-bus"
-								? "Bus restored. Future trips can use it; current activities keep their durations."
-								: intervention.kind === "open-evening-slot"
-									? "Extra hall slot funded. The unposted opportunity moves to the next day; hosting remains their choice."
-									: intervention.kind === "advertise-evening"
-										? "Invitation advertised to awake neighbours. Hearing it does not mean accepting or attending."
-										: "Hall news broadcast to awake neighbours. Each decides whether to act on it.",
+						intervention.kind === "request-inspection"
+							? reply.view.assistance?.received
+								? "Inspection request received. Helping remains their choice."
+								: "The neighbour did not receive the inspection request."
+							: intervention.kind === "lend-tools"
+								? `Tools added. ${reply.view.stats.tools ?? "Updated"} tools now available.`
+								: intervention.kind === "restore-bus"
+									? "Bus restored. Future trips can use it; current activities keep their durations."
+									: intervention.kind === "open-evening-slot"
+										? "Extra hall slot funded. The unposted opportunity moves to the next day; hosting remains their choice."
+										: intervention.kind === "advertise-evening"
+											? "Invitation advertised to awake neighbours. Hearing it does not mean accepting or attending."
+											: "Hall news broadcast to awake neighbours. Each decides whether to act on it.",
 					);
 					interventionPending.current = null;
 				}
@@ -248,16 +268,14 @@ export function useVisitorSession() {
 					return next;
 				});
 				if (reply.type === "ready") {
-					setPlaying(
-						!savedReadFailed &&
-							!saveConflictRef.current &&
-							!stateCommands.current.some(
-								(command) => command.replacement !== null,
-							),
-					);
+					setPlaying(false);
 					savedReadFailed = false;
 				}
-				if (++rounds.current % 6 === 0 && autosaveEnabled.current)
+				if (
+					(++rounds.current % 6 === 0 ||
+						typeof completed?.replacement === "number") &&
+					autosaveEnabled.current
+				)
 					dispatch({ type: "save" });
 			}
 			if (reply.type === "save") {
@@ -403,7 +421,7 @@ export function useVisitorSession() {
 			runtime?.close();
 			if (client.current === runtime) client.current = null;
 		};
-	}, [dispatch, resetWorldFeedback]);
+	}, [dispatch, enabled, resetWorldFeedback]);
 	useEffect(() => {
 		try {
 			localStorage.setItem("alder-follow", selected);
@@ -461,7 +479,9 @@ export function useVisitorSession() {
 					? `Extra slot for ${evening?.title ?? "the selected evening"}`
 					: intervention.kind === "advertise-evening"
 						? `Advertising ${evening?.title ?? "the selected invitation"}`
-						: intervention.kind.replaceAll("-", " "),
+						: intervention.kind === "request-inspection"
+							? `Annex inspection requested from ${town?.people.find((p) => p.id === intervention.actorId)?.name ?? "the selected neighbour"}`
+							: intervention.kind.replaceAll("-", " "),
 		});
 		setComparing(true);
 		setBranchError("");

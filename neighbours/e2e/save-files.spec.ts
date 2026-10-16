@@ -37,7 +37,10 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 }
 async function startPaused(page: Page) {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Pause town", exact: true }).click();
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await expect(
+		page.getByRole("button", { name: "Play town", exact: true }),
+	).toBeVisible();
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
@@ -89,6 +92,7 @@ test("actual browser gzip export preserves the complete town across import and d
 		)
 		.toBe(original.packet.runtime.now);
 	await page.reload();
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();

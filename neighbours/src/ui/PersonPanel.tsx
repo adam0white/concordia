@@ -243,6 +243,12 @@ export default function PersonPanel({
 						<strong>{(value * 100).toFixed(1)}%</strong>
 					</div>
 				))}
+				{person.decision?.offeredCount !== undefined && (
+					<p className="tiny muted">
+						{person.decision.recordedCount} of {person.decision.offeredCount}{" "}
+						scored options shown.
+					</p>
+				)}
 				{person.decision?.options.map((option) => (
 					<div className="resource" key={option.id}>
 						<span>{option.label}</span>

@@ -55,6 +55,23 @@ function Notice({
 					</p>
 				</div>
 			</div>
+			{evening.advertisementReceipt && (
+				<p className="tiny muted">
+					Advertised {datedClock(evening.advertisementReceipt.at)}
+				</p>
+			)}
+			{evening.roomReservedBy ? (
+				<p className="tiny">
+					Hall booked by{" "}
+					{town.people.find((p) => p.id === evening.roomReservedBy)?.name ??
+						evening.roomReservedBy}{" "}
+					for this hour.
+				</p>
+			) : town.now < evening.startsAt && evening.stage !== "closed" ? (
+				<p className="tiny muted">
+					Hall not booked. Advertising does not reserve it.
+				</p>
+			) : null}
 			{host && (
 				<button
 					type="button"

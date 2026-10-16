@@ -67,6 +67,14 @@ export default function HandcartCard({
 					</p>
 				</div>
 			</div>
+			{cart.completedAt !== undefined && (
+				<p className="tiny muted">
+					Repairs finished {datedClock(cart.completedAt)}
+					{cart.returnedAt !== undefined
+						? ` · Returned ${datedClock(cart.returnedAt)}`
+						: " · Waiting for handover to Jo"}
+				</p>
+			)}
 			<div className="handcart-people">
 				{["ravi", "ada", "jo"].flatMap((id) => {
 					const person = town.people.find((person) => person.id === id);

@@ -4,6 +4,10 @@ import type { Save } from "./state.ts";
 import { CHRONICLE_KINDS } from "./town-chronicle.ts";
 
 function storyTitle(s: Save, e: TownEvent): string {
+	if (e.kind === "annex-inspected")
+		return s.assistance?.opened && s.assistance.result?.id === e.id
+			? "Four extra hall places opened after annex inspection"
+			: "The annex inspection left extra places closed";
 	const evening = allEvenings(s).find(
 		(candidate) =>
 			candidate.notice?.id === e.id || candidate.result?.id === e.id,
@@ -25,6 +29,7 @@ function storyTitle(s: Save, e: TownEvent): string {
 				: "Sam’s supper did not happen";
 	}
 	const titles: Record<string, string> = {
+		"annex-observed": "The annex timber was observed",
 		"hall-open": "The hall opened after inspection",
 		"hall-closed": "The hall stayed closed after inspection",
 		"inspection-failed": "An opening attempt found unsafe timber",
@@ -52,6 +57,8 @@ export function townStories(s: Save): TownView["stories"] {
 		const retained = evening.result ?? evening.notice;
 		if (retained) events.set(retained.id, retained);
 	}
+	for (const retained of [s.assistance?.visit, s.assistance?.result])
+		if (retained) events.set(retained.id, retained);
 	if (s.handcart?.handover)
 		events.set(s.handcart.handover.id, s.handcart.handover);
 	for (const event of latestInspections) events.set(event.id, event);
