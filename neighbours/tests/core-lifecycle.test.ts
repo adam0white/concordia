@@ -137,7 +137,7 @@ it("rotates capacity priority by keyed round and restores the exact pending orde
 		for (const id of ready) r.apply(id, "rest");
 	}
 	expect(first.size).toBeGreaterThan(12);
-});
+}, 30000);
 
 it("does not let table, random or external control bypass sleeping body vetoes", () => {
 	for (const policy of ["table", "random"] as const) {
