@@ -111,3 +111,14 @@ node scripts/probe-cart-choices.ts /tmp/town-milestones/seed-42-first-prepared.j
 The choice probe finds a real idle Ravi/Ada workshop opportunity with both asking and side-bench work feasible. It records the actual considered subset and removes only Ravi's cart goal in a separate branch. Its second comparison supplies hypothetical fast access as a matched offer pair; it does not pretend an agreement occurred. No input packet or fabricated grant is imported into the visitor's live town.
 
 In the measured opportunity, Ravi chose side-bench work and did not consider the request. Goal ablation changed his choice to paid work. The hypothetical fast/slow pair had identical immediate terms despite different durations. These are narrow representation findings. They do not establish rational anticipation, autonomous negotiation, or a generic planner defect.
+
+
+## Next candidate: received learning changes who can help
+
+Revisit on 2026-10-20 under `nbh-01z.10`. This is a targeted Astra proposal, not implemented behavior. Current `core/offers.ts` makes inspection answers Lea-only, says “Wait for Lea,” and removes ordinary inspection after the hall becomes safe. Retained learning therefore has few later practical opportunities. Generalizing who can receive a request and offer assistance is a more direct progression experiment than adding another authored repair sequence.
+
+Start with one actual later inspection need and a resident who genuinely received the relevant methods. The host supplies physical conditions and consequences. Requests must be received. Anyone may attempt help; the host must not designate a successful expert or force acceptance. Compare intact learning, only that resident's relevant rules removed, and a simple lookup policy given the same demonstrations and cues. Withhold the received request in a separate matched branch. Keep external conditions keyed independently of actor order. Record decision terms, assistance, unsupported cases and the actual physical result across several seeds.
+
+Reject the capability claim if learning ablation changes nothing, no usable request opportunity occurs, or success requires a host-selected helper. A watcher must be able to see who became useful and what changed without numerical diagnostics. Matching the lookup baseline is acceptable and does not establish HF superiority.
+
+Astra suggested a small hall annex with occasional condition-driven inspection and a limited seat contribution. That physical design remains unselected: the present town has only two authored evening opportunities, so later extra seats alone could have no consequence. First establish a recurring need with real use, then choose the site. Avoid catastrophe resets, invisible globally shared expertise, forced volunteering and HF goal tuning for a preferred story. This proposal alone does not justify a framework release.
