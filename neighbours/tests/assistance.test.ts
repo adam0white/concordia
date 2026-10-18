@@ -5,6 +5,7 @@ import {
 	observeAssistance,
 	parseInspectionProposal,
 } from "../src/core/assistance.ts";
+import { HF_SOURCE } from "../src/core/hf-version.ts";
 import { createRuntime, restoreRuntime, stateHash } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
@@ -348,7 +349,7 @@ it("distinguishes forced host inspection from an actual HF decision in retained 
 			id === "lea" ? choice : (hf.actor(id).job?.offer.id ?? "rest"),
 		);
 	for (let n = 0; n < 12 && !hf.s.assistance?.result; n++) round(hf);
-	expect(hf.view().assistance?.decisionSource).toBe("HF 2.3.0");
+	expect(hf.view().assistance?.decisionSource).toBe(HF_SOURCE);
 	expect(
 		hf
 			.view()

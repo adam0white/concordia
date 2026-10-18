@@ -1,5 +1,6 @@
 import { hallInspectionOffers } from "../experiments/inspection.ts";
 import { assistanceOffers } from "./assistance.ts";
+import { holds, inspectionInstructor, inspectionInstructors } from "./cast.ts";
 import {
 	inspectionKey,
 	presentAt,
@@ -200,13 +201,14 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 		{ belonging: 0.45 },
 		{ tags: ["visit-attempt"] },
 	);
+	const teaches = holds(r, "teacher");
 	add(
-		r.person.id === "lea" ? "teach" : "learn",
-		r.person.id === "lea"
+		teaches ? "teach" : "learn",
+		teaches
 			? "Teach the displaced evening class"
 			: "Attend a practical class at school",
 		"school",
-		r.person.id === "lea" ? 120 : 60,
+		teaches ? 120 : 60,
 		{
 			competence: 0.3,
 			belonging: 0.2,
@@ -280,6 +282,11 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 		(historical || r.inspection?.key !== inspectionKey(s)) &&
 		available.some((p) => p.id === "hall")
 	) {
+		// A qualified instructor has nobody in town to wait for; before the repairs are
+		// complete they leave a short note asking for a structural opinion instead.
+		const postsNote =
+			inspectionInstructor(r) &&
+			(historical ? historical.id === "post-structural-question" : s.hall < 12);
 		for (const a of hallInspectionOffers("hall-inspection", "hall-floor"))
 			if (
 				historical ||
@@ -291,47 +298,35 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 					placeId: "hall",
 					...(a.action === "ask-inspector"
 						? {
-								duration:
-									r.person.id === "lea" &&
-									(historical
-										? historical.id === "post-structural-question"
-										: s.hall < 12)
-										? 15
-										: 120,
-								...(r.person.id === "lea" &&
-								(historical
-									? historical.id === "post-structural-question"
-									: s.hall < 12)
+								duration: postsNote ? 15 : 120,
+								...(postsNote
 									? {
 											id: "post-structural-question",
 											label: "Leave a note requesting a structural opinion",
 										}
 									: {}),
-								label:
-									r.person.id === "lea" &&
-									(historical
-										? historical.id === "post-structural-question"
-										: s.hall < 12)
-										? "Leave a note requesting a structural opinion"
-										: "Leave a question for an inspector and wait up to two hours",
+								label: postsNote
+									? "Leave a note requesting a structural opinion"
+									: "Leave a question for an inspector and wait up to two hours",
 							}
 						: {}),
 				});
 	}
+	const instructor = inspectionInstructor(r);
 	if (
-		(historical && r.place === "hall" && r.person.id !== "lea") ||
-		(r.person.id !== "lea" &&
+		(historical && r.place === "hall" && !instructor) ||
+		(!instructor &&
 			r.question?.status === "waiting" &&
 			presentAt(r, "hall", s.now))
 	)
 		add(
 			"wait-inspector",
-			"Wait for Lea beside the hall noticeboard",
+			`Wait for ${inspectionInstructors(s)[0]?.person.name ?? "an inspector"} beside the hall noticeboard`,
 			"hall",
 			30,
 			{ leisure: 0.1 },
 		);
-	if (r.person.id === "lea")
+	if (instructor)
 		for (const requester of s.people.filter(
 			(o) =>
 				o.person.id !== r.person.id &&

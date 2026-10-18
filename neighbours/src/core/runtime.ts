@@ -35,6 +35,12 @@ import {
 	requestInspection,
 } from "./assistance.ts";
 import { canProposeBench, proposeBenchWindow } from "./bench-opportunity.ts";
+import {
+	inspectionInstructor,
+	inspectionInstructors,
+	retainsInspectionMethod,
+	taughtByNeighbour,
+} from "./cast.ts";
 import { townDiagnostics } from "./diagnostics.ts";
 import {
 	inspectionKey,
@@ -49,6 +55,7 @@ import {
 	beginEvening,
 	canAdvertiseEvening,
 	canOpenEveningSlot,
+	eveningFor,
 	eveningLabel,
 	finishEvening,
 	interruptEvening,
@@ -86,7 +93,7 @@ import {
 	predictSpeech,
 } from "./player.ts";
 import { recordSocialContacts } from "./social-contact.ts";
-import { known, type Resident, type Save, SCHEMA } from "./state.ts";
+import { type Resident, type Save, SCHEMA } from "./state.ts";
 import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
 import { recordTownEvent } from "./town-chronicle.ts";
@@ -164,11 +171,14 @@ export class Runtime implements TownRuntime {
 				)
 				.slice(-8);
 			const landmarkIds = new Set(landmarks.map((e) => e.id));
+			const familiarActors = new Set(
+				this.s.people.filter((r) => r.known).map((r) => r.person.id),
+			);
 			const familiar = this.s.events
 				.filter(
 					(e) =>
 						e.actorId &&
-						known.some((k) => k[0] === e.actorId) &&
+						familiarActors.has(e.actorId) &&
 						!landmarkIds.has(e.id),
 				)
 				.slice(-152);
@@ -212,9 +222,12 @@ export class Runtime implements TownRuntime {
 			note: structuredClone(note),
 			status: "waiting",
 		};
-		const lea = this.actor("lea");
-		if (id !== "lea" && presentAt(lea, "hall", this.s.now))
-			receiveEvent(lea, note, "heard", `Heard ${note.text}`);
+		for (const instructor of inspectionInstructors(this.s))
+			if (
+				instructor.person.id !== id &&
+				presentAt(instructor, "hall", this.s.now)
+			)
+				receiveEvent(instructor, note, "heard", `Heard ${note.text}`);
 	}
 	lifecycleEvent(kind: string, text: string, actorId: string, placeId: string) {
 		const id = this.event(kind, text, actorId, placeId);
@@ -256,9 +269,9 @@ export class Runtime implements TownRuntime {
 		delete r.job;
 		r.idleSince = this.s.now;
 	}
-	/** Lea hears waiting inspection questions as standing competence suggestions. */
-	leaSuggestions(r: Resident): Suggestion[] {
-		if (r.person.id !== "lea") return [];
+	/** An inspection instructor hears waiting questions as standing competence suggestions. */
+	instructorSuggestions(r: Resident): Suggestion[] {
+		if (!inspectionInstructor(r)) return [];
 		return this.s.people
 			.filter(
 				(o) =>
@@ -328,6 +341,10 @@ export class Runtime implements TownRuntime {
 				let inspectionEvent: number | undefined;
 				if (usesActivitySlot(j.offer)) p.reserved--;
 				r.place = p.id;
+				const classOrganiser =
+					j.offer.action === "attend-class"
+						? eveningFor(this.s, j.offer)?.organiserId
+						: undefined;
 				const evening = finishEvening(this, r);
 				const cart = finishHandcart(this, r);
 				const assistance = finishAssistance(this, r);
@@ -339,7 +356,16 @@ export class Runtime implements TownRuntime {
 					} else this.s.consumed += j.food;
 				}
 				if (evening.delivered && j.offer.action === "attend-class") {
-					teachHallInspection(r.person, "lea", `evening-lesson-${j.event}`);
+					// A lesson passes on only what its organiser actually retains.
+					const organiser = classOrganiser
+						? this.s.people.find((o) => o.person.id === classOrganiser)
+						: undefined;
+					if (organiser && retainsInspectionMethod(organiser.person))
+						teachHallInspection(
+							r.person,
+							organiser.person.id,
+							`evening-lesson-${j.event}`,
+						);
 					attendedLesson = true;
 				}
 				if (evening.handled) socialCompanions = evening.companions.length;
@@ -482,18 +508,27 @@ export class Runtime implements TownRuntime {
 				}
 
 				if (j.offer.action === "learn") {
-					const teacher = boundary.find((o) => o.person.id === "lea");
-					if (
-						teacher?.job?.offer.action === "teach" &&
-						teacher.person.id !== r.person.id &&
-						overlapMinutes(j, teacher, this.s.now) >= 15
-					) {
+					// The practical class is held by whoever is actually teaching at school.
+					const teacher = boundary.find(
+						(o) =>
+							o.person.id !== r.person.id &&
+							o.job?.offer.action === "teach" &&
+							overlapMinutes(j, o, this.s.now) >= 15,
+					);
+					if (teacher?.job) {
 						attendedLesson = true;
 						socialCompanions = 1;
-						teachHallInspection(r.person, "lea", `lesson-${j.event}`);
+					}
+					// The class passes on only what its teacher actually retains.
+					if (teacher?.job && retainsInspectionMethod(teacher.person)) {
+						teachHallInspection(
+							r.person,
+							teacher.person.id,
+							`lesson-${j.event}`,
+						);
 						const eid = this.event(
 							"lesson",
-							`${r.person.name} watched Lea explain when flood-soaked timber is safe.`,
+							`${r.person.name} watched ${teacher.person.name} explain when flood-soaked timber is safe.`,
 							r.person.id,
 							"school",
 							[j.event, teacher.job.event],
@@ -504,9 +539,9 @@ export class Runtime implements TownRuntime {
 						);
 						receiveEvent(
 							r,
-							{ ...lesson, actorId: "lea", targetId: r.person.id },
+							{ ...lesson, actorId: teacher.person.id, targetId: r.person.id },
 							"heard",
-							`Lea explained timber inspection during the practical class.`,
+							`${teacher.person.name} explained timber inspection during the practical class.`,
 						);
 					}
 				}
@@ -626,22 +661,23 @@ export class Runtime implements TownRuntime {
 			(o) => o.question?.status === "waiting",
 		)) {
 			const question = requester.question;
-			if (!question || requester.person.id === "lea") continue;
+			// An instructor's own note waits for an outside opinion and never lapses here.
+			if (!question || inspectionInstructor(requester)) continue;
 			if (this.s.now - question.at > 120) {
 				question.status = "missed";
 				continue;
 			}
-			const lea = this.actor("lea");
-			if (
-				presentAt(lea, "hall", this.s.now) &&
-				!receivedRequest(lea, requester)
-			)
-				receiveEvent(
-					lea,
-					question.note,
-					"saw",
-					`Read the hall noticeboard: ${question.note.text}`,
-				);
+			for (const instructor of inspectionInstructors(this.s))
+				if (
+					presentAt(instructor, "hall", this.s.now) &&
+					!receivedRequest(instructor, requester)
+				)
+					receiveEvent(
+						instructor,
+						question.note,
+						"saw",
+						`Read the hall noticeboard: ${question.note.text}`,
+					);
 		}
 		playerRound(this);
 		if (this.s.round % 16 === 0) {
@@ -755,7 +791,10 @@ export class Runtime implements TownRuntime {
 			policy === "hf"
 				? decide(r.person, choices, {
 						scarcity: Math.max(0, 1 - r.wealth / 8),
-						suggestions: [...this.leaSuggestions(r), ...(held ? [held] : [])],
+						suggestions: [
+							...this.instructorSuggestions(r),
+							...(held ? [held] : []),
+						],
 					})
 				: undefined;
 		if (policy === "hf" && !hfRecord?.chosenAffordanceId)
@@ -991,7 +1030,7 @@ export class Runtime implements TownRuntime {
 			input.kind === "player-work"
 		) {
 			if (this.s.pending.length) throw Error("Round has unresolved actors");
-			playerIntervene(this, input, (r) => this.leaSuggestions(r));
+			playerIntervene(this, input, (r) => this.instructorSuggestions(r));
 			return;
 		}
 		if (input.kind === "propose-bench-window") {
@@ -1084,7 +1123,7 @@ export class Runtime implements TownRuntime {
 	}
 	predictSpeech(id: string) {
 		if (this.s.pending.length) throw Error("Round has unresolved actors");
-		return predictSpeech(this.s, id, (r) => this.leaSuggestions(r));
+		return predictSpeech(this.s, id, (r) => this.instructorSuggestions(r));
 	}
 	export() {
 		return structuredClone(this.s);
@@ -1186,8 +1225,8 @@ export class Runtime implements TownRuntime {
 									.name ?? rel.otherId),
 					trust: rel.trust,
 					summary: rel.roles.join(", "),
-					origin: ((r.person.id === "ada" && rel.otherId === "lea") ||
-					(r.person.id === "lea" && rel.otherId === "ada")
+					// Seeded ties carry an authored role; ties HF forms from encounters start without one.
+					origin: (rel.roles.some((role) => role !== "deceased")
 						? "initial"
 						: "observed") as "initial" | "observed",
 				})),
@@ -1202,7 +1241,7 @@ export class Runtime implements TownRuntime {
 						);
 						return {
 							eventId: e.id,
-							title: eveningLabel(e),
+							title: eveningLabel(e, this.s),
 							startsAt: e.startsAt,
 							status: reply.delivered
 								? ("attended" as const)
@@ -1277,7 +1316,7 @@ export class Runtime implements TownRuntime {
 						: {}),
 					kind: e.kind,
 					organiserId: e.organiserId,
-					title: eveningLabel(e),
+					title: eveningLabel(e, this.s),
 					startsAt: e.startsAt,
 					endsAt: e.endsAt,
 					stage: e.stage,
@@ -1406,9 +1445,8 @@ export class Runtime implements TownRuntime {
 				methodLearners: this.s.people.filter(
 					(r) => (r.person.methods?.rules.length ?? 0) > 0,
 				).length,
-				taughtNeighbours: this.s.people.filter(
-					(r) =>
-						r.person.id !== "lea" && (r.person.methods?.rules.length ?? 0) > 0,
+				taughtNeighbours: this.s.people.filter((r) =>
+					taughtByNeighbour(this.s, r),
 				).length,
 				foodProduced: this.s.produced,
 				foodConsumed: this.s.consumed,

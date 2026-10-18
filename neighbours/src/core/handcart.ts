@@ -12,6 +12,7 @@ import {
 	receivedBenchWindow,
 } from "./bench-opportunity.ts";
 import { benchWindow, validateBenchProposal } from "./bench-window.ts";
+import { requireHolder } from "./cast.ts";
 import { overlapMinutes, presentAt, receiveEvent } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import type { BenchRequest, HandcartSave } from "./handcart-state.ts";
@@ -41,6 +42,18 @@ function resident(s: Save, id: string) {
 	const r = s.people.find((p) => p.person.id === id);
 	if (!r) throw Error(`Missing ${id}`);
 	return r;
+}
+/**
+ * The episode's people come from occupations (see cast.ts), never from ids: the workshop mechanic restores the
+ * cart, the carpenter whose paid work uses the main bench can lend it, and the ferry keeper owns the cart.
+ * Save fields keep their first names (`raviGoalId`, `adaGoalId`) so older saves load unchanged.
+ */
+export function cartCast(s: Save) {
+	return {
+		repairer: requireHolder(s, "cartRepairer"),
+		lender: requireHolder(s, "benchHolder"),
+		owner: requireHolder(s, "cartOwner"),
+	};
 }
 function retained(
 	host: HandcartHost,
@@ -130,26 +143,25 @@ export function updateHandcart(host: HandcartHost): void {
 					p.job.end === s.now &&
 					p.job.end <= (c.bench?.until ?? -1),
 			)) ||
-			!resident(s, "ravi").person.body.alive ||
-			!resident(s, "ada").person.body.alive)
+			!cartCast(s).repairer.person.body.alive ||
+			!cartCast(s).lender.person.body.alive)
 	)
 		delete c.bench;
 	if (c.handover) return;
-	const ravi = resident(s, "ravi"),
-		ada = resident(s, "ada");
+	const { repairer: ravi, lender: ada, owner } = cartCast(s);
 	if (presentAt(ravi, "workshop", s.now) && !c.raviGoalId) {
 		c.observation ??= retained(
 			host,
 			"cart-observed",
-			"Jo’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
-			"ravi",
+			`${owner.person.name}’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.`,
+			ravi.person.id,
 			"workshop",
 		);
 		if (receiveEvent(ravi, c.observation, "saw"))
 			c.raviGoalId = adoptGoal(
 				ravi.person,
 				{
-					label: "Restore Jo’s handcart and return it",
+					label: `Restore ${owner.person.name}’s handcart and return it`,
 					serves: ["competence", "meaning"],
 					importance: 0.6,
 					advancedBy: [
@@ -165,8 +177,8 @@ export function updateHandcart(host: HandcartHost): void {
 		c.adaObservation ??= retained(
 			host,
 			"bench-work",
-			"Ada can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
-			"ada",
+			`${ada.person.name} can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.`,
+			ada.person.id,
 			"workshop",
 		);
 		if (receiveEvent(ada, c.adaObservation, "saw"))
@@ -191,7 +203,7 @@ export function blocksMainBench(
 	const b = s.handcart?.bench;
 	if (
 		!b ||
-		actorId === "ravi" ||
+		actorId === cartCast(s).repairer.person.id ||
 		offer.action !== "work" ||
 		offer.placeId !== "workshop"
 	)
@@ -256,9 +268,8 @@ export function handcartOffers(
 		});
 	};
 	const request = latest(s),
-		ada = resident(s, "ada"),
-		ravi = resident(s, "ravi");
-	if (r.person.id === "ravi") {
+		{ repairer: ravi, lender: ada, owner: jo } = cartCast(s);
+	if (r.person.id === ravi.person.id) {
 		if (
 			historical ||
 			(c.progress < 3 &&
@@ -274,11 +285,11 @@ export function handcartOffers(
 			add(
 				"cart-ask",
 				receivedBenchWindow(s)
-					? `Ask Ada for the main bench ${benchWindowLabel(receivedBenchWindow(s) ?? nextWindow(s.now + 15))}; her paid work needs it too`
-					: "Ask Ada for tomorrow’s 08:00–12:00 main bench; her paid work needs it too",
+					? `Ask ${ada.person.name} for the main bench ${benchWindowLabel(receivedBenchWindow(s) ?? nextWindow(s.now + 15))}; her paid work needs it too`
+					: `Ask ${ada.person.name} for tomorrow’s 08:00–12:00 main bench; her paid work needs it too`,
 				"workshop",
 				{ meaning: 0.2 },
-				{ targetId: "ada", tags: ["social"] },
+				{ targetId: ada.person.id, tags: ["social"] },
 			);
 		if (historical || (c.progress < 3 && c.raviGoalId)) {
 			add(
@@ -291,7 +302,7 @@ export function handcartOffers(
 			const fastOffer: Affordance = {
 				id: "cart-fast",
 				action: "cart-fast",
-				label: "Restore one cart section on Ada’s main bench · one hour",
+				label: `Restore one cart section on ${ada.person.name}’s main bench · one hour`,
 				placeId: "workshop",
 				duration: 60,
 				effort: 0.15,
@@ -325,21 +336,20 @@ export function handcartOffers(
 					tags: fastOffer.tags,
 				});
 		}
-		const jo = resident(s, "jo");
 		if (
 			historical ||
 			(c.progress === 3 && jo.person.body.alive && presentAt(jo, "quay", s.now))
 		)
 			add(
 				"cart-handover",
-				"Return the restored handcart to Jo",
+				`Return the restored handcart to ${jo.person.name}`,
 				"quay",
 				{ meaning: 0.45, belonging: 0.2 },
-				{ targetId: "jo", tags: ["help"] },
+				{ targetId: jo.person.id, tags: ["help"] },
 			);
 	}
 	if (
-		r.person.id === "ada" &&
+		r.person.id === ada.person.id &&
 		(historical ||
 			(request &&
 				!request.reply &&
@@ -351,25 +361,25 @@ export function handcartOffers(
 		add(
 			"cart-agree",
 			request?.opportunityEventId
-				? `Lend Ravi the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}; postpone my paid carpentry`
-				: "Lend Ravi the main bench tomorrow 08:00–12:00; postpone my paid carpentry",
+				? `Lend ${ravi.person.name} the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}; postpone my paid carpentry`
+				: `Lend ${ravi.person.name} the main bench tomorrow 08:00–12:00; postpone my paid carpentry`,
 			"workshop",
 			{ meaning: 0.25, belonging: 0.2 },
-			{ targetId: "ravi", tags: ["social"] },
+			{ targetId: ravi.person.id, tags: ["social"] },
 		);
 		add(
 			"cart-refuse",
 			"Keep the main bench for my paid work",
 			"workshop",
 			{ autonomy: 0.25 },
-			{ targetId: "ravi", tags: ["social"] },
+			{ targetId: ravi.person.id, tags: ["social"] },
 		);
 		add(
 			"cart-later",
-			"Tell Ravi to ask again another day",
+			`Tell ${ravi.person.name} to ask again another day`,
 			"workshop",
 			{ autonomy: 0.15 },
-			{ targetId: "ravi", tags: ["social"] },
+			{ targetId: ravi.person.id, tags: ["social"] },
 		);
 	}
 	return result;
@@ -391,10 +401,11 @@ export function finishHandcart(
 		return { handled: false, delivered: false, companions: [] };
 	let delivered = false;
 	const companions: string[] = [];
+	const { repairer: ravi, lender: ada, owner: jo } = cartCast(s);
 	if (
 		action === "cart-ask" &&
-		r.person.id === "ravi" &&
-		meeting(s, r, "ada", "workshop") &&
+		r.person.id === ravi.person.id &&
+		meeting(s, r, ada.person.id, "workshop") &&
 		c.requests.length < 8
 	) {
 		const proposedWindow = receivedBenchWindow(s, true);
@@ -403,13 +414,13 @@ export function finishHandcart(
 			host,
 			"bench-request",
 			proposedWindow
-				? `Ravi asked Ada to borrow the main bench ${benchWindowLabel(window)} for Jo’s handcart. Ada’s paid carpentry needs that bench too.`
-				: "Ravi asked Ada to borrow the main bench tomorrow from 08:00 to 12:00 for Jo’s handcart. Ada’s paid carpentry needs that bench too.",
-			"ravi",
+				? `${ravi.person.name} asked ${ada.person.name} to borrow the main bench ${benchWindowLabel(window)} for ${jo.person.name}’s handcart. ${ada.person.name}’s paid carpentry needs that bench too.`
+				: `${ravi.person.name} asked ${ada.person.name} to borrow the main bench tomorrow from 08:00 to 12:00 for ${jo.person.name}’s handcart. ${ada.person.name}’s paid carpentry needs that bench too.`,
+			ravi.person.id,
 			"workshop",
 			[j.event, ...(proposedWindow && c.premise ? [c.premise.event.id] : [])],
 		);
-		if (socialReceipt(s, "ravi", "ada", e, "bench-request")) {
+		if (socialReceipt(s, ravi.person.id, ada.person.id, e, "bench-request")) {
 			c.requests.push({
 				id: c.requests.length + 1,
 				event: e,
@@ -421,11 +432,11 @@ export function finishHandcart(
 					: {}),
 			});
 			delivered = true;
-			companions.push("ada");
+			companions.push(ada.person.id);
 		}
 	} else if (
 		["cart-agree", "cart-refuse", "cart-later"].includes(action) &&
-		r.person.id === "ada"
+		r.person.id === ada.person.id
 	) {
 		const request = latest(s);
 		if (
@@ -434,7 +445,7 @@ export function finishHandcart(
 			(s.now < request.proposedFrom ||
 				(request.opportunityEventId !== undefined &&
 					s.now === request.proposedFrom)) &&
-			meeting(s, r, "ravi", "workshop")
+			meeting(s, r, ravi.person.id, "workshop")
 		) {
 			const reply =
 				action === "cart-agree"
@@ -447,20 +458,20 @@ export function finishHandcart(
 				"bench-reply",
 				reply === "agree"
 					? request.opportunityEventId
-						? `Ada agreed to lend Ravi the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}. Her paid carpentry must wait.`
-						: "Ada agreed to lend Ravi the main bench tomorrow from 08:00 to 12:00. Her paid carpentry must wait."
+						? `${ada.person.name} agreed to lend ${ravi.person.name} the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}. Her paid carpentry must wait.`
+						: `${ada.person.name} agreed to lend ${ravi.person.name} the main bench tomorrow from 08:00 to 12:00. Her paid carpentry must wait.`
 					: reply === "refuse"
-						? "Ada kept the main bench for her paid carpentry. Ravi can use the slower side bench."
-						: "Ada asked Ravi to discuss the bench another day.",
-				"ada",
+						? `${ada.person.name} kept the main bench for her paid carpentry. ${ravi.person.name} can use the slower side bench.`
+						: `${ada.person.name} asked ${ravi.person.name} to discuss the bench another day.`,
+				ada.person.id,
 				"workshop",
 				[request.event.id, j.event],
 			);
-			if (socialReceipt(s, "ada", "ravi", e, "bench-reply")) {
+			if (socialReceipt(s, ada.person.id, ravi.person.id, e, "bench-reply")) {
 				request.reply = reply;
 				request.replyEvent = e;
 				delivered = true;
-				companions.push("ravi");
+				companions.push(ravi.person.id);
 				if (reply === "agree") {
 					const window = {
 						from: request.proposedFrom,
@@ -468,15 +479,15 @@ export function finishHandcart(
 					};
 					const commitment = promise(r.person, {
 						kind: "abstain",
-						toId: "ravi",
+						toId: ravi.person.id,
 						actions: [],
 						violatedBy: ["work"],
 						from: window.from,
 						until: window.until,
 						importance: 0.6,
 						label: request.opportunityEventId
-							? `Leave the main bench for Ravi’s cart work ${benchWindowLabel(window)}`
-							: "Leave the main bench for Ravi’s cart work from 08:00 to 12:00",
+							? `Leave the main bench for ${ravi.person.name}’s cart work ${benchWindowLabel(window)}`
+							: `Leave the main bench for ${ravi.person.name}’s cart work from 08:00 to 12:00`,
 					});
 					Object.assign(request, window, { commitmentId: commitment.id });
 					c.bench = {
@@ -491,14 +502,14 @@ export function finishHandcart(
 		const b = c.bench;
 		const legal =
 			action === "cart-slow" || (b && j.arrive >= b.from && j.end <= b.until);
-		if (r.person.id === "ravi" && c.progress < 3 && legal) {
+		if (r.person.id === ravi.person.id && c.progress < 3 && legal) {
 			c.progress++;
 			delivered = true;
 			const workEvent = retained(
 				host,
 				"cart-progress",
-				`Ravi restored ${c.progress} of three cart sections using the ${action === "cart-fast" ? "main" : "side"} bench.`,
-				"ravi",
+				`${ravi.person.name} restored ${c.progress} of three cart sections using the ${action === "cart-fast" ? "main" : "side"} bench.`,
+				ravi.person.id,
 				"workshop",
 				[
 					j.event,
@@ -522,12 +533,14 @@ export function finishHandcart(
 					const e = retained(
 						host,
 						"bench-used",
-						"Ravi saw the main bench was free during the period Ada had agreed to lend him, and completed his cart work there.",
-						"ada",
+						`${ravi.person.name} saw the main bench was free during the period ${ada.person.name} had agreed to lend him, and completed his cart work there.`,
+						ada.person.id,
 						"workshop",
 						[request.replyEvent?.id ?? request.event.id, workEvent.id],
 					);
-					if (socialReceipt(s, "ada", "ravi", e, "help", "saw")) {
+					if (
+						socialReceipt(s, ada.person.id, ravi.person.id, e, "help", "saw")
+					) {
 						request.benefitReceived = true;
 						request.benefitEvent = structuredClone(e);
 					}
@@ -537,23 +550,23 @@ export function finishHandcart(
 		}
 	} else if (
 		action === "cart-handover" &&
-		r.person.id === "ravi" &&
+		r.person.id === ravi.person.id &&
 		c.progress === 3 &&
 		!c.handover &&
-		meeting(s, r, "jo", "quay")
+		meeting(s, r, jo.person.id, "quay")
 	) {
 		const e = retained(
 			host,
 			"cart-returned",
-			"Ravi returned the restored handcart to Jo. It can carry one extra food unit on each of Jo’s completed supply trips.",
-			"ravi",
+			`${ravi.person.name} returned the restored handcart to ${jo.person.name}. It can carry one extra food unit on each of ${jo.person.name}’s completed supply trips.`,
+			ravi.person.id,
 			"quay",
 			[j.event],
 		);
-		if (socialReceipt(s, "ravi", "jo", e, "gift")) {
+		if (socialReceipt(s, ravi.person.id, jo.person.id, e, "gift")) {
 			c.handover = e;
 			delivered = true;
-			companions.push("jo");
+			companions.push(jo.person.id);
 		}
 	}
 	return { handled: true, delivered, companions };
@@ -564,7 +577,11 @@ export function cartSupplyBonus(
 	id: string,
 	action: string,
 ): number {
-	return id === "jo" && action === "supply" && s.handcart?.handover ? 1 : 0;
+	return action === "supply" &&
+		s.handcart?.handover &&
+		id === cartCast(s).owner.person.id
+		? 1
+		: 0;
 }
 /** Closed bounded receipts make imported bench ownership checkable. */
 export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
@@ -608,9 +625,10 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		c.requests.length > 8
 	)
 		throw Error("Invalid handcart state");
+	const cast = cartCast(s);
 	for (const [key, id] of [
-		["raviGoalId", "ravi"],
-		["adaGoalId", "ada"],
+		["raviGoalId", cast.repairer.person.id],
+		["adaGoalId", cast.lender.person.id],
 	] as const) {
 		if (
 			c[key] !== undefined &&
@@ -634,9 +652,14 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid cart evidence");
 	};
 	if (c.observation)
-		evidence(c.observation, "cart-observed", "ravi", "workshop");
+		evidence(
+			c.observation,
+			"cart-observed",
+			cast.repairer.person.id,
+			"workshop",
+		);
 	if (c.adaObservation)
-		evidence(c.adaObservation, "bench-work", "ada", "workshop");
+		evidence(c.adaObservation, "bench-work", cast.lender.person.id, "workshop");
 	if (c.premise) {
 		const p = c.premise;
 		fields(p, ["slot", "at", "from", "until", "event", "received", "origin"]);
@@ -648,7 +671,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		parseProposalOrigin(p.origin);
 		validateEvent(p.event, s, ids);
 		const window = benchWindow(p.at, p.slot);
-		const goal = resident(s, "ravi").person.agenda.goals.find(
+		const goal = cast.repairer.person.agenda.goals.find(
 			(g) => g.id === c.raviGoalId,
 		);
 		if (
@@ -667,7 +690,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			typeof p.received !== "boolean" ||
 			p.event.kind !== "intervention" ||
 			p.event.source !== "town-bulletin" ||
-			p.event.targetId !== "ravi" ||
+			p.event.targetId !== cast.repairer.person.id ||
 			p.event.placeId !== "workshop" ||
 			p.event.actorId !== undefined ||
 			!p.event.causes.includes(c.observation.id)
@@ -692,7 +715,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			"benefitReceived",
 			"benefitEvent",
 		]);
-		evidence(q.event, "bench-request", "ravi", "workshop");
+		evidence(q.event, "bench-request", cast.repairer.person.id, "workshop");
 		const proposed =
 			q.opportunityEventId === undefined
 				? nextWindow(q.event.at)
@@ -717,7 +740,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid bench request");
 		if (q.reply) {
 			if (!q.replyEvent) throw Error("Missing bench reply");
-			evidence(q.replyEvent, "bench-reply", "ada", "workshop");
+			evidence(q.replyEvent, "bench-reply", cast.lender.person.id, "workshop");
 			if (
 				q.replyEvent.at < q.heardAt ||
 				q.replyEvent.at > q.proposedFrom ||
@@ -736,7 +759,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Unanswered bench request");
 		if (q.reply === "agree") {
 			const expected = { from: q.proposedFrom, until: q.proposedUntil };
-			const promise = resident(s, "ada").person.agenda.commitments.find(
+			const promise = cast.lender.person.agenda.commitments.find(
 				(p) => p.id === q.commitmentId,
 			);
 			if (
@@ -744,7 +767,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 				q.until !== expected.until ||
 				!promise ||
 				promise.kind !== "abstain" ||
-				promise.toId !== "ravi" ||
+				promise.toId !== cast.repairer.person.id ||
 				promise.from !== q.from ||
 				promise.until !== q.until ||
 				promise.actions.length !== 0 ||
@@ -765,7 +788,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 	const workIds = new Set<number>();
 	for (const w of c.work) {
 		fields(w, ["event", "mode", "startedAt", "endedAt"]);
-		evidence(w.event, "cart-progress", "ravi", "workshop");
+		evidence(w.event, "cart-progress", cast.repairer.person.id, "workshop");
 		if (
 			!["main", "side"].includes(w.mode) ||
 			!Number.isSafeInteger(w.startedAt) ||
@@ -797,7 +820,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		)
 			throw Error("Invalid retained bench benefit");
 		if (q.benefitEvent) {
-			evidence(q.benefitEvent, "bench-used", "ada", "workshop");
+			evidence(q.benefitEvent, "bench-used", cast.lender.person.id, "workshop");
 			const w = c.work.find(
 				(w) =>
 					w.mode === "main" &&
@@ -838,7 +861,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid current bench reservation");
 	}
 	if (c.handover) {
-		evidence(c.handover, "cart-returned", "ravi", "quay");
+		evidence(c.handover, "cart-returned", cast.repairer.person.id, "quay");
 		if (
 			c.progress !== 3 ||
 			c.handover.at < (c.work.at(-1)?.endedAt ?? Infinity)

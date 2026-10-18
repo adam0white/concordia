@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import { probeAssistance } from "../scripts/probe-assistance.ts";
+import { HF_SOURCE } from "../src/core/hf-version.ts";
 import { createRuntime } from "../src/core/index.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import { teachHallInspection } from "../src/experiments/inspection.ts";
@@ -46,7 +47,7 @@ it("screens every taught known neighbour and keeps all matched outcomes without 
 		learned?.opened &&
 		!ablated?.opened
 	) {
-		expect(learned.decisionSource).toBe("HF 2.3.0");
+		expect(learned.decisionSource).toBe(HF_SOURCE);
 		expect(
 			learned.methodTerms.some(
 				(term) =>

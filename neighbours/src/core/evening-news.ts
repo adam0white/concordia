@@ -49,7 +49,7 @@ export function shareEveningNotice(
 	if (!evening?.notice) return;
 	const id = host.event(
 		"evening-retold",
-		`${speaker.person.name} told ${listener.person.name} about ${eveningLabel(evening)}. ${evening.notice.text}`,
+		`${speaker.person.name} told ${listener.person.name} about ${eveningLabel(evening, s)}. ${evening.notice.text}`,
 		speaker.person.id,
 		place,
 		[evening.notice.id, job.event],

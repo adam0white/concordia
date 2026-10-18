@@ -6,6 +6,7 @@ import {
 	socialEvent,
 } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts.ts";
+import { holder, nameOf, type Position } from "./cast.ts";
 import { presentAt, receiveEvent } from "./encounters.ts";
 import { placeOf } from "./invariants.ts";
 import type { Resident, Save } from "./state.ts";
@@ -47,7 +48,8 @@ export type EveningEvent = {
 	advertisement?: TownEvent;
 	id: string;
 	kind: "class" | "meal";
-	organiserId: "lea" | "sam";
+	/** The kind's organising position holder when the evening was created (see `organiserFor`). */
+	organiserId: string;
 	startsAt: number;
 	endsAt: number;
 	stage: "candidate" | "proposed" | "preparing" | "prepared" | "closed";
@@ -80,8 +82,22 @@ export interface EveningHost {
 		causes?: number[],
 	): number;
 }
-export function eveningLabel(e: EveningEvent): string {
-	return e.kind === "class" ? "Lea’s practical class" : "Sam’s shared supper";
+/** The position that organises each kind of hall evening. */
+export const ORGANISER_POSITION: Record<EveningEvent["kind"], Position> = {
+	class: "teacher",
+	meal: "cook",
+};
+export function organiserFor(
+	s: Pick<Save, "people">,
+	kind: EveningEvent["kind"],
+): string | undefined {
+	return holder(s, ORGANISER_POSITION[kind])?.person.id;
+}
+export function eveningLabel(e: EveningEvent, s: Pick<Save, "people">): string {
+	const name = nameOf(s, e.organiserId);
+	return e.kind === "class"
+		? `${name}’s practical class`
+		: `${name}’s shared supper`;
 }
 function clock(at: number) {
 	return `Day ${Math.floor(at / 1440) + 1} at ${String(Math.floor((at % 1440) / 60)).padStart(2, "0")}:00`;
@@ -109,6 +125,11 @@ export function roomBooking(s: Save, e: EveningEvent) {
 /** One hall, two evenings. Candidates are circumstances, never decisions. */
 export function updateEvenings(host: EveningHost): void {
 	const s = host.s;
+	const organiser = (kind: EveningEvent["kind"]) => {
+		const id = organiserFor(s, kind);
+		if (!id) throw Error(`Nobody organises the ${kind} evenings`);
+		return id;
+	};
 	if (!s.socialEvenings && s.hallSafe) {
 		const nextDay = Math.floor(s.now / 1440) + 1;
 		s.socialEvenings = {
@@ -119,7 +140,7 @@ export function updateEvenings(host: EveningHost): void {
 				(["class", "meal"] as const).map((kind) => ({
 					id: `evening-${index}-${kind}`,
 					kind,
-					organiserId: kind === "class" ? "lea" : "sam",
+					organiserId: organiser(kind),
 					startsAt: (nextDay + offset) * 1440 + 1080,
 					endsAt: (nextDay + offset) * 1440 + 1140,
 					stage: "candidate" as const,
@@ -150,7 +171,7 @@ export function updateEvenings(host: EveningHost): void {
 				id: `weekly-${next}-${kind}`,
 				cycle: next,
 				kind,
-				organiserId: kind === "class" ? "lea" : "sam",
+				organiserId: organiser(kind),
 				startsAt: start,
 				endsAt: start + 60,
 				stage: "candidate",
@@ -159,10 +180,8 @@ export function updateEvenings(host: EveningHost): void {
 		});
 	}
 	pilot.purposes ??= {};
-	for (const [id, kind] of [
-		["sam", "meal"],
-		["lea", "class"],
-	] as const) {
+	for (const kind of ["meal", "class"] as const) {
+		const id = organiser(kind);
 		const resident = s.people.find((r) => r.person.id === id);
 		if (
 			!resident ||
@@ -176,7 +195,7 @@ export function updateEvenings(host: EveningHost): void {
 		if (!purpose) {
 			const eventId = host.event(
 				"hall-purpose",
-				`The reopened hall has room for ${id === "sam" ? "the shared supper Sam promised" : "Lea’s displaced evening class"}.`,
+				`The reopened hall has room for ${kind === "meal" ? `the shared supper ${resident.person.name} promised` : `${resident.person.name}’s displaced evening class`}.`,
 				id,
 				"hall",
 			);
@@ -208,10 +227,8 @@ export function updateEvenings(host: EveningHost): void {
 			).id;
 	}
 	for (const cycle of recurring.cycles) {
-		for (const [id, kind] of [
-			["sam", "meal"],
-			["lea", "class"],
-		] as const) {
+		for (const kind of ["meal", "class"] as const) {
+			const id = organiser(kind);
 			const resident = s.people.find((r) => r.person.id === id);
 			const latestOpportunity = Math.max(...cycle.events.map((e) => e.endsAt));
 			// One weekly purpose allows either legal date from its first received observation.
@@ -230,7 +247,7 @@ export function updateEvenings(host: EveningHost): void {
 			if (!purpose) {
 				const eventId = host.event(
 					"hall-purpose",
-					`${id === "sam" ? "Sam can arrange another shared supper" : "Lea can arrange another practical class"}. ${cycle.openedSlot ? "A second hall evening is now available for this week." : "Sam’s supper and Lea’s class need the hall’s same weekly hour."}`,
+					`${resident.person.name} can arrange another ${kind === "meal" ? "shared supper" : "practical class"}. ${cycle.openedSlot ? "A second hall evening is now available for this week." : `${nameOf(s, organiser("meal"))}’s supper and ${nameOf(s, organiser("class"))}’s class need the hall’s same weekly hour.`}`,
 					id,
 					"hall",
 				);
@@ -332,7 +349,7 @@ export function updateEvenings(host: EveningHost): void {
 				);
 			const id = host.event(
 				"evening-ended",
-				`${eveningLabel(e)}: ${delivered.length ? `${delivered.join(", ")} ${e.kind === "class" ? "received the practical lesson" : "ate supper with the host"}.` : "nobody received the planned activity."}${!e.bookingEvent ? " The room was never prepared." : ""}`,
+				`${eveningLabel(e, s)}: ${delivered.length ? `${delivered.join(", ")} ${e.kind === "class" ? "received the practical lesson" : "ate supper with the host"}.` : "nobody received the planned activity."}${!e.bookingEvent ? " The room was never prepared." : ""}`,
 				e.organiserId,
 				"hall",
 				e.notice ? [e.notice.id] : [],
@@ -421,7 +438,7 @@ export function eveningOffers(
 				e,
 				"propose",
 				`propose-${e.kind}`,
-				`Invite neighbours and promise to host ${eveningLabel(e)} · ${clock(e.startsAt)}`,
+				`Invite neighbours and promise to host ${eveningLabel(e, s)} · ${clock(e.startsAt)}`,
 				15,
 				{ meaning: 0.35, competence: 0.25 },
 			);
@@ -437,7 +454,7 @@ export function eveningOffers(
 				e,
 				"accept",
 				"accept-evening",
-				`Accept ${eveningLabel(e)} · ${clock(e.startsAt)}`,
+				`Accept ${eveningLabel(e, s)} · ${clock(e.startsAt)}`,
 				15,
 				{ belonging: 0.25, meaning: 0.2 },
 				{ targetId: e.organiserId, tags: ["social"] },
@@ -446,7 +463,7 @@ export function eveningOffers(
 				e,
 				"decline",
 				"decline-evening",
-				`Decline ${eveningLabel(e)}`,
+				`Decline ${eveningLabel(e, s)}`,
 				15,
 				{ autonomy: 0.2 },
 				{ targetId: e.organiserId },
@@ -461,7 +478,7 @@ export function eveningOffers(
 				e,
 				"prepare",
 				`prepare-${e.kind}`,
-				`Prepare the hall for ${eveningLabel(e)}`,
+				`Prepare the hall for ${eveningLabel(e, s)}`,
 				30,
 				{ meaning: 0.4, competence: 0.3 },
 				{ tags: ["work"] },
@@ -477,7 +494,7 @@ export function eveningOffers(
 				e,
 				"host",
 				`host-${e.kind}`,
-				`Host ${eveningLabel(e)} at the hall`,
+				`Host ${eveningLabel(e, s)} at the hall`,
 				120,
 				{ meaning: 0.5, belonging: 0.4, competence: 0.3 },
 				{ tags: ["social", "evening"] },
@@ -497,7 +514,7 @@ export function eveningOffers(
 				e,
 				"attend",
 				`attend-${e.kind}`,
-				`Go to ${eveningLabel(e)}`,
+				`Go to ${eveningLabel(e, s)}`,
 				45,
 				e.kind === "class"
 					? { competence: 0.4, belonging: 0.35 }
@@ -580,7 +597,7 @@ export function interveneEvening(
 		e.endsAt += 1440;
 		const id = host.event(
 			"intervention",
-			`Opened a second hall evening for ${eveningLabel(e)}: ${clock(from)} moved to ${clock(e.startsAt)} before any invitation was posted.`,
+			`Opened a second hall evening for ${eveningLabel(e, s)}: ${clock(from)} moved to ${clock(e.startsAt)} before any invitation was posted.`,
 			undefined,
 			"hall",
 		);
@@ -666,7 +683,7 @@ export function finishEvening(
 	if (job.offer.id.startsWith("propose:")) {
 		const id = host.event(
 			"evening-proposed",
-			`${r.person.name} invited neighbours to ${eveningLabel(e)} in the hall on ${clock(e.startsAt)}. ${e.kind === "meal" ? "Bring one coin for your meal." : "Practical timber checks; no fee."} A reply is a promise to attend, not a command.`,
+			`${r.person.name} invited neighbours to ${eveningLabel(e, s)} in the hall on ${clock(e.startsAt)}. ${e.kind === "meal" ? "Bring one coin for your meal." : "Practical timber checks; no fee."} A reply is a promise to attend, not a command.`,
 			r.person.id,
 			"hall",
 			[job.event],
@@ -680,7 +697,7 @@ export function finishEvening(
 			from: e.startsAt,
 			until: e.endsAt,
 			importance: 0.6,
-			label: `Host ${eveningLabel(e)} · ${clock(e.startsAt)}`,
+			label: `Host ${eveningLabel(e, s)} · ${clock(e.startsAt)}`,
 		}).id;
 		e.replies[r.person.id] = { heardAt: s.now, attendedMinutes: 0 };
 	} else if (job.offer.id.startsWith("accept:")) {
@@ -695,11 +712,11 @@ export function finishEvening(
 				from: e.startsAt,
 				until: e.endsAt,
 				importance: 0.6,
-				label: `${eveningLabel(e)} · ${clock(e.startsAt)}`,
+				label: `${eveningLabel(e, s)} · ${clock(e.startsAt)}`,
 			}).id;
 			host.event(
 				"evening-accepted",
-				`${r.person.name} accepted ${eveningLabel(e)} on ${clock(e.startsAt)}.`,
+				`${r.person.name} accepted ${eveningLabel(e, s)} on ${clock(e.startsAt)}.`,
 				r.person.id,
 				"hall",
 				e.notice ? [e.notice.id, job.event] : [job.event],
@@ -711,7 +728,7 @@ export function finishEvening(
 			reply.reply = "declined";
 			host.event(
 				"evening-declined",
-				`${r.person.name} declined ${eveningLabel(e)}.`,
+				`${r.person.name} declined ${eveningLabel(e, s)}.`,
 				r.person.id,
 				"hall",
 				[job.event],
@@ -721,7 +738,7 @@ export function finishEvening(
 		e.stage = "prepared";
 		host.event(
 			"evening-prepared",
-			`${r.person.name} prepared the hall for ${eveningLabel(e)} on ${clock(e.startsAt)}. The other activity cannot use the same room at that time.`,
+			`${r.person.name} prepared the hall for ${eveningLabel(e, s)} on ${clock(e.startsAt)}. The other activity cannot use the same room at that time.`,
 			r.person.id,
 			"hall",
 			e.notice ? [e.notice.id, job.event] : [job.event],
@@ -764,7 +781,7 @@ export function finishEvening(
 		}
 		host.event(
 			"evening-attended",
-			`${r.person.name} ${e.kind === "class" ? "received Lea’s practical timber lesson" : "ate supper with Sam"} after ${reply?.attendedMinutes} awake minutes together.`,
+			`${r.person.name} ${e.kind === "class" ? `received ${nameOf(s, e.organiserId)}’s practical timber lesson` : `ate supper with ${nameOf(s, e.organiserId)}`} after ${reply?.attendedMinutes} awake minutes together.`,
 			r.person.id,
 			"hall",
 			e.notice ? [e.notice.id, job.event] : [job.event],
@@ -823,7 +840,13 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 		purposes: Record<string, HallPurpose>,
 		earliest: number,
 	) => {
-		fields(purposes, ["sam", "lea"]);
+		fields(
+			purposes,
+			(["meal", "class"] as const).flatMap((kind) => {
+				const id = organiserFor(s, kind);
+				return id ? [id] : [];
+			}),
+		);
 		for (const [id, purpose] of Object.entries(purposes)) {
 			fields(purpose, ["notice", "goalId"]);
 			validateEvent(purpose.notice, s, ids);
@@ -987,7 +1010,7 @@ export function validateEvenings(s: Save, ids: Set<string>): void {
 					: `evening-${Math.floor(index / 2)}-${kind}`) ||
 			e.cycle !== cycleIndex ||
 			e.kind !== kind ||
-			e.organiserId !== (kind === "class" ? "lea" : "sam") ||
+			e.organiserId !== organiserFor(s, kind) ||
 			e.startsAt !== expectedStart ||
 			e.endsAt !== expectedStart + 60 ||
 			!["candidate", "proposed", "preparing", "prepared", "closed"].includes(

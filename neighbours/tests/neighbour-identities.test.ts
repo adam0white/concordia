@@ -67,3 +67,18 @@ it("preserves actual numbered names and history through restore and continued re
 	expect(restored.export()).toEqual(original.export());
 	expect((restored.export() as Save).people[8]?.person.name).toBe("Resident 1");
 });
+
+it("accepts HF 2.3.0 saves and continues them exactly, normalizing only the stamps", () => {
+	const current = new Runtime(createRuntime(42, 12).export() as Save);
+	for (let i = 0; i < 24; i++) current.step();
+	const legacy230 = structuredClone(current.export()) as Save;
+	legacy230.hf = "2.3.0";
+	for (const resident of legacy230.people) resident.person.engine = "2.3.0";
+	const restored = restoreRuntime(legacy230);
+	expect(restored.export()).toEqual(current.export());
+	for (let i = 0; i < 8; i++) {
+		current.step();
+		restored.step();
+	}
+	expect(restored.export()).toEqual(current.export());
+});

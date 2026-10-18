@@ -4,6 +4,13 @@ Gaps found while building the player as a neighbour against the published
 `@adam0white/human-framework` 2.3.0. Each gap is worked around in the host. None needs Neighbours-specific
 code in HF.
 
+**Checked against 2.6.0 (2026-10-18, Phase B).** Neighbours now consumes exact npm 2.6.0. Releases 2.4.0
+(opt-in promptings), 2.5.0 (bodily forecast over declared `followedBy` exertion) and 2.6.0 (opt-in slow fatigue
+store) close neither request below: `VoiceRelation.seeded` is still set only from `PersonSpec.voices` at
+creation, and `learnFromVoice` still learns only from a suggestion's resolution. Both requests remain open and
+both host workarounds remain. Neighbours does not opt into promptings, the fatigue store or `followedBy`; those
+would change behaviour without a failing case here.
+
 ## 1. Seeding a voice after creation (2026-10-18)
 
 **Gap.** `adoptVoiceTrust(p, voiceId, target, rate)` adds a voice, but it does not mark the voice as `seeded`.

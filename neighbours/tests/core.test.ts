@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
 import { createRuntime, restoreRuntime, stateHash } from "../src/core";
+import { HF_SOURCE } from "../src/core/hf-version.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 
@@ -54,7 +55,7 @@ describe("physical town", () => {
 				.view()
 				.people.some(
 					(p) =>
-						p.decision?.source === "HF 2.3.0" && p.decision.options.length > 1,
+						p.decision?.source === HF_SOURCE && p.decision.options.length > 1,
 				),
 		).toBe(true);
 	});

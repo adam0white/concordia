@@ -4,7 +4,7 @@ import { reviewDue } from "./activity-reviews.ts";
 import { validateAssistance } from "./assistance.ts";
 import { validateEvenings } from "./evenings.ts";
 import { validateHandcart } from "./handcart.ts";
-import { HF_VERSION } from "./hf-version.ts";
+import { HF_VERSION, LEGACY_HF_VERSIONS } from "./hf-version.ts";
 import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
 import { validatePlayer } from "./player.ts";
 import { Runtime } from "./runtime.ts";
@@ -51,7 +51,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		throw Error("Unexpected or missing save fields");
 	if (
 		s.schema !== SCHEMA ||
-		!["2.2.1", HF_VERSION].includes(s.hf) ||
+		!LEGACY_HF_VERSIONS.includes(s.hf) ||
 		!Array.isArray(s.people) ||
 		s.people.length < 8 ||
 		s.people.length > 300 ||

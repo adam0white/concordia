@@ -1,5 +1,7 @@
 import type { TownEvent, TownView } from "../contracts.ts";
+import { nameOf } from "./cast.ts";
 import { allEvenings } from "./evenings.ts";
+import { cartCast } from "./handcart.ts";
 import { isHfSource } from "./hf-version.ts";
 import type { Save } from "./state.ts";
 import { CHRONICLE_KINDS } from "./town-chronicle.ts";
@@ -14,20 +16,21 @@ function storyTitle(s: Save, e: TownEvent): string {
 			candidate.notice?.id === e.id || candidate.result?.id === e.id,
 	);
 	if (evening) {
+		const host = nameOf(s, evening.organiserId);
 		if (e.kind === "evening-proposed")
 			return evening.kind === "class"
-				? "Lea invited neighbours to a class"
-				: "Sam invited neighbours to supper";
+				? `${host} invited neighbours to a class`
+				: `${host} invited neighbours to supper`;
 		const delivered = Object.entries(evening.replies).some(
 			([id, reply]) => id !== evening.organiserId && reply.delivered,
 		);
 		return evening.kind === "class"
 			? delivered
-				? "Neighbours received Lea’s class"
-				: "Lea’s class did not happen"
+				? `Neighbours received ${host}’s class`
+				: `${host}’s class did not happen`
 			: delivered
-				? "Neighbours shared Sam’s supper"
-				: "Sam’s supper did not happen";
+				? `Neighbours shared ${host}’s supper`
+				: `${host}’s supper did not happen`;
 	}
 	const titles: Record<string, string> = {
 		"annex-observed": "The annex timber was observed",
@@ -39,8 +42,9 @@ function storyTitle(s: Save, e: TownEvent): string {
 		"missed-encounter": "The explanation missed its listener",
 		lesson: "The displaced class passed on a method",
 		"shared-meal": "A shared meal returned",
-		"cart-returned": "Jo’s repaired handcart returned to the quay",
 	};
+	if (e.kind === "cart-returned")
+		return `${cartCast(s).owner.person.name}’s repaired handcart returned to the quay`;
 	return titles[e.kind] ?? "A town event";
 }
 export function townStories(s: Save): TownView["stories"] {

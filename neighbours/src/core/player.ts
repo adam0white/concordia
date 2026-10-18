@@ -38,19 +38,15 @@ import { placeOf, required } from "./invariants.ts";
 import { journalEntries } from "./journal.ts";
 import { buildOffers, socialPreview, WORKPLACE } from "./offers.ts";
 import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
-import type { Resident, Save } from "./state.ts";
+import { PLAYER_TIES, type Resident, type Save } from "./state.ts";
 import { validateEvent } from "./validation.ts";
 import { actionWords, counterWords, voicedLine } from "./voicing.ts";
 
 export const PLAYER_VOICE = "player";
 export const PLAYER_HOME = "homes";
 export const PLAYER_WORK_HOURS = 2;
-/** Seeded once when the player first acts (engineering values; HF's default for an unknown voice is 0.5). */
-export const PLAYER_VOICES: readonly [string, number][] = [
-	["lea", 0.8],
-	["sam", 0.6],
-	["jo", 0.4],
-];
+/** Authored scenario ties to the player, seeded once when the player first acts (see state.ts). */
+export const PLAYER_VOICES = PLAYER_TIES;
 export const SPEECH = {
 	ask: { strength: 0.35 },
 	urge: { strength: 0.7, insist: true },

@@ -54,6 +54,16 @@ export const known = [
 		"Visits neighbours who have not heard the hall news.",
 	],
 ];
+/**
+ * Who the returning player already knows (scenario seed data, like `known`): a cousin, a former stall partner
+ * and the next-door neighbour. Trust values are engineering starting points; HF's default for an unknown voice
+ * is 0.5. Seeded once when the player first acts.
+ */
+export const PLAYER_TIES: readonly [string, number][] = [
+	["lea", 0.8],
+	["sam", 0.6],
+	["jo", 0.4],
+];
 export const placeSpecs = [
 	["homes", "Riverside homes", 12, 65, 300, "home"],
 	["market", "Market kitchen", 42, 60, 16, "food"],
