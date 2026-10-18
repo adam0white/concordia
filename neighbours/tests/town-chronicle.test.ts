@@ -186,6 +186,8 @@ it("rejects a contradiction with a retained receipt after the live event is gone
 	for (let seed = 1; r.weather() !== "Clear" && seed < 30; seed++)
 		r = new Runtime(createRuntime(seed, 8).export() as Save);
 	expect(r.weather()).toBe("Clear");
+	// This receipt test is not about timber: dry timber lets the clear-day inspection open (timber.ts).
+	r.s.timber = { damp: 0 };
 	r.s.hall = 12;
 	r.actor("ada").place = "hall";
 	r.prepareRound();
