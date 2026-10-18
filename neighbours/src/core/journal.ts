@@ -7,17 +7,15 @@
  */
 import type { JournalEntry, TownEvent } from "../contracts.ts";
 import type { Save } from "./state.ts";
+import { actionWords, counterWords } from "./voicing.ts";
 
 const LIMIT = 40;
 function verdictNote(verdict: string, counter?: { label: string }): string {
 	if (verdict === "refused") return " It was a refusal.";
 	if (counter && (verdict === "deferred" || verdict === "modified"))
-		return ` They offered instead: ${counter.label}.`;
+		return ` They offered to ${counterWords(counter)}.`;
 	if (verdict === "complied") return " They agreed under protest.";
 	return "";
-}
-function lower(text: string): string {
-	return text.charAt(0).toLowerCase() + text.slice(1);
 }
 export function journalEntries(s: Save): JournalEntry[] {
 	const p = s.player;
@@ -55,9 +53,11 @@ export function journalEntries(s: Save): JournalEntry[] {
 			const name =
 				s.people.find((r) => r.person.id === started.targetId)?.person.name ??
 				started.targetId;
-			entry(e, `${name} began to ${lower(started.decision.chosenLabel)}.`, [
-				e.id,
-			]);
+			entry(
+				e,
+				`${name} began to ${actionWords(started.decision.chosenLabel)}.`,
+				[e.id],
+			);
 			continue;
 		}
 		entry(e, e.text, [e.id]);

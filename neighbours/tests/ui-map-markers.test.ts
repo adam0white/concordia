@@ -88,3 +88,45 @@ it("keeps a narrow-map crowd together at its actual place and excludes journeys"
 	expect(knownPlaceClusters(group.slice(0, 2), true)).toEqual([]);
 	expect(knownPlaceClusters(group, false)).toEqual([]);
 });
+
+it("steps resting markers off place labels, nearest free step first and deterministically", async () => {
+	const { labelBox } = await import("../src/ui/map-markers");
+	const scale = 2;
+	const workshop = { x: 500, y: 400 };
+	const labels = [labelBox(workshop.x, workshop.y + 74, "Workshop", 25)];
+	const ada: MarkerPoint = {
+		id: "ada",
+		placeId: "workshop",
+		x: workshop.x,
+		y: workshop.y + 60,
+		travelling: false,
+	};
+	const crowd = group.map((point) => ({
+		...point,
+		placeId: "workshop",
+		x: workshop.x,
+		y: workshop.y,
+	}));
+	const run = () =>
+		layoutKnownMarkers(
+			[ada, ...crowd],
+			scale,
+			{ width: 720, height: 1000 },
+			labels,
+		);
+	const markers = [...run().values()];
+	const covers = (m: { x: number; y: number }) =>
+		labels.some((box) => {
+			const nx = Math.max(box.x, Math.min(box.x + box.width, m.x));
+			const ny = Math.max(box.y, Math.min(box.y + box.height, m.y));
+			return (m.x - nx) ** 2 + (m.y - ny) ** 2 < (22 * scale) ** 2;
+		});
+	expect(covers(ada)).toBe(true);
+	for (const marker of markers) expect(covers(marker), marker.id).toBe(false);
+	expect(run()).toEqual(run());
+	// A marker clear of every label keeps its exact place.
+	const clear = { ...ada, id: "clear", placeId: "school", y: 100 };
+	expect(
+		layoutKnownMarkers([clear], scale, undefined, labels).get("clear"),
+	).toEqual(clear);
+});

@@ -5,6 +5,7 @@ import type {
 	SpeechAnswer,
 	TownView,
 } from "../contracts";
+import { actionWords, counterWords, voicedLine } from "../core/voicing";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
 import type { useVisitorSession } from "./useVisitorSession";
@@ -31,10 +32,7 @@ function placeLabel(town: TownView, id: string | undefined): string {
 	return town.places.find((place) => place.id === id)?.name ?? id ?? "";
 }
 function telegraph(answer: SpeechAnswer): string {
-	const counter = answer.counterOffer
-		? ` They might offer: ${answer.counterOffer.label}.`
-		: "";
-	return `Likely “${answer.says}”${counter}`;
+	return `Likely “${voicedLine(answer)}”`;
 }
 
 /** The player's own journal: recorded lines only, each traceable to its source events. */
@@ -266,20 +264,20 @@ export function SpeakPanel({
 						<q
 							className={`voice ${latest.verdict === "refused" ? "refusal" : ""}`}
 						>
-							{latest.says}
+							{voicedLine(latest)}
 						</q>{" "}
 						<span className="voice-by">{name}</span>
 					</p>
 					{latest.decision && (
 						<p>
-							Later: <q className="voice">{latest.decision.says}</q> {name}{" "}
-							chose to {latest.decision.chosenLabel.toLowerCase()}.
+							Later: <q className="voice">{voicedLine(latest.decision)}</q>{" "}
+							{name} chose to {actionWords(latest.decision.chosenLabel)}.
 						</p>
 					)}
 					{latest.result && <p className="said">{latest.result}</p>}
 					{counter && (
 						<p>
-							They offered instead: {counter.label}.{" "}
+							They offered to {counterWords(counter)}.{" "}
 							{counterId && here && personId && (
 								<button
 									type="button"

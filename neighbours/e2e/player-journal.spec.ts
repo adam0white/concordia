@@ -143,10 +143,10 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 		(verdict === "deferred" || verdict === "modified") &&
 		kept?.answer.counterOffer
 	)
-		expect(asked[0]).toContain("They offered instead:");
+		expect(asked[0]).toContain("They offered to ");
 	else
 		expect(asked[0]).not.toMatch(
-			/It was a refusal|agreed under protest|offered instead/,
+			/It was a refusal|agreed under protest|They offered to /,
 		);
 	// The action they took, when HF chose to act on it.
 	if (kept?.startedEvent !== undefined)

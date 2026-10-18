@@ -40,6 +40,7 @@ import { buildOffers, socialPreview, WORKPLACE } from "./offers.ts";
 import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
 import type { Resident, Save } from "./state.ts";
 import { validateEvent } from "./validation.ts";
+import { actionWords, counterWords, voicedLine } from "./voicing.ts";
 
 export const PLAYER_VOICE = "player";
 export const PLAYER_HOME = "homes";
@@ -511,7 +512,7 @@ function speak(
 		host,
 		"player-request",
 		accepted?.answer.counterOffer
-			? `You took up ${r.person.name}’s counter-offer: ${accepted.answer.counterOffer.label}.`
+			? `You took up ${r.person.name}’s offer to ${counterWords(accepted.answer.counterOffer)}.`
 			: mode === "promise" && work
 				? `You promised ${r.person.name} you would ${work === "cover-shift" ? `cover one of ${r.person.name}’s paid shifts` : PLAYER_WORK[work].label} and asked them to ${label.toLowerCase()}.`
 				: `You ${verb} ${r.person.name} to ${label.toLowerCase()}.`,
@@ -527,7 +528,7 @@ function speak(
 	const answerEvent = playerEvent(
 		host,
 		"player-answer",
-		`${r.person.name} answered: “${answer.says}”`,
+		`${r.person.name} answered: “${voicedLine(answer)}”`,
 		at,
 		[request.id],
 		r.person.id,
@@ -857,8 +858,8 @@ export function playerDecided(
 		host,
 		"player-decided",
 		followed
-			? `${r.person.name} took up your request and chose to ${chosenLabel.toLowerCase()}.`
-			: `${r.person.name} weighed your request and chose to ${chosenLabel.toLowerCase()} instead.`,
+			? `${r.person.name} took up your request and chose to ${actionWords(chosenLabel)}.`
+			: `${r.person.name} weighed your request and chose to ${actionWords(chosenLabel)} instead.`,
 		r.job?.offer.placeId ?? r.place,
 		[q.id, q.answerEvent],
 		r.person.id,

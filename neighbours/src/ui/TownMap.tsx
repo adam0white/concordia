@@ -14,10 +14,25 @@ import {
 import MapPeopleChooser from "./MapPeopleChooser";
 import {
 	knownPlaceClusters,
+	labelBox,
 	layoutKnownMarkers,
+	type MarkerAvoid,
 	type MarkerPoint,
 } from "./map-markers";
 import { activityLabel, canAct, lifeMarker } from "./person-status";
+
+/** The short name a narrow map prints under a place. */
+function shortPlaceName(place: PlaceView) {
+	return placeName(place)
+		.replace("Community garden", "Garden")
+		.replace("Riverside homes", "Homes")
+		.replace("Market kitchen", "Market")
+		.replace("Flooded hall", "Hall")
+		.replace("Community hall", "Hall");
+}
+function placeStatus(repairs: number) {
+	return repairs >= 12 ? "awaiting inspection" : "awaiting repair";
+}
 
 /**
  * Ink-on-paper town map. Places, people and journeys sit at their actual
@@ -674,7 +689,31 @@ export default function TownMap({
 	const visiblePoints = knownPoints.filter(
 		(person) => !clusteredIds.has(person.id),
 	);
-	const markers = layoutKnownMarkers(visiblePoints, markerScale, sheet);
+	const repairs = Math.min(12, town.stats.hallRepairs ?? 0);
+	// Place names (and a closed place's status line) as boxes resting markers step off.
+	const labels: MarkerAvoid[] = town.places.flatMap((place) => {
+		const p = point(place.x, place.y);
+		const name = sheet.portrait ? shortPlaceName(place) : placeName(place);
+		const boxes = [
+			labelBox(
+				p.x,
+				p.y + (sheet.portrait ? 74 : 66),
+				name,
+				sheet.portrait ? 25 : 17,
+			),
+		];
+		if (!place.open)
+			boxes.push(
+				labelBox(
+					p.x,
+					p.y + (sheet.portrait ? 100 : 86),
+					placeStatus(repairs),
+					sheet.portrait ? 25 : 19,
+				),
+			);
+		return boxes;
+	});
+	const markers = layoutKnownMarkers(visiblePoints, markerScale, sheet, labels);
 	const activePlaceView = town.places.find((place) => place.id === activePlace);
 	const activeCluster = clusters.find(
 		(cluster) => cluster.placeId === activePlace,
@@ -688,7 +727,6 @@ export default function TownMap({
 			?.querySelector<SVGGElement>(`[data-place="${CSS.escape(activePlace)}"]`)
 			?.focus();
 	};
-	const repairs = Math.min(12, town.stats.hallRepairs ?? 0);
 
 	return (
 		<div ref={frame} className="map-frame">
@@ -768,12 +806,7 @@ export default function TownMap({
 								textAnchor="middle"
 								className="place-name mobile-place-name"
 							>
-								{placeName(place)
-									.replace("Community garden", "Garden")
-									.replace("Riverside homes", "Homes")
-									.replace("Market kitchen", "Market")
-									.replace("Flooded hall", "Hall")
-									.replace("Community hall", "Hall")}
+								{shortPlaceName(place)}
 							</text>
 							{!place.open && (
 								<text
@@ -781,7 +814,7 @@ export default function TownMap({
 									textAnchor="middle"
 									className="map-note place-status"
 								>
-									{repairs >= 12 ? "awaiting inspection" : "awaiting repair"}
+									{placeStatus(repairs)}
 								</text>
 							)}
 						</g>

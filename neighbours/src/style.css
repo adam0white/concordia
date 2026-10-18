@@ -338,6 +338,7 @@ summary span {
 	white-space: nowrap;
 }
 .save-menu-trigger {
+	margin-left: auto;
 	min-height: 40px;
 	padding: 4px 12px;
 	white-space: nowrap;
@@ -868,6 +869,19 @@ summary span {
 	fill: color-mix(in srgb, var(--paper) 86%, transparent);
 	stroke: var(--rope);
 	stroke-width: 2.5;
+}
+.nowrap {
+	white-space: nowrap;
+}
+/* A wide map keeps its places off the bottom-right corner (only the compass is there): stamp there. */
+@media (min-width: 900px) {
+	.ink-stamp {
+		inset: auto 18px 18px auto;
+		width: 130px;
+		height: 130px;
+		margin: 0;
+		font-size: 1.2rem;
+	}
 }
 .ink-stamp > span {
 	position: relative;
@@ -1597,6 +1611,11 @@ summary span {
 	padding-top: 12px;
 	border-top: 1px solid var(--hairline);
 }
+.more-footer .provenance {
+	margin: 0;
+	font-size: 0.82rem;
+	color: var(--ink-soft);
+}
 .view-heading {
 	margin-bottom: 12px;
 }
@@ -2095,6 +2114,7 @@ th {
 	}
 	.save-menu-trigger {
 		grid-area: save;
+		margin-left: 0;
 	}
 	.masthead .theme-toggle {
 		display: none;

@@ -85,8 +85,7 @@ export default function TownGoal({
 						className="text-button step-title"
 						onClick={openJournal}
 					>
-						{step.title}
-						<span aria-hidden="true"> →</span>
+						<WithArrow text={step.title} />
 					</button>
 					<span className="step-hint">{step.hint}</span>
 				</div>
@@ -111,9 +110,22 @@ export default function TownGoal({
 				</>
 			)}
 			<button type="button" className="text-button" onClick={help}>
-				{hall?.open ? "Hall choices" : "Ways to help"}
-				<span aria-hidden="true"> →</span>
+				<WithArrow text={hall?.open ? "Hall choices" : "Ways to help"} />
 			</button>
 		</section>
+	);
+}
+
+/** Keep the arrow on the line of the last word, so it never wraps alone. */
+function WithArrow({ text }: { text: string }) {
+	const cut = text.lastIndexOf(" ");
+	return (
+		<>
+			{cut >= 0 ? text.slice(0, cut + 1) : ""}
+			<span className="nowrap">
+				{text.slice(cut + 1)}
+				<span aria-hidden="true">{"\u00a0→"}</span>
+			</span>
+		</>
 	);
 }

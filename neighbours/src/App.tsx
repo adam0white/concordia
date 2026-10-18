@@ -146,18 +146,14 @@ export default function App() {
 					<h1>Neighbours</h1>
 					<span>Alder Quay</span>
 				</a>
-				<div className="runtime-label">
-					<span
-						className={
-							hasEnteredTown && !town ? "status-dot loading" : "status-dot"
-						}
-					/>
-					{town
-						? "Browser live"
-						: hasEnteredTown
-							? "Starting town"
-							: "A town on your device"}
-				</div>
+				{!town && (
+					<div className="runtime-label">
+						<span
+							className={hasEnteredTown ? "status-dot loading" : "status-dot"}
+						/>
+						{hasEnteredTown ? "Starting town" : "A town on your device"}
+					</div>
+				)}
 				{town && (
 					<button
 						type="button"
@@ -338,6 +334,11 @@ export default function App() {
 											)}
 										</div>
 										<div className="more-footer">
+											<p className="provenance">
+												This town runs live in this browser tab. Every
+												resident’s choices are computed on your device as time
+												passes; nothing is played back from a recording.
+											</p>
 											<button
 												type="button"
 												className="text-button"
