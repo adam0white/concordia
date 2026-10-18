@@ -183,6 +183,12 @@ export function projectStudy(kind: StudyKind, value: unknown) {
 						: scalar(record(result.proposal).slot),
 			]);
 		}
+		if (Array.isArray(data.noNaturalCaseSeeds))
+			for (const seed of data.noNaturalCaseSeeds)
+				rows.push([
+					`Seed ${scalar(seed)} proposal`,
+					"No natural case in 40 days; no model call",
+				]);
 		rows.push(
 			["Actual model calls", scalar(data.modelCalls)],
 			["Replay model calls", scalar(data.replayModelCalls)],

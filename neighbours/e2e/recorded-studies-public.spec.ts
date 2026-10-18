@@ -68,7 +68,7 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 		studies
 			.locator(".study-results > div")
 			.filter({ hasText: "Actual model calls" }),
-	).toHaveText("Actual model calls3");
+	).toHaveText("Actual model calls2");
 	await expect(
 		studies
 			.locator(".study-results > div")
