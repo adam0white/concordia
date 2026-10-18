@@ -3,7 +3,7 @@ export interface TownEvent {
 	id: number;
 	at: number;
 	kind: string;
-	source?: "town-bulletin";
+	source?: "town-bulletin" | "player";
 	actorId?: string;
 	targetId?: string;
 	placeId?: string;
@@ -108,7 +108,117 @@ export interface PersonView {
 		source: string;
 	};
 }
+export interface SpeechAnswer {
+	voiceId: string;
+	verdict:
+		| "assented"
+		| "complied"
+		| "deferred"
+		| "modified"
+		| "refused"
+		| "commanded";
+	kind?: "cannot" | "notNow" | "willNot";
+	reason: string;
+	says: string;
+	counterOffer?: { affordanceId?: string; label: string };
+	insteadAffordanceId?: string;
+	likelihood?: number;
+	insisted?: boolean;
+}
+export interface SpeechPrediction {
+	targetId: string;
+	at: number;
+	offers: {
+		affordanceId: string;
+		label: string;
+		ask: SpeechAnswer;
+		urge: SpeechAnswer;
+		promise: SpeechAnswer;
+	}[];
+}
+export interface JournalEntry {
+	id: string;
+	at: number;
+	day: number;
+	text: string;
+	label: "recorded";
+	sourceEventIds: number[];
+}
+export type PlayerWorkKind = "carry-meals" | "help-repair" | "cover-shift";
+export interface PlayerView {
+	/** False until the first player input; the defaults below are then derived, not saved. */
+	active: boolean;
+	/** Absent while travelling. */
+	placeId?: string;
+	job?: {
+		kind: "travel" | "work";
+		fromId: string;
+		toId: string;
+		departedAt: number;
+		arriveAt: number;
+		endsAt: number;
+		work?: PlayerWorkKind;
+		pledgeId?: string;
+	};
+	workHoursLeft: number;
+	canMove: boolean;
+	present: {
+		id: string;
+		name: string;
+		known: boolean;
+		activity: string;
+		trust?: number;
+	}[];
+	presentCount: number;
+	destinations: { id: string; name: string; minutes: number }[];
+	requests: {
+		id: number;
+		at: number;
+		targetId: string;
+		targetName: string;
+		affordanceId: string;
+		label: string;
+		mode: "ask" | "urge" | "promise";
+		verdict: SpeechAnswer["verdict"];
+		says: string;
+		counterOffer?: { affordanceId?: string; label: string };
+		status: string;
+		decision?: {
+			at: number;
+			verdict: SpeechAnswer["verdict"];
+			says: string;
+			chosenAffordanceId: string;
+			chosenLabel: string;
+		};
+		result?: string;
+		pledgeId?: string;
+	}[];
+	pledges: {
+		id: string;
+		toId: string;
+		toName: string;
+		work: PlayerWorkKind;
+		label: string;
+		placeId: string;
+		dueBy: number;
+		status: "open" | "kept" | "lapsed";
+		canStart?: boolean;
+		blocked?: string;
+	}[];
+	journal: JournalEntry[];
+	goals: {
+		id: string;
+		title: string;
+		hint: string;
+		status: "done" | "current";
+		doneAt?: number;
+		eventIds: number[];
+	}[];
+	notices: number;
+	latestNotice?: { at: number; text: string; eventId: number };
+}
 export interface TownView {
+	player?: PlayerView;
 	assistance?: {
 		origin: ProposalOrigin;
 		decisionSource?: string;
@@ -217,9 +327,24 @@ export interface Intervention {
 		| "lend-tools"
 		| "share-news"
 		| "open-evening-slot"
-		| "advertise-evening";
+		| "advertise-evening"
+		| "player-move"
+		| "player-speak"
+		| "player-work";
 	eventId?: string;
 	actorId?: string;
+	/** player-move destination. */
+	placeId?: string;
+	/** player-speak: one of the target's actual legal offers. */
+	affordanceId?: string;
+	mode?: "ask" | "urge" | "promise";
+	/** player-speak: take up this person's latest counter-offer (affordanceId must name it). */
+	acceptCounter?: boolean;
+	/** player-speak with mode promise: one hour of the player's own work. */
+	pledge?: { work: PlayerWorkKind };
+	/** player-work: keep an open pledge, or work unpledged with `work`. */
+	pledgeId?: string;
+	work?: PlayerWorkKind;
 }
 export interface Choice {
 	id: string;
@@ -241,6 +366,8 @@ export interface TownRuntime {
 	export(): unknown;
 	intervene(input: Intervention): void;
 	inspect(id: string): unknown;
+	/** Pure telegraph for the player's speech; never changes state. */
+	predictSpeech(id: string): SpeechPrediction;
 	step(): void;
 }
 export interface TownComparison {
@@ -268,7 +395,13 @@ export interface AdvanceRequest {
 }
 export interface AdvanceResult {
 	requestId: number;
-	reason: "story" | "person-story" | "hall-choice" | "horizon" | "cancelled";
+	reason:
+		| "story"
+		| "person-story"
+		| "hall-choice"
+		| "player"
+		| "horizon"
+		| "cancelled";
 	rounds: number;
 }
 export interface AdvanceProgress {
@@ -287,6 +420,7 @@ export type UiCommand =
 	| { type: "save"; requestId?: number }
 	| { type: "restore"; save: unknown }
 	| { type: "inspect"; actorId: string }
+	| { type: "predict-speech"; requestId: number; actorId: string }
 	| { type: "cancel-comparison" }
 	| { type: "compare"; intervention: Intervention; rounds: number };
 export type UiReply =
@@ -299,5 +433,12 @@ export type UiReply =
 	| { type: "progress"; message: string; advance?: AdvanceProgress }
 	| { type: "save"; save: unknown; requestId?: number }
 	| { type: "inspection"; actorId: string; data: unknown }
+	| {
+			type: "speech-predictions";
+			requestId: number;
+			actorId: string;
+			prediction?: SpeechPrediction;
+			error?: string;
+	  }
 	| { type: "comparison"; report: TownComparison }
 	| { type: "error"; message: string };

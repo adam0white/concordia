@@ -6,6 +6,7 @@ import { validateEvenings } from "./evenings.ts";
 import { validateHandcart } from "./handcart.ts";
 import { HF_VERSION } from "./hf-version.ts";
 import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
+import { validatePlayer } from "./player.ts";
 import { Runtime } from "./runtime.ts";
 import { known, placeSpecs, type Save, SCHEMA } from "./state.ts";
 import { validateTownChronicle } from "./town-chronicle.ts";
@@ -41,7 +42,8 @@ export function restoreRuntime(input: unknown): TownRuntime {
 					key !== "socialEvenings" &&
 					key !== "handcart" &&
 					key !== "townChronicle" &&
-					key !== "assistance",
+					key !== "assistance" &&
+					key !== "player",
 			)
 			.sort()
 			.join() !== keys.sort().join()
@@ -339,6 +341,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 	validateEvenings(s, ids);
 	validateHandcart(s, ids);
 	validateTownChronicle(s, ids);
+	validatePlayer(s, ids);
 	for (const r of s.people) validateResidentEvidence(r, s, ids);
 	let last = 0;
 	for (const e of s.events) {

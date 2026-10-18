@@ -91,6 +91,21 @@ describe("actual town advance", () => {
 			),
 		).toEqual({ requestId: 1, reason: "horizon", rounds: 16 });
 	});
+	it("stops when something the player set in motion is recorded, in every mode", async () => {
+		for (const until of ["story", "hall-choice", "person-story"] as const) {
+			const e = engine((view, round) => {
+				if (!view.player) throw Error("Missing player view");
+				view.player.notices = round >= 3 ? 1 : 0;
+			});
+			expect(
+				await advanceTown(
+					e.py,
+					e.port,
+					request({ until, actorId: "musa", maxRounds: 16 }),
+				),
+			).toEqual({ requestId: 1, reason: "player", rounds: 3 });
+		}
+	});
 	it("stops at the actual invitation missed status, not its earlier accepted status", async () => {
 		const e = engine((view, round) => {
 			const musa = view.people.find((p) => p.id === "musa");

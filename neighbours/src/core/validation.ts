@@ -1,6 +1,7 @@
 import type { DecisionRecord } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts.ts";
 import { isHfSource } from "./hf-version.ts";
+import { PLAYER_EVENT_KINDS } from "./player-events.ts";
 import type { Resident, Save } from "./state.ts";
 
 const EVENT_KINDS = new Set([
@@ -39,6 +40,7 @@ const EVENT_KINDS = new Set([
 	"hall-explanation",
 	"missed-encounter",
 	"lesson",
+	...PLAYER_EVENT_KINDS,
 ]);
 function text(value: unknown, max = 4000): value is string {
 	return typeof value === "string" && value.length <= max;
@@ -73,7 +75,10 @@ export function validateEvent(e: TownEvent, s: Save, ids: Set<string>): void {
 		!minute(e.at, s.now) ||
 		!EVENT_KINDS.has(e.kind) ||
 		(e.source !== undefined &&
-			(e.source !== "town-bulletin" || e.kind !== "intervention")) ||
+			!(
+				(e.source === "town-bulletin" && e.kind === "intervention") ||
+				(e.source === "player" && e.kind.startsWith("player-"))
+			)) ||
 		!text(e.text) ||
 		!Number.isFinite(e.importance) ||
 		e.importance < 0 ||

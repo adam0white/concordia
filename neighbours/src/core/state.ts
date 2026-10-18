@@ -155,4 +155,6 @@ export type Save = {
 	/** Optional in first public saves. Activation never reconstructs past events. */
 	socialEvenings?: SocialEvenings;
 	handcart?: Handcart;
+	/** Absent until the visitor first acts as a resident; absence is the observer-only town. */
+	player?: import("./player.ts").PlayerState;
 };

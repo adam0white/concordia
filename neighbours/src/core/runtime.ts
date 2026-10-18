@@ -10,6 +10,7 @@ import {
 	perceive,
 	readPerson,
 	reviewed,
+	type Suggestion,
 	snapshot,
 	tick,
 	vetoFor,
@@ -74,8 +75,18 @@ import {
 } from "./offers.ts";
 import { realizedOutcome } from "./outcomes.ts";
 import { personLessons } from "./person-learning.ts";
+import {
+	heldSuggestion,
+	playerApplied,
+	playerDecided,
+	playerIntervene,
+	playerJobEnded,
+	playerRound,
+	playerView,
+	predictSpeech,
+} from "./player.ts";
 import { recordSocialContacts } from "./social-contact.ts";
-import { known, type Save, SCHEMA } from "./state.ts";
+import { known, type Resident, type Save, SCHEMA } from "./state.ts";
 import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
 import { recordTownEvent } from "./town-chronicle.ts";
@@ -234,15 +245,35 @@ export class Runtime implements TownRuntime {
 				needs: {},
 				material: 0,
 			});
-		this.event(
+		const stopped = this.event(
 			"interrupted",
 			`${r.person.name}'s ${j.offer.label.toLowerCase()} ${reason} ${(!r.person.body.alive ? this.s.now - 15 : this.s.now) < j.arrive ? `before arrival was confirmed, last known at ${j.from} while travelling toward ${j.offer.placeId}` : `at ${r.place}`}; reserved resources were returned.`,
 			r.person.id,
 			r.place,
 			[j.event],
 		);
+		playerJobEnded(this.s, j.event, stopped, "interrupted");
 		delete r.job;
 		r.idleSince = this.s.now;
+	}
+	/** Lea hears waiting inspection questions as standing competence suggestions. */
+	leaSuggestions(r: Resident): Suggestion[] {
+		if (r.person.id !== "lea") return [];
+		return this.s.people
+			.filter(
+				(o) =>
+					o.person.id !== r.person.id &&
+					o.question?.status === "waiting" &&
+					receivedRequest(r, o) &&
+					presentAt(o, "hall", this.s.now),
+			)
+			.map((o) => ({
+				voiceId: o.person.id,
+				affordanceId: `answer-inspection:${o.person.id}`,
+				strength: 0.5,
+				appeal: "competence" as const,
+				since: o.question?.at,
+			}));
 	}
 	prepareRound() {
 		if (this.s.pending.length) throw Error("Round has unresolved actors");
@@ -563,6 +594,7 @@ export class Runtime implements TownRuntime {
 					p.id,
 					[j.event],
 				);
+				playerJobEnded(this.s, j.event, eid, status);
 				for (const other of boundary
 					.filter(
 						(o) =>
@@ -611,6 +643,7 @@ export class Runtime implements TownRuntime {
 					`Read the hall noticeboard: ${question.note.text}`,
 				);
 		}
+		playerRound(this);
 		if (this.s.round % 16 === 0) {
 			const delivery = scheduledFoodDelivery(
 				this.s.seed,
@@ -717,28 +750,12 @@ export class Runtime implements TownRuntime {
 		);
 		if (!choices.length) throw Error("No legal choices");
 		this.offers.set(id, choices);
+		const held = heldSuggestion(this.s, id);
 		const hfRecord =
 			policy === "hf"
 				? decide(r.person, choices, {
 						scarcity: Math.max(0, 1 - r.wealth / 8),
-						suggestions:
-							r.person.id === "lea"
-								? this.s.people
-										.filter(
-											(o) =>
-												o.person.id !== id &&
-												o.question?.status === "waiting" &&
-												receivedRequest(r, o) &&
-												presentAt(o, "hall", this.s.now),
-										)
-										.map((o) => ({
-											voiceId: o.person.id,
-											affordanceId: `answer-inspection:${o.person.id}`,
-											strength: 0.5,
-											appeal: "competence" as const,
-											since: o.question?.at,
-										}))
-								: [],
+						suggestions: [...this.leaSuggestions(r), ...(held ? [held] : [])],
 					})
 				: undefined;
 		if (policy === "hf" && !hfRecord?.chosenAffordanceId)
@@ -810,6 +827,7 @@ export class Runtime implements TownRuntime {
 					}
 				: {}),
 		};
+		playerDecided(this, r, hfRecord, choices);
 		return chosen;
 	}
 	acceptExternalChoice(
@@ -870,6 +888,7 @@ export class Runtime implements TownRuntime {
 						round: this.s.round,
 					};
 				reviewed(r.person);
+				playerApplied(this.s, r, true);
 				delete r.record;
 				this.s.pending = this.s.pending.filter((actor) => actor !== id);
 				return;
@@ -955,6 +974,7 @@ export class Runtime implements TownRuntime {
 				: {}),
 		};
 		beginEvening(this.s, r);
+		playerApplied(this.s, r, false);
 		if (offer.action === "ask-inspector" && offer.targetId !== "hall-annex")
 			this.postQuestion(id, r.job.event);
 		this.s.pending = this.s.pending.filter((a) => a !== id);
@@ -965,6 +985,15 @@ export class Runtime implements TownRuntime {
 			: "Clear";
 	}
 	intervene(input: Intervention) {
+		if (
+			input.kind === "player-move" ||
+			input.kind === "player-speak" ||
+			input.kind === "player-work"
+		) {
+			if (this.s.pending.length) throw Error("Round has unresolved actors");
+			playerIntervene(this, input, (r) => this.leaSuggestions(r));
+			return;
+		}
 		if (input.kind === "propose-bench-window") {
 			proposeBenchWindow(this, input.proposal, input.proposalOrigin);
 			return;
@@ -1052,6 +1081,10 @@ export class Runtime implements TownRuntime {
 			observation: JSON.parse(this.getObservation(id)),
 			controller: r.policy,
 		};
+	}
+	predictSpeech(id: string) {
+		if (this.s.pending.length) throw Error("Round has unresolved actors");
+		return predictSpeech(this.s, id, (r) => this.leaSuggestions(r));
 	}
 	export() {
 		return structuredClone(this.s);
@@ -1147,8 +1180,10 @@ export class Runtime implements TownRuntime {
 				relationships: r.person.social.relationships.map((rel) => ({
 					id: rel.otherId,
 					name:
-						this.s.people.find((o) => o.person.id === rel.otherId)?.person
-							.name ?? rel.otherId,
+						rel.otherId === "player"
+							? "You"
+							: (this.s.people.find((o) => o.person.id === rel.otherId)?.person
+									.name ?? rel.otherId),
 					trust: rel.trust,
 					summary: rel.roles.join(", "),
 					origin: ((r.person.id === "ada" && rel.otherId === "lea") ||
@@ -1412,6 +1447,7 @@ export class Runtime implements TownRuntime {
 						},
 					}
 				: {}),
+			player: playerView(this.s),
 			controlsRemaining: this.s.controls,
 			canShareNews: canShareHallNews(this.s),
 			canLendTools: this.s.hall < 12,

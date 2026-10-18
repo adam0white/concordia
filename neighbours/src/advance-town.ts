@@ -72,6 +72,9 @@ export async function advanceTown(
 	});
 	if (cancelled()) return result("cancelled", 0);
 	const startingStories = new Set(start.stories.map((story) => story.id));
+	const startingNotices = start.player?.notices ?? 0;
+	const playerStop = (view: TownView): boolean =>
+		(view.player?.notices ?? 0) > startingNotices;
 	const reached = (view: TownView): boolean => {
 		if (request.until === "hall-choice") return hasHallChoice(view);
 		if (
@@ -98,6 +101,8 @@ export async function advanceTown(
 			rounds++;
 			const view = port.runtime.view();
 			if (reached(view)) return result(request.until, rounds);
+			// A person the player spoke to acted on it, or a pledge fell due or resolved.
+			if (playerStop(view)) return result("player", rounds);
 			if (rounds % 8 === 0) {
 				progress({
 					requestId: request.requestId,

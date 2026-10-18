@@ -174,6 +174,25 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					break;
 				}
 
+				case "predict-speech": {
+					// A pure telegraph never fails the FIFO: its error travels in its own reply.
+					try {
+						send({
+							type: "speech-predictions",
+							requestId: q.requestId,
+							actorId: q.actorId,
+							prediction: port.runtime.predictSpeech(q.actorId),
+						});
+					} catch (error) {
+						send({
+							type: "speech-predictions",
+							requestId: q.requestId,
+							actorId: q.actorId,
+							error: error instanceof Error ? error.message : String(error),
+						});
+					}
+					break;
+				}
 				case "inspect":
 					send({
 						type: "inspection",
