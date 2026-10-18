@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type {
 	AdvanceRequest,
 	Intervention,
+	PlayerWorkKind,
+	SpeechPrediction,
 	TownComparison,
 	TownView,
 	UiCommand,
@@ -88,6 +90,15 @@ export function useVisitorSession({
 		spent: number;
 	} | null>(null);
 	const [saveConflict, setSaveConflict] = useState(false);
+	// The player's own speech and movement: their rejections stay beside the speak panel.
+	const [playerError, setPlayerError] = useState("");
+	const [speechPrediction, setSpeechPrediction] = useState<{
+		actorId: string;
+		prediction?: SpeechPrediction;
+		error?: string;
+	}>();
+	const predictionSequence = useRef(0);
+	const playerSequence = useRef(0);
 	const saveConflictRef = useRef(false);
 	const [hasSave, setHasSave] = useState(false);
 	const [hasPrevious, setHasPrevious] = useState(false);
@@ -111,6 +122,7 @@ export function useVisitorSession({
 			errorRevision: number;
 			commandType: UiCommand["type"];
 			interventionId?: number;
+			playerAction?: number;
 			generation: number;
 		}[]
 	>([]);
@@ -139,8 +151,14 @@ export function useVisitorSession({
 			stateCommands.current.push({
 				commandType: command.type,
 				interventionId:
-					command.type === "intervene"
+					command.type === "intervene" &&
+					!command.intervention.kind.startsWith("player-")
 						? interventionPending.current?.id
+						: undefined,
+				playerAction:
+					command.type === "intervene" &&
+					command.intervention.kind.startsWith("player-")
+						? playerSequence.current
 						: undefined,
 				generation: worldGeneration.current,
 				replacement: replacement ? worldGeneration.current : null,
@@ -177,6 +195,8 @@ export function useVisitorSession({
 		setTrends({});
 		setHealthHistory(undefined);
 		setAdvanceNotice("");
+		setPlayerError("");
+		setSpeechPrediction(undefined);
 	}, []);
 	useEffect(() => {
 		if (!enabled) return;
@@ -211,6 +231,15 @@ export function useVisitorSession({
 				if (comparisonPending.current) setBranchProgress(reply.message);
 				if (reply.advance?.requestId === advancePending.current)
 					setAdvanceProgress(reply.message);
+			}
+			if (reply.type === "speech-predictions") {
+				if (reply.requestId !== predictionSequence.current) return;
+				setSpeechPrediction({
+					actorId: reply.actorId,
+					...(reply.prediction ? { prediction: reply.prediction } : {}),
+					...(reply.error ? { error: reply.error } : {}),
+				});
+				return;
 			}
 			if (reply.type === "comparison") {
 				comparisonPending.current = false;
@@ -276,6 +305,13 @@ export function useVisitorSession({
 					setIntervening(false);
 					setInterventionNotice("");
 				}
+				if (failed?.playerAction !== undefined) {
+					if (failed.playerAction === playerSequence.current)
+						setPlayerError(reply.message);
+					setPlaying(false);
+					pending.current = false;
+					return;
+				}
 				if (!failed || failed.errorRevision === errorRevision.current)
 					setError(
 						failed?.commandType === "restore"
@@ -323,9 +359,11 @@ export function useVisitorSession({
 								? `No matching event in ${reply.advance.rounds / 96} days. Paused at ${datedClock(reply.view.now)}.`
 								: reason === "hall-choice"
 									? `Evening choices are available · ${datedClock(reply.view.now)}.`
-									: outcome
-										? `${outcome} · ${datedClock(reply.view.now)}.`
-										: `${reason === "person-story" ? "A new outcome for the followed neighbour" : "A new story"} · ${datedClock(reply.view.now)}.`,
+									: reason === "player"
+										? `${reply.view.player?.latestNotice?.text ?? "Something you set in motion happened"} · ${datedClock(reply.view.now)}.`
+										: outcome
+											? `${outcome} · ${datedClock(reply.view.now)}.`
+											: `${reason === "person-story" ? "A new outcome for the followed neighbour" : "A new story"} · ${datedClock(reply.view.now)}.`,
 					);
 				}
 				if (reply.advance?.rounds !== 0) {
@@ -713,6 +751,65 @@ export function useVisitorSession({
 		setInterventionNotice("Changing the circumstance…");
 		send({ type: "intervene", intervention });
 	};
+	// Player inputs share the worker FIFO, export and replay; they spend no control allowance.
+	const playerInput = (intervention: Intervention) => {
+		if (
+			!town ||
+			comparisonPending.current ||
+			advancePending.current !== null ||
+			saveConflictRef.current
+		)
+			return;
+		playerSequence.current++;
+		setPlayerError("");
+		setPlaying(false);
+		send({ type: "intervene", intervention });
+	};
+	const movePlayer = (placeId: string) =>
+		playerInput({ kind: "player-move", placeId });
+	const speak = (request: {
+		actorId: string;
+		affordanceId: string;
+		mode: "ask" | "urge" | "promise";
+		pledge?: { work: PlayerWorkKind };
+		acceptCounter?: boolean;
+	}) => {
+		setSpeechPrediction(undefined);
+		playerInput({
+			kind: "player-speak",
+			actorId: request.actorId,
+			affordanceId: request.affordanceId,
+			mode: request.mode,
+			...(request.pledge ? { pledge: request.pledge } : {}),
+			...(request.acceptCounter ? { acceptCounter: true } : {}),
+		});
+	};
+	/** Start a pledged hour, or an unpledged hour of the named work (cover-shift names whose shift). */
+	const playerWork = (
+		work: string | { work: PlayerWorkKind; actorId?: string },
+	) =>
+		playerInput(
+			typeof work === "string"
+				? { kind: "player-work", pledgeId: work }
+				: {
+						kind: "player-work",
+						work: work.work,
+						...(work.actorId ? { actorId: work.actorId } : {}),
+					},
+		);
+	const predictSpeech = (actorId: string) => {
+		if (
+			!town ||
+			comparisonPending.current ||
+			advancePending.current !== null ||
+			saveConflictRef.current
+		)
+			return;
+		const requestId = ++predictionSequence.current;
+		setSpeechPrediction({ actorId });
+		// Not a state command: its reply never shifts the state FIFO bookkeeping.
+		client.current?.send({ type: "predict-speech", requestId, actorId });
+	};
 	const pause = () => {
 		setPlaying(false);
 		if (advancePending.current !== null) {
@@ -851,6 +948,13 @@ export function useVisitorSession({
 		compare,
 		cancelComparison,
 		intervene,
+		player: town?.player,
+		playerError,
+		speechPrediction,
+		movePlayer,
+		speak,
+		playerWork,
+		predictSpeech,
 		pause,
 		play,
 		exportSave,
