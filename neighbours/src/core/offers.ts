@@ -48,6 +48,21 @@ export const WORK_MINUTES: Record<string, number> = {
 
 import { type Affordance, inBreak } from "@adam0white/human-framework";
 import type { Save } from "./state.ts";
+export const WORKPLACE: Record<string, [string, string]> = {
+	carpenter: ["workshop", "Work a paid carpentry shift"],
+	mechanic: ["workshop", "Work a paid workshop shift"],
+	gardener: ["garden", "Work a paid garden shift"],
+	nurse: ["clinic", "Work a paid clinic shift"],
+	cook: ["market", "Work a paid kitchen shift"],
+	"ferry keeper": ["quay", "Work a paid quay shift"],
+	teacher: ["school", "Work a paid school shift"],
+	organiser: ["hall", "Work a paid coordination shift by the hall"],
+	"shop assistant": ["market", "Work a paid market shift"],
+	parent: ["quay", "Work a paid delivery shift"],
+	"retired neighbour": ["garden", "Help with a paid garden shift"],
+	student: ["school", "Work a paid school shift"],
+};
+
 export function usesActivitySlot(offer: Affordance): boolean {
 	return !offer.tags?.includes("floor") && !offer.tags?.includes("noticeboard");
 }
@@ -201,22 +216,8 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 		belonging: 0.3,
 		competence: 0.25,
 	});
-	const workplace: Record<string, [string, string]> = {
-		carpenter: ["workshop", "Work a paid carpentry shift"],
-		mechanic: ["workshop", "Work a paid workshop shift"],
-		gardener: ["garden", "Work a paid garden shift"],
-		nurse: ["clinic", "Work a paid clinic shift"],
-		cook: ["market", "Work a paid kitchen shift"],
-		"ferry keeper": ["quay", "Work a paid quay shift"],
-		teacher: ["school", "Work a paid school shift"],
-		organiser: ["hall", "Work a paid coordination shift by the hall"],
-		"shop assistant": ["market", "Work a paid market shift"],
-		parent: ["quay", "Work a paid delivery shift"],
-		"retired neighbour": ["garden", "Help with a paid garden shift"],
-		student: ["school", "Work a paid school shift"],
-	};
 	const [workplaceId, workLabel] = required(
-		workplace[r.role],
+		WORKPLACE[r.role],
 		"Unknown workplace role",
 	);
 	const day = Math.floor(s.now / 1440),

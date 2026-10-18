@@ -36,6 +36,7 @@ import { presentAt } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import { placeOf, required } from "./invariants.ts";
 import { journalEntries } from "./journal.ts";
+import { WORKPLACE } from "./offers";
 import { buildOffers, socialPreview } from "./offers.ts";
 import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
 import type { Resident, Save } from "./state.ts";
@@ -67,20 +68,6 @@ export const PLAYER_WORK: Record<
 	"carry-meals": { label: "carry food up from the quay", placeId: "quay" },
 	"help-repair": { label: "help repair the hall", placeId: "hall" },
 	"cover-shift": { label: "cover their paid shift" },
-};
-const WORKPLACE: Record<string, string> = {
-	carpenter: "workshop",
-	mechanic: "workshop",
-	gardener: "garden",
-	nurse: "clinic",
-	cook: "market",
-	"ferry keeper": "quay",
-	teacher: "school",
-	organiser: "hall",
-	"shop assistant": "market",
-	parent: "quay",
-	"retired neighbour": "garden",
-	student: "school",
 };
 type Answer = Pick<
 	SuggestionResolution,
@@ -398,7 +385,7 @@ function workPlace(s: Save, work: PlayerWork, forId: string): string {
 		s.people.find((o) => o.person.id === forId),
 		"Unknown resident",
 	);
-	return required(WORKPLACE[r.role], "Unknown workplace role");
+	return required(WORKPLACE[r.role], "Unknown workplace role")[0];
 }
 function hoursUsed(p: PlayerState | undefined, day: number): number {
 	return p?.work.day === day ? p.work.starts : 0;
