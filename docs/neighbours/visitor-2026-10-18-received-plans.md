@@ -1,6 +1,6 @@
 # Received plans: visitor evidence and delivery
 
-Status: candidate under final verification. Public delivery is still the preceding increment. Adam accepts feel; the checks and visitors below do not accept the game for him.
+Status: public delivery verified at clean build `e21b02d7c56ce6e1a3e7acd7b56203e8d2d2eaaf`; hosted CI passed with no failed steps. Adam accepts feel; the checks and visitors below do not accept the game for him.
 
 ## What changed
 
@@ -31,6 +31,8 @@ Fresh isolated390px visits repeated the original routes after the fixes. The spe
 
 The entertainment visitor stopped automatically at Musa's kept harvest promise onDay1 15:15, then at his missed classDay6 19:15 and missed supperDay6 19:30. His main card showed the original promise Kept. This repaid the attention that the first visit lost. It did not establish bus causality, a rich personal history or a reason for missing invitations. The actual host attendance outcomes and still-pending HF promises remain distinct; the latter require investigation rather than an invented failure judgment.
 
+The independent local retests retained [Musa's kept promise](evidence/2026-10-18/musa-kept.png), the [earlier hidden-evening contradiction](evidence/2026-10-18/hidden-evening-before.png) and the [visible actionable invitation after the fix](evidence/2026-10-18/evening-choice-after.png). These screenshots are fictional visitor towns, not the supplied private checkpoint.
+
 ## Actual evidence and its limits
 
 Physical recordings were generated once from clean source `77385505c358db8e450db64c3627f8d401deb756`. Later presentation and worker fixes leave their recorded physical source files unchanged; source digests are checked, not rewritten. Private owner input remains outside the repository. Only aggregate assistance measurements use it.
@@ -50,6 +52,6 @@ The bench UI loads the exact11.8KB projection rather than the15.5MB original tra
 
 Local release gates pass371 units across54 files, all application/script/browser typechecks, strict lint, production build,36 native controls and all33 actual-WASM browser tests. The complete final parity run passes all36 optional checkpoint continuations: twenty208-person milestones, twelve natural/active-bench packets, two weekly packets, the private supplied checkpoint and the new GM checkpoint. Both seven-day contextual comparisons, actual advance/horizon/cancel and full checkpoint restoration pass. Its final cancellation fixture was corrected to restore a legal baseline; the earlier failing attempt remains a failed attempt.
 
-Public asset/shell verification, hosted CI and deployment identity remain pending.
+Public delivery: https://neighbours.adamwhite.work, clean build `e21b02d7c56ce6e1a3e7acd7b56203e8d2d2eaaf`, Cloudflare version `d8662f70-e884-46e0-93df-fdd0339fff4c`, HF2.3.0. All24 served non-HTML assets byte-match the Cloudflare output; `_headers` is deployment configuration, not a public asset. Current HTML asset references are verified separately because Cloudflare may inject analytics. Chromium passes true320/390/844×390/desktop viewports, including live recorded-GM request/export/import and all new study views. Native Firefox Nightly public save/import/cancel/keyboard checks also pass. A separate landscape run passed after its automation scrolled the double-click target into view; its outer844×390 window had a shorter native viewport, not390px of content height. Hosted [CI39101273839](https://github.com/adam0white/concordia/actions/runs/39101273839) completed successfully with no failed steps, including dependency audit, long population runs, native/WASM and all replay/source checks. GitHub annotations from deliberately rejected malformed tapes are expected negative-test logs, not failed provider recordings or failed job steps. The independent public dependency audit reports zero vulnerabilities.
 
 Actual Firefox Nightly160.0a1 completed fresh-profile local save/import/cancel/keyboard checks and320/390px iframe layouts after an initial driver startup exited unexpectedly and a new temporary-profile attempt succeeded. Native macOS headless windows clamp to500px; iframe checks use keyboard and are not touch-device coverage. Chromium covers true narrow viewport pointer interaction. No owner settings or profile were changed.
