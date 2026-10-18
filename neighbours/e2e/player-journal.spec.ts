@@ -108,7 +108,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 		requests: {
 			id: number;
 			answerEvent: number;
-			answer: { verdict: string };
+			answer: { verdict: string; counterOffer?: { label: string } };
 			startedEvent?: number;
 			resultEvent?: number;
 			pledgeId?: string;
@@ -134,8 +134,20 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	const asked = await linesFor(kept?.answerEvent);
 	expect(asked).toHaveLength(1);
 	expect(asked[0]).toContain(name ?? "");
-	if (kept?.answer.verdict === "refused")
-		expect(asked[0]).toContain("It was a refusal.");
+	// Whatever HF answered, the line carries that verdict's own wording.
+	const verdict = kept?.answer.verdict;
+	if (verdict === "refused") expect(asked[0]).toContain("It was a refusal.");
+	else if (verdict === "complied")
+		expect(asked[0]).toContain("They agreed under protest.");
+	else if (
+		(verdict === "deferred" || verdict === "modified") &&
+		kept?.answer.counterOffer
+	)
+		expect(asked[0]).toContain("They offered instead:");
+	else
+		expect(asked[0]).not.toMatch(
+			/It was a refusal|agreed under protest|offered instead/,
+		);
 	// The action they took, when HF chose to act on it.
 	if (kept?.startedEvent !== undefined)
 		expect((await linesFor(kept.startedEvent))[0]).toContain("began to");
