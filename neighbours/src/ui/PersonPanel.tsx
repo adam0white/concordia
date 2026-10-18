@@ -79,7 +79,8 @@ export default function PersonPanel({
 			</div>
 			{canAct(person) && (
 				<p className="seems">
-					<span className="eyebrow">Seems</span> {needWords(person.needs)}
+					<span className="eyebrow">Seems</span>{" "}
+					{person.read ?? needWords(person.needs)}
 				</p>
 			)}
 			{speak}

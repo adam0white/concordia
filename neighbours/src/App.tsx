@@ -430,12 +430,7 @@ export default function App() {
 							</div>
 						)}
 						{!drawer && <StoryHeadline story={stories[0]} open={readStory} />}
-						<NeighbourStrip
-							town={town}
-							selected={selected}
-							select={follow}
-							close={closePerson}
-						/>
+						<NeighbourStrip town={town} selected={selected} select={follow} />
 						<div className="town-toolbar">
 							<div className="playback">
 								<button

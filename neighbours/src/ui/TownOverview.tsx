@@ -26,17 +26,21 @@ export default function TownOverview({
 	);
 }
 
-/** Familiar neighbours as a thumb-reachable row of inked names. */
+/**
+ * Familiar neighbours as a thumb-reachable row of inked names. A chip only opens
+ * (or returns focus to) that neighbour's panel; it never closes it. The panel's own
+ * close button closes it.
+ */
 export function NeighbourStrip({
 	town,
 	selected,
 	select,
-	close,
 }: {
 	town: TownView;
 	selected: string;
 	select: (id: string) => void;
-	close: () => void;
+	/** Unused: chips no longer toggle the panel closed. Kept so callers still compile. */
+	close?: () => void;
 }) {
 	return (
 		<nav className="neighbour-strip" aria-label="Familiar neighbours">
@@ -49,10 +53,8 @@ export function NeighbourStrip({
 						className={`neighbour life-${resident.lifeState ?? "awake"} ${selected === resident.id ? "active" : ""}`}
 						data-person-id={resident.id}
 						aria-label={`${resident.name} · ${activityLabel(resident)}`}
-						aria-pressed={selected === resident.id}
-						onClick={() =>
-							selected === resident.id ? close() : select(resident.id)
-						}
+						aria-current={selected === resident.id ? "true" : undefined}
+						onClick={() => select(resident.id)}
 					>
 						<InkPortrait
 							id={resident.id}

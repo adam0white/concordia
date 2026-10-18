@@ -116,3 +116,36 @@ export function knownPlaceClusters(points: MarkerPoint[], compact: boolean) {
 			people: people.toSorted((a, b) => a.id.localeCompare(b.id)),
 		}));
 }
+
+/** The "you" label, in marker units: a 15px hand label whose baseline sits 10 units above the glyph. */
+const YOU_LABEL = labelBox(0, -10, "you", 15);
+/** Half-size of the player's diamond glyph plus its stroke, in marker units. */
+const YOU_GLYPH = 7;
+
+/**
+ * Where the player's own marker group is drawn. A resting player sits up and to the left
+ * of their place, so a place at the sheet's left edge would push the glyph and its "you"
+ * label off the paper on a narrow map. The group is clamped so the whole marker stays on
+ * the sheet; the shift is at most the marker's own width, so it stays beside its place.
+ * Travel points lie between places, inside the margins, so the clamp leaves a walking
+ * player at the exact projected position at supported map sizes.
+ */
+export function youMarkerPlacement(
+	point: { x: number; y: number },
+	moving: boolean,
+	scale: number,
+	bounds: { width: number; height: number },
+) {
+	const left = Math.max(YOU_GLYPH, -YOU_LABEL.x) * scale;
+	const right = Math.max(YOU_GLYPH, YOU_LABEL.x + YOU_LABEL.width) * scale;
+	const top = Math.max(YOU_GLYPH, -YOU_LABEL.y) * scale;
+	const bottom = YOU_GLYPH * scale;
+	const x = moving ? point.x : point.x - 50 * scale;
+	const y = moving ? point.y : point.y - 40 * scale;
+	return {
+		x: Math.max(left, Math.min(bounds.width - right, x)),
+		y: Math.max(top, Math.min(bounds.height - bottom, y)),
+		/** The marker's extent around (x, y), in sheet units, for bounds checks. */
+		extent: { left, right, top, bottom },
+	};
+}

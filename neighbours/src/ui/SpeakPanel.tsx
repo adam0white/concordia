@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-import type {
-	PlayerView,
-	PlayerWorkKind,
-	SpeechAnswer,
-	TownView,
-} from "../contracts";
+import type { PlayerView, PlayerWorkKind, TownView } from "../contracts";
 import { actionWords, counterWords, voicedLine } from "../core/voicing";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
@@ -12,11 +7,22 @@ import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
 type Mode = "ask" | "urge" | "promise";
-const MODES: { id: Mode; label: string }[] = [
-	{ id: "ask", label: "Ask" },
-	{ id: "urge", label: "Urge" },
-	{ id: "promise", label: "Promise an hour" },
+/** What each way of putting it means. Never a forecast of the answer: asking is how you find out. */
+const MODES: { id: Mode; label: string; note: string }[] = [
+	{ id: "ask", label: "Ask", note: "Put it to them. They may say no." },
+	{
+		id: "urge",
+		label: "Urge",
+		note: "Insist. They may give in under protest, and being pushed wears on their trust.",
+	},
+	{
+		id: "promise",
+		label: "Promise an hour",
+		note: "Offer an hour of your own work. It binds you only if they take it up.",
+	},
 ];
+/** A reply stays on the panel while it is this fresh (minutes) and you are still where it was given. */
+export const FRESH_REPLY = 180;
 const SAID: Record<Mode, string> = {
 	ask: "asked",
 	urge: "urged",
@@ -26,13 +32,30 @@ const WORK: { id: PlayerWorkKind; label: string }[] = [
 	{ id: "carry-meals", label: "Carry food up from the quay" },
 	{ id: "help-repair", label: "Help repair the hall" },
 	{ id: "cover-shift", label: "Cover one hour of their shift" },
+	{ id: "dry-timber", label: "Prop and air the hall timber" },
 ];
+/** Work the host would accept now: airing the hall timber only while there is damp timber left to air. */
+export function offeredWork(player: Pick<PlayerView, "canAirTimber">) {
+	return WORK.filter((w) => w.id !== "dry-timber" || player.canAirTimber);
+}
 
 function placeLabel(town: TownView, id: string | undefined): string {
 	return town.places.find((place) => place.id === id)?.name ?? id ?? "";
 }
-function telegraph(answer: SpeechAnswer): string {
-	return `Likely “${voicedLine(answer)}”`;
+/** The latest exchange with this person, only while it is current: same place, recent or still pending. */
+export function freshReply(
+	player: PlayerView,
+	personId: string | undefined,
+	now: number,
+): PlayerView["requests"][number] | undefined {
+	if (!personId) return undefined;
+	const latest = player.requests.findLast((r) => r.targetId === personId);
+	if (!latest) return undefined;
+	if (latest.status === "held") return latest;
+	const last = Math.max(latest.at, latest.decision?.at ?? latest.at);
+	const samePlace =
+		latest.placeId === undefined || latest.placeId === player.placeId;
+	return samePlace && now - last <= FRESH_REPLY ? latest : undefined;
 }
 
 /** The player's own journal: recorded lines only, each traceable to its source events. */
@@ -73,7 +96,8 @@ export function SpeakPanel({
 	const town = session.town;
 	const player = town?.player;
 	const [offerId, setOfferId] = useState("");
-	const [work, setWork] = useState<PlayerWorkKind>("carry-meals");
+	const [work, setWork] = useState<PlayerWorkKind | "">("");
+	const [by, setBy] = useState<number | "">("");
 	const here =
 		personId !== undefined &&
 		player?.present.some((person) => person.id === personId);
@@ -94,11 +118,12 @@ export function SpeakPanel({
 			: undefined;
 	const offers = prediction?.prediction?.offers ?? [];
 	const offer = offers.find((o) => o.affordanceId === offerId) ?? offers[0];
-	const latest = personId
-		? [...player.requests]
-				.reverse()
-				.find((request) => request.targetId === personId)
-		: undefined;
+	const latest = freshReply(player, personId, town.now);
+	const deadlines = player.pledgeDeadlines ?? [];
+	const deadline =
+		by !== "" && deadlines.includes(by)
+			? by
+			: (deadlines.find((t) => t % 1440 === 1080) ?? deadlines.at(-1));
 	const company = player.present.filter((p) => p.known && p.id !== personId);
 	const counter =
 		latest &&
@@ -107,7 +132,9 @@ export function SpeakPanel({
 			? latest.counterOffer
 			: undefined;
 	const counterId = counter?.affordanceId;
-	const pledges = player.pledges.filter((pledge) => pledge.status === "open");
+	const pledges = player.pledges.filter(
+		(pledge) => pledge.status === "open" || pledge.status === "offered",
+	);
 	const busy =
 		session.advancing ||
 		session.comparing ||
@@ -186,6 +213,31 @@ export function SpeakPanel({
 					))}
 				</ul>
 			</details>
+			{!personId && player.workHoursLeft > 0 && (
+				<details className="own-work">
+					<summary>Do an hour of your own work</summary>
+					<p className="hand">
+						{player.workHoursLeft} working hour
+						{player.workHoursLeft === 1 ? "" : "s"} left today, 08:00–18:00
+						including the walk.
+					</p>
+					<ul className="walk-list">
+						{offeredWork(player)
+							.filter((w) => w.id !== "cover-shift")
+							.map((w) => (
+								<li key={w.id}>
+									<button
+										type="button"
+										disabled={!player.canMove || busy}
+										onClick={() => session.playerWork({ work: w.id })}
+									>
+										<span>{w.label}</span>
+									</button>
+								</li>
+							))}
+					</ul>
+				</details>
+			)}
 			{!personId ? null : !here ? (
 				<p>
 					{name} is not with you. Only people at the same place, and awake, can
@@ -197,6 +249,12 @@ export function SpeakPanel({
 					{prediction?.error && <p role="alert">{prediction.error}</p>}
 					{!prediction?.prediction && !prediction?.error && (
 						<p>Considering what {name} could do now…</p>
+					)}
+					{prediction?.prediction && (
+						<p className="speech-read">
+							<span className="eyebrow">You can tell</span>{" "}
+							{prediction.prediction.read.join(". ")}.
+						</p>
 					)}
 					{offers.length > 0 && offer && (
 						<>
@@ -218,36 +276,66 @@ export function SpeakPanel({
 								<select
 									value={work}
 									onChange={(event) =>
-										setWork(event.target.value as PlayerWorkKind)
+										setWork(event.target.value as PlayerWorkKind | "")
 									}
 								>
-									{WORK.map((w) => (
+									<option value="">Choose the work you would offer</option>
+									{offeredWork(player).map((w) => (
 										<option key={w.id} value={w.id}>
 											{w.label}
 										</option>
 									))}
 								</select>
 							</label>
+							{deadline !== undefined && (
+								<label>
+									Done by{" "}
+									<select
+										value={deadline}
+										onChange={(event) => setBy(Number(event.target.value))}
+									>
+										{deadlines.map((t) => (
+											<option key={t} value={t}>
+												{datedClock(t)}
+											</option>
+										))}
+									</select>
+								</label>
+							)}
 							<ul className="speech-modes">
 								{MODES.map((mode) => (
 									<li key={mode.id}>
 										<button
 											type="button"
-											disabled={busy || player.job !== undefined}
+											disabled={
+												busy ||
+												player.job !== undefined ||
+												(mode.id === "promise" &&
+													(work === "" || deadline === undefined))
+											}
 											onClick={() =>
-												session.speak({
-													actorId: personId,
-													affordanceId: offer.affordanceId,
-													mode: mode.id,
-													...(mode.id === "promise"
-														? { pledge: { work } }
-														: {}),
-												})
+												work !== "" || mode.id !== "promise"
+													? session.speak({
+															actorId: personId,
+															affordanceId: offer.affordanceId,
+															mode: mode.id,
+															...(mode.id === "promise" && work !== ""
+																? {
+																		pledge: {
+																			work,
+																			...(deadline !== undefined
+																				? { by: deadline }
+																				: {}),
+																		},
+																	}
+																: {}),
+														})
+													: undefined
 											}
 										>
 											{mode.label}
 										</button>{" "}
-										<small>{telegraph(offer[mode.id])}</small>
+										<small>{mode.note}</small>
 									</li>
 								))}
 							</ul>
@@ -306,7 +394,12 @@ export function SpeakPanel({
 							<li key={pledge.id}>
 								To {pledge.toName}: {pledge.label}, by{" "}
 								{datedClock(pledge.dueBy)}.{" "}
-								{pledge.canStart ? (
+								{pledge.status === "offered" ? (
+									<small>
+										Offered; it binds you only if {pledge.toName} takes up your
+										request.
+									</small>
+								) : pledge.canStart ? (
 									<button
 										type="button"
 										disabled={busy}

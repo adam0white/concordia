@@ -1355,11 +1355,11 @@ summary span {
 .map-you {
 	pointer-events: none;
 }
-.you-cross {
-	fill: none;
-	stroke: var(--rope);
-	stroke-width: 2.2;
-	stroke-linecap: round;
+.you-mark {
+	fill: var(--rope);
+	stroke: var(--paper);
+	stroke-width: 1.5;
+	stroke-linejoin: round;
 }
 .you-label {
 	font-family: var(--hand);

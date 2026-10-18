@@ -18,6 +18,7 @@ import {
 	layoutKnownMarkers,
 	type MarkerAvoid,
 	type MarkerPoint,
+	youMarkerPlacement,
 } from "./map-markers";
 import { activityLabel, canAct, lifeMarker } from "./person-status";
 
@@ -276,18 +277,16 @@ function PlaceDrawing({
 						className="ink roof"
 					/>
 					<Box id={`${id}:chimney`} x={34} y={-76} w={12} h={24} />
-					<Ink
-						d={inkLine(`${id}:tools`, [
-							[-38, 2],
-							[-22, 20],
-						])}
-					/>
-					<Ink
-						d={inkLine(`${id}:tools2`, [
-							[-38, 20],
-							[-22, 2],
-						])}
-					/>
+					{/* A hammer, not crossed tools: × is the map's death marker. */}
+					<g className="tool-mark">
+						<Ink
+							d={inkLine(`${id}:hammer-handle`, [
+								[-30, 22],
+								[-30, 4],
+							])}
+						/>
+						<Box id={`${id}:hammer-head`} x={-39} y={-2} w={18} h={7} />
+					</g>
 				</>
 			) : is("clinic") ? (
 				<>
@@ -667,6 +666,9 @@ export default function TownMap({
 		const place = town.places.find((p) => p.id === player.placeId);
 		return place ? { ...point(place.x, place.y), moving: false } : undefined;
 	})();
+	const youAt = you
+		? youMarkerPlacement(you, you.moving, markerScale, sheet)
+		: undefined;
 	const knownPoints: MarkerPoint[] = town.people
 		.filter((person) => person.known)
 		.flatMap((person) => {
@@ -747,8 +749,9 @@ export default function TownMap({
 					and arrival times. Named neighbours at shared places use a count badge
 					on narrow maps; select it for names. Larger maps use short leader
 					lines to their actual place. Named markers use z for sleep, ! for
-					incapacity or a mental break, and × for death. Tally marks under the
-					hall count finished repairs; a dashed line shows the old flood level.{" "}
+					incapacity or a mental break, and × for death. Your own position is a
+					small diamond labelled you. Tally marks under the hall count finished
+					repairs; a dashed line shows the old flood level.{" "}
 					{town.people.filter((p) => p.lifeState === "dead").length} deaths
 					recorded; {town.people.filter((p) => p.lifeState === "downed").length}{" "}
 					people currently unable to act.
@@ -820,13 +823,14 @@ export default function TownMap({
 						</g>
 					);
 				})}
-				{you && (
+				{youAt && (
 					<g
 						className="map-you"
-						transform={`translate(${you.x - (you.moving ? 0 : 50 * markerScale)},${you.y - (you.moving ? 0 : 40 * markerScale)}) scale(${markerScale})`}
+						transform={`translate(${youAt.x},${youAt.y}) scale(${markerScale})`}
 					>
-						<title>You{you.moving ? ", walking" : ""}</title>
-						<path d="M-5 -5 5 5M5 -5 -5 5" className="you-cross" />
+						<title>You{you?.moving ? ", walking" : ""}</title>
+						{/* A diamond, never a cross: × is the map's death marker. */}
+						<path d="M0 -6 6 0 0 6 -6 0Z" className="you-mark" />
 						<text x={0} y={-10} textAnchor="middle" className="you-label">
 							you
 						</text>

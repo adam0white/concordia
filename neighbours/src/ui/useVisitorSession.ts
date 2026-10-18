@@ -11,11 +11,20 @@ import type {
 } from "../contracts";
 import { personOutcome, personOutcomeNotice } from "../person-outcome.ts";
 import { RuntimeClient } from "../runtime-client";
+import { orderedReplies } from "./durable-replies";
 import { datedClock } from "./format";
 import { type ObservedFeed, observe } from "./observations";
 import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
 import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
+
+const savedLabel = (save: unknown) => {
+	const savedAt = (save as { runtime?: { now?: unknown } } | null)?.runtime
+		?.now;
+	return typeof savedAt === "number" && Number.isFinite(savedAt)
+		? `Saved · ${datedClock(savedAt)}`
+		: "Saved on this device";
+};
 
 // Own the runtime and device checkpoint lifecycle together. In particular, startup
 // recovery must keep autosaves locked until an explicit visitor action succeeds.
@@ -224,7 +233,7 @@ export function useVisitorSession({
 		let freshAtStartup: TownView | undefined;
 		autosaveEnabled.current = false;
 		setProgress("Checking the saved town on this device…");
-		const receive = (reply: UiReply) => {
+		const handle = (reply: UiReply) => {
 			if (!active) return;
 			if (reply.type === "progress") {
 				setProgress(reply.message);
@@ -450,7 +459,8 @@ export function useVisitorSession({
 					(++rounds.current % 6 === 0 ||
 						reply.advance !== undefined ||
 						typeof completed?.replacement === "number") &&
-					autosaveEnabled.current
+					autosaveEnabled.current &&
+					reply.save === undefined
 				)
 					dispatch({ type: "save" });
 			}
@@ -482,13 +492,7 @@ export function useVisitorSession({
 								generation < acceptedGeneration.current
 							)
 								return;
-							const checkpoint = reply.save as { runtime?: { now?: unknown } };
-							const savedAt = checkpoint?.runtime?.now;
-							setSaved(
-								typeof savedAt === "number" && Number.isFinite(savedAt)
-									? `Saved · ${datedClock(savedAt)}`
-									: "Saved on this device",
-							);
+							setSaved(savedLabel(reply.save));
 							if (
 								replace &&
 								replaceAfterSave.current?.requestId === replace.requestId
@@ -567,6 +571,43 @@ export function useVisitorSession({
 				}
 			}
 		};
+		// A player input's state reply carries its checkpoint; store it before the answer is shown.
+		// The head of the state FIFO is this reply's command, because replies are delivered in order.
+		const persistAnswer = (reply: UiReply & { save: unknown }) => {
+			const command = stateCommands.current[0];
+			if (
+				!active ||
+				saveConflictRef.current ||
+				!command ||
+				command.generation < acceptedGeneration.current ||
+				!(autosaveEnabled.current || persistenceAfterState.current)
+			)
+				return undefined;
+			const generation = command.generation;
+			return saves.write(reply.save, "latest").then(
+				() => {
+					if (
+						!active ||
+						saveConflictRef.current ||
+						generation < acceptedGeneration.current
+					)
+						return;
+					setSaved(savedLabel(reply.save));
+					setHasSave(true);
+				},
+				(failure: unknown) => {
+					if (
+						!active ||
+						generation < acceptedGeneration.current ||
+						failure instanceof SaveConflictError ||
+						saveConflictRef.current
+					)
+						return;
+					setSaved("Device save unavailable");
+				},
+			);
+		};
+		const receive = orderedReplies(handle, persistAnswer);
 		const startRuntime = () => {
 			if (!active) return;
 			runtime = new RuntimeClient(receive);
