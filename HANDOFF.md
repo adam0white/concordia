@@ -20,6 +20,14 @@ Public Chromium passes320/390/844×390/desktop, including new recorded studies a
 
 Four fresh agendas included adversarial misuse, speedrunning, meaningful entertainment and a sceptical journalist. Two independently found the missed Musa outcome and retests confirmed the fix. The opening still feels automatic; later annex and weekly funding produced more agency. HF overdue promise settlement and a stronger personal event trail remain dated follow-up `nbh-01z.37` for20October. Do not turn missed attendance into invented blame or claim that a funded slot guarantees attendance. Technical checks do not accept sustained fun for Adam.
 
+## CI changes (2026-10-18)
+
+The owner allowed removing old or useless tests from Neighbours CI. **No gate was removed.** Each one checked still guards current behaviour or evidence honesty.
+
+- The three recorded native replays (mixed town, GM, bench premise) were stale, not useless. They were regenerated from clean `315564b` and replay exactly with zero calls. The bench director now freezes seeds 42 and 73. Seed 101 has no natural case under Phase C physics and is recorded, not substituted.
+- The Playwright global timeout went from 600 s to 1500 s, and the job limit from 25 to 45 min. Collapsed stories made story-watch longer, and hosted run 39131935919 timed out with 8 tests not run.
+- CI allows one Playwright retry. `e2e/person-outcome.spec.ts:87` (a queued follow advance excludes the outcome resolved by preceding playback) failed on hosted runs 39132936684 and 39136083020, held 1 instead of 2. It passes locally and passed in other hosted attempts. It guards current FIFO playback ownership, so it stays. Its test gate holds every state after the first, which is the likely race. Follow-up by 2026-10-20 with `nbh-01z.37`: make the gate deterministic, then remove the retry.
+
 ## Previous delivery: mobile focus
 
 Remaining: Adam's play review of the deployed mobile-focus increment. Task `nbh-01z.38` is technically complete: independent reviews and agenda retests, local gates, actual public Chromium/Nightly, source-bound evidence, asset/shell checks and hosted CI pass. Adam accepts feel. The broader gameplay follow-up remains deferred to 20 October as `nbh-01z.37`.
