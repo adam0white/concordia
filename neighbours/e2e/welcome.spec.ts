@@ -83,11 +83,17 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 			() => document.documentElement.scrollWidth <= innerWidth,
 		),
 	).toBe(true);
-	const toolbar = await page.locator(".town-toolbar").boundingBox();
-	const header = await page.locator(".masthead").boundingBox();
-	expect(header).not.toBeNull();
-	expect(toolbar?.y).toBe((header?.y ?? 0) + (header?.height ?? 0));
-	expect(toolbar?.height).toBeLessThanOrEqual(70);
+	// Thumb reach: play and step sit in the bottom 40% of a phone screen.
+	const innerHeight = await page.evaluate(() => window.innerHeight);
+	for (const name of ["Play town", "Step: Advance one round"]) {
+		const box = await page
+			.getByRole("button", { name, exact: true })
+			.boundingBox();
+		expect(box).not.toBeNull();
+		expect(box?.y ?? 0).toBeGreaterThanOrEqual(innerHeight * 0.6);
+	}
+	const playback = await page.locator(".playback").boundingBox();
+	expect(playback?.height).toBeLessThanOrEqual(70);
 	await page.screenshot({ path: info.outputPath("footer-mobile-sticky.png") });
 	for (const width of [1280, 390]) {
 		await page.setViewportSize({ width, height: 844 });

@@ -1,5 +1,16 @@
 import type { PersonView } from "../contracts";
 
+const progressWords = (progress: number) =>
+	progress >= 1
+		? "done"
+		: progress >= 0.66
+			? "nearly there"
+			: progress >= 0.33
+				? "under way"
+				: progress > 0
+					? "just begun"
+					: "not started";
+
 export default function PersonPurposes({
 	person,
 }: {
@@ -16,13 +27,8 @@ export default function PersonPurposes({
 					<p>{purpose.label}</p>
 					<span className="tiny muted">
 						{purpose.status.replaceAll("-", " ")} ·{" "}
-						{Math.round(purpose.progress * 100)}%
+						<span className="hand">{progressWords(purpose.progress)}</span>
 					</span>
-					<progress
-						max={1}
-						value={purpose.progress}
-						aria-label={`${purpose.label} progress`}
-					/>
 				</div>
 			))}
 		</details>

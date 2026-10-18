@@ -95,6 +95,14 @@ const notices = [
 		"CPython 3.14.2 (PSF and incorporated licenses)",
 		resolve(app, "licenses/cpython.txt"),
 	],
+	[
+		"Literata (SIL OFL 1.1, latin subset via Fontsource 5.3.0)",
+		resolve(app, "licenses/literata-ofl.txt"),
+	],
+	[
+		"Caveat (SIL OFL 1.1, latin subset via Fontsource 5.3.0)",
+		resolve(app, "licenses/caveat-ofl.txt"),
+	],
 ];
 const noticeParts = [
 	"Neighbours third-party notices. Unmodified Pyodide source: https://github.com/pyodide/pyodide/tree/314.0.7 . CPython source: https://github.com/python/cpython/tree/v3.14.2 . Concordia source and modifications: https://github.com/adam0white/concordia/tree/neighbours . absl-py source: https://github.com/abseil/abseil-py/tree/v2.4.0 .",

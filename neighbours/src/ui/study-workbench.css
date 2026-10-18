@@ -7,7 +7,7 @@
 	flex: 1;
 }
 .study-sections button[aria-pressed="true"] {
-	border-color: var(--accent, #78bba3);
+	border-color: var(--rope);
 	font-weight: 700;
 }
 .bench-discussion label,
@@ -37,7 +37,7 @@
 	justify-content: space-between;
 	gap: 1rem;
 	padding: 0.5rem 0;
-	border-bottom: 1px solid #8884;
+	border-bottom: 1px solid var(--hairline);
 }
 .changed-resources li strong {
 	white-space: nowrap;
@@ -48,7 +48,7 @@
 	overflow-wrap: anywhere;
 }
 .comparison-stale {
-	border-left: 3px solid #b68a4e;
+	border-left: 1.5px solid var(--rope);
 	padding-left: 0.7rem;
 }
 .comparison-checkpoint {

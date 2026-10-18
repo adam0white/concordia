@@ -7,7 +7,11 @@ export interface MarkerPoint {
 }
 
 /** Spread shared-place markers in screen-sized steps. Journey coordinates stay exact. */
-export function layoutKnownMarkers(points: MarkerPoint[], scale: number) {
+export function layoutKnownMarkers(
+	points: MarkerPoint[],
+	scale: number,
+	bounds: { width: number; height: number } = { width: 1080, height: 700 },
+) {
 	const groups = new Map<string, number>();
 	for (const point of points)
 		if (!point.travelling)
@@ -26,8 +30,8 @@ export function layoutKnownMarkers(points: MarkerPoint[], scale: number) {
 		for (let row = -8; row <= 8; row++)
 			for (let col = -8; col <= 8; col++)
 				candidates.push({
-					x: clamp(point.x + col * step, 1080),
-					y: clamp(point.y + 32 * scale + row * step, 700),
+					x: clamp(point.x + col * step, bounds.width),
+					y: clamp(point.y + 32 * scale + row * step, bounds.height),
 				});
 		const distance = (p: { x: number; y: number }) =>
 			(p.x - point.x) ** 2 + (p.y - point.y - 32 * scale) ** 2;

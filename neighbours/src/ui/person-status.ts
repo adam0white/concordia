@@ -24,3 +24,55 @@ export function lifeMarker(person: Pick<PersonView, "lifeState">): string {
 				? "!"
 				: "";
 }
+
+/** Words for one HF need urgency (0 settled … 1 urgent). No meter or percentage. */
+export function urgencyWord(urgency: number): string {
+	return urgency >= 0.75
+		? "urgent"
+		: urgency >= 0.5
+			? "pressing"
+			: urgency >= 0.25
+				? "noticed"
+				: "settled";
+}
+
+const feelings: Record<string, string> = {
+	food: "hungry",
+	water: "thirsty",
+	sleep: "sleepy",
+	rest: "worn out",
+	relief: "uncomfortable",
+	safety: "uneasy",
+	belonging: "lonely",
+	esteem: "low in themselves",
+	autonomy: "hemmed in",
+	competence: "unsure of themselves",
+	leisure: "restless",
+	meaning: "adrift",
+};
+
+/** A short worded impression from the two most pressing HF need urgencies. */
+export function needWords(needs: Record<string, number>): string {
+	const pressing = Object.entries(needs)
+		.filter(([, urgency]) => urgency >= 0.5)
+		.toSorted((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+		.slice(0, 2)
+		.map(
+			([id, urgency]) =>
+				`${urgency >= 0.8 ? "very " : ""}${feelings[id] ?? id.replaceAll("_", " ")}`,
+		);
+	if (!pressing.length) return "Settled. Nothing pressing.";
+	const text = pressing.join(" and ");
+	return `${text[0]?.toUpperCase()}${text.slice(1)}.`;
+}
+
+/** Words for HF relationship trust (0..1). */
+export function trustWords(trust: number): string {
+	return trust >= 0.75
+		? "Trusts them deeply"
+		: trust >= 0.5
+			? "Trusts them"
+			: trust >= 0.25
+				? "Cautious with them"
+				: "Wary of them";
+}

@@ -1,46 +1,41 @@
-import { useEffect, useRef } from "react";
+import type { ReactNode } from "react";
 import type { PersonView, TownView } from "../contracts";
 import { PersonInvitations } from "./EveningBoard";
 import { clock, datedClock, initial, number, placeName } from "./format";
+import { InkPortrait } from "./Notebook";
 import type { ObservedFeed } from "./observations";
 import PersonLessons from "./PersonLessons";
 import PersonPromises from "./PersonPromises";
 import PersonPurposes from "./PersonPurposes";
 import { eventDetail, personHistory } from "./person-history";
-import { activityLabel, canAct } from "./person-status";
+import {
+	activityLabel,
+	canAct,
+	needWords,
+	trustWords,
+	urgencyWord,
+} from "./person-status";
 
 export default function PersonPanel({
 	person,
 	town,
 	close,
 	observed,
+	speak,
 }: {
 	person: PersonView;
 	town: TownView;
 	close: () => void;
 	observed: ObservedFeed | undefined;
+	/** Slot for the player's voice (SpeakPanel), shown under "Right now". */
+	speak?: ReactNode;
 }) {
-	const panel = useRef<HTMLElement>(null);
-	useEffect(() => {
-		if (person.id && window.matchMedia("(max-width: 760px)").matches) {
-			panel.current?.scrollIntoView({
-				block: "start",
-				behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-					? "instant"
-					: "smooth",
-			});
-		}
-	}, [person.id]);
 	const place = town.places.find((p) => p.id === person.placeId);
 	const destination = town.places.find((p) => p.id === person.journey?.toId);
 
 	const history = personHistory(person, town, observed);
 	return (
-		<aside
-			ref={panel}
-			className="person-panel"
-			aria-label={`${person.name}'s details`}
-		>
+		<aside className="person-panel" aria-label={`${person.name}'s details`}>
 			<button
 				type="button"
 				className="close-panel"
@@ -51,12 +46,11 @@ export default function PersonPanel({
 			</button>
 			<div className="eyebrow">A neighbour</div>
 			<div className="person-heading">
-				<span
+				<InkPortrait
+					id={person.id}
+					label={initial(person.name)}
 					className={`avatar life-${person.lifeState ?? "awake"}`}
-					style={{ background: person.color }}
-				>
-					{initial(person.name)}
-				</span>
+				/>
 				<div>
 					<h2 tabIndex={-1}>{person.name}</h2>
 					<p>{person.role}</p>
@@ -83,6 +77,12 @@ export default function PersonPanel({
 						<p className="muted">Until {clock(person.until)}</p>
 					)}
 			</div>
+			{canAct(person) && (
+				<p className="seems">
+					<span className="eyebrow">Seems</span> {needWords(person.needs)}
+				</p>
+			)}
+			{speak}
 			<p className="description">{person.description}</p>
 			{person.lifeEvent && (
 				<p className="life-event">
@@ -229,14 +229,12 @@ export default function PersonPanel({
 										: "Relationship recorded through an encounter."}
 								</p>
 							)}
-							<span className="muted tiny">
-								Current trust {number(r.trust)}
-							</span>
+							<span className="muted tiny">{trustWords(r.trust)}</span>
 						</div>
 					))}
 				</details>
 				<details>
-					<summary>Need urgency & decision evidence</summary>
+					<summary>How pressing each need feels · decision evidence</summary>
 					{person.paidWork && (
 						<div className="resource">
 							<span>Paid shifts started today</span>
@@ -251,7 +249,7 @@ export default function PersonPanel({
 					{Object.entries(person.needs).map(([key, value]) => (
 						<div className="resource" key={key}>
 							<span>{key.replaceAll("_", " ")}</span>
-							<strong>{(value * 100).toFixed(1)}%</strong>
+							<strong className="hand">{urgencyWord(value)}</strong>
 						</div>
 					))}
 					{person.decision?.offeredCount !== undefined && (

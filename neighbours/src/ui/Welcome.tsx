@@ -1,19 +1,40 @@
+import { inkLine } from "./ink";
+
 type Props = { onEnter: () => void };
 
+/** The opening page: a returning resident's first look, with no exposition dump. */
 export default function Welcome({ onEnter }: Props) {
 	return (
 		<main className="welcome-screen">
-			<span className="eyebrow">Welcome to Alder Quay</span>
+			<span className="eyebrow">Alder Quay · a field notebook</span>
 			<h2>A town rebuilding after a flood.</h2>
+			<svg className="welcome-rule" viewBox="0 0 320 16" aria-hidden="true">
+				<path
+					className="high-water"
+					d={inkLine(
+						"welcome-water",
+						[
+							[4, 9],
+							[316, 7],
+						],
+						1.8,
+						10,
+					)}
+				/>
+				<text x="316" y="5" textAnchor="end" className="map-note">
+					the water came up to here
+				</text>
+			</svg>
 			<p className="welcome-intro">
-				Follow eight neighbours as they work, rest and try to reopen their
-				community hall. Two hundred other residents share the town.
+				You are back in Alder Quay. The river has gone down, but the line it
+				left is still on the hall wall. Eight neighbours you know, and two
+				hundred you know by sight, are putting ordinary days back together.
 			</p>
 			<ol className="welcome-steps">
 				<li>
 					<strong>Watch a day unfold.</strong>
 					<span>
-						Press Play, or Step through one round. Select a neighbour on the map
+						Press Play, or Step through one round. Pick a neighbour on the map
 						to follow them.
 					</span>
 				</li>
@@ -21,14 +42,15 @@ export default function Welcome({ onEnter }: Props) {
 					<strong>Help when you choose.</strong>
 					<span>
 						Restore public transport, lend shared repair tools, or spread hall
-						news. People decide how to respond.
+						news. People decide for themselves how to respond, and they may say
+						no.
 					</span>
 				</li>
 				<li>
 					<strong>See what changes.</strong>
 					<span>
-						Can the hall reopen? Will neighbours make time for a class or a
-						shared meal? Stories collect what happens.
+						Will the hall reopen? Will anyone make time for a class or a shared
+						supper? The journal keeps what happened.
 					</span>
 				</li>
 			</ol>

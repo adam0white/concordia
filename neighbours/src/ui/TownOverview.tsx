@@ -1,134 +1,67 @@
-import { useEffect, useRef, useState } from "react";
-import type { PersonView, TownView } from "../contracts";
+import type { ReactNode } from "react";
+import type { TownView } from "../contracts";
 import { initial } from "./format";
-import type { ObservedFeed } from "./observations";
-import PersonPanel from "./PersonPanel";
+import { InkPortrait } from "./Notebook";
 import { activityLabel } from "./person-status";
-import TownGoal from "./TownGoal";
 import TownMap from "./TownMap";
 
+/** The map scene. Overlays are margin notes on the page, never extra panels. */
 export default function TownOverview({
 	town,
 	selected,
-	person,
-	observed,
 	select,
-	close,
-	help,
+	notes,
 }: {
 	town: TownView;
 	selected: string;
-	person?: PersonView;
-	observed?: ObservedFeed;
+	select: (id: string) => void;
+	notes?: ReactNode;
+}) {
+	return (
+		<section className="map-section" aria-label="Town overview">
+			<h2 className="sr-only">Alder Quay</h2>
+			<TownMap town={town} selected={selected} select={select} />
+			{notes}
+		</section>
+	);
+}
+
+/** Familiar neighbours as a thumb-reachable row of inked names. */
+export function NeighbourStrip({
+	town,
+	selected,
+	select,
+	close,
+}: {
+	town: TownView;
+	selected: string;
 	select: (id: string) => void;
 	close: () => void;
-	help: () => void;
 }) {
-	const roster = useRef<HTMLElement>(null);
-	const [rosterOverflows, setRosterOverflows] = useState(false);
-	useEffect(() => {
-		const strip = roster.current;
-		if (!strip) return;
-		const observer = new ResizeObserver(() =>
-			setRosterOverflows(strip.scrollWidth > strip.clientWidth + 1),
-		);
-		observer.observe(strip);
-		return () => observer.disconnect();
-	}, []);
 	return (
-		<>
-			{!person && <TownGoal town={town} help={help} />}
-			<main
-				className={`town-layout focused-town ${person ? "has-person" : ""}`}
-			>
-				<section className="map-section" aria-label="Town overview">
-					<div className="map-heading">
-						<h2>Alder Quay</h2>
-						<span className="population">
-							{
-								town.people.filter((resident) => resident.lifeState !== "dead")
-									.length
-							}{" "}
-							residents
-						</span>
-					</div>
-					<div className="map-frame">
-						<TownMap town={town} selected={selected} select={select} />
-					</div>
-					<div className="roster-row">
-						<nav
-							ref={roster}
-							className="neighbour-strip"
-							aria-label="Familiar neighbours"
-						>
-							{town.people
-								.filter((resident) => resident.known)
-								.map((resident) => (
-									<button
-										type="button"
-										key={resident.id}
-										className={`neighbour life-${resident.lifeState ?? "awake"} ${selected === resident.id ? "active" : ""}`}
-										data-person-id={resident.id}
-										aria-label={`${resident.name} · ${activityLabel(resident)}`}
-										onClick={() =>
-											selected === resident.id ? close() : select(resident.id)
-										}
-									>
-										<span
-											className="mini-avatar"
-											style={{ background: resident.color }}
-										>
-											{initial(resident.name)}
-										</span>
-										<strong>{resident.name.split(" ")[0]}</strong>
-									</button>
-								))}
-						</nav>
-						{rosterOverflows && (
-							<button
-								type="button"
-								className="more-neighbours"
-								aria-label="More neighbours"
-								onClick={() => {
-									const strip = roster.current;
-									if (!strip) return;
-									strip.scrollTo({
-										left:
-											strip.scrollLeft + strip.clientWidth >=
-											strip.scrollWidth - 8
-												? 0
-												: strip.scrollLeft + strip.clientWidth * 0.8,
-										behavior: window.matchMedia(
-											"(prefers-reduced-motion: reduce)",
-										).matches
-											? "instant"
-											: "smooth",
-									});
-								}}
-							>
-								→
-							</button>
-						)}
-					</div>
-				</section>
-				{person && (
-					<div className="focused-person">
-						<button
-							type="button"
-							className="mobile-person-back text-button"
-							onClick={close}
-						>
-							← Back to town
-						</button>
-						<PersonPanel
-							person={person}
-							town={town}
-							observed={observed}
-							close={close}
+		<nav className="neighbour-strip" aria-label="Familiar neighbours">
+			{town.people
+				.filter((resident) => resident.known)
+				.map((resident) => (
+					<button
+						type="button"
+						key={resident.id}
+						className={`neighbour life-${resident.lifeState ?? "awake"} ${selected === resident.id ? "active" : ""}`}
+						data-person-id={resident.id}
+						aria-label={`${resident.name} · ${activityLabel(resident)}`}
+						aria-pressed={selected === resident.id}
+						onClick={() =>
+							selected === resident.id ? close() : select(resident.id)
+						}
+					>
+						<InkPortrait
+							id={resident.id}
+							label={initial(resident.name)}
+							className="mini-avatar"
 						/>
-					</div>
-				)}
-			</main>
-		</>
+						<strong>{resident.name.split(" ")[0]}</strong>
+					</button>
+				))}
+		</nav>
 	);
 }

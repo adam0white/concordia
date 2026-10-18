@@ -1,7 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import type { PersonView, PlaceView, TownView } from "../contracts";
 import { initial, placeName } from "./format";
 import { CartGlyph } from "./HandcartCard";
+import {
+	hash,
+	inkBox,
+	inkCircle,
+	inkLine,
+	inkShape,
+	jitter,
+	seeded,
+} from "./ink";
 import MapPeopleChooser from "./MapPeopleChooser";
 import {
 	knownPlaceClusters,
@@ -10,210 +19,449 @@ import {
 } from "./map-markers";
 import { activityLabel, canAct, lifeMarker } from "./person-status";
 
-function PlaceBuilding({ place, town }: { place: PlaceView; town: TownView }) {
-	const is = (kind: string) =>
-		place.id.includes(kind) || place.kind.includes(kind);
+/**
+ * Ink-on-paper town map. Places, people and journeys sit at their actual
+ * projected positions; seeded jitter only changes how a line is drawn. A phone
+ * in portrait gets a portrait sheet so the town fills the scene.
+ */
+type Sheet = {
+	width: number;
+	height: number;
+	left: number;
+	right: number;
+	top: number;
+	bottom: number;
+	portrait: boolean;
+};
+const LANDSCAPE: Sheet = {
+	width: 1080,
+	height: 700,
+	left: 200,
+	right: 120,
+	top: 130,
+	bottom: 150,
+	portrait: false,
+};
+const PORTRAIT: Sheet = {
+	width: 720,
+	height: 1000,
+	left: 112,
+	right: 110,
+	top: 235,
+	bottom: 150,
+	portrait: true,
+};
+
+function Ink({
+	d,
+	className = "ink",
+	draw = true,
+}: {
+	d: string;
+	className?: string;
+	draw?: boolean;
+}) {
+	return (
+		<path
+			d={d}
+			className={draw ? `${className} ink-draw` : className}
+			pathLength={draw ? 1 : undefined}
+		/>
+	);
+}
+function Box({
+	id,
+	x,
+	y,
+	w,
+	h,
+	fill = "paper-fill",
+	stroke = "ink",
+}: {
+	id: string;
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+	fill?: string;
+	stroke?: string;
+}) {
+	const box = inkBox(id, x, y, w, h);
+	return (
+		<>
+			<path d={box.fill} className={fill} />
+			<Ink d={box.stroke} className={stroke} />
+		</>
+	);
+}
+function House({ id, x, y }: { id: string; x: number; y: number }) {
+	return (
+		<g transform={`translate(${x},${y})`}>
+			<Box id={`${id}:body`} x={-17} y={-17} w={34} h={30} />
+			<Ink
+				d={inkShape(`${id}:roof`, [
+					[-22, -17],
+					[0, -34],
+					[22, -17],
+				])}
+				className="ink roof"
+			/>
+			<Ink
+				d={inkLine(`${id}:door`, [
+					[-3, 13],
+					[-3, 3],
+					[5, 3],
+					[5, 13],
+				])}
+				className="ink-soft"
+				draw={false}
+			/>
+		</g>
+	);
+}
+
+function Windows({ id, xs, y }: { id: string; xs: number[]; y: number }) {
+	return (
+		<>
+			{xs.map((x) => (
+				<Ink
+					key={x}
+					d={inkBox(`${id}:w${x}`, x, y, 13, 16, 0.7).stroke}
+					className="ink-soft"
+					draw={false}
+				/>
+			))}
+		</>
+	);
+}
+
+function PlaceDrawing({
+	place,
+	repairs,
+}: {
+	place: PlaceView;
+	repairs: number;
+}): ReactNode {
+	const id = place.id;
+	const is = (kind: string) => id.includes(kind) || place.kind.includes(kind);
 	if (is("garden"))
 		return (
-			<g className="garden-building">
-				<rect
-					x="-58"
-					y="-38"
-					width="116"
-					height="72"
-					rx="12"
-					className="garden-soil"
-				/>
-				{[-31, -7, 17].map((y) => (
+			<g>
+				{[-30, -8, 14].map((y) => (
 					<g key={y}>
-						<rect
-							x="-49"
-							y={y}
-							width="98"
-							height="15"
-							rx="3"
-							className="garden-bed"
+						<Ink
+							d={inkLine(`${id}:bed${y}`, [
+								[-52, y + 10],
+								[52, y + 10],
+							])}
 						/>
-						{[-37, -15, 7, 29].map((x) => (
-							<path
+						{[-40, -18, 4, 26, 44].map((x) => (
+							<Ink
 								key={x}
-								d={`M${x} ${y + 12}v-8m0 4l-5-4m5 4l5-4`}
-								className="garden-leaf"
+								d={inkLine(
+									`${id}:sprout${x}:${y}`,
+									[
+										[x - 4, y + 2],
+										[x, y + 9],
+										[x + 4, y + 1],
+									],
+									0.6,
+									6,
+								)}
+								className="ink-soft"
+								draw={false}
 							/>
 						))}
 					</g>
 				))}
-				<path
-					d="M-23-40V-58L0-70L23-58V-40ZM0-70V-40M-23-58H23"
-					className="glasshouse"
+				<Ink
+					d={inkShape(`${id}:glass`, [
+						[-22, -40],
+						[-22, -58],
+						[0, -70],
+						[22, -58],
+						[22, -40],
+					])}
+				/>
+				<Ink
+					d={inkLine(`${id}:glass-rib`, [
+						[0, -70],
+						[0, -40],
+					])}
+					className="ink-soft"
+					draw={false}
 				/>
 			</g>
 		);
 	if (is("quay"))
 		return (
 			<g>
-				<ellipse cx="0" cy="2" rx="76" ry="43" className="quay-water" />
-				<rect x="-61" y="-29" width="91" height="59" rx="3" className="jetty" />
-				{[-49, -31, -13, 5, 23].map((x) => (
-					<path key={x} d={`M${x}-26V27`} className="jetty-plank" />
+				<Box id={`${id}:jetty`} x={-62} y={-26} w={92} h={52} />
+				{[-46, -28, -10, 8].map((x) => (
+					<Ink
+						key={x}
+						d={inkLine(`${id}:plank${x}`, [
+							[x, -22],
+							[x, 22],
+						])}
+						className="ink-soft"
+						draw={false}
+					/>
 				))}
-				<path d="M41-23Q70-5 41 24Q27 0 41-23Z" className="boat" />
-				<path d="M41-12V12" className="jetty-plank" />
-				<circle cx="-56" cy="-24" r="4" className="jetty-post" />
-				<circle cx="-56" cy="25" r="4" className="jetty-post" />
+				<Ink
+					d={inkShape(`${id}:boat`, [
+						[42, -24],
+						[66, -4],
+						[42, 24],
+						[34, 0],
+					])}
+				/>
+				{[-26, 26].map((y) => (
+					<path
+						key={y}
+						d={inkCircle(`${id}:post${y}`, -62, y, 4)}
+						className="ink-fill"
+					/>
+				))}
 			</g>
 		);
-	if (place.id === "homes")
+	if (id === "homes")
 		return (
-			<g className="housing-district">
+			<g>
 				<title>Riverside housing district, several streets of homes</title>
-				<rect
-					x="-105"
-					y="-78"
-					width="210"
-					height="116"
-					rx="16"
-					className="building-shadow"
-				/>
-				{[-64, -22, 22, 64].flatMap((x) =>
-					[-45, 5].map((y) => (
-						<g key={`${x}:${y}`} transform={`translate(${x},${y})`}>
-							<rect
-								x="-17"
-								y="-19"
-								width="34"
-								height="32"
-								rx="2"
-								className="building"
-							/>
-							<path d="M-21-19L0-35L21-19Z" className="roof" />
-							<path d="M-11-10H-3V0H-11ZM5-10H13V0H5Z" className="window" />
-							<path d="M-3 4H5V13H-3Z" className="door" />
-						</g>
+				{[-66, -22, 22, 66].flatMap((x) =>
+					[-42, 6].map((y) => (
+						<House
+							key={`${x}:${y}`}
+							id={`${id}:${x}:${y}`}
+							x={x + jitter(id, `${x}${y}`) * 3}
+							y={y}
+						/>
 					)),
 				)}
 			</g>
 		);
+	const hall = is("hall");
+	const boards = hall ? Math.max(0, Math.ceil((12 - repairs) / 3)) : 0;
 	return (
 		<g>
-			<rect
-				x="-59"
-				y="-38"
-				width="118"
-				height="77"
-				rx="8"
-				className="building-shadow"
-			/>
-			<rect
-				x="-53"
-				y="-43"
-				width="106"
-				height="69"
-				rx="5"
-				className="building"
-			/>
+			<Box id={`${id}:body`} x={-53} y={-43} w={106} h={69} />
 			{is("workshop") ? (
 				<>
-					<path d="M-60-43V-65L-20-49V-65L20-49V-65L60-43Z" className="roof" />
-					<rect x="35" y="-75" width="13" height="25" className="chimney" />
+					<Ink
+						d={inkLine(`${id}:roof`, [
+							[-60, -43],
+							[-60, -64],
+							[-20, -49],
+							[-20, -64],
+							[20, -49],
+							[20, -64],
+							[60, -43],
+						])}
+						className="ink roof"
+					/>
+					<Box id={`${id}:chimney`} x={34} y={-76} w={12} h={24} />
+					<Ink
+						d={inkLine(`${id}:tools`, [
+							[-38, 2],
+							[-22, 20],
+						])}
+					/>
+					<Ink
+						d={inkLine(`${id}:tools2`, [
+							[-38, 20],
+							[-22, 2],
+						])}
+					/>
 				</>
 			) : is("clinic") ? (
-				<rect x="-59" y="-50" width="118" height="10" rx="2" className="roof" />
+				<>
+					<Ink
+						d={inkLine(`${id}:roof`, [
+							[-60, -46],
+							[60, -46],
+						])}
+						className="ink roof"
+					/>
+					<Ink
+						d={inkShape(
+							`${id}:cross`,
+							[
+								[-5, -38],
+								[5, -38],
+								[5, -30],
+								[13, -30],
+								[13, -20],
+								[5, -20],
+								[5, -12],
+								[-5, -12],
+								[-5, -20],
+								[-13, -20],
+								[-13, -30],
+								[-5, -30],
+							],
+							0.5,
+							6,
+						)}
+						className="ink rope-mark"
+					/>
+				</>
 			) : (
-				<path d="M-60-43L0-66L60-43Z" className="roof" />
-			)}
-			{[-31, -6, 19].map((x) => (
-				<rect
-					key={x}
-					x={x}
-					y="-29"
-					width="13"
-					height="18"
-					rx="2"
-					className="window"
-				/>
-			))}
-			<rect x="-9" y="5" width="18" height="22" rx="2" className="door" />
-			{is("clinic") && (
-				<path
-					d="M-6-38H6V-27H17V-15H6V-4H-6V-15H-17V-27H-6Z"
-					className="clinic-cross"
+				<Ink
+					d={inkShape(`${id}:roof`, [
+						[-61, -43],
+						[0, -67],
+						[61, -43],
+					])}
+					className="ink roof"
 				/>
 			)}
+			{!is("clinic") && <Windows id={id} xs={[-31, -6, 19]} y={-30} />}
+			<Ink
+				d={inkLine(`${id}:door`, [
+					[-9, 26],
+					[-9, 5],
+					[9, 5],
+					[9, 26],
+				])}
+			/>
 			{is("school") && (
 				<g>
-					<rect
-						x="-12"
-						y="-76"
-						width="24"
-						height="24"
-						rx="2"
-						className="building"
+					<Box id={`${id}:tower`} x={-12} y={-90} w={24} h={26} />
+					<Ink
+						d={inkShape(`${id}:tower-roof`, [
+							[-17, -90],
+							[0, -102],
+							[17, -90],
+						])}
+						className="ink roof"
 					/>
-					<path d="M-17-76L0-88L17-76Z" className="roof" />
-					<path d="M-6-58Q-6-71 0-71Q6-71 6-58Z" className="school-bell" />
-					<path d="M-36 7H-17V22H-36Z" className="school-board" />
+					<path d={inkCircle(`${id}:bell`, 0, -78, 5)} className="ink" />
 				</g>
 			)}
 			{is("market") && (
 				<g>
-					<path d="M-58-8H58L65 6H-65Z" className="awning" />
-					{[-52, -26, 0, 26, 52].map((x) => (
-						<path
-							key={x}
-							d={`M${x}-8l-3 14h13l-2-14Z`}
-							className="awning-stripe"
-						/>
-					))}
-					<path d="M-59 6V28M59 6V28" className="market-post" />
+					<Ink
+						d={inkLine(
+							`${id}:awning`,
+							[
+								[-62, -6],
+								[-44, 4],
+								[-26, -6],
+								[-8, 4],
+								[10, -6],
+								[28, 4],
+								[46, -6],
+								[62, 4],
+							],
+							0.8,
+							10,
+						)}
+					/>
+					<Ink
+						d={inkLine(`${id}:posts`, [
+							[-58, -6],
+							[-58, 26],
+						])}
+						className="ink-soft"
+						draw={false}
+					/>
+					<Ink
+						d={inkLine(`${id}:posts2`, [
+							[58, -6],
+							[58, 26],
+						])}
+						className="ink-soft"
+						draw={false}
+					/>
 				</g>
 			)}
-			{is("workshop") && (
-				<path
-					d="M-36 3l16 18m-16 0l16-18M-39 2l7-3m9 24l6-4"
-					className="workshop-tools"
-				/>
-			)}
-			{is("hall") && (
+			{hall && (
 				<g>
-					{Array.from(
-						{
-							length: Math.max(
-								0,
-								Math.ceil((12 - (town.stats.hallRepairs ?? 0)) / 3),
-							),
-						},
-						(_, i) => i,
-					).map((i) => (
-						<path
+					{Array.from({ length: boards }, (_, i) => i).map((i) => (
+						<Ink
 							key={`board-${i}`}
-							d={`M${-42 + i * 23}-5l15 23`}
-							className="repair-board"
+							d={inkLine(`${id}:board${i}`, [
+								[-42 + i * 23, -30],
+								[-28 + i * 23, -10],
+							])}
+							className="ink board"
 						/>
 					))}
-					{Array.from({ length: 12 }, (_, i) => i).map((i) => (
-						<rect
-							key={`progress-${i}`}
-							x={-47 + i * 8}
-							y="32"
-							width="5"
-							height="5"
-							rx="1"
-							className={
-								i < (town.stats.hallRepairs ?? 0)
-									? "repair-done"
-									: "repair-pending"
-							}
-						/>
-					))}
+					<Ink
+						d={inkLine(
+							`${id}:high-water`,
+							[
+								[-58, -2],
+								[58, -2],
+							],
+							1.6,
+							9,
+						)}
+						className="high-water"
+						draw={false}
+					/>
+					<text x="62" y="2" className="map-note high-water-note">
+						high water
+					</text>
+					{Array.from({ length: 12 }, (_, i) => i).map((i) => {
+						const group = Math.floor(i / 5);
+						const inGroup = i % 5;
+						const x = -42 + group * 32 + inGroup * 6;
+						const done = i < repairs;
+						return (
+							<Ink
+								key={`tally-${i}`}
+								d={
+									inGroup === 4
+										? inkLine(`${id}:tally${i}`, [
+												[x - 26, 40],
+												[x + 2, 31],
+											])
+										: inkLine(`${id}:tally${i}`, [
+												[x, 30],
+												[x + jitter(id, i) * 1.5, 42],
+											])
+								}
+								className={done ? "tally done" : "tally pending"}
+								draw={false}
+							/>
+						);
+					})}
 					{!place.open && (
-						<path d="M22-41h22v15H22Z" className="inspection-sign" />
+						<g transform="translate(36,-58) rotate(-6)">
+							<Box id={`${id}:sign`} x={-14} y={-8} w={28} h={14} />
+							<text y="3" textAnchor="middle" className="map-note sign-note">
+								shut
+							</text>
+						</g>
 					)}
 				</g>
 			)}
 		</g>
 	);
 }
+
+/** Scribbled tree: a trunk and a lumpy canopy outline. */
+function Tree({ id, x, y }: { id: string; x: number; y: number }) {
+	return (
+		<g transform={`translate(${x},${y})`} className="tree">
+			<Ink
+				d={inkLine(`${id}:trunk`, [
+					[0, 6],
+					[0, 24],
+				])}
+				className="ink-soft"
+				draw={false}
+			/>
+			<path
+				d={inkCircle(`${id}:canopy`, 0, -4, 14, 0.18)}
+				className="ink-soft"
+			/>
+		</g>
+	);
+}
+
 export default function TownMap({
 	town,
 	selected,
@@ -224,23 +472,46 @@ export default function TownMap({
 	select: (id: string) => void;
 }) {
 	const map = useRef<SVGSVGElement>(null);
-	const [width, setWidth] = useState(1080);
+	const frame = useRef<HTMLDivElement>(null);
+	const [box, setBox] = useState({ width: 1080, height: 700 });
 	const [activePlace, setActivePlace] = useState("");
 	useEffect(() => {
-		const element = map.current;
+		const element = frame.current;
 		if (!element) return;
-		const resize = () => setWidth(element.getBoundingClientRect().width);
+		const resize = () => {
+			const rect = element.getBoundingClientRect();
+			setBox({ width: rect.width, height: rect.height });
+		};
 		resize();
 		const observer = new ResizeObserver(resize);
 		observer.observe(element);
 		return () => observer.disconnect();
 	}, []);
-	const markerScale = Math.max(1, 1080 / Math.max(1, width));
-	const maxX = Math.max(...town.places.map((p) => p.x));
-	const maxY = Math.max(...town.places.map((p) => p.y));
+	const sheet =
+		box.height > box.width * 1.1 && box.width < 760 ? PORTRAIT : LANDSCAPE;
+	// Viewbox units per CSS pixel with "meet" scaling; markers keep 44px targets.
+	const markerScale = Math.max(
+		1,
+		Math.max(
+			sheet.width / Math.max(1, box.width),
+			sheet.height / Math.max(1, box.height),
+		),
+	);
+	const xs = town.places.map((p) => p.x);
+	const ys = town.places.map((p) => p.y);
+	const minX = Math.min(...xs);
+	const maxX = Math.max(...xs);
+	const minY = Math.min(...ys);
+	const maxY = Math.max(...ys);
 	const point = (x: number, y: number) => ({
-		x: 100 + (x / Math.max(maxX, 1)) * 780,
-		y: 95 + (y / Math.max(maxY, 1)) * 480,
+		x:
+			sheet.left +
+			((x - minX) / Math.max(1, maxX - minX)) *
+				(sheet.width - sheet.left - sheet.right),
+		y:
+			sheet.top +
+			((y - minY) / Math.max(1, maxY - minY)) *
+				(sheet.height - sheet.top - sheet.bottom),
 	});
 	const personPoint = (person: PersonView) => {
 		const place = town.places.find((p) => p.id === person.placeId);
@@ -263,6 +534,86 @@ export default function TownMap({
 		);
 		return { x: a.x + (b.x - a.x) * fraction, y: a.y + (b.y - a.y) * fraction };
 	};
+	const placeKey = town.places.map((p) => `${p.id}:${p.x}:${p.y}`).join("|");
+	// Static paper features depend only on the sheet and the place layout.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: placeKey captures the place layout used by point().
+	const scenery = useMemo(() => {
+		const centres = town.places.map((p) => ({ id: p.id, ...point(p.x, p.y) }));
+		const quay = centres.find((p) => p.id === "quay") ?? {
+			x: sheet.left,
+			y: sheet.height * 0.4,
+		};
+		const hub = centres.find((p) => p.id === "hall");
+		const W = sheet.width;
+		const H = sheet.height;
+		// The river comes in from the top-left and leaves past the quay.
+		const bank: [number, number][] = [
+			[-10, H * 0.12],
+			[quay.x * 0.45, H * 0.2],
+			[quay.x * 0.55, quay.y - 70],
+			[quay.x - 58, quay.y - 20],
+			[quay.x - 72, quay.y + 40],
+			[quay.x * 0.35, quay.y + 110],
+			[-10, quay.y + 150],
+		];
+		const river = inkShape("river", [...bank, [-10, H * 0.12]], 3, 30);
+		const riverEdge = inkLine("river-edge", bank, 2.5, 22);
+		const flood = inkLine(
+			"flood-line",
+			bank.map(([x, y], i) => [
+				x + (i === 0 || i === bank.length - 1 ? 0 : 38),
+				y + (i === 0 ? -14 : i === bank.length - 1 ? 22 : 0),
+			]),
+			3,
+			14,
+		);
+		const ripples = Array.from({ length: 7 }, (_, i) => {
+			const y = H * 0.16 + i * ((quay.y + 110 - H * 0.16) / 7);
+			const x = 10 + jitter("ripple", i) * 6;
+			return inkLine(
+				`ripple${i}`,
+				[
+					[x, y],
+					[x + 14, y - 4],
+					[x + 28, y],
+				],
+				1,
+				8,
+			);
+		});
+		const paths = hub
+			? centres
+					.filter((p) => p.id !== hub.id)
+					.map((p) => ({
+						id: p.id,
+						d: inkLine(
+							`path:${p.id}`,
+							[
+								[hub.x, hub.y + 30],
+								[
+									(hub.x + p.x) / 2 + jitter(p.id, "bend") * 30,
+									(hub.y + p.y) / 2 + 20 + jitter(p.id, "lift") * 20,
+								],
+								[p.x, p.y + 30],
+							],
+							2,
+							20,
+						),
+					}))
+			: [];
+		const next = seeded(`trees:${W}x${H}`);
+		const trees: { id: string; x: number; y: number }[] = [];
+		for (let i = 0; i < 80 && trees.length < 11; i++) {
+			const x = 30 + next() * (W - 60);
+			const y = 40 + next() * (H - 90);
+			const clear =
+				centres.every((c) => Math.hypot(c.x - x, c.y - y) > 130) &&
+				trees.every((t) => Math.hypot(t.x - x, t.y - y) > 60) &&
+				x > quay.x * 0.7 + 40;
+			if (clear) trees.push({ id: `tree${i}`, x, y });
+		}
+		return { river, riverEdge, flood, ripples, paths, trees };
+	}, [sheet, placeKey]);
 	const cartLocation = town.handcart?.returned
 		? (() => {
 				const jo = town.people.find((person) => person.id === "jo");
@@ -273,6 +624,34 @@ export default function TownMap({
 				return workshop ? point(workshop.x, workshop.y) : undefined;
 			})();
 
+	// The player's own position, projected like any traveller's.
+	const you = (() => {
+		const player = town.player;
+		if (!player?.active) return undefined;
+		const job = player.job;
+		if (job?.kind === "travel") {
+			const from = town.places.find((p) => p.id === job.fromId);
+			const to = town.places.find((p) => p.id === job.toId);
+			if (!from || !to) return undefined;
+			const a = point(from.x, from.y);
+			const b = point(to.x, to.y);
+			const f = Math.max(
+				0,
+				Math.min(
+					1,
+					(town.now - job.departedAt) /
+						Math.max(1, job.arriveAt - job.departedAt),
+				),
+			);
+			return {
+				x: a.x + (b.x - a.x) * f,
+				y: a.y + (b.y - a.y) * f,
+				moving: true,
+			};
+		}
+		const place = town.places.find((p) => p.id === player.placeId);
+		return place ? { ...point(place.x, place.y), moving: false } : undefined;
+	})();
 	const knownPoints: MarkerPoint[] = town.people
 		.filter((person) => person.known)
 		.flatMap((person) => {
@@ -288,14 +667,14 @@ export default function TownMap({
 					]
 				: [];
 		});
-	const clusters = knownPlaceClusters(knownPoints, width <= 600);
+	const clusters = knownPlaceClusters(knownPoints, box.width <= 600);
 	const clusteredIds = new Set(
 		clusters.flatMap((cluster) => cluster.people.map((person) => person.id)),
 	);
 	const visiblePoints = knownPoints.filter(
 		(person) => !clusteredIds.has(person.id),
 	);
-	const markers = layoutKnownMarkers(visiblePoints, markerScale);
+	const markers = layoutKnownMarkers(visiblePoints, markerScale, sheet);
 	const activePlaceView = town.places.find((place) => place.id === activePlace);
 	const activeCluster = clusters.find(
 		(cluster) => cluster.placeId === activePlace,
@@ -309,103 +688,64 @@ export default function TownMap({
 			?.querySelector<SVGGElement>(`[data-place="${CSS.escape(activePlace)}"]`)
 			?.focus();
 	};
+	const repairs = Math.min(12, town.stats.hallRepairs ?? 0);
 
 	return (
-		<>
+		<div ref={frame} className="map-frame">
 			<svg
 				ref={map}
-				className="town-map"
-				viewBox="0 0 1080 700"
+				className={`town-map ${sheet.portrait ? "portrait" : "landscape"}`}
+				viewBox={`0 0 ${sheet.width} ${sheet.height}`}
+				preserveAspectRatio="xMidYMid meet"
 				role="img"
 				aria-labelledby="map-title map-description"
 			>
 				<title id="map-title">Alder Quay town map</title>
 				<desc id="map-description">
-					Live residents at their actual locations. Select a named neighbour to
-					see their activity and decisions. Dots show background residents,
-					offset within their current location for visibility. Travel is
-					projected between places using actual departure and arrival times.
-					Named neighbours at shared places use a count badge on narrow maps;
-					select it for names. Larger maps use short leader lines to their
-					actual place. Travellers stay on their route. Named markers use z for
-					sleep, ! for incapacity or a mental break, and × for death.{" "}
+					A hand-drawn map of live residents at their actual locations. Select a
+					named neighbour to see their activity and decisions. Small ink dots
+					show background residents, offset within their current location for
+					visibility. Travel is projected between places using actual departure
+					and arrival times. Named neighbours at shared places use a count badge
+					on narrow maps; select it for names. Larger maps use short leader
+					lines to their actual place. Named markers use z for sleep, ! for
+					incapacity or a mental break, and × for death. Tally marks under the
+					hall count finished repairs; a dashed line shows the old flood level.{" "}
 					{town.people.filter((p) => p.lifeState === "dead").length} deaths
 					recorded; {town.people.filter((p) => p.lifeState === "downed").length}{" "}
 					people currently unable to act.
 				</desc>
-				<defs>
-					<pattern
-						id="grass"
-						width="26"
-						height="26"
-						patternUnits="userSpaceOnUse"
-					>
-						<path
-							d="M5 9l2-3m12 14l2-3"
-							stroke="currentColor"
-							strokeWidth=".7"
-							opacity=".1"
-						/>
-					</pattern>
-					<pattern
-						id="water"
-						width="35"
-						height="22"
-						patternUnits="userSpaceOnUse"
-					>
-						<path
-							d="M0 11q9-5 18 0t18 0"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="1"
-							opacity=".18"
-						/>
-					</pattern>
-					<filter id="shadow">
-						<feDropShadow dx="0" dy="4" stdDeviation="5" floodOpacity=".08" />
-					</filter>
-				</defs>
-				<rect width="1080" height="700" className="map-ground" />
-				<rect width="1080" height="700" fill="url(#grass)" />
-				<path
-					d="M0 180Q65 205 92 260Q126 315 205 326Q275 337 205 370Q112 400 82 456Q72 530 100 640Q225 680 350 635Q360 615 370 615T710 615T1080 570V700H0Z"
-					className="river"
+				<rect
+					width={sheet.width}
+					height={sheet.height}
+					className="map-ground"
 				/>
-				<path
-					d="M0 180Q65 205 92 260Q126 315 205 326Q275 337 205 370Q112 400 82 456Q72 530 100 640Q225 680 350 635Q360 615 370 615T710 615T1080 570V700H0Z"
-					fill="url(#water)"
-				/>
-				<text x="110" y="651" className="river-label">
-					ALDER ESTUARY
+				<path d={scenery.river} className="river" />
+				{scenery.ripples.map((d) => (
+					<path key={d} d={d} className="ripple" />
+				))}
+				<Ink d={scenery.riverEdge} />
+				<path d={scenery.flood} className="flood-line" />
+				<text
+					className="map-note river-label"
+					transform={`translate(${sheet.portrait ? 26 : 34},${sheet.height * 0.13}) rotate(${sheet.portrait ? 62 : 28})`}
+				>
+					the Alder
 				</text>
-				<path d="M80 325H1000M320 60V572M740 60V575" className="road-edge" />
-				<path d="M80 325H1000M320 60V572M740 60V575" className="road" />
-				{[
-					[70, 110],
-					[170, 455],
-					[460, 90],
-					[990, 410],
-					[960, 120],
-					[430, 505],
-					[70, 390],
-					[570, 540],
-				].map(([x, y]) => (
-					<g
-						key={`${x}-${y}`}
-						transform={`translate(${x},${y})`}
-						className="tree"
-					>
-						<path d="M0 14V31" />
-						<circle r="17" />
-						<circle cx="-9" cy="6" r="12" />
-					</g>
+				{scenery.paths.map((path) => (
+					<path key={path.id} d={path.d} className="footpath" />
+				))}
+				{scenery.trees.map((tree) => (
+					<Tree key={tree.id} {...tree} />
 				))}
 				{town.places.map((place) => {
 					const p = point(place.x, place.y);
 					const hall = place.kind.includes("hall") || place.id.includes("hall");
+					const tilt = jitter(place.id, "tilt") * 1.2;
 					return (
 						<g
 							key={place.id}
+							data-map-place={place.id}
 							transform={`translate(${p.x},${p.y})`}
 							className={`place ${place.open ? "" : "closed"} ${hall ? "hall" : ""}`}
 						>
@@ -413,25 +753,18 @@ export default function TownMap({
 								{placeName(place)}: {place.description}. {place.occupants}{" "}
 								present. {place.open ? "Open" : "Closed"}
 							</title>
-							<path d="M0 0V35" className="connecting-path" />
-							<PlaceBuilding place={place} town={town} />
-							<rect
-								x="-79"
-								y="47"
-								width="158"
-								height="39"
-								rx="8"
-								className="place-sign"
-							/>
+							<g transform={`rotate(${tilt})`}>
+								<PlaceDrawing place={place} repairs={repairs} />
+							</g>
 							<text
-								y="63"
+								y={sheet.portrait ? 74 : 66}
 								textAnchor="middle"
 								className="place-name desktop-place-name"
 							>
 								{placeName(place)}
 							</text>
 							<text
-								y="68"
+								y={sheet.portrait ? 74 : 66}
 								textAnchor="middle"
 								className="place-name mobile-place-name"
 							>
@@ -442,29 +775,48 @@ export default function TownMap({
 									.replace("Flooded hall", "Hall")
 									.replace("Community hall", "Hall")}
 							</text>
-							<text y="78" textAnchor="middle" className="place-status">
-								{place.open
-									? `${place.occupants} here`
-									: (town.stats.hallRepairs ?? 0) >= 12
-										? "Awaiting inspection"
-										: "Awaiting repair"}
-							</text>
+							{!place.open && (
+								<text
+									y={sheet.portrait ? 100 : 86}
+									textAnchor="middle"
+									className="map-note place-status"
+								>
+									{repairs >= 12 ? "awaiting inspection" : "awaiting repair"}
+								</text>
+							)}
 						</g>
 					);
 				})}
+				{you && (
+					<g
+						className="map-you"
+						transform={`translate(${you.x - (you.moving ? 0 : 50 * markerScale)},${you.y - (you.moving ? 0 : 40 * markerScale)}) scale(${markerScale})`}
+					>
+						<title>You{you.moving ? ", walking" : ""}</title>
+						<path d="M-5 -5 5 5M5 -5 -5 5" className="you-cross" />
+						<text x={0} y={-10} textAnchor="middle" className="you-label">
+							you
+						</text>
+					</g>
+				)}
 				{town.people
 					.filter((p) => !p.known)
-					.map((person, i) => {
+					.map((person) => {
 						const p = personPoint(person);
 						if (!p) return null;
-						const angle = i * 2.399;
-						const radius = person.journey ? 5 : 40 + (i % 5) * 5;
+						const h = hash(person.id);
+						const angle = (h % 6283) / 1000;
+						const radius = person.journey
+							? 5
+							: sheet.portrait
+								? 46 + (h % 7) * 7
+								: 42 + (h % 5) * 6;
 						return (
 							<circle
 								key={person.id}
 								cx={p.x + Math.cos(angle) * radius}
-								cy={p.y + Math.sin(angle) * radius}
-								r="2.6"
+								cy={p.y + Math.sin(angle) * radius * 0.8}
+								r={sheet.portrait ? 2.8 : 2.6}
 								className={`background-person life-${person.lifeState ?? "awake"}`}
 							>
 								<title>
@@ -527,8 +879,12 @@ export default function TownMap({
 								}
 							}}
 						>
-							<circle r="22" />
-							<text textAnchor="middle" dy="5">
+							<circle r="22" className="person-hit" />
+							<path
+								d={inkCircle(`cluster:${cluster.placeId}`, 0, 0, 18, 0.05)}
+								className="cluster-ring"
+							/>
+							<text textAnchor="middle" dy="6">
 								{cluster.people.length}
 							</text>
 						</g>
@@ -540,12 +896,14 @@ export default function TownMap({
 					.map((person) => {
 						const marker = markers.get(person.id);
 						if (!marker) return null;
+						const life = person.lifeState ?? "awake";
+						const travelling = Boolean(person.journey && canAct(person));
 						return (
 							// biome-ignore lint/a11y/useSemanticElements: SVG groups cannot contain HTML buttons; equivalent native buttons follow the map.
 							<g
 								key={person.id}
 								transform={`translate(${marker.x},${marker.y}) scale(${markerScale})`}
-								className={`map-person life-${person.lifeState ?? "awake"} ${selected === person.id ? "selected" : ""}`}
+								className={`map-person life-${life} ${travelling ? "travelling" : ""} ${selected === person.id ? "selected" : ""}`}
 								role="button"
 								tabIndex={0}
 								aria-label={`${person.name}: ${activityLabel(person)}`}
@@ -558,22 +916,37 @@ export default function TownMap({
 								}}
 							>
 								<circle r="22" className="person-hit" />
-								<circle r="17" className="person-halo" />
-								<circle
-									className="person-disc"
-									r="13"
-									fill={person.color || "#a26745"}
+								{(life === "downed" || life === "break") && (
+									<path
+										d={inkCircle(`${person.id}:blot`, 1, 2, 15, 0.2)}
+										className="ink-blot"
+									/>
+								)}
+								{selected === person.id && (
+									<path
+										d={inkCircle(`${person.id}:ring`, 0, 0, 19.5, 0.04)}
+										className="selection-ring"
+									/>
+								)}
+								{travelling && (
+									<path d="M-22 -4h6M-21 4h5" className="motion-marks" />
+								)}
+								<path
+									d={inkCircle(person.id, 0, 0, 14, 0.07)}
+									className="person-head"
 								/>
-								<text textAnchor="middle" dy="4">
+								<text textAnchor="middle" dy="5" className="person-initial">
 									{initial(person.name)}
 								</text>
 								{lifeMarker(person) && (
-									<g className="life-badge">
-										<circle cx="13" cy="-13" r="8" />
-										<text x="13" y="-10" textAnchor="middle">
-											{lifeMarker(person)}
-										</text>
-									</g>
+									<text
+										x="13"
+										y="-10"
+										textAnchor="middle"
+										className="life-note"
+									>
+										{lifeMarker(person)}
+									</text>
 								)}
 								<title>
 									{person.name}: {activityLabel(person)}
@@ -584,9 +957,24 @@ export default function TownMap({
 							</g>
 						);
 					})}
-				<g transform="translate(982 632)" className="compass">
-					<path d="M0-20L6 0L0-5L-6 0Z" />
-					<text y="-28" textAnchor="middle">
+				<g
+					transform={`translate(${sheet.width - 50} ${sheet.height - 54})`}
+					className="compass"
+				>
+					<Ink
+						d={inkLine("compass", [
+							[0, 18],
+							[0, -18],
+						])}
+					/>
+					<Ink
+						d={inkLine("compass-head", [
+							[-6, -10],
+							[0, -18],
+							[6, -10],
+						])}
+					/>
+					<text y="-26" textAnchor="middle" className="map-note">
 						N
 					</text>
 				</g>
@@ -609,6 +997,6 @@ export default function TownMap({
 					/>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }

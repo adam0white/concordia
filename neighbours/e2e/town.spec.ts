@@ -678,7 +678,7 @@ test("retained outcomes stay near the clock and promise results survive into the
 	await page.locator(".story-headline").focus();
 	await page.keyboard.press("Enter");
 	await expect(
-		page.getByRole("tab", { name: "Stories", exact: true }),
+		page.getByRole("tab", { name: "Journal", exact: true }),
 	).toHaveAttribute("aria-selected", "true");
 	await expect(page.locator("article.event:focus")).toBeVisible();
 	await expect(page.locator("article.event:focus > .eyebrow")).toContainText(

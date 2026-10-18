@@ -6,6 +6,7 @@ import type {
 	TownView,
 } from "../contracts";
 import { clock, datedClock } from "./format";
+import { InkPortrait } from "./Notebook";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -54,28 +55,39 @@ export function PlayerJournal({ player }: { player: PlayerView }) {
 	);
 }
 
-/** Plain controls for the player: goal, place, movement, speech to one person, pledges, journal. */
+/**
+ * The player's one drawer surface: current step, place, company, walking,
+ * pledges and journal. With `personId` (the selected resident's drawer) it also
+ * offers speech to that resident; without it (the journal drawer) it lists who
+ * is here so the player can choose someone to speak to.
+ */
 export function SpeakPanel({
 	session,
 	personId,
+	select,
+	journalOpen = false,
 }: {
 	session: Session;
-	personId: string;
+	personId?: string;
+	select?: (id: string) => void;
+	journalOpen?: boolean;
 }) {
 	const town = session.town;
 	const player = town?.player;
 	const [offerId, setOfferId] = useState("");
 	const [work, setWork] = useState<PlayerWorkKind>("carry-meals");
-	const here = player?.present.some((person) => person.id === personId);
+	const here =
+		personId !== undefined &&
+		player?.present.some((person) => person.id === personId);
 	const now = town?.now;
 	const { predictSpeech } = session;
 	// biome-ignore lint/correctness/useExhaustiveDependencies: refresh the telegraph when time or company changes.
 	useEffect(() => {
-		if (here && !session.playing) predictSpeech(personId);
+		if (here && personId && !session.playing) predictSpeech(personId);
 	}, [personId, here, now, session.playing]);
 	if (!town || !player) return null;
 	const person = town.people.find((p) => p.id === personId);
-	const name = person?.name ?? personId;
+	const name = person?.name ?? personId ?? "";
 	const goal = player.goals.find((g) => g.status === "current");
 	const done = player.goals.filter((g) => g.status === "done");
 	const prediction =
@@ -84,9 +96,12 @@ export function SpeakPanel({
 			: undefined;
 	const offers = prediction?.prediction?.offers ?? [];
 	const offer = offers.find((o) => o.affordanceId === offerId) ?? offers[0];
-	const latest = [...player.requests]
-		.reverse()
-		.find((request) => request.targetId === personId);
+	const latest = personId
+		? [...player.requests]
+				.reverse()
+				.find((request) => request.targetId === personId)
+		: undefined;
+	const company = player.present.filter((p) => p.known && p.id !== personId);
 	const counter =
 		latest &&
 		latest.mode === "ask" &&
@@ -95,12 +110,17 @@ export function SpeakPanel({
 			: undefined;
 	const counterId = counter?.affordanceId;
 	const pledges = player.pledges.filter((pledge) => pledge.status === "open");
-	const busy = session.advancing || session.comparing || session.saveConflict;
+	const busy =
+		session.advancing ||
+		session.comparing ||
+		session.saveConflict ||
+		session.intervening;
 	return (
 		<section className="speak-panel" aria-label="You">
 			<h3>You</h3>
 			{goal && (
 				<div className="player-goal">
+					<span className="eyebrow">Your next step</span>
 					<strong>{goal.title}</strong>
 					<p>{goal.hint}</p>
 					{done.length > 0 && (
@@ -118,15 +138,42 @@ export function SpeakPanel({
 						? `Working at ${placeLabel(town, player.job.toId)} until ${clock(player.job.endsAt)}.`
 						: `You are at ${placeLabel(town, player.placeId)}. ${player.presentCount} awake here.`}
 			</p>
+			{select && !player.job && company.length > 0 && (
+				<div className="your-company">
+					<span className="hand">
+						{personId ? "Also here:" : "Here with you:"}
+					</span>
+					<ul>
+						{company.map((p) => (
+							<li key={p.id}>
+								<button
+									type="button"
+									className="neighbour"
+									data-person-id={p.id}
+									aria-label={`Speak to ${p.name}`}
+									onClick={() => select(p.id)}
+								>
+									<InkPortrait
+										id={p.id}
+										label={p.name.slice(0, 1)}
+										className="mini-avatar"
+									/>
+									<span>{p.name.split(" ")[0]}</span>
+								</button>
+							</li>
+						))}
+					</ul>
+				</div>
+			)}
 			{player.latestNotice && <p>{player.latestNotice.text}</p>}
 			{session.playerError && (
 				<p className="player-error" role="alert">
 					{session.playerError}
 				</p>
 			)}
-			<details>
+			<details className="walk" open={!player.active && !personId}>
 				<summary>Walk somewhere</summary>
-				<ul>
+				<ul className="walk-list">
 					{player.destinations.map((place) => (
 						<li key={place.id}>
 							<button
@@ -134,13 +181,14 @@ export function SpeakPanel({
 								disabled={!player.canMove || busy}
 								onClick={() => session.movePlayer(place.id)}
 							>
-								{place.name}, about {place.minutes} min
+								<span>{place.name}</span>
+								<span className="hand">about {place.minutes} min</span>
 							</button>
 						</li>
 					))}
 				</ul>
 			</details>
-			{!here ? (
+			{!personId ? null : !here ? (
 				<p>
 					{name} is not with you. Only people at the same place, and awake, can
 					hear you.
@@ -211,16 +259,28 @@ export function SpeakPanel({
 			)}
 			{latest && (
 				<div className="latest-answer">
-					<p>
-						You {SAID[latest.mode]}: {latest.label}. {name} said “{latest.says}”
-						{latest.decision
-							? ` Later: “${latest.decision.says}” and chose to ${latest.decision.chosenLabel.toLowerCase()}.`
-							: ""}
+					<p className="said">
+						You {SAID[latest.mode]}: {latest.label}.
 					</p>
+					<p>
+						<q
+							className={`voice ${latest.verdict === "refused" ? "refusal" : ""}`}
+						>
+							{latest.says}
+						</q>{" "}
+						<span className="voice-by">{name}</span>
+					</p>
+					{latest.decision && (
+						<p>
+							Later: <q className="voice">{latest.decision.says}</q> {name}{" "}
+							chose to {latest.decision.chosenLabel.toLowerCase()}.
+						</p>
+					)}
+					{latest.result && <p className="said">{latest.result}</p>}
 					{counter && (
 						<p>
 							They offered instead: {counter.label}.{" "}
-							{counterId && here && (
+							{counterId && here && personId && (
 								<button
 									type="button"
 									disabled={busy || player.job !== undefined}
@@ -264,10 +324,17 @@ export function SpeakPanel({
 					</ul>
 				</div>
 			)}
-			<details>
-				<summary>Your journal</summary>
-				<PlayerJournal player={player} />
-			</details>
+			{journalOpen ? (
+				<section className="your-journal" aria-label="Your journal">
+					<h4>Your own lines</h4>
+					<PlayerJournal player={player} />
+				</section>
+			) : (
+				<details>
+					<summary>Your journal</summary>
+					<PlayerJournal player={player} />
+				</details>
+			)}
 		</section>
 	);
 }

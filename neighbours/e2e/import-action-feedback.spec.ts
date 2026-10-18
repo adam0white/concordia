@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
 
-import { openSaves } from "./session-helpers";
+import { openSaves, showTab } from "./session-helpers";
 
 async function exportPacket(page: Page, info: TestInfo, name: string) {
 	await openSaves(page);
@@ -125,8 +125,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	const original = await exportPacket(page, info, "before-tools");
 	const close = page.getByRole("dialog", { name: "Save and town options" });
 	if (await close.isVisible()) await page.keyboard.press("Escape");
-	const help = page.getByRole("tab", { name: "Help", exact: true });
-	if (await help.count()) await help.click();
+	await showTab(page, "Help");
 	await page.evaluate(() => {
 		(
 			window as unknown as { interventionGate: InterventionGate }

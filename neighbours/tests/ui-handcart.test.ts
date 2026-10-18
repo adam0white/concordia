@@ -67,7 +67,8 @@ it("folds actual HF purpose state and does not fabricate missing goals", () => {
 		}),
 	);
 	expect(html).toContain("Return the cart");
-	expect(html).toContain("active · 50%");
+	expect(html).toContain('active · <span class="hand">under way</span>');
+	expect(html).not.toContain("%");
 	expect(html).not.toContain("<details open");
 });
 it("labels the physical place in the chooser and uses native named selection buttons", () => {

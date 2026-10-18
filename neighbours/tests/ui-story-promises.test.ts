@@ -301,7 +301,7 @@ it("shows activity and current promise before one evidence disclosure, preservin
 	expect(html.slice(disclosure)).toContain("Details &amp; evidence");
 	expect(html.slice(disclosure)).toContain("Received observations");
 	expect(html.slice(disclosure)).toContain(
-		"Need urgency &amp; decision evidence",
+		"How pressing each need feels · decision evidence",
 	);
 	expect(html.match(/Current pledge/g)).toHaveLength(1);
 });
