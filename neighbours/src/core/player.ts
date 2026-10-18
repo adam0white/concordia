@@ -36,7 +36,7 @@ import { presentAt } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import { placeOf, required } from "./invariants.ts";
 import { journalEntries } from "./journal.ts";
-import { WORKPLACE } from "./offers";
+import { WORKPLACE } from "./offers.ts";
 import { buildOffers, socialPreview } from "./offers.ts";
 import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
 import type { Resident, Save } from "./state.ts";

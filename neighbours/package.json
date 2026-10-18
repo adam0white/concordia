@@ -12,11 +12,12 @@
 		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json && tsc --noEmit -p e2e/tsconfig.json",
 		"test": "vitest run tests",
 		"lint": "biome check --error-on-warnings src tests scripts e2e *.ts *.json",
-		"check": "npm run lint && npm run typecheck && npm test && npm run build",
+		"check": "npm run lint && npm run typecheck && npm test && npm run test:node-imports && npm run build",
 		"test:parity": "node scripts/check-parity.mjs",
 		"build:cloudflare": "node scripts/prepare-runtime.mjs && tsc --noEmit && CF_BUILD=1 cf build",
 		"deploy": "cf deploy --prebuilt --mode production",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"test:node-imports": "node scripts/check-node-imports.mjs"
 	},
 	"dependencies": {
 		"@adam0white/human-framework": "2.3.0",
