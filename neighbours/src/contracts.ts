@@ -55,6 +55,8 @@ export interface PersonView {
 	until: number;
 	needs: Record<string, number>;
 	mood: number;
+	/** A worded read of how they seem, from HF needs, affect, outward signs and commitments. */
+	read?: string;
 	wealth: number;
 	history: TownEvent[];
 	observations?: TownEvent[];
@@ -125,16 +127,15 @@ export interface SpeechAnswer {
 	likelihood?: number;
 	insisted?: boolean;
 }
+/**
+ * What the player can see before speaking: the person's actual legal offers and a vague read worded from HF
+ * state ("Seems tired", "Set on working a paid shift"). It carries no verdict and no answer line.
+ */
 export interface SpeechPrediction {
 	targetId: string;
 	at: number;
-	offers: {
-		affordanceId: string;
-		label: string;
-		ask: SpeechAnswer;
-		urge: SpeechAnswer;
-		promise: SpeechAnswer;
-	}[];
+	offers: { affordanceId: string; label: string }[];
+	read: string[];
 }
 export interface JournalEntry {
 	id: string;
@@ -144,7 +145,11 @@ export interface JournalEntry {
 	label: "recorded";
 	sourceEventIds: number[];
 }
-export type PlayerWorkKind = "carry-meals" | "help-repair" | "cover-shift";
+export type PlayerWorkKind =
+	| "carry-meals"
+	| "help-repair"
+	| "cover-shift"
+	| "dry-timber";
 export interface PlayerView {
 	/** False until the first player input; the defaults below are then derived, not saved. */
 	active: boolean;
@@ -161,6 +166,10 @@ export interface PlayerView {
 		pledgeId?: string;
 	};
 	workHoursLeft: number;
+	/** Whether there is damp hall timber the player can still prop and air (false once the hall has reopened). */
+	canAirTimber?: boolean;
+	/** Deadlines a promise made now may name (minutes); see PLEDGE_HOURS. */
+	pledgeDeadlines?: number[];
 	canMove: boolean;
 	present: {
 		id: string;
@@ -174,6 +183,8 @@ export interface PlayerView {
 	requests: {
 		id: number;
 		at: number;
+		/** Where the request was made. */
+		placeId?: string;
 		targetId: string;
 		targetName: string;
 		affordanceId: string;
@@ -201,7 +212,7 @@ export interface PlayerView {
 		label: string;
 		placeId: string;
 		dueBy: number;
-		status: "open" | "kept" | "lapsed";
+		status: "offered" | "open" | "kept" | "lapsed" | "released";
 		canStart?: boolean;
 		blocked?: string;
 	}[];
@@ -341,7 +352,7 @@ export interface Intervention {
 	/** player-speak: take up this person's latest counter-offer (affordanceId must name it). */
 	acceptCounter?: boolean;
 	/** player-speak with mode promise: one hour of the player's own work. */
-	pledge?: { work: PlayerWorkKind };
+	pledge?: { work: PlayerWorkKind; by?: number };
 	/** player-work: keep an open pledge, or work unpledged with `work`. */
 	pledgeId?: string;
 	work?: PlayerWorkKind;
@@ -429,6 +440,8 @@ export type UiReply =
 			view: TownView;
 			elapsedMs?: number;
 			advance?: AdvanceResult;
+			/** A player input's checkpoint, taken in the same FIFO slot; the UI stores it before showing the view. */
+			save?: unknown;
 	  }
 	| { type: "progress"; message: string; advance?: AdvanceProgress }
 	| { type: "save"; save: unknown; requestId?: number }

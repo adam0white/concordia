@@ -3,7 +3,10 @@
  * pledges and the bounded record of what the player said and did. HF owns how residents hear and answer:
  * `predict` is a pure telegraph, `answerNow` books an immediate refusal, and any other verdict becomes a
  * standing suggestion resolved by `decide` at that person's next decision, brought forward with an HF
- * interrupt (an activity review, never a cancel). Pledge outcomes reach HF through `learnFromVoice`.
+ * interrupt (an activity review, never a cancel). The player sees offers and a worded read (impression.ts),
+ * never a predicted verdict. A promise binds at once only on a yes; after "not now" or "I'd rather …" it is
+ * `offered`, reserves that day's hour, and binds only if their own decision follows the request (otherwise it
+ * is released). The player chooses the work and the deadline. Pledge outcomes reach HF through `learnFromVoice`.
  * Only awake people at the player's place hear. There is no host speech credit, no synthetic reward for
  * asking, no inferred consent and no scripted cooperation. A save without `player` is byte-identical to a
  * town where the visitor never acted; the first player input creates this state and seeds the three
@@ -34,11 +37,13 @@ import type {
 import { reviewOffers } from "./activity-reviews.ts";
 import { presentAt } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
+import { speechRead } from "./impression.ts";
 import { placeOf, required } from "./invariants.ts";
 import { journalEntries } from "./journal.ts";
 import { buildOffers, socialPreview, WORKPLACE } from "./offers.ts";
 import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
 import { PLAYER_TIES, type Resident, type Save } from "./state.ts";
+import { airTimber, repairHolds, timberMoisture } from "./timber.ts";
 import { validateEvent } from "./validation.ts";
 import { actionWords, counterWords, voicedLine } from "./voicing.ts";
 
@@ -47,16 +52,34 @@ export const PLAYER_HOME = "homes";
 export const PLAYER_WORK_HOURS = 2;
 /** Authored scenario ties to the player, seeded once when the player first acts (see state.ts). */
 export const PLAYER_VOICES = PLAYER_TIES;
+/**
+ * How firmly each mode puts a suggestion (engineering defaults). An urge is an ask with insistence: HF turns a
+ * "not now" into compliance under protest and books pressure, autonomy cost and `pushed` trust losses through
+ * its own will paths, so it can still meet a refusal and it costs willingness. (Before 2026-10-18 an urge also
+ * doubled the strength to 0.7, which won outright against every preference in playtests.)
+ */
 export const SPEECH = {
 	ask: { strength: 0.35 },
-	urge: { strength: 0.7, insist: true },
+	urge: { strength: 0.35, insist: true },
 	promise: { strength: 0.5 },
 } as const;
 /** How a kept or broken pledge felt to the person it was made to (engineering defaults). */
 export const PLEDGE_FELT = { kept: 0.6, lapsed: -0.6 } as const;
 const LIMITS = { requests: 24, pledges: 16, log: 160 } as const;
 export type PlayerMode = keyof typeof SPEECH;
-export type PlayerWork = "carry-meals" | "help-repair" | "cover-shift";
+export type PlayerWork =
+	| "carry-meals"
+	| "help-repair"
+	| "cover-shift"
+	| "dry-timber";
+const WORK_KINDS: readonly string[] = [
+	"carry-meals",
+	"help-repair",
+	"cover-shift",
+	"dry-timber",
+];
+/** Deadlines a player may choose for a pledged hour: these hours of today or tomorrow, at least an hour away. */
+export const PLEDGE_HOURS = [10, 12, 14, 16, 18] as const;
 export const PLAYER_WORK: Record<
 	PlayerWork,
 	{ label: string; placeId?: string }
@@ -64,7 +87,12 @@ export const PLAYER_WORK: Record<
 	"carry-meals": { label: "carry food up from the quay", placeId: "quay" },
 	"help-repair": { label: "help repair the hall", placeId: "hall" },
 	"cover-shift": { label: "cover their paid shift" },
+	"dry-timber": { label: "prop and air the hall timber", placeId: "hall" },
 };
+/** Airing the timber is possible only in a town with timber physics, while the hall is still closed. */
+function timberToAir(s: Save): boolean {
+	return s.timber !== undefined && !s.hallSafe;
+}
 type Answer = Pick<
 	SuggestionResolution,
 	| "voiceId"
@@ -121,7 +149,11 @@ export type Pledge = {
 	madeAt: number;
 	dueBy: number;
 	event: number;
-	status: "open" | "kept" | "lapsed";
+	/**
+	 * offered: made with a request they did not take up yet ("not now" or "I'd rather …"); it binds only once
+	 * their decision follows the request, and is released otherwise. open: binding. kept, lapsed, released: closed.
+	 */
+	status: "offered" | "open" | "kept" | "lapsed" | "released";
 	dueNoticed?: boolean;
 	resolvedEvent?: number;
 	hfReported?: boolean;
@@ -322,7 +354,10 @@ function hearable(s: Save, targetId: unknown): Resident {
 	return r;
 }
 
-/** Pure telegraph: how this person would probably answer each mode for each legal offer. */
+/**
+ * What the player sees before speaking: the person's actual legal offers and a vague read worded from HF state
+ * (see impression.ts). It never carries a verdict or an answer line: asking is how the player finds out.
+ */
 export function predictSpeech(
 	s: Save,
 	targetId: string,
@@ -330,10 +365,6 @@ export function predictSpeech(
 ): SpeechPrediction {
 	const r = hearable(s, targetId);
 	const offers = speechOffers(s, r);
-	const opts = {
-		scarcity: Math.max(0, 1 - r.wealth / 8),
-		others: others(r),
-	};
 	return {
 		targetId,
 		at: s.now,
@@ -343,37 +374,66 @@ export function predictSpeech(
 			.map((offer) => ({
 				affordanceId: offer.id,
 				label: offer.label ?? offer.action,
-				ask: answerOf(
-					predict(
-						r.person,
-						offers,
-						suggestionFor("ask", offer.id, s.now),
-						opts,
-					),
-				),
-				urge: answerOf(
-					predict(
-						r.person,
-						offers,
-						suggestionFor("urge", offer.id, s.now),
-						opts,
-					),
-				),
-				promise: answerOf(
-					predict(
-						r.person,
-						offers,
-						suggestionFor("promise", offer.id, s.now),
-						opts,
-					),
-				),
+			})),
+		read: speechRead(s, r, offers, others(r)),
+	};
+}
+
+/** HF's pure prediction of each mode's answer for each legal offer. For tests and probes only; never shown. */
+export type SpeechAnswers = {
+	targetId: string;
+	at: number;
+	offers: {
+		affordanceId: string;
+		label: string;
+		ask: Answer;
+		urge: Answer;
+		promise: Answer;
+	}[];
+};
+export function predictAnswers(
+	s: Save,
+	targetId: string,
+	others: (r: Resident) => Suggestion[],
+): SpeechAnswers {
+	const r = hearable(s, targetId);
+	const offers = speechOffers(s, r);
+	const opts = {
+		scarcity: Math.max(0, 1 - r.wealth / 8),
+		others: others(r),
+	};
+	const answer = (mode: PlayerMode, id: string) =>
+		answerOf(predict(r.person, offers, suggestionFor(mode, id, s.now), opts));
+	return {
+		targetId,
+		at: s.now,
+		offers: offers
+			.filter((offer) => offer.id !== r.job?.offer.id)
+			.slice(0, 40)
+			.map((offer) => ({
+				affordanceId: offer.id,
+				label: offer.label ?? offer.action,
+				ask: answer("ask", offer.id),
+				urge: answer("urge", offer.id),
+				promise: answer("promise", offer.id),
 			})),
 	};
 }
 
+/** The default deadline: 18:00 today, or tomorrow when less than an hour remains. */
 function dueByFor(now: number): number {
 	const day = Math.floor(now / 1440);
 	return now % 1440 <= 1020 ? day * 1440 + 1080 : (day + 1) * 1440 + 1080;
+}
+/** The deadlines a pledge made now may name (see PLEDGE_HOURS); the default is always among them. */
+export function pledgeDeadlines(now: number): number[] {
+	const day = Math.floor(now / 1440);
+	return [day, day + 1].flatMap((d) =>
+		PLEDGE_HOURS.map((h) => d * 1440 + h * 60).filter((t) => t >= now + 60),
+	);
+}
+function validDueBy(madeAt: number, dueBy: number): boolean {
+	return pledgeDeadlines(madeAt).includes(dueBy);
 }
 function workPlace(s: Save, work: PlayerWork, forId: string): string {
 	if (work !== "cover-shift") return required(PLAYER_WORK[work].placeId, "");
@@ -386,29 +446,41 @@ function workPlace(s: Save, work: PlayerWork, forId: string): string {
 function hoursUsed(p: PlayerState | undefined, day: number): number {
 	return p?.work.day === day ? p.work.starts : 0;
 }
+/** Hours already promised for that day: binding pledges and offered ones still waiting on an answer. */
 function openOnDay(p: PlayerState | undefined, day: number): number {
 	return (
 		p?.pledges.filter(
-			(x) => x.status === "open" && Math.floor(x.dueBy / 1440) === day,
+			(x) =>
+				(x.status === "open" || x.status === "offered") &&
+				Math.floor(x.dueBy / 1440) === day,
 		).length ?? 0
 	);
 }
 function shiftsLeft(r: Resident, day: number): number {
 	return 2 - (r.paidWork?.day === day ? r.paidWork.starts : 0);
 }
-function checkPledgeable(s: Save, work: unknown, toId: string): PlayerWork {
+function checkPledgeable(
+	s: Save,
+	work: unknown,
+	toId: string,
+	by: unknown,
+): { work: PlayerWork; dueBy: number } {
 	if (
 		typeof work !== "string" ||
 		!Object.hasOwn(PLAYER_WORK, work) ||
-		!["carry-meals", "help-repair", "cover-shift"].includes(work)
+		!WORK_KINDS.includes(work)
 	)
 		throw Error("Choose one hour of your own work to promise");
-	const dueBy = dueByFor(s.now);
+	if (by !== undefined && (typeof by !== "number" || !validDueBy(s.now, by)))
+		throw Error("Choose a time by which you will do the hour");
+	const dueBy = by ?? dueByFor(s.now);
 	const day = Math.floor(dueBy / 1440);
 	if (hoursUsed(s.player, day) + openOnDay(s.player, day) >= PLAYER_WORK_HOURS)
 		throw Error("Your working hours for that day are already promised or used");
 	if (work === "help-repair" && s.hall >= 12)
 		throw Error("The hall repairs are already complete");
+	if (work === "dry-timber" && !timberToAir(s))
+		throw Error("There is no damp hall timber to air");
 	if (work === "cover-shift") {
 		const r = required(
 			s.people.find((o) => o.person.id === toId),
@@ -417,7 +489,7 @@ function checkPledgeable(s: Save, work: unknown, toId: string): PlayerWork {
 		if (shiftsLeft(r, day) <= 0)
 			throw Error(`${r.person.name} has no paid shift left to cover that day`);
 	}
-	return work as PlayerWork;
+	return { work: work as PlayerWork, dueBy };
 }
 
 export function playerIntervene(
@@ -489,19 +561,27 @@ function speak(
 	)
 		throw Error(`There is no counter-offer from ${r.person.name} to accept`);
 	const accepted = input.acceptCounter ? previous : undefined;
-	const work =
+	const pledged =
 		mode === "promise"
-			? checkPledgeable(s, input.pledge?.work, r.person.id)
+			? checkPledgeable(s, input.pledge?.work, r.person.id, input.pledge?.by)
 			: undefined;
+	const work = pledged?.work;
 	if (mode !== "promise" && input.pledge !== undefined)
 		throw Error("Only a promise carries a pledge");
 	const at = required(playerLocation(s), "Player location missing");
 	const p = activate(host);
 	const suggestion = suggestionFor(mode, offer.id, s.now);
+	const trustBefore = playerTrust(s, r.person.id);
 	const { resolution } = answerNow(r.person, offers, suggestion, {
 		scarcity: Math.max(0, 1 - r.wealth / 8),
 		others: others(r),
 	});
+	const trustAfter = playerTrust(s, r.person.id);
+	// HF books a refusal now, with its own 'pushed'/'worn' trust costs; say so when trust actually fell.
+	const wore =
+		trustBefore !== undefined &&
+		trustAfter !== undefined &&
+		trustAfter < trustBefore - 1e-9;
 	const label = offer.label ?? offer.action;
 	const verb = mode === "urge" ? "urged" : "asked";
 	const request = playerEvent(
@@ -524,14 +604,16 @@ function speak(
 	const answerEvent = playerEvent(
 		host,
 		"player-answer",
-		`${r.person.name} answered: “${voicedLine(answer)}”`,
+		`${r.person.name} answered: “${voicedLine(answer)}”${wore ? ` Being pushed wore on ${r.person.name}’s trust in you.` : ""}`,
 		at,
 		[request.id],
 		r.person.id,
 	);
 	for (const old of p.requests)
-		if (old.targetId === r.person.id && old.status === "held")
+		if (old.targetId === r.person.id && old.status === "held") {
 			old.status = "replaced";
+			releasePledge(host, old, "you asked them something else");
+		}
 	const q: PlayerRequest = {
 		id: request.id,
 		at: s.now,
@@ -546,13 +628,19 @@ function speak(
 		...(accepted ? { accepts: accepted.id } : {}),
 		...(waits ? { waits: true as const } : {}),
 	};
-	if (work && answer.verdict !== "refused") {
-		const dueBy = dueByFor(s.now);
+	if (pledged && work && answer.verdict !== "refused") {
+		const dueBy = pledged.dueBy;
 		const pledgeId = `pledge-${request.id}`;
+		// Only a yes binds now; "not now" or "I'd rather …" binds once their own decision follows the request.
+		const binding =
+			answer.verdict === "assented" || answer.verdict === "complied";
+		const hour = `one hour to ${work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[work].label}, by ${clock(dueBy)}`;
 		const made = playerEvent(
 			host,
 			"player-pledge",
-			`Your promise to ${r.person.name} stood: one hour to ${work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[work].label}, by ${clock(dueBy)}.`,
+			binding
+				? `Your promise to ${r.person.name} stood: ${hour}.`
+				: `Your promise to ${r.person.name} waits on what they do: ${hour}, if they take up your request.`,
 			at,
 			[request.id, answerEvent.id],
 			r.person.id,
@@ -565,7 +653,7 @@ function speak(
 			madeAt: s.now,
 			dueBy,
 			event: made.id,
-			status: "open",
+			status: binding ? "open" : "offered",
 			...(dueBy - 120 <= s.now ? { dueNoticed: true } : {}),
 		});
 		bound(p.pledges, LIMITS.pledges);
@@ -608,10 +696,7 @@ function startWork(
 	if (pledgeId !== undefined && !pledge)
 		throw Error("That promise is not open");
 	const work = pledge?.work ?? requested;
-	if (
-		typeof work !== "string" ||
-		!["carry-meals", "help-repair", "cover-shift"].includes(work)
-	)
+	if (typeof work !== "string" || !WORK_KINDS.includes(work))
 		throw Error("Choose one hour of work");
 	const kind = work as PlayerWork;
 	const forId = pledge?.toId ?? (typeof actorId === "string" ? actorId : "");
@@ -636,6 +721,8 @@ function startWork(
 			s.tools <= 0)
 	)
 		throw Error("No repair is available: no free tools or nothing left to fix");
+	if (kind === "dry-timber" && !timberToAir(s))
+		throw Error("There is no damp hall timber to air");
 	const target = s.people.find((r) => r.person.id === forId);
 	if (kind === "cover-shift") {
 		if (!target || shiftsLeft(target, day) <= 0)
@@ -679,6 +766,34 @@ function startWork(
 	};
 }
 
+function playerTrust(s: Save, id: string): number | undefined {
+	return s.people
+		.find((o) => o.person.id === id)
+		?.person.will.voices.find((v) => v.voiceId === PLAYER_VOICE)?.trust;
+}
+/** An offered pledge whose request was not taken up closes without binding; nothing reaches HF. */
+function releasePledge(
+	host: PlayerHost,
+	q: PlayerRequest,
+	why: string,
+	causes: number[] = [],
+): void {
+	const s = host.s;
+	const pledge = s.player?.pledges.find(
+		(x) => x.id === q.pledgeId && x.status === "offered",
+	);
+	if (!pledge) return;
+	pledge.status = "released";
+	const e = playerEvent(
+		host,
+		"player-pledge-released",
+		`Your offered hour for ${nameOf(s, pledge.toId)} no longer stands: ${why}.`,
+		undefined,
+		[pledge.event, ...causes],
+		pledge.toId,
+	);
+	pledge.resolvedEvent = e.id;
+}
 function reportPledge(s: Save, pledge: Pledge, kept: boolean): void {
 	const r = s.people.find((o) => o.person.id === pledge.toId);
 	const q = s.player?.requests.find((x) => x.id === pledge.requestId);
@@ -721,16 +836,20 @@ export function playerRound(host: PlayerHost): void {
 	for (const pledge of p.pledges.filter((x) => x.status === "open")) {
 		if (s.now >= pledge.dueBy) {
 			pledge.status = "lapsed";
+			const before = playerTrust(s, pledge.toId);
+			reportPledge(s, pledge, false);
+			const after = playerTrust(s, pledge.toId);
+			const fell =
+				before !== undefined && after !== undefined && after < before - 1e-9;
 			const e = playerEvent(
 				host,
 				"player-pledge-lapsed",
-				`${clock(pledge.dueBy)} passed with no hour recorded for your promise to ${nameOf(s, pledge.toId)} (${pledge.work === "cover-shift" ? "covering a paid shift" : PLAYER_WORK[pledge.work].label}).`,
+				`${clock(pledge.dueBy)} passed with no hour recorded for your promise to ${nameOf(s, pledge.toId)} (${pledge.work === "cover-shift" ? "covering a paid shift" : PLAYER_WORK[pledge.work].label}).${fell ? ` ${nameOf(s, pledge.toId)} will trust your word less.` : ""}`,
 				undefined,
 				[pledge.event],
 				pledge.toId,
 			);
 			pledge.resolvedEvent = e.id;
-			reportPledge(s, pledge, false);
 			notify(s, e.text, e.id);
 		} else if (!pledge.dueNoticed && s.now >= pledge.dueBy - 120) {
 			pledge.dueNoticed = true;
@@ -741,12 +860,24 @@ export function playerRound(host: PlayerHost): void {
 			);
 		}
 	}
+	for (const pledge of p.pledges.filter((x) => x.status === "offered"))
+		if (s.now >= pledge.dueBy) {
+			const q = p.requests.find((x) => x.id === pledge.requestId);
+			if (q)
+				releasePledge(
+					host,
+					q,
+					`${clock(pledge.dueBy)} came before they took up your request`,
+				);
+		}
 	for (const q of p.requests)
 		if (
 			q.status === "held" &&
 			!s.people.find((r) => r.person.id === q.targetId)?.person.body.alive
-		)
+		) {
 			q.status = "dropped";
+			releasePledge(host, q, "they can no longer take up your request");
+		}
 	advanceGoals(s);
 }
 function arrived(host: PlayerHost, job: PlayerJob): void {
@@ -780,7 +911,11 @@ function finishWork(host: PlayerHost, job: PlayerJob): void {
 		s.produced += 5;
 		result = "You carried food up from the quay; 5 meals reached the market.";
 	} else if (kind === "help-repair") {
-		if (s.hall < 12) {
+		// Your repair is subject to the same damp-timber physics as anyone's (timber.ts), keyed by your job event.
+		if (s.hall < 12 && !repairHolds(s, job.event))
+			result =
+				"You helped repair the hall, but the repair on the damp timber did not hold.";
+		else if (s.hall < 12) {
 			s.hall += 1;
 			result = `You helped repair the hall; ${s.hall} of 12 repairs were done.`;
 			if (s.hall === 12)
@@ -793,6 +928,12 @@ function finishWork(host: PlayerHost, job: PlayerJob): void {
 				);
 		} else
 			result = "The hall repairs were already complete; your hour added none.";
+	} else if (kind === "dry-timber") {
+		if (timberToAir(s)) {
+			airTimber(s, 60);
+			result = `You propped and aired the hall timber for an hour. ${timberMoisture(s, "Clear") === "dry" ? "It felt dry to the touch now." : "It still felt damp."}`;
+		} else
+			result = "The hall was already open; there was no timber left to air.";
 	} else {
 		const target = required(
 			s.people.find((r) => r.person.id === job.forId),
@@ -841,6 +982,7 @@ export function playerDecided(
 		: undefined;
 	if (!record || !resolution) {
 		q.status = "dropped";
+		releasePledge(host, q, "your request lapsed without an answer");
 		return;
 	}
 	const chosen = record.chosenAffordanceId ?? "";
@@ -850,12 +992,24 @@ export function playerDecided(
 		chosen;
 	const answer = answerOf(resolution);
 	const followed = chosen === q.affordanceId;
+	const pushed = r.person.will.voices
+		.find((v) => v.voiceId === PLAYER_VOICE)
+		?.history.some(
+			(h) =>
+				h.at === s.now &&
+				h.delta < 0 &&
+				(h.reason === "pushed" || h.reason === "worn"),
+		);
 	const e = playerEvent(
 		host,
 		"player-decided",
-		followed
-			? `${r.person.name} took up your request and chose to ${actionWords(chosenLabel)}.`
-			: `${r.person.name} weighed your request and chose to ${actionWords(chosenLabel)} instead.`,
+		`${
+			followed
+				? answer.verdict === "complied"
+					? `${r.person.name} gave in to your urging and chose to ${actionWords(chosenLabel)}, under protest.`
+					: `${r.person.name} took up your request and chose to ${actionWords(chosenLabel)}.`
+				: `${r.person.name} weighed your request and chose to ${actionWords(chosenLabel)} instead.`
+		}${pushed ? ` Being pushed wore on ${r.person.name}’s trust in you.` : ""}`,
 		r.job?.offer.placeId ?? r.place,
 		[q.id, q.answerEvent],
 		r.person.id,
@@ -869,6 +1023,21 @@ export function playerDecided(
 		chosenLabel,
 	};
 	notify(s, e.text, e.id);
+	const pledge = s.player?.pledges.find(
+		(x) => x.id === q.pledgeId && x.status === "offered",
+	);
+	if (pledge && followed) {
+		pledge.status = "open";
+		playerEvent(
+			host,
+			"player-pledge",
+			`${r.person.name} took up your request, so your promise now stands: one hour to ${pledge.work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[pledge.work].label}, by ${clock(pledge.dueBy)}.`,
+			r.job?.offer.placeId ?? r.place,
+			[pledge.event, e.id],
+			r.person.id,
+		);
+	} else if (pledge)
+		releasePledge(host, q, `${r.person.name} chose something else`, [e.id]);
 }
 /** Called after apply: link the person's actual action to the decided request. */
 export function playerApplied(s: Save, r: Resident, continued: boolean): void {
@@ -914,7 +1083,7 @@ export const PLAYER_GOALS = [
 	{
 		id: "answer",
 		title: "Get an answer",
-		hint: "Pick someone here and ask for one of the things they could actually do now. Their likely answer is shown first.",
+		hint: "Pick someone here and ask for one of the things they could actually do now. You can read how they seem, but you learn their answer only by asking.",
 	},
 	{
 		id: "objection",
@@ -966,8 +1135,11 @@ function goalEvidence(
 		return undefined;
 	}
 	if (id === "pledge") {
+		// Judged by when the hour was done: a promise made before the previous goal still counts once kept.
 		const pledge = p.pledges.find(
-			(x) => x.status === "kept" && x.madeAt >= since,
+			(x) =>
+				x.status === "kept" &&
+				(p.log.find((e) => e.id === x.resolvedEvent)?.at ?? -1) >= since,
 		);
 		return pledge?.resolvedEvent
 			? [pledge.event, pledge.resolvedEvent]
@@ -1037,6 +1209,8 @@ export function playerView(s: Save): PlayerView {
 				}
 			: {}),
 		workHoursLeft: PLAYER_WORK_HOURS - hoursUsed(p, day),
+		canAirTimber: timberToAir(s),
+		pledgeDeadlines: pledgeDeadlines(s.now),
 		canMove: !p?.job,
 		present: present.slice(0, 16).map((r) => ({
 			id: r.person.id,
@@ -1063,6 +1237,7 @@ export function playerView(s: Save): PlayerView {
 		requests: (p?.requests ?? []).slice(-8).map((q) => ({
 			id: q.id,
 			at: q.at,
+			placeId: q.placeId,
 			targetId: q.targetId,
 			targetName: nameOf(s, q.targetId),
 			affordanceId: q.affordanceId,
@@ -1403,12 +1578,14 @@ export function validatePlayer(s: Save, ids: Set<string>): void {
 			!Object.hasOwn(PLAYER_WORK, x.work) ||
 			!int(x.madeAt, 480) ||
 			x.madeAt > s.now ||
-			x.dueBy !== dueByFor(x.madeAt) ||
+			!validDueBy(x.madeAt, x.dueBy) ||
 			!int(x.event, 1) ||
 			x.event >= s.nextEvent ||
-			!["open", "kept", "lapsed"].includes(x.status) ||
-			(x.status === "open" && s.now >= x.dueBy) ||
-			(x.status === "open") !== (x.resolvedEvent === undefined) ||
+			!["offered", "open", "kept", "lapsed", "released"].includes(x.status) ||
+			((x.status === "open" || x.status === "offered") && s.now >= x.dueBy) ||
+			(x.status === "open" || x.status === "offered") !==
+				(x.resolvedEvent === undefined) ||
+			(x.status === "released" && x.hfReported !== undefined) ||
 			(x.resolvedEvent !== undefined &&
 				(!int(x.resolvedEvent, 1) || x.resolvedEvent >= s.nextEvent)) ||
 			(x.dueNoticed !== undefined && x.dueNoticed !== true) ||

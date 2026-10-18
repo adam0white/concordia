@@ -73,6 +73,7 @@ import {
 } from "./handcart.ts";
 import { keyed } from "./hash.ts";
 import { HF_SOURCE, isHfSource } from "./hf-version.ts";
+import { moodRead } from "./impression.ts";
 import { placeOf, required } from "./invariants.ts";
 import {
 	buildOffers,
@@ -90,13 +91,17 @@ import {
 	playerJobEnded,
 	playerRound,
 	playerView,
+	predictAnswers,
 	predictSpeech,
 } from "./player.ts";
+import { botchedUnderProtest } from "./protest.ts";
 import { recordSocialContacts } from "./social-contact.ts";
 import { type Resident, type Save, SCHEMA } from "./state.ts";
 import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
+import { repairHolds, timberMoisture, weatherTimber } from "./timber.ts";
 import { recordTownEvent } from "./town-chronicle.ts";
+import { jobLine } from "./voicing.ts";
 
 function awakeHallNewsListener(r: Save["people"][number]): boolean {
 	return (
@@ -292,6 +297,7 @@ export class Runtime implements TownRuntime {
 		if (this.s.pending.length) throw Error("Round has unresolved actors");
 		this.s.now += 15;
 		this.s.round++;
+		weatherTimber(this.s, this.weather(), 15);
 		this.records.clear();
 		this.offers.clear();
 		for (const r of this.s.people) {
@@ -336,6 +342,8 @@ export class Runtime implements TownRuntime {
 			if (r.job && r.job.end <= this.s.now) {
 				const j = r.job,
 					p = placeOf(this.s, j.offer.placeId);
+				// Before finish(): HF still holds the protested activity.
+				const botched = botchedUnderProtest(this.s, r, j);
 				let attendedLesson = false;
 				let socialCompanions = 0;
 				let inspectionEvent: number | undefined;
@@ -370,17 +378,27 @@ export class Runtime implements TownRuntime {
 				}
 				if (evening.handled) socialCompanions = evening.companions.length;
 				if (cart.handled) socialCompanions = cart.companions.length;
-				if (j.offer.action === "grow") {
+				if (j.offer.action === "grow" && !botched) {
 					placeOf(this.s, "market").stock += 3;
 					this.s.produced += 3;
 				}
-				if (j.offer.action === "supply") {
+				if (j.offer.action === "supply" && !botched) {
 					const m = placeOf(this.s, "market");
 					const supplied = 5 + cartSupplyBonus(this.s, r.person.id, "supply");
 					m.stock += supplied;
 					this.s.produced += supplied;
 				}
-				if (j.offer.action === "repair") {
+				if (botched) {
+					// A botched job does nothing to the world.
+				} else if (j.offer.action === "repair" && !repairHolds(this.s, j.event))
+					this.event(
+						"repair-slipped",
+						`${r.person.name}’s repair on the damp timber did not hold.`,
+						r.person.id,
+						"hall",
+						[j.event],
+					);
+				else if (j.offer.action === "repair") {
 					this.s.hall += 1;
 					if (this.s.hall === 12)
 						this.event(
@@ -393,13 +411,13 @@ export class Runtime implements TownRuntime {
 				}
 
 				if (j.offer.action === "open-section" && !assistance) {
-					const safe = this.weather() === "Clear" && this.s.hall >= 12;
+					const safe = this.moisture() === "dry" && this.s.hall >= 12;
 					this.s.hallSafe = safe;
 					inspectionEvent = this.event(
 						safe ? "hall-open" : "inspection-failed",
 						safe
 							? `${r.person.name} checked dry, sound timber and opened the hall.`
-							: `${r.person.name} found ${this.weather() === "Clear" ? "dry" : "wet"} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports. The hall stayed closed.`,
+							: `${r.person.name} found ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports. The hall stayed closed.`,
 						r.person.id,
 						"hall",
 						[j.event],
@@ -409,7 +427,7 @@ export class Runtime implements TownRuntime {
 					this.s.hallSafe = false;
 					inspectionEvent = this.event(
 						"hall-closed",
-						`${r.person.name} kept the hall closed after seeing ${this.weather() === "Clear" ? "dry" : "wet"} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports.`,
+						`${r.person.name} kept the hall closed after seeing ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports.`,
 						r.person.id,
 						"hall",
 						[j.event],
@@ -498,7 +516,7 @@ export class Runtime implements TownRuntime {
 						at: this.s.now,
 						event: structuredClone(event),
 						observations: j.inspectionCues ?? {
-							moisture: this.weather() === "Clear" ? "dry" : "wet",
+							moisture: this.moisture(),
 							support: this.s.hall >= 12 ? "sound" : "loose",
 						},
 						result: event.text,
@@ -546,7 +564,8 @@ export class Runtime implements TownRuntime {
 					}
 				}
 				if (j.offer.action === "work") {
-					r.wealth += 2;
+					// A botched shift is still a shift served, but it earns nothing.
+					if (!botched) r.wealth += 2;
 					const work = required(r.paidWork, "Missing paid shift ledger");
 					work.minutes += 60;
 					work.totalMinutes += 60;
@@ -592,6 +611,7 @@ export class Runtime implements TownRuntime {
 							overlapMinutes(j, o, this.s.now) >= 15,
 					).length;
 				const status =
+					botched ||
 					(j.offer.action === "open-section" &&
 						!(assistance ? this.s.assistance?.opened : this.s.hallSafe)) ||
 					(evening.handled && !evening.delivered) ||
@@ -603,7 +623,9 @@ export class Runtime implements TownRuntime {
 					attendedLesson,
 					material:
 						j.offer.action === "work"
-							? 2
+							? botched
+								? 0
+								: 2
 							: (j.offer.action === "eat" ||
 										j.offer.action === "gather" ||
 										j.offer.action === "attend-meal") &&
@@ -624,7 +646,9 @@ export class Runtime implements TownRuntime {
 
 				const eid = this.event(
 					status === "failed" ? "attempt-failed" : "completed",
-					`${r.person.name} ${status === "failed" ? "could not complete" : "finished"} ${j.offer.label.toLowerCase()}.`,
+					botched
+						? `${jobLine(r.person.name, j.offer.label, true)} The work, done under protest, went wrong.`
+						: jobLine(r.person.name, j.offer.label, status === "failed"),
 					r.person.id,
 					p.id,
 					[j.event],
@@ -777,7 +801,7 @@ export class Runtime implements TownRuntime {
 			observeHallInspection(r.person, {
 				contextId: "hall-inspection",
 				sectionId: "hall-floor",
-				moisture: this.weather() === "Clear" ? "dry" : "wet",
+				moisture: this.moisture(),
 				support: this.s.hall >= 12 ? "sound" : "loose",
 			});
 		observeAssistance(this.s, r);
@@ -1006,7 +1030,7 @@ export class Runtime implements TownRuntime {
 			["open-section", "keep-closed", "ask-inspector"].includes(offer.action)
 				? {
 						inspectionCues: {
-							moisture: this.weather() === "Clear" ? "dry" : "wet",
+							moisture: this.moisture(),
 							support: this.s.hall >= 12 ? "sound" : "loose",
 						},
 					}
@@ -1017,6 +1041,10 @@ export class Runtime implements TownRuntime {
 		if (offer.action === "ask-inspector" && offer.targetId !== "hall-annex")
 			this.postQuestion(id, r.job.event);
 		this.s.pending = this.s.pending.filter((a) => a !== id);
+	}
+	/** The hall timber's moisture cue: damp-based with timber physics, else today's weather (timber.ts). */
+	moisture() {
+		return timberMoisture(this.s, this.weather());
 	}
 	weather() {
 		return keyed(this.s.seed, Math.floor(this.s.now / 1440), "weather") < 0.35
@@ -1125,6 +1153,11 @@ export class Runtime implements TownRuntime {
 		if (this.s.pending.length) throw Error("Round has unresolved actors");
 		return predictSpeech(this.s, id, (r) => this.instructorSuggestions(r));
 	}
+	/** HF's predicted answers per mode: tests and probes only, never part of the UI contract. */
+	predictAnswers(id: string) {
+		if (this.s.pending.length) throw Error("Round has unresolved actors");
+		return predictAnswers(this.s, id, (r) => this.instructorSuggestions(r));
+	}
 	export() {
 		return structuredClone(this.s);
 	}
@@ -1178,6 +1211,7 @@ export class Runtime implements TownRuntime {
 					readPerson(r.person).needs.map((n) => [n.id, n.urgency]),
 				),
 				mood: r.person.affect.mood.valence,
+				read: moodRead(this.s, r),
 				wealth: r.wealth,
 				history: this.s.events
 					.filter((e) => e.actorId === r.person.id)

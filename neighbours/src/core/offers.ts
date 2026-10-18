@@ -160,14 +160,28 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 			{ sleep: 0.6 },
 			{ mode: "sleep", effort: 0 },
 		);
-	add(
-		"drink",
-		"Drink water at home",
-		"homes",
-		15,
-		{ water: 0.7 },
-		{ effort: 0 },
-	);
+	// Phase C host physics (gated with the timber slice, timber.ts): every workplace and gathering place has
+	// water, and the nearest source is the one offered, so a resident away from home drinks where they are
+	// (no activity slot, like resting on the floor). HF values both drinks by the water need alone, so a free
+	// walk home used to tie with drinking in place. Legacy towns keep the single home offer unchanged.
+	if (s.timber && r.place !== "homes")
+		add(
+			"drink",
+			"Drink water here",
+			r.place,
+			15,
+			{ water: 0.7 },
+			{ effort: 0, tags: ["floor"] },
+		);
+	else
+		add(
+			"drink",
+			"Drink water at home",
+			"homes",
+			15,
+			{ water: 0.7 },
+			{ effort: 0 },
+		);
 	if (historical || (placeOf(s, "market").stock > 0 && r.wealth >= 1))
 		add(
 			"eat",

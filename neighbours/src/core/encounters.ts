@@ -2,6 +2,7 @@ import type { Percept } from "@adam0white/human-framework";
 import { perceive } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts";
 import type { Job, Resident, Save } from "./state.ts";
+import { timberMoisture } from "./timber.ts";
 
 /** Physical presence includes sleepers but excludes people still travelling. */
 export function locatedAt(
@@ -28,7 +29,9 @@ export function presentAt(
 	);
 }
 export function inspectionKey(state: Save): string {
-	return `${Math.floor(state.now / 1440)}:${state.hall}`;
+	const key = `${Math.floor(state.now / 1440)}:${state.hall}`;
+	// Timber can dry within a day (timber.ts), so a changed reading is worth another look; legacy keys stay as they were.
+	return state.timber ? `${key}:${timberMoisture(state, "")}` : key;
 }
 /** Only facts actually attended through HF become received-observation cards. */
 export function receiveEvent(

@@ -18,6 +18,7 @@ import {
 	type Resident,
 	SCHEMA,
 } from "./state.ts";
+import { floodTimber } from "./timber.ts";
 export function createRuntime(seed = 42, population = 208): TownRuntime {
 	if (
 		!Number.isSafeInteger(seed) ||
@@ -196,5 +197,6 @@ export function createRuntime(seed = 42, population = 208): TownRuntime {
 		initialFood: 80,
 		produced: 0,
 		consumed: 0,
+		timber: floodTimber(),
 	});
 }

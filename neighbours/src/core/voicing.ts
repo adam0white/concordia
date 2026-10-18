@@ -319,6 +319,24 @@ export function actionWords(label: string): string {
 	return hit ? hit.phrase.act(hit.m) : lowerFirst(tidy(label));
 }
 
+/** A gerund phrase for an action label: "working a paid shift". */
+export function ingWords(label: string): string {
+	const hit = phraseFor(label);
+	return hit ? hit.phrase.ing(hit.m) : lowerFirst(tidy(label));
+}
+
+/**
+ * A finished or failed job as a journal line: "Ada finished repairing the hall." / "Ada could not finish
+ * opening this section." Unknown labels fall back to the tidied label after "the work:".
+ */
+export function jobLine(name: string, label: string, failed: boolean): string {
+	const hit = phraseFor(label);
+	const what = hit ? hit.phrase.ing(hit.m) : undefined;
+	if (what)
+		return `${name} ${failed ? "could not finish" : "finished"} ${what}.`;
+	return `${name} ${failed ? "could not finish" : "finished"} the work: ${lowerFirst(tidy(label))}.`;
+}
+
 type CounterLike = { label: string } | undefined;
 type AnswerLike = {
 	verdict: string;

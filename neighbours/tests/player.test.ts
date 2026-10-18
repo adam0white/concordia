@@ -70,7 +70,12 @@ describe("player as a neighbour", () => {
 			const before = hash(r);
 			const prediction = r.predictSpeech("ada");
 			expect(prediction.offers.length).toBeGreaterThan(0);
-			for (const offer of prediction.offers)
+			// The player sees offers and a worded read, never a verdict or an answer line.
+			expect(prediction.read.length).toBeGreaterThan(0);
+			expect(JSON.stringify(prediction)).not.toMatch(
+				/"(verdict|says|likelihood|counterOffer|insisted|ask|urge|promise)"/,
+			);
+			for (const offer of r.predictAnswers("ada").offers)
 				for (const mode of ["ask", "urge", "promise"] as const)
 					expect(offer[mode].says.length).toBeGreaterThan(0);
 			expect(hash(r)).toBe(before);
@@ -104,7 +109,7 @@ describe("player as a neighbour", () => {
 			const r = atHall();
 			const base = clone(r);
 			const offer = r
-				.predictSpeech("ada")
+				.predictAnswers("ada")
 				.offers.find(
 					(o) => o.ask.verdict === "assented" && o.affordanceId !== "rest",
 				);
@@ -159,7 +164,7 @@ describe("player as a neighbour", () => {
 							continue;
 						state.place = place.id;
 						const offer = r
-							.predictSpeech(resident.person.id)
+							.predictAnswers(resident.person.id)
 							.offers.find((o) => o.urge.verdict === "refused");
 						state.place = home;
 						if (offer) {

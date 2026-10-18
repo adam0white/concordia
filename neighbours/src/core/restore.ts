@@ -9,6 +9,7 @@ import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
 import { validatePlayer } from "./player.ts";
 import { Runtime } from "./runtime.ts";
 import { known, placeSpecs, type Save, SCHEMA } from "./state.ts";
+import { validateTimber } from "./timber.ts";
 import { validateTownChronicle } from "./town-chronicle.ts";
 import { validateEvent, validateResidentEvidence } from "./validation.ts";
 export function restoreRuntime(input: unknown): TownRuntime {
@@ -43,6 +44,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 					key !== "handcart" &&
 					key !== "townChronicle" &&
 					key !== "assistance" &&
+					key !== "timber" &&
 					key !== "player",
 			)
 			.sort()
@@ -341,6 +343,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 	validateEvenings(s, ids);
 	validateHandcart(s, ids);
 	validateTownChronicle(s, ids);
+	validateTimber(s);
 	validatePlayer(s, ids);
 	for (const r of s.people) validateResidentEvidence(r, s, ids);
 	let last = 0;

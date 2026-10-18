@@ -52,6 +52,8 @@ function market(r: Runtime) {
 }
 function setup() {
 	const r = new Runtime(createRuntime(42, 8).export() as Save);
+	// The handcart scenario is not about timber: start from dry timber so repairs hold (timber.ts).
+	r.s.timber = { damp: 0 };
 	until(r, () => r.s.hall >= 12, {
 		ada: "repair",
 		lea: "repair",

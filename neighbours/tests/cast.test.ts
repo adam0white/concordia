@@ -159,6 +159,8 @@ const rename = <T>(value: T): T =>
 /** Reached checkpoints plus arranged copies that place idle people where the episode rules apply. */
 function checkpoints(): { save: Save; arranged: boolean }[] {
 	const r = town();
+	// These checkpoints are about who holds positions, not timber: start from dry timber (timber.ts).
+	r.s.timber = { damp: 0 };
 	const out = [{ save: structuredClone(r.s), arranged: false }];
 	const arrange = (places: Record<string, string>) => {
 		const save = structuredClone(r.s);

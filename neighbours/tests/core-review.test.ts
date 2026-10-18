@@ -346,7 +346,7 @@ it("completion witnesses see the same people regardless of completion processing
 		r.prepareRound();
 		return actor(r.s, "ada")
 			.person.memory.episodes.filter((e) =>
-				e.summary.includes("finished visit neighbours"),
+				e.summary.includes("finished visiting the neighbours"),
 			)
 			.map((e) => e.summary)
 			.sort();

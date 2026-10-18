@@ -158,7 +158,21 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					await py.runPythonAsync(
 						"town_engine.intervene(json.loads(intervention_packet))\nNone",
 					);
-					send({ type: "state", view: port.runtime.view() });
+					// A player's answer is shown only after this checkpoint is on the device, so a
+					// reload can never lose an answered request or let the player ask it again.
+					send({
+						type: "state",
+						view: port.runtime.view(),
+						...(q.intervention.kind.startsWith("player-")
+							? {
+									save: JSON.parse(
+										String(
+											await py.runPythonAsync("json.dumps(town_engine.save())"),
+										),
+									),
+								}
+							: {}),
+					});
 					break;
 				case "compare": {
 					const report = await compareTown(

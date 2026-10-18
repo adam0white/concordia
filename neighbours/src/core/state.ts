@@ -165,6 +165,8 @@ export type Save = {
 	/** Optional in first public saves. Activation never reconstructs past events. */
 	socialEvenings?: SocialEvenings;
 	handcart?: Handcart;
+	/** Hall timber damp (timber.ts). Absent in saves made before it existed: legacy weather-only physics. */
+	timber?: import("./timber.ts").Timber;
 	/** Absent until the visitor first acts as a resident; absence is the observer-only town. */
 	player?: import("./player.ts").PlayerState;
 };

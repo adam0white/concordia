@@ -10,4 +10,5 @@ export const PLAYER_EVENT_KINDS = [
 	"player-work-started",
 	"player-work-done",
 	"player-pledge-lapsed",
+	"player-pledge-released",
 ] as const;
