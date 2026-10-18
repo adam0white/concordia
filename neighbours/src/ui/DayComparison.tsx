@@ -335,7 +335,8 @@ export default function DayComparison({
 								</div>
 							) : (
 								<p>
-									No differing dated outcome was reported during this interval.
+									No different story outcome yet. Progress and resources are
+									compared below.
 								</p>
 							)}
 							{outcomes.shared.length > 0 && (

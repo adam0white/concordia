@@ -48,7 +48,7 @@ const html = (view: TownView, disabled = false) =>
 		createElement(HallChoices, { town: view, disabled, onAction: () => {} }),
 	);
 
-it("hides future choices until a genuine recurring opportunity exists", () => {
+it("hides future choices until an actual evening opportunity exists", () => {
 	expect(html(createRuntime(42, 8).view())).toBe("");
 });
 it("exposes scarce alternative-slot and notice choices without implying acceptance", () => {
@@ -75,4 +75,18 @@ it("offers the weekly choice even after the original allowance is exhausted", ()
 	expect(content).not.toContain('disabled=""');
 	expect(content).toContain("1 weekly choice");
 	expect(content).toContain("1 weekly choice available");
+});
+
+it("shows an initial invitation when its actual advertisement action can stop advancement", () => {
+	const view = town();
+	const event = view.evenings?.[1];
+	if (!event) throw Error("Missing invitation");
+	view.evenings = [{ ...event, id: "evening-0-meal", recurring: false }];
+	const content = html(view);
+	expect(content).toContain("Advertise Sam’s invitation");
+	expect(content).not.toContain("No evening support actions available now.");
+	expect(content).not.toContain('disabled=""');
+	expect(content).not.toContain("weekly choice");
+	expect(content).not.toContain("Funding moves");
+	expect(content).toContain("Advertising costs 1 town credit");
 });

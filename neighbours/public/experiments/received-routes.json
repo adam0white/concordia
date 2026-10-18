@@ -1,0 +1,1223 @@
+{
+  "schema": "received-route-study@1",
+  "recordedAt": "2026-10-18T05:10:33.553Z",
+  "execution": "Node; exact published npm HF; two fixed structural domains, nine arms each",
+  "commit": "77385505c358db8e450db64c3627f8d401deb756",
+  "dirty": false,
+  "sources": {
+    "package.json": "2047cc6ea5a19a54d916fa272e31ed21a977b0b34a81406becaa01049a516673",
+    "package-lock.json": "644f8625ea8ac719350270d39eb61b224f938e16b996d621c5f350274bd001bb",
+    "src/experiments/received-route.ts": "19fd60c9c8dcd7179d3f55deef50b7fe8ebf3b037da473ab937e4cee34ad169a",
+    "scripts/probe-received-routes.ts": "a379856f8bbd87ee9b3045e02358fcc13830bb99f7fc4d1c911797e4ae090a4c"
+  },
+  "sourcesStableDuringRun": true,
+  "cases": [
+    {
+      "framework": "2.3.0",
+      "domain": "parcel",
+      "parameters": {
+        "now": 600,
+        "sourceTrust": 1,
+        "actionSuccessPrior": 0.9,
+        "goalImportance": 0.8,
+        "halfLifeMinutes": 30,
+        "offers": [
+          {
+            "id": "ask",
+            "action": "request-route",
+            "label": "Request access",
+            "targetId": "keeper",
+            "duration": 10,
+            "effort": 0.1,
+            "advertises": {}
+          },
+          {
+            "id": "direct",
+            "action": "deliver-parcel",
+            "label": "Work directly",
+            "duration": 180,
+            "effort": 0.1,
+            "advertises": {}
+          }
+        ],
+        "premise": {
+          "id": "opportunity",
+          "revision": 0,
+          "trigger": {
+            "action": "request-route",
+            "targetId": "keeper"
+          },
+          "successor": {
+            "action": "deliver-parcel",
+            "duration": 20,
+            "effort": 0.1
+          },
+          "availableFrom": 620,
+          "availableUntil": 800,
+          "expiresAt": 800,
+          "chance": 1,
+          "confidence": 1
+        }
+      },
+      "results": [
+        {
+          "arm": "useful",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "ask",
+          "considered": [
+            {
+              "affordanceId": "ask",
+              "utility": 0.2244,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.2572
+                },
+                {
+                  "source": "prospection:cost:keeper:opportunity",
+                  "value": -0.0155
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "late",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 760,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "costly",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1,
+                  "materialCost": 1000000
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "uncertain",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 0.001,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.017,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0003
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "withheld",
+          "received": null,
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "removed",
+          "received": null,
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "goal-removed",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": null,
+          "chosen": "ask",
+          "considered": [
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "direct",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "temporal-off",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": null,
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": 0.7827,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.8
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "refused",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-route",
+                  "targetId": "keeper"
+                },
+                "successor": {
+                  "action": "deliver-parcel",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "keeper",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "keeper",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "ask",
+          "considered": [
+            {
+              "affordanceId": "ask",
+              "utility": 0.2244,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.2572
+                },
+                {
+                  "source": "prospection:cost:keeper:opportunity",
+                  "value": -0.0155
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ],
+          "refusal": {
+            "requested": true,
+            "goalProgress": 0,
+            "prospectConsumed": true,
+            "feasibleAfter": false
+          }
+        }
+      ],
+      "limits": "Received route valuation only. No graph search, waiting opportunity cost, future body prediction or guarantee of consent/outcome. Temporal-on also changes direct time+success valuation; knowledge ablations retain temporal goals."
+    },
+    {
+      "framework": "2.3.0",
+      "domain": "sample",
+      "parameters": {
+        "now": 600,
+        "sourceTrust": 1,
+        "actionSuccessPrior": 0.9,
+        "goalImportance": 0.8,
+        "halfLifeMinutes": 30,
+        "offers": [
+          {
+            "id": "ask",
+            "action": "request-chamber",
+            "label": "Request access",
+            "targetId": "custodian",
+            "duration": 10,
+            "effort": 0.1,
+            "advertises": {}
+          },
+          {
+            "id": "direct",
+            "action": "cool-sample",
+            "label": "Work directly",
+            "duration": 180,
+            "effort": 0.1,
+            "advertises": {}
+          }
+        ],
+        "premise": {
+          "id": "opportunity",
+          "revision": 0,
+          "trigger": {
+            "action": "request-chamber",
+            "targetId": "custodian"
+          },
+          "successor": {
+            "action": "cool-sample",
+            "duration": 20,
+            "effort": 0.1
+          },
+          "availableFrom": 620,
+          "availableUntil": 800,
+          "expiresAt": 800,
+          "chance": 1,
+          "confidence": 1
+        }
+      },
+      "results": [
+        {
+          "arm": "useful",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "ask",
+          "considered": [
+            {
+              "affordanceId": "ask",
+              "utility": 0.2244,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.2572
+                },
+                {
+                  "source": "prospection:cost:custodian:opportunity",
+                  "value": -0.0155
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "late",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 760,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "costly",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1,
+                  "materialCost": 1000000
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "uncertain",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 0.001,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.017,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0003
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "withheld",
+          "received": null,
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "removed",
+          "received": null,
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "goal-removed",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": null,
+          "chosen": "ask",
+          "considered": [
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "direct",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "temporal-off",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": null,
+          "chosen": "direct",
+          "considered": [
+            {
+              "affordanceId": "direct",
+              "utility": 0.7827,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.8
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "ask",
+              "utility": -0.0173,
+              "terms": [
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "arm": "refused",
+          "received": {
+            "entries": [
+              {
+                "id": "opportunity",
+                "revision": 0,
+                "trigger": {
+                  "action": "request-chamber",
+                  "targetId": "custodian"
+                },
+                "successor": {
+                  "action": "cool-sample",
+                  "duration": 20,
+                  "effort": 0.1
+                },
+                "availableFrom": 620,
+                "availableUntil": 800,
+                "expiresAt": 800,
+                "chance": 1,
+                "confidence": 1,
+                "sourceId": "custodian",
+                "channel": "told",
+                "receivedAt": 600
+              }
+            ],
+            "revisions": [
+              {
+                "sourceId": "custodian",
+                "id": "opportunity",
+                "revision": 0,
+                "receivedAt": 600
+              }
+            ]
+          },
+          "temporal": {
+            "halfLifeMinutes": 30
+          },
+          "chosen": "ask",
+          "considered": [
+            {
+              "affordanceId": "ask",
+              "utility": 0.2244,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.2572
+                },
+                {
+                  "source": "prospection:cost:custodian:opportunity",
+                  "value": -0.0155
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            },
+            {
+              "affordanceId": "direct",
+              "utility": -0.006,
+              "terms": [
+                {
+                  "source": "goal:goal",
+                  "value": 0.0113
+                },
+                {
+                  "source": "effort",
+                  "value": -0.0173
+                }
+              ]
+            }
+          ],
+          "refusal": {
+            "requested": true,
+            "goalProgress": 0,
+            "prospectConsumed": true,
+            "feasibleAfter": false
+          }
+        }
+      ],
+      "limits": "Received route valuation only. No graph search, waiting opportunity cost, future body prediction or guarantee of consent/outcome. Temporal-on also changes direct time+success valuation; knowledge ablations retain temporal goals."
+    }
+  ],
+  "limits": [
+    "A controlled faculty test, separate from your town. Favorable parameters are engineering assumptions, not measured human probabilities.",
+    "The second domain renames the same structure; it is not independent ecological evidence.",
+    "Temporal mode changes direct goal time and success valuation. Knowledge ablations keep that same temporal mode; the temporal-off arm measures a separate change.",
+    "Asking yields no goal progress and grants no access. Refusal consumes the completed request expectation without making physical work available.",
+    "No general planner, waiting opportunity cost, future body prediction, live LLM or guaranteed consent."
+  ]
+}

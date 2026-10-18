@@ -225,12 +225,12 @@ export default function App() {
 								className="next-story"
 								aria-label={
 									nextPerson
-										? `Next story about ${nextPerson.name}`
+										? `Next outcome for ${nextPerson.name}`
 										: "Next story"
 								}
 								title={
 									nextPerson
-										? `Next story about ${nextPerson.name}; at most seven days.`
+										? `Next story, resolved promise or invitation outcome for ${nextPerson.name}; at most seven days.`
 										: "Next town story; at most seven days."
 								}
 								disabled={

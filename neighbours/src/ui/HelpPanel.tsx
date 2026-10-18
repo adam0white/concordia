@@ -58,10 +58,10 @@ export default function HelpPanel({
 					type="button"
 					className="next-hall-choice"
 					disabled={disabled}
-					title="Run up to seven days; stop when a hall choice becomes available."
+					title="Run up to seven days; stop at a displayed evening funding or advertisement choice."
 					onClick={onAdvance}
 				>
-					Next hall choice →
+					Next evening choice →
 				</button>
 			)}
 			<HallChoices

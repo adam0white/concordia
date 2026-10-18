@@ -71,7 +71,7 @@ test("advance can stop from Save, locks mutations and keeps completed actual tim
 	await enter(page);
 	await showTab(page, "Help");
 	await page
-		.getByRole("button", { name: "Next hall choice →", exact: true })
+		.getByRole("button", { name: "Next evening choice →", exact: true })
 		.click();
 	const stop = page.getByRole("button", {
 		name: "Stop advancing",

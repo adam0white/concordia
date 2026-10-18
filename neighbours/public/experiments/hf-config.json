@@ -1,38 +1,41 @@
 {
   "schema": "neighbours/hf-config-probe@1",
   "runtime": "typescript-host-released-hf",
-  "hf": "2.2.1",
+  "hf": "2.3.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "4bc7d7ce25847c78f9f8134ddc40049a644ac289f89d0c49d6668b2f41ecc1e7",
+  "sourceFingerprint": "956c7a8e6d9149ee8d939a2bcfa1250566eb92de29a0b0cd8d0f40b0e76108a2",
   "sources": {
-    "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
-    "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
+    "package-lock.json": "644f8625ea8ac719350270d39eb61b224f938e16b996d621c5f350274bd001bb",
+    "package.json": "2047cc6ea5a19a54d916fa272e31ed21a977b0b34a81406becaa01049a516673",
     "scripts/probe-hf-config.ts": "75941e08a5b85cd4c89713a82f4933d2762b290311b8a2c70ba41c56c4babaa3",
-    "src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
+    "src/contracts.ts": "d17cc57dd564a3cb3c1339d51b6e8bdadc65fb94035140225330aa1bc9e5d1f3",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
-    "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
+    "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
+    "src/core/bench-opportunity.ts": "df54f6bd5fe9f1085dd6dd3f8ff587c3a48ad28280ae95bf847a419c05d58cb4",
+    "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
     "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
     "src/core/evening-news.ts": "42f0b294261c62109f4f9979f888aabb752e24b1b49c0a67a89fc4771396f34d",
     "src/core/evenings.ts": "c854d64c928f6265f26040d2131b19b618a8e218e22dfd86072407f05461df9b",
-    "src/core/handcart-state.ts": "d39a81eaa68683a6f51bdc44d36cf962760f79ae6981f0f306cf43803b42cf85",
-    "src/core/handcart.ts": "5a58af5f25d6c79589e23f202ad316d6fa78be9e35c51edd8ac359d76e220f38",
+    "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
+    "src/core/handcart.ts": "bd72737394d1756d8eff54813496adc20add078d9afc5c1ffca641c1842eb945",
     "src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
+    "src/core/hf-version.ts": "7acaa590e9a83b385ec1913f99e7be35a22b019a17eeaa509046902c977fafb9",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
     "src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/restore.ts": "d676ca6fd81b92a7573cb74b7f089989f49dc13217793f88cc384126a5fe9fc0",
-    "src/core/runtime.ts": "2fe5adf0fad1d4565c2c4425a082f7d7ca151ec2e7b13bbdf1c867f6fed13197",
-    "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
+    "src/core/restore.ts": "4806a03f5661fe20210a1dd48f8493d0b6fce6dd19be915bee68a69d3ebd1044",
+    "src/core/runtime.ts": "ae3795858710301c8813f30c68d5797e09fb9a22049b8fe678b71fae5d9eccdd",
+    "src/core/scenario.ts": "0a5482498e94f13875af8821cac4d3bba80e2864be5aa273a61bde1f935ed999",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
     "src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
-    "src/core/stories.ts": "9d289868555b16c65d07b60ada1d1048672e295b2cac804c3688fe113d5a9fa3",
+    "src/core/stories.ts": "5ec5e6fb1380b76857ab057f332ee63e5fc4fd4b9b88c057f17d6c0d330a3191",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
     "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-    "src/core/validation.ts": "f2ba6af80ea227087630d28a6f98506a85c0353753dff633e1d1fdc4e6d90425",
+    "src/core/validation.ts": "ba458f0bb39c56be20279b8fc80e085cb85b981a5e0ac03f23743e77a3f18b4c",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -47,7 +50,7 @@
       101
     ]
   },
-  "wallSeconds": 9.601917041999998,
+  "wallSeconds": 11.122373708000001,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -59,7 +62,7 @@
   ],
   "arms": [
     {
-      "pid": 13477,
+      "pid": 7795,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -151,9 +154,9 @@
           "maxSubsteps": 64,
           "feltEmotionWeight": 0.5,
           "regulationRate": {
-            "reflection": 8e-05,
-            "worship": 8e-05,
-            "rest": 3e-05
+            "reflection": 0.00008,
+            "worship": 0.00008,
+            "rest": 0.00003
           },
           "regulationCeiling": 0.95,
           "soothe": {
@@ -924,6 +927,14 @@
           "nightFrom": 1200,
           "nightTo": 300
         },
+        "PROSPECTION_DEFAULTS": {
+          "maxEntries": 16,
+          "maxRevisions": 64,
+          "maxBatch": 4,
+          "maxIdentifierLength": 96,
+          "horizon": 10080,
+          "maxMaterialCost": 1000000
+        },
         "PURPOSE_DEFAULTS": {
           "graceDays": 3,
           "decayPerDay": 0.85,
@@ -1239,9 +1250,9 @@
           "maxSubsteps": 64,
           "feltEmotionWeight": 0.5,
           "regulationRate": {
-            "reflection": 8e-05,
-            "worship": 8e-05,
-            "rest": 3e-05
+            "reflection": 0.00008,
+            "worship": 0.00008,
+            "rest": 0.00003
           },
           "regulationCeiling": 0.95,
           "soothe": {
@@ -2011,6 +2022,14 @@
           "promiseSlack": 30,
           "nightFrom": 1200,
           "nightTo": 300
+        },
+        "PROSPECTION_DEFAULTS": {
+          "maxEntries": 16,
+          "maxRevisions": 64,
+          "maxBatch": 4,
+          "maxIdentifierLength": 96,
+          "horizon": 10080,
+          "maxMaterialCost": 1000000
         },
         "PURPOSE_DEFAULTS": {
           "graceDays": 3,
@@ -7011,7 +7030,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "e70c9749f77c90dbfbb87456c61828a3a46818fed9121070089ff939ae5c0bc0"
+          "finalStateSha256": "67eeb39e4366a85a8f5ae1f18f9611eaa91e6e0fa67f96f93ac59eba6a3f1119"
         },
         {
           "seed": 73,
@@ -11749,7 +11768,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "a990d4344842c059d516c69d02e11691eed9bfd0ffd6982f8d5b8da6256c1f0a"
+          "finalStateSha256": "bddb9272ba1ac3164df77a1ac850388cdb3ddd9c7ae2e42afdc923e6417c8dc4"
         },
         {
           "seed": 9,
@@ -16487,7 +16506,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "02bf604f8ee881ce61c4c04d7fed6a951be3d7ffd0fe87bfb1c80201b6253102"
+          "finalStateSha256": "79c699714632ad85ad31ca885e51966910a5a59ce07d5d9b1c5d167bd37162dc"
         },
         {
           "seed": 101,
@@ -21225,12 +21244,12 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "379ad6d0b524353a08a4162ba28de7d9073c3cc484a314dcce4b2240397d0644"
+          "finalStateSha256": "8fa9dfc3672a7d3b571712aa4d4e803ff4515b6e472fffcac2fd0725e9d6f966"
         }
       ]
     },
     {
-      "pid": 13874,
+      "pid": 8705,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -21322,9 +21341,9 @@
           "maxSubsteps": 64,
           "feltEmotionWeight": 0.5,
           "regulationRate": {
-            "reflection": 8e-05,
-            "worship": 8e-05,
-            "rest": 3e-05
+            "reflection": 0.00008,
+            "worship": 0.00008,
+            "rest": 0.00003
           },
           "regulationCeiling": 0.95,
           "soothe": {
@@ -22094,6 +22113,14 @@
           "promiseSlack": 30,
           "nightFrom": 1200,
           "nightTo": 300
+        },
+        "PROSPECTION_DEFAULTS": {
+          "maxEntries": 16,
+          "maxRevisions": 64,
+          "maxBatch": 4,
+          "maxIdentifierLength": 96,
+          "horizon": 10080,
+          "maxMaterialCost": 1000000
         },
         "PURPOSE_DEFAULTS": {
           "graceDays": 3,
@@ -22410,9 +22437,9 @@
           "maxSubsteps": 64,
           "feltEmotionWeight": 0.5,
           "regulationRate": {
-            "reflection": 8e-05,
-            "worship": 8e-05,
-            "rest": 3e-05
+            "reflection": 0.00008,
+            "worship": 0.00008,
+            "rest": 0.00003
           },
           "regulationCeiling": 0.95,
           "soothe": {
@@ -23182,6 +23209,14 @@
           "promiseSlack": 30,
           "nightFrom": 1200,
           "nightTo": 300
+        },
+        "PROSPECTION_DEFAULTS": {
+          "maxEntries": 16,
+          "maxRevisions": 64,
+          "maxBatch": 4,
+          "maxIdentifierLength": 96,
+          "horizon": 10080,
+          "maxMaterialCost": 1000000
         },
         "PURPOSE_DEFAULTS": {
           "graceDays": 3,
@@ -28182,7 +28217,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "2d02239a9681f881ba7c604f1e37dfe56d9ad3e1776faa3ec1cfa83adb49d9bf"
+          "finalStateSha256": "9c5c62cecf80e6c7aff078381762b94f709a42f0a6d4b68a63f3bebbe6cc789e"
         },
         {
           "seed": 73,
@@ -32920,7 +32955,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "bd43a36bdfdda88b8a0e2b9ccc183fdb3d9316ab4a9c7d972d586072988f902d"
+          "finalStateSha256": "a93c21bcc9fe7b8bc9fbd9179ed9d1b859bbf39b5188899e91225b272e1fc596"
         },
         {
           "seed": 9,
@@ -37658,7 +37693,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "cf4e0544b7d4002ade401b6d3b1509fdc5a38c022e8efc812846d265eb2ca1cf"
+          "finalStateSha256": "7d73b32714fd6002ceba65edd852d7823ff641acf0b3f3a79a4c5885b31caa69"
         },
         {
           "seed": 101,
@@ -42396,12 +42431,12 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "77ebc9c3700c7a6d87b103ae813c0ccb2b1fc7d2513d8f88a3a80049fb928655"
+          "finalStateSha256": "ee5614ac83264b6def15560bfac26ecf7d45e8e0239a03c55ea3978bac60cd37"
         }
       ]
     },
     {
-      "pid": 14224,
+      "pid": 8733,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -42493,9 +42528,9 @@
           "maxSubsteps": 64,
           "feltEmotionWeight": 0.5,
           "regulationRate": {
-            "reflection": 8e-05,
-            "worship": 8e-05,
-            "rest": 3e-05
+            "reflection": 0.00008,
+            "worship": 0.00008,
+            "rest": 0.00003
           },
           "regulationCeiling": 0.95,
           "soothe": {
@@ -43266,6 +43301,14 @@
           "nightFrom": 1200,
           "nightTo": 300
         },
+        "PROSPECTION_DEFAULTS": {
+          "maxEntries": 16,
+          "maxRevisions": 64,
+          "maxBatch": 4,
+          "maxIdentifierLength": 96,
+          "horizon": 10080,
+          "maxMaterialCost": 1000000
+        },
         "PURPOSE_DEFAULTS": {
           "graceDays": 3,
           "decayPerDay": 0.85,
@@ -43581,9 +43624,9 @@
           "maxSubsteps": 64,
           "feltEmotionWeight": 0.5,
           "regulationRate": {
-            "reflection": 8e-05,
-            "worship": 8e-05,
-            "rest": 3e-05
+            "reflection": 0.00008,
+            "worship": 0.00008,
+            "rest": 0.00003
           },
           "regulationCeiling": 0.95,
           "soothe": {
@@ -44353,6 +44396,14 @@
           "promiseSlack": 30,
           "nightFrom": 1200,
           "nightTo": 300
+        },
+        "PROSPECTION_DEFAULTS": {
+          "maxEntries": 16,
+          "maxRevisions": 64,
+          "maxBatch": 4,
+          "maxIdentifierLength": 96,
+          "horizon": 10080,
+          "maxMaterialCost": 1000000
         },
         "PURPOSE_DEFAULTS": {
           "graceDays": 3,
@@ -49353,7 +49404,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "ef2de1539c2a5b57d7e2f585ef66cac8ac3f061b5d63a3f3e63c2618425b3ed5"
+          "finalStateSha256": "bbe07b25c7071ca41e9ba86d1ba7c52bfb61a564aaac313c53b63f36da77808f"
         },
         {
           "seed": 73,
@@ -54091,7 +54142,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "b14516b6458a9e5a2f4a763af1a34ceb8645646b8a3dfe978d435051f3ac41a7"
+          "finalStateSha256": "b744139e58f8ca9684c6b258867de03f1c43a39d5e10f0ce5c03003d3adeb393"
         },
         {
           "seed": 9,
@@ -58829,7 +58880,7 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "496ac1d58c8d6e15b800aefe93b4766f2cbf83dcac2d2f327574543aa532a5bc"
+          "finalStateSha256": "6d27d261dfc7e91621fd7032f7c800260d530200632b9f50654a4b742b15918c"
         },
         {
           "seed": 101,
@@ -63567,10 +63618,9 @@
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "03ba9ff1b967fd8188312b97b70764f0bcc8fa166bc6bdbc3962cb473ff9239f"
+          "finalStateSha256": "9b6723e8ad33235fa1c84900e52ff6783605937e2d9b0175df7df25a819a7fa9"
         }
       ]
     }
-  ],
-  "recordedAt": "2026-10-16T20:23:42.006063+00:00"
+  ]
 }

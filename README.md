@@ -2,7 +2,7 @@
 
 [Watch the town](https://neighbours.adamwhite.work) · [Design and milestones](docs/neighbours/DESIGN.md) · [Run and debug](docs/neighbours/RUNNING.md) · [Prior art](docs/neighbours/PRIOR_ART.md)
 
-A riverside town after a flood. Eight familiar neighbours and two hundred other residents balance ordinary needs, promises and the work of reopening a community hall. The public town runs actual Python Concordia and Human Framework locally in your browser. It is not a shared server town. The optional Inspector exposes resources, decisions, diagnostics and recorded policy experiments.
+A riverside town after a flood. Eight familiar neighbours and two hundred other residents balance ordinary needs, promises and the work of reopening a community hall. The public town runs actual Python Concordia and Human Framework locally in your browser. It is not a shared server town. Person cards expose decisions. Compare offers hypothetical futures, recorded studies and diagnostics.
 
 This is a fork of Google DeepMind Concordia. Upstream history and code remain intact. Our application is in `neighbours/`; its custom Python engine is in `concordia/contrib/neighbours/`. Development branch: `neighbours`. Human Framework is consumed as an exact published package. Recorded native LLM experiments are labelled separately from the live all-HF browser town.
 
@@ -12,7 +12,9 @@ The delivered town now adds a welcome screen before runtime downloads, paused en
 
 The browser can apply one authored or recorded GM proposal after host validation. A separate native experiment runs real upstream Concordia GM components with one genuine model call and exact response replay. It proposes a scenario premise; it cannot declare repairs, learning, consent or attendance. Live browser residents still use HF, with no live browser LLM. Isolated HF configuration probes preserve production defaults and report negative results. See [the current increment](docs/neighbours/gm-and-town-agency.md) and [the native GM contract](docs/neighbours/gm-director.md).
 
-The mobile increment separates Town, Help, Stories and Inspector. The opening goal and help stay reachable, selecting a person focuses their card, and comparisons lead with changed outcomes. Save, import and town settings live in one dialog. Independent adversarial, speedrunner, entertainment and wildcard visitors tested separate agendas. See [mobile design](docs/neighbours/mobile-focus.md) and [review and verification](docs/neighbours/visitor-2026-10-16-mobile.md). Adam accepts game feel; tests do not establish sustained enjoyment, human realism or HF superiority.
+The mobile increment separates Town, Help, Stories and Compare. The opening goal and help stay reachable, selecting a person focuses their card, and comparisons lead with changed outcomes. Save, import and town settings live in one dialog. Independent adversarial, speedrunner, entertainment and wildcard visitors tested separate agendas. See [mobile design](docs/neighbours/mobile-focus.md) and [review and verification](docs/neighbours/visitor-2026-10-16-mobile.md). Adam accepts game feel; tests do not establish sustained enjoyment, human realism or HF superiority.
+
+The current candidate adds cancellable Next navigation, actual followed-person promise and invitation outcomes, a separate recorded-study workbench and received bench-window information without automatic permission. It uses exact published HF2.3.0. The new natural-town bench cases remain negative: received access changes asking value but all nine initial choices still use the side bench. Genuine native Concordia GM recordings and zero-call replays remain separate from the browser. See [received plans](docs/neighbours/received-plans.md) and [visitor evidence and delivery status](docs/neighbours/visitor-2026-10-18-received-plans.md).
 
 ---
 

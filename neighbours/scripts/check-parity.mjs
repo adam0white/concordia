@@ -380,6 +380,8 @@ try {
 		);
 	}
 
+	// Cancellation needs a legal intervention, independent of late restored towns.
+	await restoreCheckpoint(py, port, native.checkpoint);
 	const cancellationRuntime = port.runtime;
 	const cancellationPacket = String(
 		await py.runPythonAsync("json.dumps(town_engine.save())"),

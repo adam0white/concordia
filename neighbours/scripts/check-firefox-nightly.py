@@ -213,8 +213,9 @@ def main():
                 close_menu()
             record('explicit-checkpoint-import', passed=True, clock=clock())
         click('Compare')
-        click('Compare futures', prefix=True)
         detail = control('Compare futures', prefix=True).find_element(By.XPATH, '..')
+        if detail.get_attribute('open') is None:
+            click('Compare futures', prefix=True)
         Select(detail.find_elements(By.TAG_NAME, 'select')[-1]).select_by_visible_text('Seven days · 672 rounds')
         previous = clock()
         click('Compare from here')

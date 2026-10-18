@@ -7,6 +7,7 @@ import type {
 	UiCommand,
 	UiReply,
 } from "../contracts";
+import { personOutcome, personOutcomeNotice } from "../person-outcome.ts";
 import { RuntimeClient } from "../runtime-client";
 import { datedClock } from "./format";
 import { type ObservedFeed, observe } from "./observations";
@@ -31,6 +32,9 @@ export function useVisitorSession({
 	const [advanceProgress, setAdvanceProgress] = useState("");
 	const [advanceNotice, setAdvanceNotice] = useState("");
 	const advancePending = useRef<number | null>(null);
+	const advanceOrigin = useRef<{ view: TownView; actorId: string } | null>(
+		null,
+	);
 	const advanceSequence = useRef(0);
 	const [branchReport, setBranchReport] = useState<TownComparison>();
 	const [branchStale, setBranchStale] = useState(false);
@@ -128,7 +132,10 @@ export function useVisitorSession({
 			["step", "advance", "intervene", "restore", "new"].includes(command.type)
 		) {
 			const replacement = command.type === "restore" || command.type === "new";
-			if (replacement) worldGeneration.current++;
+			if (replacement) {
+				worldGeneration.current++;
+				advanceOrigin.current = null;
+			}
 			stateCommands.current.push({
 				commandType: command.type,
 				interventionId:
@@ -143,6 +150,7 @@ export function useVisitorSession({
 		client.current?.send(command);
 	}, []);
 	const resetWorldFeedback = useCallback((generation: number) => {
+		advanceOrigin.current = null;
 		acceptedGeneration.current = generation;
 		const requestedExport = exportRequest.current;
 		if (
@@ -235,6 +243,7 @@ export function useVisitorSession({
 					: undefined;
 				if (failed && failed.generation < acceptedGeneration.current) return;
 				if (failed?.commandType === "advance") {
+					advanceOrigin.current = null;
 					advancePending.current = null;
 					setAdvancing(false);
 					setAdvanceProgress("");
@@ -279,26 +288,50 @@ export function useVisitorSession({
 			if (reply.type === "ready" || reply.type === "state") {
 				if (reply.advance && reply.advance.requestId !== advancePending.current)
 					return;
+				const completed = stateCommands.current.shift();
+				if (completed && completed.generation < acceptedGeneration.current)
+					return;
+				// A queued advance starts after preceding commands, so its notice must
+				// compare against their accepted state, not the earlier rendered view.
+				if (
+					!reply.advance &&
+					advancePending.current !== null &&
+					advanceOrigin.current &&
+					completed?.generation === worldGeneration.current
+				)
+					advanceOrigin.current = {
+						actorId: advanceOrigin.current.actorId,
+						view: structuredClone(reply.view),
+					};
 				if (reply.advance) {
 					advancePending.current = null;
 					setAdvancing(false);
 					setAdvanceProgress("");
 					const reason = reply.advance.reason;
+					const origin = advanceOrigin.current;
+					const outcome =
+						reason === "person-story" && origin
+							? personOutcomeNotice(
+									personOutcome(origin.view, reply.view, origin.actorId),
+								)
+							: undefined;
+					advanceOrigin.current = null;
 					setAdvanceNotice(
 						reason === "cancelled"
 							? `Stopped at ${datedClock(reply.view.now)}. Completed time is kept.`
 							: reason === "horizon"
 								? `No matching event in ${reply.advance.rounds / 96} days. Paused at ${datedClock(reply.view.now)}.`
 								: reason === "hall-choice"
-									? `Hall choices are available · ${datedClock(reply.view.now)}.`
-									: `A new story${reason === "person-story" ? " about the followed neighbour" : ""} · ${datedClock(reply.view.now)}.`,
+									? `Evening choices are available · ${datedClock(reply.view.now)}.`
+									: outcome
+										? `${outcome} · ${datedClock(reply.view.now)}.`
+										: `${reason === "person-story" ? "A new outcome for the followed neighbour" : "A new story"} · ${datedClock(reply.view.now)}.`,
 					);
 				}
 				if (reply.advance?.rounds !== 0) {
 					liveRevision.current++;
 					if (hasBranchReport.current) setBranchStale(true);
 				}
-				const completed = stateCommands.current.shift();
 				if (
 					completed?.replacement !== null &&
 					completed?.replacement !== undefined
@@ -521,6 +554,7 @@ export function useVisitorSession({
 			})
 			.catch(() => {});
 		return () => {
+			advanceOrigin.current = null;
 			active = false;
 			saves.close();
 			runtime?.close();
@@ -621,7 +655,7 @@ export function useVisitorSession({
 	};
 	const stopAdvancing = () => {
 		if (advancePending.current === null) return;
-		setAdvanceProgress("Stopping after the current round…");
+		setAdvanceProgress("Stopping the advance…");
 		client.current?.send({
 			type: "cancel-advance",
 			requestId: advancePending.current,
@@ -645,6 +679,10 @@ export function useVisitorSession({
 		setAdvanceNotice("");
 		setAdvanceProgress("Advancing the real town to the next matching event…");
 		const requestId = ++advanceSequence.current;
+		advanceOrigin.current =
+			until === "person-story" && actorId
+				? { view: structuredClone(town), actorId }
+				: null;
 		advancePending.current = requestId;
 		setAdvancing(true);
 		persistenceAfterState.current = true;

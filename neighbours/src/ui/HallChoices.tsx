@@ -1,4 +1,5 @@
 import type { Intervention, TownView } from "../contracts";
+import { hallOpportunities } from "../hall-choice.ts";
 import { datedClock } from "./format";
 
 export default function HallChoices({
@@ -16,11 +17,9 @@ export default function HallChoices({
 	expanded?: boolean;
 	onExpandedChange?: (open: boolean) => void;
 }) {
-	const opportunities = (town.evenings ?? [])
-		.filter((e) => e.recurring && e.endsAt > town.now && e.stage !== "closed")
-		.toSorted((a, b) => a.startsAt - b.startsAt)
-		.slice(0, 2);
+	const opportunities = hallOpportunities(town);
 	const schedule = town.eveningSchedule;
+	const recurring = opportunities.some((e) => e.recurring);
 	const supportRemaining = Math.max(
 		0,
 		...opportunities.map((e) => e.supportRemaining ?? 0),
@@ -41,7 +40,7 @@ export default function HallChoices({
 			</summary>
 			<p className="tiny">
 				{opportunities.length === 0
-					? "No current hall choices."
+					? "No evening support actions available now."
 					: shared
 						? "One room, two possible evenings. Only one can use this hour."
 						: "The evenings have separate hours."}
@@ -145,7 +144,7 @@ export default function HallChoices({
 					</div>
 				);
 			})}
-			{opportunities.length > 0 && (
+			{opportunities.length > 0 && recurring && (
 				<>
 					<p className="tiny muted">
 						{supportRemaining
@@ -157,6 +156,18 @@ export default function HallChoices({
 					<p className="tiny muted">
 						Funding moves an unposted opportunity to the next day. Advertising
 						informs awake neighbours; it does not make anyone attend.
+					</p>
+				</>
+			)}
+			{opportunities.length > 0 && !recurring && (
+				<>
+					<p className="tiny muted">
+						{town.controlsRemaining} town credits left. Advertising costs 1 town
+						credit.
+					</p>
+					<p className="tiny muted">
+						Advertising informs awake neighbours; it does not make anyone
+						attend.
 					</p>
 				</>
 			)}

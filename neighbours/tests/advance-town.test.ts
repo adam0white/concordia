@@ -65,6 +65,74 @@ function story(view: TownView, id: string, actorId?: string) {
 }
 
 describe("actual town advance", () => {
+	it("does not stop for an old result, another person's result or a pending deadline passing", async () => {
+		const e = engine((view, round) => {
+			const musa = view.people.find((p) => p.id === "musa"),
+				ada = view.people.find((p) => p.id === "ada");
+			if (!musa || !ada) throw Error("Missing resident");
+			musa.commitments = [
+				{ label: "Old promise", at: 480, status: "kept" },
+				{ label: "Pending promise", at: 490, status: "pending" },
+			];
+			ada.commitments = [
+				{
+					label: "Other promise",
+					at: 490,
+					status: round >= 2 ? "broken" : "pending",
+				},
+			];
+			if (round >= 1) story(view, "other-person", "ada");
+		});
+		expect(
+			await advanceTown(
+				e.py,
+				e.port,
+				request({ until: "person-story", actorId: "musa", maxRounds: 16 }),
+			),
+		).toEqual({ requestId: 1, reason: "horizon", rounds: 16 });
+	});
+	it("stops at the actual invitation missed status, not its earlier accepted status", async () => {
+		const e = engine((view, round) => {
+			const musa = view.people.find((p) => p.id === "musa");
+			if (!musa) throw Error("Missing Musa");
+			musa.invitations = [
+				{
+					eventId: "class-1",
+					title: "Class",
+					startsAt: 500,
+					status: round >= 4 ? "missed" : "accepted",
+				},
+			];
+		});
+		expect(
+			await advanceTown(
+				e.py,
+				e.port,
+				request({ until: "person-story", actorId: "musa" }),
+			),
+		).toEqual({ requestId: 1, reason: "person-story", rounds: 4 });
+	});
+	it("stops for the followed person's actual promise result before an unrelated story", async () => {
+		const e = engine((view, round) => {
+			const musa = view.people.find((p) => p.id === "musa");
+			if (!musa) throw Error("Missing Musa");
+			musa.commitments = [
+				{
+					label: "Harvest food for Sam",
+					at: 1200,
+					status: round >= 3 ? "kept" : "pending",
+				},
+			];
+			if (round >= 1) story(view, "other", "ada");
+		});
+		expect(
+			await advanceTown(
+				e.py,
+				e.port,
+				request({ until: "person-story", actorId: "musa" }),
+			),
+		).toEqual({ requestId: 1, reason: "person-story", rounds: 3 });
+	});
 	it("stops at the first new story, before the next yield chunk", async () => {
 		const e = engine((view, round) => {
 			story(view, "old");

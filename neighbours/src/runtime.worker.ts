@@ -75,15 +75,12 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 		return;
 	}
 	let advanceCancelled: (() => boolean) | undefined;
+	let advanceValidationError: unknown;
 	if (event.data.type === "advance") {
 		try {
 			advanceCancelled = advances.begin(event.data);
 		} catch (error) {
-			send({
-				type: "error",
-				message: error instanceof Error ? error.message : String(error),
-			});
-			return;
+			advanceValidationError = error;
 		}
 	}
 	const comparison =
@@ -91,6 +88,8 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 	if (comparison) comparisons.add(comparison);
 	queue = queue
 		.then(async () => {
+			// Rejections occupy the same FIFO position as valid state commands.
+			if (advanceValidationError) throw advanceValidationError;
 			const q = event.data;
 			const start = performance.now();
 			switch (q.type) {
@@ -185,7 +184,8 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			}
 		})
 		.catch((error) => {
-			if (event.data.type === "advance") advances.finish(event.data.requestId);
+			if (event.data.type === "advance" && advanceCancelled)
+				advances.finish(event.data.requestId);
 			if (comparison) comparisons.delete(comparison);
 			send({
 				type: "error",

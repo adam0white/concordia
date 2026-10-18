@@ -82,3 +82,24 @@ python neighbours/scripts/check-firefox-nightly.py \
 ```
 
 The verified run used Nightly 160.0a1, geckodriver 0.37.1 and Selenium 4.51.0. The script creates a temporary profile and downloads no tools. Add `--checkpoint /path/to/synthetic-save.json` only for an authorized test fixture. `--local-iframe` is restricted to localhost; it checks narrow layout/keyboard behavior and does not establish phone or touch support. Native macOS headless Firefox can clamp narrow windows to 500px. The live deployment was also checked at native 844×390.
+
+
+## Received-plan controls and recordings
+
+Use a clean committed source before recording. Keep sources unchanged throughout measurements. Write to a temporary directory first; validate and publish completed reports together. Do not repair source hashes in an old report. Native provider recordings require an authenticated Claude CLI; replay makes no model call.
+
+From `neighbours/` with the pinned dependencies installed:
+
+```sh
+node scripts/probe-received-routes.ts /tmp/received-routes.json
+node scripts/probe-bench-choice.ts --output /tmp/bench-choices.json --summary-output /tmp/bench-choices-summary.json --checkpoint-directory /tmp/bench-checkpoints --require-clean
+```
+
+From the repository root with the isolated native requirements installed:
+
+```sh
+python neighbours/scripts/run-bench-director.py --node node --model opus --output /tmp/bench-director.json
+python neighbours/scripts/run-bench-director.py --replay /tmp/bench-director.json
+```
+
+The bench producer freezes seeds42/73/101 before its three actual calls and retains failed/rejected proposals. It does not apply proposals or deliver resident observations. Keep those steps separate from recipient decisions, consent and physical work. The raw bench study stays downloadable; its11.8KB UI projection must match the full report and its byte SHA-256. `node scripts/check-evidence.mjs` checks published evidence. See [the evidence receipt](visitor-2026-10-18-received-plans.md) for negative outcomes and source identity.

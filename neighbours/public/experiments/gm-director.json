@@ -1,6 +1,6 @@
 {
   "schema": "native-concordia-gm@1",
-  "recordedAt": "2026-10-16T20:30:10.953423+00:00",
+  "recordedAt": "2026-10-18T05:10:59.109531+00:00",
   "runtime": "Native upstream Concordia EventResolution + MakeObservation + real Claude CLI",
   "upstreamSha": "6fbfbc58f324aa74f78568c488713210889a801e",
   "runtimeSources": {
@@ -52,6 +52,7 @@
       "concordia/components/game_master/terminate.py": "d7624a24fa69b5981e1375bd0e598f3632ef9d3739f5a7358faadd0b6abb958f",
       "concordia/components/game_master/world_state.py": "77dc193ff8c68d9630316002705b4026f728ebe03118736849fe792fb4380e87",
       "concordia/contrib/neighbours/__init__.py": "813a01c5580d565b8177bc23fe5e1785771623ee64379373aa61620ae56394b9",
+      "concordia/contrib/neighbours/bench_director.py": "ae24bedfc761562d5ebbb185ebe6605397e5721b15de2e0bfa8e8e9cc9946fed",
       "concordia/contrib/neighbours/bridge.py": "401caee0369f28dae0b7a8a28fc5937741121a77f440e4b2771c84fbf7e425b6",
       "concordia/contrib/neighbours/engine.py": "f0e15e8ae4fbec975c16387cc3a798bfc7602799b5a23cae7db51d7c827220d1",
       "concordia/contrib/neighbours/gm_director.py": "a1f0015caa3ea81a8e7cb1adb010560fb6da096a287436af586e4c8f7e1c2dd1",
@@ -105,38 +106,41 @@
       "neighbours/scripts/capture-weekly.ts": "d27a00aef57fb5af30c8c5a182014ca917599113e52e97d70467cdb917e48545",
       "neighbours/scripts/run-gm-director.py": "145786f7d9f66c3995103c010ef2f2cc16b036c981251f382ceb10b72b5c494a",
       "neighbours/src/bridge-port.ts": "efaa97812f956bc4792c7a460c81aac0c1874069e496e55386a2088f98633dc3",
-      "neighbours/src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
+      "neighbours/src/contracts.ts": "d17cc57dd564a3cb3c1339d51b6e8bdadc65fb94035140225330aa1bc9e5d1f3",
       "neighbours/src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
-      "neighbours/src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
+      "neighbours/src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
+      "neighbours/src/core/bench-opportunity.ts": "df54f6bd5fe9f1085dd6dd3f8ff587c3a48ad28280ae95bf847a419c05d58cb4",
+      "neighbours/src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
       "neighbours/src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
       "neighbours/src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
       "neighbours/src/core/evening-news.ts": "42f0b294261c62109f4f9979f888aabb752e24b1b49c0a67a89fc4771396f34d",
       "neighbours/src/core/evenings.ts": "c854d64c928f6265f26040d2131b19b618a8e218e22dfd86072407f05461df9b",
-      "neighbours/src/core/handcart-state.ts": "d39a81eaa68683a6f51bdc44d36cf962760f79ae6981f0f306cf43803b42cf85",
-      "neighbours/src/core/handcart.ts": "5a58af5f25d6c79589e23f202ad316d6fa78be9e35c51edd8ac359d76e220f38",
+      "neighbours/src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
+      "neighbours/src/core/handcart.ts": "bd72737394d1756d8eff54813496adc20add078d9afc5c1ffca641c1842eb945",
       "neighbours/src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
+      "neighbours/src/core/hf-version.ts": "7acaa590e9a83b385ec1913f99e7be35a22b019a17eeaa509046902c977fafb9",
       "neighbours/src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
       "neighbours/src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
       "neighbours/src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
       "neighbours/src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
       "neighbours/src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
       "neighbours/src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-      "neighbours/src/core/restore.ts": "d676ca6fd81b92a7573cb74b7f089989f49dc13217793f88cc384126a5fe9fc0",
-      "neighbours/src/core/runtime.ts": "2fe5adf0fad1d4565c2c4425a082f7d7ca151ec2e7b13bbdf1c867f6fed13197",
-      "neighbours/src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
+      "neighbours/src/core/restore.ts": "4806a03f5661fe20210a1dd48f8493d0b6fce6dd19be915bee68a69d3ebd1044",
+      "neighbours/src/core/runtime.ts": "ae3795858710301c8813f30c68d5797e09fb9a22049b8fe678b71fae5d9eccdd",
+      "neighbours/src/core/scenario.ts": "0a5482498e94f13875af8821cac4d3bba80e2864be5aa273a61bde1f935ed999",
       "neighbours/src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
       "neighbours/src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
-      "neighbours/src/core/stories.ts": "9d289868555b16c65d07b60ada1d1048672e295b2cac804c3688fe113d5a9fa3",
+      "neighbours/src/core/stories.ts": "5ec5e6fb1380b76857ab057f332ee63e5fc4fd4b9b88c057f17d6c0d330a3191",
       "neighbours/src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
       "neighbours/src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-      "neighbours/src/core/validation.ts": "f2ba6af80ea227087630d28a6f98506a85c0353753dff633e1d1fdc4e6d90425",
+      "neighbours/src/core/validation.ts": "ba458f0bb39c56be20279b8fc80e085cb85b981a5e0ac03f23743e77a3f18b4c",
       "neighbours/src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
     },
     "hf": {
       "name": "@adam0white/human-framework",
-      "version": "2.2.1"
+      "version": "2.3.0"
     },
-    "sha256": "ddcc50f81c9de93971807ea8564196c19e7c865632efa01e622500c531d2d781"
+    "sha256": "70a17c6c4cfb3e018b3af59d3dae3b6e971c2323a26d04a983b8fa2fcb2a4e42"
   },
   "runtimes": {
     "python": "3.12.13",
@@ -149,15 +153,15 @@
     "termcolor": "3.3.0",
     "typing_extensions": "4.16.0"
   },
-  "sourceFingerprint": "ddcc50f81c9de93971807ea8564196c19e7c865632efa01e622500c531d2d781",
-  "gitHeadAtRun": "ca5879bb063bc01bd0465d32e6e05aaf41661eb5",
+  "sourceFingerprint": "70a17c6c4cfb3e018b3af59d3dae3b6e971c2323a26d04a983b8fa2fcb2a4e42",
+  "gitHeadAtRun": "77385505c358db8e450db64c3627f8d401deb756",
   "sourceWorkingTreeDirty": false,
   "checkpoint": {
     "schema": "neighbours/concordia@1",
     "rounds": 2440,
     "runtime": {
       "schema": "neighbours-1",
-      "hf": "2.2.1",
+      "hf": "2.3.0",
       "seed": 42,
       "now": 37080,
       "round": 2440,
@@ -4571,7 +4575,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "ada",
             "name": "Ada",
             "now": 37080,
@@ -12326,7 +12330,7 @@
                 "utility": -0.0419
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -12454,7 +12458,7 @@
               "support": "sound"
             },
             "result": "Ada kept the hall closed after seeing wet timber and sound supports.",
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "methodTerms": [
               {
                 "source": "method:hall-section-inspection:lea",
@@ -12492,7 +12496,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "musa",
             "name": "Musa",
             "now": 37080,
@@ -19946,7 +19950,7 @@
                 "utility": -0.06
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -20038,7 +20042,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "elin",
             "name": "Elin",
             "now": 37080,
@@ -27451,7 +27455,7 @@
                 "utility": -0.0356
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -27527,7 +27531,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "sam",
             "name": "Sam",
             "now": 37080,
@@ -35069,7 +35073,7 @@
                 "utility": -0.0322
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -35144,7 +35148,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "jo",
             "name": "Jo",
             "now": 37080,
@@ -42722,7 +42726,7 @@
                 "utility": -0.0343
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -42824,7 +42828,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "lea",
             "name": "Lea",
             "now": 37080,
@@ -50608,7 +50612,7 @@
                 "utility": -0.0261
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -50709,7 +50713,7 @@
               "support": "sound"
             },
             "result": "Lea checked dry, sound timber and opened the hall.",
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "methodTerms": [
               {
                 "source": "method:hall-section-inspection:prior-trade-course",
@@ -50741,7 +50745,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "ravi",
             "name": "Ravi",
             "now": 37080,
@@ -58352,7 +58356,7 @@
                 "utility": -0.0297
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -58463,7 +58467,7 @@
               "support": "sound"
             },
             "result": "Ravi kept the hall closed after seeing wet timber and sound supports.",
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "methodTerms": [
               {
                 "source": "method:hall-section-inspection:lea",
@@ -58496,7 +58500,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.2.0",
+            "engine": "2.3.0",
             "id": "noor",
             "name": "Noor",
             "now": 37080,
@@ -65965,7 +65969,7 @@
                 "utility": -0.112
               }
             ],
-            "source": "HF 2.2.1",
+            "source": "HF 2.3.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -66790,13 +66794,13 @@
       }
     }
   },
-  "checkpointSha256": "ce2e801349196f276ce0002b52b2aa62bb369b4eb235fe640ca80e3c33354fa2",
+  "checkpointSha256": "ceb01868c77a790021995df26298517adfc58687f15af4ea9147678e800e3ecd",
   "modelCalls": 1,
   "responseTape": [
     {
-      "promptSha256": "eb951a011a5554dd294545b979e01d6304da9a50c6272654a2945f75db822f0a",
+      "promptSha256": "a6535e2c3bf8d015e01a257980af54fced57a28fca93d33ed39229ac9fdcd578",
       "status": "completed",
-      "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
+      "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":240}",
       "modelIds": [
         "claude-opus-5-5"
       ],
@@ -66813,25 +66817,25 @@
     "schema": "neighbours-gm-proposal@1",
     "kind": "inspection-request",
     "target": "hall-annex",
-    "cue": "wet-sound",
+    "cue": "dry-sound",
     "windowMinutes": 240
   },
-  "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
+  "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":240}",
   "rejection": null,
   "result": {
-    "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
+    "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":240}",
     "proposal": {
       "schema": "neighbours-gm-proposal@1",
       "kind": "inspection-request",
       "target": "hall-annex",
-      "cue": "wet-sound",
+      "cue": "dry-sound",
       "windowMinutes": 240
     },
     "rejection": null,
     "resolution": "Event: Host proposal validated\n",
-    "hostInbox": "{\"cue\": \"wet-sound\", \"kind\": \"inspection-request\", \"schema\": \"neighbours-gm-proposal@1\", \"target\": \"hall-annex\", \"windowMinutes\": 240}\n\n\n",
+    "hostInbox": "{\"cue\": \"dry-sound\", \"kind\": \"inspection-request\", \"schema\": \"neighbours-gm-proposal@1\", \"target\": \"hall-annex\", \"windowMinutes\": 240}\n\n\n",
     "emptyInbox": "",
-    "checkpointSha256": "ce2e801349196f276ce0002b52b2aa62bb369b4eb235fe640ca80e3c33354fa2",
+    "checkpointSha256": "ceb01868c77a790021995df26298517adfc58687f15af4ea9147678e800e3ecd",
     "townContext": {
       "time": {
         "minute": 37080,

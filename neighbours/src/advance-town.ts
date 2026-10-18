@@ -6,6 +6,7 @@ import type {
 	TownView,
 } from "./contracts.ts";
 import { hasHallChoice } from "./hall-choice.ts";
+import { personOutcome } from "./person-outcome.ts";
 import { type PythonSession, restoreCheckpoint } from "./python-session.ts";
 
 export function validateAdvanceRequest(request: AdvanceRequest): void {
@@ -71,14 +72,20 @@ export async function advanceTown(
 	});
 	if (cancelled()) return result("cancelled", 0);
 	const startingStories = new Set(start.stories.map((story) => story.id));
-	const reached = (view: TownView): boolean =>
-		request.until === "hall-choice"
-			? hasHallChoice(view)
-			: view.stories.some(
-					(story) =>
-						!startingStories.has(story.id) &&
-						(request.until === "story" || story.actorId === request.actorId),
-				);
+	const reached = (view: TownView): boolean => {
+		if (request.until === "hall-choice") return hasHallChoice(view);
+		if (
+			request.until === "person-story" &&
+			request.actorId &&
+			personOutcome(start, view, request.actorId)
+		)
+			return true;
+		return view.stories.some(
+			(story) =>
+				!startingStories.has(story.id) &&
+				(request.until === "story" || story.actorId === request.actorId),
+		);
+	};
 	if (reached(start)) return result(request.until, 0);
 	const checkpoint: unknown = JSON.parse(
 		String(await py.runPythonAsync("json.dumps(town_engine.save())")),

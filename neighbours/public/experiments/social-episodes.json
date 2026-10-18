@@ -12,36 +12,39 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "976733606570e72f1d18a5a10935166e3283923dccc9fd8533511488947de83a",
+  "sourceFingerprint": "d6a95304ef8c1a8d237ecc1838ff812d5a29d09ce3002fba32971cd19e73139f",
   "sources": {
-    "package-lock.json": "25c21f0838b9be3f369adfa34e5fc85336791dd4538e7feaa82eb697db9be044",
-    "package.json": "3bad737875076b7cf28bb308273f25ff0a7b8131d214d55b552b6e24b021c1b1",
+    "package-lock.json": "644f8625ea8ac719350270d39eb61b224f938e16b996d621c5f350274bd001bb",
+    "package.json": "2047cc6ea5a19a54d916fa272e31ed21a977b0b34a81406becaa01049a516673",
     "scripts/profile-evenings.ts": "fd7865e8fe2bd114f0f77890c168b8fd72762852ba5895dca7846c1b231bd11c",
-    "src/contracts.ts": "5e6fc85c07520cea91190cafd3b3ade96e36dffb42c49bcfa9ba628a1b91a28f",
+    "src/contracts.ts": "d17cc57dd564a3cb3c1339d51b6e8bdadc65fb94035140225330aa1bc9e5d1f3",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
-    "src/core/assistance.ts": "3bb248f90801eb6cc073b7ad2993d16fe784048b7336fb52ddeda2747b54e1b7",
+    "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
+    "src/core/bench-opportunity.ts": "df54f6bd5fe9f1085dd6dd3f8ff587c3a48ad28280ae95bf847a419c05d58cb4",
+    "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
     "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
     "src/core/evening-news.ts": "42f0b294261c62109f4f9979f888aabb752e24b1b49c0a67a89fc4771396f34d",
     "src/core/evenings.ts": "c854d64c928f6265f26040d2131b19b618a8e218e22dfd86072407f05461df9b",
-    "src/core/handcart-state.ts": "d39a81eaa68683a6f51bdc44d36cf962760f79ae6981f0f306cf43803b42cf85",
-    "src/core/handcart.ts": "5a58af5f25d6c79589e23f202ad316d6fa78be9e35c51edd8ac359d76e220f38",
+    "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
+    "src/core/handcart.ts": "bd72737394d1756d8eff54813496adc20add078d9afc5c1ffca641c1842eb945",
     "src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
+    "src/core/hf-version.ts": "7acaa590e9a83b385ec1913f99e7be35a22b019a17eeaa509046902c977fafb9",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
     "src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/restore.ts": "d676ca6fd81b92a7573cb74b7f089989f49dc13217793f88cc384126a5fe9fc0",
-    "src/core/runtime.ts": "2fe5adf0fad1d4565c2c4425a082f7d7ca151ec2e7b13bbdf1c867f6fed13197",
-    "src/core/scenario.ts": "98d3acb6adbe4e78769390f6088fbf4c04ce2a3bd61201b51acdfc84414151ad",
+    "src/core/restore.ts": "4806a03f5661fe20210a1dd48f8493d0b6fce6dd19be915bee68a69d3ebd1044",
+    "src/core/runtime.ts": "ae3795858710301c8813f30c68d5797e09fb9a22049b8fe678b71fae5d9eccdd",
+    "src/core/scenario.ts": "0a5482498e94f13875af8821cac4d3bba80e2864be5aa273a61bde1f935ed999",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
     "src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
-    "src/core/stories.ts": "9d289868555b16c65d07b60ada1d1048672e295b2cac804c3688fe113d5a9fa3",
+    "src/core/stories.ts": "5ec5e6fb1380b76857ab057f332ee63e5fc4fd4b9b88c057f17d6c0d330a3191",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
     "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-    "src/core/validation.ts": "f2ba6af80ea227087630d28a6f98506a85c0353753dff633e1d1fdc4e6d90425",
+    "src/core/validation.ts": "ba458f0bb39c56be20279b8fc80e085cb85b981a5e0ac03f23743e77a3f18b4c",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -58,7 +61,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.2.1",
+      "hf": "2.3.0",
       "hallSafe": true,
       "activatedAt": 2640,
       "recurringCycles": 3,
@@ -1834,38 +1837,38 @@
       },
       "checkpoints": {
         "notice": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-42-first-notice.json",
           "at": 3705,
           "round": 215,
-          "sha256": "b5f9b097f5d8a306ff730266e76cd90b25b6b3d9398d7e096a85984fde168821",
-          "milestone": "notice"
+          "sha256": "58a8901c4b9bf61c7d09560213f7195413ff426bd9d9fa13af19d61617bcc875"
         },
         "prepared": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-42-first-prepared.json",
           "at": 3735,
           "round": 217,
-          "sha256": "ebb3f754d697b9e63f7a2bd8afc13dda656932b8cef269940e5c11a11a373f67",
-          "milestone": "prepared"
+          "sha256": "06276c4242b6e06e5134942aee3498d9cca662dc4b719822a8c5b63a97a95b58"
         },
         "accepted": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-42-first-accepted.json",
           "at": 3975,
           "round": 233,
-          "sha256": "e56bde29aabb45828d0492f9965a2081c1e2a67185aac9fa79134cd6be28c6a1",
-          "milestone": "accepted"
+          "sha256": "b2b57eeaadc45c0d18173bef0f5bb27763ba345152f36a02447bf2577d5f0099"
         },
         "cartProgress": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-42-first-cartProgress.json",
           "at": 5010,
           "round": 302,
-          "sha256": "6991642b5ca5f26e84ed9e117a8562f25c26f4892aab3d8590a8463120bffae9",
-          "milestone": "cartProgress"
+          "sha256": "247d9a2c7055982b0db1608218287885eeaa7c9f2f8ab7eee3a01100649190be"
         },
         "cartReturned": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-42-first-cartReturned.json",
           "at": 8205,
           "round": 515,
-          "sha256": "c72c2b57c5da4e28dfcf80305144664ddb3d18be009b1cd5a2c9a0dc641a070a",
-          "milestone": "cartReturned"
+          "sha256": "2476732ea5bef0ff84d2b35a4ff078f9a3e757f3bfcb16414760337117d5ccce"
         }
       },
-      "finalCheckpointSha256": "b8d33ecde197fa695b846900169cb56e59c545ce4cbcfe53440a7e4e66ffae10",
-      "wallSeconds": 70.987452916
+      "finalCheckpointSha256": "6e174a03cbdc862f47cf8fec53a9f53e901fa4cb5a5a898dd08ec245edda415d",
+      "wallSeconds": 89.124672292
     },
     {
       "seed": 73,
@@ -1873,7 +1876,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.2.1",
+      "hf": "2.3.0",
       "hallSafe": true,
       "activatedAt": 5685,
       "recurringCycles": 3,
@@ -3722,38 +3725,38 @@
       },
       "checkpoints": {
         "notice": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-73-first-notice.json",
           "at": 5700,
           "round": 348,
-          "sha256": "25255d98e3d7743cb1b51eae37dac30312cc4a7d236cbaa4369c3ca16a5dd9a9",
-          "milestone": "notice"
+          "sha256": "9539ca362de4328f753f30f2616a92705c4e74c2ebb9018d00b686f800d4f9b7"
         },
         "prepared": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-73-first-prepared.json",
           "at": 5835,
           "round": 357,
-          "sha256": "3224b5a93acf4254479d2db585b30cb1534eb0400dcb1441ce5c366a83b265e6",
-          "milestone": "prepared"
+          "sha256": "c6ad289ba5835fd35c6931fb62c0451c74362224d3f8eeb88897d990f3d7c0b8"
         },
         "accepted": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-73-first-accepted.json",
           "at": 6435,
           "round": 397,
-          "sha256": "2865aadf6fc2ecf2aa97936fcb88a0a483b0f551d07996cace88cd0de7a5ded5",
-          "milestone": "accepted"
+          "sha256": "1a1578e3e879170f75fb39238aefb93513328ff6c01d69587bf6978eb0387437"
         },
         "cartProgress": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-73-first-cartProgress.json",
           "at": 7890,
           "round": 494,
-          "sha256": "ea7ad21238625a548d706eb66ae10c2975ce7c6da9859f51cf5030f4a4d245ea",
-          "milestone": "cartProgress"
+          "sha256": "2fd73dcce0fb1ba4faa02a1aed6b88e5587f89d09ed4634986a049c2db6b700c"
         },
         "cartReturned": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-73-first-cartReturned.json",
           "at": 15195,
           "round": 981,
-          "sha256": "6c3480d1c3892b704fb43e7fa4b11e2ee16456bc3b8047c2226d2dcb814fa168",
-          "milestone": "cartReturned"
+          "sha256": "eed62708441cb58ae9357819204c5c4369be5e243dabbcec6b1754da656b3cd7"
         }
       },
-      "finalCheckpointSha256": "4f9d5d276089f96f273e1757719a220c9fa7625844739281addd2add913b4fe7",
-      "wallSeconds": 120.97949858400001
+      "finalCheckpointSha256": "7d8476e8e424ff022943f5015f83f2628bc21333806739728c4b5b7504a66b04",
+      "wallSeconds": 95.28211508300001
     },
     {
       "seed": 9,
@@ -3761,7 +3764,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.2.1",
+      "hf": "2.3.0",
       "hallSafe": true,
       "activatedAt": 8040,
       "recurringCycles": 2,
@@ -5553,38 +5556,38 @@
       },
       "checkpoints": {
         "notice": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-9-first-notice.json",
           "at": 8355,
           "round": 525,
-          "sha256": "7dc4c96aa0dd477507495a4e9eaaa56fb2f7e31d151c7dcb36b5e62622ecbcb2",
-          "milestone": "notice"
+          "sha256": "6c0921b1c74909a9e1d79af0161006ac9389984822934969c51463acbaed8ecd"
         },
         "prepared": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-9-first-prepared.json",
           "at": 8400,
           "round": 528,
-          "sha256": "49ecd5dd095d04a31661cfedf22445d24789fea9807d0883d613710c56a088d4",
-          "milestone": "prepared"
+          "sha256": "c68c970ba382f7391398395fa2ba4e4bf487700657fa6faf12b4ce10b9279532"
         },
         "accepted": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-9-first-accepted.json",
           "at": 8475,
           "round": 533,
-          "sha256": "701a16250f161e4875db32071b96bd1e2e76da6b2240ae606767e446c982fdee",
-          "milestone": "accepted"
+          "sha256": "a02d7442f81fcab3ea04f62bda4300a2ceff1ccdd17cffb6893a65056472edd8"
         },
         "cartProgress": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-9-first-cartProgress.json",
           "at": 10740,
           "round": 684,
-          "sha256": "bd9bc9739193e34c4c110b70c3a4b3fc9fe2c7dc6fbfc8fb2a26191f85f6e106",
-          "milestone": "cartProgress"
+          "sha256": "4b5ffca43bc723edc39e4b152fef663a7c75893f63ec5ea1d3cfb5d44d65084c"
         },
         "cartReturned": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-9-first-cartReturned.json",
           "at": 15435,
           "round": 997,
-          "sha256": "cc8440a62ee28deaeb7b004ae018032b55c761d36bd5c95b189efca56489dcb9",
-          "milestone": "cartReturned"
+          "sha256": "1a3cc97c26ddcb32aad3361b28b2617e612a9fbf7ed27818012d415571e95738"
         }
       },
-      "finalCheckpointSha256": "fef0c48bae273314e7d6a0e4d9255c135c93e51e7e6258881b6dc6a60dfd85ec",
-      "wallSeconds": 85.85868674999999
+      "finalCheckpointSha256": "05299618fa7f82a60ce9719da06b489c701e361a23d4cc74b487e605cc2b955a",
+      "wallSeconds": 85.51933691699998
     },
     {
       "seed": 101,
@@ -5592,7 +5595,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.2.1",
+      "hf": "2.3.0",
       "hallSafe": true,
       "activatedAt": 2595,
       "recurringCycles": 3,
@@ -7298,39 +7301,38 @@
       },
       "checkpoints": {
         "notice": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-101-first-notice.json",
           "at": 4275,
           "round": 253,
-          "sha256": "5bb8e70ba6a4eea3a6cac432b779519e63c9b5b1d8651ed652a2d4e798b2a6f0",
-          "milestone": "notice"
+          "sha256": "5a2b477152eccc8ab728bb822a86943638705485a058d87a2c60a3e228d5119f"
         },
         "prepared": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-101-first-prepared.json",
           "at": 4395,
           "round": 261,
-          "sha256": "550e8b6f3a6250f31a1926a0a2eecb25a8e199f3d9289b5840cad336cf582339",
-          "milestone": "prepared"
+          "sha256": "62482d2fcb250c41bf99551552c8c24e9315d019bc311f2268388e0b5f782027"
         },
         "cartProgress": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-101-first-cartProgress.json",
           "at": 5040,
           "round": 304,
-          "sha256": "eac9e8e802587bb6d68c3d8a8a1ea33a562ee7b62d3a61ce379b9bec122b1e49",
-          "milestone": "cartProgress"
+          "sha256": "f950bfbcf3be443a392c76ec4f4b997bd75fd3c4de33c72374ec15f8e748ea5c"
         },
         "accepted": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-101-first-accepted.json",
           "at": 5385,
           "round": 327,
-          "sha256": "15fea402253cfa27e5939d6e8e39bfb11d974bb3eade130b86277cc390e72d2d",
-          "milestone": "accepted"
+          "sha256": "9c936737fc799c62da13311f8013c3d0e756e5afaacfd01ff0377d00b9916af6"
         },
         "cartReturned": {
+          "path": "/tmp/neighbours-39-final/milestones/seed-101-first-cartReturned.json",
           "at": 8235,
           "round": 517,
-          "sha256": "a1c4f3bb03351003145de38ea99ad636deffcbb151729d6cea58a3b38e5197c5",
-          "milestone": "cartReturned"
+          "sha256": "851dbe0cedfd477251beaa6eb788cf0681641a02c37e19cbabf2fb022e2add6c"
         }
       },
-      "finalCheckpointSha256": "83c1b020b28f1cfc4596e7270dc0b2f71b0396c2087bdbea226f7de4aeb16f6a",
-      "wallSeconds": 90.81259487500002
+      "finalCheckpointSha256": "68eb57020dfb6e6946f3f917ab144cd1e411384d9aad97f619aefc3e1422701a",
+      "wallSeconds": 75.39817200000002
     }
-  ],
-  "recordedAt": "2026-10-16T20:29:39.960026+00:00"
+  ]
 }
