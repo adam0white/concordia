@@ -1,9 +1,9 @@
 {
   "schema": "neighbours/bench-choice-probe@1",
-  "recordedAt": "2026-10-18T12:10:41.973Z",
+  "recordedAt": "2026-10-18T13:29:41.513Z",
   "runtime": "node-typescript-host-released-hf",
   "hf": "2.6.0",
-  "node": "v26.12.0",
+  "node": "v26.11.1",
   "arguments": {
     "seeds": [
       42,
@@ -21,8 +21,8 @@
     "roundsPerPhysicalBranch": 192
   },
   "modelCalls": 0,
-  "sourceCommit": "7d2e21ef9855ea30ecc97b21979ef77dde1175f2",
-  "sourceWorktreeClean": false,
+  "sourceCommit": "6e517d9e8792165c968288c4c463cb9182f460b5",
+  "sourceWorktreeClean": true,
   "sourcesStableDuringRun": true,
   "sourceCommitUnchanged": true,
   "sourceFingerprint": "d375aadd3a197f0efd55bc3acb3933ff49080d49f407590e71514892e3d5b66f",
