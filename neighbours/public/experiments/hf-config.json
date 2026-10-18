@@ -3,12 +3,12 @@
   "runtime": "typescript-host-released-hf",
   "hf": "2.3.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "956c7a8e6d9149ee8d939a2bcfa1250566eb92de29a0b0cd8d0f40b0e76108a2",
+  "sourceFingerprint": "28acc94b6d2490bd6060cd6a67cc5fb41d2da2133d40b982410e4ae4d7d6b1ee",
   "sources": {
     "package-lock.json": "644f8625ea8ac719350270d39eb61b224f938e16b996d621c5f350274bd001bb",
     "package.json": "2047cc6ea5a19a54d916fa272e31ed21a977b0b34a81406becaa01049a516673",
     "scripts/probe-hf-config.ts": "75941e08a5b85cd4c89713a82f4933d2762b290311b8a2c70ba41c56c4babaa3",
-    "src/contracts.ts": "d17cc57dd564a3cb3c1339d51b6e8bdadc65fb94035140225330aa1bc9e5d1f3",
+    "src/contracts.ts": "9f5f24709cdf7f76ef15524b38f8a0820ffd1dfc0d552feb4569a00e75e6bf4c",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
     "src/core/bench-opportunity.ts": "df54f6bd5fe9f1085dd6dd3f8ff587c3a48ad28280ae95bf847a419c05d58cb4",
@@ -23,19 +23,22 @@
     "src/core/hf-version.ts": "7acaa590e9a83b385ec1913f99e7be35a22b019a17eeaa509046902c977fafb9",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
+    "src/core/journal.ts": "353a52bb76e20d0124487927eb0462f3a463058e9e6f3d3f3af638ce985f3f10",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
-    "src/core/offers.ts": "7e2d64799a9f05bf820873fcae86077cfa754eb4cb806cc117c18145f73082ea",
+    "src/core/offers.ts": "238d8c6f87578389cf12616543d06c8fe49aad8f95cafc4bf321c6308d66b9ce",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/restore.ts": "4806a03f5661fe20210a1dd48f8493d0b6fce6dd19be915bee68a69d3ebd1044",
-    "src/core/runtime.ts": "ae3795858710301c8813f30c68d5797e09fb9a22049b8fe678b71fae5d9eccdd",
+    "src/core/player-events.ts": "4659f09d7f4e6fb31a1dc90e1d5cc4441f87dfdcba2537872d468577a7f4a062",
+    "src/core/player.ts": "6ecf76894206129af7115dfc63876bfb2a180ca00d58798a3299122d5b8c3d0a",
+    "src/core/restore.ts": "21d55dfe4f93f1805946b5e42aec0a81d941e3b9da47c2c13b3e1bfeb9ca03b5",
+    "src/core/runtime.ts": "6ebc9aa2fc5d48bc8770a66a1a1cb96cdc092576146b7bb3ecc1c5162dc4d086",
     "src/core/scenario.ts": "0a5482498e94f13875af8821cac4d3bba80e2864be5aa273a61bde1f935ed999",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "dd114fd179c7b858cb7c8c5e693ae5680678dbfe7bacd00821482def136fd2a7",
+    "src/core/state.ts": "5773c4729e744a08ad4e664f8dfea783197515ecff6560ef90e60c54c293dcd7",
     "src/core/stories.ts": "5ec5e6fb1380b76857ab057f332ee63e5fc4fd4b9b88c057f17d6c0d330a3191",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
     "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-    "src/core/validation.ts": "ba458f0bb39c56be20279b8fc80e085cb85b981a5e0ac03f23743e77a3f18b4c",
+    "src/core/validation.ts": "5b16f7d67a8e4160162f737a9595d224bab88d57dead1d50ae3ced9c4124375d",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -50,7 +53,7 @@
       101
     ]
   },
-  "wallSeconds": 11.122373708000001,
+  "wallSeconds": 11.453423166,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -62,7 +65,7 @@
   ],
   "arms": [
     {
-      "pid": 7795,
+      "pid": 55000,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -21249,7 +21252,7 @@
       ]
     },
     {
-      "pid": 8705,
+      "pid": 55016,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -42436,7 +42439,7 @@
       ]
     },
     {
-      "pid": 8733,
+      "pid": 55030,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
