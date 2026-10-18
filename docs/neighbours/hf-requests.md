@@ -38,3 +38,35 @@ is then recorded with `hfReported: false` and trust does not change.
 
 **Request.** A generic `noteVoicePromise(p, voiceId, {kept, at, action})` that updates trust and history from
 what the voice itself did, separately from the outcome of a suggestion.
+
+**Phase C update (2026-10-18).** The lead asks for this as an HF 2.8 API; it is not in 2.6.0, so the
+workaround stays and changes shape. A pledge made with a request that was deferred or modified is now
+`offered`: it binds the player only once that person's own next decision follows the request, and is
+`released` otherwise, with nothing reported to HF. Once it binds, the decision's resolution is the one
+`learnFromVoice` hears, so a broken pledge now lowers trust through HF whenever the person did take up the
+request; the journal then says so ("… will trust your word less"). A pledge whose binding decision HF resolved
+as anything other than assented or complied is still recorded with `hfReported: false`. `noteVoicePromise`
+would remove that remaining gap and the borrowed resolution.
+
+## 3. Travel time is free in choice (2026-10-18, Phase C)
+
+**Finding.** Sam walked home twice to drink water. The host offered drinking only at home, with effort 0. HF
+scored the home drink by `need:water` alone (for example 0.0159), the same as a drink where he stood, and gave the
+30–60 minute walk no cost. Residents walked home to drink 2,787 times in 8 days (208 people, seed 42).
+
+**Host fix.** Offering water only at home was the host bug. Away from home, the drink offer is now "Drink water
+here" at the current place, so the walk no longer happens ([phase-c-physics.md](phase-c-physics.md)).
+
+**Request.** An optional travel or setup cost on an offer that choice weighs against what the offer advertises,
+or a documented recipe for expressing it through `effort` or `duration`. Today a host has to remove the long
+route to stop people taking it for nothing.
+
+## 4. Residents rarely return to work they have done once (2026-10-18, Phase C)
+
+**Finding.** Hall repair is offered to residents thousands of times a day, but nearly everyone repairs once and
+does not come back to it. Repair starts for seed 42 were 16, 6, 1 and 1 on days 1–4. When a repair does not hold
+on damp timber, the remaining work therefore falls to the player. Neighbours takes this as given and does not
+work around it ([phase-c-physics.md](phase-c-physics.md)).
+
+**Not yet a request.** This may be intended HF behaviour (satiated competence and belonging after one long
+job). It is recorded so that a later HF review can decide whether shared unfinished work should keep some pull.
