@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { Intervention, TownComparison } from "../contracts";
+import type { Intervention, TownComparison, TownView } from "../contracts";
 import { comparisonOutcomes } from "./comparison-outcomes";
 
 const at = (minutes: number) =>
@@ -8,6 +8,11 @@ const numeric = (value: number) =>
 	Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
 const names: Record<string, string> = {
 	hallRepairs: "Hall repairs completed",
+	benchNoticesReceived: "Bench proposal received by Ravi",
+	benchReserved: "Agreed main-bench booking",
+	benchRequests: "Bench requests received by Ada",
+	cartSections: "Cart sections restored",
+	cartReturned: "Cart returned to Jo",
 	hallCapacity: "Hall places available",
 	inspectionRequests: "Annex requests sent",
 	annexOpened: "Annex opened",
@@ -30,6 +35,7 @@ const names: Record<string, string> = {
 };
 const interventions: Record<Intervention["kind"], string> = {
 	"lend-tools": "Add 3 shared tools",
+	"propose-bench-window": "Tell Ravi about a bench window",
 	"request-inspection": "Request an annex inspection",
 	"restore-bus": "Restore bus service",
 	"share-news": "Broadcast hall news",
@@ -41,6 +47,10 @@ const genericInterventions = [
 	"restore-bus",
 	"share-news",
 ] as const;
+export type ComparisonSetup = {
+	kind: "lend-tools" | "restore-bus" | "share-news";
+	rounds: 24 | 96 | 672;
+};
 export default function DayComparison({
 	report,
 	request,
@@ -51,7 +61,15 @@ export default function DayComparison({
 	selected,
 	onRun,
 	onCancel,
+	setup: controlledSetup,
+	onSetupChange,
+	stale = false,
+	town,
 }: {
+	setup?: ComparisonSetup;
+	onSetupChange?: (setup: ComparisonSetup) => void;
+	stale?: boolean;
+	town?: TownView;
 	report?: TownComparison;
 	request?: { label: string; rounds: number };
 	busy: boolean;
@@ -62,8 +80,27 @@ export default function DayComparison({
 	onRun: (intervention: Intervention, rounds: 24 | 96 | 672) => void;
 	onCancel?: () => void;
 }) {
-	const [kind, setKind] = useState<Intervention["kind"]>("lend-tools");
-	const [rounds, setRounds] = useState<24 | 96 | 672>(24);
+	const [localSetup, setLocalSetup] = useState<ComparisonSetup>({
+		kind: "lend-tools",
+		rounds: 24,
+	});
+	const { kind, rounds } = controlledSetup ?? localSetup;
+	const updateSetup = (next: ComparisonSetup) => {
+		setLocalSetup(next);
+		onSetupChange?.(next);
+	};
+	const unavailable = (id: ComparisonSetup["kind"]) => {
+		if (!town) return "";
+		if (town.controlsRemaining <= 0) return "No support credits remain.";
+		if (id === "lend-tools" && town.canLendTools === false)
+			return "Shared tools cannot be added at this checkpoint.";
+		if (id === "restore-bus" && town.canRestoreBus === false)
+			return "Bus service is already restored or unavailable at this checkpoint.";
+		if (id === "share-news" && town.canShareNews === false)
+			return "There is no new hall news to broadcast at this checkpoint.";
+		return "";
+	};
+	const blocked = unavailable(kind);
 	const disclosure = useRef<HTMLDetailsElement>(null);
 	useEffect(() => {
 		if ((busy || report || error) && disclosure.current)
@@ -90,6 +127,26 @@ export default function DayComparison({
 					report.baseline.stats[key] !== report.treatment.stats[key],
 			)
 		: [];
+	const resourcePriority = [
+		"dead",
+		"underfed",
+		"lowHealth",
+		"foodConsumed",
+		"hallRepairs",
+		"tools",
+	];
+	const changedKeys = keys
+		.filter(
+			(key) =>
+				report && report.baseline.stats[key] !== report.treatment.stats[key],
+		)
+		.sort((a, b) => {
+			const priority = (key: string) =>
+				resourcePriority.includes(key)
+					? resourcePriority.indexOf(key)
+					: resourcePriority.length;
+			return priority(a) - priority(b);
+		});
 	const baselinePerson = report?.baseline.known.find(
 		(person) => person.id === selected,
 	);
@@ -102,7 +159,7 @@ export default function DayComparison({
 			className="branch-controls"
 			onSubmit={(event) => {
 				event.preventDefault();
-				if (!busy && !disabled) onRun({ kind }, rounds);
+				if (!busy && !disabled && !blocked) onRun({ kind }, rounds);
 			}}
 		>
 			<label>
@@ -111,12 +168,16 @@ export default function DayComparison({
 					disabled={busy || disabled}
 					value={kind}
 					onChange={(event) =>
-						setKind(event.target.value as Intervention["kind"])
+						updateSetup({
+							kind: event.target.value as ComparisonSetup["kind"],
+							rounds,
+						})
 					}
 				>
 					{genericInterventions.map((id) => (
-						<option key={id} value={id}>
+						<option key={id} value={id} disabled={!!unavailable(id)}>
 							{interventions[id]}
+							{unavailable(id) ? " · unavailable" : ""}
 						</option>
 					))}
 				</select>
@@ -127,7 +188,10 @@ export default function DayComparison({
 					disabled={busy || disabled}
 					value={rounds}
 					onChange={(event) =>
-						setRounds(Number(event.target.value) as 24 | 96 | 672)
+						updateSetup({
+							kind,
+							rounds: Number(event.target.value) as 24 | 96 | 672,
+						})
 					}
 				>
 					<option value={24}>6 hours · 24 rounds</option>
@@ -135,13 +199,18 @@ export default function DayComparison({
 					<option value={672}>Seven days · 672 rounds</option>
 				</select>
 			</label>
-			<button type="submit" disabled={busy || disabled}>
+			{blocked && (
+				<p className="tiny" role="status">
+					{blocked}
+				</p>
+			)}
+			<button type="submit" disabled={busy || disabled || !!blocked}>
 				{busy ? "Comparing…" : "Compare from here"}
 			</button>
 		</form>
 	);
 	return (
-		<details ref={disclosure} className="comparison day-comparison">
+		<details ref={disclosure} open className="comparison day-comparison">
 			<summary>Compare futures · hypothetical branches</summary>
 			{(request || report) && (
 				<p>
@@ -152,6 +221,19 @@ export default function DayComparison({
 				</p>
 			)}
 			<p className="tiny muted">Hypothetical · Your town is unchanged</p>
+			{report && (
+				<p className="tiny comparison-checkpoint">
+					Checkpoint: {at(report.startAt)} → {at(report.endAt)} ·{" "}
+					{report.rounds} rounds (
+					{numeric((report.endAt - report.startAt) / 60)} hours)
+				</p>
+			)}
+			{report && stale && (
+				<p className="tiny comparison-stale" role="status">
+					Your town has changed since this checkpoint. This saved comparison
+					still describes its original starting state.
+				</p>
+			)}
 			{!busy && !report && setup}
 			{busy && (
 				<p className="tiny" role="status">
@@ -164,13 +246,55 @@ export default function DayComparison({
 					Cancel comparison
 				</button>
 			)}
-			{error && (
-				<p className="error" role="alert">
-					{error}
-				</p>
-			)}
+			{error &&
+				(/Traceback|BridgeError|PythonError|\n/.test(error) ? (
+					<div>
+						<p className="error" role="alert">
+							Comparison could not finish. Your town is unchanged.
+						</p>
+						<details>
+							<summary>Technical details</summary>
+							<pre>{error}</pre>
+						</details>
+					</div>
+				) : (
+					<p className="error" role="alert">
+						{error}
+					</p>
+				))}
 			{report && !busy && (
 				<>
+					<section className="changed-resources" aria-label="Changed resources">
+						<h3>Resources that differed at the end</h3>
+						{changedKeys.length ? (
+							<ul>
+								{changedKeys.slice(0, 6).map((key) => (
+									<li key={key}>
+										<span>
+											{names[key] ?? key.replaceAll(/([a-z])([A-Z])/g, "$1 $2")}
+										</span>
+										<strong>
+											{numeric(report.baseline.stats[key] ?? 0)} →{" "}
+											{numeric(report.treatment.stats[key] ?? 0)}
+										</strong>
+									</li>
+								))}
+							</ul>
+						) : (
+							<p>No resource differences reported.</p>
+						)}
+						{changedKeys.length > 6 && (
+							<p className="tiny muted">
+								{changedKeys.length - 6} more changed facts in the full resource
+								table below.
+							</p>
+						)}
+						<p className="tiny muted">
+							Without help → with help. These totals describe these two runs;
+							they do not establish a general effect or explain the decision
+							mechanism.
+						</p>
+					</section>
 					{outcomes && (
 						<section aria-label="Changed outcomes">
 							<h3>What differed during this comparison</h3>

@@ -7,6 +7,7 @@ import {
 import type { TownRuntime } from "../contracts";
 import { teachHallInspection } from "../experiments/inspection.ts";
 import { keyed } from "./hash.ts";
+import { HF_VERSION } from "./hf-version.ts";
 import { required } from "./invariants.ts";
 import { neighbourNames } from "./neighbour-names.ts";
 import { Runtime } from "./runtime.ts";
@@ -177,7 +178,7 @@ export function createRuntime(seed = 42, population = 208): TownRuntime {
 	});
 	return new Runtime({
 		schema: SCHEMA,
-		hf: "2.2.1",
+		hf: HF_VERSION,
 		seed,
 		now: 480,
 		round: 0,

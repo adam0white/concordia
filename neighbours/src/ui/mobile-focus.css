@@ -535,3 +535,38 @@ html:has(.mobile-focused) {
 		scroll-behavior: auto;
 	}
 }
+
+.advance-feedback {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	padding: 0.6rem 0;
+	font-size: 0.8rem;
+}
+.advance-feedback .text-button {
+	margin-left: auto;
+}
+.advance-menu-status {
+	margin-block: 0.8rem;
+}
+.next-hall-choice {
+	margin-bottom: 1rem;
+}
+@media (max-width: 400px) {
+	.mobile-focused .playback {
+		gap: 4px;
+	}
+	.mobile-focused .playback button {
+		padding-inline: 6px;
+	}
+	.mobile-focused .playback .play-button {
+		min-width: 66px;
+	}
+	.mobile-focused .speed select {
+		width: 39px;
+		padding-inline: 2px;
+	}
+	.advance-feedback {
+		align-items: start;
+	}
+}

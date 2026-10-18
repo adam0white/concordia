@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { ENGINE_VERSION, FRAMEWORK_VERSION } from "@adam0white/human-framework";
 import { expect, it } from "vitest";
 import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
@@ -37,7 +38,9 @@ it("preserves background behavioral defaults and the familiar eight", () => {
 	const person = structuredClone(town.people[8]);
 	if (!person) throw Error("Missing background resident");
 	person.person.name = legacy.initialBackground.person.name;
-	expect(person).toEqual(legacy.initialBackground);
+	const expected = structuredClone(legacy.initialBackground);
+	expected.person.engine = ENGINE_VERSION;
+	expect(person).toEqual(expected);
 	expect(town.people.slice(0, 8)).toEqual(
 		(createRuntime(42, 8).export() as Save).people,
 	);
@@ -48,9 +51,15 @@ it("preserves actual numbered names and history through restore and continued re
 	expect(
 		legacy.checkpoint.events.some((e) => e.text.includes("Resident 1")),
 	).toBe(true);
-	const original = new Runtime(structuredClone(legacy.checkpoint));
+	// Only the explicit dependency/engine migration stamps change. Keep the
+	// actual historical fixture and every behavioral field unmodified.
+	const expected = structuredClone(legacy.checkpoint);
+	expected.hf = FRAMEWORK_VERSION;
+	for (const resident of expected.people)
+		resident.person.engine = ENGINE_VERSION;
+	const original = new Runtime(structuredClone(expected));
 	const restored = restoreRuntime(legacy.checkpoint);
-	expect(restored.export()).toEqual(legacy.checkpoint);
+	expect(restored.export()).toEqual(expected);
 	for (let i = 0; i < 8; i++) {
 		original.step();
 		restored.step();

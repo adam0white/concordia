@@ -51,7 +51,7 @@ jobs:
         run: node scripts/profile-town.ts --days 30 --population 208 --seed 42 --max-deaths 0
         working-directory: neighbours
       - name: Actual native HF bridge and upstream ActionSpec controls
-        run: python -m unittest concordia.environment.engine_test concordia.contrib.neighbours.engine_test concordia.contrib.neighbours.bridge_test concordia.contrib.neighbours.gm_director_test
+        run: python -m unittest concordia.environment.engine_test concordia.contrib.neighbours.engine_test concordia.contrib.neighbours.bridge_test concordia.contrib.neighbours.gm_director_test concordia.contrib.neighbours.bench_director_test
         env:
           PYTHONPATH: .
           NEIGHBOURS_NATIVE_TEST: '1'
@@ -69,6 +69,14 @@ jobs:
         run: python neighbours/scripts/run-mixed-town.py --node node --replay neighbours/public/experiments/native-mixed-town.json
       - name: Recorded upstream game-master replay (zero model calls)
         run: python neighbours/scripts/run-gm-director.py --replay neighbours/public/experiments/gm-director.json
+      - name: Natural bench choice and physical continuation controls
+        run: node scripts/probe-bench-choice.ts --output "$RUNNER_TEMP/bench-choices.json" --summary-output "$RUNNER_TEMP/bench-choices-summary.json" --checkpoint-directory "$RUNNER_TEMP/bench-choices"
+        working-directory: neighbours
+      - name: Published HF received-route controls
+        run: node scripts/probe-received-routes.ts "$RUNNER_TEMP/received-routes.json"
+        working-directory: neighbours
+      - name: Recorded upstream bench-premise replay (zero model calls)
+        run: python neighbours/scripts/run-bench-director.py --replay neighbours/public/experiments/bench-director.json
       - name: Isolated HF configuration controls
         run: node scripts/probe-hf-config.ts --output "$RUNNER_TEMP/hf-config.json"
         working-directory: neighbours

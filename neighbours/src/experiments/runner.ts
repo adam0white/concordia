@@ -3,6 +3,7 @@ import {
 	createPerson,
 	type DecisionRecord,
 	decide,
+	FRAMEWORK_VERSION,
 	snapshot,
 } from "@adam0white/human-framework";
 import {
@@ -72,7 +73,7 @@ export interface ExperimentArm {
 }
 export interface InspectionReport {
 	schema: "hall-inspection-experiment@1";
-	framework: "2.2.1";
+	framework: string;
 	seed: number;
 	arms: ExperimentArm[];
 	limits: string[];
@@ -197,7 +198,7 @@ export function runInspectionExperiment(seed = 19): InspectionReport {
 	});
 	return {
 		schema: "hall-inspection-experiment@1",
-		framework: "2.2.1",
+		framework: FRAMEWORK_VERSION,
 		seed,
 		arms,
 		limits: [

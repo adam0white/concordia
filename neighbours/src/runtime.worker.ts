@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 
+import { AdvanceCancellation, advanceTown } from "./advance-town.ts";
 import { RuntimePort } from "./bridge-port.ts";
 import { compareTown } from "./comparison.ts";
 import type { UiCommand, UiReply } from "./contracts";
@@ -63,10 +64,27 @@ let queue = boot().catch((error) => {
 	throw error;
 });
 const comparisons = new Set<{ cancelled: boolean }>();
+const advances = new AdvanceCancellation();
 self.onmessage = (event: MessageEvent<UiCommand>) => {
+	if (event.data.type === "cancel-advance") {
+		advances.cancel(event.data.requestId);
+		return;
+	}
 	if (event.data.type === "cancel-comparison") {
 		for (const comparison of comparisons) comparison.cancelled = true;
 		return;
+	}
+	let advanceCancelled: (() => boolean) | undefined;
+	if (event.data.type === "advance") {
+		try {
+			advanceCancelled = advances.begin(event.data);
+		} catch (error) {
+			send({
+				type: "error",
+				message: error instanceof Error ? error.message : String(error),
+			});
+			return;
+		}
 	}
 	const comparison =
 		event.data.type === "compare" ? { cancelled: false } : undefined;
@@ -76,6 +94,31 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			const q = event.data;
 			const start = performance.now();
 			switch (q.type) {
+				case "advance": {
+					const advance = await advanceTown(
+						py,
+						port,
+						q,
+						(value) => {
+							const minute = value.now % 1440;
+							const time = `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+							send({
+								type: "progress",
+								message: `Advancing the town: ${value.rounds} of ${value.maxRounds} rounds. Day ${value.day}, ${time}.`,
+								advance: value,
+							});
+						},
+						advanceCancelled,
+					);
+					send({
+						type: "state",
+						view: port.runtime.view(),
+						elapsedMs: performance.now() - start,
+						advance,
+					});
+					advances.finish(q.requestId);
+					break;
+				}
 				case "step": {
 					const rounds = q.rounds ?? 1;
 					if (!Number.isSafeInteger(rounds) || rounds < 1 || rounds > 16)
@@ -142,6 +185,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			}
 		})
 		.catch((error) => {
+			if (event.data.type === "advance") advances.finish(event.data.requestId);
 			if (comparison) comparisons.delete(comparison);
 			send({
 				type: "error",

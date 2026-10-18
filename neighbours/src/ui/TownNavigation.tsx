@@ -4,7 +4,7 @@ const labels = {
 	town: "Town",
 	help: "Help",
 	stories: "Stories",
-	inspector: "Inspector",
+	inspector: "Compare",
 };
 const paths = {
 	town: "m3 11 9-8 9 8M5 10v11h5v-7h4v7h5V10",

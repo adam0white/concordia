@@ -1,4 +1,5 @@
-import type { TownEvent } from "../contracts.ts";
+import type { ProposalOrigin, TownEvent } from "../contracts.ts";
+import type { BenchSlot } from "./bench-window.ts";
 import type { Save } from "./state.ts";
 export interface BenchRequest {
 	id: number;
@@ -6,6 +7,7 @@ export interface BenchRequest {
 	heardAt: number;
 	proposedFrom: number;
 	proposedUntil: number;
+	opportunityEventId?: number;
 	reply?: "agree" | "refuse" | "later";
 	replyEvent?: TownEvent;
 	from?: number;
@@ -28,6 +30,15 @@ export interface Handcart {
 	raviGoalId?: string;
 	adaGoalId?: string;
 	adaObservation?: TownEvent;
+	premise?: {
+		slot: BenchSlot;
+		at: number;
+		from: number;
+		until: number;
+		event: TownEvent;
+		received: boolean;
+		origin: ProposalOrigin;
+	};
 	requests: BenchRequest[];
 	bench?: {
 		requestId: number;

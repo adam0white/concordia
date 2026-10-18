@@ -1,0 +1,83 @@
+.study-sections {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+.study-sections button {
+	flex: 1;
+}
+.study-sections button[aria-pressed="true"] {
+	border-color: var(--accent, #78bba3);
+	font-weight: 700;
+}
+.bench-discussion label,
+.recorded-studies label,
+.inspection-study label,
+.focused-inspector > div > label {
+	display: grid;
+	gap: 0.4rem;
+	margin: 1rem 0;
+}
+.recorded-studies select,
+.focused-inspector select {
+	max-width: 100%;
+	min-width: 0;
+	width: 100%;
+}
+.changed-resources {
+	margin-block: 1rem;
+}
+.changed-resources ul {
+	list-style: none;
+	padding: 0;
+}
+.changed-resources li,
+.study-results > div {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.5rem 0;
+	border-bottom: 1px solid #8884;
+}
+.changed-resources li strong {
+	white-space: nowrap;
+}
+.study-results dd {
+	margin: 0;
+	text-align: right;
+	overflow-wrap: anywhere;
+}
+.comparison-stale {
+	border-left: 3px solid #b68a4e;
+	padding-left: 0.7rem;
+}
+.comparison-checkpoint {
+	font-variant-numeric: tabular-nums;
+}
+.inspection-study table {
+	min-width: 28rem;
+}
+@media (max-width: 520px) {
+	.study-results > div {
+		display: block;
+	}
+	.study-results dd {
+		text-align: left;
+		margin-top: 0.25rem;
+	}
+}
+
+.table-scroll {
+	max-width: 100%;
+	overflow-x: auto;
+}
+.recorded-studies pre {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.bench-discussion .button-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}

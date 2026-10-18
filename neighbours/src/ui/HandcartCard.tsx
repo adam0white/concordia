@@ -1,4 +1,6 @@
+import { useState } from "react";
 import type { TownView } from "../contracts";
+import type { BenchSlot } from "../core/bench-window";
 import { clock, datedClock } from "./format";
 
 export function CartGlyph({
@@ -36,10 +38,17 @@ export function CartGlyph({
 export default function HandcartCard({
 	town,
 	select,
+	onPropose,
+	onCompare,
+	disabled = false,
 }: {
 	town: Pick<TownView, "now" | "handcart" | "people">;
 	select: (id: string) => void;
+	onPropose?: (slot: BenchSlot) => void;
+	onCompare?: (slot: BenchSlot) => void;
+	disabled?: boolean;
 }) {
+	const [slot, setSlot] = useState<BenchSlot>("soon");
 	const cart = town.handcart;
 	if (!cart) return null;
 	const stage = cart.returned
@@ -67,6 +76,57 @@ export default function HandcartCard({
 					</p>
 				</div>
 			</div>
+			{cart.canProposeBench && onPropose && (
+				<div className="bench-discussion">
+					<label>
+						Suggest a window
+						<select
+							value={slot}
+							disabled={disabled}
+							onChange={(e) => setSlot(e.target.value as BenchSlot)}
+						>
+							<option value="soon">Soon · four hours</option>
+							<option value="tomorrow">Tomorrow · four hours</option>
+							<option value="brief">Brief · thirty minutes</option>
+						</select>
+					</label>
+					<p className="tiny muted">
+						Ada decides whether to lend it. One section needs an hour.
+					</p>
+					<div className="button-row">
+						<button
+							type="button"
+							disabled={disabled}
+							onClick={() => onPropose(slot)}
+						>
+							Tell Ravi · 1 credit
+						</button>
+						{onCompare && (
+							<button
+								type="button"
+								disabled={disabled}
+								onClick={() => onCompare(slot)}
+							>
+								Compare first
+							</button>
+						)}
+					</div>
+				</div>
+			)}
+			{cart.opportunity && (
+				<p className="tiny muted">
+					{town.now >= cart.opportunity.until
+						? "Proposed window expired"
+						: cart.opportunity.received
+							? "Ravi heard the proposed window"
+							: "Ravi did not receive the proposed window"}{" "}
+					· {datedClock(cart.opportunity.from)}–{clock(cart.opportunity.until)}
+					{cart.opportunity.origin.kind === "recorded-gm"
+						? " · Recorded GM proposal"
+						: " · Authored proposal"}
+					. {cart.bench ? "" : "No bench booking."}
+				</p>
+			)}
 			{cart.completedAt !== undefined && (
 				<p className="tiny muted">
 					Repairs finished {datedClock(cart.completedAt)}

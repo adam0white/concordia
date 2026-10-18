@@ -46,7 +46,7 @@ it("screens every taught known neighbour and keeps all matched outcomes without 
 		learned?.opened &&
 		!ablated?.opened
 	) {
-		expect(learned.decisionSource).toBe("HF 2.2.1");
+		expect(learned.decisionSource).toBe("HF 2.3.0");
 		expect(
 			learned.methodTerms.some(
 				(term) =>

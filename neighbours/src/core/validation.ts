@@ -1,5 +1,6 @@
 import type { DecisionRecord } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts.ts";
+import { isHfSource } from "./hf-version.ts";
 import type { Resident, Save } from "./state.ts";
 
 const EVENT_KINDS = new Set([
@@ -280,7 +281,7 @@ export function validateResidentEvidence(
 			throw Error("Invalid decision evidence");
 		if (
 			(d.offeredCount !== undefined || d.recordedCount !== undefined) &&
-			(d.source !== "HF 2.2.1" ||
+			(!isHfSource(d.source) ||
 				!Number.isSafeInteger(d.offeredCount) ||
 				!Number.isSafeInteger(d.recordedCount) ||
 				Number(d.offeredCount) < 1 ||
@@ -290,7 +291,7 @@ export function validateResidentEvidence(
 		)
 			throw Error("Invalid recorded option counts");
 		if (
-			d.source === "HF 2.2.1" &&
+			isHfSource(d.source) &&
 			!r.person.trace.some(
 				(t) =>
 					t.at === d.decidedAt &&

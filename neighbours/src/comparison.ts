@@ -1,5 +1,6 @@
 import type { RuntimePort } from "./bridge-port.ts";
 import type { Intervention, TownComparison, TownView } from "./contracts.ts";
+import { restoreRuntime } from "./core/index.ts";
 import { type PythonSession, restoreCheckpoint } from "./python-session.ts";
 
 function project(view: TownView): TownComparison["baseline"] {
@@ -11,6 +12,8 @@ function project(view: TownView): TownComparison["baseline"] {
 			...view.stats,
 			hallCapacity: view.places.find((p) => p.id === "hall")?.capacity ?? 0,
 			inspectionRequests: view.assistance ? 1 : 0,
+			benchNoticesReceived: view.handcart?.opportunity?.received ? 1 : 0,
+			benchReserved: view.handcart?.bench ? 1 : 0,
 			annexOpened: view.assistance?.opened ? 1 : 0,
 			availableFood: view.places.reduce((n, p) => n + p.stock, 0),
 			totalKnownWealth: known.reduce((n, p) => n + p.wealth, 0),
@@ -44,6 +47,7 @@ export async function compareTown(
 			"open-evening-slot",
 			"advertise-evening",
 			"request-inspection",
+			"propose-bench-window",
 		].includes(intervention.kind)
 	)
 		throw Error("Unknown comparison intervention");
@@ -58,6 +62,10 @@ export async function compareTown(
 		throw Error(
 			"Browser comparison requires local controllers; an LLM response tape belongs in the native runner",
 		);
+	// Validate the actual host operation on an isolated clone before spending time
+	// on either future. The disposable intervention cannot spend live allowance,
+	// deliver a live observation or consume a live person's random draws.
+	restoreRuntime(originalRuntime.export()).intervene(intervention);
 	const packet = String(
 		await py.runPythonAsync("json.dumps(town_engine.save())"),
 	);
@@ -108,6 +116,11 @@ export async function compareTown(
 			baseline,
 			treatment: project(result),
 			limits: [
+				...(intervention.kind === "propose-bench-window"
+					? [
+							"This whole-proposal branch changes both received information and the cart goal’s time valuation. It does not isolate the knowledge mechanism; matched knowledge controls are in Recorded studies.",
+						]
+					: []),
 				"One paired local run from an identical checkpoint, not an average effect across a population.",
 				"Weather and external deliveries use the same keyed events; residents may make different choices after the changed circumstance.",
 				"The allowance is spent only inside the hypothetical intervention branch. The live town is unchanged.",

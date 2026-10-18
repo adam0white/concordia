@@ -24,6 +24,7 @@ export default function App() {
 		town,
 		playing,
 		comparing,
+		advancing,
 		saveConflict,
 		selected,
 		setSelected,
@@ -38,6 +39,7 @@ export default function App() {
 	const [comparisonFocus, setComparisonFocus] = useState(false);
 	const [hallExpanded, setHallExpanded] = useState(false);
 	const person = town?.people.find((resident) => resident.id === selected);
+	const nextPerson = tab === "town" ? person : undefined;
 	const stories = town ? groupStories(town, observed) : [];
 	const storyWatch = useStoryWatch(
 		{ playing, seed: town?.seed, now: town?.now, storyId: stories[0]?.id },
@@ -73,6 +75,9 @@ export default function App() {
 		const previous = selected;
 		setSelected("");
 		requestAnimationFrame(() => {
+			// Closing removes the focused button. A newer deliberate focus takes
+			// precedence over returning to the neighbour whose drawer just closed.
+			if (document.activeElement !== document.body) return;
 			const button = [
 				...document.querySelectorAll<HTMLButtonElement>(".neighbour"),
 			].find((candidate) => candidate.dataset.personId === previous);
@@ -184,16 +189,29 @@ export default function App() {
 							<button
 								type="button"
 								className="play-button"
-								aria-label={playing ? "Pause town" : "Play town"}
-								disabled={comparing || saveConflict}
-								onClick={() => (playing ? pause() : play())}
+								aria-label={
+									advancing
+										? "Stop advancing"
+										: playing
+											? "Pause town"
+											: "Play town"
+								}
+								disabled={!advancing && (comparing || saveConflict)}
+								onClick={() =>
+									advancing
+										? session.stopAdvancing()
+										: playing
+											? pause()
+											: play()
+								}
 							>
-								{playing ? "Ⅱ" : "▶"} <span>{playing ? "Pause" : "Play"}</span>
+								{advancing ? "■" : playing ? "Ⅱ" : "▶"}{" "}
+								<span>{advancing ? "Stop" : playing ? "Pause" : "Play"}</span>
 							</button>
 							<button
 								type="button"
 								aria-label="Step: Advance one round"
-								disabled={comparing || saveConflict}
+								disabled={advancing || comparing || saveConflict}
 								onClick={() => {
 									storyWatch.resetBaseline();
 									pause();
@@ -202,9 +220,36 @@ export default function App() {
 							>
 								Step →
 							</button>
+							<button
+								type="button"
+								className="next-story"
+								aria-label={
+									nextPerson
+										? `Next story about ${nextPerson.name}`
+										: "Next story"
+								}
+								title={
+									nextPerson
+										? `Next story about ${nextPerson.name}; at most seven days.`
+										: "Next town story; at most seven days."
+								}
+								disabled={
+									advancing || comparing || saveConflict || session.intervening
+								}
+								onClick={() => {
+									storyWatch.resetBaseline();
+									session.advanceUntil(
+										nextPerson ? "person-story" : "story",
+										nextPerson?.id,
+									);
+								}}
+							>
+								Next ›
+							</button>
 							<label className="speed">
 								<span className="sr-only">Playback speed</span>
 								<select
+									disabled={advancing || comparing || saveConflict}
 									value={session.speed}
 									onChange={(event) =>
 										session.setSpeed(Number(event.target.value))
@@ -218,6 +263,27 @@ export default function App() {
 							</label>
 						</div>
 					</div>
+					{(advancing || session.advanceNotice) && (
+						<div className="advance-feedback" role="status" aria-live="polite">
+							{advancing ? (
+								<span>{session.advanceProgress}</span>
+							) : (
+								<>
+									<span className="advance-notice">
+										{session.advanceNotice}
+									</span>
+									<button
+										type="button"
+										className="text-button"
+										aria-label="Dismiss advance result"
+										onClick={session.clearAdvanceNotice}
+									>
+										Dismiss
+									</button>
+								</>
+							)}
+						</div>
+					)}
 					<TownNavigation active={tab} change={changeTab} />
 					{storyWatch.paused && (
 						<div className="paused-story">
@@ -293,8 +359,17 @@ export default function App() {
 								<HelpPanel
 									hallExpanded={hallExpanded}
 									setHallExpanded={setHallExpanded}
+									onAdvance={() => {
+										storyWatch.resetBaseline();
+										session.advanceUntil("hall-choice");
+									}}
 									town={town}
-									disabled={comparing || saveConflict || session.intervening}
+									disabled={
+										advancing ||
+										comparing ||
+										saveConflict ||
+										session.intervening
+									}
 									action={session.intervene}
 									compare={compare}
 									select={follow}

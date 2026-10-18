@@ -25,7 +25,7 @@ test("mobile navigation exposes help immediately and replaces the town with focu
 	await page.getByRole("tab", { name: "Stories", exact: true }).click();
 	await expect(page.locator(".map-section")).not.toBeVisible();
 	await expect(page.locator(".person-panel")).not.toBeVisible();
-	await page.getByRole("tab", { name: "Inspector", exact: true }).click();
+	await page.getByRole("tab", { name: "Compare", exact: true }).click();
 	await expect(page.locator(".map-section")).not.toBeVisible();
 	await expect(page.locator(".person-panel")).not.toBeVisible();
 	await page

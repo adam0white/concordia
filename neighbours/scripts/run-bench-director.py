@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Frozen three-case upstream bench proposals and exact zero-call replay.
+
+Running without --replay makes exactly one real provider call for each of the
+three fresh HF checkpoints. It retains invalid proposals; there is no retry.
+"""
+import argparse
+from datetime import datetime, timezone
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from concordia.contrib.neighbours.bench_director import (
+    ClaudeCliModel, UPSTREAM_SHA, digest, replay_report, run_director,
+    runtime_sources, verify_upstream_sources)
+from concordia.contrib.neighbours.bridge import NodeBridge
+from concordia.contrib.neighbours.engine import TownEngine
+
+SEEDS = [42, 73, 101]
+
+
+def capture_checkpoint(node, seed):
+  with tempfile.TemporaryDirectory(prefix='neighbours-bench-checkpoint-') as directory:
+    subprocess.run([node, str(ROOT / 'neighbours/scripts/capture-bench.ts'),
+                    '--output-directory', directory, '--seed', str(seed)],
+                   cwd=ROOT / 'neighbours', check=True, timeout=240)
+    checkpoint = json.loads((Path(directory) / 'checkpoint.json').read_text())
+    evidence = json.loads((Path(directory) / 'capture-evidence.json').read_text())
+    with NodeBridge(seed=seed, population=8, node=node, timeout=100) as bridge:
+      engine = TownEngine(bridge)
+      engine.restore(checkpoint)
+      canonical = engine.save()
+  if (canonical != checkpoint or checkpoint['runtime']['seed'] != seed or
+      len(checkpoint['runtime']['people']) != 8 or checkpoint['runtime']['pending'] or
+      checkpoint['runtime']['handcart']['progress'] >= 3 or
+      'cart-ask' not in evidence.get('raviLegalOfferIds', []) or
+      evidence.get('premiseAdmissibleAtBoundary') is not True or
+      evidence.get('premiseAdmissibleAtNextDecision') is not True or
+      evidence.get('raviPhysicalPlaceAtBoundary') != 'workshop'):
+    raise RuntimeError('Capture is not a genuine complete eight-person next-decision checkpoint')
+  return checkpoint, evidence
+
+
+def main():
+  parser = argparse.ArgumentParser(description=__doc__)
+  parser.add_argument('--model', default='opus')
+  parser.add_argument('--seeds', default='42,73,101')
+  parser.add_argument('--node', default='node')
+  parser.add_argument('--replay', type=Path)
+  parser.add_argument('--output', type=Path, default=Path('/tmp/neighbours-native-bench.json'))
+  args = parser.parse_args()
+  if args.replay:
+    print(json.dumps(replay_report(json.loads(args.replay.read_text()), ROOT)))
+    return
+  if args.seeds != '42,73,101':
+    parser.error('The fixed cases are --seeds 42,73,101; do not select winners')
+  verify_upstream_sources(ROOT)
+  sources = runtime_sources(ROOT)
+  # Freeze every fresh case before any model call. Failed capture makes no call.
+  frozen = [(seed, *capture_checkpoint(args.node, seed)) for seed in SEEDS]
+  model = ClaudeCliModel(args.model, max_calls=3)
+  report = {
+      'schema': 'native-concordia-bench@1', 'upstreamSha': UPSTREAM_SHA,
+      'recordedAt': datetime.now(timezone.utc).isoformat(), 'seeds': SEEDS,
+      'runtime': 'Native upstream EntityAgent/SwitchAct/EventResolution/MakeObservation + real Claude CLI',
+      'runtimeSources': sources, 'sourceFingerprint': sources['sha256'],
+      'gitHeadAtRun': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+      'sourceWorkingTreeDirty': bool(subprocess.check_output(['git', 'status', '--porcelain', '--', *sources['files']], cwd=ROOT, text=True).strip()),
+      'requestedModel': args.model, 'cliVersion': model.cli_version,
+      'cases': [],
+      'limits': [
+          'Fixed seeds captured before model calls; one attempt each with no retry or winner selection.',
+          'Complete checkpoints precede the next scheduled legal cart-ask decision; current actors can still have jobs.',
+          'Typed windows are discussable premises; host application, recipient observations, consent and work remain separate.',
+          'Recorded browser cases do not run this live native provider.',
+      ],
+  }
+  for seed, checkpoint, evidence in frozen:
+    case = {'seed': seed, 'checkpoint': checkpoint, 'checkpointSha256': digest(checkpoint),
+            'captureEvidence': evidence}
+    before = len(model.tape)
+    try:
+      case['result'] = run_director(model, checkpoint, evidence)
+    except Exception as error:  # Preserve failed provider attempts, never retry.
+      case['failure'] = f'{type(error).__name__}: {error}'
+    case['responseTape'] = model.tape[before:]
+    case['modelCalls'] = len(case['responseTape'])
+    case['modelIds'] = case['responseTape'][0].get('modelIds', []) if case['responseTape'] else []
+    report['cases'].append(case)
+  report['modelCalls'] = len(model.tape)
+  if all('result' in case for case in report['cases']):
+    report.update(replay_report(report, ROOT))
+    # replay_report's modelCalls is the replay count, keep generation separate.
+    report.update(modelCalls=len(model.tape), replayModelCalls=0)
+  else:
+    report.update(replayExact=False, replayFailure='A provider attempt failed; no exact completed-response replay exists.')
+  encoded = json.dumps(report, indent=2, ensure_ascii=False) + '\n'
+  if any(token in encoded for token in ('session_id', 'access_token', '/Users/')):
+    raise RuntimeError('Artifact contains forbidden private metadata')
+  args.output.parent.mkdir(parents=True, exist_ok=True)
+  args.output.write_text(encoded)
+  print(json.dumps({'output': str(args.output), 'modelCalls': len(model.tape),
+                    'replayExact': report['replayExact'],
+                    'cases': [{'seed': case['seed'], 'result': case.get('result', {}).get('proposal'),
+                               'rejection': case.get('result', {}).get('rejection'),
+                               'failure': case.get('failure')} for case in report['cases']]}))
+  if any('failure' in case for case in report['cases']):
+    raise SystemExit(1)
+
+
+if __name__ == '__main__':
+  main()

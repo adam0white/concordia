@@ -1,5 +1,6 @@
 import type { TownEvent, TownView } from "../contracts.ts";
 import { allEvenings } from "./evenings.ts";
+import { isHfSource } from "./hf-version.ts";
 import type { Save } from "./state.ts";
 import { CHRONICLE_KINDS } from "./town-chronicle.ts";
 
@@ -72,14 +73,13 @@ export function townStories(s: Save): TownView["stories"] {
 			)?.inspection;
 			const methodValue =
 				inspection?.methodTerms?.reduce((sum, t) => sum + t.value, 0) ?? 0;
-			const explanation =
-				inspection?.source === "HF 2.2.1"
-					? methodValue > 0
-						? " A learned method supported this choice."
-						: methodValue < 0
-							? " The chosen option included evidence against it."
-							: " No matching learned-method term was recorded for this choice."
-					: `${inspection ? ` Decision source: ${inspection.source}.` : ""}`;
+			const explanation = isHfSource(inspection?.source)
+				? methodValue > 0
+					? " A learned method supported this choice."
+					: methodValue < 0
+						? " The chosen option included evidence against it."
+						: " No matching learned-method term was recorded for this choice."
+				: `${inspection ? ` Decision source: ${inspection.source}.` : ""}`;
 			return {
 				id: `story-${e.id}`,
 				...(e.actorId ? { actorId: e.actorId } : {}),

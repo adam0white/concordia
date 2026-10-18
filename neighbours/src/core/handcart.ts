@@ -5,6 +5,13 @@ import {
 	promise,
 } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts.ts";
+import { parseProposalOrigin } from "./assistance.ts";
+import {
+	BENCH_HALF_LIFE,
+	benchWindowLabel,
+	receivedBenchWindow,
+} from "./bench-opportunity.ts";
+import { benchWindow, validateBenchProposal } from "./bench-window.ts";
 import { overlapMinutes, presentAt, receiveEvent } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import type { BenchRequest, HandcartSave } from "./handcart-state.ts";
@@ -220,6 +227,16 @@ export function handcartOffers(
 						Math.hypot(p.x - from.x, p.y - from.y) / (s.bus ? 35 : 20),
 					) * 15;
 		const duration = (HANDCART_MINUTES[action] ?? 0) + travel;
+		// The received route needs a real ask and reply before the proposed window.
+		// Do not offer a different future request under the still-live trigger identity.
+		if (
+			!historical &&
+			action === "cart-ask" &&
+			c.premise?.received &&
+			s.now <= c.premise.until &&
+			s.now + duration + 15 > c.premise.from
+		)
+			return;
 		if (
 			!historical &&
 			(s.now % 1440 < 480 ||
@@ -256,7 +273,9 @@ export function handcartOffers(
 		)
 			add(
 				"cart-ask",
-				"Ask Ada for tomorrow’s 08:00–12:00 main bench; her paid work needs it too",
+				receivedBenchWindow(s)
+					? `Ask Ada for the main bench ${benchWindowLabel(receivedBenchWindow(s) ?? nextWindow(s.now + 15))}; her paid work needs it too`
+					: "Ask Ada for tomorrow’s 08:00–12:00 main bench; her paid work needs it too",
 				"workshop",
 				{ meaning: 0.2 },
 				{ targetId: "ada", tags: ["social"] },
@@ -324,12 +343,16 @@ export function handcartOffers(
 		(historical ||
 			(request &&
 				!request.reply &&
-				s.now + 15 < request.proposedFrom &&
+				(s.now + 15 < request.proposedFrom ||
+					(request.opportunityEventId !== undefined &&
+						s.now + 15 === request.proposedFrom)) &&
 				presentAt(ravi, "workshop", s.now)))
 	) {
 		add(
 			"cart-agree",
-			"Lend Ravi the main bench tomorrow 08:00–12:00; postpone my paid carpentry",
+			request?.opportunityEventId
+				? `Lend Ravi the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}; postpone my paid carpentry`
+				: "Lend Ravi the main bench tomorrow 08:00–12:00; postpone my paid carpentry",
 			"workshop",
 			{ meaning: 0.25, belonging: 0.2 },
 			{ targetId: "ravi", tags: ["social"] },
@@ -374,22 +397,28 @@ export function finishHandcart(
 		meeting(s, r, "ada", "workshop") &&
 		c.requests.length < 8
 	) {
+		const proposedWindow = receivedBenchWindow(s, true);
+		const window = proposedWindow ?? nextWindow(s.now);
 		const e = retained(
 			host,
 			"bench-request",
-			"Ravi asked Ada to borrow the main bench tomorrow from 08:00 to 12:00 for Jo’s handcart. Ada’s paid carpentry needs that bench too.",
+			proposedWindow
+				? `Ravi asked Ada to borrow the main bench ${benchWindowLabel(window)} for Jo’s handcart. Ada’s paid carpentry needs that bench too.`
+				: "Ravi asked Ada to borrow the main bench tomorrow from 08:00 to 12:00 for Jo’s handcart. Ada’s paid carpentry needs that bench too.",
 			"ravi",
 			"workshop",
-			[j.event],
+			[j.event, ...(proposedWindow && c.premise ? [c.premise.event.id] : [])],
 		);
 		if (socialReceipt(s, "ravi", "ada", e, "bench-request")) {
-			const window = nextWindow(s.now);
 			c.requests.push({
 				id: c.requests.length + 1,
 				event: e,
 				heardAt: s.now,
 				proposedFrom: window.from,
 				proposedUntil: window.until,
+				...(proposedWindow && c.premise
+					? { opportunityEventId: c.premise.event.id }
+					: {}),
 			});
 			delivered = true;
 			companions.push("ada");
@@ -402,7 +431,9 @@ export function finishHandcart(
 		if (
 			request &&
 			!request.reply &&
-			s.now < request.proposedFrom &&
+			(s.now < request.proposedFrom ||
+				(request.opportunityEventId !== undefined &&
+					s.now === request.proposedFrom)) &&
 			meeting(s, r, "ravi", "workshop")
 		) {
 			const reply =
@@ -415,7 +446,9 @@ export function finishHandcart(
 				host,
 				"bench-reply",
 				reply === "agree"
-					? "Ada agreed to lend Ravi the main bench tomorrow from 08:00 to 12:00. Her paid carpentry must wait."
+					? request.opportunityEventId
+						? `Ada agreed to lend Ravi the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}. Her paid carpentry must wait.`
+						: "Ada agreed to lend Ravi the main bench tomorrow from 08:00 to 12:00. Her paid carpentry must wait."
 					: reply === "refuse"
 						? "Ada kept the main bench for her paid carpentry. Ravi can use the slower side bench."
 						: "Ada asked Ravi to discuss the bench another day.",
@@ -441,8 +474,9 @@ export function finishHandcart(
 						from: window.from,
 						until: window.until,
 						importance: 0.6,
-						label:
-							"Leave the main bench for Ravi’s cart work from 08:00 to 12:00",
+						label: request.opportunityEventId
+							? `Leave the main bench for Ravi’s cart work ${benchWindowLabel(window)}`
+							: "Leave the main bench for Ravi’s cart work from 08:00 to 12:00",
 					});
 					Object.assign(request, window, { commitmentId: commitment.id });
 					c.bench = {
@@ -554,6 +588,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		"raviGoalId",
 		"adaGoalId",
 		"adaObservation",
+		"premise",
 		"requests",
 		"bench",
 		"handover",
@@ -602,6 +637,43 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		evidence(c.observation, "cart-observed", "ravi", "workshop");
 	if (c.adaObservation)
 		evidence(c.adaObservation, "bench-work", "ada", "workshop");
+	if (c.premise) {
+		const p = c.premise;
+		fields(p, ["slot", "at", "from", "until", "event", "received", "origin"]);
+		validateBenchProposal({
+			schema: "neighbours-bench-proposal@1",
+			kind: "bench-window",
+			slot: p.slot,
+		});
+		parseProposalOrigin(p.origin);
+		validateEvent(p.event, s, ids);
+		const window = benchWindow(p.at, p.slot);
+		const goal = resident(s, "ravi").person.agenda.goals.find(
+			(g) => g.id === c.raviGoalId,
+		);
+		if (
+			!c.observation ||
+			!goal ||
+			goal.temporal?.halfLifeMinutes !== BENCH_HALF_LIFE ||
+			!["cart-fast", "cart-slow", "cart-handover"].every((action) =>
+				goal.advancedBy.some(
+					(rule) => rule.action === action && rule.amount === 0.25,
+				),
+			) ||
+			p.at < c.observation.at ||
+			p.at !== p.event.at ||
+			p.from !== window.from ||
+			p.until !== window.until ||
+			typeof p.received !== "boolean" ||
+			p.event.kind !== "intervention" ||
+			p.event.source !== "town-bulletin" ||
+			p.event.targetId !== "ravi" ||
+			p.event.placeId !== "workshop" ||
+			p.event.actorId !== undefined ||
+			!p.event.causes.includes(c.observation.id)
+		)
+			throw Error("Invalid received bench premise");
+	}
 	if (c.progress > 0 && (!c.observation || !c.raviGoalId))
 		throw Error("Cart work lacks an observed purpose");
 	for (const [index, q] of c.requests.entries()) {
@@ -611,6 +683,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			"heardAt",
 			"proposedFrom",
 			"proposedUntil",
+			"opportunityEventId",
 			"reply",
 			"replyEvent",
 			"from",
@@ -620,10 +693,21 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			"benefitEvent",
 		]);
 		evidence(q.event, "bench-request", "ravi", "workshop");
+		const proposed =
+			q.opportunityEventId === undefined
+				? nextWindow(q.event.at)
+				: c.premise?.received &&
+						c.premise.event.id === q.opportunityEventId &&
+						q.event.at >= c.premise.at &&
+						q.event.causes.includes(q.opportunityEventId) &&
+						q.event.at + 15 <= c.premise.from
+					? c.premise
+					: undefined;
 		if (
 			q.id !== index + 1 ||
-			q.proposedFrom !== nextWindow(q.event.at).from ||
-			q.proposedUntil !== nextWindow(q.event.at).until ||
+			!proposed ||
+			q.proposedFrom !== proposed.from ||
+			q.proposedUntil !== proposed.until ||
 			q.heardAt !== q.event.at ||
 			(q.reply !== undefined &&
 				!["agree", "refuse", "later"].includes(q.reply)) ||
@@ -636,7 +720,9 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			evidence(q.replyEvent, "bench-reply", "ada", "workshop");
 			if (
 				q.replyEvent.at < q.heardAt ||
-				q.replyEvent.at >= q.proposedFrom ||
+				q.replyEvent.at > q.proposedFrom ||
+				(q.replyEvent.at === q.proposedFrom &&
+					q.opportunityEventId === undefined) ||
 				!q.replyEvent.causes.includes(q.event.id)
 			)
 				throw Error("Invalid reply timing or ancestry");

@@ -45,8 +45,17 @@ export default function SessionMenu({
 			<p className="tiny muted">
 				Current town · Day {session.town?.day} · seed {session.town?.seed}
 			</p>
+			{session.advancing && (
+				<div className="advance-menu-status" role="status">
+					<p>{session.advanceProgress}</p>
+					<button type="button" onClick={session.stopAdvancing}>
+						Stop advancing
+					</button>
+				</div>
+			)}
 			<SessionFooter
 				{...session}
+				comparing={session.comparing || session.advancing}
 				importSave={(file) => {
 					resetStory();
 					return session.importSave(file);
@@ -99,11 +108,15 @@ export default function SessionMenu({
 						required
 						value={session.seedInput}
 						onChange={(event) => session.setSeedInput(event.target.value)}
-						disabled={session.comparing || session.saveConflict}
+						disabled={
+							session.advancing || session.comparing || session.saveConflict
+						}
 					/>
 					<button
 						type="submit"
-						disabled={session.comparing || session.saveConflict}
+						disabled={
+							session.advancing || session.comparing || session.saveConflict
+						}
 					>
 						Start town
 					</button>

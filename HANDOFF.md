@@ -1,5 +1,9 @@
 # Neighbours handoff
 
+Active increment `nbh-01z.39`: [received plans](docs/neighbours/received-plans.md) and [implementation checkpoint](docs/neighbours/received-plans-implementation.md). Remaining: final integrated native/browser controls, clean-source recordings, source-unread agenda tests and verified public delivery. Exact published HF2.3.0 is installed. The public build below is still the preceding increment. Do not call local new code deployed.
+
+Early independent visitors reproduced the absent-LLM-arm contradiction and invalid completed-hall comparison. New local work adds recorded studies, retained/stale comparisons and real cancellable next-event controls. HF2.3 source commits `3032e27` and `e6ba26f` passed908 tests with3 skipped, build and packed controls; its trusted publication and public framework-site upgrade are complete. No new town outcome or HF superiority is claimed.
+
 Remaining: Adam's play review of the deployed mobile-focus increment. Task `nbh-01z.38` is technically complete: independent reviews and agenda retests, local gates, actual public Chromium/Nightly, source-bound evidence, asset/shell checks and hosted CI pass. Adam accepts feel. The broader gameplay follow-up remains deferred to 20 October as `nbh-01z.37`.
 
 Public town: https://neighbours.adamwhite.work. Clean build `17dec9264435fdb582d138063d5e699bda77351e`, Cloudflare version `c6eab565-c4a5-4309-8426-e021b9090d97`. Implementation is `ca5879bb063bc01bd0465d32e6e05aaf41661eb5`. [Mobile design](docs/neighbours/mobile-focus.md) and [independent visitors and verification](docs/neighbours/visitor-2026-10-16-mobile.md) own this increment's evidence.

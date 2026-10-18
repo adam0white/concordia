@@ -1,4 +1,5 @@
 import type { Intervention, TownView } from "../contracts";
+import { hasHallChoice } from "../hall-choice";
 import EveningBoard from "./EveningBoard";
 import HallChoices from "./HallChoices";
 import HandcartCard from "./HandcartCard";
@@ -12,6 +13,7 @@ export default function HelpPanel({
 	select,
 	hallExpanded,
 	setHallExpanded,
+	onAdvance,
 }: {
 	town: TownView;
 	disabled: boolean;
@@ -20,6 +22,7 @@ export default function HelpPanel({
 	select: (id: string) => void;
 	hallExpanded: boolean;
 	setHallExpanded: (open: boolean) => void;
+	onAdvance?: () => void;
 }) {
 	const support = [
 		{
@@ -50,6 +53,17 @@ export default function HelpPanel({
 				<h2>Help the town</h2>
 				<p>Change a circumstance. People decide how to respond.</p>
 			</div>
+			{onAdvance && !hasHallChoice(town) && (
+				<button
+					type="button"
+					className="next-hall-choice"
+					disabled={disabled}
+					title="Run up to seven days; stop when a hall choice becomes available."
+					onClick={onAdvance}
+				>
+					Next hall choice →
+				</button>
+			)}
 			<HallChoices
 				expanded={hallExpanded}
 				onExpandedChange={setHallExpanded}
@@ -100,7 +114,36 @@ export default function HelpPanel({
 				town.evenings?.some((event) => event.stage !== "candidate")) && (
 				<details className="project-history">
 					<summary>Projects and notices</summary>
-					<HandcartCard town={town} select={select} />
+					<HandcartCard
+						town={town}
+						select={select}
+						disabled={disabled}
+						onPropose={(slot) =>
+							action({
+								kind: "propose-bench-window",
+								proposal: {
+									schema: "neighbours-bench-proposal@1",
+									kind: "bench-window",
+									slot,
+								},
+								proposalOrigin: { kind: "authored" },
+							})
+						}
+						onCompare={(slot) =>
+							compare(
+								{
+									kind: "propose-bench-window",
+									proposal: {
+										schema: "neighbours-bench-proposal@1",
+										kind: "bench-window",
+										slot,
+									},
+									proposalOrigin: { kind: "authored" },
+								},
+								96,
+							)
+						}
+					/>
 					<EveningBoard town={town} select={select} />
 				</details>
 			)}

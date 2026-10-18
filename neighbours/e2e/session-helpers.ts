@@ -17,13 +17,13 @@ export async function closeSaves(page: Page) {
 }
 export async function showTab(
 	page: Page,
-	name: "Town" | "Help" | "Stories" | "Inspector",
+	name: "Town" | "Help" | "Stories" | "Compare",
 ) {
 	await closeSaves(page);
 	await page.getByRole("tab", { name, exact: true }).click();
 }
 export async function showResources(page: Page) {
-	await showTab(page, "Inspector");
+	await showTab(page, "Compare");
 	const resources = page.locator(".inspector-resources");
 	if ((await resources.getAttribute("open")) === null)
 		await resources.locator(":scope > summary").click();

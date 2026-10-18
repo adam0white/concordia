@@ -54,7 +54,7 @@ describe("physical town", () => {
 				.view()
 				.people.some(
 					(p) =>
-						p.decision?.source === "HF 2.2.1" && p.decision.options.length > 1,
+						p.decision?.source === "HF 2.3.0" && p.decision.options.length > 1,
 				),
 		).toBe(true);
 	});

@@ -1,10 +1,11 @@
 /** Exercise actual WASM Python, native Python, the shared bridge and restore. */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { loadPyodide } from "pyodide";
+import { advanceTown } from "../src/advance-town.ts";
 import { RuntimePort } from "../src/bridge-port.ts";
 import { compareTown } from "../src/comparison.ts";
 import { restoreCheckpoint } from "../src/python-session.ts";
@@ -164,6 +165,105 @@ try {
 		"Failed comparison changed live checkpoint",
 	);
 	await py.runPythonAsync("town_engine.advance(1)\nNone");
+
+	// These are actual live advances, unlike the isolated comparison futures.
+	// Match the complete Python/HF checkpoint against plain native continuation.
+	const advanceStartPath = resolve(temporary, "advance-start.json");
+	await writeFile(advanceStartPath, JSON.stringify(native.checkpoint));
+	const assertAdvanceParity = async (label, rounds) => {
+		const expectedPath = resolve(temporary, `advance-${label}.json`);
+		execFileSync(
+			process.env.PYTHON ?? "python3",
+			[
+				resolve(app, "scripts/run-town.py"),
+				"--restore",
+				advanceStartPath,
+				"--rounds",
+				String(rounds),
+				"--output",
+				expectedPath,
+			],
+			{
+				cwd: root,
+				env: { ...process.env, NODE: process.execPath },
+				stdio: "pipe",
+			},
+		);
+		const expected = JSON.parse(await readFile(expectedPath, "utf8"));
+		assert.deepEqual(
+			JSON.parse(
+				String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+			),
+			expected.checkpoint,
+			`Actual ${label} advance differs from complete native continuation`,
+		);
+	};
+	await restoreCheckpoint(py, port, native.checkpoint);
+	const initialStoryIds = new Set(
+		port.runtime.view().stories.map((story) => story.id),
+	);
+	const advancedStory = await advanceTown(py, port, {
+		type: "advance",
+		requestId: 1,
+		until: "story",
+		maxRounds: 16,
+	});
+	assert(advancedStory.rounds > 0 && advancedStory.rounds <= 16);
+	const newStory = port.runtime
+		.view()
+		.stories.some((story) => !initialStoryIds.has(story.id));
+	if (advancedStory.reason === "story") assert(newStory);
+	else {
+		assert.equal(advancedStory.reason, "horizon");
+		assert.equal(advancedStory.rounds, 16);
+		assert.equal(
+			newStory,
+			false,
+			"Advance passed a real new story without stopping",
+		);
+	}
+	await assertAdvanceParity("story", advancedStory.rounds);
+	console.log(
+		`PASS: actual WASM advance stops for ${advancedStory.reason} after ${advancedStory.rounds} rounds and matches the complete native checkpoint`,
+	);
+	await restoreCheckpoint(py, port, native.checkpoint);
+	const backgroundPerson = port.runtime
+		.view()
+		.people.find((person) => !person.known);
+	assert(
+		backgroundPerson,
+		"Cancellation probe needs an actual background person",
+	);
+	let stopAdvance = false;
+	const advancedCancellation = await advanceTown(
+		py,
+		port,
+		{
+			type: "advance",
+			requestId: 2,
+			until: "person-story",
+			actorId: backgroundPerson.id,
+			maxRounds: 16,
+		},
+		(progress) => {
+			assert.equal(progress.now, port.runtime.view().now);
+			assert.equal(progress.day, port.runtime.view().day);
+			if (progress.rounds === 8) stopAdvance = true;
+		},
+		() => stopAdvance,
+	);
+	assert.deepEqual(advancedCancellation, {
+		requestId: 2,
+		reason: "cancelled",
+		rounds: 8,
+	});
+	assert.equal(port.runtime.view().now, native.view.now + 8 * 15);
+	await assertAdvanceParity("cancelled", advancedCancellation.rounds);
+	console.log(
+		"PASS: cancellation after eight actual WASM rounds retains live progress and matches the complete native checkpoint",
+	);
+	// Keep subsequent checks independent of the real advances and spent allowance.
+	await restoreCheckpoint(py, port, native.checkpoint);
 
 	// Optional real, late-world checkpoints exercise reservations, invitations and
 	// repaired objects through the actual Python engine in both runtimes.

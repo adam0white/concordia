@@ -33,6 +33,7 @@ import {
 	observeAssistance,
 	requestInspection,
 } from "./assistance.ts";
+import { canProposeBench, proposeBenchWindow } from "./bench-opportunity.ts";
 import { townDiagnostics } from "./diagnostics.ts";
 import {
 	inspectionKey,
@@ -63,6 +64,7 @@ import {
 	updateHandcart,
 } from "./handcart.ts";
 import { keyed } from "./hash.ts";
+import { HF_SOURCE, isHfSource } from "./hf-version.ts";
 import { placeOf, required } from "./invariants.ts";
 import {
 	buildOffers,
@@ -427,13 +429,12 @@ export class Runtime implements TownRuntime {
 						(t) => t.id === r.person.activity?.decisionId,
 					);
 					const source = r.decision?.source ?? "Host control";
-					const methodTerms =
-						source === "HF 2.2.1"
-							? (record?.considered
-									.find((c) => c.affordanceId === j.offer.id)
-									?.terms.filter((t) => t.source.startsWith("method:"))
-									.map((t) => ({ source: t.source, value: t.value })) ?? [])
-							: [];
+					const methodTerms = isHfSource(source)
+						? (record?.considered
+								.find((c) => c.affordanceId === j.offer.id)
+								?.terms.filter((t) => t.source.startsWith("method:"))
+								.map((t) => ({ source: t.source, value: t.value })) ?? [])
+						: [];
 					r.inspection = {
 						key: inspectionKey(this.s),
 						action: j.offer.action,
@@ -801,7 +802,7 @@ export class Runtime implements TownRuntime {
 				label: c.label ?? c.action,
 				utility: c.utility,
 			})),
-			source: policy === "hf" ? "HF 2.2.1" : policy,
+			source: policy === "hf" ? HF_SOURCE : policy,
 			...(hfRecord
 				? {
 						offeredCount: choices.length,
@@ -964,6 +965,10 @@ export class Runtime implements TownRuntime {
 			: "Clear";
 	}
 	intervene(input: Intervention) {
+		if (input.kind === "propose-bench-window") {
+			proposeBenchWindow(this, input.proposal, input.proposalOrigin);
+			return;
+		}
 		if (input.kind === "request-inspection") {
 			requestInspection(
 				this,
@@ -1302,6 +1307,21 @@ export class Runtime implements TownRuntime {
 			...(this.s.handcart?.observation
 				? {
 						handcart: {
+							canProposeBench: canProposeBench(this.s),
+							premiseCount: this.s.handcart.premise ? 1 : 0,
+							valuationMode: this.s.handcart.premise
+								? "received-consequences@1"
+								: "legacy",
+							...(this.s.handcart.premise
+								? {
+										opportunity: {
+											from: this.s.handcart.premise.from,
+											until: this.s.handcart.premise.until,
+											received: this.s.handcart.premise.received,
+											origin: structuredClone(this.s.handcart.premise.origin),
+										},
+									}
+								: {}),
 							progress: this.s.handcart.progress,
 							total: 3,
 							returned: !!this.s.handcart.handover,
@@ -1317,6 +1337,7 @@ export class Runtime implements TownRuntime {
 									}
 								: undefined,
 							latest: [
+								this.s.handcart.premise?.event,
 								this.s.handcart.observation,
 								this.s.handcart.handover,
 								...this.s.handcart.work.map((w) => w.event),

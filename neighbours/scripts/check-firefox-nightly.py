@@ -212,7 +212,7 @@ def main():
             if visible('dialog'):
                 close_menu()
             record('explicit-checkpoint-import', passed=True, clock=clock())
-        click('Inspector')
+        click('Compare')
         click('Compare futures', prefix=True)
         detail = control('Compare futures', prefix=True).find_element(By.XPATH, '..')
         Select(detail.find_elements(By.TAG_NAME, 'select')[-1]).select_by_visible_text('Seven days · 672 rounds')

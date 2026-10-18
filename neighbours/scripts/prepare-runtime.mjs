@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { FRAMEWORK_VERSION } from "@adam0white/human-framework";
 
 const app = resolve(import.meta.dirname, "..");
 const root = resolve(app, "..");
@@ -67,7 +68,7 @@ await writeFile(
 			commit,
 			dirty,
 			app: "neighbours@1",
-			hf: "2.2.1",
+			hf: FRAMEWORK_VERSION,
 			concordiaUpstream: "6fbfbc58f324aa74f78568c488713210889a801e",
 			pythonBundle: digest,
 			runtime: "Browser-local Python Concordia and released HF",
@@ -84,7 +85,7 @@ await cp(
 const notices = [
 	["Concordia (Apache-2.0)", resolve(root, "LICENSE")],
 	[
-		"Human Framework 2.2.1 (MIT)",
+		`Human Framework ${FRAMEWORK_VERSION} (MIT)`,
 		resolve(app, "node_modules/@adam0white/human-framework/LICENSE"),
 	],
 	["React (MIT)", resolve(app, "node_modules/react/LICENSE")],

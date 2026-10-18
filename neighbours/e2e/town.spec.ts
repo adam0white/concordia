@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
+import { FRAMEWORK_VERSION } from "@adam0white/human-framework";
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
 import { transformWithOxc } from "vite";
 import {
@@ -56,7 +57,7 @@ async function packet(
 	) as Packet;
 	expect(result.schema).toBe("neighbours/concordia@1");
 	expect(result.runtime.people).toHaveLength(208);
-	expect(result.runtime.hf).toBe("2.2.1");
+	expect(result.runtime.hf).toBe(FRAMEWORK_VERSION);
 	return result;
 }
 async function importPacket(page: Page, value: unknown) {
@@ -116,7 +117,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	expect(await packet(page, info, "reload")).toEqual(continued);
-	await showTab(page, "Inspector");
+	await showTab(page, "Compare");
 	await openSaves(page);
 	await page.getByLabel("New town seed").fill("73");
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
@@ -480,6 +481,45 @@ test("closed visitor sessions cannot commit queued or already-started saves", as
 	expect(result.closedAtRevision).toBe(true);
 	expect(result.startedRejected).toBe(true);
 	expect(result.afterStarted).toEqual(result.beforeStarted);
+});
+
+test("closing a person preserves a newer keyboard focus before deferred focus return", async ({
+	page,
+}) => {
+	await page.goto("/");
+	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	const neighbours = page.getByRole("navigation", {
+		name: "Familiar neighbours",
+	});
+	const ada = neighbours.getByRole("button", { name: /Ada/ });
+	await neighbours.getByRole("button", { name: /Noor/ }).click();
+	await expect(
+		page.getByLabel("Noor's details", { exact: true }),
+	).toBeVisible();
+	await page.evaluate(() => {
+		const original = window.requestAnimationFrame;
+		window.requestAnimationFrame = (callback) => {
+			window.requestAnimationFrame = original;
+			Object.assign(window, { flushPersonFocus: callback });
+			return 0;
+		};
+		document
+			.querySelector<HTMLButtonElement>(".person-panel .close-panel")
+			?.click();
+	});
+	await expect(page.getByLabel("Noor's details", { exact: true })).toHaveCount(
+		0,
+	);
+	await ada.focus();
+	await page.evaluate(() => {
+		const pending = window as unknown as {
+			flushPersonFocus: FrameRequestCallback;
+		};
+		pending.flushPersonFocus(performance.now());
+	});
+	await expect(ada).toBeFocused();
+	await page.keyboard.press("Enter");
+	await expect(page.getByLabel("Ada's details", { exact: true })).toBeVisible();
 });
 
 test("map selection keeps 44px targets and places clusters truthfully on narrow maps", async ({

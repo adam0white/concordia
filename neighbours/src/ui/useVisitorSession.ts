@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
+	AdvanceRequest,
 	Intervention,
 	TownComparison,
 	TownView,
@@ -26,7 +27,29 @@ export function useVisitorSession({
 	const [error, setError] = useState("");
 	const [playing, setPlaying] = useState(false);
 	const [comparing, setComparing] = useState(false);
+	const [advancing, setAdvancing] = useState(false);
+	const [advanceProgress, setAdvanceProgress] = useState("");
+	const [advanceNotice, setAdvanceNotice] = useState("");
+	const advancePending = useRef<number | null>(null);
+	const advanceSequence = useRef(0);
 	const [branchReport, setBranchReport] = useState<TownComparison>();
+	const [branchStale, setBranchStale] = useState(false);
+	const [branchHistory, setBranchHistory] = useState<
+		{
+			id: string;
+			report: TownComparison;
+			label: string;
+			revision: number;
+		}[]
+	>([]);
+	const [comparisonSetup, setComparisonSetup] = useState<{
+		kind: "lend-tools" | "restore-bus" | "share-news";
+		rounds: 24 | 96 | 672;
+	}>({ kind: "lend-tools", rounds: 24 });
+	const comparisonLabel = useRef("");
+	const comparisonSequence = useRef(0);
+	const liveRevision = useRef(0);
+	const hasBranchReport = useRef(false);
 	const [branchProgress, setBranchProgress] = useState("");
 	const [branchRequest, setBranchRequest] = useState<{
 		label: string;
@@ -101,7 +124,9 @@ export function useVisitorSession({
 			client.current?.send({ ...command, requestId });
 			return;
 		}
-		if (["step", "intervene", "restore", "new"].includes(command.type)) {
+		if (
+			["step", "advance", "intervene", "restore", "new"].includes(command.type)
+		) {
 			const replacement = command.type === "restore" || command.type === "new";
 			if (replacement) worldGeneration.current++;
 			stateCommands.current.push({
@@ -133,6 +158,9 @@ export function useVisitorSession({
 		}
 		setInterventionNotice("");
 		setBranchReport(undefined);
+		hasBranchReport.current = false;
+		setBranchStale(false);
+		setBranchHistory([]);
 		setBranchRequest(undefined);
 		setBranchProgress("");
 		setBranchError("");
@@ -140,11 +168,17 @@ export function useVisitorSession({
 		setObserved(undefined);
 		setTrends({});
 		setHealthHistory(undefined);
+		setAdvanceNotice("");
 	}, []);
 	useEffect(() => {
 		if (!enabled) return;
 		let active = true;
 		const saves = new DeviceSaves(() => {
+			if (advancePending.current !== null)
+				client.current?.send({
+					type: "cancel-advance",
+					requestId: advancePending.current,
+				});
 			if (!active) return;
 			saveConflictRef.current = true;
 			setSaveConflict(true);
@@ -167,11 +201,22 @@ export function useVisitorSession({
 			if (reply.type === "progress") {
 				setProgress(reply.message);
 				if (comparisonPending.current) setBranchProgress(reply.message);
+				if (reply.advance?.requestId === advancePending.current)
+					setAdvanceProgress(reply.message);
 			}
 			if (reply.type === "comparison") {
 				comparisonPending.current = false;
 				setComparing(false);
 				setBranchReport(reply.report);
+				hasBranchReport.current = true;
+				setBranchStale(false);
+				const entry = {
+					id: `comparison-${++comparisonSequence.current}`,
+					report: reply.report,
+					label: comparisonLabel.current,
+					revision: liveRevision.current,
+				};
+				setBranchHistory((history) => [entry, ...history].slice(0, 4));
 				setBranchProgress("");
 			}
 			if (reply.type === "ready" && firstReady) {
@@ -189,6 +234,11 @@ export function useVisitorSession({
 					? stateCommands.current.shift()
 					: undefined;
 				if (failed && failed.generation < acceptedGeneration.current) return;
+				if (failed?.commandType === "advance") {
+					advancePending.current = null;
+					setAdvancing(false);
+					setAdvanceProgress("");
+				}
 				persistenceAfterState.current = false;
 				if (restoringStartup && freshAtStartup) {
 					restoringStartup = false;
@@ -227,6 +277,27 @@ export function useVisitorSession({
 				pending.current = false;
 			}
 			if (reply.type === "ready" || reply.type === "state") {
+				if (reply.advance && reply.advance.requestId !== advancePending.current)
+					return;
+				if (reply.advance) {
+					advancePending.current = null;
+					setAdvancing(false);
+					setAdvanceProgress("");
+					const reason = reply.advance.reason;
+					setAdvanceNotice(
+						reason === "cancelled"
+							? `Stopped at ${datedClock(reply.view.now)}. Completed time is kept.`
+							: reason === "horizon"
+								? `No matching event in ${reply.advance.rounds / 96} days. Paused at ${datedClock(reply.view.now)}.`
+								: reason === "hall-choice"
+									? `Hall choices are available · ${datedClock(reply.view.now)}.`
+									: `A new story${reason === "person-story" ? " about the followed neighbour" : ""} · ${datedClock(reply.view.now)}.`,
+					);
+				}
+				if (reply.advance?.rounds !== 0) {
+					liveRevision.current++;
+					if (hasBranchReport.current) setBranchStale(true);
+				}
 				const completed = stateCommands.current.shift();
 				if (
 					completed?.replacement !== null &&
@@ -306,6 +377,7 @@ export function useVisitorSession({
 				}
 				if (
 					(++rounds.current % 6 === 0 ||
+						reply.advance !== undefined ||
 						typeof completed?.replacement === "number") &&
 					autosaveEnabled.current
 				)
@@ -473,6 +545,7 @@ export function useVisitorSession({
 			if (
 				!pending.current &&
 				!comparisonPending.current &&
+				advancePending.current === null &&
 				!saveConflictRef.current
 			) {
 				pending.current = true;
@@ -484,6 +557,7 @@ export function useVisitorSession({
 	const send = (command: UiCommand) => {
 		if (
 			!comparisonPending.current &&
+			advancePending.current === null &&
 			(!saveConflictRef.current || command.type === "save")
 		) {
 			if (
@@ -491,13 +565,20 @@ export function useVisitorSession({
 				command.type === "intervene" ||
 				command.type === "restore" ||
 				command.type === "new"
-			)
+			) {
 				persistenceAfterState.current = true;
+				setAdvanceNotice("");
+			}
 			dispatch(command);
 		}
 	};
 	const compare = (intervention: Intervention, rounds: 24 | 96 | 672) => {
-		if (comparisonPending.current || saveConflictRef.current) return;
+		if (
+			comparisonPending.current ||
+			advancePending.current !== null ||
+			saveConflictRef.current
+		)
+			return;
 		if (replaceAfterSave.current) {
 			setBranchError("Wait for the new town to finish starting, then compare.");
 			return;
@@ -505,32 +586,81 @@ export function useVisitorSession({
 		setPlaying(false);
 		const evening = town?.evenings?.find((e) => e.id === intervention.eventId);
 		setBranchReport(undefined);
-		setBranchRequest({
-			rounds,
-			label:
-				intervention.kind === "open-evening-slot"
-					? `Extra slot for ${evening?.title ?? "the selected evening"}`
-					: intervention.kind === "advertise-evening"
-						? `Advertising ${evening?.title ?? "the selected invitation"}`
-						: intervention.kind === "request-inspection"
-							? `Annex inspection requested from ${town?.people.find((p) => p.id === intervention.actorId)?.name ?? "the selected neighbour"}`
-							: intervention.kind.replaceAll("-", " "),
-		});
+		hasBranchReport.current = false;
+		setBranchStale(false);
+		const label =
+			intervention.kind === "open-evening-slot"
+				? `Extra slot for ${evening?.title ?? "the selected evening"}`
+				: intervention.kind === "advertise-evening"
+					? `Advertising ${evening?.title ?? "the selected invitation"}`
+					: intervention.kind === "request-inspection"
+						? `Annex inspection requested from ${town?.people.find((p) => p.id === intervention.actorId)?.name ?? "the selected neighbour"}`
+						: intervention.kind.replaceAll("-", " ");
+		comparisonLabel.current = label;
+		setBranchRequest({ rounds, label });
 		setComparing(true);
 		setBranchError("");
 		setBranchProgress("Pausing the live town and taking its checkpoint…");
 		comparisonPending.current = true;
 		client.current?.send({ type: "compare", intervention, rounds });
 	};
+	const selectBranchReport = (report: TownComparison) => {
+		if (comparisonPending.current) return;
+		const entry = branchHistory.find((item) => item.report === report);
+		if (!entry) return;
+		setBranchReport(report);
+		hasBranchReport.current = true;
+		setBranchRequest({ label: entry.label, rounds: report.rounds });
+		setBranchStale(entry.revision !== liveRevision.current);
+		setBranchError("");
+	};
 	const cancelComparison = () => {
 		if (!comparisonPending.current) return;
 		setBranchProgress("Stopping comparison and restoring the live town…");
 		client.current?.send({ type: "cancel-comparison" });
 	};
+	const stopAdvancing = () => {
+		if (advancePending.current === null) return;
+		setAdvanceProgress("Stopping after the current round…");
+		client.current?.send({
+			type: "cancel-advance",
+			requestId: advancePending.current,
+		});
+	};
+	const advanceUntil = (
+		until: AdvanceRequest["until"] = "story",
+		actorId?: string,
+	) => {
+		if (
+			!town ||
+			comparisonPending.current ||
+			advancePending.current !== null ||
+			saveConflictRef.current ||
+			replaceAfterSave.current ||
+			interventionPending.current
+		)
+			return;
+		setPlaying(false);
+		setError("");
+		setAdvanceNotice("");
+		setAdvanceProgress("Advancing the real town to the next matching event…");
+		const requestId = ++advanceSequence.current;
+		advancePending.current = requestId;
+		setAdvancing(true);
+		persistenceAfterState.current = true;
+		dispatch({
+			type: "advance",
+			requestId,
+			until,
+			maxRounds: 672,
+			...(actorId ? { actorId } : {}),
+		});
+	};
 	const intervene = (intervention: Intervention) => {
 		if (
 			!town ||
 			comparisonPending.current ||
+			advancePending.current !== null ||
 			saveConflictRef.current ||
 			interventionPending.current
 		)
@@ -547,16 +677,27 @@ export function useVisitorSession({
 	};
 	const pause = () => {
 		setPlaying(false);
+		if (advancePending.current !== null) {
+			stopAdvancing();
+			return;
+		}
 		send({ type: "save" });
 	};
 
 	const play = () => {
-		if (saveConflictRef.current) return;
+		if (
+			saveConflictRef.current ||
+			advancePending.current !== null ||
+			comparisonPending.current
+		)
+			return;
 		autosaveEnabled.current = true;
 		setError("");
+		setAdvanceNotice("");
 		setPlaying(true);
 	};
 	const exportSave = () => {
+		if (advancePending.current !== null || comparisonPending.current) return;
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;
@@ -567,7 +708,12 @@ export function useVisitorSession({
 		setError(message);
 	};
 	const startTown = () => {
-		if (saveConflictRef.current || comparisonPending.current) return;
+		if (
+			saveConflictRef.current ||
+			comparisonPending.current ||
+			advancePending.current !== null
+		)
+			return;
 		const seed = Number(seedInput);
 		if (!Number.isSafeInteger(seed) || seed < 0 || seed > 2147483647) {
 			reportLocalError("Choose a whole-number seed from 0 to 2147483647.");
@@ -580,7 +726,12 @@ export function useVisitorSession({
 		send({ type: "save", requestId });
 	};
 	const restoreSave = (slot: "previous" | "latest") => {
-		if (saveConflictRef.current || comparisonPending.current) return;
+		if (
+			saveConflictRef.current ||
+			comparisonPending.current ||
+			advancePending.current !== null
+		)
+			return;
 		const intent = ++replacementIntent.current;
 		replaceAfterSave.current = null;
 		setPlaying(false);
@@ -600,7 +751,12 @@ export function useVisitorSession({
 			});
 	};
 	const importSave = async (file: File) => {
-		if (saveConflictRef.current || comparisonPending.current) return;
+		if (
+			saveConflictRef.current ||
+			comparisonPending.current ||
+			advancePending.current !== null
+		)
+			return;
 		const intent = ++replacementIntent.current;
 		replaceAfterSave.current = null;
 		setPlaying(false);
@@ -622,7 +778,18 @@ export function useVisitorSession({
 		error,
 		playing,
 		comparing,
+		advancing,
+		advanceProgress,
+		advanceNotice,
+		clearAdvanceNotice: () => setAdvanceNotice(""),
+		advanceUntil,
+		stopAdvancing,
 		branchReport,
+		branchStale,
+		branchHistory,
+		selectBranchReport,
+		comparisonSetup,
+		setComparisonSetup,
 		branchRequest,
 		branchProgress,
 		branchError,

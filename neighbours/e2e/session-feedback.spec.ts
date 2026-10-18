@@ -100,10 +100,10 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Bus restored",
 	);
-	await showTab(page, "Inspector");
-	await page
-		.getByText("Compare futures · hypothetical branches", { exact: true })
-		.click();
+	await showTab(page, "Compare");
+	const comparison = page.locator(".day-comparison");
+	if ((await comparison.getAttribute("open")) === null)
+		await comparison.locator(":scope > summary").click();
 	await page
 		.getByRole("button", { name: "Compare from here", exact: true })
 		.click();
@@ -120,7 +120,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Bus restored",
 	);
-	await showTab(page, "Inspector");
+	await showTab(page, "Compare");
 	await expect(
 		page.getByText("Checkpoint & limits", { exact: true }),
 	).toBeVisible();
@@ -132,7 +132,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await importPacket(page, original);
 	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toHaveCount(0);
-	await showTab(page, "Inspector");
+	await showTab(page, "Compare");
 	await expect(
 		page.getByText("Checkpoint & limits", { exact: true }),
 	).toHaveCount(0);

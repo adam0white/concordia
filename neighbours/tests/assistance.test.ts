@@ -348,7 +348,7 @@ it("distinguishes forced host inspection from an actual HF decision in retained 
 			id === "lea" ? choice : (hf.actor(id).job?.offer.id ?? "rest"),
 		);
 	for (let n = 0; n < 12 && !hf.s.assistance?.result; n++) round(hf);
-	expect(hf.view().assistance?.decisionSource).toBe("HF 2.2.1");
+	expect(hf.view().assistance?.decisionSource).toBe("HF 2.3.0");
 	expect(
 		hf
 			.view()
@@ -378,7 +378,7 @@ it("rejects forged or missing durable decision evidence", () => {
 				s.assistance.methodTerms = [{ source: "method:forged", value: 1 }];
 		},
 		(s: Save) => {
-			if (s.assistance) s.assistance.decisionSource = "HF 2.2.1";
+			if (s.assistance) s.assistance.decisionSource = "HF 2.3.0";
 		},
 	]) {
 		const bad = r.export() as Save;

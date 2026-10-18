@@ -4,6 +4,7 @@ import { reviewDue } from "./activity-reviews.ts";
 import { validateAssistance } from "./assistance.ts";
 import { validateEvenings } from "./evenings.ts";
 import { validateHandcart } from "./handcart.ts";
+import { HF_VERSION } from "./hf-version.ts";
 import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
 import { Runtime } from "./runtime.ts";
 import { known, placeSpecs, type Save, SCHEMA } from "./state.ts";
@@ -48,7 +49,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		throw Error("Unexpected or missing save fields");
 	if (
 		s.schema !== SCHEMA ||
-		s.hf !== "2.2.1" ||
+		!["2.2.1", HF_VERSION].includes(s.hf) ||
 		!Array.isArray(s.people) ||
 		s.people.length < 8 ||
 		s.people.length > 300 ||
@@ -367,5 +368,6 @@ export function restoreRuntime(input: unknown): TownRuntime {
 	);
 	if (cash + s.consumed + reservedFood !== initialCash + paid)
 		throw Error("Money conservation violation");
+	s.hf = HF_VERSION;
 	return new Runtime(s);
 }

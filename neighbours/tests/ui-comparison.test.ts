@@ -146,3 +146,87 @@ it("keeps the ready result preamble short and renders each outcome summary once"
 	expect(html).toContain("Without help");
 	expect(html).toContain("With help");
 });
+
+it("shows changed resources and checkpoint outside disclosures, flags stale branches", () => {
+	const report: TownComparison = {
+		schema: "town-comparison@1",
+		seed: 42,
+		startAt: 480,
+		endAt: 1920,
+		rounds: 96,
+		startHash: "old",
+		intervention: { kind: "restore-bus" },
+		baseline: {
+			stats: { foodConsumed: 178, underfed: 30, hallRepairs: 11 },
+			known: [],
+			stories: [],
+		},
+		treatment: {
+			stats: { foodConsumed: 208, underfed: 0, hallRepairs: 10 },
+			known: [],
+			stories: [],
+		},
+		limits: [],
+	};
+	const html = renderToStaticMarkup(
+		createElement(DayComparison, {
+			report,
+			stale: true,
+			busy: false,
+			progress: "",
+			error: "",
+			selected: "",
+			onRun: () => {},
+		}),
+	);
+	const main = html.slice(
+		0,
+		html.indexOf("Resources and neighbour state at the end"),
+	);
+	expect(main).toContain("178 → 208");
+	expect(main).toContain("30 → 0");
+	expect(main).toContain("11 → 10");
+	expect(main).toContain("Day 1, 08:00");
+	expect(main).toContain("96 rounds");
+	expect(main).toContain("Your town has changed");
+	expect(main).toContain("do not establish a general effect");
+});
+it("retains controlled setup and explains unavailable selected interventions before running", () => {
+	const html = renderToStaticMarkup(
+		createElement(DayComparison, {
+			setup: { kind: "restore-bus", rounds: 96 },
+			town: {
+				controlsRemaining: 3,
+				canRestoreBus: false,
+				canLendTools: true,
+				canShareNews: true,
+			} as never,
+			busy: false,
+			progress: "",
+			error: "",
+			selected: "",
+			onRun: () => {},
+		}),
+	);
+	expect(html).toContain('value="restore-bus" disabled="" selected=""');
+	expect(html).toContain("Bus service is already restored");
+	expect(html).toContain('value="96" selected=""');
+	expect(html).toContain('type="submit" disabled=""');
+});
+
+it("keeps Python diagnostics behind a short unchanged-town explanation", () => {
+	const html = renderToStaticMarkup(
+		createElement(DayComparison, {
+			busy: false,
+			progress: "",
+			error: "Traceback (most recent call last):\nBridgeError: bad experiment",
+			selected: "",
+			onRun: () => {},
+		}),
+	);
+	expect(html).toContain(
+		"Comparison could not finish. Your town is unchanged.",
+	);
+	expect(html).toContain("Technical details");
+	expect(html).not.toContain('class="error" role="alert">Traceback');
+});

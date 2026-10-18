@@ -1,4 +1,6 @@
-import Comparison from "./Comparison";
+import { useState } from "react";
+import RecordedStudies from "./RecordedStudies";
+import "./study-workbench.css";
 import DayComparison from "./DayComparison";
 import EvidencePanel from "./EvidencePanel";
 import { metricLabel, number, placeName } from "./format";
@@ -10,28 +12,84 @@ export default function TownInspector({
 }: {
 	session: ReturnType<typeof useVisitorSession>;
 }) {
+	const [section, setSection] = useState<"town" | "recorded">("town");
 	const town = session.town;
 	if (!town) return null;
 	return (
 		<section className="inspector focused-inspector">
-			<h2>Inspector</h2>
-			<DayComparison
-				report={session.branchReport}
-				request={session.branchRequest}
-				busy={session.comparing}
-				disabled={session.saveConflict}
-				progress={session.branchProgress}
-				error={session.branchError}
-				selected={session.selected}
-				onRun={session.compare}
-				onCancel={session.cancelComparison}
-			/>
-			<TownHealth history={session.healthHistory} />
+			<h2>Compare</h2>
+			<fieldset className="study-sections" aria-label="Comparison section">
+				<button
+					type="button"
+					aria-pressed={section === "town"}
+					onClick={() => setSection("town")}
+				>
+					Your town
+				</button>
+				<button
+					type="button"
+					aria-pressed={section === "recorded"}
+					onClick={() => setSection("recorded")}
+				>
+					Recorded studies
+				</button>
+			</fieldset>
+			<div hidden={section !== "town"}>
+				{session.branchHistory &&
+					session.branchHistory.length > 0 &&
+					(session.branchHistory.length > 1 || !session.branchReport) && (
+						<label>
+							Recent comparisons
+							<select
+								disabled={session.comparing}
+								value={
+									session.branchHistory.find(
+										(entry) => entry.report === session.branchReport,
+									)?.id ?? ""
+								}
+								onChange={(event) => {
+									const saved = session.branchHistory.find(
+										(entry) => entry.id === event.target.value,
+									);
+									if (saved) session.selectBranchReport(saved.report);
+								}}
+							>
+								{!session.branchReport && (
+									<option value="" disabled>
+										Choose a saved comparison
+									</option>
+								)}
+								{session.branchHistory.map(({ id, report, label }) => (
+									<option key={id} value={id}>
+										{label} · Day {Math.floor(report.startAt / 1440) + 1} ·{" "}
+										{report.rounds} rounds
+									</option>
+								))}
+							</select>
+						</label>
+					)}
+				<DayComparison
+					setup={session.comparisonSetup}
+					onSetupChange={session.setComparisonSetup}
+					stale={session.branchStale}
+					town={town}
+					report={session.branchReport}
+					request={session.branchRequest}
+					busy={session.comparing}
+					disabled={session.advancing || session.saveConflict}
+					progress={session.branchProgress}
+					error={session.branchError}
+					selected={session.selected}
+					onRun={session.compare}
+					onCancel={session.cancelComparison}
+				/>
+				<TownHealth history={session.healthHistory} />
+			</div>
+			<div hidden={section !== "recorded"}>
+				<RecordedStudies />
+			</div>
 			<EvidencePanel />
-			<details className="inspector-controls">
-				<summary>Controlled tests</summary>
-				<Comparison />
-			</details>
+
 			<details className="inspector-resources">
 				<summary>Resources and runtime</summary>
 				<h3>Shared resources</h3>

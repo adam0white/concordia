@@ -188,6 +188,15 @@ export interface TownView {
 		nextStartsAt?: number;
 	};
 	handcart?: {
+		canProposeBench?: boolean;
+		premiseCount?: number;
+		valuationMode?: "legacy" | "received-consequences@1";
+		opportunity?: {
+			from: number;
+			until: number;
+			received: boolean;
+			origin: ProposalOrigin;
+		};
 		progress: number;
 		total: number;
 		returned: boolean;
@@ -202,6 +211,7 @@ export interface Intervention {
 	proposal?: unknown;
 	proposalOrigin?: ProposalOrigin;
 	kind:
+		| "propose-bench-window"
 		| "request-inspection"
 		| "restore-bus"
 		| "lend-tools"
@@ -249,7 +259,28 @@ export interface TownComparison {
 	treatment: TownComparison["baseline"];
 	limits: string[];
 }
+export interface AdvanceRequest {
+	type: "advance";
+	requestId: number;
+	until: "story" | "person-story" | "hall-choice";
+	actorId?: string;
+	maxRounds: number;
+}
+export interface AdvanceResult {
+	requestId: number;
+	reason: "story" | "person-story" | "hall-choice" | "horizon" | "cancelled";
+	rounds: number;
+}
+export interface AdvanceProgress {
+	requestId: number;
+	rounds: number;
+	maxRounds: number;
+	day: number;
+	now: number;
+}
 export type UiCommand =
+	| AdvanceRequest
+	| { type: "cancel-advance"; requestId: number }
 	| { type: "step"; rounds?: number }
 	| { type: "new"; seed: number; population?: number }
 	| { type: "intervene"; intervention: Intervention }
@@ -259,8 +290,13 @@ export type UiCommand =
 	| { type: "cancel-comparison" }
 	| { type: "compare"; intervention: Intervention; rounds: number };
 export type UiReply =
-	| { type: "ready" | "state"; view: TownView; elapsedMs?: number }
-	| { type: "progress"; message: string }
+	| {
+			type: "ready" | "state";
+			view: TownView;
+			elapsedMs?: number;
+			advance?: AdvanceResult;
+	  }
+	| { type: "progress"; message: string; advance?: AdvanceProgress }
 	| { type: "save"; save: unknown; requestId?: number }
 	| { type: "inspection"; actorId: string; data: unknown }
 	| { type: "comparison"; report: TownComparison }

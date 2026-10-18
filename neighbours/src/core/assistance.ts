@@ -10,6 +10,7 @@ import {
 } from "../experiments/inspection.ts";
 import { presentAt } from "./encounters.ts";
 import type { EveningHost } from "./evenings.ts";
+import { isHfSource } from "./hf-version.ts";
 import { placeOf } from "./invariants.ts";
 import { placeSpecs, type Resident, type Save } from "./state.ts";
 import { validateEvent } from "./validation.ts";
@@ -99,13 +100,12 @@ export function assistanceDecision(
 	return {
 		id: record.id,
 		source,
-		methodTerms:
-			source === "HF 2.2.1"
-				? (record.considered
-						.find((c) => c.affordanceId === record.chosenAffordanceId)
-						?.terms.filter((t) => t.source.startsWith("method:"))
-						.map((t) => ({ source: t.source, value: t.value })) ?? [])
-				: [],
+		methodTerms: isHfSource(source)
+			? (record.considered
+					.find((c) => c.affordanceId === record.chosenAffordanceId)
+					?.terms.filter((t) => t.source.startsWith("method:"))
+					.map((t) => ({ source: t.source, value: t.value })) ?? [])
+			: [],
 	};
 }
 function validateDecisionEvidence(
@@ -133,8 +133,8 @@ function validateDecisionEvidence(
 				!Number.isFinite(t.value) ||
 				Math.abs(t.value) > 1e6,
 		) ||
-		(source !== "HF 2.2.1" && terms.length > 0) ||
-		(source === "HF 2.2.1" && id.startsWith("host-"))
+		(!isHfSource(source) && terms.length > 0) ||
+		(isHfSource(source) && id.startsWith("host-"))
 	)
 		throw Error("Invalid assistance decision provenance");
 }
@@ -146,7 +146,7 @@ function validateMatchingTrace(
 	terms: { source: string; value: number }[],
 ): void {
 	const trace = r.person.trace.find((t) => t.id === id);
-	if (source !== "HF 2.2.1" || !trace) return;
+	if (!isHfSource(source) || !trace) return;
 	const chosen = trace.considered.find(
 		(c) => c.affordanceId === `annex-${action}`,
 	);
