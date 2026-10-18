@@ -1,10 +1,10 @@
 {
   "schema": "neighbours/bench-choice-probe@1",
-  "recordedAt": "2026-10-18T08:03:27.366Z",
+  "recordedAt": "2026-10-18T08:35:37.331Z",
   "hf": "2.3.0",
   "modelCalls": 0,
-  "sourceCommit": "90e07c1be0cac6aaddbb81955d05db04234b2d4b",
-  "sourceFingerprint": "f85b5dae4e77e914f77a582241e8ffe0a393aa8fa07234e73f1718d668d9c80b",
+  "sourceCommit": "7d2e21ef9855ea30ecc97b21979ef77dde1175f2",
+  "sourceFingerprint": "3996b7db15a9c344e846157c21a35d53bba5ce52b85e8c340ce3295da1510116",
   "sourceWorktreeClean": true,
   "limitations": [
     "Fresh fixed-seed captures contain eight actual HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
@@ -381,5 +381,5 @@
       }
     }
   ],
-  "rawReportSha256": "8034e09945a82a9459a29b551c0a809f51cd139305b49a0158b5ef66f26bdfb9"
+  "rawReportSha256": "7d25c5a8d55856fc13965876b6ee006776bdde6f0cee0289fee7da2865234e5c"
 }
