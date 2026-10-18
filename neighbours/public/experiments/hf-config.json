@@ -3,44 +3,47 @@
   "runtime": "typescript-host-released-hf",
   "hf": "2.6.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "a18ea3b74c4ac7fbd902a2670c991e563133c550b4fd63358b4aa16903d94fde",
+  "sourceFingerprint": "70a632a5415664176d673a465a77f2b763882688bc16274526862e08fc98c75c",
   "sources": {
     "package-lock.json": "3dc7b931d18567ba1b979781bc69cb7d52456ce47f0edce6cdda48430083b0b6",
     "package.json": "ac296e1fd9876d540e14376f58ae47898baab2c0ee1eba67959a0a956cf38c61",
     "scripts/probe-hf-config.ts": "75941e08a5b85cd4c89713a82f4933d2762b290311b8a2c70ba41c56c4babaa3",
-    "src/contracts.ts": "9f5f24709cdf7f76ef15524b38f8a0820ffd1dfc0d552feb4569a00e75e6bf4c",
+    "src/contracts.ts": "09cb5d27df5c433d057837d6558aaed183512c7495217afd95f73cc59e7448cf",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
     "src/core/bench-opportunity.ts": "ffa8810c0feffc900cba9f2e779e5b3f83f2cd4f38f7cfdc74839d6ce8b29b79",
     "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/cast.ts": "1b3aff0ed86792f6e1a83eddcc833da8a0b0a175684060a4e3e740efccbc201f",
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
-    "src/core/encounters.ts": "d9d4b78139abd922e8f4c359fc620f28452d0af227cf668a4cdd7377ba4e1e2a",
+    "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
     "src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
     "src/core/evenings.ts": "92943a79298cec652881907c2e4e26f4374c9e06df619fd5bbaa1a839d6bd0cb",
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
     "src/core/handcart.ts": "fc43caea8b9f89511ffabda04ec1bd81f7f24139b3603e37ea81e1580b4d2558",
     "src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
     "src/core/hf-version.ts": "444f2ad22a735b0b4096f9e537b70a180d87a855b205bd6176801409941dc8cb",
+    "src/core/impression.ts": "0646e065dfdcef317a7ba6e6e45ee29401592cf2649b2b176402e605916196d9",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/journal.ts": "93ab2463db21ede9d5a9802030c51314f1171b5d0137ab68d93cff52d5eaac8e",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
-    "src/core/offers.ts": "18825e392ed4ad9e60a462465c77e79227badaa6aea43208dca5046472c4ea3c",
+    "src/core/offers.ts": "1964c41df6d46f87850978ef153cfe2e82f14cdb7037bac5458fb1ebfe38da8c",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
-    "src/core/player-events.ts": "4659f09d7f4e6fb31a1dc90e1d5cc4441f87dfdcba2537872d468577a7f4a062",
-    "src/core/player.ts": "97727ad986ad024d869affe5336eb27ad7f8503f702408205125212afab8bd2b",
-    "src/core/restore.ts": "44b0dbce5b09acb2d5b494b34f7aa9052830037c2d17398587acc38c270fcac8",
-    "src/core/runtime.ts": "cfd71881292124733508d1ba1af36a5aca1e09efa08cc0e46108495e98520cb8",
-    "src/core/scenario.ts": "0a5482498e94f13875af8821cac4d3bba80e2864be5aa273a61bde1f935ed999",
+    "src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
+    "src/core/player.ts": "ba7fbe9d0faa8ce6cdbfe2c06261548894773b5e7271b9805bf0603fc184d4ba",
+    "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
+    "src/core/restore.ts": "ad08a69dbf23aea1a08cdf956ba1db70e605cdd82b5fda18e47a801335869411",
+    "src/core/runtime.ts": "7159cf73207789f4be997fb1e2a9edd7231e0f22858dfa38e54d1237689779d1",
+    "src/core/scenario.ts": "75f92c28de3e5ef980a3f854dc083deb6d23bd4938f56ce926ac421bd9b9b29d",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "14e5258a195666186a43e283129868a497443a9e1aec673adf7c12aa297d6398",
-    "src/core/stories.ts": "1a23c8961310b59c29d4e33bdc29a4fa44b712c9a3f6cca458eeec3ba8637772",
+    "src/core/state.ts": "b615b3f8e5d2df192c6e179204617bcc9eb37629ecadc9bd1015ab72e4233e4f",
+    "src/core/stories.ts": "915ba163f798eff6d26f0acf2110e66986fe9cbc4688f8c09c44bd56c2c2c953",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
+    "src/core/timber.ts": "2ce112eb5272add95ac49e2559582c326f311104b103c55291832ec5a0576e6a",
     "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-    "src/core/validation.ts": "5b16f7d67a8e4160162f737a9595d224bab88d57dead1d50ae3ced9c4124375d",
-    "src/core/voicing.ts": "3c7d4537fdff5de376fa7e841df8b6ebed379b5c15f3b3b8e18feffdfe118e35",
+    "src/core/validation.ts": "d10caaca12d2334f41f11d0fa483a3d5a1e584d6b5c43f638644d2d619ad5f30",
+    "src/core/voicing.ts": "14465adb66b60dd38239b305c81e927d9d0ad9de39962fd57ccf41fa523468dd",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -55,7 +58,7 @@
       101
     ]
   },
-  "wallSeconds": 7.742477792,
+  "wallSeconds": 8.088620125,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -67,7 +70,7 @@
   ],
   "arms": [
     {
-      "pid": 10566,
+      "pid": 36238,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -2487,7 +2490,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -2685,7 +2688,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -3342,7 +3345,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -3686,7 +3689,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -3884,7 +3887,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -4529,7 +4532,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -4840,7 +4843,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -5030,7 +5033,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -5344,7 +5347,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -5542,7 +5545,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -6187,7 +6190,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -6402,7 +6405,664 @@
               "lookup": "annex-ask-inspector"
             }
           ],
-          "genuineCartOpportunity": null,
+          "genuineCartOpportunity": {
+            "at": 17940,
+            "chosen": "cart-slow",
+            "offeredIds": [
+              "rest",
+              "drink",
+              "eat",
+              "grow",
+              "supply",
+              "talk",
+              "learn",
+              "care",
+              "work",
+              "gather",
+              "accept:evening-1-class",
+              "decline:evening-1-class",
+              "accept:evening-1-meal",
+              "decline:evening-1-meal",
+              "cart-ask",
+              "cart-slow"
+            ],
+            "recordedTop": [
+              {
+                "affordanceId": "cart-slow",
+                "action": "cart-slow",
+                "label": "Restore one cart section on the side bench · two hours",
+                "utility": 0.5638,
+                "terms": [
+                  {
+                    "source": "goal:g4",
+                    "value": 0.6
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "eat",
+                "action": "eat",
+                "label": "Eat a meal at the market",
+                "utility": 0.4206,
+                "terms": [
+                  {
+                    "source": "need:food",
+                    "value": 0.5356
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0164
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65
+                },
+                "believed": {
+                  "food": 0.648517967668387
+                }
+              },
+              {
+                "affordanceId": "gather",
+                "action": "gather",
+                "label": "Share a meal in the reopened hall",
+                "utility": 0.3851,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0156
+                  },
+                  {
+                    "source": "need:food",
+                    "value": 0.4989
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.002
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65,
+                  "belonging": 0.65,
+                  "meaning": 0.3
+                },
+                "believed": {
+                  "belonging": 0.65,
+                  "food": 0.6422354623558479,
+                  "meaning": 0.3
+                },
+                "recalled": [
+                  "e691"
+                ]
+              },
+              {
+                "affordanceId": "work",
+                "action": "work",
+                "label": "Work a paid workshop shift",
+                "utility": 0.1451,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": 0.1813
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.3
+                },
+                "believed": {
+                  "competence": 0.3
+                }
+              },
+              {
+                "affordanceId": "rest",
+                "action": "rest",
+                "label": "Rest at home",
+                "utility": 0.0046,
+                "terms": [
+                  {
+                    "source": "need:leisure",
+                    "value": 0.0044
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0002
+                  }
+                ],
+                "advertised": {
+                  "leisure": 0.3
+                },
+                "believed": {
+                  "leisure": 0.3
+                }
+              },
+              {
+                "affordanceId": "drink",
+                "action": "drink",
+                "label": "Drink water here",
+                "utility": 0.0019,
+                "terms": [
+                  {
+                    "source": "need:water",
+                    "value": 0.0018
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0001
+                  }
+                ],
+                "advertised": {
+                  "water": 0.7
+                },
+                "believed": {
+                  "water": 0.18287774978804483
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-class",
+                "action": "accept-evening",
+                "label": "Accept Lea’s practical class · Day 15 at 18:00",
+                "utility": -0.0102,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "social:lea",
+                    "value": 0.0006
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-meal",
+                "action": "accept-evening",
+                "label": "Accept Sam’s shared supper · Day 15 at 18:00",
+                "utility": -0.0108,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              }
+            ],
+            "allScores": [
+              {
+                "affordanceId": "cart-slow",
+                "action": "cart-slow",
+                "label": "Restore one cart section on the side bench · two hours",
+                "utility": 0.5638,
+                "terms": [
+                  {
+                    "source": "goal:g4",
+                    "value": 0.6
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "eat",
+                "action": "eat",
+                "label": "Eat a meal at the market",
+                "utility": 0.4206,
+                "terms": [
+                  {
+                    "source": "need:food",
+                    "value": 0.5356
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0164
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65
+                },
+                "believed": {
+                  "food": 0.648517967668387
+                }
+              },
+              {
+                "affordanceId": "gather",
+                "action": "gather",
+                "label": "Share a meal in the reopened hall",
+                "utility": 0.3851,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0156
+                  },
+                  {
+                    "source": "need:food",
+                    "value": 0.4989
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.002
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65,
+                  "belonging": 0.65,
+                  "meaning": 0.3
+                },
+                "believed": {
+                  "belonging": 0.65,
+                  "food": 0.6422354623558479,
+                  "meaning": 0.3
+                },
+                "recalled": [
+                  "e691"
+                ]
+              },
+              {
+                "affordanceId": "work",
+                "action": "work",
+                "label": "Work a paid workshop shift",
+                "utility": 0.1451,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": 0.1813
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.3
+                },
+                "believed": {
+                  "competence": 0.3
+                }
+              },
+              {
+                "affordanceId": "rest",
+                "action": "rest",
+                "label": "Rest at home",
+                "utility": 0.0046,
+                "terms": [
+                  {
+                    "source": "need:leisure",
+                    "value": 0.0044
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0002
+                  }
+                ],
+                "advertised": {
+                  "leisure": 0.3
+                },
+                "believed": {
+                  "leisure": 0.3
+                }
+              },
+              {
+                "affordanceId": "drink",
+                "action": "drink",
+                "label": "Drink water here",
+                "utility": 0.0019,
+                "terms": [
+                  {
+                    "source": "need:water",
+                    "value": 0.0018
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0001
+                  }
+                ],
+                "advertised": {
+                  "water": 0.7
+                },
+                "believed": {
+                  "water": 0.18287774978804483
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-class",
+                "action": "accept-evening",
+                "label": "Accept Lea’s practical class · Day 15 at 18:00",
+                "utility": -0.0102,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "social:lea",
+                    "value": 0.0006
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-meal",
+                "action": "accept-evening",
+                "label": "Accept Sam’s shared supper · Day 15 at 18:00",
+                "utility": -0.0108,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "decline:evening-1-class",
+                "action": "decline-evening",
+                "label": "Decline Lea’s practical class",
+                "utility": -0.0189,
+                "terms": [
+                  {
+                    "source": "need:autonomy",
+                    "value": 0.0052
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "autonomy": 0.2
+                },
+                "believed": {
+                  "autonomy": 0.2
+                }
+              },
+              {
+                "affordanceId": "decline:evening-1-meal",
+                "action": "decline-evening",
+                "label": "Decline Sam’s shared supper",
+                "utility": -0.0189,
+                "terms": [
+                  {
+                    "source": "need:autonomy",
+                    "value": 0.0052
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "autonomy": 0.2
+                },
+                "believed": {
+                  "autonomy": 0.2
+                }
+              },
+              {
+                "affordanceId": "talk",
+                "action": "talk",
+                "label": "Visit neighbours at the hall",
+                "utility": -0.0265,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0096
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0001
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.45
+                },
+                "believed": {
+                  "belonging": 0.38571428571428573
+                }
+              },
+              {
+                "affordanceId": "cart-ask",
+                "action": "cart-ask",
+                "label": "Ask Ada for tomorrow’s 08:00–12:00 main bench; her paid work needs it too",
+                "utility": -0.0268,
+                "terms": [
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "social:ada",
+                    "value": 0.0006
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "care",
+                "action": "care",
+                "label": "Help neighbours at the clinic",
+                "utility": -0.0292,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.007
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.3,
+                  "competence": 0.25
+                },
+                "believed": {
+                  "belonging": 0.3,
+                  "competence": 0.25
+                }
+              },
+              {
+                "affordanceId": "learn",
+                "action": "learn",
+                "label": "Attend a practical class at school",
+                "utility": -0.0314,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0048
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.3,
+                  "belonging": 0.2
+                },
+                "believed": {
+                  "belonging": 0.2,
+                  "competence": 0.3
+                }
+              },
+              {
+                "affordanceId": "grow",
+                "action": "grow",
+                "label": "Tend and harvest the garden",
+                "utility": -0.0362,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.35
+                },
+                "believed": {
+                  "competence": 0.35
+                }
+              },
+              {
+                "affordanceId": "supply",
+                "action": "supply",
+                "label": "Carry food from the quay",
+                "utility": -0.0362,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.25
+                },
+                "believed": {
+                  "competence": 0.25
+                }
+              }
+            ],
+            "omittedFromTop": [
+              "grow",
+              "supply",
+              "talk",
+              "learn",
+              "care",
+              "decline:evening-1-class",
+              "decline:evening-1-meal",
+              "cart-ask"
+            ]
+          },
           "authoredCartControl": {
             "provenance": "authored-cart-present-control; actual HF received observation and acquired goal; no claimed preceding evening",
             "acquiredGoalId": "g3",
@@ -6567,7 +7227,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -6783,7 +7443,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -6982,99 +7642,99 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801082616375,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037190317217,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.40190293835161733,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.5640637026684846,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3474915663837339,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3619485867791914,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.48948961148966763,
+              "brokenPromises": 2,
               "keptPromises": 9
             }
           ],
@@ -7083,11 +7743,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
+            "minimumSatiety": 0.48948961148966763,
+            "brokenPromises": 2,
             "keptPromises": 9
           },
-          "finalStateSha256": "c40ad2ab690dffaaf4bec2ce01ce7510bfd748e0aa4834c1c9d2163472744766"
+          "finalStateSha256": "700e60af8f1c39ea837af6bc2f638c7a952353b9377b0acaa7a51cd60cb3deec"
         },
         {
           "seed": 73,
@@ -7225,7 +7885,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -7423,7 +8083,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -8080,7 +8740,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -8424,7 +9084,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -8622,7 +9282,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -9267,7 +9927,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -9578,7 +10238,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -9768,7 +10428,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -10082,7 +10742,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -10280,7 +10940,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -10925,7 +11585,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -11140,7 +11800,664 @@
               "lookup": "annex-ask-inspector"
             }
           ],
-          "genuineCartOpportunity": null,
+          "genuineCartOpportunity": {
+            "at": 17940,
+            "chosen": "cart-slow",
+            "offeredIds": [
+              "rest",
+              "drink",
+              "eat",
+              "grow",
+              "supply",
+              "talk",
+              "learn",
+              "care",
+              "work",
+              "gather",
+              "accept:evening-1-class",
+              "decline:evening-1-class",
+              "accept:evening-1-meal",
+              "decline:evening-1-meal",
+              "cart-ask",
+              "cart-slow"
+            ],
+            "recordedTop": [
+              {
+                "affordanceId": "cart-slow",
+                "action": "cart-slow",
+                "label": "Restore one cart section on the side bench · two hours",
+                "utility": 0.5638,
+                "terms": [
+                  {
+                    "source": "goal:g4",
+                    "value": 0.6
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "eat",
+                "action": "eat",
+                "label": "Eat a meal at the market",
+                "utility": 0.4206,
+                "terms": [
+                  {
+                    "source": "need:food",
+                    "value": 0.5356
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0164
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65
+                },
+                "believed": {
+                  "food": 0.648517967668387
+                }
+              },
+              {
+                "affordanceId": "gather",
+                "action": "gather",
+                "label": "Share a meal in the reopened hall",
+                "utility": 0.3851,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0156
+                  },
+                  {
+                    "source": "need:food",
+                    "value": 0.4989
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.002
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65,
+                  "belonging": 0.65,
+                  "meaning": 0.3
+                },
+                "believed": {
+                  "belonging": 0.65,
+                  "food": 0.6422354623558479,
+                  "meaning": 0.3
+                },
+                "recalled": [
+                  "e691"
+                ]
+              },
+              {
+                "affordanceId": "work",
+                "action": "work",
+                "label": "Work a paid workshop shift",
+                "utility": 0.1451,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": 0.1813
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.3
+                },
+                "believed": {
+                  "competence": 0.3
+                }
+              },
+              {
+                "affordanceId": "rest",
+                "action": "rest",
+                "label": "Rest at home",
+                "utility": 0.0046,
+                "terms": [
+                  {
+                    "source": "need:leisure",
+                    "value": 0.0044
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0002
+                  }
+                ],
+                "advertised": {
+                  "leisure": 0.3
+                },
+                "believed": {
+                  "leisure": 0.3
+                }
+              },
+              {
+                "affordanceId": "drink",
+                "action": "drink",
+                "label": "Drink water here",
+                "utility": 0.0019,
+                "terms": [
+                  {
+                    "source": "need:water",
+                    "value": 0.0018
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0001
+                  }
+                ],
+                "advertised": {
+                  "water": 0.7
+                },
+                "believed": {
+                  "water": 0.18287774978804483
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-class",
+                "action": "accept-evening",
+                "label": "Accept Lea’s practical class · Day 15 at 18:00",
+                "utility": -0.0102,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "social:lea",
+                    "value": 0.0006
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-meal",
+                "action": "accept-evening",
+                "label": "Accept Sam’s shared supper · Day 15 at 18:00",
+                "utility": -0.0108,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              }
+            ],
+            "allScores": [
+              {
+                "affordanceId": "cart-slow",
+                "action": "cart-slow",
+                "label": "Restore one cart section on the side bench · two hours",
+                "utility": 0.5638,
+                "terms": [
+                  {
+                    "source": "goal:g4",
+                    "value": 0.6
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "competence": 0.35,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "eat",
+                "action": "eat",
+                "label": "Eat a meal at the market",
+                "utility": 0.4206,
+                "terms": [
+                  {
+                    "source": "need:food",
+                    "value": 0.5356
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0164
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65
+                },
+                "believed": {
+                  "food": 0.648517967668387
+                }
+              },
+              {
+                "affordanceId": "gather",
+                "action": "gather",
+                "label": "Share a meal in the reopened hall",
+                "utility": 0.3851,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0156
+                  },
+                  {
+                    "source": "need:food",
+                    "value": 0.4989
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.002
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": -0.0952
+                  }
+                ],
+                "advertised": {
+                  "food": 0.65,
+                  "belonging": 0.65,
+                  "meaning": 0.3
+                },
+                "believed": {
+                  "belonging": 0.65,
+                  "food": 0.6422354623558479,
+                  "meaning": 0.3
+                },
+                "recalled": [
+                  "e691"
+                ]
+              },
+              {
+                "affordanceId": "work",
+                "action": "work",
+                "label": "Work a paid workshop shift",
+                "utility": 0.1451,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  },
+                  {
+                    "source": "material",
+                    "value": 0.1813
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.3
+                },
+                "believed": {
+                  "competence": 0.3
+                }
+              },
+              {
+                "affordanceId": "rest",
+                "action": "rest",
+                "label": "Rest at home",
+                "utility": 0.0046,
+                "terms": [
+                  {
+                    "source": "need:leisure",
+                    "value": 0.0044
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0002
+                  }
+                ],
+                "advertised": {
+                  "leisure": 0.3
+                },
+                "believed": {
+                  "leisure": 0.3
+                }
+              },
+              {
+                "affordanceId": "drink",
+                "action": "drink",
+                "label": "Drink water here",
+                "utility": 0.0019,
+                "terms": [
+                  {
+                    "source": "need:water",
+                    "value": 0.0018
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0001
+                  }
+                ],
+                "advertised": {
+                  "water": 0.7
+                },
+                "believed": {
+                  "water": 0.18287774978804483
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-class",
+                "action": "accept-evening",
+                "label": "Accept Lea’s practical class · Day 15 at 18:00",
+                "utility": -0.0102,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "social:lea",
+                    "value": 0.0006
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "accept:evening-1-meal",
+                "action": "accept-evening",
+                "label": "Accept Sam’s shared supper · Day 15 at 18:00",
+                "utility": -0.0108,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0045
+                  },
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.25,
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "belonging": 0.1875,
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "decline:evening-1-class",
+                "action": "decline-evening",
+                "label": "Decline Lea’s practical class",
+                "utility": -0.0189,
+                "terms": [
+                  {
+                    "source": "need:autonomy",
+                    "value": 0.0052
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "autonomy": 0.2
+                },
+                "believed": {
+                  "autonomy": 0.2
+                }
+              },
+              {
+                "affordanceId": "decline:evening-1-meal",
+                "action": "decline-evening",
+                "label": "Decline Sam’s shared supper",
+                "utility": -0.0189,
+                "terms": [
+                  {
+                    "source": "need:autonomy",
+                    "value": 0.0052
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0241
+                  }
+                ],
+                "advertised": {
+                  "autonomy": 0.2
+                },
+                "believed": {
+                  "autonomy": 0.2
+                }
+              },
+              {
+                "affordanceId": "talk",
+                "action": "talk",
+                "label": "Visit neighbours at the hall",
+                "utility": -0.0265,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0096
+                  },
+                  {
+                    "source": "expectation",
+                    "value": 0.0001
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.45
+                },
+                "believed": {
+                  "belonging": 0.38571428571428573
+                }
+              },
+              {
+                "affordanceId": "cart-ask",
+                "action": "cart-ask",
+                "label": "Ask Ada for tomorrow’s 08:00–12:00 main bench; her paid work needs it too",
+                "utility": -0.0268,
+                "terms": [
+                  {
+                    "source": "emotion:joy:social",
+                    "value": 0.0088
+                  },
+                  {
+                    "source": "social:ada",
+                    "value": 0.0006
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "meaning": 0.2
+                },
+                "believed": {
+                  "meaning": 0.2
+                }
+              },
+              {
+                "affordanceId": "care",
+                "action": "care",
+                "label": "Help neighbours at the clinic",
+                "utility": -0.0292,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.007
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "belonging": 0.3,
+                  "competence": 0.25
+                },
+                "believed": {
+                  "belonging": 0.3,
+                  "competence": 0.25
+                }
+              },
+              {
+                "affordanceId": "learn",
+                "action": "learn",
+                "label": "Attend a practical class at school",
+                "utility": -0.0314,
+                "terms": [
+                  {
+                    "source": "need:belonging",
+                    "value": 0.0048
+                  },
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.3,
+                  "belonging": 0.2
+                },
+                "believed": {
+                  "belonging": 0.2,
+                  "competence": 0.3
+                }
+              },
+              {
+                "affordanceId": "grow",
+                "action": "grow",
+                "label": "Tend and harvest the garden",
+                "utility": -0.0362,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.35
+                },
+                "believed": {
+                  "competence": 0.35
+                }
+              },
+              {
+                "affordanceId": "supply",
+                "action": "supply",
+                "label": "Carry food from the quay",
+                "utility": -0.0362,
+                "terms": [
+                  {
+                    "source": "effort",
+                    "value": -0.0362
+                  }
+                ],
+                "advertised": {
+                  "competence": 0.25
+                },
+                "believed": {
+                  "competence": 0.25
+                }
+              }
+            ],
+            "omittedFromTop": [
+              "grow",
+              "supply",
+              "talk",
+              "learn",
+              "care",
+              "decline:evening-1-class",
+              "decline:evening-1-meal",
+              "cart-ask"
+            ]
+          },
           "authoredCartControl": {
             "provenance": "authored-cart-present-control; actual HF received observation and acquired goal; no claimed preceding evening",
             "acquiredGoalId": "g3",
@@ -11305,7 +12622,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -11521,7 +12838,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -11720,99 +13037,99 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939002803135,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126969446471,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801072554357,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037189311015,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.40190293835161733,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.5640637026684846,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3474915663837339,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3619485867791914,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.48120698231439635,
+              "brokenPromises": 2,
               "keptPromises": 9
             }
           ],
@@ -11821,11 +13138,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
+            "minimumSatiety": 0.48120698231439635,
+            "brokenPromises": 2,
             "keptPromises": 9
           },
-          "finalStateSha256": "f5244110a4017030039676021d78b706ecd206012e3cda9a2a51d9df34ccb342"
+          "finalStateSha256": "34e333d2139537a00b87e42910502277ade78249e3965cdeda394b386f5ab9b5"
         },
         {
           "seed": 9,
@@ -11963,7 +13280,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -12161,7 +13478,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -12818,7 +14135,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -13162,7 +14479,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -13360,7 +14677,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -14005,7 +15322,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -14316,7 +15633,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -14506,7 +15823,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -14820,7 +16137,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -15018,7 +16335,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -15663,7 +16980,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -16043,7 +17360,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -16259,7 +17576,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -16458,100 +17775,100 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801082616375,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037190317217,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.36042489059552096,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3814118093750464,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.35590951271437443,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3705972871807128,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.5352500403338192,
+              "brokenPromises": 3,
+              "keptPromises": 10
             }
           ],
           "minimumAlive": 8,
@@ -16559,11 +17876,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
-            "keptPromises": 9
+            "minimumSatiety": 0.5352500403338192,
+            "brokenPromises": 3,
+            "keptPromises": 10
           },
-          "finalStateSha256": "ea502e7f5cf5a84c8b8ef90cf5abd7e78300ea7089e183efde9703ca7723fe97"
+          "finalStateSha256": "d8299f492efa80d0354ec445611dbab6200721105fb19eb053a070eab2bc3bf2"
         },
         {
           "seed": 101,
@@ -16701,7 +18018,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -16899,7 +18216,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -17556,7 +18873,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -17900,7 +19217,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -18098,7 +19415,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -18743,7 +20060,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -19054,7 +20371,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -19244,7 +20561,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -19558,7 +20875,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -19756,7 +21073,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -20401,7 +21718,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -20781,7 +22098,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -20997,7 +22314,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -21196,100 +22513,100 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801082616375,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037190317217,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.40190293835161733,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.6142035962008002,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
+              "minimumSatiety": 0.3551570332139106,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.3445382831914196,
+              "brokenPromises": 1,
+              "keptPromises": 10
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.4046321753310435,
+              "brokenPromises": 1,
+              "keptPromises": 10
             }
           ],
           "minimumAlive": 8,
@@ -21297,16 +22614,16 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
-            "keptPromises": 9
+            "minimumSatiety": 0.4046321753310435,
+            "brokenPromises": 1,
+            "keptPromises": 10
           },
-          "finalStateSha256": "7ab8c44e01c1377dfd98a6d2c269e2a96f29556ebb085ef64be1f0cc4d6d918e"
+          "finalStateSha256": "a16b13d6d97e1a7818ef7f936018ce1a6046a99d20b57891a23ed42ed35eadf7"
         }
       ]
     },
     {
-      "pid": 10576,
+      "pid": 36248,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -23726,7 +25043,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -23924,7 +25241,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -24581,7 +25898,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -24925,7 +26242,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -25123,7 +26440,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -25768,7 +27085,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -26079,7 +27396,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -26269,7 +27586,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -26583,7 +27900,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -26781,7 +28098,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -27426,7 +28743,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -27806,7 +29123,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -28022,7 +29339,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -28221,99 +29538,99 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801082616375,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037190317217,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.40190293835161733,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.5640637026684846,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3474915663837339,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.401977496265654,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.48948961148966763,
+              "brokenPromises": 2,
               "keptPromises": 9
             }
           ],
@@ -28322,11 +29639,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
+            "minimumSatiety": 0.48948961148966763,
+            "brokenPromises": 2,
             "keptPromises": 9
           },
-          "finalStateSha256": "abd6062ded911ed68d0949bae3cd1ed1c630af4326b09581462eb9ceea2a28e4"
+          "finalStateSha256": "f032a111a0a21e1d61cc1d1645dfed542ac9de8f4ffda54e04f4752a65588985"
         },
         {
           "seed": 73,
@@ -28464,7 +29781,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -28662,7 +29979,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -29319,7 +30636,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -29663,7 +30980,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -29861,7 +31178,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -30506,7 +31823,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -30817,7 +32134,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -31007,7 +32324,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -31321,7 +32638,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -31519,7 +32836,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -32164,7 +33481,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -32544,7 +33861,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -32760,7 +34077,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -32959,99 +34276,99 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939002803135,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126969446471,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801072554357,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037189311015,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.40190293835161733,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.5640637026684846,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3474915663837339,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.401977496265654,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.48120698231439635,
+              "brokenPromises": 2,
               "keptPromises": 9
             }
           ],
@@ -33060,11 +34377,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
+            "minimumSatiety": 0.48120698231439635,
+            "brokenPromises": 2,
             "keptPromises": 9
           },
-          "finalStateSha256": "5961d09fad91a24cbcbe855a1e96f2d318ad4d735578fb24feee9bba9ee8af2a"
+          "finalStateSha256": "cf40fdb2c6dccfc43e60b3ea11bd826ca609a00099ad3dc58bc9e908523283e1"
         },
         {
           "seed": 9,
@@ -33202,7 +34519,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -33400,7 +34717,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -34057,7 +35374,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -34401,7 +35718,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -34599,7 +35916,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -35244,7 +36561,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -35555,7 +36872,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -35745,7 +37062,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -36059,7 +37376,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -36257,7 +37574,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -36902,7 +38219,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -37282,7 +38599,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -37498,7 +38815,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -37697,100 +39014,100 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801082616375,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037190317217,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.36042489059552096,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3814118093750464,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.35590951271437443,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
+              "minimumSatiety": 0.3705972871807128,
+              "brokenPromises": 2,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.5304969773104949,
+              "brokenPromises": 3,
+              "keptPromises": 10
             }
           ],
           "minimumAlive": 8,
@@ -37798,11 +39115,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
-            "keptPromises": 9
+            "minimumSatiety": 0.5304969773104949,
+            "brokenPromises": 3,
+            "keptPromises": 10
           },
-          "finalStateSha256": "42a1c28ab21ee6472e640ec76b06d4b6f922ec31405c3264fdf3cf0c169e029c"
+          "finalStateSha256": "1f82261b7008678153cf9ab70bc4b385d4fee93ba679f2aab7a5b06b70196b15"
         },
         {
           "seed": 101,
@@ -37940,7 +39257,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -38138,7 +39455,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -38795,7 +40112,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -39139,7 +40456,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -39337,7 +40654,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -39982,7 +41299,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -40293,7 +41610,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -40483,7 +41800,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -40797,7 +42114,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -40995,7 +42312,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -41640,7 +42957,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -42020,7 +43337,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -42236,7 +43553,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -42435,100 +43752,100 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.39398801082616375,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.4813037190317217,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.40190293835161733,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.6142035962008002,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
+              "minimumSatiety": 0.3551570332139106,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.3445382831914196,
+              "brokenPromises": 1,
+              "keptPromises": 10
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.338031589178118,
+              "brokenPromises": 1,
+              "keptPromises": 10
             }
           ],
           "minimumAlive": 8,
@@ -42536,16 +43853,16 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
-            "keptPromises": 9
+            "minimumSatiety": 0.338031589178118,
+            "brokenPromises": 1,
+            "keptPromises": 10
           },
-          "finalStateSha256": "e2f4c6554eca4f0b5879fe516ca13afae65f96d151308b4212e5642b6c7db265"
+          "finalStateSha256": "d01689edec6a62cbec278387c82a91168c103e0023653024d3d8e8fce850c06f"
         }
       ]
     },
     {
-      "pid": 10591,
+      "pid": 36254,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -44965,7 +46282,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -45163,7 +46480,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -45820,7 +47137,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -46164,7 +47481,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -46362,7 +47679,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -47007,7 +48324,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -47318,7 +48635,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -47508,7 +48825,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -47822,7 +49139,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -48020,7 +49337,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -48665,7 +49982,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -49045,7 +50362,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -49261,7 +50578,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -49460,100 +50777,100 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.38270517229633116,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.37915160223270805,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.37291305635880867,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.39059059687228376,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
+              "minimumSatiety": 0.32307284849575113,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
+              "minimumSatiety": 0.5731097302477846,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.517767788032913,
+              "brokenPromises": 1,
+              "keptPromises": 10
             }
           ],
           "minimumAlive": 8,
@@ -49561,11 +50878,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
-            "keptPromises": 9
+            "minimumSatiety": 0.517767788032913,
+            "brokenPromises": 1,
+            "keptPromises": 10
           },
-          "finalStateSha256": "010362ca19a04e909ecfd13b11c901c5708b76fd8a624a831a372cea505fa541"
+          "finalStateSha256": "87556866acdd1b5466abf794968d8ab6707db1b7d826e87b052cc6051226b424"
         },
         {
           "seed": 73,
@@ -49703,7 +51020,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -49901,7 +51218,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -50558,7 +51875,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -50902,7 +52219,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -51100,7 +52417,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -51745,7 +53062,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -52056,7 +53373,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -52246,7 +53563,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -52560,7 +53877,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -52758,7 +54075,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -53403,7 +54720,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -53783,7 +55100,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -53999,7 +55316,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -54198,98 +55515,98 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939002803135,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126969446471,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.38270517229633116,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.37915160223270805,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.37291305635880867,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.39059059687228376,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
+              "minimumSatiety": 0.32307284849575113,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
+              "minimumSatiety": 0.5170568411210615,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
+              "minimumSatiety": 0.45109759989303916,
               "brokenPromises": 0,
               "keptPromises": 9
             }
@@ -54299,11 +55616,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
+            "minimumSatiety": 0.45109759989303916,
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "cec44a6e1121c8529c82116beb3404ced1b3a4d4c5e502b168c00f101dba0f57"
+          "finalStateSha256": "eb05a9152e80fb36c1694c7393f07e3cdbdfce1c6ae494d4993066074d540c58"
         },
         {
           "seed": 9,
@@ -54441,7 +55758,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -54639,7 +55956,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -55296,7 +56613,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -55640,7 +56957,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -55838,7 +57155,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -56483,7 +57800,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -56794,7 +58111,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -56984,7 +58301,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -57298,7 +58615,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -57496,7 +58813,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -58141,7 +59458,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -58521,7 +59838,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -58737,7 +60054,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -58936,100 +60253,100 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.38270517229633116,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.37915160223270805,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.37291305635880867,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.39059059687228376,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
+              "minimumSatiety": 0.32307284849575113,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
+              "minimumSatiety": 0.5731097302477846,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
-              "brokenPromises": 0,
-              "keptPromises": 9
+              "minimumSatiety": 0.49027981562993445,
+              "brokenPromises": 1,
+              "keptPromises": 10
             }
           ],
           "minimumAlive": 8,
@@ -59037,11 +60354,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
-            "brokenPromises": 0,
-            "keptPromises": 9
+            "minimumSatiety": 0.49027981562993445,
+            "brokenPromises": 1,
+            "keptPromises": 10
           },
-          "finalStateSha256": "c64fa7a8e90b57c2d71c2e84f5d3fb10ea3bd4b435fd9901e4b37eb2e8aef75b"
+          "finalStateSha256": "717b6b01354b7d48825962306e044ba13112eabc8509c51893349f7702a47622"
         },
         {
           "seed": 101,
@@ -59179,7 +60496,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -59377,7 +60694,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -60034,7 +61351,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -60378,7 +61695,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -60576,7 +61893,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -61221,7 +62538,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -61532,7 +62849,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -61722,7 +63039,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -62036,7 +63353,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -62234,7 +63551,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0045,
                     "terms": [
                       {
@@ -62879,7 +64196,7 @@
                   {
                     "affordanceId": "drink",
                     "action": "drink",
-                    "label": "Drink water at home",
+                    "label": "Drink water here",
                     "utility": 0.0063,
                     "terms": [
                       {
@@ -63259,7 +64576,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -63475,7 +64792,7 @@
                 {
                   "affordanceId": "drink",
                   "action": "drink",
-                  "label": "Drink water at home",
+                  "label": "Drink water here",
                   "utility": 0.0045,
                   "terms": [
                     {
@@ -63674,98 +64991,98 @@
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5137325819435103,
+              "minimumSatiety": 0.5296529086345844,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4104921996906508,
+              "minimumSatiety": 0.34880939012865153,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.7064436743412817,
+              "minimumSatiety": 0.6500609117902524,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4549265017136791,
+              "minimumSatiety": 0.3306126970452673,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3613790015201684,
+              "minimumSatiety": 0.7692540274028532,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.38102136370928297,
+              "minimumSatiety": 0.4739124422175912,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.45861057657295873,
+              "minimumSatiety": 0.38270517229633116,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4762191413058939,
+              "minimumSatiety": 0.5277134099674562,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.354050587576558,
+              "minimumSatiety": 0.37915160223270805,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.37510719052943936,
+              "minimumSatiety": 0.37291305635880867,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.4034154716895697,
+              "minimumSatiety": 0.39059059687228376,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3822099108511909,
+              "minimumSatiety": 0.32307284849575113,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.5117545376158781,
+              "minimumSatiety": 0.37051928123706146,
               "brokenPromises": 0,
               "keptPromises": 9
             },
             {
               "alive": 8,
               "underfed": 0,
-              "minimumSatiety": 0.3323534647777077,
+              "minimumSatiety": 0.4616466776260142,
               "brokenPromises": 0,
               "keptPromises": 9
             }
@@ -63775,11 +65092,11 @@
           "finalHealth": {
             "alive": 8,
             "underfed": 0,
-            "minimumSatiety": 0.3323534647777077,
+            "minimumSatiety": 0.4616466776260142,
             "brokenPromises": 0,
             "keptPromises": 9
           },
-          "finalStateSha256": "4e8d46611eb4816b1a63ccefaeeb6a0ff3cb53f05201c2981a84694422dbf233"
+          "finalStateSha256": "5b1c1b3ee0b8f084ccd17fc72c53bd7a229df8b0f94296d64d330303da622664"
         }
       ]
     }
