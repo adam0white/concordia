@@ -8,6 +8,8 @@ test.use({ hasTouch: true });
 test("actual town offers optional story stops and keyboard/mobile access to retained older stories", async ({
 	page,
 }, info) => {
+	// Repeated stories collapse into one, so the seventh distinct story takes longer to arrive.
+	test.setTimeout(360_000);
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	const play = page.getByRole("button", { name: "Play town", exact: true });
@@ -72,7 +74,7 @@ test("actual town offers optional story stops and keyboard/mobile access to reta
 	await expect(pause).toBeVisible();
 	await expect(stopped).toHaveCount(0);
 	const archive = page.locator(".story-archive");
-	await expect(archive).toBeVisible({ timeout: 90_000 });
+	await expect(archive).toBeVisible({ timeout: 240_000 });
 	await pause.click();
 	await expect(archive).not.toHaveAttribute("open");
 	const summary = archive.locator(":scope > summary");
