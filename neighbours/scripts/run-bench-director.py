@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Frozen three-case upstream bench proposals and exact zero-call replay.
+"""Frozen two-case upstream bench proposals and exact zero-call replay.
 
 Running without --replay makes exactly one real provider call for each of the
-three fresh HF checkpoints. It retains invalid proposals; there is no retry.
+two fresh HF checkpoints (seed 101 has no natural case). It retains invalid proposals; there is no retry.
 """
 import argparse
 from datetime import datetime, timezone
@@ -17,10 +17,11 @@ sys.path.insert(0, str(ROOT))
 from concordia.contrib.neighbours.bench_director import (
     ClaudeCliModel, UPSTREAM_SHA, digest, replay_report, run_director,
     runtime_sources, verify_upstream_sources)
+from concordia.contrib.neighbours.bench_director import BENCH_SEEDS, NO_NATURAL_CASE_SEEDS
 from concordia.contrib.neighbours.bridge import NodeBridge
 from concordia.contrib.neighbours.engine import TownEngine
 
-SEEDS = [42, 73, 101]
+SEEDS = list(BENCH_SEEDS)
 
 
 def capture_checkpoint(node, seed):
@@ -48,7 +49,7 @@ def capture_checkpoint(node, seed):
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument('--model', default='opus')
-  parser.add_argument('--seeds', default='42,73,101')
+  parser.add_argument('--seeds', default='42,73')
   parser.add_argument('--node', default='node')
   parser.add_argument('--replay', type=Path)
   parser.add_argument('--output', type=Path, default=Path('/tmp/neighbours-native-bench.json'))
@@ -56,16 +57,16 @@ def main():
   if args.replay:
     print(json.dumps(replay_report(json.loads(args.replay.read_text()), ROOT)))
     return
-  if args.seeds != '42,73,101':
-    parser.error('The fixed cases are --seeds 42,73,101; do not select winners')
+  if args.seeds != '42,73':
+    parser.error('The fixed cases are --seeds 42,73; do not select winners')
   verify_upstream_sources(ROOT)
   sources = runtime_sources(ROOT)
   # Freeze every fresh case before any model call. Failed capture makes no call.
   frozen = [(seed, *capture_checkpoint(args.node, seed)) for seed in SEEDS]
-  model = ClaudeCliModel(args.model, max_calls=3)
+  model = ClaudeCliModel(args.model, max_calls=len(SEEDS))
   report = {
       'schema': 'native-concordia-bench@1', 'upstreamSha': UPSTREAM_SHA,
-      'recordedAt': datetime.now(timezone.utc).isoformat(), 'seeds': SEEDS,
+      'recordedAt': datetime.now(timezone.utc).isoformat(), 'seeds': SEEDS, 'noNaturalCaseSeeds': list(NO_NATURAL_CASE_SEEDS),
       'runtime': 'Native upstream EntityAgent/SwitchAct/EventResolution/MakeObservation + real Claude CLI',
       'runtimeSources': sources, 'sourceFingerprint': sources['sha256'],
       'gitHeadAtRun': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
@@ -74,6 +75,7 @@ def main():
       'cases': [],
       'limits': [
           'Fixed seeds captured before model calls; one attempt each with no retry or winner selection.',
+          'Seed 101 has no natural bench case within 40 days under Phase C physics; it is recorded, not substituted.',
           'Complete checkpoints precede the next scheduled legal cart-ask decision; current actors can still have jobs.',
           'Typed windows are discussable premises; host application, recipient observations, consent and work remain separate.',
           'Recorded browser cases do not run this live native provider.',

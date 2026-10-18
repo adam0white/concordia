@@ -112,8 +112,11 @@ Not regenerated:
 
 - The native model tapes `gm-director.json`, `bench-director.json` and `native-mixed-town.json` were already
   refusing replay at 7d2e21e ("Runtime sources differ"), before Phase B. Regenerating them takes about ten real
-  provider calls, and no gate consumes them. They remain historical evidence. Regenerate them after these
-  changes are committed.
+  provider calls. Correction (2026-10-18): an earlier version of this note said no gate consumes them. That was
+  wrong: hosted CI (`.github/workflows/neighbours.yml`) replays all three with zero model calls, and run
+  39132936684 failed at the mixed-town replay for this reason. They were regenerated from a clean commit after
+  Phases B and C were committed. The bench director now freezes seeds 42 and 73 only, because seed 101 has no
+  natural case under Phase C physics.
 - `inspection-comparison.json` remains the historical four-call HF 2.2.1 model study.
 
 `received-routes.json` and `bench-choices.json` record commit 7d2e21e with a dirty worktree. This is because

@@ -91,11 +91,11 @@ class BenchDirectorTest(unittest.TestCase):
       self.assertEqual(result['hostInbox'], '')
       self.assertEqual(len(model.tape), 1)
 
-  def test_three_case_source_bound_report_replay_and_tamper_controls(self):
+  def test_fixed_case_source_bound_report_replay_and_tamper_controls(self):
     root = Path(__file__).resolve().parents[3]
     sources = runtime_sources(root)
     cases = []
-    for seed, slot in zip((42, 73, 101), ('soon', 'tomorrow', 'brief')):
+    for seed, slot in zip((42, 73), ('soon', 'tomorrow')):
       checkpoint = {**CHECKPOINT, 'seed': seed}
       evidence = {'nextDecisionAt': 495}
       model = RecordingModel(json.dumps({**GOOD, 'slot': slot}))
@@ -106,12 +106,12 @@ class BenchDirectorTest(unittest.TestCase):
     report = {'schema': 'native-concordia-bench@1', 'upstreamSha': UPSTREAM_SHA,
               'runtimeSources': sources, 'sourceFingerprint': sources['sha256'],
               'requestedModel': 'test-only', 'cliVersion': 'test-only-cli',
-              'seeds': [42, 73, 101], 'cases': cases, 'modelCalls': 3}
-    self.assertEqual(replay_report(report, root), {'replayExact': True, 'modelCalls': 0, 'caseCount': 3})
+              'seeds': [42, 73], 'noNaturalCaseSeeds': [101], 'cases': cases, 'modelCalls': 2}
+    self.assertEqual(replay_report(report, root), {'replayExact': True, 'modelCalls': 0, 'caseCount': 2})
     self.assertIn('neighbours/scripts/capture-bench.ts', sources['files'])
     for mutation in (
         lambda r: r.update(upstreamSha='bad'),
-        lambda r: r.update(modelCalls=4),
+        lambda r: r.update(modelCalls=3),
         lambda r: r.update(cliVersion=''),
         lambda r: r.update(sourceFingerprint='bad'),
         lambda r: r['runtimeSources']['files'].update({'invented.py': 'bad'}),
@@ -119,7 +119,8 @@ class BenchDirectorTest(unittest.TestCase):
         lambda r: r['cases'][0].update(modelCalls=2),
         lambda r: r['cases'][0]['result'].update(hostInboxRecipient='ravi'),
         lambda r: r['cases'][0]['captureEvidence'].update(nextDecisionAt=500),
-        lambda r: r.update(seeds=[73, 42, 101]),
+        lambda r: r.update(seeds=[73, 42]),
+        lambda r: r.update(noNaturalCaseSeeds=[]),
     ):
       broken = copy.deepcopy(report)
       mutation(broken)

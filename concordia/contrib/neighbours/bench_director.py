@@ -135,6 +135,12 @@ def run_director(model, checkpoint, capture_evidence=None):
           'hostApplied': False, 'residentObservationsDelivered': 0}
 
 
+# Seed 101 has no natural bench case within 40 days under the Phase C host
+# physics (docs/neighbours/phase-c-physics.md). It is recorded, not substituted.
+BENCH_SEEDS = (42, 73)
+NO_NATURAL_CASE_SEEDS = (101,)
+
+
 def runtime_sources(root):
   sources = gm_runtime_sources(root)
   files = dict(sources['files'])
@@ -150,11 +156,12 @@ def replay_report(report, root):
   verify_upstream_sources(root)
   if report.get('runtimeSources') != runtime_sources(root) or report.get('sourceFingerprint') != report['runtimeSources']['sha256']:
     raise ValueError('Runtime sources differ; regenerate actual evidence')
-  if (report.get('seeds') != [42, 73, 101] or len(report.get('cases', [])) != 3
-      or report.get('modelCalls') != 3
+  if (report.get('seeds') != list(BENCH_SEEDS) or len(report.get('cases', [])) != len(BENCH_SEEDS)
+      or report.get('noNaturalCaseSeeds') != list(NO_NATURAL_CASE_SEEDS)
+      or report.get('modelCalls') != len(BENCH_SEEDS)
       or not isinstance(report.get('requestedModel'), str) or not report['requestedModel']
       or not isinstance(report.get('cliVersion'), str) or not report['cliVersion']):
-    raise ValueError('Fixed three-case bench catalog differs')
+    raise ValueError('Fixed bench catalog differs')
   for seed, case in zip(report['seeds'], report['cases']):
     tape = case.get('responseTape')
     if (case.get('seed') != seed or case.get('modelCalls') != 1 or
@@ -171,4 +178,4 @@ def replay_report(report, root):
     actual = run_director(replay, case['checkpoint'], case['captureEvidence'])
     if actual != case['result'] or replay.cursor != 1:
       raise ValueError('Upstream bench replay diverged')
-  return {'replayExact': True, 'modelCalls': 0, 'caseCount': 3}
+  return {'replayExact': True, 'modelCalls': 0, 'caseCount': len(BENCH_SEEDS)}
