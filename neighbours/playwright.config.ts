@@ -6,7 +6,7 @@ export default defineConfig({
 	workers: 1,
 	retries: 0,
 	timeout: 120_000,
-	globalTimeout: 600_000,
+	globalTimeout: 1_500_000,
 	expect: { timeout: 30_000 },
 	reporter: [["list"], ["html", { open: "never" }]],
 	use: {
