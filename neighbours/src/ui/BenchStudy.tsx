@@ -136,6 +136,11 @@ export default function BenchStudy() {
 				</select>
 			</label>
 			<BenchStudyResults report={report} index={index} />
+			{report.noNaturalCase?.map((n) => (
+				<p className="tiny muted" key={n.seed}>
+					Seed {n.seed}: no natural case in {n.searchedDays} days. {n.reason}
+				</p>
+			))}
 		</>
 	);
 }

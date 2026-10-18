@@ -14,6 +14,12 @@ export interface Branch {
 		adaPaidMinutesCompleted: number;
 	};
 }
+/** A study seed searched again with no natural case: recorded, never replaced by another seed. */
+export interface NoNaturalCase {
+	seed: number;
+	searchedDays: number;
+	reason: string;
+}
 export interface BenchReport {
 	schema: "neighbours/bench-choice-probe@1";
 	recordedAt: string;
@@ -25,6 +31,7 @@ export interface BenchReport {
 	rawReportSha256?: string;
 	limitations: string[];
 	cases: { seed: number; slot: string; noProposal: Branch; proposal: Branch }[];
+	noNaturalCase?: NoNaturalCase[];
 }
 const object = (value: unknown): Record<string, unknown> =>
 	value !== null && typeof value === "object" && !Array.isArray(value)
@@ -61,9 +68,28 @@ const validBranch = (value: unknown) => {
 		)
 	);
 };
+const validNoCase = (value: unknown) => {
+	const n = object(value);
+	return (
+		Number.isSafeInteger(n.seed) &&
+		typeof n.searchedDays === "number" &&
+		Number.isFinite(n.searchedDays) &&
+		n.searchedDays > 0 &&
+		typeof n.reason === "string" &&
+		n.reason.length > 0
+	);
+};
 export function benchStudyReport(value: unknown): BenchReport {
 	const r = object(value);
+	const caseSeeds = new Set(
+		Array.isArray(r.cases) ? r.cases.map((c) => object(c).seed) : [],
+	);
 	if (
+		// A recorded no-case seed must be valid and must not also appear as a case.
+		(r.noNaturalCase !== undefined &&
+			(!Array.isArray(r.noNaturalCase) ||
+				!r.noNaturalCase.every(validNoCase) ||
+				r.noNaturalCase.some((n) => caseSeeds.has(object(n).seed)))) ||
 		r.schema !== "neighbours/bench-choice-probe@1" ||
 		typeof r.recordedAt !== "string" ||
 		typeof r.hf !== "string" ||
@@ -130,5 +156,14 @@ export function summarizeBenchStudy(value: unknown): BenchReport {
 			noProposal: branch(c.noProposal),
 			proposal: branch(c.proposal),
 		})),
+		...(report.noNaturalCase
+			? {
+					noNaturalCase: report.noNaturalCase.map((n) => ({
+						seed: n.seed,
+						searchedDays: n.searchedDays,
+						reason: n.reason,
+					})),
+				}
+			: {}),
 	};
 }

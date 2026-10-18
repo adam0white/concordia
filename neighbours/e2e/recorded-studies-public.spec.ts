@@ -29,12 +29,15 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await expect(bench).toBeVisible();
 	await expect(
 		studies.getByLabel("Frozen town case").locator("option"),
-	).toHaveCount(9);
+	).toHaveCount(6);
 	await expect(
 		bench.getByRole("row", {
-			name: "Returned to Jo Returned Returned",
+			name: "Returned to Jo No return in this interval Returned",
 			exact: true,
 		}),
+	).toBeVisible();
+	await expect(
+		studies.getByText(/^Seed 101: no natural case in 40 days\./),
 	).toBeVisible();
 	expect(
 		requests.some((url) => url.endsWith("/bench-choices-summary.json")),

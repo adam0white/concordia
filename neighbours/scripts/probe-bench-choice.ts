@@ -22,9 +22,15 @@ import type { BenchSlot } from "../src/core/bench-window.ts";
 import { restoreRuntime, type Save } from "../src/core/index.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import { summarizeBenchStudy } from "../src/ui/bench-study-report.ts";
-import { captureBench } from "./capture-bench.ts";
+import { benchWindowShiftRounds, captureBench } from "./capture-bench.ts";
 
-const SEEDS = [42, 73, 101] as const;
+const SEEDS = [42, 73] as const;
+/**
+ * Seeds kept in the study with no natural case under current physics (lead decision, 2026-10-18). The probe
+ * re-searches each one and fails if a natural case appears, so the record cannot go stale. Never substituted.
+ */
+const NO_CASE_SEEDS = [101] as const;
+const NO_CASE = /^No natural premise-admissible boundary/;
 const SLOTS: BenchSlot[] = ["soon", "tomorrow", "brief"];
 const ROUNDS = 192;
 const app = resolve(import.meta.dirname, "..");
@@ -327,6 +333,34 @@ export function runBenchChoiceProbe(
 			sha256: sha(encoded),
 		};
 	});
+	const noNaturalCase = NO_CASE_SEEDS.map((seed) => {
+		let found = false;
+		try {
+			captureBench(seed);
+			found = true;
+		} catch (error) {
+			assert(
+				error instanceof Error && NO_CASE.test(error.message),
+				`Seed ${seed} capture failed for another reason`,
+			);
+		}
+		assert(
+			!found,
+			`Seed ${seed} now has a natural case; return it to SEEDS and rerun`,
+		);
+		const current = benchWindowShiftRounds(seed),
+			legacy = benchWindowShiftRounds(seed, true);
+		return {
+			seed,
+			searchedDays: 40,
+			population: 8,
+			benchWindowRounds: current.windowRounds,
+			adaAtShiftRounds: current.adaAtShift,
+			legacyBenchWindowRounds: legacy.windowRounds,
+			legacyAdaAtShiftRounds: legacy.adaAtShift,
+			reason: `No genuine Ravi cart-ask decision with Ada at the workshop within 40 days. Ada was at her workshop shift in ${current.adaAtShift} of ${current.windowRounds} rounds in which a bench proposal was possible; with legacy timber physics, ${legacy.adaAtShift} of ${legacy.windowRounds}.`,
+		};
+	});
 	const frozenSetHash = sha(
 		JSON.stringify(frozen.map(({ seed, sha256 }) => ({ seed, sha256 }))),
 	);
@@ -395,6 +429,7 @@ export function runBenchChoiceProbe(
 		node: process.version,
 		arguments: {
 			seeds: SEEDS,
+			noCaseSeeds: NO_CASE_SEEDS,
 			slots: SLOTS,
 			population: 8,
 			roundsPerPhysicalBranch: ROUNDS,
@@ -408,6 +443,7 @@ export function runBenchChoiceProbe(
 		sources: beforeSources,
 		frozenSetHash,
 		activeCheckpoints,
+		noNaturalCase,
 		captures: frozen.map(({ seed, captureEvidence, file, sha256 }) => ({
 			seed,
 			captureEvidence,
@@ -424,7 +460,7 @@ export function runBenchChoiceProbe(
 		limitations: [
 			"Fresh fixed-seed captures contain eight actual HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
 			"This probe runs the actual TypeScript physical host and published HF under Node. It does not run Python Concordia or a live model; native/WASM parity is a separate check.",
-			"All three natural complete checkpoints and nine lawful complete proposal starts are frozen before any outcome evaluation. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Ravi turn after earlier actors choose normally.",
+			"Both natural complete checkpoints and six lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 is kept in the study as a recorded no-case (noNaturalCase): it was searched again and had no natural case in 40 days; no other seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Ravi turn after earlier actors choose normally.",
 			"Each bench-active checkpoint file is the exact complete start of its physical proposal branch, including actual retained HF knowledge. admissionAt records the complete-boundary notice; decisionAt/startAt records Ravi's later actual decision.",
 			"The physical proposal/no-proposal contrast combines temporal-goal opt-in, received knowledge, one spent allowance and possible legal request-window changes. It does not isolate knowledge causally.",
 			"The person-only intact/removed comparison holds actual legal offers, the entire physical state and temporal goals fixed. Removed deletes structured prospection after actual receipt; no withheld arm was executed.",

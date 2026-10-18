@@ -155,4 +155,39 @@ describe("compact bench study projection", () => {
 		trial.proposal.outcome.newRequests = Number.NaN;
 		expect(() => summarizeBenchStudy(raw)).toThrow("Invalid bench study");
 	});
+	it("carries a recorded no-case seed into the summary and the page, and rejects one that is also a case", () => {
+		const raw = {
+			...rawReport(),
+			noNaturalCase: [
+				{
+					seed: 101,
+					searchedDays: 40,
+					population: 8,
+					adaAtShiftRounds: 1,
+					reason: "Ada was at her workshop shift in 1 of 24 rounds.",
+				},
+			],
+		};
+		raw.cases = raw.cases.filter((c) => c.seed !== 101);
+		const summary = summarizeBenchStudy(raw);
+		expect(summary.cases).toHaveLength(6);
+		expect(summary.noNaturalCase).toEqual([
+			{
+				seed: 101,
+				searchedDays: 40,
+				reason: "Ada was at her workshop shift in 1 of 24 rounds.",
+			},
+		]);
+		expect(() =>
+			benchStudyReport({
+				...raw,
+				noNaturalCase: [{ ...raw.noNaturalCase[0], seed: 42 }],
+			}),
+		).toThrow("Invalid bench study");
+		expect(() =>
+			benchStudyReport({ ...raw, noNaturalCase: [{ seed: 101 }] }),
+		).toThrow("Invalid bench study");
+		// Without the field, the summary has none either.
+		expect("noNaturalCase" in summarizeBenchStudy(rawReport())).toBe(false);
+	});
 });

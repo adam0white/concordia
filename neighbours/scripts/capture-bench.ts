@@ -82,6 +82,30 @@ export function captureBench(seed = 42) {
 	);
 }
 
+/**
+ * For a seed with no natural case: over the same 40-day 8-person town, count the rounds in which a bench proposal
+ * was possible and in how many of them Ada was at her paid workshop shift. `legacy` deletes the Phase C timber
+ * slice before running, for the legacy comparison. Observation only; nothing is chosen or changed.
+ */
+export function benchWindowShiftRounds(seed: number, legacy = false) {
+	const start = createRuntime(seed, 8).export() as Save;
+	if (legacy) delete start.timber;
+	const host = new Runtime(start);
+	const deadline = host.s.now + 40 * 1440;
+	let windowRounds = 0;
+	let adaAtShift = 0;
+	while (host.s.now < deadline) {
+		if (canProposeBench(host.s)) {
+			windowRounds++;
+			const job = host.actor("ada").job;
+			if (job?.offer.action === "work" && job.offer.placeId === "workshop")
+				adaAtShift++;
+		}
+		host.step();
+	}
+	return { windowRounds, adaAtShift };
+}
+
 if (
 	process.argv[1] &&
 	import.meta.url === pathToFileURL(resolve(process.argv[1])).href
