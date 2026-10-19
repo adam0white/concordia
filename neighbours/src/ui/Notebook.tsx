@@ -17,6 +17,7 @@ export function OtherNotebooks() {
 			<span className="hand">other notebooks</span>
 			<a href="https://rope.adamwhite.work">Rope</a>
 			<a href="https://repair.adamwhite.work">Repair</a>
+			<a href="https://pass.adamwhite.work">Pass</a>
 		</nav>
 	);
 }
