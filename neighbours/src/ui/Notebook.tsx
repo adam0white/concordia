@@ -10,14 +10,11 @@ export function HubMark() {
 	);
 }
 
-/** Sibling sites, as the design language's footer row. */
+/** The design language's footer: one link to the collection of all notebooks. */
 export function OtherNotebooks() {
 	return (
-		<nav className="other-notebooks" aria-label="Other notebooks">
-			<span className="hand">other notebooks</span>
-			<a href="https://rope.adamwhite.work">Rope</a>
-			<a href="https://repair.adamwhite.work">Repair</a>
-			<a href="https://pass.adamwhite.work">Pass</a>
+		<nav className="other-notebooks" aria-label="All notebooks">
+			<a href="https://human.adamwhite.work/games/">◇ all notebooks</a>
 		</nav>
 	);
 }
