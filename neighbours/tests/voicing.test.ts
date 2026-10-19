@@ -8,6 +8,7 @@ import {
 	offerKind,
 	PHRASES,
 	phraseFor,
+	refusalWhy,
 	voicedLine,
 } from "../src/core/voicing.ts";
 
@@ -148,4 +149,20 @@ it("keeps the recorded line for other verdicts and reads unknown labels grammati
 			counterOffer: { label: "later" },
 		}),
 	).toBe("Not now. Later.");
+});
+
+it("refusals say why only from the reason HF recorded", () => {
+	expect(refusalWhy({ verdict: "refused", reason: "need:water" })).toBe(
+		"Why: they need a drink first.",
+	);
+	expect(refusalWhy({ verdict: "refused", reason: "distrust" })).toMatch(
+		/trust your word/,
+	);
+	expect(refusalWhy({ verdict: "refused", reason: "norm:theft" })).toMatch(
+		/something they hold to/,
+	);
+	expect(refusalWhy({ verdict: "refused", reason: "mystery" })).toBeUndefined();
+	expect(
+		refusalWhy({ verdict: "deferred", reason: "need:food" }),
+	).toBeUndefined();
 });

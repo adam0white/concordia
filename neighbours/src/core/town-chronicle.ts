@@ -12,6 +12,7 @@ export const CHRONICLE_KINDS: ReadonlySet<string> = new Set([
 	"annex-observed",
 	"annex-inspected",
 	"hall-repaired",
+	"hall-loosened",
 	"hall-open",
 	"lesson",
 	"hall-explanation",
@@ -79,8 +80,10 @@ export function validateTownChronicle(s: Save, ids: Set<string>): void {
 		validateEvent(event, s, ids);
 		if (
 			!CHRONICLE_KINDS.has(event.kind) ||
-			typeof event.actorId !== "string" ||
-			!ids.has(event.actorId) ||
+			// Timber working loose (hall-care.ts) is the only chronicle event nobody did.
+			(event.kind === "hall-loosened"
+				? event.actorId !== undefined
+				: typeof event.actorId !== "string" || !ids.has(event.actorId)) ||
 			event.id <= previousId ||
 			event.at < previousAt
 		)

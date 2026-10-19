@@ -402,3 +402,38 @@ export function voicedLine(answer: AnswerLike): string {
 	}
 	return answer.says;
 }
+
+const NEED_FIRST: Record<string, string> = {
+	food: "they need to eat first",
+	water: "they need a drink first",
+	sleep: "they need sleep first",
+	rest: "they need to rest first",
+	survival: "they are in no state for it",
+};
+/**
+ * Refusals that say why: HF's spoken line can be curt ("I can't right now."), so the screen adds the dominant
+ * reason HF recorded (`SuggestionResolution.reason`) in plain narrator words. Only reasons HF names are glossed;
+ * an unknown reason adds nothing rather than a guess.
+ */
+export function refusalWhy(answer: {
+	verdict: string;
+	reason?: string;
+}): string | undefined {
+	if (answer.verdict !== "refused" || !answer.reason) return undefined;
+	const reason = answer.reason;
+	if (reason.startsWith("need:")) {
+		const need = NEED_FIRST[reason.slice(5)];
+		return need ? `Why: ${need}.` : undefined;
+	}
+	if (reason === "distrust")
+		return "Why: they do not trust your word just now.";
+	if (reason === "unavailable" || reason === "capacity")
+		return "Why: it is not something they can do here and now.";
+	if (reason === "autonomy")
+		return "Why: you pushed, and they want the choice to be theirs.";
+	if (reason.startsWith("norm:"))
+		return "Why: it goes against something they hold to.";
+	if (reason.startsWith("commitment") || reason.startsWith("omission"))
+		return "Why: they have a promise to keep first.";
+	return undefined;
+}

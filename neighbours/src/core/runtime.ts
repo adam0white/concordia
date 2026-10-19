@@ -65,6 +65,7 @@ import {
 	updateEvenings,
 	weeklySupportRemaining,
 } from "./evenings.ts";
+import { loosenHall, noticeLooseHall, settleHallGoals } from "./hall-care.ts";
 import {
 	cartSupplyBonus,
 	finishHandcart,
@@ -146,6 +147,7 @@ export class Runtime implements TownRuntime {
 				"hall-open",
 				"hall-closed",
 				"hall-repaired",
+				"hall-loosened",
 				"inspection-failed",
 				"hall-explanation",
 				"shared-meal",
@@ -298,6 +300,13 @@ export class Runtime implements TownRuntime {
 		this.s.now += 15;
 		this.s.round++;
 		weatherTimber(this.s, this.weather(), 15);
+		if (loosenHall(this.s))
+			this.event(
+				"hall-loosened",
+				"A repaired section of the hall worked loose as the wet timber moved.",
+				undefined,
+				"hall",
+			);
 		this.records.clear();
 		this.offers.clear();
 		for (const r of this.s.people) {
@@ -400,6 +409,7 @@ export class Runtime implements TownRuntime {
 					);
 				else if (j.offer.action === "repair") {
 					this.s.hall += 1;
+					settleHallGoals(this.s);
 					if (this.s.hall === 12)
 						this.event(
 							"hall-repaired",
@@ -797,6 +807,7 @@ export class Runtime implements TownRuntime {
 		if (policy === "llm")
 			throw Error("LLM requires an external model decision");
 		const r = this.actor(id);
+		if (presentAt(r, "hall", this.s.now)) noticeLooseHall(this.s, r);
 		if (presentAt(r, "hall", this.s.now))
 			observeHallInspection(r.person, {
 				contextId: "hall-inspection",
@@ -819,6 +830,12 @@ export class Runtime implements TownRuntime {
 							...this.instructorSuggestions(r),
 							...(held ? [held] : []),
 						],
+						// HF 2.8.0: a player's request that interrupts a running activity is weighed on its merits,
+						// without the activity's inertia bonus (promise inertia stays). Version 1 player saves keep
+						// the earlier decision exactly.
+						...(held && this.s.player?.version === 2
+							? { reconsider: true }
+							: {}),
 					})
 				: undefined;
 		if (policy === "hf" && !hfRecord?.chosenAffordanceId)

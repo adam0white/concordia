@@ -524,6 +524,23 @@ export function eveningOffers(
 					tags: ["social", "evening"],
 					...(e.kind === "meal" ? { material: -1 } : {}),
 					fulfills: reply?.commitmentId ? [reply.commitmentId] : [],
+					// HF 2.8.0 going along: name who is already on their way to or at this evening. HF weighs only
+					// the ties this person actually has. Towns without `together` keep their offers exactly. A
+					// historical offer omits it: who was going is a fact of that moment, checked on restore instead.
+					...(s.together && !historical
+						? {
+								alongside: s.people
+									.filter(
+										(o) =>
+											o.person.id !== r.person.id &&
+											o.person.body.alive &&
+											(o.job?.offer.id === `attend:${e.id}` ||
+												o.job?.offer.id === `host:${e.id}`),
+									)
+									.map((o) => o.person.id)
+									.sort(),
+							}
+						: {}),
 				},
 			);
 	}

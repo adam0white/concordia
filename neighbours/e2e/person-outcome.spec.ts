@@ -82,8 +82,25 @@ test("following Musa stops at his actual kept promise and preserves exact reload
 	expect(errors).toEqual([]);
 });
 
-type OutcomeGate = { held: (() => void)[]; holding: boolean };
+type HeldReply = { advance?: { reason: string; rounds: number } };
+type OutcomeGate = {
+	held: { reply: HeldReply; release: () => void }[];
+	holding: boolean;
+};
+const gateOf = (page: Page) =>
+	page.evaluate(() =>
+		(
+			window as unknown as { personOutcomeGate: OutcomeGate }
+		).personOutcomeGate.held.map((h) => h.reply),
+	);
 
+/**
+ * Lea keeps two promises on Day 1: the hall inspection at 15:15, then the displaced class at 18:15. Playback's
+ * state for the first is held while a follow advance is queued behind it. The
+ * advance must report the second promise, not the first one that preceding
+ * playback already resolved. Each wait is on an actual worker reply: the held
+ * playback state, then the advance's own completion reply.
+ */
 test("a queued follow advance excludes the outcome resolved by preceding playback", async ({
 	page,
 }) => {
@@ -96,20 +113,25 @@ test("a queued follow advance excludes the outcome resolved by preceding playbac
 				super(url, options);
 				this.addEventListener("message", (event: MessageEvent) => {
 					if (event.data.type !== "state") return;
-					const musa = event.data.view.people.find(
-						(p: { id: string }) => p.id === "musa",
+					const lea = event.data.view.people.find(
+						(p: { id: string }) => p.id === "lea",
 					);
 					if (
 						!gate.holding &&
-						!musa.commitments.some(
+						!lea.commitments.some(
 							(p: { label: string; status: string }) =>
-								p.label === "Harvest food for Sam" && p.status === "kept",
+								p.label === "Inspect the hall before resuming classes there" &&
+								p.status === "kept",
 						)
 					)
 						return;
+					// From here every state reply is held, so playback cannot send another step.
 					gate.holding = true;
 					event.stopImmediatePropagation();
-					gate.held.push(() => this.onmessage?.call(this, event));
+					gate.held.push({
+						reply: { advance: event.data.advance },
+						release: () => this.onmessage?.call(this, event),
+					});
 				});
 			}
 		};
@@ -125,7 +147,7 @@ test("a queued follow advance excludes the outcome resolved by preceding playbac
 		"Bus restored",
 	);
 	await showTab(page, "Town");
-	await page.locator('.neighbour-strip [data-person-id="musa"]').click();
+	await page.locator('.neighbour-strip [data-person-id="lea"]').click();
 	await openSaves(page);
 	await page.getByRole("checkbox", { name: "Pause on new stories" }).uncheck();
 	await closeSaves(page);
@@ -133,26 +155,28 @@ test("a queued follow advance excludes the outcome resolved by preceding playbac
 		.getByRole("combobox", { name: "Playback speed" })
 		.selectOption("120");
 	await page.getByRole("button", { name: "Play town", exact: true }).click();
-	const held = () =>
-		page.evaluate(
-			() =>
-				(window as unknown as { personOutcomeGate: OutcomeGate })
-					.personOutcomeGate.held.length,
-		);
-	await expect.poll(held, { timeout: 60000 }).toBe(1);
+	// Playback's step reply that resolved the first promise is held, unrendered.
+	await expect.poll(() => gateOf(page), { timeout: 60000 }).toEqual([{}]);
 	await page
-		.getByRole("button", { name: "Next outcome for Musa", exact: true })
+		.getByRole("button", { name: "Next outcome for Lea", exact: true })
 		.click();
-	await expect.poll(held, { timeout: 60000 }).toBe(2);
+	// The advance's own completion reply, queued behind the held step.
+	await expect
+		.poll(() => gateOf(page), { timeout: 60000 })
+		.toEqual([
+			{},
+			{ advance: expect.objectContaining({ reason: "person-story" }) },
+		]);
 	await page.evaluate(() => {
 		const gate = (window as unknown as { personOutcomeGate: OutcomeGate })
 			.personOutcomeGate;
-		for (const reply of gate.held.splice(0)) reply();
+		for (const held of gate.held.splice(0)) held.release();
 	});
-	await expect(page.locator(".advance-notice")).toBeVisible();
-	await expect(page.locator(".advance-notice")).not.toContainText(
-		"kept a promise: Harvest food for Sam",
+	const notice = page.locator(".advance-notice");
+	await expect(notice).toContainText(
+		"Lea kept a promise: Hold the displaced class.",
 	);
+	await expect(notice).not.toContainText("Inspect the hall");
 	await expect(
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeEnabled();

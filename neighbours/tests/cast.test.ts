@@ -161,6 +161,9 @@ function checkpoints(): { save: Save; arranged: boolean }[] {
 	const r = town();
 	// These checkpoints are about who holds positions, not timber: start from dry timber (timber.ts).
 	r.s.timber = { damp: 0 };
+	// The bench-request checkpoint needs Ravi to ask before he finishes the cart on the side bench; with HF
+	// fullness he stops drinking idly and can finish first. Positions, not hydration, are under test here.
+	for (const p of r.s.people) delete p.person.body.fullness;
 	const out = [{ save: structuredClone(r.s), arranged: false }];
 	const arrange = (places: Record<string, string>) => {
 		const save = structuredClone(r.s);

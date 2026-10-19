@@ -167,6 +167,11 @@ export type Save = {
 	handcart?: Handcart;
 	/** Hall timber damp (timber.ts). Absent in saves made before it existed: legacy weather-only physics. */
 	timber?: import("./timber.ts").Timber;
+	/**
+	 * Present (true) in towns begun under HF 2.8.0: evening offers name who is already going (`Affordance.alongside`).
+	 * Absent in older saves, whose offers stay exactly as they were.
+	 */
+	together?: true;
 	/** Absent until the visitor first acts as a resident; absence is the observer-only town. */
 	player?: import("./player.ts").PlayerState;
 };

@@ -39,6 +39,7 @@ function storyTitle(s: Save, e: TownEvent): string {
 		"inspection-failed": "An opening attempt found unsafe timber",
 		"hall-repaired": "Repairs finished; inspection remains",
 		"repair-slipped": "A repair did not hold on damp timber",
+		"hall-loosened": "A repaired section worked loose on wet timber",
 		"hall-explanation": "A question became a shared method",
 		"missed-encounter": "The explanation missed its listener",
 		lesson: "The displaced class passed on a method",
@@ -53,6 +54,7 @@ const REPEATING = new Set([
 	"inspection-failed",
 	"hall-closed",
 	"repair-slipped",
+	"hall-loosened",
 ]);
 const MILESTONES = new Set(["hall-open", "hall-repaired"]);
 function when(at: number): string {

@@ -192,6 +192,8 @@ export interface PlayerView {
 		mode: "ask" | "urge" | "promise";
 		verdict: SpeechAnswer["verdict"];
 		says: string;
+		/** For a refusal: the plain reason HF gave, in the narrator's words (voicing.ts `refusalWhy`). */
+		why?: string;
 		counterOffer?: { affordanceId?: string; label: string };
 		status: string;
 		decision?: {

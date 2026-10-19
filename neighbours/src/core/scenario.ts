@@ -1,6 +1,7 @@
 import {
 	adoptGoal,
 	createPerson,
+	enableFullness,
 	promise,
 	setRetention,
 } from "@adam0white/human-framework";
@@ -79,6 +80,9 @@ export function createRuntime(seed = 42, population = 208): TownRuntime {
 			values: { benevolence: 0.35 + keyed(seed, 0, id) * 0.5 },
 		});
 		setRetention(person, { trace: 4, chronicleDays: 31 });
+		// HF 2.8.0 fullness: someone who is not thirsty stops picking a drink as the cheapest idle choice. It lives
+		// in the person's own state, so people restored from older saves keep their behaviour.
+		enableFullness(person);
 		if (id === "lea")
 			teachHallInspection(
 				person,
@@ -198,5 +202,6 @@ export function createRuntime(seed = 42, population = 208): TownRuntime {
 		produced: 0,
 		consumed: 0,
 		timber: floodTimber(),
+		together: true,
 	});
 }

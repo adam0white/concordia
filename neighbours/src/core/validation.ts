@@ -33,6 +33,7 @@ const EVENT_KINDS = new Set([
 	"intervention",
 	"hall-repaired",
 	"repair-slipped",
+	"hall-loosened",
 	"shared-meal",
 	"hall-open",
 	"inspection-failed",

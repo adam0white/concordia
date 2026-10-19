@@ -45,6 +45,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 					key !== "townChronicle" &&
 					key !== "assistance" &&
 					key !== "timber" &&
+					key !== "together" &&
 					key !== "player",
 			)
 			.sort()
@@ -216,7 +217,22 @@ export function restoreRuntime(input: unknown): TownRuntime {
 						(a) => a.id === j.offer.id,
 					)
 				: canonical;
-			const omit = new Set(["duration", "fulfills"]);
+			// `alongside` names who was going when the offer was made; it is checked below, not rebuilt.
+			const omit = new Set(["duration", "fulfills", "alongside"]);
+			const along = j.offer.alongside;
+			if (
+				along !== undefined &&
+				(!s.together ||
+					!Array.isArray(along) ||
+					along.some(
+						(id, i) =>
+							typeof id !== "string" ||
+							!s.people.some((o) => o.person.id === id) ||
+							id === r.person.id ||
+							(i > 0 && (along[i - 1] as string) >= id),
+					))
+			)
+				throw Error("Invalid going-along names");
 			const offerFields = Object.keys(j.offer)
 				.filter((k) => !omit.has(k))
 				.sort();
@@ -344,6 +360,8 @@ export function restoreRuntime(input: unknown): TownRuntime {
 	validateHandcart(s, ids);
 	validateTownChronicle(s, ids);
 	validateTimber(s);
+	if (s.together !== undefined && s.together !== true)
+		throw Error("Invalid together marker");
 	validatePlayer(s, ids);
 	for (const r of s.people) validateResidentEvidence(r, s, ids);
 	let last = 0;

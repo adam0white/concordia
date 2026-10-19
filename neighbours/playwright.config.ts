@@ -4,8 +4,7 @@ export default defineConfig({
 	testDir: "./e2e",
 	fullyParallel: false,
 	workers: 1,
-	// One CI retry: person-outcome.spec.ts:87 is timing-sensitive on hosted runners (see HANDOFF.md).
-	retries: process.env.CI ? 1 : 0,
+	retries: 0,
 	timeout: 120_000,
 	globalTimeout: 1_500_000,
 	expect: { timeout: 30_000 },

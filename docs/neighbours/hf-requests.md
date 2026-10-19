@@ -11,6 +11,11 @@ creation, and `learnFromVoice` still learns only from a suggestion's resolution.
 both host workarounds remain. Neighbours does not opt into promptings, the fatigue store or `followedBy`; those
 would change behaviour without a failing case here.
 
+**Checked against 2.8.0 (2026-10-19, Phase D).** Requests 1 and 2 are closed by HF 2.8.0: Neighbours now
+seeds the player's voice with `seedVoice` and reports kept and broken pledges with `noteVoicePromise` for players
+begun under 2.8.0 (player `version: 2`). Version 1 players from older saves keep the `learnFromVoice`
+workaround so their continuation is exact. Request 3 is unchanged. Request 4 is discriminated below.
+
 ## 1. Seeding a voice after creation (2026-10-18)
 
 **Gap.** `adoptVoiceTrust(p, voiceId, target, rate)` adds a voice, but it does not mark the voice as `seeded`.
@@ -70,3 +75,34 @@ work around it ([phase-c-physics.md](phase-c-physics.md)).
 
 **Not yet a request.** This may be intended HF behaviour (satiated competence and belonging after one long
 job). It is recorded so that a later HF review can decide whether shared unfinished work should keep some pull.
+
+**Discriminated (2026-10-19, Phase D, HF 2.8.0).** `neighbours/scripts/probe-repair-return.ts` restores the seed-42,
+208-person town at day 3, after its twelve repairs, injects six sections of fresh damage and runs one more day,
+reading every HF decision record. Confirmed: repair was a legal offer in 6,915 of 7,063 decisions and was chosen
+0 times (median utility gap 0.033; mean repair terms `need:competence` 0.0005, `need:belonging` 0.0093, `effort`
+−0.0304). On days 0–1 the same offer was chosen 76 times in 2,819. So the work did not run out: residents decline
+work that is still offered, because the offer advertised only needs that other work had already met.
+
+**Outcome: host offer design, fixed in the host.** Nothing about the hall said it mattered to anyone. Neighbours
+now lets wet timber work a repaired section loose (a keyed daily draw while the hall is shut and damp), and a
+resident who sees the loose supports at the hall may adopt one bounded HF goal, "Make the hall sound again"
+(serves meaning and belonging, importance from their own benevolence, two-day deadline, one repair achieves it).
+No offer value changed and no bonus was added; HF still decides. Same probe on the final Phase D code: 30 repairs
+chosen in 369 offers (offers are capped by the three tools); the arm without the new marker still chooses 0 in
+6,699. Unplayed 208-person towns, 25 days: seeds 42 and 101 each loosen three sections and still reopen (day 7
+20:30 and day 12 16:30); seeds 73 and 9 dry before any loosening and reopen on day 4.
+
+**Does HF need anything?** Not to fix this. One narrow, generic question is left for the HF owner, below.
+Assumed, not shown: that real people return to shared work because they see it undone, not because of a
+standing pull from the work itself.
+
+### 4a. Proposal (low priority): perceived unfinished shared work
+
+- **What.** A documented HF recipe, or a small helper, for "a person sees shared work undone and may take it on":
+  perception → bounded goal with `advancedBy`, importance from the person's own values, abandoned when the world
+  says it is done.
+- **Confirmed.** Without a goal, HF's choice correctly ignores work whose advertised needs are met (0 of 6,915).
+  With a perception-triggered goal adopted by the host, residents return (30 of 369).
+- **Assumed.** Other games (repairs, chores, communal duties) will hit the same pattern and reinvent it.
+- **Workaround in use.** `neighbours/src/core/hall-care.ts`: host perception calls `adoptGoal` and later
+  `abandonGoal`. It works; the request is documentation and reuse, not a missing capability.

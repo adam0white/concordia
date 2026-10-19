@@ -16,9 +16,32 @@ if (!reports.length)
 		"public/experiments/received-routes.json",
 		"public/experiments/bench-choices.json",
 	);
+/**
+ * Recorded historical reports: their generator needs an input that is no longer available, so they cannot be
+ * rerun on current sources. Each is pinned to its exact bytes instead of its source digests, and the check says
+ * so on every run. See docs/neighbours/phase-d-regeneration.md.
+ */
+const HISTORICAL = {
+	"public/experiments/received-assistance.json": {
+		sha256: "7dab5998b96e85ac29681c711484aa183e1d34c4d8d6e208c70039c07dbacbfd",
+		why: "its private owner checkpoint (sha256 52fa1c08…a04b0) is unavailable, so it cannot be rerun; it records the HF 2.6.0 sources it was measured on",
+	},
+};
 for (const reportPath of reports) {
 	const rawBytes = readFileSync(resolve(app, reportPath), "utf8");
 	const report = JSON.parse(rawBytes);
+	const historical = HISTORICAL[reportPath];
+	if (historical) {
+		assert.equal(
+			createHash("sha256").update(rawBytes).digest("hex"),
+			historical.sha256,
+			`Historical evidence changed: ${reportPath}. It cannot be regenerated; restore the recorded bytes.`,
+		);
+		console.log(
+			`HISTORICAL: ${report.schema} (${reportPath}) is a recorded report, not current-source evidence: ${historical.why}.`,
+		);
+		continue;
+	}
 	if (report.schema === "neighbours/bench-choice-probe@1") {
 		const summary = JSON.parse(
 			readFileSync(

@@ -6,7 +6,8 @@
  * interrupt (an activity review, never a cancel). The player sees offers and a worded read (impression.ts),
  * never a predicted verdict. A promise binds at once only on a yes; after "not now" or "I'd rather …" it is
  * `offered`, reserves that day's hour, and binds only if their own decision follows the request (otherwise it
- * is released). The player chooses the work and the deadline. Pledge outcomes reach HF through `learnFromVoice`.
+ * is released). The player chooses the work and the deadline. Pledge outcomes reach HF through `noteVoicePromise`
+ * (version 2 player state, HF 2.8.0); version 1 saves keep the earlier `learnFromVoice` report.
  * Only awake people at the player's place hear. There is no host speech credit, no synthetic reward for
  * asking, no inferred consent and no scripted cooperation. A save without `player` is byte-identical to a
  * town where the visitor never acted; the first player input creates this state and seeds the three
@@ -15,17 +16,18 @@
  */
 import {
 	type Affordance,
-	adoptVoiceTrust,
 	answerNow,
 	type DecisionRecord,
 	interrupt,
 	learnFromVoice,
+	noteVoicePromise,
 	perceive,
 	predict,
 	readPerson,
 	resolutionsOf,
 	type Suggestion,
 	type SuggestionResolution,
+	seedVoice,
 	vetoFor,
 } from "@adam0white/human-framework";
 import type {
@@ -45,7 +47,12 @@ import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
 import { PLAYER_TIES, type Resident, type Save } from "./state.ts";
 import { airTimber, repairHolds, timberMoisture } from "./timber.ts";
 import { validateEvent } from "./validation.ts";
-import { actionWords, counterWords, voicedLine } from "./voicing.ts";
+import {
+	actionWords,
+	counterWords,
+	refusalWhy,
+	voicedLine,
+} from "./voicing.ts";
 
 export const PLAYER_VOICE = "player";
 export const PLAYER_HOME = "homes";
@@ -171,7 +178,8 @@ export type PlayerJob = {
 	forId?: string;
 };
 export type PlayerState = {
-	version: 1;
+	/** 1: legacy pledge reporting through `learnFromVoice`; 2 (HF 2.8.0): `seedVoice` and `noteVoicePromise`. */
+	version: 1 | 2;
 	place: string;
 	job?: PlayerJob;
 	work: { day: number; starts: number };
@@ -264,7 +272,7 @@ function activate(host: PlayerHost): PlayerState {
 	const s = host.s;
 	if (s.player) return s.player;
 	s.player = {
-		version: 1,
+		version: 2,
 		place: PLAYER_HOME,
 		work: { day: Math.floor(s.now / 1440), starts: 0 },
 		requests: [],
@@ -275,7 +283,7 @@ function activate(host: PlayerHost): PlayerState {
 	};
 	for (const [id, trust] of PLAYER_VOICES) {
 		const r = s.people.find((o) => o.person.id === id);
-		if (r) adoptVoiceTrust(r.person, PLAYER_VOICE, trust, 1);
+		if (r) seedVoice(r.person, PLAYER_VOICE, trust);
 	}
 	playerEvent(
 		host,
@@ -796,6 +804,22 @@ function releasePledge(
 }
 function reportPledge(s: Save, pledge: Pledge, kept: boolean): void {
 	const r = s.people.find((o) => o.person.id === pledge.toId);
+	// HF 2.8.0: the player's word is evidence about the player, judged by whether the hour was given. It needs
+	// no suggestion resolution, so a bound pledge after "not now" reaches HF too. Version 1 saves (made before
+	// 2.8.0) keep the borrowed-resolution path so their continuation stays exact.
+	if (s.player?.version === 2) {
+		if (!r?.person.body.alive) {
+			pledge.hfReported = false;
+			return;
+		}
+		noteVoicePromise(r.person, PLAYER_VOICE, {
+			kept,
+			at: s.now,
+			action: `pledge:${pledge.work}`,
+		});
+		pledge.hfReported = true;
+		return;
+	}
 	const q = s.player?.requests.find((x) => x.id === pledge.requestId);
 	const accepted = [q?.decision?.answer, q?.answer].find(
 		(a) => a?.verdict === "assented" || a?.verdict === "complied",
@@ -1245,6 +1269,7 @@ export function playerView(s: Save): PlayerView {
 			mode: q.mode,
 			verdict: q.answer.verdict,
 			says: q.answer.says,
+			...(refusalWhy(q.answer) ? { why: refusalWhy(q.answer) } : {}),
 			...(q.answer.counterOffer ? { counterOffer: q.answer.counterOffer } : {}),
 			status: q.status,
 			...(q.decision
@@ -1386,7 +1411,7 @@ export function validatePlayer(s: Save, ids: Set<string>): void {
 	const place = (id: unknown) =>
 		typeof id === "string" && s.places.some((x) => x.id === id);
 	if (
-		p.version !== 1 ||
+		(p.version !== 1 && p.version !== 2) ||
 		!place(p.place) ||
 		!int(p.notices) ||
 		!Array.isArray(p.requests) ||

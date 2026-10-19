@@ -356,6 +356,7 @@ export function SpeakPanel({
 						</q>{" "}
 						<span className="voice-by">{name}</span>
 					</p>
+					{latest.why && <p className="refusal-why">{latest.why}</p>}
 					{latest.decision && (
 						<p>
 							Later: <q className="voice">{voicedLine(latest.decision)}</q>{" "}

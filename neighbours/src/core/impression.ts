@@ -168,8 +168,23 @@ export function speechRead(
 	else {
 		const recent = voice.history.filter((h) => s.now - h.at <= 2 * 1440);
 		if (voice.pressure >= 0.3) out.push("Bristling at being pushed");
-		if (recent.some((h) => h.reason === "pledge-broken" && h.delta < 0))
+		// "pledge-*" reasons are version 1 saves; HF 2.8.0 noteVoicePromise records "promise-*".
+		if (
+			recent.some(
+				(h) =>
+					(h.reason === "pledge-broken" || h.reason === "promise-broken") &&
+					h.delta < 0,
+			)
+		)
 			out.push("Still sore about a promise you broke");
+		else if (
+			recent.some(
+				(h) =>
+					(h.reason === "pledge-kept" || h.reason === "promise-kept") &&
+					h.delta > 0,
+			)
+		)
+			out.push("Remembers you kept your word");
 		else if (
 			recent.some(
 				(h) =>

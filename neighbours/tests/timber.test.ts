@@ -28,7 +28,10 @@ const town = (seed = 42, population = 8) =>
 	new Runtime(createRuntime(seed, population).export() as Save);
 const legacyTown = (seed = 42, population = 8) => {
 	const s = createRuntime(seed, population).export() as Save;
+	// A Phase C-and-older town: no timber, no going-along evenings, no HF fullness.
 	delete s.timber;
+	delete s.together;
+	for (const r of s.people) delete r.person.body.fullness;
 	return new Runtime(s);
 };
 /** One round in which `requested` residents take that offer and everyone else rests at home. */
@@ -40,7 +43,10 @@ function round(r: Runtime, requested: Record<string, string> = {}) {
 }
 
 it("new towns start with flood-soaked timber; legacy saves restore without it", () => {
-	expect(town().s.timber).toEqual({ damp: FLOOD_DAMP });
+	expect(town().s.timber).toEqual({
+		damp: FLOOD_DAMP,
+		care: { loosened: 0 },
+	});
 	const legacy = legacyTown();
 	const restored = restoreRuntime(legacy.export()) as Runtime;
 	expect("timber" in restored.export()).toBe(false);
@@ -361,9 +367,10 @@ it(
 		expect(phaseC.s.hallSafe).toBe(false);
 		expect(phaseC.moisture()).toBe("wet");
 		expect(slips).toBeGreaterThan(0);
-		// Seed 9 has a dry week: its hall reopens on day 4 without the visitor.
+		// Seed 9 has a dry week: its hall reopens on day 4 without the visitor (17:30 since HF fullness and hall care).
 		const dry = town(9, 208);
-		for (let i = 0; i < 320 && !dry.s.hallSafe; i++) dry.step();
+		for (let i = 0; i < 360 && !dry.s.hallSafe; i++) dry.step();
+		expect(Math.floor(dry.s.now / 1440)).toBe(3);
 		expect(dry.s.hallSafe).toBe(true);
 		expect(dry.s.now).toBeGreaterThan(480 + 2 * 1440);
 	},

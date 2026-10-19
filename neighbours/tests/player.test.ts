@@ -226,7 +226,7 @@ describe("player as a neighbour", () => {
 			).toThrow();
 			while (r.view().player?.job) r.step();
 			const kept = voice(r, "ada")?.history?.at(-1);
-			expect(kept?.reason).toBe("pledge-kept");
+			expect(kept?.reason).toBe("promise-kept");
 			expect(kept?.action).toBe("pledge:carry-meals");
 			expect(kept?.delta ?? 0).toBeGreaterThan(0);
 			expect(r.view().player?.pledges[0]?.status).toBe("kept");
@@ -253,7 +253,7 @@ describe("player as a neighbour", () => {
 			expect(r.s.now).toBeGreaterThanOrEqual(pledge?.dueBy ?? 0);
 			expect(r.view().player?.pledges[0]?.status).toBe("lapsed");
 			const lapsed = voice(r, "ada")?.history?.at(-1);
-			expect(lapsed?.reason).toBe("pledge-broken");
+			expect(lapsed?.reason).toBe("promise-broken");
 			expect(lapsed?.delta ?? 0).toBeLessThan(0);
 			const line = r.view().player?.journal.at(-1)?.text ?? "";
 			expect(line).toMatch(/passed with no hour recorded/);
@@ -300,7 +300,7 @@ describe("player as a neighbour", () => {
 			const good = r.export() as Save;
 			const cases: ((s: Save) => void)[] = [
 				(s) => {
-					(s.player as unknown as { version: number }).version = 2;
+					(s.player as unknown as { version: number }).version = 3;
 				},
 				(s) => {
 					(s.player as unknown as { place: string }).place = "moon";

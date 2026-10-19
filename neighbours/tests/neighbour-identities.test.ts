@@ -40,6 +40,8 @@ it("preserves background behavioral defaults and the familiar eight", () => {
 	person.person.name = legacy.initialBackground.person.name;
 	const expected = structuredClone(legacy.initialBackground);
 	expected.person.engine = ENGINE_VERSION;
+	// New towns enable HF 2.8.0 fullness for every person (scenario.ts); nothing else in the defaults moved.
+	expected.person.body.fullness = true;
 	expect(person).toEqual(expected);
 	expect(town.people.slice(0, 8)).toEqual(
 		(createRuntime(42, 8).export() as Save).people,

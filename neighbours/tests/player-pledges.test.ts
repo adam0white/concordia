@@ -133,7 +133,7 @@ describe("player pledges (Phase C)", () => {
 				.actor("ada")
 				.person.will.voices.find((v) => v.voiceId === "player");
 			const broken = voice?.history.findLast(
-				(h) => h.reason === "pledge-broken",
+				(h) => h.reason === "promise-broken",
 			);
 			expect(broken?.delta ?? 0).toBeLessThan(0);
 			const line =

@@ -19,10 +19,12 @@
  * or any guaranteed reopening day. The rates are engineering assumptions chosen so that, without the visitor,
  * the hall can reopen but usually later than the second day; they are not measured from real timber.
  */
+import { validateHallCare } from "./hall-care.ts";
 import { keyed } from "./hash.ts";
 import type { Save } from "./state.ts";
 
-export type Timber = { damp: number };
+/** `care` (Phase D, hall-care.ts): present in new towns; counts sections the wet timber has worked loose. */
+export type Timber = { damp: number; care?: { loosened: number } };
 /** Damp of the hall timber when a new town begins, the morning after the flood. */
 export const FLOOD_DAMP = 1;
 /** Inspection reads the timber as dry below this damp. */
@@ -38,9 +40,9 @@ export const MIN_HOLD = 0.7;
 
 const tidy = (x: number) => Math.min(1, Math.max(0, Math.round(x * 1e6) / 1e6));
 
-/** The town's new-game timber after the flood. */
+/** The town's new-game timber after the flood, with hall care (hall-care.ts). */
 export function floodTimber(): Timber {
-	return { damp: FLOOD_DAMP };
+	return { damp: FLOOD_DAMP, care: { loosened: 0 } };
 }
 
 /** The moisture cue a person sees at the hall: damp-based when timber physics exist, else the legacy weather. */
@@ -97,11 +99,12 @@ export function validateTimber(s: Save): void {
 		!t ||
 		typeof t !== "object" ||
 		Array.isArray(t) ||
-		Object.keys(t).join() !== "damp" ||
+		!["damp", "care,damp"].includes(Object.keys(t).sort().join()) ||
 		typeof (t as Timber).damp !== "number" ||
 		!Number.isFinite((t as Timber).damp) ||
 		(t as Timber).damp < 0 ||
 		(t as Timber).damp > 1
 	)
 		throw Error("Invalid hall timber");
+	if ((t as Timber).care !== undefined) validateHallCare((t as Timber).care);
 }
