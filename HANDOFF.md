@@ -1,5 +1,19 @@
 # Neighbours handoff
 
+## F-214 resident retest follow-up (2026-10-20)
+
+Remaining: the driver's taste retest and Adam's broader feel acceptance; genuine recorded-study regeneration in `nbh-01z.43` (execution milestone 2026-10-21, review follow-up deadline 2026-11-03); existing enlarged-text masthead/dock and Journal reflow in `nbh-01z.45` (2026-11-03). This is a bounded phone correction, not a whole-page DL-25 pass.
+
+The resident name now precedes a direct response: talk when together, or an actual walk to the resident's current place with the host's travel estimate. Location and generic walking controls follow it. Only the compact response pins; expanded conversation scrolls and places its actual Ask before pledge inputs and descriptive reads. Held replies and promises remain reachable after a resident leaves. On the town map and compact list, the same literal Needs help cue marks the hall's known open repair/inspection need and clears when it opens. No private HF need value is treated as player knowledge. No ranking or deadline is inferred.
+
+Validation: full `npm run check` passes 479 units, lint, three typechecks, 42 plain-Node imports and build; actual Chromium/WASM passes 48/48; native engine/bridge/director controls pass 37/37. Source `c3d70a2` exports restore identically and match after 24 further rounds (seed 42/population 208: `aad95905`; seed 73/population 8: `d8699814`). Actual 360×690 Ada/Ravi responses and both help labels are visible; direct controls have real centre hits and heights 63.81/44 px. The 1280×800 sanity render passes. Opening remains 21 words before Enter town. No simulation, Python, save format, HF 2.8.0 pin, dependency or recorded fixture changed.
+
+A separate source-unread phone visitor identified the hall need, saw the direct Ada/Ravi walking responses without scrolling, walked to Ravi in four Steps and reached an actual Ask/refusal/counter-offer without scrolling. This narrow watch does not verify later completion or sustained feel.
+
+Two independent source reviewers caught one introduced follow-up regression: replies/promises disappeared when the resident left. It is corrected with an actual SpeakPanel departure projection test. Initial browser checks also prompted separating the compact pinned response from secondary locations. The unchanged provenance gate still fails the earlier lockfile digest; no green hosted-CI claim is made.
+
+Implementation is signed `456079c160ceb334d5cec998fbf380500dca8aba`. Its first deployment stamped dirty because the commit hook exported an unstaged task claim. Signed tracker receipt `78054bc59040141b594613ffb92ab1b64b020536` includes that authoritative state; its own full check passes, and its public release is verified clean at Cloudflare version `e76f9f3e-fd6c-4cdc-a6d9-a83d1fda2adf`. Actual live 360×690 town, both residents, conversation and 1280×800 screenshots pass. The current public release stamp remains authoritative after this documentation receipt. Task `nbh-01z.46` closes the technical correction; owner feel remains separate.
+
 ## F-214 adversarial follow-up (2026-10-20)
 
 Remaining: genuine recorded-study regeneration in `nbh-01z.43` (execution milestone 2026-10-21, review follow-up deadline 2026-11-03), existing enlarged-text masthead/playback reflow and Journal way-back work in `nbh-01z.45` (2026-11-03), and the driver's taste review. Adam still accepts the broader game's feel. The design's Deferred section records the reasons. This is not a whole-page DL-25 pass.
