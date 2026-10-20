@@ -1,8 +1,10 @@
 # Neighbours handoff
 
-## Phase D release candidate (2026-10-20)
+## Phase D delivery (2026-10-20)
 
-Remaining: push `neighbours`, deploy and verify the clean live stamp. All local release gates pass: 469 unit tests, 39 browser regressions plus four final-study retests, 37 native controls, 35 late-checkpoint parity controls, 30-day stress, provenance, build and audit. Adam accepts feel separately. Broader gameplay work remains in `nbh-01z.37`; this regeneration does not claim a new faculty or owner acceptance.
+Remaining: Adam's feel acceptance and the broader gameplay work in `nbh-01z.37`. The technical publication gate is cleared. All local gates and [hosted CI 39373059475](https://github.com/adam0white/concordia/actions/runs/39373059475) passed on signed release source `ff72917017d5b0b2904df2b4b99ed0ac5abd79d1`: 469 unit tests, 39 browser regressions plus four final-study retests, 37 native controls, 35 late-checkpoint parity controls, 30-day stress, provenance, build and audit.
+
+The first Phase D public delivery was verified at `ff72917`, `dirty: false`, published HF 2.8.0 and lab client 0.1.1; Cloudflare version `4a07e94d-874e-4783-ab27-bd6cfdf60604`. Served HTML loads the new bundle, and fourteen served bundle/runtime/report files exactly match the clean build. This first receipt is retained as provenance. The current [live release stamp](https://neighbours.adamwhite.work/release.json) is authoritative after documentation follow-ups. No runtime or evidence change follows the verified source.
 
 The owner now authorizes genuine Claude CLI regeneration. All three native tapes were regenerated from unchanged runtime sources at `9148a96` on published HF 2.8.0: seven mixed-town decisions, one GM proposal and two bench proposals, **ten calls total**. No usage-limit error occurred. Each separately replays exactly with zero model calls. No tape or provenance field was rewritten by hand.
 

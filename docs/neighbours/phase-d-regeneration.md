@@ -1,6 +1,6 @@
 # Phase D: genuine evidence regeneration (2026-10-20)
 
-Remaining at this checkpoint: push, deployment and live verification. Adam accepts feel separately. The owner authorized Claude CLI for this regeneration, with about ten calls and an immediate stop on a usage-limit error.
+Remaining: Adam's feel acceptance and the existing gameplay follow-ups. Technical publication is complete. Adam accepts feel separately. The owner authorized Claude CLI for this regeneration, with about ten calls and an immediate stop on a usage-limit error.
 
 ## Sources and provider budget
 
@@ -73,4 +73,6 @@ The bench probe was then rerun with `--require-clean`, and the route study was r
 
 The factual review correction to the stale deterministic limitation was made in its producer, followed by another actual generator run. No generated measurement or digest was patched.
 
-Publication uses branch `neighbours`, signed commits and a clean production build. The served `/release.json` and served assets determine the public release; a local build or push alone is not deployment evidence. The live release receipt will be added after verification.
+Publication uses branch `neighbours`, signed commits and a clean production build. The served `/release.json` and served assets determine the public release; a local build or push alone is not deployment evidence. [Hosted CI 39373059475](https://github.com/adam0white/concordia/actions/runs/39373059475) passed every gate at signed source `ff72917017d5b0b2904df2b4b99ed0ac5abd79d1`.
+
+First public delivery, verified 2026-10-20: commit `ff72917`, `dirty: false`, HF 2.8.0, Cloudflare version `4a07e94d-874e-4783-ab27-bd6cfdf60604`. Served HTML loads the expected entry and stylesheet. Fourteen served bundle/runtime/report files match the clean build byte for byte, including all three native tapes and the nine-case bench report. The live `/release.json` remains authoritative for documentation follow-ups. They do not change runtime sources, measurements or the ten-call provider total.
