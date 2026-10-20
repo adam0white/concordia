@@ -27,10 +27,10 @@ test("notebook preview contains the actual town and cancel sends no run", async 
 	await expect(dialog).toBeVisible();
 	await dialog.getByText(/Exactly what is sent/).click();
 	const preview = dialog.getByLabel("The exact text that is sent");
-	await expect(preview).toHaveValue(/"game": "neighbours"/);
 	const text = await preview.inputValue();
 	const packet = JSON.parse(text);
 	expect(packet.game).toBe("neighbours");
+	expect(packet.run).toBeDefined();
 	expect(packet.run.runtime.people).toHaveLength(208);
 	await dialog.getByRole("button", { name: "Not now", exact: true }).click();
 	await expect(dialog).toHaveCount(0);
