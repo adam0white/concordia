@@ -208,7 +208,7 @@ export function clock(at: number): string {
 function nameOf(s: Save, id: string): string {
 	return s.people.find((r) => r.person.id === id)?.person.name ?? id;
 }
-function placeName(s: Save, id: string): string {
+export function placeName(s: Save, id: string): string {
 	return s.places.find((p) => p.id === id)?.name ?? id;
 }
 export function travelMinutes(s: Save, from: string, to: string): number {
@@ -262,6 +262,12 @@ function notify(s: Save, text: string, eventId: number): void {
 	const p = required(s.player, "Player state missing");
 	p.notices++;
 	p.latestNotice = { at: s.now, text, eventId };
+}
+/** A town happening the visitor learns of, once they have acted; observer-only towns are unchanged. */
+export function playerHears(s: Save, text: string, eventId: number): void {
+	if (!s.player) return;
+	keepById(s, eventId);
+	notify(s, text, eventId);
 }
 function bound<T>(list: T[], limit: number): void {
 	if (list.length > limit) list.splice(0, list.length - limit);
@@ -688,6 +694,43 @@ function speak(
 	advanceGoals(s);
 }
 
+/**
+ * Why one hour of the visitor's own work cannot start now, or undefined when it can. The same check refuses the
+ * intervention and disables the button with this reason, so the screen never offers work the host would reject.
+ */
+export function workRefusal(
+	s: Save,
+	kind: PlayerWork,
+	forId = "",
+	dueBy?: number,
+): string | undefined {
+	const p = s.player;
+	if (p?.job) return "Finish what you are doing first";
+	const from = p?.place ?? PLAYER_HOME;
+	const to = workPlace(s, kind, forId);
+	const travel = travelMinutes(s, from, to);
+	const day = Math.floor(s.now / 1440);
+	const minute = s.now - day * 1440;
+	const end = s.now + travel + 60;
+	if (minute < 480 || end > day * 1440 + 1080)
+		return "Work hours are 08:00–18:00, including the walk there";
+	if (hoursUsed(p, day) >= PLAYER_WORK_HOURS)
+		return "You have already worked two hours today";
+	if (dueBy !== undefined && end > dueBy)
+		return "That hour would end after the promised time";
+	if (kind === "help-repair") {
+		if (
+			s.hall +
+				s.people.filter((r) => r.job?.offer.action === "repair").length >=
+			12
+		)
+			return "Nothing is left to repair: every section is fixed or being fixed";
+		if (s.tools <= 0) return "Every tool is in use; wait for one to come free";
+	}
+	if (kind === "dry-timber" && !timberToAir(s))
+		return "There is no damp hall timber to air";
+	return undefined;
+}
 function startWork(
 	host: PlayerHost,
 	pledgeId: unknown,
@@ -710,27 +753,13 @@ function startWork(
 	const forId = pledge?.toId ?? (typeof actorId === "string" ? actorId : "");
 	if (kind === "cover-shift" && !s.people.some((r) => r.person.id === forId))
 		throw Error("Choose whose shift to cover");
+	const refusal = workRefusal(s, kind, forId, pledge?.dueBy);
+	if (refusal) throw Error(refusal);
 	const from = p?.place ?? PLAYER_HOME;
 	const to = workPlace(s, kind, forId);
 	const travel = travelMinutes(s, from, to);
 	const day = Math.floor(s.now / 1440);
-	const minute = s.now - day * 1440;
 	const end = s.now + travel + 60;
-	if (minute < 480 || end > day * 1440 + 1080)
-		throw Error("Work hours are 08:00–18:00, including the walk there");
-	if (hoursUsed(p, day) >= PLAYER_WORK_HOURS)
-		throw Error("You have already worked two hours today");
-	if (pledge && end > pledge.dueBy)
-		throw Error("That hour would end after the promised time");
-	if (
-		kind === "help-repair" &&
-		(s.hall + s.people.filter((r) => r.job?.offer.action === "repair").length >=
-			12 ||
-			s.tools <= 0)
-	)
-		throw Error("No repair is available: no free tools or nothing left to fix");
-	if (kind === "dry-timber" && !timberToAir(s))
-		throw Error("There is no damp hall timber to air");
 	const target = s.people.find((r) => r.person.id === forId);
 	if (kind === "cover-shift") {
 		if (!target || shiftsLeft(target, day) <= 0)
@@ -1234,6 +1263,14 @@ export function playerView(s: Save): PlayerView {
 			: {}),
 		workHoursLeft: PLAYER_WORK_HOURS - hoursUsed(p, day),
 		canAirTimber: timberToAir(s),
+		workBlocked: Object.fromEntries(
+			(["carry-meals", "help-repair", "dry-timber"] as const).flatMap(
+				(kind) => {
+					const why = workRefusal(s, kind);
+					return why ? [[kind, why]] : [];
+				},
+			),
+		),
 		pledgeDeadlines: pledgeDeadlines(s.now),
 		canMove: !p?.job,
 		present: present.slice(0, 16).map((r) => ({

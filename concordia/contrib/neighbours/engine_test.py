@@ -2,7 +2,7 @@
 import copy
 import json
 import unittest
-from concordia.contrib.neighbours.engine import TownEngine, BridgeError
+from concordia.contrib.neighbours.engine import TownEngine, BridgeError, InterventionRejected
 from concordia.environment.engine import Engine
 
 
@@ -12,6 +12,7 @@ class FakeBridge:
     self.calls = []
     self.invalid_choice = False
     self.drop = None
+    self.reject = None
 
   def __call__(self, request):
     req = json.loads(request)
@@ -35,6 +36,7 @@ class FakeBridge:
     elif op == 'restore':
       self.state = copy.deepcopy(req['save'])
       result = None
+    elif op == 'intervene' and self.reject: result = {'rejected': self.reject}
     else: result = None
     return json.dumps(result)
 
@@ -59,6 +61,15 @@ class TownEngineTest(unittest.TestCase):
     self.bridge.invalid_choice = False
     self.engine.restore(checkpoint)
     self.assertEqual(self.engine.advance()['now'], 1)
+
+  def test_rejected_intervention_keeps_the_town_usable(self):
+    self.bridge.reject = 'Every tool is in use; wait for one to come free'
+    with self.assertRaises(InterventionRejected): self.engine.intervene({'kind': 'player-work'})
+    self.assertEqual(self.engine.advance()['now'], 1)
+    self.bridge.reject = None
+    self.bridge.drop = 'intervene'
+    with self.assertRaises(BridgeError): self.engine.intervene({'kind': 'player-work'})
+    with self.assertRaises(RuntimeError): self.engine.advance()
 
   def test_dropped_reply_is_visible_and_no_checkpoint_callback(self):
     self.bridge.drop = 'apply'

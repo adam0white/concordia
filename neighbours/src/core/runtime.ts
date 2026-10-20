@@ -86,8 +86,10 @@ import { realizedOutcome } from "./outcomes.ts";
 import { personLessons } from "./person-learning.ts";
 import {
 	heldSuggestion,
+	placeName,
 	playerApplied,
 	playerDecided,
+	playerHears,
 	playerIntervene,
 	playerJobEnded,
 	playerRound,
@@ -265,9 +267,14 @@ export class Runtime implements TownRuntime {
 				needs: {},
 				material: 0,
 			});
+		const travelling =
+			(!r.person.body.alive ? this.s.now - 15 : this.s.now) < j.arrive;
 		const stopped = this.event(
 			"interrupted",
-			`${r.person.name}'s ${j.offer.label.toLowerCase()} ${reason} ${(!r.person.body.alive ? this.s.now - 15 : this.s.now) < j.arrive ? `before arrival was confirmed, last known at ${j.from} while travelling toward ${j.offer.placeId}` : `at ${r.place}`}; reserved resources were returned.`,
+			// Towns begun under HF 2.8.0 say it in plain words; older saves keep their recorded wording exactly.
+			this.s.together
+				? `${r.person.name} stopped “${j.offer.label}” ${travelling ? `on the way to ${placeName(this.s, required(j.offer.placeId, "Missing destination"))}` : `at ${placeName(this.s, r.place)}`}${reason === "stopped" ? "" : " to do something else"}.`
+				: `${r.person.name}'s ${j.offer.label.toLowerCase()} ${reason} ${travelling ? `before arrival was confirmed, last known at ${j.from} while travelling toward ${j.offer.placeId}` : `at ${r.place}`}; reserved resources were returned.`,
 			r.person.id,
 			r.place,
 			[j.event],
@@ -300,13 +307,20 @@ export class Runtime implements TownRuntime {
 		this.s.now += 15;
 		this.s.round++;
 		weatherTimber(this.s, this.weather(), 15);
-		if (loosenHall(this.s))
-			this.event(
+		if (loosenHall(this.s)) {
+			const id = this.event(
 				"hall-loosened",
 				"A repaired section of the hall worked loose as the wet timber moved.",
 				undefined,
 				"hall",
 			);
+			// A visitor who has acted hears of it, so a running advance stops at the crisis instead of passing it.
+			playerHears(
+				this.s,
+				`A repaired section of the hall worked loose overnight on the wet timber (${12 - this.s.hall} of 12 now need work).`,
+				id,
+			);
+		}
 		this.records.clear();
 		this.offers.clear();
 		for (const r of this.s.people) {

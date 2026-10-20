@@ -217,9 +217,9 @@ export function SpeakPanel({
 				<details className="own-work">
 					<summary>Do an hour of your own work</summary>
 					<p className="hand">
-						{player.workHoursLeft} working hour
-						{player.workHoursLeft === 1 ? "" : "s"} left today, 08:00–18:00
-						including the walk.
+						You can still give {player.workHoursLeft} hour
+						{player.workHoursLeft === 1 ? "" : "s"} of work today, between 08:00
+						and 18:00 including the walk.
 					</p>
 					<ul className="walk-list">
 						{offeredWork(player)
@@ -228,11 +228,28 @@ export function SpeakPanel({
 								<li key={w.id}>
 									<button
 										type="button"
-										disabled={!player.canMove || busy}
+										disabled={
+											!player.canMove ||
+											busy ||
+											!!player.workBlocked?.[
+												w.id as keyof NonNullable<PlayerView["workBlocked"]>
+											]
+										}
 										onClick={() => session.playerWork({ work: w.id })}
 									>
 										<span>{w.label}</span>
 									</button>
+									{player.workBlocked?.[
+										w.id as keyof NonNullable<PlayerView["workBlocked"]>
+									] && (
+										<small className="hand">
+											{
+												player.workBlocked[
+													w.id as keyof NonNullable<PlayerView["workBlocked"]>
+												]
+											}
+										</small>
+									)}
 								</li>
 							))}
 					</ul>

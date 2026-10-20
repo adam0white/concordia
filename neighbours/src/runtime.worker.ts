@@ -220,9 +220,14 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			if (event.data.type === "advance" && advanceCancelled)
 				advances.finish(event.data.requestId);
 			if (comparison) comparisons.delete(comparison);
+			const message = error instanceof Error ? error.message : String(error);
+			// The host refused before changing anything (bridge-port.ts): say why, in one line.
+			const rejected = message.match(/InterventionRejected: (.+)/)?.[1]?.trim();
 			send({
 				type: "error",
-				message: error instanceof Error ? error.message : String(error),
+				message: rejected
+					? `Not possible now: ${rejected}. Nothing in the town changed.`
+					: message,
 			});
 		});
 };

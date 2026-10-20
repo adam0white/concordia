@@ -114,7 +114,7 @@ test("actual tools and bus branches retain setup, separate history and mark a sa
 	expect(checkpoint).toContain("Day 1, 08:00");
 	await expect(
 		comparison.getByRole("region", { name: "Changed resources" }),
-	).toContainText("Shared tools available");
+	).toContainText("Tools owned, including in use");
 	comparison = await anotherSetup(page);
 	await comparison
 		.getByLabel("Change in the second run")

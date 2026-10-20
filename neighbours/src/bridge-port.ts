@@ -30,9 +30,23 @@ export class RuntimePort {
 			case "restore":
 				this.runtime = restoreRuntime(request.save);
 				return null;
-			case "intervene":
-				this.runtime.intervene(request.intervention as Intervention);
+			case "intervene": {
+				// A refusal that left the town untouched is answered as such, so the engine stays usable. Anything
+				// that changed state before failing stays an error and requires a restore.
+				const before = JSON.stringify(this.runtime.export());
+				try {
+					this.runtime.intervene(request.intervention as Intervention);
+				} catch (error) {
+					if (JSON.stringify(this.runtime.export()) !== before) throw error;
+					return {
+						rejected:
+							error instanceof Error
+								? error.message
+								: "That cannot be done now",
+					};
+				}
 				return null;
+			}
 			case "inspect":
 				return this.runtime.inspect(actorId);
 			default:

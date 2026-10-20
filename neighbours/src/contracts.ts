@@ -168,6 +168,10 @@ export interface PlayerView {
 	workHoursLeft: number;
 	/** Whether there is damp hall timber the player can still prop and air (false once the hall has reopened). */
 	canAirTimber?: boolean;
+	/** Own work that cannot start now, with the host's reason (player.ts `workRefusal`). */
+	workBlocked?: Partial<
+		Record<"carry-meals" | "help-repair" | "dry-timber", string>
+	>;
 	/** Deadlines a promise made now may name (minutes); see PLEDGE_HOURS. */
 	pledgeDeadlines?: number[];
 	canMove: boolean;

@@ -46,7 +46,8 @@ test("a real WASM annex request comparison preserves the live town and the reque
 		.getByText("Situation source and controlled cases", { exact: true })
 		.click();
 	await card.getByLabel("Situation", { exact: true }).selectOption("dry-sound");
-	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("lea");
+	// At this genuine checkpoint (Day 14, 18:00) Lea is asleep in Phase D towns; Ada is awake and can be asked.
+	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("ada");
 	const before = await exported(page);
 	await closeSaves(page);
 	await card
@@ -56,7 +57,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 		})
 		.click();
 	const comparison = page.locator(".day-comparison");
-	await expect(comparison).toContainText("Annex inspection requested from Lea");
+	await expect(comparison).toContainText("Annex inspection requested from Ada");
 	await expect(
 		comparison.getByText("Resources and neighbour state at the end", {
 			exact: true,
@@ -78,9 +79,9 @@ test("a real WASM annex request comparison preserves the live town and the reque
 		.getByText("Situation source and controlled cases", { exact: true })
 		.click();
 	await card.getByLabel("Situation", { exact: true }).selectOption("dry-sound");
-	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("lea");
+	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("ada");
 	await card
-		.getByRole("button", { name: "Ask Lea to inspect", exact: true })
+		.getByRole("button", { name: "Ask Ada to inspect", exact: true })
 		.click();
 	await expect(
 		page.getByRole("status").filter({ hasText: "Inspection request received" }),

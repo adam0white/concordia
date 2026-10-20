@@ -12,6 +12,10 @@ class BridgeError(RuntimeError):
   """A runtime response is missing, malformed or explicitly failed."""
 
 
+class InterventionRejected(ValueError):
+  """The host refused an intervention before changing anything; the town stays usable."""
+
+
 class _Person(Entity):
   def __init__(self, actor_id, request):
     self._name = actor_id
@@ -185,7 +189,13 @@ class TownEngine(Engine):
     self._require_ready()
     # A transport failure may happen after mutation. Require restore in that case.
     self._ready = False
-    if self._request('intervene', intervention=intervention) is not None:
+    result = self._request('intervene', intervention=intervention)
+    if (isinstance(result, dict) and list(result) == ['rejected'] and
+        isinstance(result['rejected'], str)):
+      # The host checked its own state is unchanged before answering this way.
+      self._ready = True
+      raise InterventionRejected(result['rejected'])
+    if result is not None:
       raise BridgeError('intervene must return null.')
     self._ready = True
     return self.view()
