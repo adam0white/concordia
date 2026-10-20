@@ -2335,3 +2335,148 @@ th {
 .resident-talk .speech {
 	margin-top: 0;
 }
+
+/* Place selection shares the person drawer, with ink selection and real travel. */
+.place[role="button"] {
+	cursor: pointer;
+}
+.place-hit-area {
+	fill: transparent;
+	stroke: var(--ink-soft);
+	stroke-dasharray: 3 8;
+	stroke-width: 1;
+}
+.place-selection-outline {
+	fill: transparent;
+	stroke: var(--ink);
+	stroke-width: 3;
+}
+.place[role="button"]:focus-visible .place-hit-area {
+	stroke: var(--ink);
+	stroke-width: 3;
+	stroke-dasharray: none;
+}
+button.known-place-need {
+	cursor: pointer;
+	min-height: 44px;
+}
+button.known-place-need[aria-pressed="true"] {
+	outline: 2px solid var(--ink);
+	outline-offset: -3px;
+}
+.place-panel h2 {
+	margin: 0;
+}
+.place-panel h2:focus {
+	outline: none;
+}
+.place-response {
+	margin: 12px 0;
+}
+.place-walk {
+	width: 100%;
+	min-height: 44px;
+}
+.place-company {
+	list-style: none;
+	padding: 0;
+}
+.place-company button {
+	width: 100%;
+	min-height: 44px;
+	text-align: left;
+}
+.place-known-need {
+	font-weight: 600;
+}
+@media (max-width: 899px) {
+	.app[data-drawer="place"] .neighbour-strip,
+	.app[data-drawer="place"] .margin-note {
+		display: none;
+	}
+	.app[data-drawer="place"] .ink-stamp {
+		top: 4px;
+		width: 104px;
+		height: 104px;
+		margin: 0 0 0 -52px;
+		font-size: 1rem;
+	}
+}
+@media (min-width: 900px) {
+	.app[data-drawer="place"] .map-section {
+		right: min(460px, 40vw);
+	}
+}
+
+/* Keep the entire offer and its condition together before optional alternatives. */
+.promise-choice {
+	display: grid;
+	gap: 6px;
+}
+.promise-choice > label {
+	grid-template-columns: 78px minmax(0, 1fr);
+	align-items: center;
+}
+.promise-choice select {
+	min-width: 0;
+}
+.promise-choice > button {
+	min-height: 44px;
+}
+.resident-talk .promise-meaning {
+	font-size: 0.9375rem;
+	line-height: 1.3;
+}
+.resident-talk .speech-alternatives > summary {
+	min-height: 44px;
+}
+@media (max-width: 700px) {
+	.person-panel:has(.resident-talk[open]) > .eyebrow,
+	.person-panel:has(.resident-talk[open]) > .person-heading .avatar {
+		display: none;
+	}
+	.person-panel:has(.resident-talk[open]) > .person-heading {
+		min-height: 32px;
+		margin-bottom: 4px;
+	}
+	.person-panel:has(.resident-talk[open]) > .player-action {
+		padding-right: 0;
+	}
+}
+
+.playback {
+	flex-wrap: wrap;
+}
+.clock-rate {
+	flex-basis: 100%;
+	font-size: 0.765rem;
+	line-height: 1.15;
+	color: var(--ink-soft);
+}
+/* Expanding a conversation changes pinning; browser anchoring must not jump to its journal. */
+.drawer-person {
+	overflow-anchor: none;
+}
+
+/* A compact place sheet leaves its selected building visible above it. */
+@media (max-width: 899px) {
+	.drawer-place {
+		max-height: 55%;
+		padding-top: 10px;
+		padding-bottom: 12px;
+	}
+	.place-panel p {
+		margin: 6px 0;
+		line-height: 1.25;
+	}
+	.place-panel h3 {
+		margin: 10px 0 4px;
+		font-size: 1rem;
+	}
+	.place-panel .place-response {
+		margin: 8px 0;
+	}
+	.place-panel .place-company {
+		margin: 4px 0;
+	}
+}

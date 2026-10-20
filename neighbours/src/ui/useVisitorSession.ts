@@ -16,6 +16,7 @@ import { datedClock } from "./format";
 import { lab } from "./lab";
 import { type ObservedFeed, observe } from "./observations";
 import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
+import { playbackRate } from "./playback-rate";
 import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
 
@@ -74,6 +75,9 @@ export function useVisitorSession({
 	const [branchError, setBranchError] = useState("");
 	const comparisonPending = useRef(false);
 	const [speed, setSpeed] = useState(1200);
+	const [townEpoch, setTownEpoch] = useState(0);
+	const [conversationPerson, setConversationPerson] = useState<string>();
+	const rate = playbackRate(speed, conversationPerson !== undefined);
 	const [selected, setSelected] = useState(() => {
 		try {
 			return localStorage.getItem("alder-follow") || "";
@@ -108,6 +112,9 @@ export function useVisitorSession({
 		error?: string;
 	}>();
 	const predictionSequence = useRef(0);
+	const predictionKey = useRef<{ actorId: string; town: TownView } | undefined>(
+		undefined,
+	);
 	const playerSequence = useRef(0);
 	const saveConflictRef = useRef(false);
 	const [hasSave, setHasSave] = useState(false);
@@ -181,6 +188,7 @@ export function useVisitorSession({
 	const resetWorldFeedback = useCallback((generation: number) => {
 		advanceOrigin.current = null;
 		acceptedGeneration.current = generation;
+		setTownEpoch(generation);
 		const requestedExport = exportRequest.current;
 		if (
 			requestedExport !== null &&
@@ -208,6 +216,9 @@ export function useVisitorSession({
 		setAdvanceNotice("");
 		setPlayerError("");
 		setSpeechPrediction(undefined);
+		predictionKey.current = undefined;
+		predictionSequence.current++;
+		setConversationPerson(undefined);
 	}, []);
 	useEffect(() => {
 		if (!enabled) return;
@@ -674,9 +685,9 @@ export function useVisitorSession({
 				pending.current = true;
 				dispatch({ type: "step" });
 			}
-		}, speed);
+		}, rate.interval);
 		return () => clearInterval(timer);
-	}, [playing, speed, hasTown, dispatch]);
+	}, [playing, rate.interval, hasTown, dispatch]);
 	const send = (command: UiCommand) => {
 		if (
 			!comparisonPending.current &&
@@ -812,6 +823,7 @@ export function useVisitorSession({
 		)
 			return;
 		playerSequence.current++;
+		setConversationPerson(undefined);
 		setPlayerError("");
 		setPlaying(false);
 		send({ type: "intervene", intervention });
@@ -822,10 +834,12 @@ export function useVisitorSession({
 		actorId: string;
 		affordanceId: string;
 		mode: "ask" | "urge" | "promise";
-		pledge?: { work: PlayerWorkKind };
+		pledge?: { work: PlayerWorkKind; by?: number };
 		acceptCounter?: boolean;
 	}) => {
 		setSpeechPrediction(undefined);
+		predictionKey.current = undefined;
+		setConversationPerson(undefined);
 		playerInput({
 			kind: "player-speak",
 			actorId: request.actorId,
@@ -848,19 +862,28 @@ export function useVisitorSession({
 						...(work.actorId ? { actorId: work.actorId } : {}),
 					},
 		);
-	const predictSpeech = (actorId: string) => {
-		if (
-			!town ||
-			comparisonPending.current ||
-			advancePending.current !== null ||
-			saveConflictRef.current
-		)
-			return;
-		const requestId = ++predictionSequence.current;
-		setSpeechPrediction({ actorId });
-		// Not a state command: its reply never shifts the state FIFO bookkeeping.
-		client.current?.send({ type: "predict-speech", requestId, actorId });
-	};
+	const predictSpeech = useCallback(
+		(actorId: string) => {
+			if (
+				!town ||
+				comparisonPending.current ||
+				advancePending.current !== null ||
+				saveConflictRef.current
+			)
+				return;
+			if (
+				predictionKey.current?.town === town &&
+				predictionKey.current.actorId === actorId
+			)
+				return;
+			predictionKey.current = { actorId, town };
+			const requestId = ++predictionSequence.current;
+			setSpeechPrediction({ actorId });
+			// Not a state command: its reply never shifts the state FIFO bookkeeping.
+			client.current?.send({ type: "predict-speech", requestId, actorId });
+		},
+		[town],
+	);
 	const pause = () => {
 		setPlaying(false);
 		if (advancePending.current !== null) {
@@ -984,6 +1007,10 @@ export function useVisitorSession({
 		branchError,
 		speed,
 		setSpeed,
+		clockRate: rate.label,
+		townEpoch,
+		conversationPerson,
+		setConversationPerson,
 		selected,
 		setSelected,
 		observed,

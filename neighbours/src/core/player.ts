@@ -1354,6 +1354,12 @@ export function playerView(s: Save): PlayerView {
 				placeId: to,
 				dueBy: x.dueBy,
 				status: x.status,
+				...(x.status === "kept" && x.hfReported === true
+					? {
+							remembered: true,
+							result: p?.log.find((e) => e.id === x.resolvedEvent)?.text,
+						}
+					: {}),
 				...(x.status === "open"
 					? { canStart: !reason, ...(reason ? { blocked: reason } : {}) }
 					: {}),

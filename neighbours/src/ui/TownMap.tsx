@@ -481,10 +481,14 @@ export default function TownMap({
 	town,
 	selected,
 	select,
+	selectedPlace,
+	selectPlace,
 }: {
 	town: TownView;
 	selected: string;
 	select: (id: string) => void;
+	selectedPlace?: string;
+	selectPlace?: (id: string) => void;
 }) {
 	const needs = knownOpenNeeds(town);
 	const map = useRef<SVGSVGElement>(null);
@@ -797,16 +801,43 @@ export default function TownMap({
 					const hall = place.kind.includes("hall") || place.id.includes("hall");
 					const tilt = jitter(place.id, "tilt") * 1.2;
 					return (
+						// biome-ignore lint/a11y/useSemanticElements: SVG groups cannot contain HTML buttons.
 						<g
 							key={place.id}
 							data-map-place={place.id}
+							role="button"
+							tabIndex={0}
+							aria-label={`Inspect ${placeName(place)}`}
+							aria-pressed={selectedPlace === place.id}
+							onClick={() => {
+								setActivePlace("");
+								selectPlace?.(place.id);
+							}}
+							onKeyDown={(event) => {
+								if (event.key === "Enter" || event.key === " ") {
+									event.preventDefault();
+									setActivePlace("");
+									selectPlace?.(place.id);
+								}
+							}}
 							transform={`translate(${p.x},${p.y})`}
 							className={`place ${place.open ? "" : "closed"} ${hall ? "hall" : ""}`}
 						>
 							<title>
-								{placeName(place)}: {place.description}. {place.occupants}{" "}
-								present. {place.open ? "Open" : "Closed"}
+								{`${placeName(place)}: ${place.description}. ${place.occupants} present. ${place.open ? "Open" : "Closed"}`}
 							</title>
+							<rect
+								x={-90}
+								y={-110}
+								width={180}
+								height={selectedPlace === place.id ? 255 : 245}
+								rx={15}
+								className={
+									selectedPlace === place.id
+										? "place-selection-outline"
+										: "place-hit-area"
+								}
+							/>
 							<g transform={`rotate(${tilt})`}>
 								<PlaceDrawing place={place} repairs={repairs} />
 							</g>

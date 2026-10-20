@@ -154,7 +154,98 @@ it("keeps a held answer and open promise when the listener departs", () => {
 		}),
 	);
 	expect(html).toContain('class="latest-answer"');
+	expect(html.indexOf('class="latest-answer"')).toBeLessThan(
+		html.indexOf("is not with you"),
+	);
 	expect(html).toContain("Your promises");
 	expect(html).toContain("Start the hour");
-	expect(html).not.toContain('class="resident-talk"');
+	expect(html).toContain('class="resident-talk"');
+});
+
+it("keeps promise inputs together with explicit work and a visible evening deadline", () => {
+	const current = session();
+	const player = current.town?.player;
+	if (!player) throw new Error("Missing player");
+	player.present = [
+		{ id: "ada", name: "Ada", known: true, activity: "working" },
+	];
+	player.pledgeDeadlines = [1080];
+	current.speechPrediction = {
+		actorId: "ada",
+		prediction: {
+			targetId: "ada",
+			at: 480,
+			offers: [{ affordanceId: "rest", label: "Rest at home" }],
+			read: [],
+		},
+	} as NonNullable<Session["speechPrediction"]>;
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, {
+			session: current,
+			personId: "ada",
+			showAction: false,
+		}),
+	);
+	expect(html).toContain('class="promise-choice"');
+	expect(html).toContain("Choose what to ask");
+	expect(html).toContain("Choose a deadline");
+	expect(html).not.toMatch(/value="rest" selected/);
+	expect(html).toMatch(/value="1080" selected/);
+	expect(html).toMatch(
+		/<details class="speech-alternatives"><summary>Ask or urge instead/,
+	);
+	expect(html.indexOf("Promise an hour")).toBeLessThan(
+		html.indexOf("Ask or urge instead"),
+	);
+	expect(html).toContain("It binds you only if they take it up.");
+});
+it("reserves the same promise form while predictions load", () => {
+	const current = session();
+	if (!current.town?.player) throw new Error("Missing player");
+	current.town.player.present = [
+		{ id: "ada", name: "Ada", known: true, activity: "working" },
+	];
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, {
+			session: current,
+			personId: "ada",
+			showAction: false,
+		}),
+	);
+	expect(html).toContain('class="promise-choice"');
+	expect(html).toContain("Your hour");
+	expect(html).toContain("Done by");
+	expect(html).toContain("Promise an hour");
+});
+
+it("puts a bound hour before another offer so the player can start helping", () => {
+	const current = session();
+	const player = current.town?.player;
+	if (!player) throw Error("Missing player");
+	player.present = [
+		{ id: "ada", name: "Ada", known: true, activity: "working" },
+	];
+	player.pledges = [
+		{
+			id: "hour",
+			toId: "ada",
+			toName: "Ada",
+			work: "carry-meals",
+			label: "Carry food",
+			placeId: "quay",
+			dueBy: 1080,
+			status: "open",
+			canStart: true,
+		},
+	];
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, {
+			session: current,
+			personId: "ada",
+			showAction: false,
+		}),
+	);
+	expect(html.indexOf("Start the hour")).toBeLessThan(
+		html.indexOf('class="promise-choice"'),
+	);
 });

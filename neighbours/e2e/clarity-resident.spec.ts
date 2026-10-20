@@ -117,7 +117,7 @@ for (const { width, colorScheme } of [
 	});
 }
 
-test("Ada and Ravi lead with a direct response; arriving reaches a visible ask", async ({
+test("Ada and Ravi lead with a direct response; arriving reaches the Ask alternative", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
@@ -162,9 +162,12 @@ test("Ada and Ravi lead with a direct response; arriving reaches a visible ask",
 	const talk = page.locator(".resident-talk > summary");
 	await expect(talk).toHaveText("Talk to Ravi");
 	await talk.click();
+	await page.getByLabel("Ask them to").selectOption({ index: 1 });
+	await page.getByText("Ask or urge instead", { exact: true }).click();
 	const ask = page
 		.locator(".resident-talk")
 		.getByRole("button", { name: "Ask", exact: true });
+	await ask.scrollIntoViewIfNeeded();
 	await expect(ask).toBeInViewport({ ratio: 1 });
 	await expect(ask).toBeEnabled();
 	await expectUncovered(ask);

@@ -12,6 +12,7 @@ import {
 } from "./ui/Notebook";
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
+import PlacePanel from "./ui/PlacePanel";
 import SessionMenu from "./ui/SessionMenu";
 import { PlayerAction, SpeakPanel } from "./ui/SpeakPanel";
 import Stories from "./ui/Stories";
@@ -55,11 +56,15 @@ export default function App() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [storyFocus, setStoryFocus] = useState<string>();
 	const [personFocus, setPersonFocus] = useState<string>();
+	const [selectedPlace, setSelectedPlace] = useState("");
+	const [placeFocus, setPlaceFocus] = useState(false);
 	const [comparisonFocus, setComparisonFocus] = useState(false);
 	const [hallExpanded, setHallExpanded] = useState(false);
 	const person = town?.people.find((resident) => resident.id === selected);
 	const nextPerson = tab === "town" ? person : undefined;
-	const drawer = tab === "town" ? (person ? "person" : undefined) : tab;
+	const place = town?.places.find((p) => p.id === selectedPlace);
+	const drawer =
+		tab === "town" ? (person ? "person" : place ? "place" : undefined) : tab;
 	const stories = town ? groupStories(town, observed) : [];
 	const storyWatch = useStoryWatch(
 		{ playing, seed: town?.seed, now: town?.now, storyId: stories[0]?.id },
@@ -96,7 +101,34 @@ export default function App() {
 		target?.scrollIntoView({ block: "start", behavior: "instant" });
 		setStoryFocus(undefined);
 	}, [tab, storyFocus]);
+	useEffect(() => {
+		if (!placeFocus || !place || tab !== "town") return;
+		document
+			.getElementById("selected-place-name")
+			?.focus({ preventScroll: true });
+		document
+			.getElementById("town-info-panel")
+			?.scrollTo({ top: 0, behavior: "instant" });
+		setPlaceFocus(false);
+	}, [placeFocus, place, tab]);
+	const inspectPlace = (id: string) => {
+		setSelected("");
+		setSelectedPlace(id);
+		setTab("town");
+		setPlaceFocus(true);
+	};
+	const closePlace = () => {
+		const previous = selectedPlace;
+		setSelectedPlace("");
+		requestAnimationFrame(() => {
+			const target = document.querySelector<HTMLElement>(
+				`[data-map-place="${CSS.escape(previous)}"]`,
+			);
+			target?.focus({ preventScroll: true });
+		});
+	};
 	const follow = (id: string) => {
+		setSelectedPlace("");
 		setSelected(id);
 		setTab("town");
 		setPersonFocus(id);
@@ -117,7 +149,10 @@ export default function App() {
 		});
 	};
 	const changeTab = (next: TownTab) => {
-		if (next === "town") setSelected("");
+		if (next === "town") {
+			setSelected("");
+			setSelectedPlace("");
+		}
 		setTab(next);
 		requestAnimationFrame(() =>
 			document
@@ -222,6 +257,8 @@ export default function App() {
 							town={town}
 							selected={selected}
 							select={follow}
+							selectedPlace={selectedPlace}
+							selectPlace={inspectPlace}
 							notes={
 								<>
 									<div className="town-time">
@@ -255,6 +292,24 @@ export default function App() {
 								aria-labelledby={`tab-${tab}`}
 								tabIndex={-1}
 							>
+								{drawer === "place" && place && (
+									<PlacePanel
+										town={town}
+										place={place}
+										close={closePlace}
+										select={(id, talk) => {
+											follow(id);
+											if (talk) session.setConversationPerson(id);
+										}}
+										move={session.movePlayer}
+										busy={
+											session.advancing ||
+											session.comparing ||
+											session.saveConflict ||
+											session.intervening
+										}
+									/>
+								)}
 								{drawer === "person" && person && (
 									<PersonPanel
 										person={person}
@@ -263,6 +318,7 @@ export default function App() {
 										close={closePerson}
 										playerAction={
 											<PlayerAction
+												key={`${person.id}:${session.townEpoch}`}
 												session={session}
 												personId={person.id}
 												conversation={
@@ -436,7 +492,13 @@ export default function App() {
 							</div>
 						)}
 						{!drawer && <StoryHeadline story={stories[0]} open={readStory} />}
-						<NeighbourStrip town={town} selected={selected} select={follow} />
+						<NeighbourStrip
+							town={town}
+							selected={selected}
+							select={follow}
+							selectedPlace={selectedPlace}
+							selectPlace={inspectPlace}
+						/>
 						<div className="town-toolbar">
 							<div className="playback">
 								<button
@@ -514,6 +576,9 @@ export default function App() {
 										<option value={120}>10×</option>
 									</select>
 								</label>
+								<span className="clock-rate" role="status">
+									{session.clockRate}
+								</span>
 							</div>
 							<TownNavigation active={tab} change={changeTab} />
 						</div>

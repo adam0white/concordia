@@ -40,6 +40,8 @@ Beads epic nbh-01z owns status and dependencies. This design states acceptance; 
 
 ## Deferred
 
+- **Cold first-help after a refused offer**, target **2026-11-03**, `nbh-01z.40`: the final source-unread phone visitor reached a clear refusal but did no personal work within two minutes; autonomous repairs do not count as their help. Unpledged work remained hidden in Journal. Making that route legible and giving a specific resident truthful acknowledgement needs its own recipient/observation design while preserving old exports; the current round changes no simulation transitions or promise conditions. The scripted kept-hour path proves capability, not cold-player success.
+
 - **F-214 review finding 4 — recorded-study provenance**, follow-up deadline **2026-11-03**: genuinely regenerate the five studies affected by the earlier lab-client 0.1.2 dependency change; this requires measured runs and is outside the small UI follow-up. Existing maintenance task `nbh-01z.43` has an earlier execution milestone of 2026-10-21; the follow-up deadline does not postpone it. `check-evidence.mjs` and hosted CI remain red until regeneration passes; never rewrite recorded digests or fixtures.
 - **Existing masthead and playback dock clipping at 200% text**, target **2026-11-03**: reflow must preserve room for both the town and its controls; this needs broader layout work than the resident-action regression. Tracked in `nbh-01z.45`. The resident-sheet correction does not establish a whole-page DL-25 pass.
 - **Existing Journal heading and close control scroll away**, target **2026-11-03**: persistent Town navigation returns to the map, but keeping Journal controls visible needs its own short-screen and enlarged-text checks. Tracked in `nbh-01z.45`.

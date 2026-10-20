@@ -190,7 +190,10 @@ describe("neighbour chips", () => {
 		const chips = (strip.props.children as unknown[])
 			.flat()
 			.filter(
-				(child) => isValidElement(child) && child.type === "button",
+				(child) =>
+					isValidElement<{ "data-person-id"?: string }>(child) &&
+					child.type === "button" &&
+					!!child.props["data-person-id"],
 			) as ReactElement<{
 			onClick: () => void;
 			"aria-current"?: string;

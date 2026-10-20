@@ -219,6 +219,9 @@ export interface PlayerView {
 		placeId: string;
 		dueBy: number;
 		status: "offered" | "open" | "kept" | "lapsed" | "released";
+		/** Actual completed work and a kept promise received by the resident. */
+		remembered?: boolean;
+		result?: string;
 		canStart?: boolean;
 		blocked?: string;
 	}[];

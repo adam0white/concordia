@@ -11,17 +11,27 @@ export default function TownOverview({
 	town,
 	selected,
 	select,
+	selectedPlace,
+	selectPlace,
 	notes,
 }: {
 	town: TownView;
 	selected: string;
 	select: (id: string) => void;
+	selectedPlace?: string;
+	selectPlace?: (id: string) => void;
 	notes?: ReactNode;
 }) {
 	return (
 		<section className="map-section" aria-label="Town overview">
 			<h2 className="sr-only">Alder Quay</h2>
-			<TownMap town={town} selected={selected} select={select} />
+			<TownMap
+				town={town}
+				selected={selected}
+				select={select}
+				selectedPlace={selectedPlace}
+				selectPlace={selectPlace}
+			/>
 			{notes}
 		</section>
 	);
@@ -36,10 +46,14 @@ export function NeighbourStrip({
 	town,
 	selected,
 	select,
+	selectedPlace,
+	selectPlace,
 }: {
 	town: TownView;
 	selected: string;
 	select: (id: string) => void;
+	selectedPlace?: string;
+	selectPlace?: (id: string) => void;
 	/** Unused: chips no longer toggle the panel closed. Kept so callers still compile. */
 	close?: () => void;
 }) {
@@ -47,10 +61,17 @@ export function NeighbourStrip({
 	return (
 		<nav className="neighbour-strip" aria-label="Familiar neighbours">
 			{needs.places.hall && (
-				<span className="known-place-need" title={needs.places.hall}>
+				<button
+					type="button"
+					className="known-place-need"
+					title={needs.places.hall}
+					aria-label="Inspect Flooded hall · Needs help"
+					aria-pressed={selectedPlace === "hall"}
+					onClick={() => selectPlace?.("hall")}
+				>
 					<strong>Hall</strong>
 					<span className="known-need-cue">Needs help</span>
-				</span>
+				</button>
 			)}
 			{town.people
 				.filter((resident) => resident.known)

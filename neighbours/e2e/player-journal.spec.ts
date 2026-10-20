@@ -76,6 +76,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	});
 	// No hour is promised by default: the player chooses the work (and may choose the deadline).
 	await expect(promise).toBeDisabled();
+	await panel.getByLabel("Ask them to").selectOption({ index: 1 });
 	await panel.getByLabel("Your hour").selectOption("carry-meals");
 	await expect(promise).toBeEnabled();
 	// No predicted answer is shown before asking.
@@ -241,6 +242,7 @@ test("an answered request is on the device before it is shown and survives an im
 	const name = (await page.locator(".person-panel h2").textContent())?.trim();
 	expect(name).toBeTruthy();
 	const before = await deviceRequests(page);
+	await panel.getByLabel("Ask them to").selectOption({ index: 1 });
 	await panel.getByLabel("Your hour").selectOption("carry-meals");
 	await panel
 		.getByRole("button", { name: "Promise an hour", exact: true })
