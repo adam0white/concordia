@@ -1,6 +1,6 @@
 # Phase D: genuine evidence regeneration (2026-10-20)
 
-Remaining at this checkpoint: signed publication, deployment and live verification. Adam accepts feel separately. The owner authorized Claude CLI for this regeneration, with about ten calls and an immediate stop on a usage-limit error.
+Remaining at this checkpoint: push, deployment and live verification. Adam accepts feel separately. The owner authorized Claude CLI for this regeneration, with about ten calls and an immediate stop on a usage-limit error.
 
 ## Sources and provider budget
 
@@ -68,6 +68,8 @@ All local release gates pass on Node 26.12.0:
 - Five current-source studies and compact-summary provenance pass; historical assistance bytes match their pinned SHA-256. All twenty milestone packet hashes were checked against the actual files. Checkpoint files and their temporary path metadata are local run provenance, not downloadable saved-town artifacts.
 - All three model tapes separately replay exactly with **zero** provider calls. Actual generation total remains **ten**.
 - Cloudflare production build succeeds; npm audit reports **zero vulnerabilities**. Gitleaks scanned 24.85 MB of public experiment artifacts and found no leaks. A separate scan found no private user paths, session identifiers, access/refresh tokens or private-key markers.
+
+The bench probe was then rerun with `--require-clean`, and the route study was rerun from signed source commit `e4b62a2`. All nine case results and all twelve captured checkpoint records exactly match the preceding run. Their published commit/cleanliness fields now identify that clean source; the generators wrote those fields themselves.
 
 The factual review correction to the stale deterministic limitation was made in its producer, followed by another actual generator run. No generated measurement or digest was patched.
 

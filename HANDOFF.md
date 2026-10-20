@@ -2,7 +2,7 @@
 
 ## Phase D release candidate (2026-10-20)
 
-Remaining: sign and push `neighbours`, deploy and verify the clean live stamp. All local release gates pass: 469 unit tests, 39 browser regressions plus four final-study retests, 37 native controls, 35 late-checkpoint parity controls, 30-day stress, provenance, build and audit. Adam accepts feel separately. Broader gameplay work remains in `nbh-01z.37`; this regeneration does not claim a new faculty or owner acceptance.
+Remaining: push `neighbours`, deploy and verify the clean live stamp. All local release gates pass: 469 unit tests, 39 browser regressions plus four final-study retests, 37 native controls, 35 late-checkpoint parity controls, 30-day stress, provenance, build and audit. Adam accepts feel separately. Broader gameplay work remains in `nbh-01z.37`; this regeneration does not claim a new faculty or owner acceptance.
 
 The owner now authorizes genuine Claude CLI regeneration. All three native tapes were regenerated from unchanged runtime sources at `9148a96` on published HF 2.8.0: seven mixed-town decisions, one GM proposal and two bench proposals, **ten calls total**. No usage-limit error occurred. Each separately replays exactly with zero model calls. No tape or provenance field was rewritten by hand.
 
