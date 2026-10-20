@@ -37,3 +37,9 @@ M5 enrichment and reviewed polish: watchable three-day episode, backstory expres
 M6 stretch after stable delivery: labelled LLM visitors and matched policy runs, richer negotiation, generic HF fixes with release controls, multi-day social change and additional town situations. Do not defer a discovered correctness defect into stretch.
 
 Beads epic nbh-01z owns status and dependencies. This design states acceptance; it is not a second task checklist.
+
+## Deferred
+
+- **F-214 review finding 4 — recorded-study provenance**, follow-up deadline **2026-11-03**: genuinely regenerate the five studies affected by the earlier lab-client 0.1.2 dependency change; this requires measured runs and is outside the small UI follow-up. Existing maintenance task `nbh-01z.43` has an earlier execution milestone of 2026-10-21; the follow-up deadline does not postpone it. `check-evidence.mjs` and hosted CI remain red until regeneration passes; never rewrite recorded digests or fixtures.
+- **Existing masthead and playback dock clipping at 200% text**, target **2026-11-03**: reflow must preserve room for both the town and its controls; this needs broader layout work than the resident-action regression. Tracked in `nbh-01z.45`. The resident-sheet correction does not establish a whole-page DL-25 pass.
+- **Existing Journal heading and close control scroll away**, target **2026-11-03**: persistent Town navigation returns to the map, but keeping Journal controls visible needs its own short-screen and enlarged-text checks. Tracked in `nbh-01z.45`.

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
 import type { PersonView, TownView } from "../contracts";
 import { PersonInvitations } from "./EveningBoard";
 import { clock, datedClock, initial, number, placeName } from "./format";
@@ -32,12 +32,35 @@ export default function PersonPanel({
 	speak?: ReactNode;
 	playerAction?: ReactNode;
 }) {
+	const panel = useRef<HTMLElement>(null);
+	const [pinAction, setPinAction] = useState(false);
+	useLayoutEffect(() => {
+		if (!playerAction) return;
+		const action = panel.current?.querySelector(":scope > .player-action");
+		const drawer = panel.current?.closest(".drawer");
+		if (!action || !drawer) return;
+		// Measure the content, not a viewport breakpoint: enlarged text and an
+		// expanded walking list must leave room to inspect the resident too.
+		const resize = () =>
+			setPinAction(
+				action.getBoundingClientRect().height <= drawer.clientHeight / 2,
+			);
+		resize();
+		const observer = new ResizeObserver(resize);
+		observer.observe(action);
+		observer.observe(drawer);
+		return () => observer.disconnect();
+	}, [playerAction]);
 	const place = town.places.find((p) => p.id === person.placeId);
 	const destination = town.places.find((p) => p.id === person.journey?.toId);
 
 	const history = personHistory(person, town, observed);
 	return (
-		<aside className="person-panel" aria-label={`${person.name}'s details`}>
+		<aside
+			ref={panel}
+			className={`person-panel${pinAction ? " pin-action" : ""}`}
+			aria-label={`${person.name}'s details`}
+		>
 			<button
 				type="button"
 				className="close-panel"

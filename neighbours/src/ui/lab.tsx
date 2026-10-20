@@ -25,7 +25,16 @@ export function LabPrivacy() {
 				maxWidth: "calc(100vw - 1rem)",
 			}}
 		>
-			<summary>Playtest privacy</summary>
+			<summary
+				style={{
+					minHeight: 44,
+					minWidth: 44,
+					alignContent: "center",
+					cursor: "pointer",
+				}}
+			>
+				Playtest privacy
+			</summary>
 			<label>
 				<input
 					type="checkbox"

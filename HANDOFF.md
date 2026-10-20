@@ -1,5 +1,15 @@
 # Neighbours handoff
 
+## F-214 adversarial follow-up (2026-10-20)
+
+Remaining: genuine recorded-study regeneration in `nbh-01z.43` (execution milestone 2026-10-21, review follow-up deadline 2026-11-03), existing enlarged-text masthead/playback reflow and Journal way-back work in `nbh-01z.45` (2026-11-03), and the driver's taste review. Adam still accepts the broader game's feel. The design's Deferred section records the reasons. This is not a whole-page DL-25 pass.
+
+The new resident-action regression is corrected: actual action and drawer sizes determine whether the action stays pinned. Compact actions remain pinned; oversized text or expanded controls scroll in document order, leaving resident details reachable. Resident selection uses ink and weight rather than the task accent. The map walking response, header collection link and Playtest privacy disclosure have non-overlapping hit areas of at least 44×44 px in the measured layouts. No simulation, Python engine, save format, dependency pin or recorded fixture changed.
+
+Validation: `npm run check` passes all 472 units, lint, three typechecks, 42 plain-Node imports and build. The complete actual Chromium/WASM suite passes 46/46, including unchanged save/import/reload and normal sticky-action travel coverage. New real hit tests cover resident name, description, every walking destination and close at doubled root text (320×690 light and 360×690 dark). Target/accent checks cover 360×690, 320×690 and 1280×800. Native engine/bridge/director controls pass 37/37. Existing runtime exports from starting source `75fcb0a` restore identically and match after 24 more rounds (seed 42/population 208: `aad95905`; seed 73/population 8: `d8699814`). Two independent source reviewers, including a wildcard reviewer, found no remaining blocker. The first lint run caught selector specificity warnings; the corrected full check passes. The separate provenance gate still fails at the unchanged lock digest; no green hosted-CI claim is made.
+
+Publication is pending for this source increment. The current public release stamp remains authoritative. Beads automatically reopened overdue `nbh-01z.37` during context recovery (`bd-defer-wake` audit); its content and scope were preserved.
+
 ## First-minute clarity F-214 (2026-10-20)
 
 Remaining: provenance/hosted-CI repair in nbh-01z.43 (21 October) and Opus driver's final taste review of this bounded increment; Adam still accepts the broader game's feel. The three ledger fixes are UI-only. Entry precedes the introduction (127 → 21 rendered opening words); the introduction remains under More about Alder Quay. The resident sheet pins the current action, actual location and walking control above the description. One Game menu contains saves, import, Download this run, send, story settings and playtest privacy. Selected tabs use ink rather than the task accent. Published HF 2.8.0, the simulation, Python orchestration and save schema are unchanged.
