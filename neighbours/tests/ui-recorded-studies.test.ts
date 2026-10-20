@@ -94,3 +94,18 @@ it("keeps generated bench premises separate from recipient knowledge and consent
 		"Not applied; no resident receipt or consent claimed",
 	]);
 });
+it("labels the native seed 101 exclusion as Phase C history rather than current absence", () => {
+	const raw = recorded("bench-director");
+	const before = JSON.stringify(raw);
+	const projected = projectStudy("bench-gm", raw);
+	expect(raw.seeds).toEqual([42, 73]);
+	expect(projected.rows).toContainEqual([
+		"Seed 101 historical exclusion",
+		"Excluded after the Phase C search from the fixed native 42/73 catalog. The current deterministic study finds a natural case; no current native model coverage for this seed.",
+	]);
+	expect(projected.rows).not.toContainEqual([
+		"Seed 101 proposal",
+		"No natural case in 40 days; no model call",
+	]);
+	expect(JSON.stringify(raw)).toBe(before);
+});

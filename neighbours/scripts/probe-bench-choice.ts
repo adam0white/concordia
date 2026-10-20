@@ -24,12 +24,12 @@ import type { Runtime } from "../src/core/runtime.ts";
 import { summarizeBenchStudy } from "../src/ui/bench-study-report.ts";
 import { benchWindowShiftRounds, captureBench } from "./capture-bench.ts";
 
-const SEEDS = [42, 73] as const;
+const SEEDS = [42, 73, 101] as const;
 /**
- * Seeds kept in the study with no natural case under current physics (lead decision, 2026-10-18). The probe
- * re-searches each one and fails if a natural case appears, so the record cannot go stale. Never substituted.
+ * The Phase C search excluded seed 101. Phase D finds a natural case, so all three original seeds are back
+ * in SEEDS. Keep the no-case guard for any future measured exclusions; never substitute a seed.
  */
-const NO_CASE_SEEDS = [101] as const;
+const NO_CASE_SEEDS: readonly number[] = [];
 const NO_CASE = /^No natural premise-admissible boundary/;
 const SLOTS: BenchSlot[] = ["soon", "tomorrow", "brief"];
 const ROUNDS = 192;
@@ -460,7 +460,7 @@ export function runBenchChoiceProbe(
 		limitations: [
 			"Fresh fixed-seed captures contain eight actual HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
 			"This probe runs the actual TypeScript physical host and published HF under Node. It does not run Python Concordia or a live model; native/WASM parity is a separate check.",
-			"Both natural complete checkpoints and six lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 is kept in the study as a recorded no-case (noNaturalCase): it was searched again and had no natural case in 40 days; no other seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Ravi turn after earlier actors choose normally.",
+			"Three natural complete checkpoints and nine lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 now has a natural case under Phase D and is included again; no seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Ravi turn after earlier actors choose normally.",
 			"Each bench-active checkpoint file is the exact complete start of its physical proposal branch, including actual retained HF knowledge. admissionAt records the complete-boundary notice; decisionAt/startAt records Ravi's later actual decision.",
 			"The physical proposal/no-proposal contrast combines temporal-goal opt-in, received knowledge, one spent allowance and possible legal request-window changes. It does not isolate knowledge causally.",
 			"The person-only intact/removed comparison holds actual legal offers, the entire physical state and temporal goals fixed. Removed deletes structured prospection after actual receipt; no withheld arm was executed.",

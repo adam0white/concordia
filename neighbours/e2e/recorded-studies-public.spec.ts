@@ -29,16 +29,23 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await expect(bench).toBeVisible();
 	await expect(
 		studies.getByLabel("Frozen town case").locator("option"),
-	).toHaveCount(6);
+	).toHaveCount(9);
 	await expect(
 		bench.getByRole("row", {
-			name: "Returned to Jo No return in this interval Returned",
+			name: "Returned to Jo Returned Returned",
+			exact: true,
+		}),
+	).toBeVisible();
+	await studies.getByLabel("Frozen town case").selectOption("6");
+	await expect(
+		bench.getByRole("row", {
+			name: "Returned to Jo Returned No return in this interval",
 			exact: true,
 		}),
 	).toBeVisible();
 	await expect(
 		studies.getByText(/^Seed 101: no natural case in 40 days\./),
-	).toBeVisible();
+	).toHaveCount(0);
 	expect(
 		requests.some((url) => url.endsWith("/bench-choices-summary.json")),
 	).toBe(true);
@@ -58,6 +65,9 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await studies.getByLabel("Control setting").selectOption("1");
 	await expect(routes.locator("tbody tr")).toHaveCount(9);
 	await choice.selectOption("bench-gm");
+	await expect(
+		studies.getByText("Seed 101 historical exclusion", { exact: true }),
+	).toBeVisible();
 	await expect(
 		studies.getByText("Not applied; no resident receipt or consent claimed", {
 			exact: true,

@@ -891,42 +891,6 @@ export default function TownMap({
 						/>
 					) : null;
 				})}
-				{clusters.map((cluster) => {
-					const place = town.places.find(
-						(place) => place.id === cluster.placeId,
-					);
-					return (
-						// biome-ignore lint/a11y/useSemanticElements: SVG groups cannot contain HTML buttons; the chooser uses native buttons.
-						<g
-							key={cluster.placeId}
-							data-place={cluster.placeId}
-							data-count={cluster.people.length}
-							className="map-cluster"
-							transform={`translate(${cluster.x},${cluster.y}) scale(${markerScale})`}
-							role="button"
-							tabIndex={0}
-							aria-label={`${cluster.people.length} neighbours at ${place ? placeName(place) : cluster.placeId}`}
-							aria-expanded={activePlace === cluster.placeId}
-							aria-controls="map-place-chooser"
-							onClick={() => setActivePlace(cluster.placeId)}
-							onKeyDown={(event) => {
-								if (event.key === "Enter" || event.key === " ") {
-									event.preventDefault();
-									setActivePlace(cluster.placeId);
-								}
-							}}
-						>
-							<circle r="22" className="person-hit" />
-							<path
-								d={inkCircle(`cluster:${cluster.placeId}`, 0, 0, 18, 0.05)}
-								className="cluster-ring"
-							/>
-							<text textAnchor="middle" dy="6">
-								{cluster.people.length}
-							</text>
-						</g>
-					);
-				})}
 
 				{town.people
 					.filter((p) => p.known)
@@ -994,6 +958,43 @@ export default function TownMap({
 							</g>
 						);
 					})}
+				{/* Counts stay clickable when a traveller departs from the same place. */}
+				{clusters.map((cluster) => {
+					const place = town.places.find(
+						(place) => place.id === cluster.placeId,
+					);
+					return (
+						// biome-ignore lint/a11y/useSemanticElements: SVG groups cannot contain HTML buttons; the chooser uses native buttons.
+						<g
+							key={cluster.placeId}
+							data-place={cluster.placeId}
+							data-count={cluster.people.length}
+							className="map-cluster"
+							transform={`translate(${cluster.x},${cluster.y}) scale(${markerScale})`}
+							role="button"
+							tabIndex={0}
+							aria-label={`${cluster.people.length} neighbours at ${place ? placeName(place) : cluster.placeId}`}
+							aria-expanded={activePlace === cluster.placeId}
+							aria-controls="map-place-chooser"
+							onClick={() => setActivePlace(cluster.placeId)}
+							onKeyDown={(event) => {
+								if (event.key === "Enter" || event.key === " ") {
+									event.preventDefault();
+									setActivePlace(cluster.placeId);
+								}
+							}}
+						>
+							<circle r="22" className="person-hit" />
+							<path
+								d={inkCircle(`cluster:${cluster.placeId}`, 0, 0, 18, 0.05)}
+								className="cluster-ring"
+							/>
+							<text textAnchor="middle" dy="6">
+								{cluster.people.length}
+							</text>
+						</g>
+					);
+				})}
 				<g
 					transform={`translate(${sheet.width - 50} ${sheet.height - 54})`}
 					className="compass"

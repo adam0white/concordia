@@ -1,23 +1,27 @@
 {
   "schema": "neighbours/cart-choice-probe@1",
-  "hf": "2.6.0",
+  "hf": "2.8.0",
   "runtime": "typescript-host-released-hf",
   "node": "v26.12.0",
   "seed": 42,
-  "startRound": 628,
-  "inputSha256": "5317e3b646b91c70c03df5f276feb51a40e05648ad14f6b0112ddd4d5e08829f",
-  "raviDecisions": 48,
+  "startRound": 730,
+  "inputSha256": "3e0ae6ede2fa4863a7a6ebda682c5edc51789867c4f97d140f75dc19b77423d0",
+  "raviDecisions": 16,
   "opportunity": {
-    "at": 12210,
-    "round": 782,
+    "at": 12180,
+    "round": 780,
     "place": "workshop",
-    "adaPlace": "workshop",
+    "adaPlace": "homes",
     "physicalProjectProgress": 1,
     "offeredIds": [
       "rest",
       "drink",
+      "grow",
+      "supply",
       "care",
       "work",
+      "accept:evening-1-class",
+      "decline:evening-1-class",
       "cart-ask",
       "cart-slow"
     ],
@@ -26,45 +30,39 @@
       "consideredIds": [
         "cart-slow",
         "work",
-        "rest",
         "drink",
+        "rest",
+        "accept:evening-1-class",
+        "decline:evening-1-class",
         "cart-ask",
         "care"
       ],
       "considered": [
         {
           "id": "cart-slow",
-          "utility": 0.5628,
+          "utility": 0.5629,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
-              "source": "goal:g4",
+              "source": "goal:g3",
               "value": 0.6
             },
             {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         },
         {
           "id": "cart-ask",
-          "utility": -0.0283,
+          "utility": -0.0324,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
               "source": "emotion:joy:social",
-              "value": 0.0089
+              "value": 0.0047
             },
             {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         }
@@ -74,8 +72,10 @@
       "chosen": "work",
       "consideredIds": [
         "work",
-        "rest",
         "drink",
+        "rest",
+        "accept:evening-1-class",
+        "decline:evening-1-class",
         "cart-ask",
         "care",
         "cart-slow"
@@ -83,33 +83,25 @@
       "considered": [
         {
           "id": "cart-ask",
-          "utility": -0.0283,
+          "utility": -0.0324,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
               "source": "emotion:joy:social",
-              "value": 0.0089
+              "value": 0.0047
             },
             {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         },
         {
           "id": "cart-slow",
-          "utility": -0.0372,
+          "utility": -0.0371,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         }
@@ -164,37 +156,29 @@
       "considered": [
         {
           "id": "cart-fast-probe",
-          "utility": 0.5628,
+          "utility": 0.5629,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
-              "source": "goal:g4",
+              "source": "goal:g3",
               "value": 0.6
             },
             {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         },
         {
           "id": "cart-slow",
-          "utility": 0.5628,
+          "utility": 0.5629,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
-              "source": "goal:g4",
+              "source": "goal:g3",
               "value": 0.6
             },
             {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         }
@@ -209,29 +193,21 @@
       "considered": [
         {
           "id": "cart-fast-probe",
-          "utility": -0.0372,
+          "utility": -0.0371,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         },
         {
           "id": "cart-slow",
-          "utility": -0.0372,
+          "utility": -0.0371,
           "terms": [
             {
-              "source": "need:meaning",
-              "value": 0.0001
-            },
-            {
               "source": "effort",
-              "value": -0.0373
+              "value": -0.0371
             }
           ]
         }
@@ -239,10 +215,10 @@
     }
   },
   "sources": {
-    "package-lock.json": "3dc7b931d18567ba1b979781bc69cb7d52456ce47f0edce6cdda48430083b0b6",
-    "package.json": "ac296e1fd9876d540e14376f58ae47898baab2c0ee1eba67959a0a956cf38c61",
+    "package-lock.json": "7f021fc4a5b488f369d70f6fc99234b4a8d74ffb0fa443e2a1089e66cc11639c",
+    "package.json": "251e2d4d7e36fef574d96465f2d71306fc7f0358e961178207a5c34bb8236ed6",
     "scripts/probe-cart-choices.ts": "66c04bd02fc2da4f9b5cbcbe2291600da8d934fe7a6c2c1bfe4ed53aabc91a3b",
-    "src/contracts.ts": "09cb5d27df5c433d057837d6558aaed183512c7495217afd95f73cc59e7448cf",
+    "src/contracts.ts": "cbdd2763e55b640a6550511cdd989913129fa3ea55426c26fcb10baacbdf4fa7",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
     "src/core/bench-opportunity.ts": "ffa8810c0feffc900cba9f2e779e5b3f83f2cd4f38f7cfdc74839d6ce8b29b79",
@@ -251,12 +227,13 @@
     "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
     "src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
-    "src/core/evenings.ts": "92943a79298cec652881907c2e4e26f4374c9e06df619fd5bbaa1a839d6bd0cb",
+    "src/core/evenings.ts": "b8470935ef506afcc25dd59315b78e4440db75d5dbd2bea583a8428f8b713046",
+    "src/core/hall-care.ts": "d9d4edcb531ef117b1dbf0d0799d8a7127bfdfb8574c4d28f79f1fa7100becd4",
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
     "src/core/handcart.ts": "fc43caea8b9f89511ffabda04ec1bd81f7f24139b3603e37ea81e1580b4d2558",
     "src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
-    "src/core/hf-version.ts": "444f2ad22a735b0b4096f9e537b70a180d87a855b205bd6176801409941dc8cb",
-    "src/core/impression.ts": "0646e065dfdcef317a7ba6e6e45ee29401592cf2649b2b176402e605916196d9",
+    "src/core/hf-version.ts": "26ddae6e0d0c78130b125fc0fd66bd2638fd0cbeef0dc320166af60b14b69fe1",
+    "src/core/impression.ts": "a07326c75d20675cb82f4c6aa89c984e6eb4e8a03bb5c24ea24befafcf597341",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/journal.ts": "93ab2463db21ede9d5a9802030c51314f1171b5d0137ab68d93cff52d5eaac8e",
@@ -265,19 +242,19 @@
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
     "src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
-    "src/core/player.ts": "ba7fbe9d0faa8ce6cdbfe2c06261548894773b5e7271b9805bf0603fc184d4ba",
+    "src/core/player.ts": "170a47615fc688cfd827713a15b7fecd6d9cd08cae2dc639f071024c49bde49c",
     "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
-    "src/core/restore.ts": "ad08a69dbf23aea1a08cdf956ba1db70e605cdd82b5fda18e47a801335869411",
-    "src/core/runtime.ts": "7159cf73207789f4be997fb1e2a9edd7231e0f22858dfa38e54d1237689779d1",
-    "src/core/scenario.ts": "75f92c28de3e5ef980a3f854dc083deb6d23bd4938f56ce926ac421bd9b9b29d",
+    "src/core/restore.ts": "3857fb3e92cd67c295ec3de503d1c50d9853080b453975c36ea605f7f6f96b05",
+    "src/core/runtime.ts": "fb76d85c3f6d6c28a59cab110d8b7f0e9d5b4c9e8387e77ae60235d786b9e1e1",
+    "src/core/scenario.ts": "ae46f71e0d3414bdd428158c09e418ac939799eb1f801164e1505ab471c084ac",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "b615b3f8e5d2df192c6e179204617bcc9eb37629ecadc9bd1015ab72e4233e4f",
-    "src/core/stories.ts": "915ba163f798eff6d26f0acf2110e66986fe9cbc4688f8c09c44bd56c2c2c953",
+    "src/core/state.ts": "62d19e4f5894bb067418d87a9ea4eb42ef894a4a18ca43eec4ba9394d99f260f",
+    "src/core/stories.ts": "9cd97012fa55e5da25b535d4ffbb0c457abf8d5b7b9b93dafcd1f108c3eadbd7",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
-    "src/core/timber.ts": "2ce112eb5272add95ac49e2559582c326f311104b103c55291832ec5a0576e6a",
-    "src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-    "src/core/validation.ts": "d10caaca12d2334f41f11d0fa483a3d5a1e584d6b5c43f638644d2d619ad5f30",
-    "src/core/voicing.ts": "14465adb66b60dd38239b305c81e927d9d0ad9de39962fd57ccf41fa523468dd",
+    "src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
+    "src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
+    "src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
+    "src/core/voicing.ts": "3297f5dd7f7b7601c07d0c2db130111ac0380e44793c03b3a6b30952fe273901",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "limitations": [

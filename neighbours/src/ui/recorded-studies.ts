@@ -186,8 +186,10 @@ export function projectStudy(kind: StudyKind, value: unknown) {
 		if (Array.isArray(data.noNaturalCaseSeeds))
 			for (const seed of data.noNaturalCaseSeeds)
 				rows.push([
-					`Seed ${scalar(seed)} proposal`,
-					"No natural case in 40 days; no model call",
+					`Seed ${scalar(seed)} historical exclusion`,
+					seed === 101
+						? "Excluded after the Phase C search from the fixed native 42/73 catalog. The current deterministic study finds a natural case; no current native model coverage for this seed."
+						: "Historical catalog exclusion; no native model call. This does not establish current absence.",
 				]);
 		rows.push(
 			["Actual model calls", scalar(data.modelCalls)],

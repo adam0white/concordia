@@ -1,19 +1,19 @@
 {
   "schema": "received-route-study@1",
-  "recordedAt": "2026-10-18T13:29:23.582Z",
+  "recordedAt": "2026-10-20T04:58:17.940Z",
   "execution": "Node; exact published npm HF; two fixed structural domains, nine arms each",
-  "commit": "6e517d9e8792165c968288c4c463cb9182f460b5",
+  "commit": "9148a964a23b88d62461743b040e4ebf7bea4dc2",
   "dirty": false,
   "sources": {
-    "package.json": "ac296e1fd9876d540e14376f58ae47898baab2c0ee1eba67959a0a956cf38c61",
-    "package-lock.json": "3dc7b931d18567ba1b979781bc69cb7d52456ce47f0edce6cdda48430083b0b6",
+    "package.json": "251e2d4d7e36fef574d96465f2d71306fc7f0358e961178207a5c34bb8236ed6",
+    "package-lock.json": "7f021fc4a5b488f369d70f6fc99234b4a8d74ffb0fa443e2a1089e66cc11639c",
     "src/experiments/received-route.ts": "19fd60c9c8dcd7179d3f55deef50b7fe8ebf3b037da473ab937e4cee34ad169a",
     "scripts/probe-received-routes.ts": "a379856f8bbd87ee9b3045e02358fcc13830bb99f7fc4d1c911797e4ae090a4c"
   },
   "sourcesStableDuringRun": true,
   "cases": [
     {
-      "framework": "2.6.0",
+      "framework": "2.8.0",
       "domain": "parcel",
       "parameters": {
         "now": 600,
@@ -613,7 +613,7 @@
       "limits": "Received route valuation only. No graph search, waiting opportunity cost, future body prediction or guarantee of consent/outcome. Temporal-on also changes direct time+success valuation; knowledge ablations retain temporal goals."
     },
     {
-      "framework": "2.6.0",
+      "framework": "2.8.0",
       "domain": "sample",
       "parameters": {
         "now": 600,

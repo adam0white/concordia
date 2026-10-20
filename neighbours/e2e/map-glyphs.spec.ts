@@ -71,3 +71,30 @@ test("the you marker stays whole at the left-edge quay on phone widths", async (
 		page.locator('[data-map-place="workshop"] .tool-mark'),
 	).toHaveCount(1);
 });
+
+test("a departing traveller cannot block a phone place-count button", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await enter(page);
+	await page
+		.getByRole("button", { name: "Ada: Free to choose", exact: true })
+		.click();
+	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await page.getByRole("button", { name: "Next outcome for Ada" }).click();
+	await expect(
+		page.getByRole("button", { name: "Play town", exact: true }),
+	).toBeVisible();
+	await page.getByRole("button", { name: "Close person details" }).click();
+	const homes = page.getByRole("button", {
+		name: "4 neighbours at Riverside homes",
+		exact: true,
+	});
+	await expect(homes).toBeVisible();
+	// A normal pointer click must reach the count, even when a journey starts here.
+	await homes.click({ timeout: 5_000 });
+	await expect(homes).toHaveAttribute("aria-expanded", "true");
+	await expect(
+		page.getByRole("region", { name: "Neighbours at Riverside homes" }),
+	).toBeVisible();
+});

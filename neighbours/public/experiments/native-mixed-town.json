@@ -1,6 +1,6 @@
 {
   "schema": "native-mixed-town@1",
-  "recordedAt": "2026-10-18T14:23:54.347382+00:00",
+  "recordedAt": "2026-10-20T04:51:51.295118+00:00",
   "runtime": "Python Concordia + persistent Node + real Claude CLI",
   "population": 8,
   "hfControllers": 7,
@@ -8,14 +8,14 @@
   "runtimeSources": {
     "files": {
       "concordia/contrib/neighbours/bridge.py": "401caee0369f28dae0b7a8a28fc5937741121a77f440e4b2771c84fbf7e425b6",
-      "concordia/contrib/neighbours/engine.py": "f0e15e8ae4fbec975c16387cc3a798bfc7602799b5a23cae7db51d7c827220d1",
+      "concordia/contrib/neighbours/engine.py": "e41e432ba32937287b29b73d153d4ce27798a2525f3366bb43f2d4229136ae86",
       "concordia/environment/engine.py": "b0e8c7a249c409d49dd2db56515daf79959bbc8a77f83200d97566233d9eac84",
       "concordia/environment/step_controller.py": "611cb072311b5739ba26cf4bbbc29981cdd59fd7b7b2a1b0c071c7a0d9faf730",
       "concordia/typing/entity.py": "5429aab9e0e812ce272466787b11c19c87ba75bafc6e3e87458f38a083559992",
       "neighbours/scripts/mixed-bridge.ts": "4e08e8693edbaedcbea61ccc531d1fd7a94a246f60bc0b0056f4881aae799a9b",
       "neighbours/scripts/run-mixed-town.py": "28207ef422c740f3f81a115cce6e66ebe9dff5dacf7991b4c3de3ca427cc3b8b",
-      "neighbours/src/bridge-port.ts": "efaa97812f956bc4792c7a460c81aac0c1874069e496e55386a2088f98633dc3",
-      "neighbours/src/contracts.ts": "09cb5d27df5c433d057837d6558aaed183512c7495217afd95f73cc59e7448cf",
+      "neighbours/src/bridge-port.ts": "da113ed4c3ba1899aa5a3ed167f60e983222035a689b1cf62200094e3a1a1ddb",
+      "neighbours/src/contracts.ts": "cbdd2763e55b640a6550511cdd989913129fa3ea55426c26fcb10baacbdf4fa7",
       "neighbours/src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
       "neighbours/src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
       "neighbours/src/core/bench-opportunity.ts": "ffa8810c0feffc900cba9f2e779e5b3f83f2cd4f38f7cfdc74839d6ce8b29b79",
@@ -24,12 +24,13 @@
       "neighbours/src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
       "neighbours/src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
       "neighbours/src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
-      "neighbours/src/core/evenings.ts": "92943a79298cec652881907c2e4e26f4374c9e06df619fd5bbaa1a839d6bd0cb",
+      "neighbours/src/core/evenings.ts": "b8470935ef506afcc25dd59315b78e4440db75d5dbd2bea583a8428f8b713046",
+      "neighbours/src/core/hall-care.ts": "d9d4edcb531ef117b1dbf0d0799d8a7127bfdfb8574c4d28f79f1fa7100becd4",
       "neighbours/src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
       "neighbours/src/core/handcart.ts": "fc43caea8b9f89511ffabda04ec1bd81f7f24139b3603e37ea81e1580b4d2558",
       "neighbours/src/core/hash.ts": "bbb39dbff2e4a2ad15089bc69ec0e07324a7cce17e51c97cc40d633d2fb03ced",
-      "neighbours/src/core/hf-version.ts": "444f2ad22a735b0b4096f9e537b70a180d87a855b205bd6176801409941dc8cb",
-      "neighbours/src/core/impression.ts": "0646e065dfdcef317a7ba6e6e45ee29401592cf2649b2b176402e605916196d9",
+      "neighbours/src/core/hf-version.ts": "26ddae6e0d0c78130b125fc0fd66bd2638fd0cbeef0dc320166af60b14b69fe1",
+      "neighbours/src/core/impression.ts": "a07326c75d20675cb82f4c6aa89c984e6eb4e8a03bb5c24ea24befafcf597341",
       "neighbours/src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
       "neighbours/src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
       "neighbours/src/core/journal.ts": "93ab2463db21ede9d5a9802030c51314f1171b5d0137ab68d93cff52d5eaac8e",
@@ -38,19 +39,19 @@
       "neighbours/src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
       "neighbours/src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
       "neighbours/src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
-      "neighbours/src/core/player.ts": "ba7fbe9d0faa8ce6cdbfe2c06261548894773b5e7271b9805bf0603fc184d4ba",
+      "neighbours/src/core/player.ts": "170a47615fc688cfd827713a15b7fecd6d9cd08cae2dc639f071024c49bde49c",
       "neighbours/src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
-      "neighbours/src/core/restore.ts": "ad08a69dbf23aea1a08cdf956ba1db70e605cdd82b5fda18e47a801335869411",
-      "neighbours/src/core/runtime.ts": "7159cf73207789f4be997fb1e2a9edd7231e0f22858dfa38e54d1237689779d1",
-      "neighbours/src/core/scenario.ts": "75f92c28de3e5ef980a3f854dc083deb6d23bd4938f56ce926ac421bd9b9b29d",
+      "neighbours/src/core/restore.ts": "3857fb3e92cd67c295ec3de503d1c50d9853080b453975c36ea605f7f6f96b05",
+      "neighbours/src/core/runtime.ts": "fb76d85c3f6d6c28a59cab110d8b7f0e9d5b4c9e8387e77ae60235d786b9e1e1",
+      "neighbours/src/core/scenario.ts": "ae46f71e0d3414bdd428158c09e418ac939799eb1f801164e1505ab471c084ac",
       "neighbours/src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-      "neighbours/src/core/state.ts": "b615b3f8e5d2df192c6e179204617bcc9eb37629ecadc9bd1015ab72e4233e4f",
-      "neighbours/src/core/stories.ts": "915ba163f798eff6d26f0acf2110e66986fe9cbc4688f8c09c44bd56c2c2c953",
+      "neighbours/src/core/state.ts": "62d19e4f5894bb067418d87a9ea4eb42ef894a4a18ca43eec4ba9394d99f260f",
+      "neighbours/src/core/stories.ts": "9cd97012fa55e5da25b535d4ffbb0c457abf8d5b7b9b93dafcd1f108c3eadbd7",
       "neighbours/src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
-      "neighbours/src/core/timber.ts": "2ce112eb5272add95ac49e2559582c326f311104b103c55291832ec5a0576e6a",
-      "neighbours/src/core/town-chronicle.ts": "a2826583dda845f0e6984d4bf2f5f88086803ab504ae97e3c417aa9f35a97e7d",
-      "neighbours/src/core/validation.ts": "d10caaca12d2334f41f11d0fa483a3d5a1e584d6b5c43f638644d2d619ad5f30",
-      "neighbours/src/core/voicing.ts": "14465adb66b60dd38239b305c81e927d9d0ad9de39962fd57ccf41fa523468dd",
+      "neighbours/src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
+      "neighbours/src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
+      "neighbours/src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
+      "neighbours/src/core/voicing.ts": "3297f5dd7f7b7601c07d0c2db130111ac0380e44793c03b3a6b30952fe273901",
       "neighbours/src/experiments/claude-native.ts": "96c306e95fa6b05f7622b51f67ba399ea3743cf6a949816fc2833c949f7689d1",
       "neighbours/src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b",
       "neighbours/src/experiments/llm.ts": "198201911758ede79c1ad9bd2c67770c49b31a9064d535903e41b50da1399c54",
@@ -58,112 +59,126 @@
     },
     "hf": {
       "name": "@adam0white/human-framework",
-      "version": "2.6.0"
+      "version": "2.8.0"
     },
-    "sha256": "76ecdfebf4b9eb3599b4bcc591e70d867fbf20e7c09aee7b892cffca25ae1d97"
+    "sha256": "12affca6367366bedf9dda3fc18bdf284e7ae45a679eccf5b7f4a5ed3470abeb"
   },
   "runtimes": {
-    "node": "v26.11.1",
+    "node": "v26.12.0",
     "python": "3.15.0",
     "abslPy": "2.4.0",
     "platform": "darwin",
     "architecture": "arm64"
   },
-  "gitHeadAtRun": "315564b28d4268b406831a1f07d82b65347361a0",
+  "gitHeadAtRun": "9148a964a23b88d62461743b040e4ebf7bea4dc2",
   "sourceWorkingTreeDirty": false,
   "llmActor": "ada",
   "rounds": 12,
-  "modelDecisions": 6,
+  "modelDecisions": 7,
   "replayExact": true,
   "replayModelCalls": 0,
   "responseTape": {
     "schema": "town-response-tape@1",
     "actorId": "ada",
-    "cursor": 6,
+    "cursor": 7,
     "entries": [
       {
-        "rawResponse": "{\"contextId\":\"dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd\",\"action\":\"repair\",\"reason\":\"Needs are all low, and I have a commitment to repair the hall doors before evening. Starting the repair now while I'm free makes good use of the morning, and it keeps me close to the hall for comparing flood damage after Lea's class at 840.\"}",
+        "rawResponse": "{\"contextId\":\"f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4\",\"action\":\"repair\",\"reason\":\"Needs are all low, and I'm free. Repairing the flood-damaged hall works toward my commitment to fix the doors before evening and lets me make progress before meeting at the hall after Lea's class.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 4660,
-          "reportedCostUsd": 0.008213
+          "reportedDurationMs": 3706,
+          "reportedCostUsd": 0.014544000000000001
         },
-        "requestHash": "dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd\",\"observation\":{\"at\":495,\"name\":\"Ada\",\"place\":\"workshop\",\"activity\":\"Free\",\"weather\":\"Rain\",\"nearby\":[\"Ada\",\"Ravi\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.003625701224705241,\"water\":0.002126551323071046,\"sleep\":0.010741858547107137,\"rest\":0.000006645445806724101,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007362249614131971,\"esteem\":0.0128230736391065,\"autonomy\":0.007200000000000002,\"competence\":0.0128230736391065,\"leisure\":0.012800000000000002,\"meaning\":0.012855471725933517},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"inspect\",\"label\":\"Go and inspect the hall timber\"}],\"response\":{\"contextId\":\"dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4\",\"observation\":{\"at\":495,\"name\":\"Ada\",\"place\":\"workshop\",\"activity\":\"Free\",\"weather\":\"Rain\",\"nearby\":[\"Ada\",\"Ravi\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.003625701224705241,\"water\":0.002126551323071046,\"sleep\":0.010741858547107137,\"rest\":0.000006645445806724101,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007362249614131971,\"esteem\":0.0128230736391065,\"autonomy\":0.007200000000000002,\"competence\":0.0128230736391065,\"leisure\":0.012800000000000002,\"meaning\":0.012855471725933517},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"inspect\",\"label\":\"Go and inspect the hall timber\"}],\"response\":{\"contextId\":\"f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       },
       {
-        "rawResponse": "{\"contextId\":\"92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69\",\"action\":\"repair\",\"reason\":\"Needs are low and I'm already at the hall. Continuing repairs advances my commitment to fix the doors before evening and keeps me here for comparing flood damage after Lea's class.\"}",
+        "rawResponse": "{\"contextId\":\"de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8\",\"action\":\"repair\",\"reason\":\"Needs are all low and I'm already at the hall mid-repair. Hall isn't safe yet and I've committed to fixing the doors before evening, so continuing the repair is the best use of time before meeting Lea at 840.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 4713,
-          "reportedCostUsd": 0.01792
+          "reportedDurationMs": 2204,
+          "reportedCostUsd": 0.015732
         },
-        "requestHash": "92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69\",\"observation\":{\"at\":525,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.004673364272738205,\"water\":0.0029724381078621073,\"sleep\":0.01083058152220067,\"rest\":0.00023152947762220184,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007689773845520336,\"esteem\":0.012869033544118356,\"autonomy\":0.007200000000000002,\"competence\":0.012869033544118356,\"leisure\":0.014141462579474882,\"meaning\":0.012966533677329393},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8\",\"observation\":{\"at\":525,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.004673364272738205,\"water\":0.0029724381078621073,\"sleep\":0.01083058152220067,\"rest\":0.00023152947762220184,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007689773845520336,\"esteem\":0.012869033544118356,\"autonomy\":0.007200000000000002,\"competence\":0.012869033544118356,\"leisure\":0.014141462579474882,\"meaning\":0.012966533677329393},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       },
       {
-        "rawResponse": "{\"contextId\":\"c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029\",\"action\":\"repair\",\"reason\":\"Needs are low, I'm already at the hall, and the doors must be repaired before evening. Continuing repairs keeps me on site for comparing flood damage after Lea's class.\"}",
+        "rawResponse": "{\"contextId\":\"ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba\",\"action\":\"repair\",\"reason\":\"Needs are low and I'm already at the hall mid-repair. Continuing advances my commitment to fix the doors before evening and keeps me here for comparing flood damage with Lea after her class.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 5360,
-          "reportedCostUsd": 0.017856
+          "reportedDurationMs": 2204,
+          "reportedCostUsd": 0.015460000000000002
         },
-        "requestHash": "c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029\",\"observation\":{\"at\":555,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.00585381394469533,\"water\":0.003959630486370486,\"sleep\":0.010829657568572109,\"rest\":0.0005167812289939143,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008021185611287496,\"esteem\":0.012914744132100298,\"autonomy\":0.007200000000000002,\"competence\":0.012914744132100298,\"leisure\":0.015500689035394873,\"meaning\":0.013077750953675575},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba\",\"observation\":{\"at\":555,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.00585381394469533,\"water\":0.003959630486370486,\"sleep\":0.010829657568572109,\"rest\":0.0005167812289939143,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008021185611287496,\"esteem\":0.012914744132100298,\"autonomy\":0.007200000000000002,\"competence\":0.012914744132100298,\"leisure\":0.015500689035394873,\"meaning\":0.013077750953675575},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       },
       {
-        "rawResponse": "{\"contextId\":\"22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c\",\"action\":\"repair\",\"reason\":\"Needs are all low, I'm already at the hall, and it is still unsafe. Continuing repairs advances my commitment to fix the doors before evening, and keeps me here for comparing the damage with Lea after her class.\"}",
+        "rawResponse": "{\"contextId\":\"5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d\",\"action\":\"repair\",\"reason\":\"Needs are low and I'm already at the hall. Continuing repairs keeps the doors on track before evening and keeps me here for comparing flood damage with Lea after her class.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 4751,
-          "reportedCostUsd": 0.018076000000000002
+          "reportedDurationMs": 2983,
+          "reportedCostUsd": 0.015484000000000001
         },
-        "requestHash": "22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c\",\"observation\":{\"at\":585,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.007167050200025114,\"water\":0.005088128415442827,\"sleep\":0.010759765056526323,\"rest\":0.0007410588842984258,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008356313689951994,\"esteem\":0.012960206030676989,\"autonomy\":0.007200000000000002,\"competence\":0.012960206030676989,\"leisure\":0.016872824604419884,\"meaning\":0.013189120367643815},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d\",\"observation\":{\"at\":585,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.007167050200025114,\"water\":0.005088128415442827,\"sleep\":0.010759765056526323,\"rest\":0.0007410588842984258,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008356313689951994,\"esteem\":0.012960206030676989,\"autonomy\":0.007200000000000002,\"competence\":0.012960206030676989,\"leisure\":0.016872824604419884,\"meaning\":0.013189120367643815},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       },
       {
-        "rawResponse": "{\"contextId\":\"2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9\",\"action\":\"ask-inspector\",\"reason\":\"My repair on the damp timber didn't hold and the hall is unsafe. Rather than force another failed repair in the rain, I'll ask an inspector how to proceed, staying at the hall for the meeting after Lea's class at 840.\"}",
+        "rawResponse": "{\"contextId\":\"3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e\",\"action\":\"ask-inspector\",\"reason\":\"My repair on the damp timber slipped and the hall is still unsafe. Asking an inspector how to make the repair hold in the rain is wiser than trying again blindly. Waiting up to two hours still gets me back before Lea's class ends at 840.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 4447,
-          "reportedCostUsd": 0.019576000000000003
+          "reportedDurationMs": 4088,
+          "reportedCostUsd": 0.019276
         },
-        "requestHash": "2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       },
       {
-        "rawResponse": "{\"contextId\":\"afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28\",\"action\":\"ask-inspector\",\"reason\":\"My last repair on the damp timber slipped and the hall is unsafe. I'll keep waiting for an inspector's answer on judging the timber before trying again. I can stay at the hall for my 840 meeting with Lea, and my needs are low right now.\"}",
+        "rawResponse": "{\"contextId\":\"152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb\",\"action\":\"keep-closed\",\"reason\":\"The hall is unsafe and my damp-timber repair didn't hold. Keeping this section closed protects neighbours while I await the inspector's answer and stay at the hall for Lea's flood-damage comparison at 840.\"}",
         "provenance": {
           "provider": "Claude Code CLI",
           "requestedModel": "opus",
           "models": [
             "claude-opus-5-5"
           ],
-          "reportedDurationMs": 5883,
-          "reportedCostUsd": 0.021416
+          "reportedDurationMs": 2410,
+          "reportedCostUsd": 0.018988
         },
-        "requestHash": "afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28",
-        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28\",\"observation\":{\"at\":645,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Leave a question for an inspector and wait up to two hours\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.009933768698739949,\"water\":0.007499263980171229,\"sleep\":0.010508459439370996,\"rest\":0.0003417327043307812,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.009037054787882751,\"esteem\":0.01305038633079509,\"autonomy\":0.007200000000000002,\"competence\":0.0000010351531529950549,\"leisure\":0.018084867193009828,\"meaning\":0.013412302983819258},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":37,\"at\":615,\"kind\":\"started\",\"text\":\"Ada: Leave a question for an inspector and wait up to two hours.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":38,\"at\":615,\"kind\":\"question\",\"text\":\"Ada left a question on the hall noticeboard: “How can I tell whether the timber is safe?”\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"wait-inspector\",\"label\":\"Wait for Lea beside the hall noticeboard\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"}],\"response\":{\"contextId\":\"afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+        "requestHash": "152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb\",\"observation\":{\"at\":645,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Leave a question for an inspector and wait up to two hours\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.009933768698739949,\"water\":0.007499263980171229,\"sleep\":0.010508459439370996,\"rest\":0.0003417327043307812,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.009037054787882751,\"esteem\":0.01305038633079509,\"autonomy\":0.007200000000000002,\"competence\":0.0000010351531529950549,\"leisure\":0.018084867193009828,\"meaning\":0.013412302983819258},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":37,\"at\":615,\"kind\":\"started\",\"text\":\"Ada: Leave a question for an inspector and wait up to two hours.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":38,\"at\":615,\"kind\":\"question\",\"text\":\"Ada left a question on the hall noticeboard: “How can I tell whether the timber is safe?”\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"wait-inspector\",\"label\":\"Wait for Lea beside the hall noticeboard\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"}],\"response\":{\"contextId\":\"152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+      },
+      {
+        "rawResponse": "{\"contextId\":\"bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d\",\"action\":\"wait-inspector\",\"reason\":\"The hall is unsafe and my last repair on damp timber failed, so repairing again in the rain is risky. I'll wait by the noticeboard for Lea, which keeps my 840 commitment to compare flood damage and gives my inspector question time to be answered.\"}",
+        "provenance": {
+          "provider": "Claude Code CLI",
+          "requestedModel": "opus",
+          "models": [
+            "claude-opus-5-5"
+          ],
+          "reportedDurationMs": 2627,
+          "reportedCostUsd": 0.020347999999999998
+        },
+        "requestHash": "bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d",
+        "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d\",\"observation\":{\"at\":660,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.010718040848254536,\"water\":0.008198168757046593,\"sleep\":0.010445829883362281,\"rest\":0.00037778299843170077,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.00920930673075161,\"esteem\":0.01307277698897515,\"autonomy\":0.007200000000000002,\"competence\":0.0000023207139949835253,\"leisure\":0.018002662038334175,\"meaning\":0.013468188812691434},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":37,\"at\":615,\"kind\":\"started\",\"text\":\"Ada: Leave a question for an inspector and wait up to two hours.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":38,\"at\":615,\"kind\":\"question\",\"text\":\"Ada left a question on the hall noticeboard: “How can I tell whether the timber is safe?”\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":44,\"at\":645,\"kind\":\"interrupted\",\"text\":\"Ada stopped “Leave a question for an inspector and wait up to two hours” at Flooded hall to do something else.\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":45,\"at\":645,\"kind\":\"started\",\"text\":\"Ada: Keep this section closed.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":46,\"at\":660,\"kind\":\"hall-closed\",\"text\":\"Ada kept the hall closed after seeing wet timber and loose supports.\",\"causes\":[45],\"importance\":0.95,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":47,\"at\":660,\"kind\":\"completed\",\"text\":\"Ada finished keeping this section closed.\",\"causes\":[45],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"wait-inspector\",\"label\":\"Wait for Lea beside the hall noticeboard\"}],\"response\":{\"contextId\":\"bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
       }
     ]
   },
@@ -172,7 +187,7 @@
     "rounds": 0,
     "runtime": {
       "schema": "neighbours-1",
-      "hf": "2.6.0",
+      "hf": "2.8.0",
       "seed": 42,
       "now": 480,
       "round": 0,
@@ -188,7 +203,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "ada",
             "name": "Ada",
             "now": 480,
@@ -217,7 +232,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -480,7 +496,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "musa",
             "name": "Musa",
             "now": 480,
@@ -509,7 +525,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -708,7 +725,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "elin",
             "name": "Elin",
             "now": 480,
@@ -737,7 +754,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -936,7 +954,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "sam",
             "name": "Sam",
             "now": 480,
@@ -965,7 +983,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -1164,7 +1183,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "jo",
             "name": "Jo",
             "now": 480,
@@ -1193,7 +1212,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -1392,7 +1412,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "lea",
             "name": "Lea",
             "now": 480,
@@ -1421,7 +1441,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -1755,7 +1776,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "ravi",
             "name": "Ravi",
             "now": 480,
@@ -1784,7 +1805,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -1996,7 +2018,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "noor",
             "name": "Noor",
             "now": 480,
@@ -2025,7 +2047,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -2309,8 +2332,12 @@
       "produced": 0,
       "consumed": 0,
       "timber": {
-        "damp": 1
+        "damp": 1,
+        "care": {
+          "loosened": 0
+        }
       },
+      "together": true,
       "mixed": {
         "schema": "town-response-tape@1",
         "actorId": "ada",
@@ -2324,7 +2351,7 @@
     "rounds": 12,
     "runtime": {
       "schema": "neighbours-1",
-      "hf": "2.6.0",
+      "hf": "2.8.0",
       "seed": 42,
       "now": 660,
       "round": 12,
@@ -2419,7 +2446,7 @@
           "id": 9,
           "at": 525,
           "kind": "interrupted",
-          "text": "Lea's go and inspect the hall timber changed plan at an HF review at hall; reserved resources were returned.",
+          "text": "Lea stopped “Go and inspect the hall timber” at Flooded hall to do something else.",
           "causes": [
             7
           ],
@@ -2805,14 +2832,70 @@
           "importance": 0.15,
           "actorId": "ravi",
           "placeId": "workshop"
+        },
+        {
+          "id": 44,
+          "at": 645,
+          "kind": "interrupted",
+          "text": "Ada stopped “Leave a question for an inspector and wait up to two hours” at Flooded hall to do something else.",
+          "causes": [
+            37
+          ],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "hall"
+        },
+        {
+          "id": 45,
+          "at": 645,
+          "kind": "started",
+          "text": "Ada: Keep this section closed.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "hall"
+        },
+        {
+          "id": 46,
+          "at": 660,
+          "kind": "hall-closed",
+          "text": "Ada kept the hall closed after seeing wet timber and loose supports.",
+          "causes": [
+            45
+          ],
+          "importance": 0.95,
+          "actorId": "ada",
+          "placeId": "hall"
+        },
+        {
+          "id": 47,
+          "at": 660,
+          "kind": "completed",
+          "text": "Ada finished keeping this section closed.",
+          "causes": [
+            45
+          ],
+          "importance": 0.3,
+          "actorId": "ada",
+          "placeId": "hall"
+        },
+        {
+          "id": 48,
+          "at": 660,
+          "kind": "started",
+          "text": "Ada: Wait for Lea beside the hall noticeboard.",
+          "causes": [],
+          "importance": 0.15,
+          "actorId": "ada",
+          "placeId": "hall"
         }
       ],
-      "nextEvent": 44,
+      "nextEvent": 49,
       "people": [
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "ada",
             "name": "Ada",
             "now": 660,
@@ -2827,10 +2910,10 @@
               "sex": "female"
             },
             "body": {
-              "satiety": 0.6354895718502647,
-              "hydration": 0.6816990087882376,
+              "satiety": 0.6339733471409743,
+              "hydration": 0.6798795391370892,
               "sleepPressure": 0.35681659973493907,
-              "exertion": 0.06270038221470874,
+              "exertion": 0.08387251316568547,
               "circadianPeak": 960,
               "pain": 0,
               "health": 1,
@@ -2841,7 +2924,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -2970,7 +3054,17 @@
                 {
                   "at": 615,
                   "action": "repair",
-                  "intention": "Needs are all low, and I have a commitment to repair the hall doors before evening. Starting the repair now while I'm free makes good use of the morning, and it keeps me close to the hall for comparing flood damage after Lea's class at 840."
+                  "intention": "Needs are all low, and I'm free. Repairing the flood-damaged hall works toward my commitment to fix the doors before evening and lets me make progress before meeting at the hall after Lea's class."
+                },
+                {
+                  "at": 645,
+                  "action": "ask-inspector",
+                  "intention": "My repair on the damp timber slipped and the hall is still unsafe. Asking an inspector how to make the repair hold in the rain is wiser than trying again blindly. Waiting up to two hours still gets me back before Lea's class ends at 840."
+                },
+                {
+                  "at": 660,
+                  "action": "keep-closed",
+                  "intention": "The hall is unsafe and my damp-timber repair didn't hold. Keeping this section closed protects neighbours while I await the inspector's answer and stay at the hall for Lea's flood-damage comparison at 840."
                 }
               ],
               "nextBreach": 0
@@ -3006,9 +3100,22 @@
                   "placeId": "hall"
                 },
                 "action": "repair",
-                "strength": 0.03859303305558906,
+                "strength": 0.03855974656457861,
                 "repetitions": 1,
-                "lastAt": 615
+                "lastAt": 615,
+                "withheld": 1,
+                "lastWithheldAt": 660
+              },
+              {
+                "cue": {
+                  "hour": 11,
+                  "placeId": "hall",
+                  "after": "repair"
+                },
+                "action": "keep-closed",
+                "strength": 0.0386,
+                "repetitions": 1,
+                "lastAt": 660
               }
             ],
             "memory": {
@@ -3115,6 +3222,50 @@
                   "placeId": "hall",
                   "id": "e6",
                   "salience": 0.2985594133033061
+                },
+                {
+                  "at": 645,
+                  "kind": "outcome",
+                  "action": "ask-inspector",
+                  "actorId": "ada",
+                  "valence": 0,
+                  "summary": "Leave a question for an inspector and wait up to two hours: interrupted",
+                  "tags": [
+                    "interrupted"
+                  ],
+                  "targetId": "hall-floor",
+                  "placeId": "hall",
+                  "id": "e7",
+                  "salience": 0.2992788398650861
+                },
+                {
+                  "at": 660,
+                  "kind": "outcome",
+                  "action": "keep-closed",
+                  "actorId": "ada",
+                  "valence": 0,
+                  "summary": "Finished Keep this section closed",
+                  "tags": [
+                    "completed"
+                  ],
+                  "targetId": "hall-floor",
+                  "placeId": "hall",
+                  "id": "e8",
+                  "salience": 0.3
+                },
+                {
+                  "at": 660,
+                  "kind": "witnessed",
+                  "action": "local-situation",
+                  "valence": 0,
+                  "summary": "At hall. 0 hall repairs completed.",
+                  "tags": [
+                    "local-situation",
+                    "saw"
+                  ],
+                  "placeId": "hall",
+                  "id": "e9",
+                  "salience": 0.3
                 }
               ],
               "beliefs": [],
@@ -3128,10 +3279,24 @@
                   "successRate": 1,
                   "samples": 1,
                   "valence": 0.15650270993983748
+                },
+                {
+                  "key": "keep-closed",
+                  "needs": {},
+                  "successRate": 1,
+                  "samples": 1,
+                  "valence": 0
+                },
+                {
+                  "key": "keep-closed@hall-floor",
+                  "needs": {},
+                  "successRate": 1,
+                  "samples": 1,
+                  "valence": 0
                 }
               ],
               "sourceTrust": {},
-              "nextEpisode": 7
+              "nextEpisode": 10
             },
             "social": {
               "relationships": [
@@ -3222,9 +3387,9 @@
                   "baseImportance": 0.7,
                   "id": "g2",
                   "status": "active",
-                  "progress": 0,
+                  "progress": 0.75,
                   "adoptedAt": 480,
-                  "lastAdvancedAt": 480
+                  "lastAdvancedAt": 660
                 }
               ],
               "nextId": 4,
@@ -3237,42 +3402,42 @@
               "temperature": 0
             },
             "activity": {
-              "affordanceId": "ask-inspector",
-              "action": "ask-inspector",
+              "affordanceId": "wait-inspector",
+              "action": "wait-inspector",
               "affordance": {
-                "id": "ask-inspector",
-                "action": "ask-inspector",
-                "label": "Leave a question for an inspector and wait up to two hours",
-                "targetId": "hall-floor",
-                "methodContext": "hall-inspection",
-                "duration": 120,
-                "effort": 0,
-                "advertises": {},
-                "placeId": "hall"
+                "id": "wait-inspector",
+                "action": "wait-inspector",
+                "label": "Wait for Lea beside the hall noticeboard",
+                "placeId": "hall",
+                "duration": 30,
+                "effort": 0.15,
+                "advertises": {
+                  "leisure": 0.1
+                },
+                "fulfills": []
               },
               "needsAtStart": {
-                "food": 0.6718789667253757,
-                "water": 0.7180884036633487,
-                "sleep": 0.6352470500576961,
-                "rest": 0.8942212208961732,
+                "food": 0.6339733471409743,
+                "water": 0.6798795391370892,
+                "sleep": 0.638651313075544,
+                "rest": 0.9312810980850519,
                 "relief": 1,
                 "safety": 0.8,
-                "belonging": 0.6703222964890019,
-                "esteem": 0.5968030896746147,
+                "belonging": 0.6607120188771858,
+                "esteem": 0.5957603280698573,
                 "autonomy": 0.7,
-                "competence": 1,
-                "leisure": 0.5223303379776744,
-                "meaning": 0.592252548185835
+                "competence": 0.9946140065969875,
+                "leisure": 0.5256232768366715,
+                "meaning": 0.5896923591271509
               },
-              "startedAt": 615,
-              "endsAt": 735,
-              "effort": 0,
+              "startedAt": 660,
+              "endsAt": 690,
+              "effort": 0.15,
               "focus": 0,
               "mode": "awake",
-              "decisionId": "external-ada-9",
-              "intention": "My repair on the damp timber didn't hold and the hall is unsafe. Rather than force another failed repair in the rain, I'll ask an inspector how to proceed, staying at the hall for the meeting after Lea's class at 840.",
-              "reviewAt": 675,
-              "targetId": "hall-floor"
+              "decisionId": "external-ada-12",
+              "intention": "The hall is unsafe and my last repair on damp timber failed, so repairing again in the rain is risky. I'll wait by the noticeboard for Lea, which keeps my 840 commitment to compare flood damage and gives my inspector question time to be answered.",
+              "reviewAt": 690
             },
             "trace": [],
             "nextDecision": 0,
@@ -3305,6 +3470,12 @@
                   "done": 1,
                   "prompted": 0,
                   "by": {}
+                },
+                {
+                  "action": "keep-closed",
+                  "done": 1,
+                  "prompted": 0,
+                  "by": {}
                 }
               ],
               "verdicts": [],
@@ -3321,38 +3492,15 @@
           "wealth": 3,
           "policy": "llm",
           "decision": {
-            "chosen": "ask-inspector",
-            "decidedAt": 645,
-            "round": 11,
-            "label": "Leave a question for an inspector and wait up to two hours",
-            "reason": "My last repair on the damp timber slipped and the hall is unsafe. I'll keep waiting for an inspector's answer on judging the timber before trying again. I can stay at the hall for my 840 meeting with Lea, and my needs are low right now.",
+            "chosen": "wait-inspector",
+            "decidedAt": 660,
+            "round": 12,
+            "label": "Wait for Lea beside the hall noticeboard",
+            "reason": "The hall is unsafe and my last repair on damp timber failed, so repairing again in the rain is risky. I'll wait by the noticeboard for Lea, which keeps my 840 commitment to compare flood damage and gives my inspector question time to be answered.",
             "options": [],
             "source": "LLM policy with HF person state: claude-opus-5-5"
           },
-          "idleSince": 615,
-          "job": {
-            "offer": {
-              "id": "ask-inspector",
-              "action": "ask-inspector",
-              "label": "Leave a question for an inspector and wait up to two hours",
-              "targetId": "hall-floor",
-              "methodContext": "hall-inspection",
-              "duration": 120,
-              "effort": 0,
-              "advertises": {},
-              "placeId": "hall"
-            },
-            "end": 735,
-            "arrive": 615,
-            "from": "hall",
-            "event": 37,
-            "food": 0,
-            "tools": 0,
-            "inspectionCues": {
-              "moisture": "wet",
-              "support": "loose"
-            }
-          },
+          "idleSince": 660,
           "question": {
             "event": 38,
             "at": 615,
@@ -3369,12 +3517,56 @@
               "placeId": "hall"
             },
             "status": "waiting"
+          },
+          "inspection": {
+            "key": "0:0:wet",
+            "action": "keep-closed",
+            "at": 660,
+            "event": {
+              "id": 46,
+              "at": 660,
+              "kind": "hall-closed",
+              "text": "Ada kept the hall closed after seeing wet timber and loose supports.",
+              "causes": [
+                45
+              ],
+              "importance": 0.95,
+              "actorId": "ada",
+              "placeId": "hall"
+            },
+            "observations": {
+              "moisture": "wet",
+              "support": "loose"
+            },
+            "result": "Ada kept the hall closed after seeing wet timber and loose supports.",
+            "source": "LLM policy with HF person state: claude-opus-5-5",
+            "methodTerms": []
+          },
+          "job": {
+            "offer": {
+              "id": "wait-inspector",
+              "action": "wait-inspector",
+              "label": "Wait for Lea beside the hall noticeboard",
+              "placeId": "hall",
+              "duration": 30,
+              "effort": 0.15,
+              "advertises": {
+                "leisure": 0.1
+              },
+              "fulfills": []
+            },
+            "end": 690,
+            "arrive": 660,
+            "from": "hall",
+            "event": 48,
+            "food": 0,
+            "tools": 0
           }
         },
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "musa",
             "name": "Musa",
             "now": 660,
@@ -3403,7 +3595,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -3853,11 +4046,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.01,
+                    "utility": 0.0046,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.01
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0054
                       }
                     ],
                     "advertised": {
@@ -4061,11 +4258,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0128,
+                    "utility": 0.0087,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0128
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0041
                       }
                     ],
                     "advertised": {
@@ -4240,11 +4441,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.016,
+                    "utility": 0.0131,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.016
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0029
                       }
                     ],
                     "advertised": {
@@ -4430,11 +4635,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0195,
+                    "utility": 0.0175,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0195
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.002
                       }
                     ],
                     "advertised": {
@@ -4639,7 +4848,7 @@
               {
                 "id": "drink",
                 "label": "Drink water here",
-                "utility": 0.0195
+                "utility": 0.0175
               },
               {
                 "id": "talk",
@@ -4667,7 +4876,7 @@
                 "utility": -0.0305
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 11,
             "recordedCount": 8
           },
@@ -4706,7 +4915,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "elin",
             "name": "Elin",
             "now": 660,
@@ -4735,7 +4944,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -5159,11 +5369,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.01,
+                    "utility": 0.0046,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.01
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0054
                       }
                     ],
                     "advertised": {
@@ -5365,11 +5579,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0128,
+                    "utility": 0.0087,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0128
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0041
                       }
                     ],
                     "advertised": {
@@ -5572,11 +5790,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.016,
+                    "utility": 0.0131,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.016
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0029
                       }
                     ],
                     "advertised": {
@@ -5741,24 +5963,6 @@
                     }
                   },
                   {
-                    "affordanceId": "drink",
-                    "action": "drink",
-                    "label": "Drink water here",
-                    "utility": 0.0195,
-                    "terms": [
-                      {
-                        "source": "need:water",
-                        "value": 0.0195
-                      }
-                    ],
-                    "advertised": {
-                      "water": 0.7
-                    },
-                    "believed": {
-                      "water": 0.7
-                    }
-                  },
-                  {
                     "affordanceId": "rest",
                     "action": "rest",
                     "label": "Rest at home",
@@ -5774,6 +5978,28 @@
                     },
                     "believed": {
                       "leisure": 0.3
+                    }
+                  },
+                  {
+                    "affordanceId": "drink",
+                    "action": "drink",
+                    "label": "Drink water here",
+                    "utility": 0.0175,
+                    "terms": [
+                      {
+                        "source": "need:water",
+                        "value": 0.0195
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.002
+                      }
+                    ],
+                    "advertised": {
+                      "water": 0.7
+                    },
+                    "believed": {
+                      "water": 0.7
                     }
                   },
                   {
@@ -5968,14 +6194,14 @@
                 "utility": 0.1551
               },
               {
-                "id": "drink",
-                "label": "Drink water here",
-                "utility": 0.0195
-              },
-              {
                 "id": "rest",
                 "label": "Rest at home",
                 "utility": 0.0182
+              },
+              {
+                "id": "drink",
+                "label": "Drink water here",
+                "utility": 0.0175
               },
               {
                 "id": "talk",
@@ -6003,7 +6229,7 @@
                 "utility": -0.0305
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 11,
             "recordedCount": 8
           },
@@ -6042,7 +6268,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "sam",
             "name": "Sam",
             "now": 660,
@@ -6071,7 +6297,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -6480,11 +6707,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.01,
+                    "utility": 0.0046,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.01
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0054
                       }
                     ],
                     "advertised": {
@@ -6665,11 +6896,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0128,
+                    "utility": 0.0087,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0128
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0041
                       }
                     ],
                     "advertised": {
@@ -6871,11 +7106,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.016,
+                    "utility": 0.0131,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.016
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0029
                       }
                     ],
                     "advertised": {
@@ -7078,11 +7317,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0195,
+                    "utility": 0.0175,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0195
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.002
                       }
                     ],
                     "advertised": {
@@ -7297,7 +7540,7 @@
               {
                 "id": "drink",
                 "label": "Drink water here",
-                "utility": 0.0195
+                "utility": 0.0175
               },
               {
                 "id": "inspect",
@@ -7325,7 +7568,7 @@
                 "utility": -0.0284
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 11,
             "recordedCount": 8
           },
@@ -7364,7 +7607,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "jo",
             "name": "Jo",
             "now": 660,
@@ -7393,7 +7636,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -7832,11 +8076,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0099,
+                    "utility": 0.0045,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0099
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0054
                       }
                     ],
                     "advertised": {
@@ -8038,11 +8286,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0128,
+                    "utility": 0.0087,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0128
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0041
                       }
                     ],
                     "advertised": {
@@ -8241,11 +8493,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0159,
+                    "utility": 0.0129,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0159
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.003
                       }
                     ],
                     "advertised": {
@@ -8427,11 +8683,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0195,
+                    "utility": 0.0175,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0195
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.002
                       }
                     ],
                     "advertised": {
@@ -8636,7 +8896,7 @@
               {
                 "id": "drink",
                 "label": "Drink water here",
-                "utility": 0.0195
+                "utility": 0.0175
               },
               {
                 "id": "talk",
@@ -8664,7 +8924,7 @@
                 "utility": -0.0305
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 11,
             "recordedCount": 8
           },
@@ -8703,7 +8963,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "lea",
             "name": "Lea",
             "now": 660,
@@ -8732,7 +8992,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -9277,11 +9538,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0096,
+                    "utility": 0.004,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0096
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0056
                       }
                     ],
                     "advertised": {
@@ -9481,11 +9746,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0124,
+                    "utility": 0.0082,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0124
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0042
                       }
                     ],
                     "advertised": {
@@ -9665,24 +9934,6 @@
                     }
                   },
                   {
-                    "affordanceId": "drink",
-                    "action": "drink",
-                    "label": "Drink water here",
-                    "utility": 0.0155,
-                    "terms": [
-                      {
-                        "source": "need:water",
-                        "value": 0.0155
-                      }
-                    ],
-                    "advertised": {
-                      "water": 0.7
-                    },
-                    "believed": {
-                      "water": 0.7
-                    }
-                  },
-                  {
                     "affordanceId": "rest",
                     "action": "rest",
                     "label": "Rest at home",
@@ -9698,6 +9949,28 @@
                     },
                     "believed": {
                       "leisure": 0.3
+                    }
+                  },
+                  {
+                    "affordanceId": "drink",
+                    "action": "drink",
+                    "label": "Drink water here",
+                    "utility": 0.0124,
+                    "terms": [
+                      {
+                        "source": "need:water",
+                        "value": 0.0155
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0031
+                      }
+                    ],
+                    "advertised": {
+                      "water": 0.7
+                    },
+                    "believed": {
+                      "water": 0.7
                     }
                   },
                   {
@@ -9873,11 +10146,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.019,
+                    "utility": 0.0169,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.019
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0021
                       }
                     ],
                     "advertised": {
@@ -10158,7 +10435,7 @@
               {
                 "id": "drink",
                 "label": "Drink water here",
-                "utility": 0.019
+                "utility": 0.0169
               },
               {
                 "id": "rest",
@@ -10186,7 +10463,7 @@
                 "utility": -0.0219
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -10229,7 +10506,7 @@
               "support": "loose"
             },
             "result": "Lea kept the hall closed after seeing wet timber and loose supports.",
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "methodTerms": []
           },
           "job": {
@@ -10259,7 +10536,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "ravi",
             "name": "Ravi",
             "now": 660,
@@ -10288,7 +10565,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -10781,11 +11059,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0099,
+                    "utility": 0.0045,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0099
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0054
                       }
                     ],
                     "advertised": {
@@ -10995,11 +11277,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0128,
+                    "utility": 0.0087,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0128
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0041
                       }
                     ],
                     "advertised": {
@@ -11210,11 +11496,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0159,
+                    "utility": 0.0129,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0159
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.003
                       }
                     ],
                     "advertised": {
@@ -11371,11 +11661,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0194,
+                    "utility": 0.0174,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0194
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.002
                       }
                     ],
                     "advertised": {
@@ -11669,7 +11963,7 @@
               {
                 "id": "drink",
                 "label": "Drink water here",
-                "utility": 0.0194
+                "utility": 0.0174
               },
               {
                 "id": "rest",
@@ -11702,7 +11996,7 @@
                 "utility": -0.0359
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 11,
             "recordedCount": 8
           },
@@ -11757,7 +12051,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.6.0",
+            "engine": "2.8.0",
             "id": "noor",
             "name": "Noor",
             "now": 660,
@@ -11786,7 +12080,8 @@
               "since": 480,
               "injuries": [],
               "illnesses": [],
-              "nextId": 0
+              "nextId": 0,
+              "fullness": true
             },
             "needs": {
               "safety": 0.8,
@@ -12092,6 +12387,21 @@
                   "placeId": "hall",
                   "id": "e7",
                   "salience": 0.2985594133033061
+                },
+                {
+                  "at": 660,
+                  "kind": "witnessed",
+                  "action": "neighbour-completed",
+                  "valence": 0,
+                  "summary": "Ada finished keeping this section closed.",
+                  "tags": [
+                    "neighbour-completed",
+                    "saw"
+                  ],
+                  "actorId": "ada",
+                  "placeId": "hall",
+                  "id": "e8",
+                  "salience": 0.3
                 }
               ],
               "beliefs": [],
@@ -12116,7 +12426,7 @@
                 }
               ],
               "sourceTrust": {},
-              "nextEpisode": 8
+              "nextEpisode": 9
             },
             "social": {
               "relationships": [
@@ -12281,11 +12591,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0113,
+                    "utility": 0.0066,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0113
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0047
                       }
                     ],
                     "advertised": {
@@ -12473,11 +12787,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0143,
+                    "utility": 0.0108,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0143
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0035
                       }
                     ],
                     "advertised": {
@@ -12614,11 +12932,15 @@
                     "affordanceId": "drink",
                     "action": "drink",
                     "label": "Drink water here",
-                    "utility": 0.0176,
+                    "utility": 0.0151,
                     "terms": [
                       {
                         "source": "need:water",
                         "value": 0.0176
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0025
                       }
                     ],
                     "advertised": {
@@ -12756,24 +13078,6 @@
                     }
                   },
                   {
-                    "affordanceId": "drink",
-                    "action": "drink",
-                    "label": "Drink water here",
-                    "utility": 0.0213,
-                    "terms": [
-                      {
-                        "source": "need:water",
-                        "value": 0.0213
-                      }
-                    ],
-                    "advertised": {
-                      "water": 0.7
-                    },
-                    "believed": {
-                      "water": 0.7
-                    }
-                  },
-                  {
                     "affordanceId": "rest",
                     "action": "rest",
                     "label": "Rest at home",
@@ -12789,6 +13093,28 @@
                     },
                     "believed": {
                       "leisure": 0.3
+                    }
+                  },
+                  {
+                    "affordanceId": "drink",
+                    "action": "drink",
+                    "label": "Drink water here",
+                    "utility": 0.0197,
+                    "terms": [
+                      {
+                        "source": "need:water",
+                        "value": 0.0213
+                      },
+                      {
+                        "source": "full:water",
+                        "value": -0.0016
+                      }
+                    ],
+                    "advertised": {
+                      "water": 0.7
+                    },
+                    "believed": {
+                      "water": 0.7
                     }
                   },
                   {
@@ -12966,14 +13292,14 @@
                 "utility": 0.1743
               },
               {
-                "id": "drink",
-                "label": "Drink water here",
-                "utility": 0.0213
-              },
-              {
                 "id": "rest",
                 "label": "Rest at home",
                 "utility": 0.0203
+              },
+              {
+                "id": "drink",
+                "label": "Drink water here",
+                "utility": 0.0197
               },
               {
                 "id": "ask-inspector",
@@ -13001,7 +13327,7 @@
                 "utility": -0.0264
               }
             ],
-            "source": "HF 2.6.0",
+            "source": "HF 2.8.0",
             "offeredCount": 13,
             "recordedCount": 8
           },
@@ -13125,8 +13451,12 @@
       "produced": 13,
       "consumed": 0,
       "timber": {
-        "damp": 1
+        "damp": 1,
+        "care": {
+          "loosened": 0
+        }
       },
+      "together": true,
       "townChronicle": {
         "version": 1,
         "events": [
@@ -13148,91 +13478,105 @@
       "mixed": {
         "schema": "town-response-tape@1",
         "actorId": "ada",
-        "cursor": 6,
+        "cursor": 7,
         "entries": [
           {
-            "rawResponse": "{\"contextId\":\"dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd\",\"action\":\"repair\",\"reason\":\"Needs are all low, and I have a commitment to repair the hall doors before evening. Starting the repair now while I'm free makes good use of the morning, and it keeps me close to the hall for comparing flood damage after Lea's class at 840.\"}",
+            "rawResponse": "{\"contextId\":\"f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4\",\"action\":\"repair\",\"reason\":\"Needs are all low, and I'm free. Repairing the flood-damaged hall works toward my commitment to fix the doors before evening and lets me make progress before meeting at the hall after Lea's class.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 4660,
-              "reportedCostUsd": 0.008213
+              "reportedDurationMs": 3706,
+              "reportedCostUsd": 0.014544000000000001
             },
-            "requestHash": "dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd\",\"observation\":{\"at\":495,\"name\":\"Ada\",\"place\":\"workshop\",\"activity\":\"Free\",\"weather\":\"Rain\",\"nearby\":[\"Ada\",\"Ravi\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.003625701224705241,\"water\":0.002126551323071046,\"sleep\":0.010741858547107137,\"rest\":0.000006645445806724101,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007362249614131971,\"esteem\":0.0128230736391065,\"autonomy\":0.007200000000000002,\"competence\":0.0128230736391065,\"leisure\":0.012800000000000002,\"meaning\":0.012855471725933517},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"inspect\",\"label\":\"Go and inspect the hall timber\"}],\"response\":{\"contextId\":\"dd8139b0b66fe99046e4547cd32bb64b143a05a496c300284a06ae1ceb92d1cd\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4\",\"observation\":{\"at\":495,\"name\":\"Ada\",\"place\":\"workshop\",\"activity\":\"Free\",\"weather\":\"Rain\",\"nearby\":[\"Ada\",\"Ravi\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.003625701224705241,\"water\":0.002126551323071046,\"sleep\":0.010741858547107137,\"rest\":0.000006645445806724101,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007362249614131971,\"esteem\":0.0128230736391065,\"autonomy\":0.007200000000000002,\"competence\":0.0128230736391065,\"leisure\":0.012800000000000002,\"meaning\":0.012855471725933517},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"inspect\",\"label\":\"Go and inspect the hall timber\"}],\"response\":{\"contextId\":\"f78370b432468b4771bea6c43382c7dbb75e8fd400d21cddc866853bc16ba2f4\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           },
           {
-            "rawResponse": "{\"contextId\":\"92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69\",\"action\":\"repair\",\"reason\":\"Needs are low and I'm already at the hall. Continuing repairs advances my commitment to fix the doors before evening and keeps me here for comparing flood damage after Lea's class.\"}",
+            "rawResponse": "{\"contextId\":\"de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8\",\"action\":\"repair\",\"reason\":\"Needs are all low and I'm already at the hall mid-repair. Hall isn't safe yet and I've committed to fixing the doors before evening, so continuing the repair is the best use of time before meeting Lea at 840.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 4713,
-              "reportedCostUsd": 0.01792
+              "reportedDurationMs": 2204,
+              "reportedCostUsd": 0.015732
             },
-            "requestHash": "92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69\",\"observation\":{\"at\":525,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.004673364272738205,\"water\":0.0029724381078621073,\"sleep\":0.01083058152220067,\"rest\":0.00023152947762220184,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007689773845520336,\"esteem\":0.012869033544118356,\"autonomy\":0.007200000000000002,\"competence\":0.012869033544118356,\"leisure\":0.014141462579474882,\"meaning\":0.012966533677329393},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"92ce7e9de704ed6ffcd5c24bf76bd09643196e5319d0647bf7040bde5a687b69\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8\",\"observation\":{\"at\":525,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.004673364272738205,\"water\":0.0029724381078621073,\"sleep\":0.01083058152220067,\"rest\":0.00023152947762220184,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.007689773845520336,\"esteem\":0.012869033544118356,\"autonomy\":0.007200000000000002,\"competence\":0.012869033544118356,\"leisure\":0.014141462579474882,\"meaning\":0.012966533677329393},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"de8976ae3cd215553777f937ada2832ede0525f6306c5772a00bc8b22323d0f8\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           },
           {
-            "rawResponse": "{\"contextId\":\"c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029\",\"action\":\"repair\",\"reason\":\"Needs are low, I'm already at the hall, and the doors must be repaired before evening. Continuing repairs keeps me on site for comparing flood damage after Lea's class.\"}",
+            "rawResponse": "{\"contextId\":\"ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba\",\"action\":\"repair\",\"reason\":\"Needs are low and I'm already at the hall mid-repair. Continuing advances my commitment to fix the doors before evening and keeps me here for comparing flood damage with Lea after her class.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 5360,
-              "reportedCostUsd": 0.017856
+              "reportedDurationMs": 2204,
+              "reportedCostUsd": 0.015460000000000002
             },
-            "requestHash": "c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029\",\"observation\":{\"at\":555,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.00585381394469533,\"water\":0.003959630486370486,\"sleep\":0.010829657568572109,\"rest\":0.0005167812289939143,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008021185611287496,\"esteem\":0.012914744132100298,\"autonomy\":0.007200000000000002,\"competence\":0.012914744132100298,\"leisure\":0.015500689035394873,\"meaning\":0.013077750953675575},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"c3f0166d1b29befab7cf93b9ba59eabab294bfaa4c50c14ceefc049b2868c029\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba\",\"observation\":{\"at\":555,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.00585381394469533,\"water\":0.003959630486370486,\"sleep\":0.010829657568572109,\"rest\":0.0005167812289939143,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008021185611287496,\"esteem\":0.012914744132100298,\"autonomy\":0.007200000000000002,\"competence\":0.012914744132100298,\"leisure\":0.015500689035394873,\"meaning\":0.013077750953675575},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"ada4a319becfa0d86e89df295e957d0442694f19b1f32341ec619903c7038bba\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           },
           {
-            "rawResponse": "{\"contextId\":\"22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c\",\"action\":\"repair\",\"reason\":\"Needs are all low, I'm already at the hall, and it is still unsafe. Continuing repairs advances my commitment to fix the doors before evening, and keeps me here for comparing the damage with Lea after her class.\"}",
+            "rawResponse": "{\"contextId\":\"5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d\",\"action\":\"repair\",\"reason\":\"Needs are low and I'm already at the hall. Continuing repairs keeps the doors on track before evening and keeps me here for comparing flood damage with Lea after her class.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 4751,
-              "reportedCostUsd": 0.018076000000000002
+              "reportedDurationMs": 2983,
+              "reportedCostUsd": 0.015484000000000001
             },
-            "requestHash": "22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c\",\"observation\":{\"at\":585,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.007167050200025114,\"water\":0.005088128415442827,\"sleep\":0.010759765056526323,\"rest\":0.0007410588842984258,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008356313689951994,\"esteem\":0.012960206030676989,\"autonomy\":0.007200000000000002,\"competence\":0.012960206030676989,\"leisure\":0.016872824604419884,\"meaning\":0.013189120367643815},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"22831c45b16cdcc63290e2ba4028e2da0c92c89b9e95b8b3165c48a608a9196c\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d\",\"observation\":{\"at\":585,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Repair the flood-damaged hall\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.007167050200025114,\"water\":0.005088128415442827,\"sleep\":0.010759765056526323,\"rest\":0.0007410588842984258,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008356313689951994,\"esteem\":0.012960206030676989,\"autonomy\":0.007200000000000002,\"competence\":0.012960206030676989,\"leisure\":0.016872824604419884,\"meaning\":0.013189120367643815},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"pending\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"}],\"response\":{\"contextId\":\"5db5bd5eac618cd72924b48bcc992564fad20c53719e6105ac8bfc641779fd4d\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           },
           {
-            "rawResponse": "{\"contextId\":\"2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9\",\"action\":\"ask-inspector\",\"reason\":\"My repair on the damp timber didn't hold and the hall is unsafe. Rather than force another failed repair in the rain, I'll ask an inspector how to proceed, staying at the hall for the meeting after Lea's class at 840.\"}",
+            "rawResponse": "{\"contextId\":\"3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e\",\"action\":\"ask-inspector\",\"reason\":\"My repair on the damp timber slipped and the hall is still unsafe. Asking an inspector how to make the repair hold in the rain is wiser than trying again blindly. Waiting up to two hours still gets me back before Lea's class ends at 840.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 4447,
-              "reportedCostUsd": 0.019576000000000003
+              "reportedDurationMs": 4088,
+              "reportedCostUsd": 0.019276
             },
-            "requestHash": "2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"2b0e99451da41ac12f21a80abf416be250c0697a8805c3ca9618af66c2b185a9\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e\",\"observation\":{\"at\":615,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.008613072998176567,\"water\":0.006357931851926323,\"sleep\":0.010643577159329027,\"rest\":0.0008951320086956953,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.008694991055382847,\"esteem\":0.013005419879674945,\"autonomy\":0.007200000000000002,\"competence\":0,\"leisure\":0.018253464481321823,\"meaning\":0.01330063875687559},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"}],\"response\":{\"contextId\":\"3cdf3995fad823382b80637115545a18b7310ed37019adc8bf20bc4f6ffe9f2e\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           },
           {
-            "rawResponse": "{\"contextId\":\"afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28\",\"action\":\"ask-inspector\",\"reason\":\"My last repair on the damp timber slipped and the hall is unsafe. I'll keep waiting for an inspector's answer on judging the timber before trying again. I can stay at the hall for my 840 meeting with Lea, and my needs are low right now.\"}",
+            "rawResponse": "{\"contextId\":\"152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb\",\"action\":\"keep-closed\",\"reason\":\"The hall is unsafe and my damp-timber repair didn't hold. Keeping this section closed protects neighbours while I await the inspector's answer and stay at the hall for Lea's flood-damage comparison at 840.\"}",
             "provenance": {
               "provider": "Claude Code CLI",
               "requestedModel": "opus",
               "models": [
                 "claude-opus-5-5"
               ],
-              "reportedDurationMs": 5883,
-              "reportedCostUsd": 0.021416
+              "reportedDurationMs": 2410,
+              "reportedCostUsd": 0.018988
             },
-            "requestHash": "afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28",
-            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28\",\"observation\":{\"at\":645,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Leave a question for an inspector and wait up to two hours\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.009933768698739949,\"water\":0.007499263980171229,\"sleep\":0.010508459439370996,\"rest\":0.0003417327043307812,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.009037054787882751,\"esteem\":0.01305038633079509,\"autonomy\":0.007200000000000002,\"competence\":0.0000010351531529950549,\"leisure\":0.018084867193009828,\"meaning\":0.013412302983819258},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":37,\"at\":615,\"kind\":\"started\",\"text\":\"Ada: Leave a question for an inspector and wait up to two hours.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":38,\"at\":615,\"kind\":\"question\",\"text\":\"Ada left a question on the hall noticeboard: “How can I tell whether the timber is safe?”\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"wait-inspector\",\"label\":\"Wait for Lea beside the hall noticeboard\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"}],\"response\":{\"contextId\":\"afccc85b0c3f1595ef6a6476af9d6f469879bf892df885d52bffdedadc6ced28\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+            "requestHash": "152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb\",\"observation\":{\"at\":645,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Leave a question for an inspector and wait up to two hours\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.009933768698739949,\"water\":0.007499263980171229,\"sleep\":0.010508459439370996,\"rest\":0.0003417327043307812,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.009037054787882751,\"esteem\":0.01305038633079509,\"autonomy\":0.007200000000000002,\"competence\":0.0000010351531529950549,\"leisure\":0.018084867193009828,\"meaning\":0.013412302983819258},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":2,\"at\":495,\"kind\":\"started\",\"text\":\"Ada: Repair the flood-damaged hall.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":37,\"at\":615,\"kind\":\"started\",\"text\":\"Ada: Leave a question for an inspector and wait up to two hours.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":38,\"at\":615,\"kind\":\"question\",\"text\":\"Ada left a question on the hall noticeboard: “How can I tell whether the timber is safe?”\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"keep-closed\",\"label\":\"Keep this section closed\"},{\"id\":\"open-section\",\"label\":\"Open this section\"},{\"id\":\"wait-inspector\",\"label\":\"Wait for Lea beside the hall noticeboard\"},{\"id\":\"ask-inspector\",\"label\":\"Leave a question for an inspector and wait up to two hours\"}],\"response\":{\"contextId\":\"152560afc19cc7dd6dfc8dd3a218d8f83735f51388f2fdc44801472e6e369edb\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
+          },
+          {
+            "rawResponse": "{\"contextId\":\"bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d\",\"action\":\"wait-inspector\",\"reason\":\"The hall is unsafe and my last repair on damp timber failed, so repairing again in the rain is risky. I'll wait by the noticeboard for Lea, which keeps my 840 commitment to compare flood damage and gives my inspector question time to be answered.\"}",
+            "provenance": {
+              "provider": "Claude Code CLI",
+              "requestedModel": "opus",
+              "models": [
+                "claude-opus-5-5"
+              ],
+              "reportedDurationMs": 2627,
+              "reportedCostUsd": 0.020347999999999998
+            },
+            "requestHash": "bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d",
+            "prompt": "{\"responseFormat\":\"Return one plain JSON object. No Markdown fences or surrounding text.\",\"task\":\"Choose one feasible town activity for yourself. Balance your needs and known commitments; you may decline work by selecting another available action. You cannot invent actions or outcomes.\",\"contextId\":\"bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d\",\"observation\":{\"at\":660,\"name\":\"Ada\",\"place\":\"hall\",\"activity\":\"Free\",\"weather\":\"Rain\",\"hallRepairs\":0,\"hallSafe\":false,\"nearby\":[\"Ada\"]},\"self\":{\"name\":\"Ada\",\"role\":\"carpenter\",\"description\":\"Kept the hall tables dry; wants to repair its doors.\",\"needs\":{\"food\":0.010718040848254536,\"water\":0.008198168757046593,\"sleep\":0.010445829883362281,\"rest\":0.00037778299843170077,\"relief\":0,\"safety\":0.0031999999999999984,\"belonging\":0.00920930673075161,\"esteem\":0.01307277698897515,\"autonomy\":0.007200000000000002,\"competence\":0.0000023207139949835253,\"leisure\":0.018002662038334175,\"meaning\":0.013468188812691434},\"wealth\":3,\"commitments\":[{\"label\":\"Repair doors before evening\",\"at\":1080,\"status\":\"kept\"},{\"label\":\"Be at the hall after Lea’s class to compare the flood damage\",\"at\":840,\"status\":\"pending\"}],\"relationships\":[{\"id\":\"lea\",\"name\":\"Lea\",\"trust\":0.65,\"summary\":\"neighbour\",\"origin\":\"initial\"},{\"id\":\"musa\",\"name\":\"Musa\",\"trust\":0.5,\"summary\":\"\",\"origin\":\"observed\"}],\"history\":[{\"id\":29,\"at\":615,\"kind\":\"repair-slipped\",\"text\":\"Ada’s repair on the damp timber did not hold.\",\"causes\":[2],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":30,\"at\":615,\"kind\":\"completed\",\"text\":\"Ada finished working on the hall repairs.\",\"causes\":[2],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":37,\"at\":615,\"kind\":\"started\",\"text\":\"Ada: Leave a question for an inspector and wait up to two hours.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":38,\"at\":615,\"kind\":\"question\",\"text\":\"Ada left a question on the hall noticeboard: “How can I tell whether the timber is safe?”\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":44,\"at\":645,\"kind\":\"interrupted\",\"text\":\"Ada stopped “Leave a question for an inspector and wait up to two hours” at Flooded hall to do something else.\",\"causes\":[37],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":45,\"at\":645,\"kind\":\"started\",\"text\":\"Ada: Keep this section closed.\",\"causes\":[],\"importance\":0.15,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":46,\"at\":660,\"kind\":\"hall-closed\",\"text\":\"Ada kept the hall closed after seeing wet timber and loose supports.\",\"causes\":[45],\"importance\":0.95,\"actorId\":\"ada\",\"placeId\":\"hall\"},{\"id\":47,\"at\":660,\"kind\":\"completed\",\"text\":\"Ada finished keeping this section closed.\",\"causes\":[45],\"importance\":0.3,\"actorId\":\"ada\",\"placeId\":\"hall\"}]},\"choices\":[{\"id\":\"rest\",\"label\":\"Rest at home\"},{\"id\":\"drink\",\"label\":\"Drink water here\"},{\"id\":\"eat\",\"label\":\"Eat a meal at the market\"},{\"id\":\"grow\",\"label\":\"Tend and harvest the garden\"},{\"id\":\"supply\",\"label\":\"Carry food from the quay\"},{\"id\":\"talk\",\"label\":\"Visit neighbours at the hall\"},{\"id\":\"learn\",\"label\":\"Attend a practical class at school\"},{\"id\":\"care\",\"label\":\"Help neighbours at the clinic\"},{\"id\":\"work\",\"label\":\"Work a paid carpentry shift\"},{\"id\":\"repair\",\"label\":\"Repair the flood-damaged hall\"},{\"id\":\"wait-inspector\",\"label\":\"Wait for Lea beside the hall noticeboard\"}],\"response\":{\"contextId\":\"bbddfa78576fa3b93dc96102b4a8e867eda561b07861b29226b12985965eb53d\",\"action\":\"one available action ID\",\"reason\":\"brief reason, at most 400 characters\"}}"
           }
         ]
       }
@@ -13256,13 +13600,13 @@
         "placeId": "hall",
         "destination": "hall",
         "lifeState": "awake",
-        "activity": "Leave a question for an inspector and wait up to two hours",
-        "until": 735,
+        "activity": "Wait for Lea beside the hall noticeboard",
+        "until": 690,
         "needs": {
-          "food": 0.010629428178392268,
-          "water": 0.008105241680511233,
+          "food": 0.010718040848254536,
+          "water": 0.008198168757046593,
           "sleep": 0.010445829883362281,
-          "rest": 0.0002111268522918014,
+          "rest": 0.00037778299843170077,
           "relief": 0,
           "safety": 0.0031999999999999984,
           "belonging": 0.00920930673075161,
@@ -13276,28 +13620,6 @@
         "read": "Even-tempered. Expected to be at the hall after Lea’s class to compare the flood damage.",
         "wealth": 3,
         "history": [
-          {
-            "id": 2,
-            "at": 495,
-            "kind": "started",
-            "text": "Ada: Repair the flood-damaged hall.",
-            "causes": [],
-            "importance": 0.15,
-            "actorId": "ada",
-            "placeId": "hall"
-          },
-          {
-            "id": 29,
-            "at": 615,
-            "kind": "repair-slipped",
-            "text": "Ada’s repair on the damp timber did not hold.",
-            "causes": [
-              2
-            ],
-            "importance": 0.15,
-            "actorId": "ada",
-            "placeId": "hall"
-          },
           {
             "id": 30,
             "at": 615,
@@ -13331,9 +13653,88 @@
             "importance": 0.15,
             "actorId": "ada",
             "placeId": "hall"
+          },
+          {
+            "id": 44,
+            "at": 645,
+            "kind": "interrupted",
+            "text": "Ada stopped “Leave a question for an inspector and wait up to two hours” at Flooded hall to do something else.",
+            "causes": [
+              37
+            ],
+            "importance": 0.15,
+            "actorId": "ada",
+            "placeId": "hall"
+          },
+          {
+            "id": 45,
+            "at": 645,
+            "kind": "started",
+            "text": "Ada: Keep this section closed.",
+            "causes": [],
+            "importance": 0.15,
+            "actorId": "ada",
+            "placeId": "hall"
+          },
+          {
+            "id": 46,
+            "at": 660,
+            "kind": "hall-closed",
+            "text": "Ada kept the hall closed after seeing wet timber and loose supports.",
+            "causes": [
+              45
+            ],
+            "importance": 0.95,
+            "actorId": "ada",
+            "placeId": "hall"
+          },
+          {
+            "id": 47,
+            "at": 660,
+            "kind": "completed",
+            "text": "Ada finished keeping this section closed.",
+            "causes": [
+              45
+            ],
+            "importance": 0.3,
+            "actorId": "ada",
+            "placeId": "hall"
+          },
+          {
+            "id": 48,
+            "at": 660,
+            "kind": "started",
+            "text": "Ada: Wait for Lea beside the hall noticeboard.",
+            "causes": [],
+            "importance": 0.15,
+            "actorId": "ada",
+            "placeId": "hall"
           }
         ],
         "observations": [],
+        "inspection": {
+          "at": 660,
+          "action": "keep-closed",
+          "event": {
+            "id": 46,
+            "at": 660,
+            "kind": "hall-closed",
+            "text": "Ada kept the hall closed after seeing wet timber and loose supports.",
+            "causes": [
+              45
+            ],
+            "importance": 0.95,
+            "actorId": "ada",
+            "placeId": "hall"
+          },
+          "observations": {
+            "moisture": "wet",
+            "support": "loose"
+          },
+          "result": "Ada kept the hall closed after seeing wet timber and loose supports.",
+          "source": "LLM policy with HF person state: claude-opus-5-5",
+          "methodTerms": []
+        },
         "paidWork": {
           "day": 0,
           "starts": 0,
@@ -13361,7 +13762,7 @@
           {
             "id": "g2",
             "label": "Understand the flood-damaged timber before reopening",
-            "progress": 0,
+            "progress": 0.75,
             "status": "active"
           }
         ],
@@ -13378,11 +13779,11 @@
           }
         ],
         "decision": {
-          "chosen": "ask-inspector",
-          "decidedAt": 645,
-          "round": 11,
-          "label": "Leave a question for an inspector and wait up to two hours",
-          "reason": "My last repair on the damp timber slipped and the hall is unsafe. I'll keep waiting for an inspector's answer on judging the timber before trying again. I can stay at the hall for my 840 meeting with Lea, and my needs are low right now.",
+          "chosen": "wait-inspector",
+          "decidedAt": 660,
+          "round": 12,
+          "label": "Wait for Lea beside the hall noticeboard",
+          "reason": "The hall is unsafe and my last repair on damp timber failed, so repairing again in the rain is risky. I'll wait by the noticeboard for Lea, which keeps my 840 commitment to compare flood damage and gives my inspector question time to be answered.",
           "options": [],
           "source": "LLM policy with HF person state: claude-opus-5-5"
         }
@@ -13519,7 +13920,7 @@
             {
               "id": "drink",
               "label": "Drink water here",
-              "utility": 0.0195
+              "utility": 0.0175
             },
             {
               "id": "talk",
@@ -13547,7 +13948,7 @@
               "utility": -0.0305
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 11,
           "recordedCount": 8
         }
@@ -13677,14 +14078,14 @@
               "utility": 0.1551
             },
             {
-              "id": "drink",
-              "label": "Drink water here",
-              "utility": 0.0195
-            },
-            {
               "id": "rest",
               "label": "Rest at home",
               "utility": 0.0182
+            },
+            {
+              "id": "drink",
+              "label": "Drink water here",
+              "utility": 0.0175
             },
             {
               "id": "talk",
@@ -13712,7 +14113,7 @@
               "utility": -0.0305
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 11,
           "recordedCount": 8
         }
@@ -13827,7 +14228,7 @@
             {
               "id": "drink",
               "label": "Drink water here",
-              "utility": 0.0195
+              "utility": 0.0175
             },
             {
               "id": "inspect",
@@ -13855,7 +14256,7 @@
               "utility": -0.0284
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 11,
           "recordedCount": 8
         }
@@ -13992,7 +14393,7 @@
             {
               "id": "drink",
               "label": "Drink water here",
-              "utility": 0.0195
+              "utility": 0.0175
             },
             {
               "id": "talk",
@@ -14020,7 +14421,7 @@
               "utility": -0.0305
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 11,
           "recordedCount": 8
         }
@@ -14061,7 +14462,7 @@
             "id": 9,
             "at": 525,
             "kind": "interrupted",
-            "text": "Lea's go and inspect the hall timber changed plan at an HF review at hall; reserved resources were returned.",
+            "text": "Lea stopped “Go and inspect the hall timber” at Flooded hall to do something else.",
             "causes": [
               7
             ],
@@ -14191,7 +14592,7 @@
             "support": "loose"
           },
           "result": "Lea kept the hall closed after seeing wet timber and loose supports.",
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "methodTerms": []
         },
         "paidWork": {
@@ -14250,7 +14651,7 @@
             {
               "id": "drink",
               "label": "Drink water here",
-              "utility": 0.019
+              "utility": 0.0169
             },
             {
               "id": "rest",
@@ -14278,7 +14679,7 @@
               "utility": -0.0219
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 10,
           "recordedCount": 8
         }
@@ -14478,7 +14879,7 @@
             {
               "id": "drink",
               "label": "Drink water here",
-              "utility": 0.0194
+              "utility": 0.0174
             },
             {
               "id": "rest",
@@ -14511,7 +14912,7 @@
               "utility": -0.0359
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 11,
           "recordedCount": 8
         }
@@ -14641,14 +15042,14 @@
               "utility": 0.1743
             },
             {
-              "id": "drink",
-              "label": "Drink water here",
-              "utility": 0.0213
-            },
-            {
               "id": "rest",
               "label": "Rest at home",
               "utility": 0.0203
+            },
+            {
+              "id": "drink",
+              "label": "Drink water here",
+              "utility": 0.0197
             },
             {
               "id": "ask-inspector",
@@ -14676,7 +15077,7 @@
               "utility": -0.0264
             }
           ],
-          "source": "HF 2.6.0",
+          "source": "HF 2.8.0",
           "offeredCount": 13,
           "recordedCount": 8
         }
@@ -14873,7 +15274,7 @@
         "id": 9,
         "at": 525,
         "kind": "interrupted",
-        "text": "Lea's go and inspect the hall timber changed plan at an HF review at hall; reserved resources were returned.",
+        "text": "Lea stopped “Go and inspect the hall timber” at Flooded hall to do something else.",
         "causes": [
           7
         ],
@@ -15259,9 +15660,81 @@
         "importance": 0.15,
         "actorId": "ravi",
         "placeId": "workshop"
+      },
+      {
+        "id": 44,
+        "at": 645,
+        "kind": "interrupted",
+        "text": "Ada stopped “Leave a question for an inspector and wait up to two hours” at Flooded hall to do something else.",
+        "causes": [
+          37
+        ],
+        "importance": 0.15,
+        "actorId": "ada",
+        "placeId": "hall"
+      },
+      {
+        "id": 45,
+        "at": 645,
+        "kind": "started",
+        "text": "Ada: Keep this section closed.",
+        "causes": [],
+        "importance": 0.15,
+        "actorId": "ada",
+        "placeId": "hall"
+      },
+      {
+        "id": 46,
+        "at": 660,
+        "kind": "hall-closed",
+        "text": "Ada kept the hall closed after seeing wet timber and loose supports.",
+        "causes": [
+          45
+        ],
+        "importance": 0.95,
+        "actorId": "ada",
+        "placeId": "hall"
+      },
+      {
+        "id": 47,
+        "at": 660,
+        "kind": "completed",
+        "text": "Ada finished keeping this section closed.",
+        "causes": [
+          45
+        ],
+        "importance": 0.3,
+        "actorId": "ada",
+        "placeId": "hall"
+      },
+      {
+        "id": 48,
+        "at": 660,
+        "kind": "started",
+        "text": "Ada: Wait for Lea beside the hall noticeboard.",
+        "causes": [],
+        "importance": 0.15,
+        "actorId": "ada",
+        "placeId": "hall"
       }
     ],
     "stories": [
+      {
+        "id": "story-46",
+        "actorId": "ada",
+        "at": 660,
+        "groupId": "hall-closed:story-17",
+        "title": "The hall stayed closed after inspection (2 times)",
+        "summary": "Ada kept the hall closed after seeing wet timber and loose supports. Decision source: LLM policy with HF person state: claude-opus-5-5. The same happened 2 times between Day 1, 09:15 and Day 1, 11:00.",
+        "eventIds": [
+          13,
+          17,
+          45,
+          46
+        ],
+        "missingEventIds": [],
+        "kind": "hall-closed"
+      },
       {
         "id": "story-41",
         "actorId": "ravi",
@@ -15276,20 +15749,6 @@
         ],
         "missingEventIds": [],
         "kind": "lesson"
-      },
-      {
-        "id": "story-17",
-        "actorId": "lea",
-        "at": 555,
-        "groupId": "hall-closed:17",
-        "title": "The hall stayed closed after inspection",
-        "summary": "Lea kept the hall closed after seeing wet timber and loose supports.",
-        "eventIds": [
-          13,
-          17
-        ],
-        "missingEventIds": [],
-        "kind": "hall-closed"
       }
     ],
     "evenings": [],
@@ -15327,6 +15786,7 @@
       "placeId": "homes",
       "workHoursLeft": 2,
       "canAirTimber": true,
+      "workBlocked": {},
       "pledgeDeadlines": [
         720,
         840,
@@ -15402,7 +15862,7 @@
       "persistentPeople": 8
     }
   },
-  "checkpointSha256": "b1a55c5384374d557e10e7bdc37ea2c7c92e659e49b8732d6c087f13bb34625e",
+  "checkpointSha256": "5220c36f64e9415c6df9796179726aebf5e2abf20dff2a9b9fee34148f70a0ab",
   "limits": [
     "One short native run, not an HF-versus-LLM superiority result.",
     "The LLM actor uses HF body and person state but an explicitly external choice record.",
