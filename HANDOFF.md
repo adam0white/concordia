@@ -1,5 +1,11 @@
 # Neighbours handoff
 
+## CI repair (2026-10-20)
+
+Remaining: Adam's feel acceptance and the existing gameplay/reflow follow-ups. The Round 4 phone test enumerated three hall buttons at 09:15 before its sixth queued Step rendered; the 09:30 reply removed Lea while the indexed assertions ran. It now waits for every rendered round and asserts the final time and Ada/Noor roster. All existing viewport, hit-target, scroll and completed-help assertions remain. Final `npm run check` passes 501 units, lint, three typechecks, 42 Node imports and build. The full actual browser suite passes 63/63 on Node 26.12.0; native controls pass 37/37, with no skips. Two independent reviewers, including a wildcard, found no code blocker; the wildcard corrected the regeneration note's assertion wording.
+
+The provenance and native replay gates correctly rejected stale dependency and Round 4 source identities. Five deterministic studies and three native model studies were genuinely rerun at runtime source `b6d3821`, on released HF 2.8.0 and lab client 0.1.2. All five source checks pass, all three native tapes replay exactly with zero model calls, and historical assistance remains byte-pinned. Generation used ten genuine model calls. No simulation, dependency, checker, timeout or retry policy was changed. No recorded digest was rewritten by hand. Negative bench results remain. Commands, limitations and source receipts are in [the regeneration record](docs/neighbours/ci-provenance-regeneration-2026-10-20.md). Hosted GitHub Actions and the live `/release.json` identify the final CI and publication receipts.
+
 ## Round 4: first personal help (2026-10-20)
 
 Remaining: the driver’s cold timing/taste retest and Adam’s feel acceptance in `nbh-01z.40`, target 2026-11-03. A fresh source-unread visitor completed Ada’s real covered shift and saw her two-coin acknowledgement at raw 142 seconds; three 30-second locator timeouts and a mid-visit dock-space correction limit timing claims. The final synchronous pending cue has builder regression evidence, not a second cold visit. Existing provenance regeneration `nbh-01z.43` remains due 2026-10-21, with review deadline 2026-11-03; enlarged-text/Journal work remains in `nbh-01z.45`.

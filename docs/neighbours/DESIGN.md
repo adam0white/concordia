@@ -38,10 +38,11 @@ M6 stretch after stable delivery: labelled LLM visitors and matched policy runs,
 
 Beads epic nbh-01z owns status and dependencies. This design states acceptance; it is not a second task checklist.
 
+The earlier F-214 recorded-study provenance deferral (`nbh-01z.43`) was resolved on **2026-10-20** by genuinely regenerating five deterministic studies and three native model studies. Source and exact replay gates remain unchanged. Historical assistance remains byte-pinned. See [the regeneration record](ci-provenance-regeneration-2026-10-20.md).
+
 ## Deferred
 
 - **Cold first-help timing and feel acceptance**, target **2026-11-03**, `nbh-01z.40`: Round 4 exposes an existing paid shift in a reachable resident’s conversation. Choosing it starts a real covered hour and pays the resident two coins; only completed work reported to published HF receives person-worded credit. It is a host opportunity, not invented resident dialogue or an inspection bargain. A new opt-in input and optional direct-pledge marker leave old inputs and exports unchanged. A source-unread visitor completed Ada’s hour at 142 seconds, including three 30-second automation locator timeouts. This establishes independent completion, not a strict two-minute result. The driver’s timing/taste retest and Adam’s broader feel acceptance remain.
 
-- **F-214 review finding 4 — recorded-study provenance**, follow-up deadline **2026-11-03**: genuinely regenerate the five studies affected by the earlier lab-client 0.1.2 dependency change; this requires measured runs and is outside the small UI follow-up. Existing maintenance task `nbh-01z.43` has an earlier execution milestone of 2026-10-21; the follow-up deadline does not postpone it. `check-evidence.mjs` and hosted CI remain red until regeneration passes; never rewrite recorded digests or fixtures.
 - **Existing masthead and playback dock clipping at 200% text**, target **2026-11-03**: reflow must preserve room for both the town and its controls; this needs broader layout work than the resident-action regression. Tracked in `nbh-01z.45`. The resident-sheet correction does not establish a whole-page DL-25 pass.
 - **Existing Journal heading and close control scroll away**, target **2026-11-03**: persistent Town navigation returns to the map, but keeping Journal controls visible needs its own short-screen and enlarged-text checks. Tracked in `nbh-01z.45`.

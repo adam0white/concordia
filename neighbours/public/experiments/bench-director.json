@@ -1,7 +1,7 @@
 {
   "schema": "native-concordia-bench@1",
   "upstreamSha": "6fbfbc58f324aa74f78568c488713210889a801e",
-  "recordedAt": "2026-10-20T04:52:41.907182+00:00",
+  "recordedAt": "2026-10-20T12:49:12.449287+00:00",
   "seeds": [
     42,
     73
@@ -113,7 +113,7 @@
       "neighbours/scripts/capture-weekly.ts": "d27a00aef57fb5af30c8c5a182014ca917599113e52e97d70467cdb917e48545",
       "neighbours/scripts/run-gm-director.py": "145786f7d9f66c3995103c010ef2f2cc16b036c981251f382ceb10b72b5c494a",
       "neighbours/src/bridge-port.ts": "da113ed4c3ba1899aa5a3ed167f60e983222035a689b1cf62200094e3a1a1ddb",
-      "neighbours/src/contracts.ts": "cbdd2763e55b640a6550511cdd989913129fa3ea55426c26fcb10baacbdf4fa7",
+      "neighbours/src/contracts.ts": "597c8344d3a2658d202982163e511085f39d4ba30ea4c87ba0e99cb265b25120",
       "neighbours/src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
       "neighbours/src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
       "neighbours/src/core/bench-opportunity.ts": "ffa8810c0feffc900cba9f2e779e5b3f83f2cd4f38f7cfdc74839d6ce8b29b79",
@@ -137,10 +137,10 @@
       "neighbours/src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
       "neighbours/src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
       "neighbours/src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
-      "neighbours/src/core/player.ts": "170a47615fc688cfd827713a15b7fecd6d9cd08cae2dc639f071024c49bde49c",
+      "neighbours/src/core/player.ts": "a2a19e2f5c501044693362f57b1136f2d5994bd1e3fa984cf725d011c06c74f2",
       "neighbours/src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
       "neighbours/src/core/restore.ts": "3857fb3e92cd67c295ec3de503d1c50d9853080b453975c36ea605f7f6f96b05",
-      "neighbours/src/core/runtime.ts": "fb76d85c3f6d6c28a59cab110d8b7f0e9d5b4c9e8387e77ae60235d786b9e1e1",
+      "neighbours/src/core/runtime.ts": "78445943931656bc634173f8b69df65e8a3f6d79a40a9fad471a7fa761f9c2f2",
       "neighbours/src/core/scenario.ts": "ae46f71e0d3414bdd428158c09e418ac939799eb1f801164e1505ab471c084ac",
       "neighbours/src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
       "neighbours/src/core/state.ts": "62d19e4f5894bb067418d87a9ea4eb42ef894a4a18ca43eec4ba9394d99f260f",
@@ -158,10 +158,10 @@
       "name": "@adam0white/human-framework",
       "version": "2.8.0"
     },
-    "sha256": "720f85c03be5fd57522c5cfc6f0534a5978818196af60c6aa60ff99f75ff3e38"
+    "sha256": "e915f5a82977f02812c76e2d760e0e4622aa731f6f23cb97b6aaf894aa58df62"
   },
-  "sourceFingerprint": "720f85c03be5fd57522c5cfc6f0534a5978818196af60c6aa60ff99f75ff3e38",
-  "gitHeadAtRun": "9148a964a23b88d62461743b040e4ebf7bea4dc2",
+  "sourceFingerprint": "e915f5a82977f02812c76e2d760e0e4622aa731f6f23cb97b6aaf894aa58df62",
+  "gitHeadAtRun": "b6d3821c83ca893f00e77b9275c4129402fad402",
   "sourceWorkingTreeDirty": false,
   "requestedModel": "opus",
   "cliVersion": "2.1.302 (Claude Code)",

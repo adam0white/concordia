@@ -16,11 +16,21 @@ for (const width of [360, 1280])
 		await expect(page.locator(".playback")).toContainText(
 			"Press Play to set off",
 		);
-		for (let i = 0; i < 6; i++)
+		const time = page.locator(".town-time");
+		for (let i = 0; i < 6; i++) {
+			const before = await time.innerText();
 			await page
 				.getByRole("button", { name: "Step: Advance one round", exact: true })
 				.click();
+			// A click queues a worker command; wait for its rendered outcome.
+			await expect(time).not.toHaveText(before);
+		}
+		await expect(time).toContainText("09:30");
 		const company = page.locator(".place-company");
+		await expect(company.getByRole("button")).toHaveText([
+			/^Talk to Ada ·/,
+			/^Talk to Noor ·/,
+		]);
 		await expect(company).toBeInViewport({ ratio: 1 });
 		for (const button of await company.getByRole("button").all()) {
 			await expect(button).toBeInViewport({ ratio: 1 });
