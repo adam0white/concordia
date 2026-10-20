@@ -1,15 +1,13 @@
 import { expect, type Page } from "@playwright/test";
 
 export async function openSaves(page: Page) {
-	const dialog = page.getByRole("dialog", { name: "Save and town options" });
+	const dialog = page.getByRole("dialog", { name: "Game menu" });
 	if (!(await dialog.isVisible()))
-		await page
-			.getByRole("button", { name: "Save and town options", exact: true })
-			.click();
+		await page.getByRole("button", { name: "Game menu", exact: true }).click();
 	await expect(dialog).toBeVisible();
 }
 export async function closeSaves(page: Page) {
-	const dialog = page.getByRole("dialog", { name: "Save and town options" });
+	const dialog = page.getByRole("dialog", { name: "Game menu" });
 	if (await dialog.isVisible()) {
 		await page.keyboard.press("Escape");
 		await expect(dialog).not.toBeVisible();

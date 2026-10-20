@@ -29,7 +29,9 @@ async function packet(
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(() => link.getAttribute("href", { timeout: 500 }).catch(() => null))
 		.not.toBe(old);
@@ -158,7 +160,9 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 			true;
 	});
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await openSaves(page);
 	await page.getByLabel("New town seed").fill("99");
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
@@ -206,7 +210,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 			true;
 	});
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(() =>
 			page.evaluate(

@@ -35,6 +35,8 @@ test("notebook preview contains the actual town and cancel sends no run", async 
 	await dialog.getByRole("button", { name: "Not now", exact: true }).click();
 	await expect(dialog).toHaveCount(0);
 	expect(runs).toBe(0);
+	await openSaves(page);
+	await page.getByText("Playtest privacy", { exact: true }).click();
 	await expect(
 		page.getByLabel("Anonymous play events", { exact: true }),
 	).not.toBeChecked();

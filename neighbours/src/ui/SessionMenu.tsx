@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ErrorMessage from "./ErrorMessage";
+import { LabPrivacy } from "./lab";
 import SessionFooter from "./SessionFooter";
 import type { useVisitorSession } from "./useVisitorSession";
 
@@ -33,12 +34,8 @@ export default function SessionMenu({
 			onClose={close}
 		>
 			<div className="session-menu-heading">
-				<h2 id="session-menu-title">Save and town options</h2>
-				<button
-					type="button"
-					onClick={close}
-					aria-label="Close save and town options"
-				>
+				<h2 id="session-menu-title">Game menu</h2>
+				<button type="button" onClick={close} aria-label="Close Game menu">
 					×
 				</button>
 			</div>
@@ -79,14 +76,15 @@ export default function SessionMenu({
 			{session.saveConflict && (
 				<div className="error" role="status">
 					<p>
-						Another tab saved the town. Export to keep this version, or load the
-						device town.
+						Another tab saved the town. Download this run to keep this version,
+						or load the device town.
 					</p>
 					<button type="button" onClick={() => location.reload()}>
 						Load device town
 					</button>
 				</div>
 			)}
+			<LabPrivacy />
 			<label className="menu-story-option">
 				<input
 					type="checkbox"

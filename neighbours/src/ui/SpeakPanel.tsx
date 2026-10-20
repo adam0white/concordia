@@ -76,6 +76,66 @@ export function PlayerJournal({ player }: { player: PlayerView }) {
 	);
 }
 
+/** The immediate action stays separate so the resident sheet can pin it while scrolling. */
+export function PlayerAction({
+	session,
+	openWalking = false,
+}: {
+	session: Session;
+	openWalking?: boolean;
+}) {
+	const town = session.town;
+	const player = town?.player;
+	if (!town || !player) return null;
+	const goal = player.goals.find((g) => g.status === "current");
+	const busy =
+		session.advancing ||
+		session.comparing ||
+		session.saveConflict ||
+		session.intervening;
+	return (
+		<section className="player-action" aria-label="Your next step and location">
+			{goal && (
+				<strong>
+					{goal.id === "arrive" ? "Choose a place to walk" : goal.title}
+				</strong>
+			)}
+			<p className="player-place">
+				{player.job?.kind === "travel"
+					? `Walking to ${placeLabel(town, player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
+					: player.job?.kind === "work"
+						? `Working at ${placeLabel(town, player.job.toId)} until ${clock(player.job.endsAt)}.`
+						: `You are at ${placeLabel(town, player.placeId)}. ${player.presentCount} awake here.`}
+			</p>
+			<details className="walk" open={openWalking}>
+				<summary
+					className={
+						goal?.id === "arrive" && player.canMove && !busy
+							? "current-action"
+							: undefined
+					}
+				>
+					Walk somewhere
+				</summary>
+				<ul className="walk-list">
+					{player.destinations.map((place) => (
+						<li key={place.id}>
+							<button
+								type="button"
+								disabled={!player.canMove || busy}
+								onClick={() => session.movePlayer(place.id)}
+							>
+								<span>{place.name}</span>
+								<span className="hand">about {place.minutes} min</span>
+							</button>
+						</li>
+					))}
+				</ul>
+			</details>
+		</section>
+	);
+}
+
 /**
  * The player's one drawer surface: current step, place, company, walking,
  * pledges and journal. With `personId` (the selected resident's drawer) it also
@@ -87,11 +147,13 @@ export function SpeakPanel({
 	personId,
 	select,
 	journalOpen = false,
+	showAction = true,
 }: {
 	session: Session;
 	personId?: string;
 	select?: (id: string) => void;
 	journalOpen?: boolean;
+	showAction?: boolean;
 }) {
 	const town = session.town;
 	const player = town?.player;
@@ -143,26 +205,16 @@ export function SpeakPanel({
 	return (
 		<section className="speak-panel" aria-label="You">
 			<h3>You</h3>
-			{goal && (
-				<div className="player-goal">
-					<span className="eyebrow">Your next step</span>
-					<strong>{goal.title}</strong>
-					<p>{goal.hint}</p>
-					{done.length > 0 && (
-						<small>Done: {done.map((g) => g.title).join(", ")}</small>
-					)}
-				</div>
+			{showAction && (
+				<PlayerAction
+					session={session}
+					openWalking={!player.active && !personId}
+				/>
 			)}
-			{!goal && done.length > 0 && (
-				<p>Every goal so far is done: {done.map((g) => g.title).join(", ")}.</p>
+			{goal && <p className="speak-context">{goal.hint}</p>}
+			{done.length > 0 && (
+				<small>Done: {done.map((g) => g.title).join(", ")}</small>
 			)}
-			<p className="player-place">
-				{player.job?.kind === "travel"
-					? `Walking to ${placeLabel(town, player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
-					: player.job?.kind === "work"
-						? `Working at ${placeLabel(town, player.job.toId)} until ${clock(player.job.endsAt)}.`
-						: `You are at ${placeLabel(town, player.placeId)}. ${player.presentCount} awake here.`}
-			</p>
 			{select && !player.job && company.length > 0 && (
 				<div className="your-company">
 					<span className="hand">
@@ -196,23 +248,6 @@ export function SpeakPanel({
 					{session.playerError}
 				</p>
 			)}
-			<details className="walk" open={!player.active && !personId}>
-				<summary>Walk somewhere</summary>
-				<ul className="walk-list">
-					{player.destinations.map((place) => (
-						<li key={place.id}>
-							<button
-								type="button"
-								disabled={!player.canMove || busy}
-								onClick={() => session.movePlayer(place.id)}
-							>
-								<span>{place.name}</span>
-								<span className="hand">about {place.minutes} min</span>
-							</button>
-						</li>
-					))}
-				</ul>
-			</details>
 			{!personId && player.workHoursLeft > 0 && (
 				<details className="own-work">
 					<summary>Do an hour of your own work</summary>

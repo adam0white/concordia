@@ -44,7 +44,9 @@ test("actual town offers optional story stops and keyboard/mobile access to reta
 	await expect(play).toBeVisible();
 	// Exact same-world import must clear the old stop reason and stay ordinary paused.
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	const download = page.waitForEvent("download");
 	await page.getByRole("link", { name: /Download save/ }).click();
 	const path = info.outputPath("story-stop.json.gz");

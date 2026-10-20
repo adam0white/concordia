@@ -85,7 +85,11 @@ export default function TownGoal({
 						className="text-button step-title"
 						onClick={openJournal}
 					>
-						<WithArrow text={step.title} />
+						<WithArrow
+							text={
+								step.id === "arrive" ? "Choose a place to walk" : step.title
+							}
+						/>
 					</button>
 					<span className="step-hint">{step.hint}</span>
 				</div>
@@ -109,7 +113,7 @@ export default function TownGoal({
 					<span className="repair-words">{repairWords(repairs)}</span>
 				</>
 			)}
-			<button type="button" className="text-button" onClick={help}>
+			<button type="button" className="text-button town-help" onClick={help}>
 				<WithArrow text={hall?.open ? "Hall choices" : "Ways to help"} />
 			</button>
 		</section>

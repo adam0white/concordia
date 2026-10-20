@@ -51,17 +51,13 @@ test("mobile keeps the map and opens one drawer at a time, with help one tap ins
 	await expect(page.locator(".person-panel")).toBeVisible();
 	await page.getByRole("button", { name: "Close person details" }).click();
 	await expect(drawers).toHaveCount(0);
-	await page
-		.getByRole("button", { name: "Save and town options", exact: true })
-		.click();
-	await expect(
-		page.getByRole("dialog", { name: "Save and town options" }),
-	).toBeVisible();
+	await page.getByRole("button", { name: "Game menu", exact: true }).click();
+	await expect(page.getByRole("dialog", { name: "Game menu" })).toBeVisible();
 	await expect(page.getByLabel("New town seed")).toBeVisible();
 	await page.keyboard.press("Escape");
 	await expect(page.getByRole("dialog")).not.toBeVisible();
 	await expect(
-		page.getByRole("button", { name: "Save and town options", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeFocused();
 	expect(
 		await page.evaluate(

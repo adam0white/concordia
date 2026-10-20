@@ -13,8 +13,8 @@ export function HubMark() {
 /** The design language's footer: one link to the collection of all notebooks. */
 export function OtherNotebooks() {
 	return (
-		<nav className="other-notebooks" aria-label="All notebooks">
-			<a href="https://human.adamwhite.work/games/">◇ all notebooks</a>
+		<nav className="other-notebooks" aria-label="All games">
+			<a href="https://human.adamwhite.work/games/">◇ all games</a>
 		</nav>
 	);
 }

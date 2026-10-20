@@ -57,7 +57,7 @@ export default function SessionFooter({
 					Send this run to the notebook
 				</button>
 				<button type="button" disabled={comparing} onClick={exportSave}>
-					Export
+					Download this run
 				</button>
 				<button
 					type="button"

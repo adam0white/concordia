@@ -13,7 +13,7 @@ import {
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
 import SessionMenu from "./ui/SessionMenu";
-import { SpeakPanel } from "./ui/SpeakPanel";
+import { PlayerAction, SpeakPanel } from "./ui/SpeakPanel";
 import Stories from "./ui/Stories";
 import StoryHeadline, { storyAnchor } from "./ui/StoryHeadline";
 import TownGoal from "./ui/TownGoal";
@@ -145,7 +145,7 @@ export default function App() {
 			className={`app ${hasEnteredTown ? "town-entered" : ""} ${town ? "town-ready" : ""}`}
 			data-drawer={town ? (drawer ?? "none") : undefined}
 		>
-			<LabPrivacy />
+			{!town && <LabPrivacy />}
 			<header className="masthead">
 				<HubMark />
 				<a className="brand" href="./">
@@ -164,10 +164,12 @@ export default function App() {
 					<button
 						type="button"
 						className="save-menu-trigger"
-						aria-label="Save and town options"
+						aria-label="Game menu"
+						aria-haspopup="dialog"
+						aria-expanded={menuOpen}
 						onClick={() => setMenuOpen(true)}
 					>
-						Save <span aria-hidden="true">⋯</span>
+						Game menu <span aria-hidden="true">⋯</span>
 					</button>
 				)}
 				<button
@@ -259,8 +261,13 @@ export default function App() {
 										town={town}
 										observed={observed}
 										close={closePerson}
+										playerAction={<PlayerAction session={session} />}
 										speak={
-											<SpeakPanel session={session} personId={person.id} />
+											<SpeakPanel
+												session={session}
+												personId={person.id}
+												showAction={false}
+											/>
 										}
 									/>
 								)}
@@ -345,13 +352,7 @@ export default function App() {
 												resident’s choices are computed on your device as time
 												passes; nothing is played back from a recording.
 											</p>
-											<button
-												type="button"
-												className="text-button"
-												onClick={() => setMenuOpen(true)}
-											>
-												Saves, seeds and story pauses…
-											</button>
+
 											<button
 												type="button"
 												className="text-button theme-toggle-more"
@@ -407,13 +408,6 @@ export default function App() {
 								>
 									Read story
 								</button>
-								<button
-									type="button"
-									className="text-button"
-									onClick={() => setMenuOpen(true)}
-								>
-									Pause settings
-								</button>
 							</div>
 						)}
 						{session.error && !menuOpen && (
@@ -424,11 +418,12 @@ export default function App() {
 						{saveConflict && !menuOpen && (
 							<div className="error" role="status">
 								<p>
-									Another tab saved the device town. This tab is paused. Export
-									to keep this version, or load the device town.
+									Another tab saved the device town. This tab is paused.
+									Download this run to keep this version, or load the device
+									town.
 								</p>
 								<button type="button" onClick={() => setMenuOpen(true)}>
-									Save options
+									Open Game menu
 								</button>
 								<button type="button" onClick={() => location.reload()}>
 									Load device town

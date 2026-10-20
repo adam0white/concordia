@@ -50,7 +50,9 @@ test("fresh mobile evening advance stops at a displayed action that can actually
 	await expect(action).toBeEnabled();
 	await action.click();
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	const link = page.getByRole("link", { name: /Download save/ });
 	await expect(link).toBeVisible();
 	const pending = page.waitForEvent("download");

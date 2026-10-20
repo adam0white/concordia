@@ -13,7 +13,9 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 		? await link.getAttribute("href")
 		: null;
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(async () => {
 			const next = await link
@@ -164,7 +166,9 @@ test("compression finishing after a newer export or accepted import cannot publi
 			).compressionGate.hold = true;
 		});
 		await openSaves(page);
-		await page.getByRole("button", { name: "Export", exact: true }).click();
+		await page
+			.getByRole("button", { name: "Download this run", exact: true })
+			.click();
 		await expect
 			.poll(() =>
 				page.evaluate(

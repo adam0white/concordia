@@ -40,7 +40,9 @@ async function packet(
 		? await link.getAttribute("href")
 		: null;
 	await openSaves(page);
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(async () => {
 			const href = await link.getAttribute("href").catch(() => null);

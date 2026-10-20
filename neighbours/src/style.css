@@ -339,7 +339,7 @@ summary span {
 }
 .save-menu-trigger {
 	margin-left: auto;
-	min-height: 40px;
+	min-height: 44px;
 	padding: 4px 12px;
 	white-space: nowrap;
 }
@@ -381,6 +381,13 @@ summary span {
 	height: 26px;
 	overflow: visible;
 }
+.welcome-goal {
+	font-size: 1rem;
+}
+.welcome-details > summary {
+	min-height: 44px;
+	align-content: center;
+}
 .welcome-intro {
 	font-size: 1.02rem;
 }
@@ -414,9 +421,9 @@ summary span {
 	min-height: 52px;
 	padding: 10px 28px;
 	font-size: 1.05rem;
-	background: var(--ink);
+	background: var(--rope);
 	color: var(--paper);
-	border-color: var(--ink);
+	border-color: var(--rope);
 }
 .enter-town:hover:not(:disabled) {
 	background: var(--rope);
@@ -424,7 +431,10 @@ summary span {
 }
 .welcome-device,
 .welcome-details {
-	font-size: 0.82rem;
+	font-size: max(15px, 0.82rem);
+}
+.welcome-screen > .welcome-details {
+	margin-top: 18px;
 }
 .welcome-device {
 	margin-top: 16px;
@@ -675,7 +685,7 @@ summary span {
 .primary-navigation button[aria-selected="true"],
 .more-navigation button[aria-selected="true"] {
 	color: var(--ink);
-	border-bottom-color: var(--rope);
+	border-bottom-color: var(--ink);
 	font-weight: 600;
 }
 .glyph {
@@ -911,6 +921,10 @@ summary span {
 }
 
 /* ——— You: the next step, where you are, your own lines ——— */
+.town-help {
+	color: var(--ink);
+	text-decoration-color: currentColor;
+}
 .your-step {
 	display: grid;
 	gap: 0;
@@ -1434,11 +1448,48 @@ summary span {
 .person-panel {
 	position: relative;
 }
+.player-action {
+	display: grid;
+	gap: 4px;
+}
+.player-action p {
+	margin: 0;
+	font-size: 0.9375rem;
+}
+.player-action details {
+	margin: 0;
+}
+.player-action summary {
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+}
+.player-action .current-action {
+	color: var(--rope);
+}
+.player-action .walk-list {
+	max-height: 35dvh;
+	overflow-y: auto;
+	padding: 3px;
+}
+.speak-context {
+	font-size: 0.9375rem;
+}
+.person-panel > .player-action {
+	width: 100%;
+	position: sticky;
+	top: -14px;
+	z-index: 2;
+	margin: -14px 0 12px;
+	padding: 10px 32px 8px 0;
+	background: var(--paper);
+	border-bottom: 1px solid var(--hairline);
+}
 .person-panel .close-panel {
 	position: sticky;
 	top: -14px;
 	float: right;
-	z-index: 1;
+	z-index: 3;
 	margin: -10px -8px 0 0;
 	background: var(--paper);
 }
@@ -1972,6 +2023,9 @@ th {
 	min-height: 48px;
 	border-block: 1px solid var(--hairline);
 	font-size: 0.9rem;
+}
+.menu-story-option input {
+	accent-color: var(--ink);
 }
 .advance-menu-status {
 	margin-block: 12px;

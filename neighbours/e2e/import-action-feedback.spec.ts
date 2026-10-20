@@ -8,7 +8,9 @@ async function exportPacket(page: Page, info: TestInfo, name: string) {
 	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
 		.not.toBe(old);
@@ -49,7 +51,7 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 			original,
 		);
 	}
-	const close = page.getByRole("dialog", { name: "Save and town options" });
+	const close = page.getByRole("dialog", { name: "Game menu" });
 	if (await close.isVisible()) await page.keyboard.press("Escape");
 	await page.getByRole("button", { name: "Step: Advance one round" }).click();
 	const continuation = await exportPacket(
@@ -123,7 +125,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 		page.getByRole("button", { name: "Play town", exact: true }),
 	).toBeVisible();
 	const original = await exportPacket(page, info, "before-tools");
-	const close = page.getByRole("dialog", { name: "Save and town options" });
+	const close = page.getByRole("dialog", { name: "Game menu" });
 	if (await close.isVisible()) await page.keyboard.press("Escape");
 	await showTab(page, "Help");
 	await page.evaluate(() => {

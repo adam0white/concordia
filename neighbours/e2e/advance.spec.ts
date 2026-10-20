@@ -16,7 +16,9 @@ async function exported(page: Page) {
 	const previous = (await link.count())
 		? await link.getAttribute("href")
 		: null;
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
 		.not.toBe(previous);
@@ -92,9 +94,9 @@ test("advance can stop from Save, locks mutations and keeps completed actual tim
 		page.getByRole("button", { name: "Compare from here", exact: true }),
 	).toBeDisabled();
 	await openSaves(page);
-	const dialog = page.getByRole("dialog", { name: "Save and town options" });
+	const dialog = page.getByRole("dialog", { name: "Game menu" });
 	await expect(
-		dialog.getByRole("button", { name: "Export", exact: true }),
+		dialog.getByRole("button", { name: "Download this run", exact: true }),
 	).toBeDisabled();
 	await expect(
 		dialog.getByRole("button", { name: "Import", exact: true }),
@@ -106,7 +108,7 @@ test("advance can stop from Save, locks mutations and keeps completed actual tim
 		.getByRole("button", { name: "Stop advancing", exact: true })
 		.click();
 	await expect(
-		dialog.getByRole("button", { name: "Export", exact: true }),
+		dialog.getByRole("button", { name: "Download this run", exact: true }),
 	).toBeEnabled();
 	await closeSaves(page);
 	await expect(page.locator(".advance-notice")).toContainText(

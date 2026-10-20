@@ -10,7 +10,9 @@ async function packet(page: Page) {
 	const previous = (await link.count())
 		? await link.getAttribute("href")
 		: null;
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
 		.not.toBe(previous);

@@ -22,6 +22,7 @@ export default function PersonPanel({
 	close,
 	observed,
 	speak,
+	playerAction,
 }: {
 	person: PersonView;
 	town: TownView;
@@ -29,6 +30,7 @@ export default function PersonPanel({
 	observed: ObservedFeed | undefined;
 	/** Slot for the player's voice (SpeakPanel), shown under "Right now". */
 	speak?: ReactNode;
+	playerAction?: ReactNode;
 }) {
 	const place = town.places.find((p) => p.id === person.placeId);
 	const destination = town.places.find((p) => p.id === person.journey?.toId);
@@ -44,6 +46,7 @@ export default function PersonPanel({
 			>
 				×
 			</button>
+			{playerAction}
 			<div className="eyebrow">A neighbour</div>
 			<div className="person-heading">
 				<InkPortrait

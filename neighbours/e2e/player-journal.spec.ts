@@ -7,7 +7,9 @@ async function exportPacket(page: Page, info: TestInfo, name: string) {
 	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
-	await page.getByRole("button", { name: "Export", exact: true }).click();
+	await page
+		.getByRole("button", { name: "Download this run", exact: true })
+		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
 		.not.toBe(old);
