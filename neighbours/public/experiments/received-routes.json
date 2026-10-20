@@ -1,12 +1,12 @@
 {
   "schema": "received-route-study@1",
-  "recordedAt": "2026-10-20T12:50:27.763Z",
+  "recordedAt": "2026-10-20T20:36:32.201Z",
   "execution": "Node; exact published npm HF; two fixed structural domains, nine arms each",
-  "commit": "b6d3821c83ca893f00e77b9275c4129402fad402",
+  "commit": "484d1977c2bd8c22f6df22d5802eb6df4d241ed2",
   "dirty": false,
   "sources": {
-    "package.json": "5c02252bb74555f8b40e83cd5076315f725efbbb109c873fd385639b401219fe",
-    "package-lock.json": "2bf34568df188c6520b30df0dcbb83ef1fe869f722d32505a97965ae66ea87f8",
+    "package.json": "56ff877e9e881a2d8b2b1f3e74ee4ed815c4f2933a5c59dace8cff7ae6886b2c",
+    "package-lock.json": "ae27f384bc6474db502201892fb7173deab41914d56706feef1927e4dda6cb7d",
     "src/experiments/received-route.ts": "19fd60c9c8dcd7179d3f55deef50b7fe8ebf3b037da473ab937e4cee34ad169a",
     "scripts/probe-received-routes.ts": "a379856f8bbd87ee9b3045e02358fcc13830bb99f7fc4d1c911797e4ae090a4c"
   },

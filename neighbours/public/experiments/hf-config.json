@@ -3,10 +3,10 @@
   "runtime": "typescript-host-released-hf",
   "hf": "2.8.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "032bc51075e9e7153f22b9514b61f1c3e3dabfb5f3a8b328d65ea0dddb2517b9",
+  "sourceFingerprint": "ee58a5482a6a768cf9e484c742233dfe577df4ee4a8b10c9cd225ead81840ae2",
   "sources": {
-    "package-lock.json": "2bf34568df188c6520b30df0dcbb83ef1fe869f722d32505a97965ae66ea87f8",
-    "package.json": "5c02252bb74555f8b40e83cd5076315f725efbbb109c873fd385639b401219fe",
+    "package-lock.json": "ae27f384bc6474db502201892fb7173deab41914d56706feef1927e4dda6cb7d",
+    "package.json": "56ff877e9e881a2d8b2b1f3e74ee4ed815c4f2933a5c59dace8cff7ae6886b2c",
     "scripts/probe-hf-config.ts": "75941e08a5b85cd4c89713a82f4933d2762b290311b8a2c70ba41c56c4babaa3",
     "src/contracts.ts": "597c8344d3a2658d202982163e511085f39d4ba30ea4c87ba0e99cb265b25120",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
@@ -59,7 +59,7 @@
       101
     ]
   },
-  "wallSeconds": 31.417963125,
+  "wallSeconds": 49.296035499999995,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -71,7 +71,7 @@
   ],
   "arms": [
     {
-      "pid": 79999,
+      "pid": 16883,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -22377,7 +22377,7 @@
       ]
     },
     {
-      "pid": 80767,
+      "pid": 16979,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -45361,7 +45361,7 @@
       ]
     },
     {
-      "pid": 81036,
+      "pid": 17038,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {

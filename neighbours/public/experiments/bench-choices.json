@@ -1,6 +1,6 @@
 {
   "schema": "neighbours/bench-choice-probe@1",
-  "recordedAt": "2026-10-20T12:50:10.374Z",
+  "recordedAt": "2026-10-20T20:59:02.727Z",
   "runtime": "node-typescript-host-released-hf",
   "hf": "2.8.0",
   "node": "v26.12.0",
@@ -20,14 +20,14 @@
     "roundsPerPhysicalBranch": 192
   },
   "modelCalls": 0,
-  "sourceCommit": "b6d3821c83ca893f00e77b9275c4129402fad402",
+  "sourceCommit": "a43abe4ed6ce36d0dad3e35002d9bf095a9b9341",
   "sourceWorktreeClean": false,
   "sourcesStableDuringRun": true,
   "sourceCommitUnchanged": true,
-  "sourceFingerprint": "fd10a866663dc0cbfb2debe55af0b87cc4104fcfbfceabbfb4c6321b4bdab21f",
+  "sourceFingerprint": "4009d1550963272d5bf3c5ce5d65b0583012adddb81e4f1d40b93f058a206392",
   "sources": {
-    "package-lock.json": "2bf34568df188c6520b30df0dcbb83ef1fe869f722d32505a97965ae66ea87f8",
-    "package.json": "5c02252bb74555f8b40e83cd5076315f725efbbb109c873fd385639b401219fe",
+    "package-lock.json": "ae27f384bc6474db502201892fb7173deab41914d56706feef1927e4dda6cb7d",
+    "package.json": "56ff877e9e881a2d8b2b1f3e74ee4ed815c4f2933a5c59dace8cff7ae6886b2c",
     "scripts/capture-bench.ts": "bc967111ec95ec37b968bd1451efe80689c11f019f46adb115cb592fda9ba20a",
     "scripts/probe-bench-choice.ts": "1ba00469744fb3337e3cda86acb8a3039dd7f3f15159b730f6f78ae1a6c92fa8",
     "src/contracts.ts": "597c8344d3a2658d202982163e511085f39d4ba30ea4c87ba0e99cb265b25120",
