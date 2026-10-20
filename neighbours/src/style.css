@@ -2440,6 +2440,8 @@ button.known-place-need[aria-pressed="true"] {
 		margin-bottom: 4px;
 	}
 	.person-panel:has(.resident-talk[open]) > .player-action {
+		top: 0;
+		padding-top: 0;
 		padding-right: 0;
 	}
 }

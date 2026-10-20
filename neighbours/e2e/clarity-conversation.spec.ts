@@ -38,6 +38,16 @@ for (const width of [360, 1280])
 	}, info) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
 		await openConversation(page);
+		// The compact action background must not cover the selected person's name.
+		expect(
+			await page.locator(".person-panel").evaluate((el) => {
+				const name = el.querySelector("h2")?.getBoundingClientRect();
+				const action = el
+					.querySelector(":scope > .player-action")
+					?.getBoundingClientRect();
+				return !!name && !!action && name.bottom <= action.top;
+			}),
+		).toBe(true);
 		const form = page.locator(".promise-choice");
 		for (const label of ["Ask them to", "Your hour", "Done by"]) {
 			const control = form.getByLabel(label);
