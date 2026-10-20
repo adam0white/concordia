@@ -13,6 +13,7 @@ import { personOutcome, personOutcomeNotice } from "../person-outcome.ts";
 import { RuntimeClient } from "../runtime-client";
 import { orderedReplies } from "./durable-replies";
 import { datedClock } from "./format";
+import { lab } from "./lab";
 import { type ObservedFeed, observe } from "./observations";
 import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
 import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
@@ -116,6 +117,7 @@ export function useVisitorSession({
 	const pending = useRef(false);
 	const saveRequestId = useRef(0);
 	const exportRequest = useRef<number | null>(null);
+	const notebookRequest = useRef<number | null>(null);
 	const rounds = useRef(0);
 	const autosaveEnabled = useRef(false);
 	const persistenceAfterState = useRef(false);
@@ -530,44 +532,52 @@ export function useVisitorSession({
 					exportRequest.current !== null &&
 					reply.requestId === exportRequest.current
 				) {
-					const requestId = reply.requestId;
-					const revision = errorRevision.current;
-					void encodeSave(reply.save).then(
-						(blob) => {
-							if (
-								!active ||
-								exportRequest.current !== requestId ||
-								generation < acceptedGeneration.current
-							)
-								return;
-							downloadGeneration.current = generation;
-							const packet = reply.save as {
-								runtime?: { now?: number };
-							} | null;
-							const at = packet?.runtime?.now;
-							setDownloadLabel(
-								typeof at === "number" ? datedClock(at) : "Current checkpoint",
-							);
-							setDownloadUrl(URL.createObjectURL(blob));
-							exportRequest.current = null;
-						},
-						(failure: unknown) => {
-							if (
-								!active ||
-								exportRequest.current !== requestId ||
-								generation < acceptedGeneration.current
-							)
-								return;
-							exportRequest.current = null;
-							if (revision !== errorRevision.current) return;
-							errorRevision.current++;
-							setError(
-								failure instanceof SaveFileError
-									? failure.message
-									: "This save could not be compressed. The current town is unchanged.",
-							);
-						},
-					);
+					if (notebookRequest.current === reply.requestId) {
+						notebookRequest.current = null;
+						exportRequest.current = null;
+						lab.openSendDialog({ getRun: () => reply.save });
+					} else {
+						const requestId = reply.requestId;
+						const revision = errorRevision.current;
+						void encodeSave(reply.save).then(
+							(blob) => {
+								if (
+									!active ||
+									exportRequest.current !== requestId ||
+									generation < acceptedGeneration.current
+								)
+									return;
+								downloadGeneration.current = generation;
+								const packet = reply.save as {
+									runtime?: { now?: number };
+								} | null;
+								const at = packet?.runtime?.now;
+								setDownloadLabel(
+									typeof at === "number"
+										? datedClock(at)
+										: "Current checkpoint",
+								);
+								setDownloadUrl(URL.createObjectURL(blob));
+								exportRequest.current = null;
+							},
+							(failure: unknown) => {
+								if (
+									!active ||
+									exportRequest.current !== requestId ||
+									generation < acceptedGeneration.current
+								)
+									return;
+								exportRequest.current = null;
+								if (revision !== errorRevision.current) return;
+								errorRevision.current++;
+								setError(
+									failure instanceof SaveFileError
+										? failure.message
+										: "This save could not be compressed. The current town is unchanged.",
+								);
+							},
+						);
+					}
 				}
 			}
 		};
@@ -872,13 +882,16 @@ export function useVisitorSession({
 		setAdvanceNotice("");
 		setPlaying(true);
 	};
-	const exportSave = () => {
+	const requestExport = (notebook: boolean) => {
 		if (advancePending.current !== null || comparisonPending.current) return;
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;
+		notebookRequest.current = notebook ? requestId : null;
 		send({ type: "save", requestId });
 	};
+	const exportSave = () => requestExport(false);
+	const sendRun = () => requestExport(true);
 	const reportLocalError = (message: string) => {
 		errorRevision.current++;
 		setError(message);
@@ -999,6 +1012,7 @@ export function useVisitorSession({
 		pause,
 		play,
 		exportSave,
+		sendRun,
 		startTown,
 		restoreSave,
 		importSave,

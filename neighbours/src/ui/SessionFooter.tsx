@@ -13,6 +13,7 @@ type Props = Pick<
 	| "downloadLabel"
 	| "restoreSave"
 	| "exportSave"
+	| "sendRun"
 	| "importSave"
 >;
 export default function SessionFooter({
@@ -25,6 +26,7 @@ export default function SessionFooter({
 	downloadLabel,
 	restoreSave,
 	exportSave,
+	sendRun,
 	importSave,
 }: Props) {
 	const file = useRef<HTMLInputElement>(null);
@@ -51,6 +53,9 @@ export default function SessionFooter({
 						Restore autosave
 					</button>
 				)}
+				<button type="button" disabled={comparing} onClick={sendRun}>
+					Send this run to the notebook
+				</button>
 				<button type="button" disabled={comparing} onClick={exportSave}>
 					Export
 				</button>

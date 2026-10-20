@@ -3,6 +3,7 @@ import type { Intervention } from "./contracts";
 import ErrorMessage from "./ui/ErrorMessage";
 import { clock } from "./ui/format";
 import HelpPanel from "./ui/HelpPanel";
+import { LabPrivacy, lab } from "./ui/lab";
 import {
 	HubMark,
 	InkStamp,
@@ -29,6 +30,10 @@ import Welcome from "./ui/Welcome";
 
 export default function App() {
 	const [hasEnteredTown, setHasEnteredTown] = useState(false);
+	useEffect(() => {
+		lab.screen(hasEnteredTown ? "play" : "title");
+		if (hasEnteredTown) lab.milestone("run started");
+	}, [hasEnteredTown]);
 	const focusLoading = useCallback((heading: HTMLHeadingElement | null) => {
 		heading?.focus();
 	}, []);
@@ -140,6 +145,7 @@ export default function App() {
 			className={`app ${hasEnteredTown ? "town-entered" : ""} ${town ? "town-ready" : ""}`}
 			data-drawer={town ? (drawer ?? "none") : undefined}
 		>
+			<LabPrivacy />
 			<header className="masthead">
 				<HubMark />
 				<a className="brand" href="./">

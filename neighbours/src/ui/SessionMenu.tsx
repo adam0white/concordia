@@ -55,6 +55,12 @@ export default function SessionMenu({
 			)}
 			<SessionFooter
 				{...session}
+				sendRun={() => {
+					// Release the native modal before the notebook opens outside it.
+					dialog.current?.close();
+					close();
+					session.sendRun();
+				}}
 				comparing={session.comparing || session.advancing}
 				importSave={(file) => {
 					resetStory();
