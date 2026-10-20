@@ -30,7 +30,7 @@ async function expectUncovered(target: Locator) {
 		.toBe(true);
 }
 
-test("resident sheet keeps the player's verb, location and walking action visible while scrolling", async ({
+test("resident sheet keeps the selected resident response visible while scrolling", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
@@ -42,8 +42,10 @@ test("resident sheet keeps the player's verb, location and walking action visibl
 	await page.locator(".neighbour-strip [data-person-id]").first().click();
 	const action = page.locator(".person-panel > .player-action");
 	await expect(action).toBeInViewport();
-	await expect(action).toContainText("Choose a place to walk");
-	await expect(action).toContainText("You are at Riverside homes");
+	await expect(action).toContainText("Walk to Workshop to talk");
+	await expect(page.locator(".resident-location")).toContainText(
+		"You are at Riverside homes",
+	);
 	const drawer = page.locator(".drawer-person");
 	await drawer.evaluate((element) => {
 		element.scrollTop = element.scrollHeight;
@@ -58,13 +60,19 @@ test("resident sheet keeps the player's verb, location and walking action visibl
 	expect((actionBox?.y ?? 0) + (actionBox?.height ?? 0)).toBeLessThanOrEqual(
 		dockBox?.y ?? 0,
 	);
-	const walk = action.getByText("Walk somewhere", { exact: true });
-	await expect(walk).toBeInViewport();
+	const walk = page
+		.locator(".resident-location")
+		.getByText("Walk somewhere", { exact: true });
+	await expectUncovered(walk);
 	await walk.click();
-	const destination = action.getByRole("button", { name: /Market kitchen/ });
-	await expect(destination).toBeInViewport();
+	const destination = page
+		.locator(".resident-location")
+		.getByRole("button", { name: /Market kitchen/ });
+	await expectUncovered(destination);
 	await destination.click();
-	await expect(action).toContainText("Walking to Market kitchen");
+	await expect(page.locator(".resident-location")).toContainText(
+		"Walking to Market kitchen",
+	);
 });
 
 for (const { width, colorScheme } of [
@@ -108,3 +116,80 @@ for (const { width, colorScheme } of [
 		await expect(panel).toHaveCount(0);
 	});
 }
+
+test("Ada and Ravi lead with a direct response; arriving reaches a visible ask", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 360, height: 690 });
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
+	await expect(
+		page.getByRole("button", { name: "Play town", exact: true }),
+	).toBeVisible({ timeout: 60000 });
+	for (const id of ["ada", "ravi"]) {
+		await page.locator(`.neighbour-strip [data-person-id="${id}"]`).click();
+		const panel = page.locator(".person-panel");
+		const response = panel.getByRole("button", {
+			name: /Walk to Workshop to talk/,
+		});
+		await expect(response).toBeInViewport({ ratio: 1 });
+		const ordering = await panel.evaluate((el) => {
+			const name = el.querySelector("h2")?.getBoundingClientRect();
+			const response = el
+				.querySelector(".resident-response")
+				?.getBoundingClientRect();
+			const location = el
+				.querySelector(".player-place")
+				?.getBoundingClientRect();
+			return (
+				!!name &&
+				!!response &&
+				!!location &&
+				name.bottom <= response.top &&
+				response.bottom <= location.top
+			);
+		});
+		expect(ordering).toBe(true);
+		await expectUncovered(response);
+		if (id === "ravi") await response.click();
+		else
+			await panel.getByRole("button", { name: "Close person details" }).click();
+	}
+	for (let i = 0; i < 4; i++)
+		await page
+			.getByRole("button", { name: "Step: Advance one round", exact: true })
+			.click();
+	const talk = page.locator(".resident-talk > summary");
+	await expect(talk).toHaveText("Talk to Ravi");
+	await talk.click();
+	const ask = page
+		.locator(".resident-talk")
+		.getByRole("button", { name: "Ask", exact: true });
+	await expect(ask).toBeInViewport({ ratio: 1 });
+	await expect(ask).toBeEnabled();
+	await expectUncovered(ask);
+	await ask.click();
+	await expect(page.locator(".latest-answer")).toBeVisible();
+});
+
+test("known open hall need is readable on map and list without colour", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 360, height: 690 });
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
+	await expect(
+		page.getByRole("button", { name: "Play town", exact: true }),
+	).toBeVisible({ timeout: 60000 });
+	for (const selector of [
+		".known-need-map",
+		".known-place-need .known-need-cue",
+	]) {
+		const cue = page.locator(selector);
+		await expect(cue).toContainText("Needs help");
+		await expect(cue).toBeInViewport({ ratio: 1 });
+	}
+	await expect(
+		page.locator(".neighbour[data-person-id] .known-need-cue"),
+	).toHaveCount(0);
+});

@@ -66,6 +66,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 		24,
 	);
 	await you.locator(".your-company button").first().click();
+	await page.locator(".resident-talk > summary").click();
 	const panel = page.locator(".person-panel .speak-panel");
 	const name = (await page.locator(".person-panel h2").textContent())?.trim();
 	expect(name).toBeTruthy();
@@ -235,6 +236,7 @@ test("an answered request is on the device before it is shown and survives an im
 		24,
 	);
 	await you.locator(".your-company button").first().click();
+	await page.locator(".resident-talk > summary").click();
 	const panel = page.locator(".person-panel .speak-panel");
 	const name = (await page.locator(".person-panel h2").textContent())?.trim();
 	expect(name).toBeTruthy();

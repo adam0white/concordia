@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import type { PlayerView, PlayerWorkKind, TownView } from "../contracts";
 import { actionWords, counterWords, voicedLine } from "../core/voicing";
 import { clock, datedClock } from "./format";
@@ -80,9 +80,13 @@ export function PlayerJournal({ player }: { player: PlayerView }) {
 export function PlayerAction({
 	session,
 	openWalking = false,
+	personId,
+	conversation,
 }: {
 	session: Session;
 	openWalking?: boolean;
+	personId?: string;
+	conversation?: ReactNode;
 }) {
 	const town = session.town;
 	const player = town?.player;
@@ -93,13 +97,18 @@ export function PlayerAction({
 		session.comparing ||
 		session.saveConflict ||
 		session.intervening;
-	return (
-		<section className="player-action" aria-label="Your next step and location">
-			{goal && (
-				<strong>
-					{goal.id === "arrive" ? "Choose a place to walk" : goal.title}
-				</strong>
-			)}
+	const person = town.people.find((p) => p.id === personId);
+	const here = player.present.some((p) => p.id === personId);
+	const destination = player.destinations.find((p) => p.id === person?.placeId);
+	const unavailable = person?.journey
+		? `${person.name} is on the way to ${placeLabel(town, person.journey.toId)}. Meet them after they arrive.`
+		: person?.lifeState === "asleep"
+			? `${person.name} is asleep. Talk when they are awake.`
+			: person
+				? `${person.name} cannot talk here now.`
+				: "";
+	const location = (
+		<>
 			<p className="player-place">
 				{player.job?.kind === "travel"
 					? `Walking to ${placeLabel(town, player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
@@ -107,10 +116,25 @@ export function PlayerAction({
 						? `Working at ${placeLabel(town, player.job.toId)} until ${clock(player.job.endsAt)}.`
 						: `You are at ${placeLabel(town, player.placeId)}. ${player.presentCount} awake here.`}
 			</p>
+			{person && (
+				<p className="person-place">
+					{person.name}:{" "}
+					{person.journey
+						? `travelling to ${placeLabel(town, person.journey.toId)}`
+						: placeLabel(town, person.placeId)}
+					. {!here && destination ? "Current location; they may move." : ""}
+				</p>
+			)}
+			{player.job && person && (
+				<p className="hand">
+					You can talk after your{" "}
+					{player.job.kind === "travel" ? "walk" : "work"} ends.
+				</p>
+			)}
 			<details className="walk" open={openWalking}>
 				<summary
 					className={
-						goal?.id === "arrive" && player.canMove && !busy
+						!person && goal?.id === "arrive" && player.canMove && !busy
 							? "current-action"
 							: undefined
 					}
@@ -132,6 +156,46 @@ export function PlayerAction({
 					))}
 				</ul>
 			</details>
+		</>
+	);
+	return person ? (
+		<>
+			<section className="player-action" aria-label="Your next step">
+				{person &&
+					(here ? (
+						<details className="resident-talk">
+							<summary className="current-action">
+								Talk to {person.name}
+							</summary>
+							{conversation}
+						</details>
+					) : destination &&
+						!person.journey &&
+						(person.lifeState === undefined || person.lifeState === "awake") ? (
+						<button
+							type="button"
+							className="resident-response current-action"
+							disabled={!player.canMove || busy}
+							onClick={() => session.movePlayer(destination.id)}
+						>
+							Walk to {destination.name} to talk · ~{destination.minutes} min
+						</button>
+					) : (
+						<p className="resident-response">{unavailable}</p>
+					))}
+			</section>
+			<div className="resident-location">{location}</div>
+			{!here && conversation}
+		</>
+	) : (
+		<section className="player-action" aria-label="Your next step and location">
+			{!person && goal && (
+				<strong>
+					{goal.id === "arrive" ? "Choose a place to walk" : goal.title}
+				</strong>
+			)}
+
+			{location}
 		</section>
 	);
 }
@@ -204,45 +268,49 @@ export function SpeakPanel({
 		session.intervening;
 	return (
 		<section className="speak-panel" aria-label="You">
-			<h3>You</h3>
+			{showAction && <h3>You</h3>}
 			{showAction && (
 				<PlayerAction
 					session={session}
 					openWalking={!player.active && !personId}
 				/>
 			)}
-			{goal && <p className="speak-context">{goal.hint}</p>}
-			{done.length > 0 && (
-				<small>Done: {done.map((g) => g.title).join(", ")}</small>
+			{showAction && (
+				<>
+					{goal && <p className="speak-context">{goal.hint}</p>}
+					{done.length > 0 && (
+						<small>Done: {done.map((g) => g.title).join(", ")}</small>
+					)}
+					{select && !player.job && company.length > 0 && (
+						<div className="your-company">
+							<span className="hand">
+								{personId ? "Also here:" : "Here with you:"}
+							</span>
+							<ul>
+								{company.map((p) => (
+									<li key={p.id}>
+										<button
+											type="button"
+											className="neighbour"
+											data-person-id={p.id}
+											aria-label={`Speak to ${p.name}`}
+											onClick={() => select(p.id)}
+										>
+											<InkPortrait
+												id={p.id}
+												label={p.name.slice(0, 1)}
+												className="mini-avatar"
+											/>
+											<span>{p.name.split(" ")[0]}</span>
+										</button>
+									</li>
+								))}
+							</ul>
+						</div>
+					)}
+					{player.latestNotice && <p>{player.latestNotice.text}</p>}
+				</>
 			)}
-			{select && !player.job && company.length > 0 && (
-				<div className="your-company">
-					<span className="hand">
-						{personId ? "Also here:" : "Here with you:"}
-					</span>
-					<ul>
-						{company.map((p) => (
-							<li key={p.id}>
-								<button
-									type="button"
-									className="neighbour"
-									data-person-id={p.id}
-									aria-label={`Speak to ${p.name}`}
-									onClick={() => select(p.id)}
-								>
-									<InkPortrait
-										id={p.id}
-										label={p.name.slice(0, 1)}
-										className="mini-avatar"
-									/>
-									<span>{p.name.split(" ")[0]}</span>
-								</button>
-							</li>
-						))}
-					</ul>
-				</div>
-			)}
-			{player.latestNotice && <p>{player.latestNotice.text}</p>}
 			{session.playerError && (
 				<p className="player-error" role="alert">
 					{session.playerError}
@@ -302,12 +370,6 @@ export function SpeakPanel({
 					{!prediction?.prediction && !prediction?.error && (
 						<p>Considering what {name} could do now…</p>
 					)}
-					{prediction?.prediction && (
-						<p className="speech-read">
-							<span className="eyebrow">You can tell</span>{" "}
-							{prediction.prediction.read.join(". ")}.
-						</p>
-					)}
 					{offers.length > 0 && offer && (
 						<>
 							<label>
@@ -323,6 +385,21 @@ export function SpeakPanel({
 									))}
 								</select>
 							</label>
+							<button
+								type="button"
+								className="current-action"
+								disabled={busy || player.job !== undefined}
+								onClick={() =>
+									session.speak({
+										actorId: personId,
+										affordanceId: offer.affordanceId,
+										mode: "ask",
+									})
+								}
+							>
+								Ask
+							</button>
+							<p className="hand">Put it to them. They may say no.</p>
 							<label>
 								Your hour{" "}
 								<select
@@ -355,7 +432,7 @@ export function SpeakPanel({
 								</label>
 							)}
 							<ul className="speech-modes">
-								{MODES.map((mode) => (
+								{MODES.filter((mode) => mode.id !== "ask").map((mode) => (
 									<li key={mode.id}>
 										<button
 											type="button"
@@ -392,6 +469,12 @@ export function SpeakPanel({
 								))}
 							</ul>
 						</>
+					)}
+					{prediction?.prediction && (
+						<p className="speech-read">
+							<span className="eyebrow">You can tell</span>{" "}
+							{prediction.prediction.read.join(". ")}.
+						</p>
 					)}
 				</div>
 			)}

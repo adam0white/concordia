@@ -69,7 +69,6 @@ export default function PersonPanel({
 			>
 				×
 			</button>
-			{playerAction}
 			<div className="eyebrow">A neighbour</div>
 			<div className="person-heading">
 				<InkPortrait
@@ -79,9 +78,11 @@ export default function PersonPanel({
 				/>
 				<div>
 					<h2 tabIndex={-1}>{person.name}</h2>
-					<p>{person.role}</p>
 				</div>
 			</div>
+			{playerAction}
+			{speak}
+			<p className="resident-role">{person.role}</p>
 			<div className="activity-card">
 				<span className="eyebrow">
 					Right now ·{" "}
@@ -109,7 +110,6 @@ export default function PersonPanel({
 					{person.read ?? needWords(person.needs)}
 				</p>
 			)}
-			{speak}
 			<p className="description">{person.description}</p>
 			{person.lifeEvent && (
 				<p className="life-event">

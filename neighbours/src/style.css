@@ -1485,7 +1485,7 @@ summary span {
 	position: relative;
 	top: -14px;
 	z-index: 2;
-	margin: -14px 0 12px;
+	margin: 0 0 12px;
 	padding: 10px 32px 8px 0;
 	background: var(--paper);
 	border-bottom: 1px solid var(--hairline);
@@ -2279,4 +2279,59 @@ th {
 	.background-person {
 		transition: none;
 	}
+}
+
+/* A known open need is words in ink, never a colour or a judgement of willingness. */
+.known-need-cue {
+	border: 1px solid currentColor;
+	border-radius: 3px;
+	padding: 0.1em 0.3em;
+	font-size: 0.7rem;
+	font-weight: 650;
+	white-space: nowrap;
+}
+.known-place-need {
+	display: flex;
+	flex: 0 0 auto;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+	padding: 0.35rem 0.5rem;
+}
+.known-need-map {
+	fill: var(--ink);
+	font-size: 19px;
+	font-weight: 650;
+	text-decoration: underline;
+	paint-order: stroke;
+	stroke: var(--paper);
+	stroke-width: 4px;
+	stroke-linejoin: round;
+}
+.town-map.portrait .known-need-map {
+	font-size: 25px;
+}
+
+/* The resident response precedes both location and biography. */
+.resident-response {
+	min-height: 44px;
+	text-align: left;
+	font-size: 0.9375rem;
+}
+.resident-talk > :where(summary) {
+	font-weight: 600;
+}
+.resident-role {
+	margin: 8px 0;
+	font-style: italic;
+	color: var(--ink-soft);
+}
+.resident-talk .speak-panel {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+.resident-talk .speech {
+	margin-top: 0;
 }

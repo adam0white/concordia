@@ -11,6 +11,7 @@ import {
 	jitter,
 	seeded,
 } from "./ink";
+import { knownOpenNeeds } from "./known-needs";
 import MapPeopleChooser from "./MapPeopleChooser";
 import {
 	knownPlaceClusters,
@@ -485,6 +486,7 @@ export default function TownMap({
 	selected: string;
 	select: (id: string) => void;
 }) {
+	const needs = knownOpenNeeds(town);
 	const map = useRef<SVGSVGElement>(null);
 	const frame = useRef<HTMLDivElement>(null);
 	const [box, setBox] = useState({ width: 1080, height: 700 });
@@ -713,6 +715,15 @@ export default function TownMap({
 					sheet.portrait ? 25 : 19,
 				),
 			);
+		if (needs.places[place.id])
+			boxes.push(
+				labelBox(
+					p.x,
+					p.y + (sheet.portrait ? 128 : 109),
+					"Needs help",
+					sheet.portrait ? 25 : 19,
+				),
+			);
 		return boxes;
 	});
 	const markers = layoutKnownMarkers(visiblePoints, markerScale, sheet, labels);
@@ -751,7 +762,9 @@ export default function TownMap({
 					lines to their actual place. Named markers use z for sleep, ! for
 					incapacity or a mental break, and × for death. Your own position is a
 					small diamond labelled you. Tally marks under the hall count finished
-					repairs; a dashed line shows the old flood level.{" "}
+					repairs; a dashed line shows the old flood level. Needs help marks a
+					known open need, not someone’s willingness to help. An unmarked
+					neighbour may have needs you do not know.{" "}
 					{town.people.filter((p) => p.lifeState === "dead").length} deaths
 					recorded; {town.people.filter((p) => p.lifeState === "downed").length}{" "}
 					people currently unable to act.
@@ -811,6 +824,16 @@ export default function TownMap({
 							>
 								{shortPlaceName(place)}
 							</text>
+							{needs.places[place.id] && (
+								<text
+									y={sheet.portrait ? 128 : 109}
+									textAnchor="middle"
+									className="known-need-map"
+								>
+									<title>{needs.places[place.id]}</title>
+									Needs help
+								</text>
+							)}
 							{!place.open && (
 								<text
 									y={sheet.portrait ? 100 : 86}

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { TownView } from "../contracts";
 import { initial } from "./format";
+import { knownOpenNeeds } from "./known-needs";
 import { InkPortrait } from "./Notebook";
 import { activityLabel } from "./person-status";
 import TownMap from "./TownMap";
@@ -42,8 +43,15 @@ export function NeighbourStrip({
 	/** Unused: chips no longer toggle the panel closed. Kept so callers still compile. */
 	close?: () => void;
 }) {
+	const needs = knownOpenNeeds(town);
 	return (
 		<nav className="neighbour-strip" aria-label="Familiar neighbours">
+			{needs.places.hall && (
+				<span className="known-place-need" title={needs.places.hall}>
+					<strong>Hall</strong>
+					<span className="known-need-cue">Needs help</span>
+				</span>
+			)}
 			{town.people
 				.filter((resident) => resident.known)
 				.map((resident) => (

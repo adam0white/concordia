@@ -261,12 +261,17 @@ export default function App() {
 										town={town}
 										observed={observed}
 										close={closePerson}
-										playerAction={<PlayerAction session={session} />}
-										speak={
-											<SpeakPanel
+										playerAction={
+											<PlayerAction
 												session={session}
 												personId={person.id}
-												showAction={false}
+												conversation={
+													<SpeakPanel
+														session={session}
+														personId={person.id}
+														showAction={false}
+													/>
+												}
 											/>
 										}
 									/>
