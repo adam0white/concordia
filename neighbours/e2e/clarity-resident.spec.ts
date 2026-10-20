@@ -162,6 +162,14 @@ test("Ada and Ravi lead with a direct response; arriving reaches the Ask alterna
 	const talk = page.locator(".resident-talk > summary");
 	await expect(talk).toHaveText("Talk to Ravi");
 	await talk.click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await page.getByLabel("Ask them to").selectOption({ index: 1 });
 	await page.getByText("Ask or urge instead", { exact: true }).click();
 	const ask = page

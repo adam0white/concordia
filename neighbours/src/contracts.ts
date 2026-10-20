@@ -166,6 +166,17 @@ export interface PlayerView {
 		pledgeId?: string;
 	};
 	workHoursLeft: number;
+	helpOffers?: {
+		toId: string;
+		toName: string;
+		work: "cover-shift";
+		placeId: string;
+		placeName: string;
+		minutes: number;
+		endsAt: number;
+		label: string;
+		blocked?: string;
+	}[];
 	/** Whether there is damp hall timber the player can still prop and air (false once the hall has reopened). */
 	canAirTimber?: boolean;
 	/** Own work that cannot start now, with the host's reason (player.ts `workRefusal`). */
@@ -211,6 +222,7 @@ export interface PlayerView {
 		pledgeId?: string;
 	}[];
 	pledges: {
+		direct?: true;
 		id: string;
 		toId: string;
 		toName: string;
@@ -350,7 +362,8 @@ export interface Intervention {
 		| "advertise-evening"
 		| "player-move"
 		| "player-speak"
-		| "player-work";
+		| "player-work"
+		| "player-help";
 	eventId?: string;
 	actorId?: string;
 	/** player-move destination. */

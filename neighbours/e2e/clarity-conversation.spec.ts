@@ -14,6 +14,14 @@ async function openConversation(page: Page, waitPrediction = true) {
 			.getByRole("button", { name: "Step: Advance one round", exact: true })
 			.click();
 	await page.locator(".resident-talk > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	if (waitPrediction)
 		await expect(page.getByLabel("Ask them to")).toBeEnabled();
 }

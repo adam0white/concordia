@@ -74,7 +74,11 @@ function HelpReceipt({ pledge }: { pledge: PlayerView["pledges"][number] }) {
 				<strong>{pledge.toName} remembers</strong>
 			</p>
 			<p>
-				<q className="voice">You kept your word about that hour.</q>
+				<q className="voice">
+					{pledge.direct
+						? "You covered that hour for me. I received the two coins."
+						: "You kept your word about that hour."}
+				</q>
 			</p>
 			<p>{pledge.result}</p>
 		</div>
@@ -87,11 +91,13 @@ export function PlayerAction({
 	openWalking = false,
 	personId,
 	conversation,
+	walkNotice,
 }: {
 	session: Session;
 	openWalking?: boolean;
 	personId?: string;
 	conversation?: ReactNode;
+	walkNotice?: ReactNode;
 }) {
 	const [conversationOpen, setConversationOpen] = useState(
 		session.conversationPerson === personId && personId !== undefined,
@@ -105,6 +111,7 @@ export function PlayerAction({
 	if (!town || !player) return null;
 	const goal = player.goals.find((g) => g.status === "current");
 	const busy =
+		session.playerPending ||
 		session.advancing ||
 		session.comparing ||
 		session.saveConflict ||
@@ -121,6 +128,7 @@ export function PlayerAction({
 				: "";
 	const location = (
 		<>
+			{walkNotice}
 			<p className="player-place">
 				{player.job?.kind === "travel"
 					? `Walking to ${placeLabel(town, player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
@@ -248,6 +256,20 @@ export function SpeakPanel({
 }) {
 	const town = session.town;
 	const player = town?.player;
+	const answerPanel = useRef<HTMLDivElement>(null);
+	const recordedAnswer = player?.requests.findLast(
+		(request) => request.targetId === personId,
+	);
+	const answerKey = recordedAnswer
+		? `${personId}:${recordedAnswer.id}:${recordedAnswer.decision?.at ?? recordedAnswer.at}`
+		: "";
+	useEffect(() => {
+		if (!answerKey) return;
+		answerPanel.current?.scrollIntoView({
+			block: "nearest",
+			behavior: "instant",
+		});
+	}, [answerKey]);
 	const [offerId, setOfferId] = useState("");
 	const [work, setWork] = useState<PlayerWorkKind | "">("");
 	const [by, setBy] = useState<number | "">("");
@@ -267,6 +289,13 @@ export function SpeakPanel({
 		session.speechPrediction?.actorId === personId
 			? session.speechPrediction
 			: undefined;
+	const help = player.helpOffers?.find((offer) => offer.toId === personId);
+	const question = person?.history.findLast(
+		(event) => event.kind === "question",
+	);
+	const inspector =
+		person?.activity?.includes("question for an inspector") &&
+		person.placeId === "hall";
 	const offers = prediction?.prediction?.offers ?? [];
 	const offer = offers.find((o) => o.affordanceId === offerId);
 	const latest = freshReply(player, personId, town.now);
@@ -292,6 +321,7 @@ export function SpeakPanel({
 		(pledge) => pledge.status === "open" || pledge.status === "offered",
 	);
 	const busy =
+		session.playerPending ||
 		session.advancing ||
 		session.comparing ||
 		session.saveConflict ||
@@ -390,7 +420,7 @@ export function SpeakPanel({
 				</details>
 			)}
 			{latest && (
-				<div className="latest-answer">
+				<div className="latest-answer" ref={answerPanel}>
 					<p className="said">
 						You {SAID[latest.mode]}: {latest.label}.
 					</p>
@@ -462,142 +492,187 @@ export function SpeakPanel({
 					</ul>
 				</div>
 			)}
+			{personId && here && help && (
+				<section className="resident-help" aria-label={`Help ${name}`}>
+					<p>
+						You could cover a paid hour at {help.placeName} for {name}. {name}{" "}
+						would receive the two-coin wage.
+					</p>
+					<button
+						type="button"
+						className="current-action"
+						disabled={busy || !!help.blocked}
+						onClick={() => session.offerHelp(personId)}
+					>
+						Cover an hour for {name}
+					</button>
+					<p className="hand">
+						{help.blocked ??
+							`${help.minutes} min including the walk · ends ${datedClock(help.endsAt)}. Starts your work now; no request in return.`}
+					</p>
+				</section>
+			)}
+			{inspector && (
+				<p className="inspector-context">
+					{name} is waiting for an inspector. {question?.text} You can help with
+					an hour of work while they wait.
+				</p>
+			)}
 			{!personId ? null : !here ? (
 				<p>
 					{name} is not with you. Only people at the same place, and awake, can
 					hear you.
 				</p>
 			) : (
-				<div
-					className="speech"
-					onFocusCapture={() => session.setConversationPerson?.(personId)}
-				>
-					<div className="promise-choice">
-						<label>
-							Ask them to
-							<select
-								value={offer?.affordanceId ?? ""}
-								disabled={!offers.length}
-								onChange={(event) => setOfferId(event.target.value)}
-							>
-								<option value="">
-									{offers.length
-										? "Choose what to ask"
-										: prediction?.prediction
-											? "No request available now"
-											: "Considering their choices…"}
-								</option>
-								{offers.map((o) => (
-									<option key={o.affordanceId} value={o.affordanceId}>
-										{o.label}
+				<details className="conversation-request">
+					{/* biome-ignore lint/a11y/noStaticElementInteractions: Native summary already handles pointer and keyboard activation. */}
+					<summary
+						onClick={(event) => {
+							event.preventDefault();
+							const details = event.currentTarget
+								.parentElement as HTMLDetailsElement;
+							details.open = !details.open;
+							if (details.open)
+								details.scrollIntoView({ block: "start", behavior: "instant" });
+						}}
+					>
+						Ask {name} to do something
+					</summary>
+					<div
+						className="speech"
+						onFocusCapture={() => session.setConversationPerson?.(personId)}
+					>
+						<div className="promise-choice">
+							<label>
+								Ask them to
+								<select
+									value={offer?.affordanceId ?? ""}
+									disabled={!offers.length}
+									onChange={(event) => setOfferId(event.target.value)}
+								>
+									<option value="">
+										{offers.length
+											? "Choose what to ask"
+											: prediction?.prediction
+												? "No request available now"
+												: "Considering their choices…"}
 									</option>
-								))}
-							</select>
-						</label>
-						<label>
-							Your hour
-							<select
-								value={work}
-								onChange={(event) =>
-									setWork(event.target.value as PlayerWorkKind | "")
+									{offers.map((o) => (
+										<option key={o.affordanceId} value={o.affordanceId}>
+											{o.label}
+										</option>
+									))}
+								</select>
+							</label>
+							<label>
+								Your hour
+								<select
+									value={work}
+									onChange={(event) =>
+										setWork(event.target.value as PlayerWorkKind | "")
+									}
+								>
+									<option value="">Choose your work</option>
+									{offeredWork(player).map((w) => (
+										<option key={w.id} value={w.id}>
+											{w.label}
+										</option>
+									))}
+								</select>
+							</label>
+							<label>
+								Done by
+								<select
+									value={deadline ?? ""}
+									onChange={(event) =>
+										setBy(
+											event.target.value === ""
+												? ""
+												: Number(event.target.value),
+										)
+									}
+								>
+									<option value="">Choose a deadline</option>
+									{deadlines.map((t) => (
+										<option key={t} value={t}>
+											{datedClock(t)}
+										</option>
+									))}
+								</select>
+							</label>
+							<button
+								type="button"
+								className="current-action"
+								disabled={
+									busy ||
+									!!player.job ||
+									!offer ||
+									!work ||
+									deadline === undefined
 								}
+								onClick={() => {
+									if (offer && work && deadline !== undefined)
+										session.speak({
+											actorId: personId,
+											affordanceId: offer.affordanceId,
+											mode: "promise",
+											pledge: { work, by: deadline },
+										});
+								}}
 							>
-								<option value="">Choose your work</option>
-								{offeredWork(player).map((w) => (
-									<option key={w.id} value={w.id}>
-										{w.label}
-									</option>
-								))}
-							</select>
-						</label>
-						<label>
-							Done by
-							<select
-								value={deadline ?? ""}
-								onChange={(event) =>
-									setBy(
-										event.target.value === "" ? "" : Number(event.target.value),
-									)
-								}
+								Promise an hour
+							</button>
+							<p className="promise-meaning">
+								{offer && work
+									? `Ask ${name} to ${actionWords(offer.label)}. You offer one hour to ${WORK.find((item) => item.id === work)?.label.toLowerCase()}, by ${datedClock(deadline ?? town.now)}. It binds you only if they take it up.`
+									: "Offer your work. It binds you only if they take it up."}
+							</p>
+						</div>
+						<details className="speech-alternatives">
+							<summary>Ask or urge instead</summary>
+							<button
+								type="button"
+								disabled={busy || !!player.job || !offer}
+								onClick={() => {
+									if (offer)
+										session.speak({
+											actorId: personId,
+											affordanceId: offer.affordanceId,
+											mode: "ask",
+										});
+								}}
 							>
-								<option value="">Choose a deadline</option>
-								{deadlines.map((t) => (
-									<option key={t} value={t}>
-										{datedClock(t)}
-									</option>
-								))}
-							</select>
-						</label>
-						<button
-							type="button"
-							className="current-action"
-							disabled={
-								busy ||
-								!!player.job ||
-								!offer ||
-								!work ||
-								deadline === undefined
-							}
-							onClick={() => {
-								if (offer && work && deadline !== undefined)
-									session.speak({
-										actorId: personId,
-										affordanceId: offer.affordanceId,
-										mode: "promise",
-										pledge: { work, by: deadline },
-									});
-							}}
-						>
-							Promise an hour
-						</button>
-						<p className="promise-meaning">
-							Offer your work. It binds you only if they take it up.
-						</p>
+								Ask
+							</button>
+							<p className="hand">Put it to them. They may say no.</p>
+							<button
+								type="button"
+								disabled={busy || !!player.job || !offer}
+								onClick={() => {
+									if (offer)
+										session.speak({
+											actorId: personId,
+											affordanceId: offer.affordanceId,
+											mode: "urge",
+										});
+								}}
+							>
+								Urge
+							</button>
+							<p className="hand">
+								Insist. They may give in under protest, and being pushed wears
+								on their trust.
+							</p>
+						</details>
+						{prediction?.error && <p role="alert">{prediction.error}</p>}
+						{prediction?.prediction && (
+							<p className="speech-read">
+								<span className="eyebrow">You can tell</span>{" "}
+								{prediction.prediction.read.join(". ")}.
+							</p>
+						)}
 					</div>
-					<details className="speech-alternatives">
-						<summary>Ask or urge instead</summary>
-						<button
-							type="button"
-							disabled={busy || !!player.job || !offer}
-							onClick={() => {
-								if (offer)
-									session.speak({
-										actorId: personId,
-										affordanceId: offer.affordanceId,
-										mode: "ask",
-									});
-							}}
-						>
-							Ask
-						</button>
-						<p className="hand">Put it to them. They may say no.</p>
-						<button
-							type="button"
-							disabled={busy || !!player.job || !offer}
-							onClick={() => {
-								if (offer)
-									session.speak({
-										actorId: personId,
-										affordanceId: offer.affordanceId,
-										mode: "urge",
-									});
-							}}
-						>
-							Urge
-						</button>
-						<p className="hand">
-							Insist. They may give in under protest, and being pushed wears on
-							their trust.
-						</p>
-					</details>
-					{prediction?.error && <p role="alert">{prediction.error}</p>}
-					{prediction?.prediction && (
-						<p className="speech-read">
-							<span className="eyebrow">You can tell</span>{" "}
-							{prediction.prediction.read.join(". ")}.
-						</p>
-					)}
-				</div>
+				</details>
 			)}
 			{journalOpen ? (
 				<section className="your-journal" aria-label="Your journal">

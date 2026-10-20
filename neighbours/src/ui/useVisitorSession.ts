@@ -116,6 +116,8 @@ export function useVisitorSession({
 		undefined,
 	);
 	const playerSequence = useRef(0);
+	const playerPendingRef = useRef<number | null>(null);
+	const [playerPending, setPlayerPending] = useState(false);
 	const saveConflictRef = useRef(false);
 	const [hasSave, setHasSave] = useState(false);
 	const [hasPrevious, setHasPrevious] = useState(false);
@@ -189,6 +191,8 @@ export function useVisitorSession({
 		advanceOrigin.current = null;
 		acceptedGeneration.current = generation;
 		setTownEpoch(generation);
+		playerPendingRef.current = null;
+		setPlayerPending(false);
 		const requestedExport = exportRequest.current;
 		if (
 			requestedExport !== null &&
@@ -327,6 +331,10 @@ export function useVisitorSession({
 					setIntervening(false);
 					setInterventionNotice("");
 				}
+				if (failed?.playerAction === playerPendingRef.current) {
+					playerPendingRef.current = null;
+					setPlayerPending(false);
+				}
 				if (failed?.playerAction !== undefined) {
 					if (failed.playerAction === playerSequence.current)
 						setPlayerError(reply.message);
@@ -409,6 +417,10 @@ export function useVisitorSession({
 					setSaved("Restored town from this device");
 				}
 				if (reply.type === "ready") autosaveEnabled.current = !savedReadFailed;
+				if (completed?.playerAction === playerPendingRef.current) {
+					playerPendingRef.current = null;
+					setPlayerPending(false);
+				}
 				setTown(reply.view);
 				setHealthHistory((previous) => sampleHealth(previous, reply.view));
 				const intervention = interventionPending.current;
@@ -817,19 +829,26 @@ export function useVisitorSession({
 	const playerInput = (intervention: Intervention) => {
 		if (
 			!town ||
+			playerPendingRef.current !== null ||
 			comparisonPending.current ||
 			advancePending.current !== null ||
 			saveConflictRef.current
 		)
 			return;
 		playerSequence.current++;
+		playerPendingRef.current = playerSequence.current;
+		setPlayerPending(true);
 		setConversationPerson(undefined);
 		setPlayerError("");
 		setPlaying(false);
 		send({ type: "intervene", intervention });
 	};
-	const movePlayer = (placeId: string) =>
+	const movePlayer = (placeId: string) => {
+		if (playerPendingRef.current !== null || !town?.player?.canMove) return;
 		playerInput({ kind: "player-move", placeId });
+	};
+	const offerHelp = (actorId: string) =>
+		playerInput({ kind: "player-help", actorId });
 	const speak = (request: {
 		actorId: string;
 		affordanceId: string;
@@ -1031,8 +1050,10 @@ export function useVisitorSession({
 		intervene,
 		player: town?.player,
 		playerError,
+		playerPending,
 		speechPrediction,
 		movePlayer,
+		offerHelp,
 		speak,
 		playerWork,
 		predictSpeech,

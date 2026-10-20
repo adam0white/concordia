@@ -576,6 +576,7 @@ summary span {
 	max-height: 80%;
 	overflow-y: auto;
 	overscroll-behavior: contain;
+	scroll-padding: 8px;
 	padding: 14px 16px 22px;
 	background: var(--paper);
 	border-top: 1.5px solid var(--ink);
@@ -2450,7 +2451,6 @@ button.known-place-need[aria-pressed="true"] {
 	flex-wrap: wrap;
 }
 .clock-rate {
-	flex-basis: 100%;
 	font-size: 0.765rem;
 	line-height: 1.15;
 	color: var(--ink-soft);
@@ -2480,5 +2480,49 @@ button.known-place-need[aria-pressed="true"] {
 	}
 	.place-panel .place-company {
 		margin: 4px 0;
+	}
+}
+
+/* A resident can offer real work before the optional request form. */
+.resident-help {
+	display: grid;
+	gap: 6px;
+}
+.resident-help > button {
+	min-height: 44px;
+	width: 100%;
+}
+.resident-talk .conversation-request > summary {
+	min-height: 44px;
+}
+.inspector-context {
+	border-left: 2px solid var(--ink-soft);
+	padding-left: 8px;
+}
+@media (max-width: 899px) {
+	.drawer-place:has(.place-company) {
+		max-height: 80%;
+	}
+}
+/* Opening a request makes room for its complete terms; the work option returns when closed. */
+.speak-panel:has(.conversation-request[open]) > .resident-help,
+.speak-panel:has(.conversation-request[open]) > .inspector-context {
+	display: none;
+}
+/* A worker reply fills reserved feedback space without moving Play under a thumb. */
+.playback-status {
+	flex-basis: 100%;
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+}
+.playback-job-notice {
+	font-size: 0.765rem;
+	min-height: 1.15em;
+	line-height: 1.15;
+}
+@media (max-width: 340px) {
+	.playback-status {
+		min-height: 30px;
 	}
 }

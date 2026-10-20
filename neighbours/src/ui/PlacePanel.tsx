@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { PlaceView, TownView } from "../contracts";
 import { clock, placeName } from "./format";
 import { knownOpenNeeds } from "./known-needs";
@@ -10,6 +11,7 @@ export default function PlacePanel({
 	move,
 	select,
 	close,
+	walkNotice,
 }: {
 	town: TownView;
 	place: PlaceView;
@@ -17,6 +19,7 @@ export default function PlacePanel({
 	move: (id: string) => void;
 	select: (id: string, talk?: boolean) => void;
 	close: () => void;
+	walkNotice?: ReactNode;
 }) {
 	const player = town.player;
 	const destination = player?.destinations.find((p) => p.id === place.id);
@@ -57,6 +60,7 @@ export default function PlacePanel({
 							Walk to {label} · ~{destination.minutes} min
 						</button>
 					)}
+					{walkNotice}
 					<p role="status">
 						{player.job?.kind === "travel"
 							? `Walking to ${location(player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`

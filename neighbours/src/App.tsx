@@ -13,6 +13,7 @@ import {
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
 import PlacePanel from "./ui/PlacePanel";
+import QueuedWalkNotice from "./ui/QueuedWalkNotice";
 import SessionMenu from "./ui/SessionMenu";
 import { PlayerAction, SpeakPanel } from "./ui/SpeakPanel";
 import Stories from "./ui/Stories";
@@ -174,7 +175,7 @@ export default function App() {
 		setTab("journal");
 		setStoryFocus(id);
 	};
-	const busy = advancing || comparing || saveConflict;
+	const busy = advancing || comparing || saveConflict || session.playerPending;
 	return (
 		<div
 			className={`app ${hasEnteredTown ? "town-entered" : ""} ${town ? "town-ready" : ""}`}
@@ -302,11 +303,20 @@ export default function App() {
 											if (talk) session.setConversationPerson(id);
 										}}
 										move={session.movePlayer}
+										walkNotice={
+											<QueuedWalkNotice
+												town={town}
+												playing={playing}
+												advancing={advancing}
+												pending={session.playerPending}
+											/>
+										}
 										busy={
 											session.advancing ||
 											session.comparing ||
 											session.saveConflict ||
-											session.intervening
+											session.intervening ||
+											session.playerPending
 										}
 									/>
 								)}
@@ -321,6 +331,14 @@ export default function App() {
 												key={`${person.id}:${session.townEpoch}`}
 												session={session}
 												personId={person.id}
+												walkNotice={
+													<QueuedWalkNotice
+														town={town}
+														playing={playing}
+														advancing={advancing}
+														pending={session.playerPending}
+													/>
+												}
 												conversation={
 													<SpeakPanel
 														session={session}
@@ -576,9 +594,19 @@ export default function App() {
 										<option value={120}>10×</option>
 									</select>
 								</label>
-								<span className="clock-rate" role="status">
-									{session.clockRate}
-								</span>
+								<div className="playback-status">
+									<span className="clock-rate" role="status">
+										{session.clockRate}
+									</span>
+									<span className="playback-job-notice">
+										<QueuedWalkNotice
+											town={town}
+											playing={playing}
+											advancing={advancing}
+											pending={session.playerPending}
+										/>
+									</span>
+								</div>
 							</div>
 							<TownNavigation active={tab} change={changeTab} />
 						</div>

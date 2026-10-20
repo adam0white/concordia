@@ -102,6 +102,15 @@ test("place company distinguishes meeting from an immediate conversation", async
 	const talk = panel.getByRole("button", { name: /^Talk to Ravi/ });
 	await expect(talk).toBeVisible();
 	await talk.click();
+	await page.locator(".conversation-request > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await expect(page.locator(".resident-talk")).toHaveAttribute("open", "");
 	await expect(
 		page

@@ -1086,7 +1086,8 @@ export class Runtime implements TownRuntime {
 		if (
 			input.kind === "player-move" ||
 			input.kind === "player-speak" ||
-			input.kind === "player-work"
+			input.kind === "player-work" ||
+			input.kind === "player-help"
 		) {
 			if (this.s.pending.length) throw Error("Round has unresolved actors");
 			playerIntervene(this, input, (r) => this.instructorSuggestions(r));

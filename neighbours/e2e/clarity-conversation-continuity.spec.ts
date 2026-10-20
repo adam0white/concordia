@@ -44,6 +44,14 @@ test("loading conversation retains its person and restores the chosen playback r
 	const talk = page.locator(".resident-talk > summary");
 	await expect(talk).toHaveText("Talk to Ravi");
 	await talk.click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await expect(page.getByLabel("Ask them to")).toBeDisabled();
 	await expect
 		.poll(() =>
@@ -77,6 +85,14 @@ test("loading conversation retains its person and restores the chosen playback r
 	});
 	await expect(page.locator(".person-panel h2")).toHaveText("Ravi");
 	await talk.click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await page.getByRole("button", { name: "Play town", exact: true }).click();
 	await expect(rate).toHaveText("10× · 125 min/s");
 	await expect(
@@ -102,6 +118,14 @@ test("continuous playback slows while a conversation waits and resumes its chose
 			.getByRole("button", { name: "Step: Advance one round", exact: true })
 			.click();
 	await page.locator(".resident-talk > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await page.getByLabel("Ask them to").selectOption("repair");
 	await page
 		.getByRole("combobox", { name: "Playback speed" })
@@ -117,6 +141,14 @@ test("continuous playback slows while a conversation waits and resumes its chose
 		timeout: 20000,
 	});
 	await page.locator(".resident-talk > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await expect(page.locator(".clock-rate")).toHaveText("10× · 125 min/s");
 	await expect(page.locator(".town-time strong")).not.toHaveText("09:15");
 });
@@ -136,6 +168,14 @@ test("successful import resets the prior town's open conversation and choices", 
 			.getByRole("button", { name: "Step: Advance one round", exact: true })
 			.click();
 	await page.locator(".resident-talk > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await page.getByLabel("Your hour").selectOption("help-repair");
 	await openSaves(page);
 	await page
@@ -157,6 +197,14 @@ test("successful import resets the prior town's open conversation and choices", 
 	await closeSaves(page);
 	await expect(page.locator(".resident-talk")).not.toHaveAttribute("open", "");
 	await page.locator(".resident-talk > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await expect(page.getByLabel("Your hour")).toHaveValue("");
 	await expect(page.locator(".clock-rate")).toHaveText(
 		"Slow · 1 min/s · conversation",

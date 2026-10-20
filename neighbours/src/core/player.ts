@@ -149,6 +149,8 @@ export type PlayerRequest = {
 	resultEvent?: number;
 };
 export type Pledge = {
+	/** Direct help has no PlayerRequest; requestId names its own pledge event. */
+	direct?: true;
 	id: string;
 	requestId: number;
 	toId: string;
@@ -513,9 +515,56 @@ export function playerIntervene(
 ): void {
 	if (input.kind === "player-move") move(host, input.placeId);
 	else if (input.kind === "player-speak") speak(host, input, others);
+	else if (input.kind === "player-help") directHelp(host, input);
 	else if (input.kind === "player-work")
 		startWork(host, input.pledgeId, input.work, input.actorId);
 	else throw Error("Unknown player action");
+}
+
+/** Available capacity is a host fact; helping does not demand a resident decision. */
+function directHelpReason(s: Save, r: Resident): string | undefined {
+	if (s.player?.version === 1)
+		return "This older town does not support direct help";
+	const reason = workRefusal(s, "cover-shift", r.person.id);
+	if (reason) return reason;
+	const day = Math.floor(s.now / 1440);
+	if (hoursUsed(s.player, day) + openOnDay(s.player, day) >= PLAYER_WORK_HOURS)
+		return "Your working hours are already promised or used";
+	if (shiftsLeft(r, day) <= 0)
+		return `${r.person.name} has no paid shift left today`;
+	return undefined;
+}
+function directHelp(host: PlayerHost, input: Intervention): void {
+	if (Object.keys(input).some((k) => k !== "kind" && k !== "actorId"))
+		throw Error("Direct help takes only a resident");
+	const s = host.s;
+	const r = hearable(s, input.actorId);
+	if (!r.known) throw Error("Choose a familiar resident");
+	const reason = directHelpReason(s, r);
+	if (reason) throw Error(reason);
+	const p = activate(host);
+	const made = playerEvent(
+		host,
+		"player-pledge",
+		`You offered to cover one paid shift for ${r.person.name} and set off to do it.`,
+		playerLocation(s),
+		[],
+		r.person.id,
+	);
+	const pledge: Pledge = {
+		id: `pledge-${made.id}`,
+		requestId: made.id,
+		direct: true,
+		toId: r.person.id,
+		work: "cover-shift",
+		madeAt: s.now,
+		dueBy: dueByFor(s.now),
+		event: made.id,
+		status: "open",
+	};
+	p.pledges.push(pledge);
+	bound(p.pledges, LIMITS.pledges);
+	startWork(host, pledge.id, undefined, undefined);
 }
 
 function move(host: PlayerHost, placeId: unknown): void {
@@ -1262,6 +1311,24 @@ export function playerView(s: Save): PlayerView {
 				}
 			: {}),
 		workHoursLeft: PLAYER_WORK_HOURS - hoursUsed(p, day),
+		helpOffers: present
+			.filter((r) => r.known && r.policy === "hf" && shiftsLeft(r, day) > 0)
+			.map((r) => {
+				const placeId = workPlace(s, "cover-shift", r.person.id);
+				const minutes = travelMinutes(s, from, placeId) + 60;
+				const blocked = directHelpReason(s, r);
+				return {
+					toId: r.person.id,
+					toName: r.person.name,
+					work: "cover-shift" as const,
+					placeId,
+					placeName: placeName(s, placeId),
+					minutes,
+					endsAt: s.now + minutes,
+					label: `Cover one paid shift for ${r.person.name}`,
+					...(blocked ? { blocked } : {}),
+				};
+			}),
 		canAirTimber: timberToAir(s),
 		workBlocked: Object.fromEntries(
 			(["carry-meals", "help-repair", "dry-timber"] as const).flatMap(
@@ -1344,6 +1411,7 @@ export function playerView(s: Save): PlayerView {
 									: undefined;
 			return {
 				id: x.id,
+				...(x.direct ? { direct: true as const } : {}),
 				toId: x.toId,
 				toName: nameOf(s, x.toId),
 				work: x.work,
@@ -1638,8 +1706,23 @@ export function validatePlayer(s: Save, ids: Set<string>): void {
 			"dueNoticed",
 			"resolvedEvent",
 			"hfReported",
+			"direct",
 		]);
 		if (
+			(x.direct !== undefined &&
+				(x.direct !== true ||
+					p.version !== 2 ||
+					x.work !== "cover-shift" ||
+					x.event !== x.requestId ||
+					x.status === "offered" ||
+					x.status === "released" ||
+					x.status === "lapsed" ||
+					(x.status === "open" &&
+						(p.job?.pledgeId !== x.id ||
+							p.job.work !== x.work ||
+							p.job.forId !== x.toId ||
+							p.job.departedAt !== x.madeAt)) ||
+					p.requests.some((q) => q.id === x.requestId))) ||
 			x.id !== `pledge-${x.requestId}` ||
 			!int(x.requestId, 1) ||
 			!ids.has(x.toId) ||

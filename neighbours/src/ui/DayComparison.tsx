@@ -43,6 +43,7 @@ const interventions: Record<Intervention["kind"], string> = {
 	"advertise-evening": "Share the posted evening invitation",
 	"player-move": "Walk somewhere",
 	"player-speak": "Speak to a neighbour",
+	"player-help": "Cover a neighbour’s paid hour",
 	"player-work": "Give an hour of your own work",
 };
 const genericInterventions = [

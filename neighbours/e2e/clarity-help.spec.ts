@@ -27,6 +27,14 @@ test("a player can offer and complete a real hour and see Ada remember it", asyn
 	await page.getByRole("button", { name: "Close place details" }).click();
 	await page.locator('.neighbour-strip [data-person-id="ada"]').click();
 	await page.locator(".resident-talk > summary").click();
+	if (
+		await page
+			.locator(
+				".resident-talk[open] .conversation-request:not([open]) > summary",
+			)
+			.count()
+	)
+		await page.locator(".conversation-request > summary").click();
 	await page.getByLabel("Ask them to").selectOption("open-section");
 	await page.getByLabel("Your hour").selectOption("carry-meals");
 	await page.getByLabel("Done by").selectOption("1080");
