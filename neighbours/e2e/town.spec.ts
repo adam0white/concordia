@@ -342,15 +342,9 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 
 	await closeSaves(other);
 
-	for (
-		let i = 0;
-		i < 8 &&
-		!(await other
-			.getByRole("button", { name: "Load device town", exact: true })
-			.isVisible());
-		i++
-	)
-		await step(other);
+	// Ready plus five actual rounds reaches the sixth-state autosave. Wait for
+	// its IndexedDB result before attempting another round: a conflict holds time.
+	for (let i = 0; i < 5; i++) await step(other);
 	await expect(
 		other.getByRole("button", { name: "Load device town", exact: true }),
 	).toBeVisible();
