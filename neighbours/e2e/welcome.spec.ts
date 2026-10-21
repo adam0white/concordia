@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
 test("welcome explains the town before starting any runtime, with keyboard entry and compact mobile controls", async ({
@@ -34,9 +34,11 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 	await expect(page.locator(".welcome-screen")).toContainText(
 		"shared repair tools",
 	);
-	await expect(page.locator(".welcome-screen")).toContainText("starts paused");
+	await expect(page.locator(".welcome-screen")).toContainText(
+		"starts when you enter",
+	);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toHaveCount(0);
 	await expect(page.locator(".runtime-label")).toHaveText(
 		"A town on your device",
@@ -58,7 +60,7 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 	await page.getByRole("button", { name: "Enter town", exact: true }).focus();
 	await page.keyboard.press("Enter");
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	expect(
 		await page.evaluate(
@@ -73,25 +75,16 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 	).toBeInViewport();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeInViewport();
 	await expect(
 		page.getByRole("button", { name: "Step: Advance one round" }),
-	).toBeInViewport();
+	).toHaveCount(0);
 	expect(
 		await page.evaluate(
 			() => document.documentElement.scrollWidth <= innerWidth,
 		),
 	).toBe(true);
-	// Thumb reach: play and step sit in the bottom 40% of a phone screen.
-	const innerHeight = await page.evaluate(() => window.innerHeight);
-	for (const name of ["Play town", "Step: Advance one round"]) {
-		const box = await page
-			.getByRole("button", { name, exact: true })
-			.boundingBox();
-		expect(box).not.toBeNull();
-		expect(box?.y ?? 0).toBeGreaterThanOrEqual(innerHeight * 0.6);
-	}
 	const playback = await page.locator(".playback").boundingBox();
 	expect(playback?.height).toBeLessThanOrEqual(70);
 	await page.screenshot({ path: info.outputPath("footer-mobile-sticky.png") });
@@ -119,7 +112,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await openSaves(page);
 	await page.getByLabel("New town seed").fill("71");
@@ -151,8 +144,36 @@ test("a new seed is durably saved while paused before its first round", async ({
 	await page.reload();
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	expect((await latest())?.runtime.seed).toBe(71);
 	expect((await latest())?.runtime.round).toBe(0);
+});
+
+test("the single native welcome help supports keyboard, Escape and outside dismissal", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 360, height: 690 });
+	await page.goto("/");
+	const info = page.getByRole("button", {
+		name: "About Alder Quay",
+		exact: true,
+	});
+	await info.focus();
+	await page.keyboard.press("Space");
+	const popup = page.locator("#welcome-help");
+	await expect(popup).toBeVisible();
+	await expect(popup).toContainText("More about Alder Quay");
+	await expect(popup).toContainText("About the simulation");
+	const box = await popup.boundingBox();
+	expect(box).not.toBeNull();
+	expect(box?.x).toBeGreaterThanOrEqual(0);
+	expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(360);
+	expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(690);
+	await page.keyboard.press("Escape");
+	await expect(popup).not.toBeVisible();
+	await expect(info).toBeFocused();
+	await info.click();
+	await page.mouse.click(2, 2);
+	await expect(popup).not.toBeVisible();
 });

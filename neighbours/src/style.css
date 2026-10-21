@@ -2526,3 +2526,19 @@ button.known-place-need[aria-pressed="true"] {
 		min-height: 30px;
 	}
 }
+
+.help-info {
+	min-width: 44px;
+	min-height: 44px;
+	border-radius: 50%;
+	font-style: italic;
+}
+.welcome-help {
+	box-sizing: border-box;
+	max-width: min(38rem, calc(100vw - 2rem));
+	max-height: calc(100dvh - 2rem);
+	overflow: auto;
+	padding: 1rem;
+	color: var(--ink);
+	background: var(--paper);
+}

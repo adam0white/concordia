@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, type Page, test } from "@playwright/test";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
+import { expect, type Page, test } from "./clock-fixture";
 import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 let genuine: ReturnType<typeof captureWeekly>["candidate"];
@@ -32,7 +32,7 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
@@ -82,7 +82,7 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	await page.reload();
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	expect(await exported(page)).toEqual(after);
 });

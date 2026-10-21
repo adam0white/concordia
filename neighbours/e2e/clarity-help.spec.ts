@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, test } from "@playwright/test";
+import { expect, step, test } from "./clock-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
 test.use({
@@ -16,14 +16,11 @@ test("a player can offer and complete a real hour and see Ada remember it", asyn
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeEnabled({ timeout: 60000 });
 	await page.locator('[data-map-place="hall"]').tap();
 	await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
-	for (let i = 0; i < 7; i++)
-		await page
-			.getByRole("button", { name: "Step: Advance one round", exact: true })
-			.click();
+	for (let i = 0; i < 7; i++) await step(page);
 	await page.getByRole("button", { name: "Close place details" }).click();
 	await page.locator('.neighbour-strip [data-person-id="ada"]').click();
 	await page.locator(".resident-talk > summary").click();
@@ -45,22 +42,17 @@ test("a player can offer and complete a real hour and see Ada remember it", asyn
 	await expect(page.locator(".latest-answer")).toContainText(
 		"Alright, I'll do it.",
 	);
-	await expect(page.locator(".clock-rate")).toHaveText("1× · 12.5 min/s");
+	await expect(page.locator(".clock-rate")).toHaveText("Time passing");
 	// Editing another choice in the same resolved conversation rearms reading time.
 	await page.getByLabel("Your hour").focus();
 	await expect(page.locator(".clock-rate")).toHaveText(
-		"Slow · 1 min/s · conversation",
+		"Time held · conversation",
 	);
-	await page
-		.getByRole("button", { name: "Step: Advance one round", exact: true })
-		.click();
 	await page
 		.getByRole("button", { name: "Start the hour", exact: true })
 		.click();
 	for (let i = 0; i < 12; i++) {
-		await page
-			.getByRole("button", { name: "Step: Advance one round", exact: true })
-			.click();
+		await step(page);
 		if (await page.locator(".pledge-receipt").count()) break;
 	}
 	await expect(page.locator(".pledge-receipt")).toContainText("Ada remembers");

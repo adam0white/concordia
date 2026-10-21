@@ -2,8 +2,14 @@ import { expect, type Page } from "@playwright/test";
 
 export async function openSaves(page: Page) {
 	const dialog = page.getByRole("dialog", { name: "Game menu" });
-	if (!(await dialog.isVisible()))
-		await page.getByRole("button", { name: "Game menu", exact: true }).click();
+	if (!(await dialog.isVisible())) {
+		const menu = page.getByRole("button", { name: "Game menu", exact: true });
+		if (
+			!(await menu.isDisabled()) &&
+			(await menu.getAttribute("aria-expanded")) !== "true"
+		)
+			await menu.click();
+	}
 	await expect(dialog).toBeVisible();
 }
 export async function closeSaves(page: Page) {

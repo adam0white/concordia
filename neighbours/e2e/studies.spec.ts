@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
-import { expect, type Page, test } from "@playwright/test";
 import { createRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import { expect, type Page, step, test } from "./clock-fixture";
 import { openSaves, showTab } from "./session-helpers";
 
 test.use({ actionTimeout: 15000 });
@@ -11,7 +11,7 @@ async function enter(page: Page) {
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 }
@@ -165,9 +165,7 @@ test("actual tools and bus branches retain setup, separate history and mark a sa
 		checkpoint,
 	);
 	await expect(page.locator(".town-time")).toContainText("08:00");
-	await page
-		.getByRole("button", { name: "Step: Advance one round", exact: true })
-		.click();
+	await step(page);
 	await expect(page.locator(".town-time")).toContainText("08:15");
 	await expect(comparison.locator(".comparison-checkpoint")).toHaveText(
 		checkpoint,

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 import { openSaves } from "./session-helpers";
 
 test("notebook preview contains the actual town and cancel sends no run", async ({
@@ -14,7 +14,7 @@ test("notebook preview contains the actual town and cancel sends no run", async 
 	await page.getByLabel("Anonymous play events", { exact: true }).uncheck();
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await openSaves(page);
 	await page

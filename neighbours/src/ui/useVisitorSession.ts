@@ -16,7 +16,7 @@ import { datedClock } from "./format";
 import { lab } from "./lab";
 import { type ObservedFeed, observe } from "./observations";
 import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
-import { playbackRate } from "./playback-rate";
+import { playbackRate, storyReadingKey } from "./playback-rate";
 import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
 
@@ -74,10 +74,23 @@ export function useVisitorSession({
 	}>();
 	const [branchError, setBranchError] = useState("");
 	const comparisonPending = useRef(false);
-	const [speed, setSpeed] = useState(1200);
 	const [townEpoch, setTownEpoch] = useState(0);
-	const [conversationPerson, setConversationPerson] = useState<string>();
-	const rate = playbackRate(speed, conversationPerson !== undefined);
+	const [conversationPerson, updateConversationPerson] = useState<string>();
+	const conversationHeld = useRef<string | undefined>(undefined);
+	const setConversationPerson = useCallback((id: string | undefined) => {
+		conversationHeld.current = id;
+		updateConversationPerson(id);
+	}, []);
+	const clearConversationPerson = useCallback(
+		(id: string | undefined) => {
+			if (conversationHeld.current === id) setConversationPerson(undefined);
+		},
+		[setConversationPerson],
+	);
+	const rate = playbackRate(
+		conversationPerson !== undefined,
+		Boolean(town?.player?.job),
+	);
 	const [selected, setSelected] = useState(() => {
 		try {
 			return localStorage.getItem("alder-follow") || "";
@@ -136,6 +149,7 @@ export function useVisitorSession({
 	const downloadGeneration = useRef(0);
 	const errorRevision = useRef(0);
 	// Worker replies keep command order; reset feedback on a successful replacement, never a rejected import.
+	const [commandPending, setCommandPending] = useState(false);
 	const stateCommands = useRef<
 		{
 			replacement: number | null;
@@ -150,6 +164,27 @@ export function useVisitorSession({
 	const saveRequests = useRef(
 		new Map<number, { generation: number; backup: boolean }>(),
 	);
+	const menuHeld = useRef(false);
+	const menuWaiting = useRef(false);
+	const [menuOpen, setMenuOpen] = useState(false);
+	const [menuPausing, setMenuPausing] = useState(false);
+	const clockHealthy = useRef(false);
+	const readingUntil = useRef(0);
+	const remainingReading = useRef(0);
+	const previousStory = useRef<string | undefined>(undefined);
+	const settleMenu = useCallback(() => {
+		if (
+			menuWaiting.current &&
+			stateCommands.current.length === 0 &&
+			!pending.current &&
+			advancePending.current === null &&
+			!comparisonPending.current
+		) {
+			menuWaiting.current = false;
+			setMenuPausing(false);
+			setMenuOpen(true);
+		}
+	}, []);
 	const dispatch = useCallback((command: UiCommand) => {
 		if (command.type === "save") {
 			const requestId = command.requestId ?? ++saveRequestId.current;
@@ -168,6 +203,7 @@ export function useVisitorSession({
 				worldGeneration.current++;
 				advanceOrigin.current = null;
 			}
+			setCommandPending(true);
 			stateCommands.current.push({
 				commandType: command.type,
 				interventionId:
@@ -187,43 +223,47 @@ export function useVisitorSession({
 		}
 		client.current?.send(command);
 	}, []);
-	const resetWorldFeedback = useCallback((generation: number) => {
-		advanceOrigin.current = null;
-		acceptedGeneration.current = generation;
-		setTownEpoch(generation);
-		playerPendingRef.current = null;
-		setPlayerPending(false);
-		const requestedExport = exportRequest.current;
-		if (
-			requestedExport !== null &&
-			(saveRequests.current.get(requestedExport)?.generation ?? -1) < generation
-		)
-			exportRequest.current = null;
-		interventionPending.current = null;
-		setIntervening(false);
-		if (downloadGeneration.current < generation) {
-			setDownloadUrl("");
-			setDownloadLabel("");
-		}
-		setInterventionNotice("");
-		setBranchReport(undefined);
-		hasBranchReport.current = false;
-		setBranchStale(false);
-		setBranchHistory([]);
-		setBranchRequest(undefined);
-		setBranchProgress("");
-		setBranchError("");
-		setSaved("");
-		setObserved(undefined);
-		setTrends({});
-		setHealthHistory(undefined);
-		setAdvanceNotice("");
-		setPlayerError("");
-		setSpeechPrediction(undefined);
-		predictionKey.current = undefined;
-		predictionSequence.current++;
-		setConversationPerson(undefined);
-	}, []);
+	const resetWorldFeedback = useCallback(
+		(generation: number) => {
+			advanceOrigin.current = null;
+			acceptedGeneration.current = generation;
+			setTownEpoch(generation);
+			playerPendingRef.current = null;
+			setPlayerPending(false);
+			const requestedExport = exportRequest.current;
+			if (
+				requestedExport !== null &&
+				(saveRequests.current.get(requestedExport)?.generation ?? -1) <
+					generation
+			)
+				exportRequest.current = null;
+			interventionPending.current = null;
+			setIntervening(false);
+			if (downloadGeneration.current < generation) {
+				setDownloadUrl("");
+				setDownloadLabel("");
+			}
+			setInterventionNotice("");
+			setBranchReport(undefined);
+			hasBranchReport.current = false;
+			setBranchStale(false);
+			setBranchHistory([]);
+			setBranchRequest(undefined);
+			setBranchProgress("");
+			setBranchError("");
+			setSaved("");
+			setObserved(undefined);
+			setTrends({});
+			setHealthHistory(undefined);
+			setAdvanceNotice("");
+			setPlayerError("");
+			setSpeechPrediction(undefined);
+			predictionKey.current = undefined;
+			predictionSequence.current++;
+			setConversationPerson(undefined);
+		},
+		[setConversationPerson],
+	);
 	useEffect(() => {
 		if (!enabled) return;
 		let active = true;
@@ -250,7 +290,7 @@ export function useVisitorSession({
 		let freshAtStartup: TownView | undefined;
 		autosaveEnabled.current = false;
 		setProgress("Checking the saved town on this device…");
-		const handle = (reply: UiReply) => {
+		const handleReply = (reply: UiReply) => {
 			if (!active) return;
 			if (reply.type === "progress") {
 				setProgress(reply.message);
@@ -270,6 +310,7 @@ export function useVisitorSession({
 			if (reply.type === "comparison") {
 				comparisonPending.current = false;
 				setComparing(false);
+				setPlaying(clockHealthy.current);
 				setBranchReport(reply.report);
 				hasBranchReport.current = true;
 				setBranchStale(false);
@@ -293,10 +334,15 @@ export function useVisitorSession({
 				}
 			}
 			if (reply.type === "error") {
+				const previouslyHealthy = clockHealthy.current;
 				const failed = !comparisonPending.current
 					? stateCommands.current.shift()
 					: undefined;
 				if (failed && failed.generation < acceptedGeneration.current) return;
+				clockHealthy.current = false;
+				// A rejected import leaves the existing engine intact. Closing its menu resumes that town.
+				if (failed?.commandType === "restore" && !restoringStartup)
+					clockHealthy.current = previouslyHealthy;
 				if (failed?.commandType === "advance") {
 					advanceOrigin.current = null;
 					advancePending.current = null;
@@ -313,7 +359,7 @@ export function useVisitorSession({
 					setPlaying(false);
 					pending.current = false;
 					setError(
-						`The saved town could not be restored. Its device save is preserved while this fresh town is paused. Continuing with Play, Step or an intervention will replace that save. You can also import a compatible save or choose Start town in Save and town options. ${reply.message}`,
+						`The saved town could not be restored. Its device save is preserved while this fresh town is paused. Taking an action will replace that save. You can also import a compatible save or choose Start town in Game menu. ${reply.message}`,
 					);
 					return;
 				}
@@ -348,7 +394,7 @@ export function useVisitorSession({
 							? `This save could not be loaded. Your current town is unchanged. ${reply.message}`
 							: reply.message,
 					);
-				setPlaying(false);
+				setPlaying(clockHealthy.current);
 				pending.current = false;
 			}
 			if (reply.type === "ready" || reply.type === "state") {
@@ -421,6 +467,18 @@ export function useVisitorSession({
 					playerPendingRef.current = null;
 					setPlayerPending(false);
 				}
+				clockHealthy.current = !savedReadFailed;
+				setPlaying(!savedReadFailed);
+				const storyKey = storyReadingKey(reply.view);
+				if (
+					previousStory.current !== undefined &&
+					previousStory.current !== storyKey &&
+					!completed?.replacement
+				) {
+					if (menuHeld.current) remainingReading.current = 6000;
+					else readingUntil.current = Date.now() + 6000;
+				}
+				previousStory.current = storyKey;
 				setTown(reply.view);
 				setHealthHistory((previous) => sampleHealth(previous, reply.view));
 				const intervention = interventionPending.current;
@@ -477,7 +535,7 @@ export function useVisitorSession({
 					return next;
 				});
 				if (reply.type === "ready") {
-					setPlaying(false);
+					setPlaying(!savedReadFailed);
 					savedReadFailed = false;
 				}
 				if (
@@ -604,6 +662,14 @@ export function useVisitorSession({
 				}
 			}
 		};
+		const handle = (reply: UiReply) => {
+			try {
+				handleReply(reply);
+			} finally {
+				setCommandPending(stateCommands.current.length > 0);
+				settleMenu();
+			}
+		};
 		// A player input's state reply carries its checkpoint; store it before the answer is shown.
 		// The head of the state FIFO is this reply's command, because replies are delivered in order.
 		const persistAnswer = (reply: UiReply & { save: unknown }) => {
@@ -672,7 +738,7 @@ export function useVisitorSession({
 			runtime?.close();
 			if (client.current === runtime) client.current = null;
 		};
-	}, [dispatch, enabled, resetWorldFeedback]);
+	}, [dispatch, enabled, resetWorldFeedback, settleMenu]);
 	useEffect(() => {
 		try {
 			localStorage.setItem("alder-follow", selected);
@@ -686,9 +752,14 @@ export function useVisitorSession({
 	);
 	const hasTown = town !== undefined;
 	useEffect(() => {
-		if (!playing || !hasTown) return;
+		if (!playing || !hasTown || rate.interval === 0) return;
 		const timer = setInterval(() => {
 			if (
+				!menuHeld.current &&
+				conversationHeld.current === undefined &&
+				Date.now() >= readingUntil.current &&
+				stateCommands.current.length === 0 &&
+				playerPendingRef.current === null &&
 				!pending.current &&
 				!comparisonPending.current &&
 				advancePending.current === null &&
@@ -912,6 +983,24 @@ export function useVisitorSession({
 		send({ type: "save" });
 	};
 
+	const openMenu = () => {
+		if (menuHeld.current) return;
+		remainingReading.current = Math.max(0, readingUntil.current - Date.now());
+		menuHeld.current = true;
+		menuWaiting.current = true;
+		setMenuPausing(true);
+		setPlaying(false);
+		stopAdvancing();
+		settleMenu();
+	};
+	const closeMenu = () => {
+		if (!menuHeld.current) return;
+		readingUntil.current = Date.now() + remainingReading.current;
+		remainingReading.current = 0;
+		setMenuOpen(false);
+		menuHeld.current = false;
+		setPlaying(clockHealthy.current && !saveConflictRef.current);
+	};
 	const play = () => {
 		if (
 			saveConflictRef.current ||
@@ -925,6 +1014,7 @@ export function useVisitorSession({
 		setPlaying(true);
 	};
 	const requestExport = (notebook: boolean) => {
+		if (stateCommands.current.length > 0 || pending.current) return;
 		if (advancePending.current !== null || comparisonPending.current) return;
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
@@ -1024,12 +1114,16 @@ export function useVisitorSession({
 		branchRequest,
 		branchProgress,
 		branchError,
-		speed,
-		setSpeed,
+		commandPending,
+		menuOpen,
+		menuPausing,
+		openMenu,
+		closeMenu,
 		clockRate: rate.label,
 		townEpoch,
 		conversationPerson,
 		setConversationPerson,
+		clearConversationPerson,
 		selected,
 		setSelected,
 		observed,

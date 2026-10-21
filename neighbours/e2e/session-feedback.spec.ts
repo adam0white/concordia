@@ -1,6 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, type Page, type TestInfo, test } from "@playwright/test";
+import {
+	expect,
+	type Page,
+	postStep,
+	type TestInfo,
+	test,
+} from "./clock-fixture";
 import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 type Packet = { runtime: { seed: number; now: number } };
@@ -13,11 +19,9 @@ type SaveGate = {
 };
 async function pause(page: Page) {
 	await closeSaves(page);
-	const button = page.getByRole("button", { name: "Pause town", exact: true });
-	if (await button.isVisible()) await button.click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 }
 async function packet(
@@ -93,7 +97,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "original");
@@ -148,7 +152,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await page.getByRole("button", { name: "Start town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
@@ -189,7 +193,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	expect(await packet(page, info, "after-delayed-replies")).toEqual(original);
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 });
 
@@ -201,7 +205,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "edge-original");
@@ -231,7 +235,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 		for (const deliver of gate.held.splice(0)) deliver();
 	});
 	await expect(page.getByRole("link", { name: /Download save/ })).toBeVisible();
-	// Keep a successful replacement acknowledgement behind an Export from its new world.
+	// Export waits for a replacement acknowledgement before exposing its new world.
 	await page.evaluate(() => {
 		(
 			window as unknown as { sessionSaveGate: SaveGate }
@@ -247,29 +251,51 @@ test("exports survive rejected imports and exports from a replacement survive it
 			),
 		)
 		.toBe(1);
-	expect(await packet(page, info, "before-restore-acknowledgement")).toEqual(
-		original,
-	);
-	const newLink = await page
-		.getByRole("link", { name: /Download save/ })
-		.getAttribute("href");
+	await expect(
+		page.getByRole("button", { name: "Download this run", exact: true }),
+	).toBeDisabled();
 	await page.evaluate(() => {
 		const gate = (window as unknown as { sessionSaveGate: SaveGate })
 			.sessionSaveGate;
 		gate.holdState = false;
 		for (const deliver of gate.heldState.splice(0)) deliver();
 	});
-	await expect(
-		page.getByRole("link", { name: /Download save/ }),
-	).toHaveAttribute("href", newLink ?? "missing-link");
-	// A local file error is newer than the held Step; that older state must not dismiss it.
+	expect(await packet(page, info, "after-restore-acknowledgement")).toEqual(
+		original,
+	);
+	// Start a file read while the menu is open. Its error can arrive after a later step was queued.
 	await page.evaluate(() => {
+		const read = File.prototype.text;
+		File.prototype.text = function () {
+			if (this.name !== "broken.json") return read.call(this);
+			return new Promise<string>((resolve) =>
+				Object.assign(window, {
+					releaseFileRead: () => {
+						void read.call(this).then(resolve);
+					},
+				}),
+			);
+		};
 		(
 			window as unknown as { sessionSaveGate: SaveGate }
 		).sessionSaveGate.holdState = true;
 	});
+	await page.getByLabel("Import town save").setInputFiles({
+		name: "broken.json",
+		mimeType: "application/json",
+		buffer: Buffer.from("{"),
+	});
+	await expect
+		.poll(() =>
+			page.evaluate(
+				() =>
+					typeof (window as unknown as { releaseFileRead?: () => void })
+						.releaseFileRead,
+			),
+		)
+		.toBe("function");
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await postStep(page);
 	await expect
 		.poll(() =>
 			page.evaluate(
@@ -279,12 +305,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 			),
 		)
 		.toBe(1);
-	await openSaves(page);
-	await page.getByLabel("Import town save").setInputFiles({
-		name: "broken.json",
-		mimeType: "application/json",
-		buffer: Buffer.from("{"),
-	});
+	await page.evaluate(() =>
+		(window as unknown as { releaseFileRead: () => void }).releaseFileRead(),
+	);
 	await expect(page.getByRole("alert")).toContainText("not valid JSON");
 	await page.evaluate(() => {
 		const gate = (window as unknown as { sessionSaveGate: SaveGate })
@@ -292,6 +315,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 		gate.holdState = false;
 		for (const deliver of gate.heldState.splice(0)) deliver();
 	});
+
 	expect((await packet(page, info, "after-delayed-step")).runtime.now).toBe(
 		original.runtime.now + 15,
 	);

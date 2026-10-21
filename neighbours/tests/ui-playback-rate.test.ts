@@ -1,24 +1,46 @@
 import { expect, it } from "vitest";
-import { playbackRate } from "../src/ui/playback-rate";
+import { playbackRate, storyReadingKey } from "../src/ui/playback-rate";
 
-it("slows an unresolved conversation to one minute per second without replacing the chosen speed", () => {
-	expect(playbackRate(120, true)).toEqual({
-		interval: 15000,
-		label: "Slow · 1 min/s · conversation",
-	});
-	expect(playbackRate(120, false)).toEqual({
-		interval: 120,
-		label: "10× · 125 min/s",
-	});
+it("holds an actual conversation and keeps empty stretches brisk", () => {
+	expect(playbackRate(true).interval).toBe(0);
+	expect(playbackRate(false).interval).toBe(400);
+	expect(playbackRate(false, true).interval).toBe(1200);
 });
-it("labels each chosen rate in simulation minutes per real second", () => {
-	for (const [interval, speed, minutes] of [
-		[2400, "½×", "6.25"],
-		[1200, "1×", "12.5"],
-		[400, "3×", "37.5"],
-	] as const)
-		expect(playbackRate(interval, false)).toEqual({
-			interval,
-			label: `${speed} · ${minutes} min/s`,
-		});
+
+it("notices newest-first stories and repeats whose retained id stays the same", () => {
+	const first = {
+		seed: 42,
+		stories: [
+			{ id: "new", eventIds: [2] },
+			{ id: "old", eventIds: [1] },
+		],
+	} satisfies {
+		seed: number;
+		stories: [
+			{ id: string; eventIds: number[] },
+			{ id: string; eventIds: number[] },
+		];
+	};
+	const view = (value: typeof first) =>
+		value as unknown as import("../src/contracts").TownView;
+	const key = storyReadingKey(view(first));
+	expect(
+		storyReadingKey(
+			view({
+				...first,
+				stories: [
+					{ ...first.stories[0], id: "newer", eventIds: [3] },
+					first.stories[1],
+				],
+			}),
+		),
+	).not.toBe(key);
+	expect(
+		storyReadingKey(
+			view({
+				...first,
+				stories: [{ ...first.stories[0], eventIds: [2, 3] }, first.stories[1]],
+			}),
+		),
+	).not.toBe(key);
 });

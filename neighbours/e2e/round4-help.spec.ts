@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, step, test } from "./clock-fixture";
 
 test.use({ hasTouch: true });
 for (const width of [360, 1280])
@@ -9,19 +9,17 @@ for (const width of [360, 1280])
 		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 		await page.getByRole("button", { name: "Enter town", exact: true }).click();
 		await expect(
-			page.getByRole("button", { name: "Play town", exact: true }),
+			page.getByRole("button", { name: "Game menu", exact: true }),
 		).toBeEnabled({ timeout: 60000 });
 		await page.locator('[data-map-place="hall"] .place-hit-area').tap();
 		await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
 		await expect(page.locator(".playback")).toContainText(
-			"Press Play to set off",
+			"You set off automatically",
 		);
 		const time = page.locator(".town-time");
 		for (let i = 0; i < 6; i++) {
 			const before = await time.innerText();
-			await page
-				.getByRole("button", { name: "Step: Advance one round", exact: true })
-				.click();
+			await step(page);
 			// A click queues a worker command; wait for its rendered outcome.
 			await expect(time).not.toHaveText(before);
 		}
@@ -64,18 +62,15 @@ for (const width of [360, 1280])
 		await page.screenshot({ path: info.outputPath(`round4-ada-${width}.png`) });
 		await help.click();
 		await expect(page.locator(".playback")).toContainText(
-			"Press Play to begin your hour",
+			"Your hour starts automatically",
 		);
-		await page.getByRole("button", { name: "Play town", exact: true }).click();
 		// Leave default speed/story-watch on. Resuming a story is a visible player input.
 		const started = Date.now();
 		while (
 			Date.now() - started < 45000 &&
 			!(await page.locator(".pledge-receipt").count())
 		) {
-			const play = page.getByRole("button", { name: "Play town", exact: true });
-			if (await play.isVisible()) await play.click();
-			await page.waitForTimeout(250);
+			await step(page);
 		}
 		await expect(page.locator(".pledge-receipt")).toContainText(
 			"You covered that hour for me. I received the two coins.",

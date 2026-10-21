@@ -1,18 +1,15 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, step, test } from "./clock-fixture";
 
 test.use({ hasTouch: true });
 async function openConversation(page: Page, waitPrediction = true) {
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
-	for (let i = 0; i < 4; i++)
-		await page
-			.getByRole("button", { name: "Step: Advance one round", exact: true })
-			.click();
+	for (let i = 0; i < 4; i++) await step(page);
 	await page.locator(".resident-talk > summary").click();
 	if (
 		await page
@@ -74,38 +71,24 @@ for (const width of [360, 1280])
 		await page.screenshot({ path: info.outputPath(`offer-${width}.png`) });
 	});
 
-test("conversation stays open and mounted when the listener leaves", async ({
+test("conversation stays mounted and keeps the selected offer while reading holds time", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
 	await openConversation(page);
 	const details = page.locator(".resident-talk");
 	const original = await details.elementHandle();
-	if (!original) throw new Error("No conversation");
+	if (!original) throw Error("No conversation");
 	await page.getByLabel("Your hour").selectOption("help-repair");
-	let departed = false;
-	for (let round = 0; round < 24; round++) {
-		await page
-			.getByRole("button", { name: "Step: Advance one round", exact: true })
-			.click();
-		if (
-			await page
-				.locator(".speak-panel")
-				.getByText(/is not with you/)
-				.isVisible()
-		) {
-			departed = true;
-			break;
-		}
-	}
-	expect(departed).toBe(true);
+	const before = await page.locator(".town-time strong").innerText();
+	await page.clock.fastForward(30000);
+	expect(await page.locator(".town-time strong").innerText()).toBe(before);
 	expect(
 		await original.evaluate(
 			(element) => element.isConnected && (element as HTMLDetailsElement).open,
 		),
 	).toBe(true);
-	await expect(details.locator("summary").first()).toHaveText("Talk to Ravi");
-	await expect(page.getByLabel("Your hour")).toHaveCount(0);
+	await expect(page.getByLabel("Your hour")).toHaveValue("help-repair");
 });
 
 test("loading choices leaves offer controls in place", async ({ page }) => {
@@ -126,6 +109,7 @@ test("loading choices leaves offer controls in place", async ({ page }) => {
 	const pending = await button.boundingBox();
 	await expect(page.getByLabel("Ask them to")).toBeDisabled();
 	await visibleTarget(button);
+	await page.clock.runFor(2100);
 	await expect(page.getByLabel("Ask them to")).toBeEnabled();
 	const ready = await button.boundingBox();
 	expect(ready).toEqual(pending);

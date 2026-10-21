@@ -69,6 +69,10 @@ export default function SessionFooter({
 				{downloadUrl && (
 					<a
 						className="download-save"
+						aria-disabled={comparing}
+						onClick={(event) => {
+							if (comparing) event.preventDefault();
+						}}
 						href={downloadUrl}
 						download="alder-quay-save.json.gz"
 					>

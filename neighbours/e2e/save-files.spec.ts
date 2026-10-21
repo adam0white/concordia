@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, type Page, type TestInfo, test } from "@playwright/test";
+import { expect, type Page, step, type TestInfo, test } from "./clock-fixture";
 import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 type Packet = {
@@ -45,11 +45,11 @@ async function startPaused(page: Page) {
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 }
 
@@ -65,7 +65,7 @@ test("actual browser gzip export preserves the complete town across import and d
 		original.json.byteLength / 2,
 	);
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	const advanced = await exportFile(page, info, "advanced");
 	expect(advanced.packet.runtime.now).toBe(original.packet.runtime.now + 15);
 	await openSaves(page);
@@ -104,7 +104,7 @@ test("actual browser gzip export preserves the complete town across import and d
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	expect(
 		(await exportFile(page, info, "reload")).json.equals(original.json),
@@ -185,10 +185,8 @@ test("compression finishing after a newer export or accepted import cannot publi
 				.compressionGate;
 			gate.hold = false;
 			for (const finish of gate.held.splice(0)) finish();
-			await new Promise<void>((resolve) =>
-				requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
-			);
 		});
+		await page.clock.runFor(40);
 	};
 	await hold();
 	await page.evaluate(() => {
@@ -217,7 +215,7 @@ test("compression finishing after a newer export or accepted import cannot publi
 	await expect(link).toHaveCount(0);
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await expect(page.locator(".intervention-result")).toHaveCount(0);
 	await release();

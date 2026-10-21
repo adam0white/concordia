@@ -1,5 +1,11 @@
 # Neighbours handoff
 
+## Automatic clock and native help (2026-10-21)
+
+Remaining: Adam's feel acceptance and the existing dated gameplay/reflow follow-ups. The town now advances automatically, holds an explicitly opened conversation, and gives each new story or received player notice a bounded reading interval. Game menu blocks the timer immediately and appears after in-flight commands and checkpoint writes settle. It preserves remaining reading time. Gameplay clock buttons, rate choices and incomplete Next skips are removed. Comparison/study diagnostics remain. One native welcome information popover preserves both helper explanations. Host/Python/HF rules, protocols, saves and scenario versions are unchanged. The current public `/release.json` remains the delivery authority.
+
+Validation: final `npm run check` passes 501 units, lint, three typechecks, 42 plain-Node imports and build. All 58 actual browser cases are covered locally: 56 passed the full run and five focused retests cover corrected cross-tab and startup-recovery expectations plus menu/story and next-day continuation. Native controls pass 37/37 with no skips; actual native/WASM parity, cancellation, restore and two old-save continuations pass. The recorded-source gate remains green. One independent Codex review found no remaining blocker. Hosted CI and clean release receipts follow on the exact branch commit.
+
 ## CI repair (2026-10-20)
 
 Remaining: Adam's feel acceptance and the existing gameplay/reflow follow-ups. The Round 4 phone test enumerated three hall buttons at 09:15 before its sixth queued Step rendered; the 09:30 reply removed Lea while the indexed assertions ran. It now waits for every rendered round and asserts the final time and Ada/Noor roster. All existing viewport, hit-target, scroll and completed-help assertions remain. Final `npm run check` passes 501 units, lint, three typechecks, 42 Node imports and build. The full actual browser suite passes 63/63 on Node 26.12.0; native controls pass 37/37, with no skips. Two independent reviewers, including a wildcard, found no code blocker; the wildcard corrected the regeneration note's assertion wording.

@@ -1,5 +1,5 @@
 import { readdir } from "node:fs/promises";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 
 test("worker rejects an invalid queued advance in command order and preserves the preceding step", async ({
 	page,

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, step, test } from "./clock-fixture";
 
 test.use({ hasTouch: true });
 
@@ -13,7 +13,7 @@ for (const viewport of [
 		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 		await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 		await expect(
-			page.getByRole("button", { name: "Play town", exact: true }),
+			page.getByRole("button", { name: "Game menu", exact: true }),
 		).toBeVisible({ timeout: 60000 });
 		const clock = await page.locator(".town-time").textContent();
 		const hall = page.locator('[data-map-place="hall"]');
@@ -89,16 +89,13 @@ test("place company distinguishes meeting from an immediate conversation", async
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	await page.locator('[data-map-place="workshop"] .place-hit-area').tap();
 	const panel = page.locator(".place-panel");
 	await expect(panel.getByRole("button", { name: /^Meet Ravi/ })).toBeVisible();
 	await panel.getByRole("button", { name: /Walk to Workshop ·/ }).click();
-	for (let i = 0; i < 4; i++)
-		await page
-			.getByRole("button", { name: "Step: Advance one round", exact: true })
-			.click();
+	for (let i = 0; i < 4; i++) await step(page);
 	const talk = panel.getByRole("button", { name: /^Talk to Ravi/ });
 	await expect(talk).toBeVisible();
 	await talk.click();

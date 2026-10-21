@@ -1,4 +1,4 @@
-import { expect, type Locator, test } from "@playwright/test";
+import { expect, type Locator, step, test } from "./clock-fixture";
 
 /** A visible box can still be behind the pinned action. Check the real hit target. */
 async function expectUncovered(target: Locator) {
@@ -37,7 +37,7 @@ test("resident sheet keeps the selected resident response visible while scrollin
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	await page.locator(".neighbour-strip [data-person-id]").first().click();
 	const action = page.locator(".person-panel > .player-action");
@@ -87,7 +87,7 @@ for (const { width, colorScheme } of [
 		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 		await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 		await expect(
-			page.getByRole("button", { name: "Play town", exact: true }),
+			page.getByRole("button", { name: "Game menu", exact: true }),
 		).toBeVisible({ timeout: 60000 });
 		await page.locator(".neighbour-strip [data-person-id]").first().click();
 		await page.evaluate(() => {
@@ -124,7 +124,7 @@ test("Ada and Ravi lead with a direct response; arriving reaches the Ask alterna
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	for (const id of ["ada", "ravi"]) {
 		await page.locator(`.neighbour-strip [data-person-id="${id}"]`).click();
@@ -155,10 +155,7 @@ test("Ada and Ravi lead with a direct response; arriving reaches the Ask alterna
 		else
 			await panel.getByRole("button", { name: "Close person details" }).click();
 	}
-	for (let i = 0; i < 4; i++)
-		await page
-			.getByRole("button", { name: "Step: Advance one round", exact: true })
-			.click();
+	for (let i = 0; i < 4; i++) await step(page);
 	const talk = page.locator(".resident-talk > summary");
 	await expect(talk).toHaveText("Talk to Ravi");
 	await talk.click();
@@ -190,7 +187,7 @@ test("known open hall need is readable on map and list without colour", async ({
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	for (const selector of [
 		".known-need-map",

@@ -1,16 +1,18 @@
-/** Fifteen simulated minutes per unchanged town round. Only the UI timer uses this rate. */
-export function playbackRate(chosen: number, conversation: boolean) {
-	const speed =
-		new Map([
-			[2400, "½×"],
-			[1200, "1×"],
-			[400, "3×"],
-			[120, "10×"],
-		]).get(chosen) ?? "Custom";
-	if (conversation)
-		return {
-			interval: Math.max(chosen, 15000),
-			label: "Slow · 1 min/s · conversation",
-		};
-	return { interval: chosen, label: `${speed} · ${15000 / chosen} min/s` };
+import type { TownView } from "../contracts";
+/** Fifteen simulated minutes per unchanged town round. UI timing never enters saves. */
+export function playbackRate(conversation: boolean, occupied = false) {
+	return conversation
+		? { interval: 0, label: "Time held · conversation" }
+		: {
+				interval: occupied ? 1200 : 400,
+				label: "Time passing",
+			};
+}
+
+/** Newest-first stories may retain their id when repeated events are collapsed. */
+export function storyReadingKey(
+	view: Pick<TownView, "seed" | "stories" | "player">,
+) {
+	const latest = view.stories[0];
+	return `${view.seed}:${latest?.id ?? ""}:${latest?.eventIds.join(",") ?? ""}:${view.player?.notices ?? 0}`;
 }

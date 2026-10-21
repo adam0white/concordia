@@ -18,11 +18,11 @@ it("acknowledges only an accepted paused walk without advancing time", () => {
 	const before = runtime.view().now;
 	runtime.intervene({ kind: "player-move", placeId: "hall" });
 	expect(runtime.view().now).toBe(before);
-	expect(render()).toContain("Press Play to set off");
-	expect(render(true)).toBe("");
+	expect(render()).toContain("You set off automatically");
+	expect(render(true)).toContain("automatically");
 	expect(render(false, true)).toBe("");
 	runtime.step();
-	expect(render()).toContain("Press Play to keep walking");
+	expect(render()).toContain("You keep walking automatically");
 	for (let i = 0; i < 12; i++) runtime.step();
 	expect(render()).toBe("");
 });
@@ -43,10 +43,10 @@ it("acknowledges accepted stopped work and clears on resumed playback", () => {
 		renderToStaticMarkup(
 			createElement(QueuedWalkNotice, { town, playing, advancing: false }),
 		);
-	expect(render()).toContain("Press Play to begin your hour");
-	expect(render(true)).toBe("");
+	expect(render()).toContain("Your hour starts automatically");
+	expect(render(true)).toContain("automatically");
 	town.now += 15;
-	expect(render()).toContain("Press Play to continue your hour");
+	expect(render()).toContain("Your hour continues automatically");
 });
 
 it("restores stopped travel from accepted state without changing exact continuation", () => {
@@ -62,7 +62,7 @@ it("restores stopped travel from accepted state without changing exact continuat
 				advancing: false,
 			}),
 		),
-	).toContain("Press Play to set off");
+	).toContain("You set off automatically");
 	expect(stateHash(restored.export())).toBe(before);
 	for (let i = 0; i < 8; i++) {
 		runtime.step();

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 import { showTab } from "./session-helpers";
 
 test("a cancelled second comparison keeps the first report selectable and byte-identical", async ({
@@ -7,7 +7,7 @@ test("a cancelled second comparison keeps the first report selectable and byte-i
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 	const panel = page.locator(".day-comparison");

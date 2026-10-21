@@ -1,6 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, type Page, type TestInfo, test } from "@playwright/test";
+import {
+	step as automaticStep,
+	expect,
+	type Page,
+	type TestInfo,
+	test,
+} from "./clock-fixture";
 import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 async function exportPacket(page: Page, info: TestInfo, name: string) {
@@ -22,13 +28,8 @@ async function exportPacket(page: Page, info: TestInfo, name: string) {
 }
 
 /** Step one actual round and wait until the town clock shows it. */
-async function step(page: Page) {
-	const clock = page.locator(".town-time strong");
-	const before = await clock.textContent();
-	const button = page.getByRole("button", { name: "Step: Advance one round" });
-	await expect(button).toBeEnabled();
-	await button.click();
-	await expect(clock).not.toHaveText(before ?? "");
+async function step(page: Page, count = 1) {
+	for (let i = 0; i < count; i++) await automaticStep(page);
 }
 /** Step actual rounds until `done` holds, at most `limit` rounds. */
 async function stepUntil(page: Page, done: () => Promise<boolean>, limit = 40) {
@@ -43,7 +44,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60_000 });
 
 	// Walk to the hall from the journal drawer, where walking needs no resident.
@@ -227,7 +228,7 @@ test("an answered request is on the device before it is shown and survives an im
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60_000 });
 	await showTab(page, "Journal");
 	const you = page.locator(".journal .speak-panel");
@@ -276,7 +277,7 @@ test("an answered request is on the device before it is shown and survives an im
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60_000 });
 	expect(await deviceRequests(page)).toEqual(stored);
 	await showTab(page, "Journal");

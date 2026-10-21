@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 
 test("entry precedes optional introduction and one Game menu owns run controls", async ({
 	page,
@@ -14,11 +14,14 @@ test("entry precedes optional introduction and one Game menu owns run controls",
 			.split(/\s+/).length ?? 0;
 	expect(opening).toBeLessThanOrEqual(40);
 	await expect(page.locator(".welcome-steps")).not.toBeVisible();
-	await page.getByText("More about Alder Quay", { exact: true }).click();
+	await page
+		.getByRole("button", { name: "About Alder Quay", exact: true })
+		.click();
 	await expect(page.locator(".welcome-steps")).toBeVisible();
+	await page.keyboard.press("Escape");
 	await enter.click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	const menu = page.getByRole("button", { name: "Game menu", exact: true });
 	await expect(menu).toHaveCount(1);

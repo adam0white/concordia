@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 
 test("mobile keeps the map and opens one drawer at a time, with help one tap inside More", async ({
 	page,
@@ -7,7 +7,7 @@ test("mobile keeps the map and opens one drawer at a time, with help one tap ins
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	const views = page.getByRole("tablist", { name: "Town views" });
 	const more = views.getByRole("tab", { name: "More", exact: true });

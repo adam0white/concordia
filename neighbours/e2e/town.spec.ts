@@ -1,8 +1,15 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { FRAMEWORK_VERSION } from "@adam0white/human-framework";
-import { expect, type Page, type TestInfo, test } from "@playwright/test";
 import { transformWithOxc } from "vite";
+import {
+	expect,
+	type Page,
+	prepareClock,
+	step,
+	type TestInfo,
+	test,
+} from "./clock-fixture";
 import {
 	closeSaves,
 	openSaves,
@@ -22,11 +29,9 @@ type Packet = {
 };
 async function pause(page: Page) {
 	await closeSaves(page);
-	const button = page.getByRole("button", { name: "Pause town", exact: true });
-	if (await button.isVisible()) await button.click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 }
 async function packet(
@@ -80,7 +85,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "initial");
@@ -89,7 +94,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	// Cross the autosave cadence; each export must own its request despite pause/step save traffic.
 	for (let i = 0; i < 7; i++) {
 		await closeSaves(page);
-		await page.getByRole("button", { name: "Step: Advance one round" }).click();
+		await step(page);
 		const next = await packet(page, info, `step-${i}`);
 		expect(next.runtime.now).toBe(current.runtime.now + 15);
 		expect(next.rounds).toBe(current.rounds + 1);
@@ -105,7 +110,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 		.poll(async () => (await packet(page, info, "imported")).runtime.now)
 		.toBe(initial.runtime.now);
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	const continued = await packet(page, info, "continued");
 	expect(continued.runtime.now).toBe(initial.runtime.now + 15);
 	const minutes = continued.runtime.now;
@@ -116,7 +121,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	expect(await packet(page, info, "reload")).toEqual(continued);
 	await showTab(page, "Compare");
@@ -147,7 +152,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	const before = await packet(page, info, "after-invalid");
 	expect(before).toEqual(previousTown);
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	expect((await packet(page, info, "usable")).runtime.now).toBe(
 		before.runtime.now + 15,
 	);
@@ -162,7 +167,7 @@ test("390px town has no horizontal overflow and keyboard can open a person", asy
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	expect(
@@ -225,7 +230,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "owner-initial");
@@ -252,27 +257,30 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	expect(await packet(page, info, "legacy-adopted")).toEqual(initial);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
 		.toEqual(initial);
 	const other = await context.newPage();
+	await prepareClock(other);
 	await other.goto("/");
 	await other.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		other.getByRole("button", { name: "Play town", exact: true }),
+		other.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
+	await openSaves(other);
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	const advanced = await packet(page, info, "owner-advanced");
+
 	await expect(
 		other.getByRole("button", { name: "Load device town", exact: true }),
 	).toBeVisible();
 	await expect(
-		other.getByRole("button", { name: "Play town", exact: true }),
-	).toBeDisabled();
+		other.getByRole("button", { name: "Game menu", exact: true }),
+	).toBeEnabled();
 	const beforeExport = await deviceCheckpoint(page);
 	expect(beforeExport.latest).toEqual(advanced);
 	expect(await packet(other, info, "stale-tab-export")).toEqual(initial);
@@ -283,14 +291,14 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 		.click();
 	await other.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		other.getByRole("button", { name: "Play town", exact: true }),
+		other.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeEnabled();
 	expect(await packet(other, info, "reloaded-device-town")).toEqual(advanced);
 	await expect(
 		page.getByRole("button", { name: "Load device town", exact: true }),
 	).toBeVisible();
 	await closeSaves(other);
-	await other.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(other);
 	expect((await packet(other, info, "new-owner-continued")).runtime.now).toBe(
 		advanced.runtime.now + 15,
 	);
@@ -308,7 +316,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "cas-initial");
@@ -316,22 +324,33 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 		.poll(async () => (await deviceCheckpoint(page)).latest)
 		.toEqual(initial);
 	const other = await context.newPage();
+	await prepareClock(other);
 	await other.goto("/");
 	await other.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		other.getByRole("button", { name: "Play town", exact: true }),
+		other.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeEnabled();
+	await openSaves(other);
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	const advanced = await packet(page, info, "cas-owner-advanced");
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
 		.toEqual(advanced);
 	const beforeConflict = await deviceCheckpoint(page);
 	// Reach the real autosave cadence without Pause or Export issuing a save first.
-	await other.getByLabel("Playback speed").selectOption("120");
+
 	await closeSaves(other);
-	await other.getByRole("button", { name: "Play town", exact: true }).click();
+
+	for (
+		let i = 0;
+		i < 8 &&
+		!(await other
+			.getByRole("button", { name: "Load device town", exact: true })
+			.isVisible());
+		i++
+	)
+		await step(other);
 	await expect(
 		other.getByRole("button", { name: "Load device town", exact: true }),
 	).toBeVisible();
@@ -355,7 +374,7 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	const valid = await packet(page, info, "recovery-original");
@@ -384,17 +403,24 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	);
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await expect(page.getByRole("alert")).toContainText(
-		"Continuing with Play, Step or an intervention will replace that save.",
+		"Taking an action will replace that save.",
 	);
+	await page.clock.fastForward(30000);
+	await expect(page.locator(".town-time strong")).toHaveText("08:00");
 	const protectedDevice = await deviceCheckpoint(page);
 	expect(protectedDevice.latest).toEqual({ schema: "invalid-startup" });
 	await packet(page, info, "recovery-export-does-not-overwrite");
 	expect(await deviceCheckpoint(page)).toEqual(protectedDevice);
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await page.locator(".neighbour-strip [data-person-id]").first().click();
+	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
+	await expect(page.locator(".resident-location")).toContainText(
+		"Walking to Workshop",
+	);
+	await step(page);
 	const recovered = await packet(page, info, "deliberate-recovery");
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
@@ -531,7 +557,7 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await pause(page);
 	for (const width of [1280, 390]) {
@@ -629,25 +655,29 @@ test("retained outcomes stay near the clock and promise results survive into the
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await closeSaves(page);
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
-	await page.getByLabel("Playback speed").selectOption("120");
+
 	await closeSaves(page);
-	await page.getByRole("button", { name: "Play town", exact: true }).click();
+
 	await openSaves(page);
-	await page.getByRole("checkbox", { name: "Pause on new stories" }).uncheck();
+
 	await closeSaves(page);
 	if (
 		await page
-			.getByRole("button", { name: "Play town", exact: true })
+			.getByRole("button", { name: "Game menu", exact: true })
 			.isVisible()
 	) {
 		await closeSaves(page);
-		await page.getByRole("button", { name: "Play town", exact: true }).click();
 	}
-	await expect(page.locator(".town-time .eyebrow")).toContainText("Day 2", {
-		timeout: 30000,
-	});
+	for (
+		let i = 0;
+		i < 96 &&
+		!(await page.locator(".town-time .eyebrow").innerText()).includes("Day 2");
+		i++
+	)
+		await step(page);
+	await expect(page.locator(".town-time .eyebrow")).toContainText("Day 2");
 	await pause(page);
 	await page
 		.getByRole("navigation", { name: "Familiar neighbours" })
@@ -670,7 +700,7 @@ test("retained outcomes stay near the clock and promise results survive into the
 		.click();
 	if (!(await page.locator(".story-headline").count())) {
 		await closeSaves(page);
-		await page.getByRole("button", { name: "Play town", exact: true }).click();
+
 		await expect(page.locator(".story-headline")).toBeVisible({
 			timeout: 30000,
 		});

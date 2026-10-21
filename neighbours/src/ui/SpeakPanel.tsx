@@ -103,8 +103,8 @@ export function PlayerAction({
 		session.conversationPerson === personId && personId !== undefined,
 	);
 	useEffect(
-		() => () => session.setConversationPerson?.(undefined),
-		[session.setConversationPerson],
+		() => () => session.clearConversationPerson?.(personId),
+		[session.clearConversationPerson, personId],
 	);
 	const town = session.town;
 	const player = town?.player;
@@ -213,10 +213,20 @@ export function PlayerAction({
 					onToggle={(event) => {
 						const open = event.currentTarget.open;
 						setConversationOpen(open);
-						session.setConversationPerson?.(open ? person.id : undefined);
+						if (!open) session.setConversationPerson?.(undefined);
 					}}
 				>
-					<summary className="current-action">Talk to {person.name}</summary>
+					{/* biome-ignore lint/a11y/noStaticElementInteractions: Native summary supports pointer and keyboard activation. */}
+					<summary
+						className="current-action"
+						onClick={() =>
+							session.setConversationPerson?.(
+								conversationOpen ? undefined : person.id,
+							)
+						}
+					>
+						Talk to {person.name}
+					</summary>
 					{conversation}
 				</details>
 			</section>

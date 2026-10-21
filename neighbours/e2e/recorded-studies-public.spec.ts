@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./clock-fixture";
 import { showTab } from "./session-helpers";
 
 test("real recorded bench, route and upstream GM studies render on mobile without loading the large bench trace", async ({
@@ -10,7 +10,7 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 	await page

@@ -26,7 +26,6 @@ import TownNavigation, {
 	type TownTab,
 } from "./ui/TownNavigation";
 import TownOverview, { NeighbourStrip } from "./ui/TownOverview";
-import { useStoryWatch } from "./ui/useStoryWatch";
 import { useVisitorSession } from "./ui/useVisitorSession";
 import Welcome from "./ui/Welcome";
 
@@ -49,12 +48,10 @@ export default function App() {
 		selected,
 		setSelected,
 		observed,
-		pause,
-		play,
 	} = session;
 	const [tab, setTab] = useState<TownTab>("town");
 	const [moreTab, setMoreTab] = useState<MoreTab>("help");
-	const [menuOpen, setMenuOpen] = useState(false);
+	const { menuOpen } = session;
 	const [storyFocus, setStoryFocus] = useState<string>();
 	const [personFocus, setPersonFocus] = useState<string>();
 	const [selectedPlace, setSelectedPlace] = useState("");
@@ -62,15 +59,10 @@ export default function App() {
 	const [comparisonFocus, setComparisonFocus] = useState(false);
 	const [hallExpanded, setHallExpanded] = useState(false);
 	const person = town?.people.find((resident) => resident.id === selected);
-	const nextPerson = tab === "town" ? person : undefined;
 	const place = town?.places.find((p) => p.id === selectedPlace);
 	const drawer =
 		tab === "town" ? (person ? "person" : place ? "place" : undefined) : tab;
 	const stories = town ? groupStories(town, observed) : [];
-	const storyWatch = useStoryWatch(
-		{ playing, seed: town?.seed, now: town?.now, storyId: stories[0]?.id },
-		pause,
-	);
 	const milestones: Milestone[] = [];
 	if (town?.places.some((place) => place.id === "hall" && place.open))
 		milestones.push({ id: "hall-open", text: "The hall reopened" });
@@ -203,9 +195,11 @@ export default function App() {
 						aria-label="Game menu"
 						aria-haspopup="dialog"
 						aria-expanded={menuOpen}
-						onClick={() => setMenuOpen(true)}
+						disabled={session.menuPausing}
+						onClick={() => session.openMenu()}
 					>
-						Game menu <span aria-hidden="true">⋯</span>
+						{session.menuPausing ? "Pausing…" : "Game menu"}{" "}
+						<span aria-hidden="true">⋯</span>
 					</button>
 				)}
 				<button
@@ -404,10 +398,6 @@ export default function App() {
 													<HelpPanel
 														hallExpanded={hallExpanded}
 														setHallExpanded={setHallExpanded}
-														onAdvance={() => {
-															storyWatch.resetBaseline();
-															session.advanceUntil("hall-choice");
-														}}
 														town={town}
 														disabled={busy || session.intervening}
 														action={session.intervene}
@@ -477,18 +467,6 @@ export default function App() {
 								)}
 							</div>
 						)}
-						{storyWatch.paused && (
-							<div className="paused-story">
-								<span role="status">Paused for a new story</span>
-								<button
-									type="button"
-									className="text-button"
-									onClick={() => stories[0] && readStory(stories[0].id)}
-								>
-									Read story
-								</button>
-							</div>
-						)}
 						{session.error && !menuOpen && (
 							<div className="error" role="alert">
 								<ErrorMessage message={session.error} />
@@ -501,7 +479,7 @@ export default function App() {
 									Download this run to keep this version, or load the device
 									town.
 								</p>
-								<button type="button" onClick={() => setMenuOpen(true)}>
+								<button type="button" onClick={() => session.openMenu()}>
 									Open Game menu
 								</button>
 								<button type="button" onClick={() => location.reload()}>
@@ -519,81 +497,6 @@ export default function App() {
 						/>
 						<div className="town-toolbar">
 							<div className="playback">
-								<button
-									type="button"
-									className="play-button"
-									aria-label={
-										advancing
-											? "Stop advancing"
-											: playing
-												? "Pause town"
-												: "Play town"
-									}
-									disabled={!advancing && (comparing || saveConflict)}
-									onClick={() =>
-										advancing
-											? session.stopAdvancing()
-											: playing
-												? pause()
-												: play()
-									}
-								>
-									<span aria-hidden="true">
-										{advancing ? "■" : playing ? "Ⅱ" : "▶"}
-									</span>{" "}
-									<span>{advancing ? "Stop" : playing ? "Pause" : "Play"}</span>
-								</button>
-								<button
-									type="button"
-									aria-label="Step: Advance one round"
-									disabled={busy}
-									onClick={() => {
-										storyWatch.resetBaseline();
-										pause();
-										session.send({ type: "step" });
-									}}
-								>
-									Step
-								</button>
-								<button
-									type="button"
-									className="next-story"
-									aria-label={
-										nextPerson
-											? `Next outcome for ${nextPerson.name}`
-											: "Next story"
-									}
-									title={
-										nextPerson
-											? `Next story, resolved promise or invitation outcome for ${nextPerson.name}; at most seven days.`
-											: "Next town story; at most seven days."
-									}
-									disabled={busy || session.intervening}
-									onClick={() => {
-										storyWatch.resetBaseline();
-										session.advanceUntil(
-											nextPerson ? "person-story" : "story",
-											nextPerson?.id,
-										);
-									}}
-								>
-									Next ›
-								</button>
-								<label className="speed">
-									<span className="sr-only">Playback speed</span>
-									<select
-										disabled={busy}
-										value={session.speed}
-										onChange={(event) =>
-											session.setSpeed(Number(event.target.value))
-										}
-									>
-										<option value={2400}>½×</option>
-										<option value={1200}>1×</option>
-										<option value={400}>3×</option>
-										<option value={120}>10×</option>
-									</select>
-								</label>
 								<div className="playback-status">
 									<span className="clock-rate" role="status">
 										{session.clockRate}
@@ -614,10 +517,7 @@ export default function App() {
 					<SessionMenu
 						session={session}
 						open={menuOpen}
-						close={() => setMenuOpen(false)}
-						storyPauses={storyWatch.enabled}
-						setStoryPauses={storyWatch.setEnabled}
-						resetStory={storyWatch.resetBaseline}
+						close={session.closeMenu}
 					/>
 				</>
 			)}

@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, type Page, type TestInfo, test } from "@playwright/test";
+import { expect, type Page, step, type TestInfo, test } from "./clock-fixture";
 
 import { openSaves, showTab } from "./session-helpers";
 
@@ -35,7 +35,7 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	const original = await exportPacket(page, info, "original");
 	const link = page.getByRole("link", { name: /Download save/ });
@@ -53,7 +53,7 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 	}
 	const close = page.getByRole("dialog", { name: "Game menu" });
 	if (await close.isVisible()) await page.keyboard.press("Escape");
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	const continuation = await exportPacket(
 		page,
 		info,
@@ -62,7 +62,7 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 	await importPacket(page, original);
 	await expect(link).toHaveCount(0);
 	if (await close.isVisible()) await page.keyboard.press("Escape");
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
+	await step(page);
 	expect(await exportPacket(page, info, "restored-control")).toEqual(
 		continuation,
 	);
@@ -122,7 +122,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	const original = await exportPacket(page, info, "before-tools");
 	const close = page.getByRole("dialog", { name: "Game menu" });
@@ -153,16 +153,21 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 					.interventionGate.commands,
 		),
 	).toBe(1);
-	// Recovery exports remain available while the intervention is pending.
-	const pending = await exportPacket(page, info, "pending-tools");
-	expect(pending.runtime.controls).toBe(original.runtime.controls - 1);
-	if (await close.isVisible()) await page.keyboard.press("Escape");
+	// The menu becomes available only after the pending intervention is acknowledged.
+	await page.getByRole("button", { name: "Game menu", exact: true }).click();
+	await expect(
+		page.getByRole("dialog", { name: "Game menu", exact: true }),
+	).not.toBeVisible();
 	await page.evaluate(() => {
 		const gate = (window as unknown as { interventionGate: InterventionGate })
 			.interventionGate;
 		gate.hold = false;
 		for (const deliver of gate.held.splice(0)) deliver();
 	});
+	await expect(close).toBeVisible();
+	const pending = await exportPacket(page, info, "acknowledged-tools");
+	expect(pending.runtime.controls).toBe(original.runtime.controls - 1);
+	if (await close.isVisible()) await page.keyboard.press("Escape");
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Tools added",
 	);

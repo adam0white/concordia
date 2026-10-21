@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, type Page, test } from "@playwright/test";
 import { captureBench } from "../scripts/capture-bench.ts";
+import { expect, type Page, test } from "./clock-fixture";
 import { closeSaves, openSaves, showTab } from "./session-helpers";
 
 async function packet(page: Page) {
@@ -40,7 +40,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeEnabled({ timeout: 60000 });
 	await openSaves(page);
 	await page.getByLabel("Import town save").setInputFiles({
@@ -93,7 +93,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	await page.reload();
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeEnabled();
 	expect(await packet(page)).toEqual(proposed);
 	panel = await cart(page);

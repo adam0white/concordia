@@ -14,8 +14,16 @@ export default function Welcome({ onEnter }: Props) {
 			<button type="button" className="enter-town" onClick={onEnter}>
 				Enter town
 			</button>
-			<details className="welcome-details">
-				<summary>More about Alder Quay</summary>
+			<button
+				type="button"
+				className="help-info"
+				popoverTarget="welcome-help"
+				aria-label="About Alder Quay"
+			>
+				i
+			</button>
+			<div id="welcome-help" popover="auto" className="welcome-help">
+				<h3>More about Alder Quay</h3>
 				<svg className="welcome-rule" viewBox="0 0 320 16" aria-hidden="true">
 					<path
 						className="high-water"
@@ -42,8 +50,8 @@ export default function Welcome({ onEnter }: Props) {
 					<li>
 						<strong>Watch a day unfold.</strong>
 						<span>
-							Press Play, or Step through one round. Pick a neighbour on the map
-							to follow them.
+							The clock runs automatically and holds while you talk. Pick a
+							neighbour on the map to follow them.
 						</span>
 					</li>
 					<li>
@@ -62,20 +70,18 @@ export default function Welcome({ onEnter }: Props) {
 						</span>
 					</li>
 				</ol>
-			</details>
-			<p className="welcome-device muted">
-				Continuing downloads the Python runtime on your first visit. The
-				simulation runs on this device and starts paused. Your saved town is
-				loaded when available; you can import a save inside.
-			</p>
-			<details className="welcome-details">
-				<summary>About the simulation</summary>
+				<h3>About the simulation</h3>
 				<p>
 					Python Concordia coordinates the town. Human Framework makes the
 					residents’ decisions. This is your device’s town, with autosaves and
 					exportable saves. It does not run while this page is closed.
 				</p>
-			</details>
+			</div>
+			<p className="welcome-device muted">
+				Continuing downloads the Python runtime on your first visit. The
+				simulation runs on this device and starts when you enter. Your saved
+				town is loaded when available; you can import a save inside.
+			</p>
 		</main>
 	);
 }

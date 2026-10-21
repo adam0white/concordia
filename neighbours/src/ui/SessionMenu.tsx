@@ -9,16 +9,10 @@ export default function SessionMenu({
 	session,
 	open,
 	close,
-	storyPauses,
-	setStoryPauses,
-	resetStory,
 }: {
 	session: Session;
 	open: boolean;
 	close: () => void;
-	storyPauses: boolean;
-	setStoryPauses: (value: boolean) => void;
-	resetStory: () => void;
 }) {
 	const dialog = useRef<HTMLDialogElement>(null);
 	useEffect(() => {
@@ -58,13 +52,13 @@ export default function SessionMenu({
 					close();
 					session.sendRun();
 				}}
-				comparing={session.comparing || session.advancing}
+				comparing={
+					session.comparing || session.advancing || session.commandPending
+				}
 				importSave={(file) => {
-					resetStory();
 					return session.importSave(file);
 				}}
 				restoreSave={(slot) => {
-					resetStory();
 					session.restoreSave(slot);
 				}}
 			/>
@@ -85,19 +79,10 @@ export default function SessionMenu({
 				</div>
 			)}
 			<LabPrivacy />
-			<label className="menu-story-option">
-				<input
-					type="checkbox"
-					checked={storyPauses}
-					onChange={(event) => setStoryPauses(event.target.checked)}
-				/>
-				Pause on new stories
-			</label>
 			<form
 				className="seed-form"
 				onSubmit={(event) => {
 					event.preventDefault();
-					resetStory();
 					session.startTown();
 				}}
 			>
@@ -113,13 +98,19 @@ export default function SessionMenu({
 						value={session.seedInput}
 						onChange={(event) => session.setSeedInput(event.target.value)}
 						disabled={
-							session.advancing || session.comparing || session.saveConflict
+							session.advancing ||
+							session.comparing ||
+							session.saveConflict ||
+							session.commandPending
 						}
 					/>
 					<button
 						type="submit"
 						disabled={
-							session.advancing || session.comparing || session.saveConflict
+							session.advancing ||
+							session.comparing ||
+							session.saveConflict ||
+							session.commandPending
 						}
 					>
 						Start town

@@ -25,9 +25,7 @@ describe("action-owned error recovery", () => {
 		expect(html).toContain(
 			"Its device save is preserved while this fresh town is paused.",
 		);
-		expect(html).toContain(
-			"Continuing with Play, Step or an intervention will replace that save.",
-		);
+		expect(html).toContain("Taking an action will replace that save.");
 	});
 	it("does not infer an import from arbitrary technical error text", () => {
 		const html = render(

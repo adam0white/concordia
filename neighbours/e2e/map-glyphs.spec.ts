@@ -1,11 +1,11 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Page, step, test } from "./clock-fixture";
 import { showTab } from "./session-helpers";
 
 async function enter(page: Page) {
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible({ timeout: 60_000 });
 }
 
@@ -34,7 +34,7 @@ test("the you marker stays whole at the left-edge quay on phone widths", async (
 	await you
 		.locator("details.walk .walk-list button", { hasText: "Quay" })
 		.click();
-	const step = page.getByRole("button", { name: "Step: Advance one round" });
+
 	for (
 		let i = 0;
 		i < 40 &&
@@ -43,8 +43,7 @@ test("the you marker stays whole at the left-edge quay on phone widths", async (
 		);
 		i++
 	) {
-		await expect(step).toBeEnabled();
-		await step.click();
+		await step(page);
 	}
 	await expect(you.locator(".player-place")).toContainText("You are at Quay");
 	await showTab(page, "Town");
@@ -80,10 +79,11 @@ test("a departing traveller cannot block a phone place-count button", async ({
 	await page
 		.getByRole("button", { name: "Ada: Free to choose", exact: true })
 		.click();
-	await page.getByRole("button", { name: "Step: Advance one round" }).click();
-	await page.getByRole("button", { name: "Next outcome for Ada" }).click();
+	await step(page);
+	for (let i = 0; i < 23; i++) await step(page);
+	await expect(page.locator(".town-time strong")).toHaveText("14:00");
 	await expect(
-		page.getByRole("button", { name: "Play town", exact: true }),
+		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toBeVisible();
 	await page.getByRole("button", { name: "Close person details" }).click();
 	const homes = page.getByRole("button", {

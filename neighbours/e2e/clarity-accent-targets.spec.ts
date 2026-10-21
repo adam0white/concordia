@@ -1,4 +1,4 @@
-import { expect, type Locator, test } from "@playwright/test";
+import { expect, type Locator, test } from "./clock-fixture";
 
 async function expectStandaloneTarget(target: Locator) {
 	await expect(target).toBeInViewport();
@@ -66,7 +66,7 @@ for (const viewport of [
 		await page.goto("/");
 		await page.getByRole("button", { name: "Enter town", exact: true }).click();
 		await expect(
-			page.getByRole("button", { name: "Play town", exact: true }),
+			page.getByRole("button", { name: "Game menu", exact: true }),
 		).toBeVisible();
 		await expectStandaloneTarget(page.locator(".hub-mark"));
 		await expectStandaloneTarget(page.locator(".margin-note .step-title"));
