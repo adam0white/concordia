@@ -99,6 +99,18 @@ for (const width of [360, 1280]) {
 			page.getByRole("combobox", { name: "Playback speed" }),
 		).toHaveCount(0);
 		await capture(page, "town");
+		await expect
+			.poll(() =>
+				page.locator(".map-person, .map-cluster").evaluateAll(
+					(markers) =>
+						markers.length > 0 &&
+						markers.every((marker) => {
+							const rect = marker.getBoundingClientRect();
+							return rect.width >= 44 && rect.height >= 44;
+						}),
+				),
+			)
+			.toBe(true);
 		const rects = await page.evaluate(() => ({
 			scene: document
 				.querySelector(".game-scene")

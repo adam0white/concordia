@@ -513,7 +513,8 @@ export default function TownMap({
 		box.width < 760 && box.height <= 160 && Boolean(selected || selectedPlace);
 	const cropWidth = sheet.width * 0.55;
 	const cropHeight = (cropWidth * box.height) / Math.max(1, box.width);
-	// Viewbox units per CSS pixel with "meet" scaling; markers keep 44px targets.
+	// Viewbox units per CSS pixel with "meet" scaling. The 46-unit hit
+	// diameter leaves room for SVG borders while keeping targets above 44px.
 	const markerScale = Math.max(
 		1,
 		cropped
@@ -989,7 +990,7 @@ export default function TownMap({
 									}
 								}}
 							>
-								<circle r="22" className="person-hit" />
+								<circle r="23" className="person-hit" />
 								{(life === "downed" || life === "break") && (
 									<path
 										d={inkCircle(`${person.id}:blot`, 1, 2, 15, 0.2)}
@@ -1057,7 +1058,7 @@ export default function TownMap({
 								}
 							}}
 						>
-							<circle r="22" className="person-hit" />
+							<circle r="23" className="person-hit" />
 							<path
 								d={inkCircle(`cluster:${cluster.placeId}`, 0, 0, 18, 0.05)}
 								className="cluster-ring"
