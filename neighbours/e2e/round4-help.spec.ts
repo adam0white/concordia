@@ -51,10 +51,15 @@ for (const width of [360, 1280])
 			path: info.outputPath(`round4-hall-${width}.png`),
 		});
 		await page.getByRole("button", { name: /^Talk to Ada/ }).click();
+		await expect(page.getByText("Done by", { exact: true })).toBeInViewport({
+			ratio: 1,
+		});
+		await page.locator(".resident-help summary").click();
 		const help = page.getByRole("button", {
-			name: "Cover an hour for Ada",
+			name: "Start the covered hour",
 			exact: true,
 		});
+		await help.scrollIntoViewIfNeeded();
 		await expect(help).toBeInViewport({ ratio: 1 });
 		await expect(page.locator(".inspector-context")).toContainText(
 			"Ada left a question on the hall noticeboard",

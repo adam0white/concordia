@@ -5,7 +5,7 @@ import { createRuntime } from "../src/core/index";
 import { SpeakPanel } from "../src/ui/SpeakPanel";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
 
-it("carries Ada's current inspector question into the conversation before another request", () => {
+it("keeps request chips before secondary covered work and preserves Ada's inspector question", () => {
 	const r = createRuntime(42, 208);
 	r.intervene({ kind: "player-move", placeId: "hall" });
 	for (let i = 0; i < 6; i++) r.step();
@@ -20,7 +20,7 @@ it("carries Ada's current inspector question into the conversation before anothe
 	expect(html).toContain("How can I tell whether the timber is safe?");
 	expect(html).toContain("Ask Ada to do something");
 	expect(html).toContain("Cover an hour for Ada");
-	expect(html.indexOf("Cover an hour for Ada")).toBeLessThan(
+	expect(html.indexOf("Cover an hour for Ada")).toBeGreaterThan(
 		html.indexOf("Ask Ada to</legend>"),
 	);
 }, 60000);

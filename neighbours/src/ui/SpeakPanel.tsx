@@ -537,31 +537,6 @@ export function SpeakPanel({
 					</ul>
 				</div>
 			)}
-			{!recordOnly && personId && here && help && (
-				<section className="resident-help" aria-label={`Help ${name}`}>
-					<p>
-						You could cover a paid hour at {help.placeName} for {name}. {name}{" "}
-						would receive the two-coin wage.
-					</p>
-					<button
-						type="button"
-						disabled={busy || !!help.blocked}
-						onClick={() => session.offerHelp(personId)}
-					>
-						Cover an hour for {name}
-					</button>
-					<p className="hand">
-						{help.blocked ??
-							`${help.minutes} min including the walk · ends ${datedClock(help.endsAt)}. Starts your work now; no request in return.`}
-					</p>
-				</section>
-			)}
-			{!recordOnly && inspector && (
-				<p className="inspector-context">
-					{name} is waiting for an inspector. {question?.text} You can help with
-					an hour of work while they wait.
-				</p>
-			)}
 			{recordOnly || !personId ? null : !here ? (
 				<p>
 					{name} is not with you. Only people at the same place, and awake, can
@@ -731,6 +706,32 @@ export function SpeakPanel({
 						</button>
 					)}
 				</form>
+			)}
+			{!recordOnly && personId && here && help && (
+				<details className="resident-help" aria-label={`Help ${name}`}>
+					<summary>Cover an hour for {name} ▸</summary>
+					<p>
+						You could cover a paid hour at {help.placeName} for {name}. {name}{" "}
+						would receive the two-coin wage.
+					</p>
+					<button
+						type="button"
+						disabled={busy || !!help.blocked}
+						onClick={() => session.offerHelp(personId)}
+					>
+						Start the covered hour
+					</button>
+					<p className="hand">
+						{help.blocked ??
+							`${help.minutes} min including the walk · ends ${datedClock(help.endsAt)}. Starts your work now; no request in return.`}
+					</p>
+				</details>
+			)}
+			{!recordOnly && inspector && (
+				<p className="inspector-context">
+					{name} is waiting for an inspector. {question?.text} You can help with
+					an hour of work while they wait.
+				</p>
 			)}
 			{!recordOnly && !journalOpen && <OwnWork session={session} />}
 			{!recordOnly && journalOpen ? (
