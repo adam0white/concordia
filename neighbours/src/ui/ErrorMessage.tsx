@@ -5,7 +5,7 @@ export default function ErrorMessage({ message }: { message: string }) {
 		<>
 			<p>
 				{message.startsWith("The saved town could not be restored.")
-					? "The saved town could not be restored. Its device save is preserved while this fresh town is paused. Taking an action will replace that save. You can also import a compatible save or choose Start town in Game menu."
+					? "The saved town could not be restored. Its device save is preserved while this fresh town is paused. Taking an action will replace that save. You can also go to the title page and use Other ways in to import a compatible save or start from a seed."
 					: message.startsWith(
 								"This save could not be loaded. Your current town is unchanged.",
 							)

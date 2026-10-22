@@ -185,6 +185,10 @@ export function useVisitorSession({
 	const acceptedGeneration = useRef(0);
 	const downloadGeneration = useRef(0);
 	const errorRevision = useRef(0);
+	const lastExportFailure = useRef<{
+		revision: number;
+		message: string;
+	} | null>(null);
 	// Worker replies keep command order; reset feedback on a successful replacement, never a rejected import.
 	const [commandPending, setCommandPending] = useState(false);
 	const stateCommands = useRef<
@@ -492,7 +496,7 @@ export function useVisitorSession({
 					setPlaying(false);
 					pending.current = false;
 					setError(
-						`The saved town could not be restored. Its device save is preserved while this fresh town is paused. Taking an action will replace that save. You can also import a compatible save or choose Start town in Game menu. ${reply.message}`,
+						`The saved town could not be restored. Its device save is preserved while this fresh town is paused. Taking an action will replace that save. You can also go to the title page and use Other ways in to import a compatible save or start from a seed. ${reply.message}`,
 					);
 					return;
 				}
@@ -832,11 +836,15 @@ export function useVisitorSession({
 								exportRequest.current = null;
 								if (revision !== errorRevision.current) return;
 								errorRevision.current++;
-								setError(
+								const message =
 									failure instanceof SaveFileError
 										? failure.message
-										: "This save could not be compressed. The current town is unchanged.",
-								);
+										: "This save could not be compressed. The current town is unchanged.";
+								lastExportFailure.current = {
+									revision: errorRevision.current,
+									message,
+								};
+								setError(message);
 							},
 						);
 					}
@@ -1240,6 +1248,14 @@ export function useVisitorSession({
 	const requestExport = (notebook: boolean) => {
 		if (stateCommands.current.length > 0 || pending.current) return;
 		if (advancePending.current !== null || comparisonPending.current) return;
+		const previousFailure = lastExportFailure.current;
+		if (previousFailure?.revision === errorRevision.current) {
+			errorRevision.current++;
+			setError((current) =>
+				current === previousFailure.message ? "" : current,
+			);
+		}
+		lastExportFailure.current = null;
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;

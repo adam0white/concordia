@@ -573,7 +573,7 @@ export default function App() {
 										</button>
 									</div>
 								)}
-								{session.error && (
+								{session.error && sheet !== "feedback" && (
 									<div className="error" role="alert">
 										<ErrorMessage message={session.error} />
 									</div>

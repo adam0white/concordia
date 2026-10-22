@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import ErrorMessage from "./ErrorMessage";
 import { LabPrivacy, lab, useLabRecording } from "./lab";
 import type { useVisitorSession } from "./useVisitorSession";
 
@@ -38,6 +39,11 @@ export default function SendWord({
 	const [sending, setSending] = useState(false);
 	const [sent, setSent] = useState(false);
 	const [error, setError] = useState("");
+	const feedbackError = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (error || session.error)
+			feedbackError.current?.scrollIntoView({ block: "nearest" });
+	}, [error, session.error]);
 	const { switchedOff, privacySignalOn } = useLabRecording();
 	const blocked = switchedOff || (privacySignalOn && !consent);
 	const submit = async () => {
@@ -198,10 +204,13 @@ export default function SendWord({
 						<span className="tiny">({session.downloadLabel})</span>
 					</a>
 				)}
-				{error && (
-					<p className="error" role="alert">
-						{error}
-					</p>
+				{(error || session.error) && (
+					<div className="error" role="alert" ref={feedbackError}>
+						{error && <p>{error}</p>}
+						{session.error && session.error !== error && (
+							<ErrorMessage message={session.error} />
+						)}
+					</div>
 				)}
 			</div>
 			<div className="action-bar">
