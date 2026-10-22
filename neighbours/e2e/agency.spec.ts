@@ -3,7 +3,6 @@ import { gunzipSync } from "node:zlib";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
 import { expect, type Page, test } from "./clock-fixture";
 import {
-	closeSaves,
 	openDownload,
 	openOtherWays,
 	openSaves,
@@ -55,7 +54,7 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 		await choices.locator(":scope > summary").click();
 	const before = await exported(page);
 	expect(before.runtime.controls).toBe(0);
-	await closeSaves(page);
+	await showTab(page, "Help");
 	await page.getByRole("button", { name: /Compare a week with Lea/ }).click();
 	const comparison = page.locator(".day-comparison");
 	await expect(comparison).toHaveAttribute("open", "");

@@ -1,5 +1,9 @@
 # Neighbours handoff
 
+## Approved UI grammar (2026-10-22)
+
+Adam accepts feel separately. This section records the source implementation; hosted CI and the live release manifest establish publication. Implementation `7839c5f` replaces the older controls below with automatic pacing, optional menu pace choices and Skip ⏩. It puts the map first, pins context actions, moves saves to the title, studies to the menu, and adds named Send word. Simulation, Python, published HF 2.8.0, contracts and replay/save formats are unchanged. Independent review fixes and regenerated-source evidence are recorded in [UI grammar delivery](docs/neighbours/ui-grammar-2026-10-22.md). Local validation covers 517 unit tests, all 67 browser cases across the full sweep and focused retests, 37 native controls, actual 208-person native/WASM parity, three exact zero-call tape replays and regenerated source provenance. The live `/release.json` remains authoritative.
+
 ## Player clock controls (2026-10-22)
 Remaining: Adam accepts feel. Play/pause, one-round Step and the four previous playback speeds return. Step waits while busy or a conversation is open. Opening a conversation still holds time; active work retains its minimum interval and new stories retain reading time. Game menu preserves both a running and a player-paused clock. Unsafe Next controls remain absent. Native information help, simulation rules, HF pin, saves and replay stay unchanged.
 

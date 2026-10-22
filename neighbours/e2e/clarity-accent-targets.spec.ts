@@ -26,6 +26,7 @@ async function expectStandaloneTarget(target: Locator) {
 				"a, button, summary, input, select",
 			),
 		).filter((other) => {
+			if (!other.checkVisibility()) return false;
 			if (
 				other === element ||
 				element.contains(other) ||
@@ -33,11 +34,31 @@ async function expectStandaloneTarget(target: Locator) {
 			)
 				return false;
 			const box = other.getBoundingClientRect();
+			let left = Math.max(0, box.left),
+				right = Math.min(innerWidth, box.right),
+				top = Math.max(0, box.top),
+				bottom = Math.min(innerHeight, box.bottom);
+			for (
+				let parent = other.parentElement;
+				parent;
+				parent = parent.parentElement
+			) {
+				const style = getComputedStyle(parent);
+				const clip = parent.getBoundingClientRect();
+				if (/hidden|clip|scroll|auto/.test(style.overflowX)) {
+					left = Math.max(left, clip.left);
+					right = Math.min(right, clip.right);
+				}
+				if (/hidden|clip|scroll|auto/.test(style.overflowY)) {
+					top = Math.max(top, clip.top);
+					bottom = Math.min(bottom, clip.bottom);
+				}
+			}
 			return (
-				box.width > 0 &&
-				box.height > 0 &&
-				Math.min(rect.right, box.right) - Math.max(rect.left, box.left) > 0.5 &&
-				Math.min(rect.bottom, box.bottom) - Math.max(rect.top, box.top) > 0.5
+				right > left &&
+				bottom > top &&
+				Math.min(rect.right, right) - Math.max(rect.left, left) > 0.5 &&
+				Math.min(rect.bottom, bottom) - Math.max(rect.top, top) > 0.5
 			);
 		});
 		return {
@@ -92,7 +113,7 @@ for (const viewport of [
 		await page.keyboard.press("Escape");
 		await page.locator(".neighbour-strip [data-person-id]").first().click();
 		await expect(page.locator(".neighbour.active")).toHaveAttribute(
-			"aria-current",
+			"aria-pressed",
 			"true",
 		);
 		await expectStandaloneTarget(page.locator(".game-actions .primary"));

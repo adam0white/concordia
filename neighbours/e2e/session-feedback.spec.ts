@@ -240,6 +240,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 		gate.hold = false;
 		for (const deliver of gate.held.splice(0)) deliver();
 	});
+	await openDownload(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toBeVisible();
 	// Export waits for a replacement acknowledgement before exposing its new world.
 	await page.evaluate(() => {
@@ -259,7 +260,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 		.toBe(1);
 	await expect(
 		page.getByRole("button", { name: "Keep a copy of this run", exact: true }),
-	).toBeDisabled();
+	).toHaveCount(0);
 	await page.evaluate(() => {
 		const gate = (window as unknown as { sessionSaveGate: SaveGate })
 			.sessionSaveGate;
@@ -269,7 +270,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 	expect(await packet(page, info, "after-restore-acknowledgement")).toEqual(
 		original,
 	);
-	// Start a file read while the menu is open. Its error can arrive after a later step was queued.
+	// A title-page file read can fail after a later timer round has been queued.
 	await page.evaluate(() => {
 		const read = File.prototype.text;
 		File.prototype.text = function () {
@@ -327,4 +328,29 @@ test("exports survive rejected imports and exports from a replacement survive it
 		original.runtime.now + 15,
 	);
 	await expect(page.getByRole("alert")).toContainText("not valid JSON");
+});
+
+test("a rejected local JSON file resumes automatic time without another action", async ({
+	page,
+}) => {
+	await page.goto("/");
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
+	await openOtherWays(page);
+	await page.getByLabel("Import town save").setInputFiles({
+		name: "invalid-local.json",
+		mimeType: "application/json",
+		buffer: Buffer.from("{"),
+	});
+	await expect(page.getByRole("alert")).toContainText("not valid JSON");
+	// No menu, walking, or other action resumes time after the error.
+	const before = await postStep(page);
+	await expect
+		.poll(() =>
+			page.evaluate(() => (window as unknown as { townNow: number }).townNow),
+		)
+		.toBe(before.now + 15);
+	await expect(page.locator(".town-time strong")).toHaveText("08:15");
 });

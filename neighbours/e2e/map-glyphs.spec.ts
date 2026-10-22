@@ -29,9 +29,17 @@ test("the you marker stays whole at the left-edge quay on phone widths", async (
 }) => {
 	test.setTimeout(180_000);
 	await enter(page);
-	await page.locator('[data-map-place="quay"] .place-hit-area').click();
+	await page.locator('[data-map-place="quay"]').press("Enter");
 	await page.getByRole("button", { name: /Walk to Quay ·/ }).click();
-	for (let i = 0; i < 4; i++) await step(page);
+	for (
+		let i = 0;
+		i < 40 &&
+		!(await page.locator(".place-response").textContent())?.includes(
+			"You are here.",
+		);
+		i++
+	)
+		await step(page);
 	await expect(page.locator(".place-response")).toContainText("You are here.");
 	await showTab(page, "Town");
 	for (const width of [320, 360, 390]) {

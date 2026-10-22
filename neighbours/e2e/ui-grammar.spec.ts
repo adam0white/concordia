@@ -149,6 +149,15 @@ for (const width of [360, 1280]) {
 		await page
 			.getByRole("button", { name: "Close Help the town", exact: true })
 			.click();
+		await page.getByRole("button", { name: "Journal", exact: true }).click();
+		await menu(page);
+		await page.keyboard.press("Escape");
+		await expect(page.locator(".game-sheet .sheet-heading h2")).toHaveText(
+			"Journal",
+		);
+		await page
+			.getByRole("button", { name: "Close Journal", exact: true })
+			.click();
 		await menu(page);
 		await held(page);
 		await capture(page, "menu");
@@ -276,7 +285,26 @@ for (const width of [360, 1280]) {
 				},
 				{ privacy },
 			);
-			await page.goto("/");
+			// The client intentionally suppresses linked localhost recording. Serve the
+			// exact local build at a secure synthetic origin; API transport stays intercepted.
+			const configured =
+				process.env.NEIGHBOURS_LIVE_URL ?? "http://127.0.0.1:5286";
+			let entry = "/";
+			if (!privacy && !configured.startsWith("https://")) {
+				entry = "https://neighbours-ui-test.invalid/";
+				await page.route(
+					"https://neighbours-ui-test.invalid/**",
+					async (route) => {
+						const requested = new URL(route.request().url());
+						const response = await route.fetch({
+							url: new URL(requested.pathname + requested.search, configured)
+								.href,
+						});
+						await route.fulfill({ response });
+					},
+				);
+			}
+			await page.goto(entry);
 			await page
 				.getByRole("button", { name: "Enter Alder Quay", exact: true })
 				.click();

@@ -3,7 +3,6 @@ import { gunzipSync } from "node:zlib";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
 import { expect, type Page, test } from "./clock-fixture";
 import {
-	closeSaves,
 	openDownload,
 	openOtherWays,
 	openSaves,
@@ -51,15 +50,23 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	});
 	await showTab(page, "Help");
 	const card = page.locator(".inspection-situation");
-	await card.locator(":scope > summary").click();
-	await card
-		.getByText("Situation source and controlled cases", { exact: true })
-		.click();
-	await card.getByLabel("Situation", { exact: true }).selectOption("dry-sound");
-	// At this genuine checkpoint (Day 14, 18:00) Lea is asleep in Phase D towns; Ada is awake and can be asked.
-	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("ada");
+	const configure = async () => {
+		if ((await card.getAttribute("open")) === null)
+			await card.locator(":scope > summary").click();
+		const source = card.getByText("Why · the record ▸", { exact: true });
+		if ((await source.locator("..").getAttribute("open")) === null)
+			await source.click();
+		await card
+			.getByLabel("Situation", { exact: true })
+			.selectOption("dry-sound");
+		await card
+			.getByLabel("Ask a neighbour", { exact: true })
+			.selectOption("ada");
+	};
+	await configure();
 	const before = await exported(page);
-	await closeSaves(page);
+	await showTab(page, "Help");
+	await configure();
 	await card
 		.getByRole("button", {
 			name: "Compare a day with this request",
@@ -84,12 +91,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	).toContainText("+1");
 	expect(await exported(page)).toEqual(before);
 	await showTab(page, "Help");
-	await card.locator(":scope > summary").click();
-	await card
-		.getByText("Situation source and controlled cases", { exact: true })
-		.click();
-	await card.getByLabel("Situation", { exact: true }).selectOption("dry-sound");
-	await card.getByLabel("Ask a neighbour", { exact: true }).selectOption("ada");
+	await configure();
 	await card
 		.getByRole("button", { name: "Ask Ada to inspect", exact: true })
 		.click();

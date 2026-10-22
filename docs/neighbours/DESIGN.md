@@ -40,11 +40,11 @@ Beads epic nbh-01z owns status and dependencies. This design states acceptance; 
 
 The earlier F-214 recorded-study provenance deferral (`nbh-01z.43`) was resolved on **2026-10-20** by genuinely regenerating five deterministic studies and three native model studies. Source and exact replay gates remain unchanged. Historical assistance remains byte-pinned. See [the regeneration record](ci-provenance-regeneration-2026-10-20.md).
 
-## Clock and help presentation (2026-10-21)
+## Clock and help presentation (2026-10-22)
 
-The live town chooses its pace. One unchanged fifteen-minute round runs at a time: briskly in quiet stretches and more slowly during the player's travel or work. A new story or received player notice gets six seconds of reading time. An explicitly opened conversation holds time; merely selecting a person does not. Opening Game menu first blocks new rounds and drains already submitted commands. The menu appears only after their terminal acknowledgement and checkpoint writes. Closing it restores any remaining reading time. Pending menu replacements also block further actions and exports until acknowledged.
+The live town chooses its pace. One unchanged fifteen-minute round runs at a time: briskly in quiet stretches and more slowly during the player's travel or work. A new story or received player notice gets eight seconds of reading time. An explicitly opened conversation holds time; merely selecting a person does not. Opening Game menu first blocks new rounds and drains already submitted commands. The menu appears only after their terminal acknowledgement and checkpoint writes. Closing it restores any remaining reading time. Pending menu replacements also block further actions and exports until acknowledged.
 
-Gameplay has no Play, Step, rate selector or Next skip. Existing comparison and recorded-study controls remain diagnostics. Their protocols and historical saves are unchanged, as are Python, host rules, HF 2.8.0 and scenario versions. One native welcome information popover retains both former helper explanations. Historical playback-control UI tests were replaced by automatic-clock, reading, conversation and menu-drain checks; advance unit/native/worker-order controls remain.
+Gameplay has no Play or Step. Automatic pacing is the default; Automatic / Slow / Steady / Fast are available only in the game menu. Skip ⏩ runs actual rounds and stops on the next relevant event. The approved [UI grammar delivery](ui-grammar-2026-10-22.md) replaces the earlier clock layout. Existing comparison and recorded-study controls remain diagnostics. Their protocols and historical saves are unchanged, as are Python, host rules, HF 2.8.0 and scenario versions. One native welcome information popover retains both former helper explanations. Historical playback-control UI tests were replaced by automatic-clock, reading, conversation and menu-drain checks; advance unit/native/worker-order controls remain.
 
 ## Deferred
 

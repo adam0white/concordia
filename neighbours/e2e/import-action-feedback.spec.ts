@@ -28,6 +28,9 @@ async function exportPacket(page: Page, info: TestInfo, name: string) {
 	return JSON.parse(gunzipSync(await readFile(path)).toString("utf8"));
 }
 async function importPacket(page: Page, value: unknown) {
+	const before = await page.evaluate(
+		() => (window as unknown as { townStates: number }).townStates,
+	);
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
@@ -35,6 +38,19 @@ async function importPacket(page: Page, value: unknown) {
 		mimeType: "application/json",
 		buffer: Buffer.from(JSON.stringify(value)),
 	});
+	if (
+		value &&
+		typeof value === "object" &&
+		"schema" in value &&
+		value.schema === "neighbours/concordia@1"
+	)
+		await expect
+			.poll(() =>
+				page.evaluate(
+					() => (window as unknown as { townStates: number }).townStates,
+				),
+			)
+			.toBeGreaterThan(before);
 }
 
 test("worker rejects JSON arrays and invalid objects with truthful recovery and exact continuation", async ({
@@ -182,7 +198,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	const pending = await exportPacket(page, info, "acknowledged-tools");
 	expect(pending.runtime.controls).toBe(original.runtime.controls - 1);
 	if (await close.isVisible()) await page.keyboard.press("Escape");
-	await closeSaves(page);
+	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Tools added",
 	);

@@ -783,6 +783,11 @@ export function useVisitorSession({
 								setError(
 									"The current town could not be saved on this device. Your town is unchanged. Download a copy before starting another town.",
 								);
+								setPlaying(
+									clockHealthy.current &&
+										!saveConflictRef.current &&
+										!menuHeld.current,
+								);
 							}
 						});
 				if (
@@ -1303,10 +1308,10 @@ export function useVisitorSession({
 			return;
 		const intent = ++replacementIntent.current;
 		replaceAfterSave.current = null;
-		setPlaying(false);
 		void localSave(slot)
 			.then((save) => {
 				if (save !== undefined && intent === replacementIntent.current) {
+					setPlaying(false);
 					send({ type: "restore", save });
 				}
 			})
@@ -1328,10 +1333,10 @@ export function useVisitorSession({
 			return;
 		const intent = ++replacementIntent.current;
 		replaceAfterSave.current = null;
-		setPlaying(false);
 		try {
 			const save = await decodeSave(file);
 			if (intent !== replacementIntent.current) return;
+			setPlaying(false);
 			send({ type: "restore", save });
 		} catch (failure) {
 			if (intent !== replacementIntent.current) return;

@@ -101,6 +101,7 @@ export default function App() {
 	useEffect(() => {
 		const close = (event: KeyboardEvent) => {
 			if (event.key !== "Escape") return;
+			if (session.menuOpen || session.menuPausing || titleMenu) return;
 			if (info) setInfo(false);
 			else if (sheet !== "town") {
 				if (sheet === "compare" || sheet === "studies")
@@ -110,7 +111,14 @@ export default function App() {
 		};
 		window.addEventListener("keydown", close);
 		return () => window.removeEventListener("keydown", close);
-	}, [info, sheet, session.cancelComparison]);
+	}, [
+		info,
+		sheet,
+		session.cancelComparison,
+		session.menuOpen,
+		session.menuPausing,
+		titleMenu,
+	]);
 	useEffect(() => {
 		if (!info) return;
 		const outside = (event: PointerEvent) => {
@@ -137,6 +145,20 @@ export default function App() {
 		setSheet("town");
 	};
 	const closeSelection = () => {
+		const previousPerson = selected;
+		const previousPlace = selectedPlace;
+		requestAnimationFrame(() => {
+			// Closing removes the focused control. Preserve any newer deliberate focus.
+			if (document.activeElement !== document.body) return;
+			const target = previousPerson
+				? document.querySelector<HTMLElement>(
+						`.neighbour-strip [data-person-id="${CSS.escape(previousPerson)}"]`,
+					)
+				: document.querySelector<HTMLElement>(
+						`[data-map-place="${CSS.escape(previousPlace)}"]`,
+					);
+			target?.focus({ preventScroll: true });
+		});
 		session.setConversationPerson(undefined);
 		setSelected("");
 		setSelectedPlace("");
@@ -150,7 +172,10 @@ export default function App() {
 			session.setConversationPerson(undefined);
 			setInTown(false);
 			setSheet("town");
-		} else setSheet(next);
+		} else {
+			if (next !== "feedback" && town) setInTown(true);
+			setSheet(next);
+		}
 	};
 	const compare = (input: Intervention, rounds: 96 | 672) => {
 		setSheet("compare");

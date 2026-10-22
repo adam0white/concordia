@@ -278,7 +278,9 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	const advanced = await packet(page, info, "owner-advanced");
 
 	await expect(
-		other.getByRole("button", { name: "Load device town", exact: true }),
+		other
+			.getByRole("dialog", { name: /^Game menu/ })
+			.getByRole("button", { name: "Load device town", exact: true }),
 	).toBeVisible();
 	await expect(
 		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
