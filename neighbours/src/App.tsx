@@ -437,7 +437,14 @@ export default function App() {
 				<main className="game-loading">
 					<div className="title-drawing loading-drawing" aria-hidden="true">
 						<svg viewBox="0 0 360 240" aria-hidden="true">
-							<path d="M-10 200 Q100 80 180 170 T380 100" />
+							<path
+								className="loading-town-outline"
+								d="M45 70h55v42H45zM235 50h65v45h-65zM195 145h60v35h-60z"
+							/>
+							<path
+								className="loading-river"
+								d="M-10 200 Q100 80 180 170 T380 100"
+							/>
 						</svg>
 					</div>
 					<section>

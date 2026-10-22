@@ -476,6 +476,11 @@ body,
 	padding: 16px;
 	overflow: auto;
 }
+.game-loading [role="status"] {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 .game-loading > footer {
 	padding: 12px;
 }
@@ -490,7 +495,10 @@ body,
 	stroke: var(--sky);
 	stroke-width: 2;
 }
-.loading-drawing path {
+.loading-drawing .loading-town-outline {
+	opacity: 0.25;
+}
+.loading-drawing .loading-river {
 	stroke-dasharray: 500;
 	animation: river-ink 4s ease infinite;
 }
@@ -640,7 +648,7 @@ body,
 	}
 }
 @media (prefers-reduced-motion: reduce) {
-	.loading-drawing path {
+	.loading-drawing .loading-river {
 		animation: none;
 	}
 }
