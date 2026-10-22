@@ -215,8 +215,8 @@
     }
   },
   "sources": {
-    "package-lock.json": "ae27f384bc6474db502201892fb7173deab41914d56706feef1927e4dda6cb7d",
-    "package.json": "56ff877e9e881a2d8b2b1f3e74ee4ed815c4f2933a5c59dace8cff7ae6886b2c",
+    "package-lock.json": "5dba3cab31288ec7e6343fe326edd97e32721f99b81231e67eca0aa041f5be10",
+    "package.json": "c557e536e569e56285246b2339ac548ae4b842563df843e312feca4ab937077b",
     "scripts/probe-cart-choices.ts": "66c04bd02fc2da4f9b5cbcbe2291600da8d934fe7a6c2c1bfe4ed53aabc91a3b",
     "src/contracts.ts": "597c8344d3a2658d202982163e511085f39d4ba30ea4c87ba0e99cb265b25120",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
