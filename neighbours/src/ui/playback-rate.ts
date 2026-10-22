@@ -1,10 +1,14 @@
 import type { TownView } from "../contracts";
 /** Fifteen simulated minutes per unchanged town round. UI timing never enters saves. */
-export function playbackRate(conversation: boolean, occupied = false) {
+export function playbackRate(
+	conversation: boolean,
+	occupied = false,
+	speed = 1200,
+) {
 	return conversation
 		? { interval: 0, label: "Time held · conversation" }
 		: {
-				interval: occupied ? 1200 : 400,
+				interval: occupied ? Math.max(1200, speed) : speed,
 				label: "Time passing",
 			};
 }

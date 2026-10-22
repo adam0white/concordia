@@ -40,6 +40,7 @@ export function useVisitorSession({
 	const [progress, setProgress] = useState("Preparing the live town…");
 	const [error, setError] = useState("");
 	const [playing, setPlaying] = useState(false);
+	const playerPaused = useRef(false);
 	const [comparing, setComparing] = useState(false);
 	const [advancing, setAdvancing] = useState(false);
 	const [advanceProgress, setAdvanceProgress] = useState("");
@@ -87,9 +88,12 @@ export function useVisitorSession({
 		},
 		[setConversationPerson],
 	);
+	const [speed, setSpeed] = useState(1200);
+	const menuWasPlaying = useRef(false);
 	const rate = playbackRate(
 		conversationPerson !== undefined,
 		Boolean(town?.player?.job),
+		speed,
 	);
 	const [selected, setSelected] = useState(() => {
 		try {
@@ -310,7 +314,9 @@ export function useVisitorSession({
 			if (reply.type === "comparison") {
 				comparisonPending.current = false;
 				setComparing(false);
-				setPlaying(clockHealthy.current);
+				setPlaying(
+					clockHealthy.current && !playerPaused.current && !menuHeld.current,
+				);
 				setBranchReport(reply.report);
 				hasBranchReport.current = true;
 				setBranchStale(false);
@@ -394,7 +400,9 @@ export function useVisitorSession({
 							? `This save could not be loaded. Your current town is unchanged. ${reply.message}`
 							: reply.message,
 					);
-				setPlaying(clockHealthy.current);
+				setPlaying(
+					clockHealthy.current && !playerPaused.current && !menuHeld.current,
+				);
 				pending.current = false;
 			}
 			if (reply.type === "ready" || reply.type === "state") {
@@ -468,7 +476,9 @@ export function useVisitorSession({
 					setPlayerPending(false);
 				}
 				clockHealthy.current = !savedReadFailed;
-				setPlaying(!savedReadFailed);
+				setPlaying(
+					!savedReadFailed && !playerPaused.current && !menuHeld.current,
+				);
 				const storyKey = storyReadingKey(reply.view);
 				if (
 					previousStory.current !== undefined &&
@@ -535,7 +545,9 @@ export function useVisitorSession({
 					return next;
 				});
 				if (reply.type === "ready") {
-					setPlaying(!savedReadFailed);
+					setPlaying(
+						!savedReadFailed && !playerPaused.current && !menuHeld.current,
+					);
 					savedReadFailed = false;
 				}
 				if (
@@ -975,6 +987,7 @@ export function useVisitorSession({
 		[town],
 	);
 	const pause = () => {
+		playerPaused.current = true;
 		setPlaying(false);
 		if (advancePending.current !== null) {
 			stopAdvancing();
@@ -985,6 +998,7 @@ export function useVisitorSession({
 
 	const openMenu = () => {
 		if (menuHeld.current) return;
+		menuWasPlaying.current = playing;
 		remainingReading.current = Math.max(0, readingUntil.current - Date.now());
 		menuHeld.current = true;
 		menuWaiting.current = true;
@@ -999,7 +1013,11 @@ export function useVisitorSession({
 		remainingReading.current = 0;
 		setMenuOpen(false);
 		menuHeld.current = false;
-		setPlaying(clockHealthy.current && !saveConflictRef.current);
+		setPlaying(
+			menuWasPlaying.current &&
+				clockHealthy.current &&
+				!saveConflictRef.current,
+		);
 	};
 	const play = () => {
 		if (
@@ -1008,6 +1026,7 @@ export function useVisitorSession({
 			comparisonPending.current
 		)
 			return;
+		playerPaused.current = false;
 		autosaveEnabled.current = true;
 		setError("");
 		setAdvanceNotice("");
@@ -1119,7 +1138,9 @@ export function useVisitorSession({
 		menuPausing,
 		openMenu,
 		closeMenu,
-		clockRate: rate.label,
+		clockRate: playing ? rate.label : "Time stopped",
+		speed,
+		setSpeed,
 		townEpoch,
 		conversationPerson,
 		setConversationPerson,

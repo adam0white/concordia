@@ -1,5 +1,9 @@
 # Neighbours handoff
 
+## Player clock controls (2026-10-22)
+Remaining: Adam accepts feel. Play/pause, one-round Step and the four previous playback speeds return. Step waits while busy or a conversation is open. Opening a conversation still holds time; active work retains its minimum interval and new stories retain reading time. Game menu preserves both a running and a player-paused clock. Unsafe Next controls remain absent. Native information help, simulation rules, HF pin, saves and replay stay unchanged.
+
+
 ## Automatic clock and native help (2026-10-21)
 
 Remaining: Adam's feel acceptance and the existing dated gameplay/reflow follow-ups. The town now advances automatically, holds an explicitly opened conversation, and gives each new story or received player notice a bounded reading interval. Game menu blocks the timer immediately and appears after in-flight commands and checkpoint writes settle. It preserves remaining reading time. Gameplay clock buttons, rate choices and incomplete Next skips are removed. Comparison/study diagnostics remain. One native welcome information popover preserves both helper explanations. Host/Python/HF rules, protocols, saves and scenario versions are unchanged. The current public `/release.json` remains the delivery authority.

@@ -497,6 +497,44 @@ export default function App() {
 						/>
 						<div className="town-toolbar">
 							<div className="playback">
+								<button
+									type="button"
+									className="play-button"
+									aria-label={playing ? "Pause town" : "Play town"}
+									disabled={comparing || saveConflict}
+									onClick={() => (playing ? session.pause() : session.play())}
+								>
+									{playing ? "Pause" : "Play"}
+								</button>
+								<button
+									type="button"
+									aria-label="Step: Advance one round"
+									disabled={
+										busy ||
+										session.commandPending ||
+										session.conversationPerson !== undefined
+									}
+									onClick={() => {
+										session.pause();
+										session.send({ type: "step" });
+									}}
+								>
+									Step
+								</button>
+								<label className="speed">
+									<span className="sr-only">Playback speed</span>
+									<select
+										value={session.speed}
+										onChange={(event) =>
+											session.setSpeed(Number(event.target.value))
+										}
+									>
+										<option value={2400}>½×</option>
+										<option value={1200}>1×</option>
+										<option value={400}>3×</option>
+										<option value={120}>10×</option>
+									</select>
+								</label>
 								<div className="playback-status">
 									<span className="clock-rate" role="status">
 										{session.clockRate}

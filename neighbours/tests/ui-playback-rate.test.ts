@@ -3,7 +3,9 @@ import { playbackRate, storyReadingKey } from "../src/ui/playback-rate";
 
 it("holds an actual conversation and keeps empty stretches brisk", () => {
 	expect(playbackRate(true).interval).toBe(0);
-	expect(playbackRate(false).interval).toBe(400);
+	expect(playbackRate(false).interval).toBe(1200);
+	expect(playbackRate(false, false, 120).interval).toBe(120);
+	expect(playbackRate(false, true, 120).interval).toBe(1200);
 	expect(playbackRate(false, true).interval).toBe(1200);
 });
 
