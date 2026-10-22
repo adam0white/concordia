@@ -2,7 +2,13 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
 import { expect, type Page, test } from "./clock-fixture";
-import { closeSaves, openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openOtherWays,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 let genuine: ReturnType<typeof captureWeekly>["candidate"];
 test.beforeAll(() => {
@@ -14,8 +20,9 @@ async function exported(page: Page) {
 	const previous = (await link.count())
 		? await link.getAttribute("href")
 		: null;
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
@@ -30,11 +37,12 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "genuine-week.json",
 		mimeType: "application/json",
@@ -80,9 +88,9 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 			after.runtime.socialEvenings.recurrence.cycles[0].openedSlot.from,
 	).toBe(1440);
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await exported(page)).toEqual(after);
 });

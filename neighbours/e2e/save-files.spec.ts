@@ -1,7 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, step, type TestInfo, test } from "./clock-fixture";
-import { closeSaves, openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openOtherWays,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 type Packet = {
 	runtime: { now: number; people: unknown[] };
@@ -13,8 +19,9 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 		? await link.getAttribute("href")
 		: null;
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(async () => {
@@ -42,15 +49,13 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 }
 async function startPaused(page: Page) {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 }
 
 test("actual browser gzip export preserves the complete town across import and device reload", async ({
@@ -69,6 +74,7 @@ test("actual browser gzip export preserves the complete town across import and d
 	const advanced = await exportFile(page, info, "advanced");
 	expect(advanced.packet.runtime.now).toBe(original.packet.runtime.now + 15);
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "complete-town.json.gz",
 		mimeType: "application/gzip",
@@ -101,15 +107,16 @@ test("actual browser gzip export preserves the complete town across import and d
 		)
 		.toBe(original.packet.runtime.now);
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(
 		(await exportFile(page, info, "reload")).json.equals(original.json),
 	).toBe(true);
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "truncated.json.gz",
 		mimeType: "application/gzip",
@@ -166,8 +173,9 @@ test("compression finishing after a newer export or accepted import cannot publi
 			).compressionGate.hold = true;
 		});
 		await openSaves(page);
+		await openDownload(page);
 		await page
-			.getByRole("button", { name: "Download this run", exact: true })
+			.getByRole("button", { name: "Keep a copy of this run", exact: true })
 			.click();
 		await expect
 			.poll(() =>
@@ -207,6 +215,7 @@ test("compression finishing after a newer export or accepted import cannot publi
 	await hold();
 	// A valid legacy JSON import accepts a replacement while the old compressor is still running.
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "legacy.json",
 		mimeType: "application/json",
@@ -214,9 +223,7 @@ test("compression finishing after a newer export or accepted import cannot publi
 	});
 	await expect(link).toHaveCount(0);
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await expect(page.locator(".intervention-result")).toHaveCount(0);
 	await release();
 	await expect(link).toHaveCount(0);

@@ -3,16 +3,16 @@ import { createRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import { expect, type Page, step, test } from "./clock-fixture";
-import { openSaves, showTab } from "./session-helpers";
+import { openOtherWays, openSaves, showTab } from "./session-helpers";
 
 test.use({ actionTimeout: 15000 });
 
 async function enter(page: Page) {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 }
 async function comparisonReady(page: Page) {
@@ -40,12 +40,7 @@ test("320px recorded studies show actual case outcomes, honest LLM limits and ke
 }) => {
 	await page.setViewportSize({ width: 320, height: 740 });
 	await enter(page);
-	const section = page.getByRole("button", {
-		name: "Recorded studies",
-		exact: true,
-	});
-	await section.focus();
-	await page.keyboard.press("Enter");
+	await showTab(page, "Recorded studies");
 	const study = page.getByRole("region", {
 		name: "Recorded hall inspection study",
 	});
@@ -165,7 +160,9 @@ test("actual tools and bus branches retain setup, separate history and mark a sa
 		checkpoint,
 	);
 	await expect(page.locator(".town-time")).toContainText("08:00");
+	await showTab(page, "Town");
 	await step(page);
+	await showTab(page, "Compare");
 	await expect(page.locator(".town-time")).toContainText("08:15");
 	await expect(comparison.locator(".comparison-checkpoint")).toHaveText(
 		checkpoint,
@@ -187,6 +184,7 @@ test("a genuinely completed hall disables tools before any branch starts", async
 	};
 	await enter(page);
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "actual-completed-hall.json",
 		mimeType: "application/json",

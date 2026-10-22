@@ -11,10 +11,10 @@ for (const viewport of [
 	}, testInfo) => {
 		await page.setViewportSize(viewport);
 		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-		await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
-		await expect(
-			page.getByRole("button", { name: "Game menu", exact: true }),
-		).toBeVisible({ timeout: 60000 });
+		await page
+			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.click();
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		const clock = await page.locator(".town-time").textContent();
 		const hall = page.locator('[data-map-place="hall"]');
 		// Tap the illustrated building's centre, the location that looked inert in the cold visit.
@@ -23,12 +23,12 @@ for (const viewport of [
 		await expect(
 			panel.getByRole("heading", { name: "Flooded hall", exact: true }),
 		).toBeVisible();
-		await expect(page.locator(".drawer")).toHaveCount(1);
+		await expect(page.locator(".game-sheet")).toHaveCount(1);
 		await expect(hall).toHaveAttribute("aria-pressed", "true");
 		await expect(hall.locator(".place-selection-outline")).toBeAttached();
 		await expect(panel).toContainText("The hall needs repairs.");
 		await expect(
-			panel.getByRole("button", { name: /Walk to Flooded hall · ~45 min/ }),
+			page.getByRole("button", { name: /Walk to Flooded hall · ~45 min/ }),
 		).toBeInViewport({ ratio: 1 });
 		await expect(
 			panel.getByRole("heading", { name: "Who is around" }),
@@ -40,7 +40,7 @@ for (const viewport of [
 		await panel.evaluate(async (element) => {
 			await Promise.all(
 				element
-					.closest(".drawer")
+					.closest(".game-sheet")
 					?.getAnimations()
 					.map((animation) => animation.finished) ?? [],
 			);
@@ -68,17 +68,17 @@ for (const viewport of [
 			})
 			.click();
 		await expect(panel).toBeVisible();
-		await expect(page.locator(".drawer")).toHaveCount(1);
-		await panel.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
+		await expect(page.locator(".game-sheet")).toHaveCount(1);
+		await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
 		await expect(panel).toContainText("Walking to Flooded hall");
 		await expect(
-			panel.getByRole("button", { name: /Walk to Flooded hall ·/ }),
+			page.getByRole("button", { name: /Walk to Flooded hall ·/ }),
 		).toBeDisabled();
 		await panel.getByRole("button", { name: "Close place details" }).click();
 		await page.locator('.neighbour[data-person-id="ada"]').click();
 		await expect(page.locator(".person-panel")).toBeVisible();
 		await expect(panel).toHaveCount(0);
-		await expect(page.locator(".drawer")).toHaveCount(1);
+		await expect(page.locator(".game-sheet")).toHaveCount(1);
 	});
 }
 
@@ -87,31 +87,21 @@ test("place company distinguishes meeting from an immediate conversation", async
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
-	await page.locator('[data-map-place="workshop"] .place-hit-area').tap();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
+	await page.locator('[data-map-place="workshop"]').press("Enter");
 	const panel = page.locator(".place-panel");
 	await expect(panel.getByRole("button", { name: /^Meet Ravi/ })).toBeVisible();
-	await panel.getByRole("button", { name: /Walk to Workshop ·/ }).click();
+	await page.getByRole("button", { name: /Walk to Workshop ·/ }).click();
 	for (let i = 0; i < 4; i++) await step(page);
 	const talk = panel.getByRole("button", { name: /^Talk to Ravi/ });
 	await expect(talk).toBeVisible();
 	await talk.click();
-	await page.locator(".conversation-request > summary").click();
-	if (
-		await page
-			.locator(
-				".resident-talk[open] .conversation-request:not([open]) > summary",
-			)
-			.count()
-	)
-		await page.locator(".conversation-request > summary").click();
-	await expect(page.locator(".resident-talk")).toHaveAttribute("open", "");
+
+	await expect(page.locator(".conversation-request")).toBeVisible();
 	await expect(
-		page
-			.locator(".resident-talk")
-			.getByRole("button", { name: "Promise an hour", exact: true }),
+		page.getByRole("button", { name: /^Put it to / }),
 	).toBeInViewport({ ratio: 1 });
 });

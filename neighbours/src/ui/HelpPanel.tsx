@@ -64,20 +64,6 @@ export default function HelpPanel({
 					Next evening choice →
 				</button>
 			)}
-			<HallChoices
-				expanded={hallExpanded}
-				onExpandedChange={setHallExpanded}
-				town={town}
-				disabled={disabled}
-				onAction={action}
-				onCompare={(input) => compare(input, 672)}
-			/>
-			<InspectionSituation
-				town={town}
-				disabled={disabled}
-				onAction={action}
-				onCompare={(input) => compare(input, 96)}
-			/>
 			<section className="town-support" aria-label="Town support">
 				<div className="support-heading">
 					<h3>Town support</h3>
@@ -110,6 +96,21 @@ export default function HelpPanel({
 					))}
 				</div>
 			</section>
+			<h3>The hall</h3>
+			<HallChoices
+				expanded={hallExpanded}
+				onExpandedChange={setHallExpanded}
+				town={town}
+				disabled={disabled}
+				onAction={action}
+				onCompare={(input) => compare(input, 672)}
+			/>
+			<InspectionSituation
+				town={town}
+				disabled={disabled}
+				onAction={action}
+				onCompare={(input) => compare(input, 96)}
+			/>
 			{(town.handcart ||
 				town.evenings?.some((event) => event.stage !== "candidate")) && (
 				<details className="project-history">

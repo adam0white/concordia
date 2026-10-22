@@ -16,9 +16,16 @@ import { datedClock } from "./format";
 import { lab } from "./lab";
 import { type ObservedFeed, observe } from "./observations";
 import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
-import { playbackRate, storyReadingKey } from "./playback-rate";
+import {
+	automaticPlaybackRate,
+	type PacingMode,
+	STORY_READING_MS,
+	skipStopReason,
+	storyReadingKey,
+} from "./playback-rate";
 import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
+import { advanceStoryWatch, type StoryWatchState } from "./useStoryWatch";
 
 const savedLabel = (save: unknown) => {
 	const savedAt = (save as { runtime?: { now?: unknown } } | null)?.runtime
@@ -40,7 +47,12 @@ export function useVisitorSession({
 	const [progress, setProgress] = useState("Preparing the live town…");
 	const [error, setError] = useState("");
 	const [playing, setPlaying] = useState(false);
-	const playerPaused = useRef(false);
+	const skipRun = useRef<{
+		start: TownView;
+		previous: TownView;
+		rounds: number;
+		stopped: boolean;
+	} | null>(null);
 	const [comparing, setComparing] = useState(false);
 	const [advancing, setAdvancing] = useState(false);
 	const [advanceProgress, setAdvanceProgress] = useState("");
@@ -80,6 +92,7 @@ export function useVisitorSession({
 	const conversationHeld = useRef<string | undefined>(undefined);
 	const setConversationPerson = useCallback((id: string | undefined) => {
 		conversationHeld.current = id;
+		if (id && skipRun.current) skipRun.current.stopped = true;
 		updateConversationPerson(id);
 	}, []);
 	const clearConversationPerson = useCallback(
@@ -89,11 +102,20 @@ export function useVisitorSession({
 		[setConversationPerson],
 	);
 	const [speed, setSpeed] = useState(1200);
-	const menuWasPlaying = useRef(false);
-	const rate = playbackRate(
-		conversationPerson !== undefined,
+	const [pacingMode, setPacingMode] = useState<PacingMode>("automatic");
+	const [inspectionOpen, setInspectionOpen] = useState(false);
+	const [readingOpen, updateReadingOpen] = useState(false);
+	const readingHeld = useRef(false);
+	const setReadingOpen = useCallback((open: boolean) => {
+		readingHeld.current = open;
+		if (open && skipRun.current) skipRun.current.stopped = true;
+		updateReadingOpen(open);
+	}, []);
+	const rate = automaticPlaybackRate(
+		pacingMode,
+		inspectionOpen,
+		conversationPerson !== undefined || readingOpen,
 		Boolean(town?.player?.job),
-		speed,
 	);
 	const [selected, setSelected] = useState(() => {
 		try {
@@ -143,6 +165,17 @@ export function useVisitorSession({
 	const pending = useRef(false);
 	const saveRequestId = useRef(0);
 	const exportRequest = useRef<number | null>(null);
+	const runRequests = useRef(
+		new Map<
+			number,
+			{
+				generation: number;
+				resolve: (save: unknown) => void;
+				reject: (error: Error) => void;
+				timer: ReturnType<typeof setTimeout>;
+			}
+		>(),
+	);
 	const notebookRequest = useRef<number | null>(null);
 	const rounds = useRef(0);
 	const autosaveEnabled = useRef(false);
@@ -175,7 +208,7 @@ export function useVisitorSession({
 	const clockHealthy = useRef(false);
 	const readingUntil = useRef(0);
 	const remainingReading = useRef(0);
-	const previousStory = useRef<string | undefined>(undefined);
+	const previousStory = useRef<StoryWatchState | undefined>(undefined);
 	const settleMenu = useCallback(() => {
 		if (
 			menuWaiting.current &&
@@ -368,6 +401,28 @@ export function useVisitorSession({
 				}
 				return;
 			}
+			if (reply.type === "save" && reply.requestId !== undefined) {
+				const request = runRequests.current.get(reply.requestId);
+				if (request) {
+					clearTimeout(request.timer);
+					runRequests.current.delete(reply.requestId);
+					if (request.generation !== worldGeneration.current)
+						request.reject(
+							new Error(
+								"The town changed before its run was ready. Try again.",
+							),
+						);
+					else request.resolve(reply.save);
+					return;
+				}
+			}
+			if (reply.type === "error") {
+				for (const request of runRequests.current.values()) {
+					clearTimeout(request.timer);
+					request.reject(new Error(reply.message));
+				}
+				runRequests.current.clear();
+			}
 			if (reply.type === "error") lab.log("error", reply.message);
 			if (reply.type === "progress") {
 				setProgress(reply.message);
@@ -387,9 +442,7 @@ export function useVisitorSession({
 			if (reply.type === "comparison") {
 				comparisonPending.current = false;
 				setComparing(false);
-				setPlaying(
-					clockHealthy.current && !playerPaused.current && !menuHeld.current,
-				);
+				setPlaying(clockHealthy.current && !menuHeld.current);
 				setBranchReport(reply.report);
 				hasBranchReport.current = true;
 				setBranchStale(false);
@@ -422,7 +475,8 @@ export function useVisitorSession({
 				// A rejected import leaves the existing engine intact. Closing its menu resumes that town.
 				if (failed?.commandType === "restore" && !restoringStartup)
 					clockHealthy.current = previouslyHealthy;
-				if (failed?.commandType === "advance") {
+				if (failed?.commandType === "advance" || skipRun.current) {
+					skipRun.current = null;
 					advanceOrigin.current = null;
 					advancePending.current = null;
 					setAdvancing(false);
@@ -473,9 +527,7 @@ export function useVisitorSession({
 							? `This save could not be loaded. Your current town is unchanged. ${reply.message}`
 							: reply.message,
 					);
-				setPlaying(
-					clockHealthy.current && !playerPaused.current && !menuHeld.current,
-				);
+				setPlaying(clockHealthy.current && !menuHeld.current);
 				pending.current = false;
 			}
 			if (reply.type === "ready" || reply.type === "state") {
@@ -550,19 +602,27 @@ export function useVisitorSession({
 					setPlayerPending(false);
 				}
 				clockHealthy.current = !savedReadFailed;
-				setPlaying(
-					!savedReadFailed && !playerPaused.current && !menuHeld.current,
-				);
+				setPlaying(!savedReadFailed && !menuHeld.current);
 				const storyKey = storyReadingKey(reply.view);
+				const watchedStory = advanceStoryWatch(
+					completed?.replacement ? undefined : previousStory.current,
+					{
+						enabled: true,
+						playing: true,
+						seed: reply.view.seed,
+						now: reply.view.now,
+						storyId: storyKey,
+					},
+				);
 				if (
-					previousStory.current !== undefined &&
-					previousStory.current !== storyKey &&
-					!completed?.replacement
+					previousStory.current === undefined ||
+					watchedStory.pause ||
+					completed?.replacement
 				) {
-					if (menuHeld.current) remainingReading.current = 6000;
-					else readingUntil.current = Date.now() + 6000;
+					if (menuHeld.current) remainingReading.current = STORY_READING_MS;
+					else readingUntil.current = Date.now() + STORY_READING_MS;
 				}
-				previousStory.current = storyKey;
+				previousStory.current = watchedStory.state;
 				setTown(reply.view);
 				setHealthHistory((previous) => sampleHealth(previous, reply.view));
 				const intervention = interventionPending.current;
@@ -619,10 +679,39 @@ export function useVisitorSession({
 					return next;
 				});
 				if (reply.type === "ready") {
-					setPlaying(
-						!savedReadFailed && !playerPaused.current && !menuHeld.current,
-					);
+					setPlaying(!savedReadFailed && !menuHeld.current);
 					savedReadFailed = false;
+				}
+				const skip = skipRun.current;
+				if (skip && completed?.commandType === "step") {
+					skip.rounds++;
+					const reason =
+						skip.stopped ||
+						saveConflictRef.current ||
+						menuHeld.current ||
+						readingHeld.current ||
+						conversationHeld.current !== undefined
+							? "Stopped"
+							: skipStopReason(
+									skip.start,
+									skip.previous,
+									reply.view,
+									skip.rounds,
+								);
+					skip.previous = reply.view;
+					if (reason) {
+						skipRun.current = null;
+						advancePending.current = null;
+						setAdvancing(false);
+						setAdvanceProgress("");
+						setAdvanceNotice(`${reason} · ${datedClock(reply.view.now)}.`);
+						if (menuHeld.current) remainingReading.current = STORY_READING_MS;
+						else readingUntil.current = Date.now() + STORY_READING_MS;
+						if (autosaveEnabled.current) dispatch({ type: "save" });
+					} else {
+						setAdvanceProgress(`Skipping · ${datedClock(reply.view.now)}`);
+						dispatch({ type: "step" });
+					}
 				}
 				if (
 					(++rounds.current % 6 === 0 ||
@@ -691,13 +780,9 @@ export function useVisitorSession({
 								replaceAfterSave.current?.requestId === replace.requestId
 							) {
 								replaceAfterSave.current = null;
-								if (
-									window.confirm(
-										"The current town could not be saved on this device. Replace it with a new town anyway?",
-									)
-								) {
-									dispatch(replace.command);
-								}
+								setError(
+									"The current town could not be saved on this device. Your town is unchanged. Download a copy before starting another town.",
+								);
 							}
 						});
 				if (
@@ -825,6 +910,7 @@ export function useVisitorSession({
 			.catch(() => {});
 		return () => {
 			advanceOrigin.current = null;
+			skipRun.current = null;
 			active = false;
 			stopRecording();
 			for (const request of telemetryRequests.values()) {
@@ -832,6 +918,13 @@ export function useVisitorSession({
 				request.resolve(null);
 			}
 			telemetryRequests.clear();
+			for (const request of runRequests.current.values()) {
+				clearTimeout(request.timer);
+				request.reject(
+					new Error("The town session closed before its run was ready."),
+				);
+			}
+			runRequests.current.clear();
 			saves.close();
 			runtime?.close();
 			if (client.current === runtime) client.current = null;
@@ -855,6 +948,7 @@ export function useVisitorSession({
 			if (
 				!menuHeld.current &&
 				conversationHeld.current === undefined &&
+				!readingHeld.current &&
 				Date.now() >= readingUntil.current &&
 				stateCommands.current.length === 0 &&
 				playerPendingRef.current === null &&
@@ -935,6 +1029,11 @@ export function useVisitorSession({
 		client.current?.send({ type: "cancel-comparison" });
 	};
 	const stopAdvancing = () => {
+		if (skipRun.current) {
+			skipRun.current.stopped = true;
+			setAdvanceProgress("Stopping…");
+			return;
+		}
 		if (advancePending.current === null) return;
 		setAdvanceProgress("Stopping the advance…");
 		client.current?.send({
@@ -948,6 +1047,11 @@ export function useVisitorSession({
 	) => {
 		if (
 			!town ||
+			menuHeld.current ||
+			stateCommands.current.length > 0 ||
+			playerPendingRef.current !== null ||
+			readingHeld.current ||
+			conversationHeld.current !== undefined ||
 			comparisonPending.current ||
 			advancePending.current !== null ||
 			saveConflictRef.current ||
@@ -958,6 +1062,12 @@ export function useVisitorSession({
 		setPlaying(false);
 		setError("");
 		setAdvanceNotice("");
+		if (town.people.some((person) => person.policy === "llm")) {
+			setError(
+				"Browser advance requires local controllers; no live model fallback is available",
+			);
+			return;
+		}
 		setAdvanceProgress("Advancing the real town to the next matching event…");
 		const requestId = ++advanceSequence.current;
 		advanceOrigin.current =
@@ -967,6 +1077,16 @@ export function useVisitorSession({
 		advancePending.current = requestId;
 		setAdvancing(true);
 		persistenceAfterState.current = true;
+		if (until === "story") {
+			skipRun.current = {
+				start: structuredClone(town),
+				previous: structuredClone(town),
+				rounds: 0,
+				stopped: false,
+			};
+			dispatch({ type: "step" });
+			return;
+		}
 		dispatch({
 			type: "advance",
 			requestId,
@@ -1007,7 +1127,7 @@ export function useVisitorSession({
 		playerSequence.current++;
 		playerPendingRef.current = playerSequence.current;
 		setPlayerPending(true);
-		setConversationPerson(undefined);
+		if (intervention.kind !== "player-speak") setConversationPerson(undefined);
 		setPlayerError("");
 		setPlaying(false);
 		send({ type: "intervene", intervention });
@@ -1027,7 +1147,6 @@ export function useVisitorSession({
 	}) => {
 		setSpeechPrediction(undefined);
 		predictionKey.current = undefined;
-		setConversationPerson(undefined);
 		playerInput({
 			kind: "player-speak",
 			actorId: request.actorId,
@@ -1073,7 +1192,7 @@ export function useVisitorSession({
 		[town],
 	);
 	const pause = () => {
-		playerPaused.current = true;
+		if (skipRun.current) skipRun.current.stopped = true;
 		setPlaying(false);
 		if (advancePending.current !== null) {
 			stopAdvancing();
@@ -1084,7 +1203,6 @@ export function useVisitorSession({
 
 	const openMenu = () => {
 		if (menuHeld.current) return;
-		menuWasPlaying.current = playing;
 		remainingReading.current = Math.max(0, readingUntil.current - Date.now());
 		menuHeld.current = true;
 		menuWaiting.current = true;
@@ -1099,11 +1217,7 @@ export function useVisitorSession({
 		remainingReading.current = 0;
 		setMenuOpen(false);
 		menuHeld.current = false;
-		setPlaying(
-			menuWasPlaying.current &&
-				clockHealthy.current &&
-				!saveConflictRef.current,
-		);
+		setPlaying(clockHealthy.current && !saveConflictRef.current);
 	};
 	const play = () => {
 		if (
@@ -1112,7 +1226,7 @@ export function useVisitorSession({
 			comparisonPending.current
 		)
 			return;
-		playerPaused.current = false;
+
 		autosaveEnabled.current = true;
 		setError("");
 		setAdvanceNotice("");
@@ -1126,6 +1240,35 @@ export function useVisitorSession({
 		exportRequest.current = requestId;
 		notebookRequest.current = notebook ? requestId : null;
 		send({ type: "save", requestId });
+	};
+	const getRun = (): Promise<unknown> => {
+		if (
+			!client.current ||
+			!town ||
+			stateCommands.current.length > 0 ||
+			pending.current ||
+			advancePending.current !== null ||
+			comparisonPending.current
+		)
+			return Promise.reject(
+				new Error(
+					"Wait for the town's current action to finish, then try again.",
+				),
+			);
+		const requestId = ++saveRequestId.current;
+		return new Promise((resolve, reject) => {
+			const timer = setTimeout(() => {
+				runRequests.current.delete(requestId);
+				reject(new Error("The run took too long to prepare. Try again."));
+			}, 30000);
+			runRequests.current.set(requestId, {
+				generation: worldGeneration.current,
+				resolve,
+				reject,
+				timer,
+			});
+			client.current?.send({ type: "save", requestId });
+		});
 	};
 	const exportSave = () => requestExport(false);
 	const sendRun = () => requestExport(true);
@@ -1224,9 +1367,21 @@ export function useVisitorSession({
 		menuPausing,
 		openMenu,
 		closeMenu,
-		clockRate: playing ? rate.label : "Time stopped",
+		clockRate: conversationPerson
+			? "Time holds while you talk"
+			: readingOpen || menuOpen
+				? "Time holds while you read"
+				: Date.now() < readingUntil.current
+					? "Time holds for a new story"
+					: playing
+						? rate.label
+						: "Time stopped",
 		speed,
 		setSpeed,
+		pacingMode,
+		setPacingMode,
+		setInspectionOpen,
+		setReadingOpen,
 		townEpoch,
 		conversationPerson,
 		setConversationPerson,
@@ -1261,6 +1416,7 @@ export function useVisitorSession({
 		pause,
 		play,
 		exportSave,
+		getRun,
 		sendRun,
 		startTown,
 		restoreSave,

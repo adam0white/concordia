@@ -21,7 +21,7 @@ it("carries Ada's current inspector question into the conversation before anothe
 	expect(html).toContain("Ask Ada to do something");
 	expect(html).toContain("Cover an hour for Ada");
 	expect(html.indexOf("Cover an hour for Ada")).toBeLessThan(
-		html.indexOf("Ask them to"),
+		html.indexOf("Ask Ada to</legend>"),
 	);
 }, 60000);
 

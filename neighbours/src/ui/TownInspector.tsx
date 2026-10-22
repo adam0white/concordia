@@ -1,4 +1,3 @@
-import { useState } from "react";
 import RecordedStudies from "./RecordedStudies";
 import "./study-workbench.css";
 import DayComparison from "./DayComparison";
@@ -9,31 +8,15 @@ import type { useVisitorSession } from "./useVisitorSession";
 
 export default function TownInspector({
 	session,
+	section = "town",
 }: {
 	session: ReturnType<typeof useVisitorSession>;
+	section?: "town" | "recorded";
 }) {
-	const [section, setSection] = useState<"town" | "recorded">("town");
 	const town = session.town;
 	if (!town) return null;
 	return (
 		<section className="inspector focused-inspector">
-			<h2>Compare</h2>
-			<fieldset className="study-sections" aria-label="Comparison section">
-				<button
-					type="button"
-					aria-pressed={section === "town"}
-					onClick={() => setSection("town")}
-				>
-					Your town
-				</button>
-				<button
-					type="button"
-					aria-pressed={section === "recorded"}
-					onClick={() => setSection("recorded")}
-				>
-					Recorded studies
-				</button>
-			</fieldset>
 			<div hidden={section !== "town"}>
 				{session.branchHistory &&
 					session.branchHistory.length > 0 &&

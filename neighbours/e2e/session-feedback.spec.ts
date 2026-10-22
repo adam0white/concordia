@@ -7,7 +7,13 @@ import {
 	type TestInfo,
 	test,
 } from "./clock-fixture";
-import { closeSaves, openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openOtherWays,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 type Packet = { runtime: { seed: number; now: number } };
 type SaveGate = {
@@ -20,9 +26,7 @@ type SaveGate = {
 async function pause(page: Page) {
 	await closeSaves(page);
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 }
 async function packet(
 	page: Page,
@@ -33,8 +37,9 @@ async function packet(
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(() => link.getAttribute("href", { timeout: 500 }).catch(() => null))
@@ -48,6 +53,7 @@ async function packet(
 }
 async function importPacket(page: Page, value: unknown) {
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "town.json",
 		mimeType: "application/json",
@@ -94,11 +100,11 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 }, info) => {
 	await installGate(page);
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "original");
 	await showTab(page, "Help");
@@ -130,7 +136,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(
 		page.getByText("Checkpoint & limits", { exact: true }),
 	).toBeVisible();
-	await openSaves(page);
+	await openDownload(page);
 	await expect(
 		page.getByRole("link", { name: /Download save/ }),
 	).toHaveAttribute("href", oldLink ?? "missing-download-link");
@@ -142,18 +148,17 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(
 		page.getByText("Checkpoint & limits", { exact: true }),
 	).toHaveCount(0);
-	await openSaves(page);
+	await openDownload(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
 		0,
 	);
 	expect(await packet(page, info, "successful-import")).toEqual(original);
 	await openSaves(page);
-	await page.getByLabel("New town seed").fill("73");
-	await page.getByRole("button", { name: "Start town", exact: true }).click();
+	await openOtherWays(page);
+	await page.getByLabel("Start from a seed").fill("73");
+	await page.getByRole("button", { name: "Start", exact: true }).click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
 		0,
@@ -164,12 +169,14 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 			true;
 	});
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await openSaves(page);
-	await page.getByLabel("New town seed").fill("99");
-	await page.getByRole("button", { name: "Start town", exact: true }).click();
+	await openOtherWays(page);
+	await page.getByLabel("Start from a seed").fill("99");
+	await page.getByRole("button", { name: "Start", exact: true }).click();
 	await expect
 		.poll(() =>
 			page.evaluate(
@@ -192,9 +199,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	);
 	expect(await packet(page, info, "after-delayed-replies")).toEqual(original);
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 });
 
 test("exports survive rejected imports and exports from a replacement survive its delayed state", async ({
@@ -202,11 +207,11 @@ test("exports survive rejected imports and exports from a replacement survive it
 }, info) => {
 	await installGate(page);
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const original = await packet(page, info, "edge-original");
 	await page.evaluate(() => {
@@ -214,8 +219,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 			true;
 	});
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(() =>
@@ -252,7 +258,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 		)
 		.toBe(1);
 	await expect(
-		page.getByRole("button", { name: "Download this run", exact: true }),
+		page.getByRole("button", { name: "Keep a copy of this run", exact: true }),
 	).toBeDisabled();
 	await page.evaluate(() => {
 		const gate = (window as unknown as { sessionSaveGate: SaveGate })
@@ -280,6 +286,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 			window as unknown as { sessionSaveGate: SaveGate }
 		).sessionSaveGate.holdState = true;
 	});
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "broken.json",
 		mimeType: "application/json",

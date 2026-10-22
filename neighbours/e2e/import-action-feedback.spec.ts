@@ -2,14 +2,21 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, step, type TestInfo, test } from "./clock-fixture";
 
-import { openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openOtherWays,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 async function exportPacket(page: Page, info: TestInfo, name: string) {
 	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
@@ -22,6 +29,7 @@ async function exportPacket(page: Page, info: TestInfo, name: string) {
 }
 async function importPacket(page: Page, value: unknown) {
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "town.json",
 		mimeType: "application/json",
@@ -33,10 +41,10 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 	page,
 }, info) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	const original = await exportPacket(page, info, "original");
 	const link = page.getByRole("link", { name: /Download save/ });
 	for (const [index, invalid] of [[], { schema: "invalid" }].entries()) {
@@ -46,13 +54,15 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 			"This save could not be loaded. Your current town is unchanged.",
 		);
 		await expect(page.getByRole("alert")).not.toContainText("You can reload");
+		await openDownload(page);
 		await expect(link).toHaveAttribute("href", href ?? "missing");
 		expect(await exportPacket(page, info, `rejected-${index}`)).toEqual(
 			original,
 		);
 	}
-	const close = page.getByRole("dialog", { name: "Game menu" });
+	const close = page.getByRole("dialog", { name: /^Game menu/ });
 	if (await close.isVisible()) await page.keyboard.press("Escape");
+	await closeSaves(page);
 	await step(page);
 	const continuation = await exportPacket(
 		page,
@@ -62,6 +72,7 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 	await importPacket(page, original);
 	await expect(link).toHaveCount(0);
 	if (await close.isVisible()) await page.keyboard.press("Escape");
+	await closeSaves(page);
 	await step(page);
 	expect(await exportPacket(page, info, "restored-control")).toEqual(
 		continuation,
@@ -120,13 +131,14 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 		};
 	});
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	const original = await exportPacket(page, info, "before-tools");
-	const close = page.getByRole("dialog", { name: "Game menu" });
+	const close = page.getByRole("dialog", { name: /^Game menu/ });
 	if (await close.isVisible()) await page.keyboard.press("Escape");
+	await closeSaves(page);
 	await showTab(page, "Help");
 	await page.evaluate(() => {
 		(
@@ -154,9 +166,11 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 		),
 	).toBe(1);
 	// The menu becomes available only after the pending intervention is acknowledged.
-	await page.getByRole("button", { name: "Game menu", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ })
+		.click();
 	await expect(
-		page.getByRole("dialog", { name: "Game menu", exact: true }),
+		page.getByRole("dialog", { name: /^Game menu(?: · day \d+)?$/ }),
 	).not.toBeVisible();
 	await page.evaluate(() => {
 		const gate = (window as unknown as { interventionGate: InterventionGate })
@@ -168,6 +182,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	const pending = await exportPacket(page, info, "acknowledged-tools");
 	expect(pending.runtime.controls).toBe(original.runtime.controls - 1);
 	if (await close.isVisible()) await page.keyboard.press("Escape");
+	await closeSaves(page);
 	await expect(page.locator(".intervention-result")).toContainText(
 		"Tools added",
 	);

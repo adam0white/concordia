@@ -3,10 +3,10 @@ import { showTab } from "./session-helpers";
 
 async function enter(page: Page) {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60_000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 }
 
 test("clicking a neighbour chip never closes that neighbour's panel", async ({
@@ -17,7 +17,7 @@ test("clicking a neighbour chip never closes that neighbour's panel", async ({
 	const chip = page.locator(".neighbour-strip [data-person-id]").first();
 	await chip.click();
 	await expect(page.locator(".person-panel")).toBeVisible();
-	await expect(chip).toHaveAttribute("aria-current", "true");
+	await expect(chip).toHaveAttribute("aria-pressed", "true");
 	await chip.click();
 	await expect(page.locator(".person-panel")).toBeVisible();
 	await page.locator(".neighbour-strip [data-person-id]").nth(1).click();
@@ -29,23 +29,10 @@ test("the you marker stays whole at the left-edge quay on phone widths", async (
 }) => {
 	test.setTimeout(180_000);
 	await enter(page);
-	await showTab(page, "Journal");
-	const you = page.locator(".journal .speak-panel");
-	await you
-		.locator("details.walk .walk-list button", { hasText: "Quay" })
-		.click();
-
-	for (
-		let i = 0;
-		i < 40 &&
-		!/You are at Quay/.test(
-			(await you.locator(".player-place").textContent()) ?? "",
-		);
-		i++
-	) {
-		await step(page);
-	}
-	await expect(you.locator(".player-place")).toContainText("You are at Quay");
+	await page.locator('[data-map-place="quay"] .place-hit-area').click();
+	await page.getByRole("button", { name: /Walk to Quay ·/ }).click();
+	for (let i = 0; i < 4; i++) await step(page);
+	await expect(page.locator(".place-response")).toContainText("You are here.");
 	await showTab(page, "Town");
 	for (const width of [320, 360, 390]) {
 		await page.setViewportSize({ width, height: 780 });
@@ -82,9 +69,7 @@ test("a departing traveller cannot block a phone place-count button", async ({
 	await step(page);
 	for (let i = 0; i < 23; i++) await step(page);
 	await expect(page.locator(".town-time strong")).toHaveText("14:00");
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await page.getByRole("button", { name: "Close person details" }).click();
 	const homes = page.getByRole("button", {
 		name: "4 neighbours at Riverside homes",

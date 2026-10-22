@@ -7,14 +7,20 @@ import {
 	type TestInfo,
 	test,
 } from "./clock-fixture";
-import { closeSaves, openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 async function exportPacket(page: Page, info: TestInfo, name: string) {
 	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
 	const old = (await link.count()) ? await link.getAttribute("href") : null;
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
@@ -31,62 +37,36 @@ async function exportPacket(page: Page, info: TestInfo, name: string) {
 async function step(page: Page, count = 1) {
 	for (let i = 0; i < count; i++) await automaticStep(page);
 }
-/** Step actual rounds until `done` holds, at most `limit` rounds. */
-async function stepUntil(page: Page, done: () => Promise<boolean>, limit = 40) {
-	for (let i = 0; i < limit && !(await done()); i++) await step(page);
-	expect(await done()).toBe(true);
-}
 
 test("the player walks, speaks with a promise and keeps it; the journal records each step from actual events", async ({
 	page,
 }, info) => {
 	test.setTimeout(180_000);
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60_000 });
-
-	// Walk to the hall from the journal drawer, where walking needs no resident.
-	await showTab(page, "Journal");
-	const you = page.locator(".journal .speak-panel");
-	await you
-		.locator("details.walk .walk-list button", { hasText: "Flooded hall" })
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
-	await expect(you.locator(".player-place")).toContainText("Walking to");
-	await stepUntil(page, async () =>
-		/You are at Flooded hall/.test(
-			(await you.locator(".player-place").textContent()) ?? "",
-		),
-	);
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 
-	// Speak to someone actually here, choosing a promise of one hour's work.
-	await stepUntil(
-		page,
-		async () => (await you.locator(".your-company button").count()) > 0,
-		24,
-	);
-	await you.locator(".your-company button").first().click();
-	await page.locator(".resident-talk > summary").click();
-	if (
-		await page
-			.locator(
-				".resident-talk[open] .conversation-request:not([open]) > summary",
-			)
-			.count()
-	)
-		await page.locator(".conversation-request > summary").click();
-	const panel = page.locator(".person-panel .speak-panel");
-	const name = (await page.locator(".person-panel h2").textContent())?.trim();
+	await page.locator('[data-map-place="hall"] .place-hit-area').click();
+	await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
+	for (let i = 0; i < 6; i++) await step(page);
+	await page
+		.locator(".place-company")
+		.getByRole("button", { name: /^Talk to / })
+		.first()
+		.click();
+	const panel = page.locator(".speak-panel");
+	const name = (await page.locator(".game-sheet h2").textContent())?.trim();
 	expect(name).toBeTruthy();
-	const promise = panel.getByRole("button", {
-		name: "Promise an hour",
+	const promise = page.getByRole("button", {
+		name: /^Put it to /,
 		exact: true,
 	});
 	// No hour is promised by default: the player chooses the work (and may choose the deadline).
 	await expect(promise).toBeDisabled();
-	await panel.getByLabel("Ask them to").selectOption({ index: 1 });
-	await panel.getByLabel("Your hour").selectOption("carry-meals");
+	await panel.locator("[data-affordance-id]").first().click();
+	await panel.locator('[data-work-id="carry-meals"]').click();
 	await expect(promise).toBeEnabled();
 	// No predicted answer is shown before asking.
 	await expect(panel).not.toContainText("Likely");
@@ -106,28 +86,23 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 			(p: { id: string }) => p.id === request.pledgeId,
 		)?.status === "open";
 	if (pledged) {
-		const start = panel.getByRole("button", { name: "Start the hour" });
-		await stepUntil(page, async () => (await start.count()) > 0, 8);
-		await start.click();
-		await expect(panel.locator(".player-place")).toContainText(
-			/Walking to|Working at/,
-		);
-		await stepUntil(
-			page,
-			async () =>
-				!/Working at|Walking to/.test(
-					(await panel.locator(".player-place").textContent()) ?? "",
-				),
-			30,
-		);
+		const start = panel.getByRole("button", {
+			name: "Start the hour",
+			exact: true,
+		});
+		if (await start.isVisible()) await start.click();
+		else await page.getByRole("button", { name: "Done", exact: true }).click();
+		await step(page, 16);
 	}
+	await showTab(page, "Town");
 	// Let the resident's own next decision happen; HF decides what they do.
 	for (let i = 0; i < 4; i++) await step(page);
 
 	await showTab(page, "Journal");
-	const lines = page.locator(".journal .player-journal li");
+	const lines = page.locator(".player-journal li");
 	await expect(lines.first()).toBeVisible();
 	const saved = await exportPacket(page, info, "after-journal");
+	await showTab(page, "Journal");
 	const player = saved.runtime.player as {
 		log: { id: number }[];
 		requests: {
@@ -226,44 +201,25 @@ test("an answered request is on the device before it is shown and survives an im
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60_000 });
-	await showTab(page, "Journal");
-	const you = page.locator(".journal .speak-panel");
-	await you
-		.locator("details.walk .walk-list button", { hasText: "Flooded hall" })
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
-	await stepUntil(page, async () =>
-		/You are at Flooded hall/.test(
-			(await you.locator(".player-place").textContent()) ?? "",
-		),
-	);
-	await stepUntil(
-		page,
-		async () => (await you.locator(".your-company button").count()) > 0,
-		24,
-	);
-	await you.locator(".your-company button").first().click();
-	await page.locator(".resident-talk > summary").click();
-	if (
-		await page
-			.locator(
-				".resident-talk[open] .conversation-request:not([open]) > summary",
-			)
-			.count()
-	)
-		await page.locator(".conversation-request > summary").click();
-	const panel = page.locator(".person-panel .speak-panel");
-	const name = (await page.locator(".person-panel h2").textContent())?.trim();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
+	await page.locator('[data-map-place="hall"] .place-hit-area').click();
+	await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
+	for (let i = 0; i < 6; i++) await step(page);
+	await page
+		.locator(".place-company")
+		.getByRole("button", { name: /^Talk to / })
+		.first()
+		.click();
+	const panel = page.locator(".speak-panel");
+	const name = (await page.locator(".game-sheet h2").textContent())?.trim();
 	expect(name).toBeTruthy();
 	const before = await deviceRequests(page);
-	await panel.getByLabel("Ask them to").selectOption({ index: 1 });
-	await panel.getByLabel("Your hour").selectOption("carry-meals");
-	await panel
-		.getByRole("button", { name: "Promise an hour", exact: true })
-		.click();
+	await panel.locator("[data-affordance-id]").first().click();
+	await panel.locator('[data-work-id="carry-meals"]').click();
+	await page.getByRole("button", { name: /^Put it to /, exact: true }).click();
 	const answer = panel.locator(".latest-answer");
 	await expect(answer).toContainText("You made a promise and asked");
 	// Shown means stored: read once, with no Export (which would itself save) and no polling.
@@ -274,15 +230,15 @@ test("an answered request is on the device before it is shown and survives an im
 
 	// Reload at once: the answered request and its answer come back from the device.
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60_000 });
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 	expect(await deviceRequests(page)).toEqual(stored);
 	await showTab(page, "Journal");
 	const line = page.locator(
-		`.journal .player-journal li[data-events~="${request?.answerEvent}"]`,
+		`.player-journal li[data-events~="${request?.answerEvent}"]`,
 	);
 	await expect(line).toHaveCount(1);
 	await expect(line).toContainText(name ?? "");

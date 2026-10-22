@@ -186,17 +186,15 @@ it("keeps promise inputs together with explicit work and a visible evening deadl
 			showAction: false,
 		}),
 	);
-	expect(html).toContain('class="promise-choice"');
-	expect(html).toContain("Choose what to ask");
-	expect(html).toContain("Choose a deadline");
-	expect(html).not.toMatch(/value="rest" selected/);
-	expect(html).toMatch(/value="1080" selected/);
-	expect(html).toMatch(
-		/<details class="speech-alternatives"><summary>Ask or urge instead/,
-	);
-	expect(html.indexOf("Promise an hour")).toBeLessThan(
-		html.indexOf("Ask or urge instead"),
-	);
+	expect(html).not.toContain("<select");
+	expect(html).not.toContain("speech-alternatives");
+	expect(html).toContain("Ask Ada to</legend>");
+	expect(html).toContain('aria-pressed="false">Rest at home');
+	expect(html).toContain('aria-pressed="true">Offer an hour');
+	expect(html).toContain('aria-pressed="false">Ask');
+	expect(html).toContain('aria-pressed="false">Urge');
+	expect(html).toContain('aria-pressed="true">Day 1 · 18:00');
+	expect(html).toContain("Put it to Ada");
 	expect(html).toContain("It binds you only if they take it up.");
 });
 it("reserves the same promise form while predictions load", () => {
@@ -212,10 +210,10 @@ it("reserves the same promise form while predictions load", () => {
 			showAction: false,
 		}),
 	);
-	expect(html).toContain('class="promise-choice"');
+	expect(html).toContain('class="conversation-request speech"');
 	expect(html).toContain("Your hour");
 	expect(html).toContain("Done by");
-	expect(html).toContain("Promise an hour");
+	expect(html).toContain("Put it to Ada");
 });
 
 it("puts a bound hour before another offer so the player can start helping", () => {
@@ -246,6 +244,57 @@ it("puts a bound hour before another offer so the player can start helping", () 
 		}),
 	);
 	expect(html.indexOf("Start the hour")).toBeLessThan(
-		html.indexOf('class="promise-choice"'),
+		html.indexOf('class="conversation-request speech"'),
 	);
+});
+
+it("connects the pinned submit without duplicating a primary or journal", () => {
+	const current = session();
+	if (!current.town?.player) throw new Error("Missing player");
+	current.town.player.present = [
+		{ id: "ada", name: "Ada", known: true, activity: "working" },
+	];
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, {
+			session: current,
+			personId: "ada",
+			showAction: false,
+			formId: "town-conversation",
+		}),
+	);
+	expect(html).toContain('id="town-conversation"');
+	expect(html).not.toContain('type="submit"');
+	expect(html).not.toContain("Your journal");
+	expect(html).toContain("Your own work");
+});
+
+it("keeps a personal record reachable without opening fresh conversation controls", () => {
+	const current = session();
+	const player = current.town?.player;
+	if (!player) throw new Error("Missing player");
+	player.requests = [
+		{
+			id: 1,
+			targetId: "ada",
+			at: current.town?.now ?? 0,
+			mode: "ask",
+			status: "held",
+			label: "Rest",
+			why: "Needs a break",
+			verdict: "refused",
+		} as (typeof player.requests)[number],
+	];
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, {
+			session: current,
+			personId: "ada",
+			showAction: false,
+			recordOnly: true,
+		}),
+	);
+	expect(html).toContain("Needs a break");
+	expect(html).not.toContain("conversation-request");
+	expect(html).not.toContain("Your own work");
+	expect(html).not.toContain("Your journal");
+	expect(html).not.toContain("inspector-context");
 });

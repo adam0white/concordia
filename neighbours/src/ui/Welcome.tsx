@@ -1,89 +1,118 @@
-import { inkLine } from "./ink";
+import { useEffect, useState } from "react";
 import { LabNotice } from "./lab";
+import OtherWaysIn, { type TitleActions } from "./OtherWaysIn";
+import { localSave } from "./persistence";
+import type { useVisitorSession } from "./useVisitorSession";
 
-type Props = { onEnter: () => void };
-
-/** The opening page: a returning resident's first look, with no exposition dump. */
-export default function Welcome({ onEnter }: Props) {
+type Session = ReturnType<typeof useVisitorSession>;
+export default function Welcome({
+	session,
+	onEnter,
+	...actions
+}: TitleActions & { session: Session; onEnter: () => void }) {
+	const [otherWays, setOtherWays] = useState(false);
+	const [confirmNew, setConfirmNew] = useState(false);
+	const [deviceDay, setDeviceDay] = useState<number>();
+	const [previous, setPrevious] = useState(false);
+	useEffect(() => {
+		let active = true;
+		void Promise.all([localSave(), localSave("previous")])
+			.then(([latest, prior]) => {
+				if (!active) return;
+				const packet = latest as { runtime?: { now?: number } } | undefined;
+				if (packet)
+					setDeviceDay(Math.floor((packet.runtime?.now ?? 0) / 1440) + 1);
+				setPrevious(prior !== undefined);
+			})
+			.catch(() => {});
+		return () => {
+			active = false;
+		};
+	}, []);
+	const hasSave = session.hasSave || deviceDay !== undefined;
+	const day = session.town?.day ?? deviceDay;
 	return (
 		<main className="welcome-screen">
 			<LabNotice />
-			<span className="eyebrow">Alder Quay · a field notebook</span>
-			<h2>A town rebuilding after a flood.</h2>
-			<p className="welcome-goal">
-				Watch a day unfold, or help your neighbours rebuild.
-			</p>
-			<button type="button" className="enter-town" onClick={onEnter}>
-				Enter town
-			</button>
-			<button
-				type="button"
-				className="help-info"
-				popoverTarget="welcome-help"
-				aria-label="About Alder Quay"
-			>
-				i
-			</button>
-			<div id="welcome-help" popover="auto" className="welcome-help">
-				<h3>More about Alder Quay</h3>
-				<svg className="welcome-rule" viewBox="0 0 320 16" aria-hidden="true">
+			<div className="welcome-scene" aria-hidden="true">
+				<svg viewBox="0 0 360 200" aria-hidden="true">
 					<path
-						className="high-water"
-						d={inkLine(
-							"welcome-water",
-							[
-								[4, 9],
-								[316, 7],
-							],
-							1.8,
-							10,
-						)}
+						className="welcome-river"
+						d="M-20 28C90 135 110 25 185 110S290 145 380 190"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth="24"
+						opacity=".13"
 					/>
-					<text x="316" y="5" textAnchor="end" className="map-note">
-						the water came up to here
-					</text>
+					<path
+						d="M45 70h55v42H45zM235 50h65v45h-65zM195 145h60v35h-60z"
+						fill="none"
+						stroke="currentColor"
+						opacity=".25"
+					/>
 				</svg>
-				<p className="welcome-intro">
-					You are back in Alder Quay. The river has gone down, but the line it
-					left is still on the hall wall. Eight neighbours you know, and two
-					hundred you know by sight, are putting ordinary days back together.
-				</p>
-				<ol className="welcome-steps">
-					<li>
-						<strong>Watch a day unfold.</strong>
-						<span>
-							The clock runs automatically and holds while you talk. Pick a
-							neighbour on the map to follow them.
-						</span>
-					</li>
-					<li>
-						<strong>Help when you choose.</strong>
-						<span>
-							Restore public transport, lend shared repair tools, or spread hall
-							news. People decide for themselves how to respond, and they may
-							say no.
-						</span>
-					</li>
-					<li>
-						<strong>See what changes.</strong>
-						<span>
-							Will the hall reopen? Will anyone make time for a class or a
-							shared supper? The journal keeps what happened.
-						</span>
-					</li>
-				</ol>
-				<h3>About the simulation</h3>
-				<p>
-					Python Concordia coordinates the town. Human Framework makes the
-					residents’ decisions. This is your device’s town, with autosaves and
-					exportable saves. It does not run while this page is closed.
+				<span className="eyebrow">NEIGHBOURS · Alder Quay</span>
+			</div>
+			<div className="welcome-premise">
+				<h2>A town rebuilding after a flood.</h2>
+				<p className="welcome-goal">
+					Help your neighbours reopen the flooded hall. They decide for
+					themselves.
 				</p>
 			</div>
-			<p className="welcome-device muted">
-				Continuing downloads the Python runtime on your first visit. The
-				simulation runs on this device and starts when you enter. Your saved
-				town is loaded when available; you can import a save inside.
-			</p>
+			<button
+				type="button"
+				className="other-ways-trigger"
+				onClick={() => setOtherWays(true)}
+			>
+				Other ways in <span aria-hidden="true">▸</span>
+			</button>
+			<div className="welcome-actions action-bar">
+				{confirmNew ? (
+					<div className="new-town-confirm">
+						<p>Your current town is kept as the previous town.</p>
+						<button
+							type="button"
+							className="primary"
+							onClick={() => (actions.onStart ?? session.startTown)()}
+						>
+							Start a new town
+						</button>
+						<button type="button" onClick={() => setConfirmNew(false)}>
+							Keep this town
+						</button>
+					</div>
+				) : (
+					<>
+						<button
+							type="button"
+							className="enter-town primary"
+							onClick={onEnter}
+						>
+							{hasSave
+								? `Return to Alder Quay${day ? ` · day ${day}` : ""}`
+								: "Enter Alder Quay"}
+						</button>
+						{hasSave && (
+							<button type="button" onClick={() => setConfirmNew(true)}>
+								A new town
+							</button>
+						)}
+					</>
+				)}
+				<p className="welcome-device muted">
+					The first visit downloads the town to this device.
+				</p>
+			</div>
+			{otherWays && (
+				<OtherWaysIn
+					session={session}
+					hasSave={hasSave}
+					hasPrevious={session.hasPrevious || previous}
+					onClose={() => setOtherWays(false)}
+					{...actions}
+				/>
+			)}
 		</main>
 	);
 }

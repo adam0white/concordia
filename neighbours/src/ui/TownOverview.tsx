@@ -60,19 +60,25 @@ export function NeighbourStrip({
 	const needs = knownOpenNeeds(town);
 	return (
 		<nav className="neighbour-strip" aria-label="Familiar neighbours">
-			{needs.places.hall && (
+			{
 				<button
 					type="button"
 					className="known-place-need"
 					title={needs.places.hall}
-					aria-label="Inspect Flooded hall · Needs help"
+					aria-label={
+						needs.places.hall
+							? "Inspect Flooded hall · Needs help"
+							: "Inspect Hall"
+					}
 					aria-pressed={selectedPlace === "hall"}
 					onClick={() => selectPlace?.("hall")}
 				>
 					<strong>Hall</strong>
-					<span className="known-need-cue">Needs help</span>
+					<span className="known-need-cue" aria-hidden="true">
+						{needs.places.hall ? "•" : ""}
+					</span>
 				</button>
-			)}
+			}
 			{town.people
 				.filter((resident) => resident.known)
 				.map((resident) => (
@@ -82,7 +88,7 @@ export function NeighbourStrip({
 						className={`neighbour life-${resident.lifeState ?? "awake"} ${selected === resident.id ? "active" : ""}`}
 						data-person-id={resident.id}
 						aria-label={`${resident.name} · ${activityLabel(resident)}`}
-						aria-current={selected === resident.id ? "true" : undefined}
+						aria-pressed={selected === resident.id}
 						onClick={() => select(resident.id)}
 					>
 						<InkPortrait

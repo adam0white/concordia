@@ -1,19 +1,21 @@
 import { expect, postStep, step, test } from "./clock-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
-test("player clock controls retain default progression and menu holds", async ({
+test("automatic pacing hides clock controls and the menu holds", async ({
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(page.locator(".clock-rate")).toBeVisible({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await expect(
 		page.getByRole("button", { name: /^(Play|Pause|Step)/ }),
-	).toHaveCount(2);
+	).toHaveCount(0);
 	await expect(page.getByRole("button", { name: /^Next/ })).toHaveCount(0);
 	await expect(
 		page.getByRole("combobox", { name: "Playback speed" }),
-	).toBeVisible();
+	).toHaveCount(0);
 	const before = await page.evaluate(
 		() => (window as unknown as { townNow: number }).townNow,
 	);
@@ -61,8 +63,10 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 		};
 	});
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(page.locator(".clock-rate")).toBeVisible({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	for (let i = 0; i < 5; i++) await step(page);
 	await page.evaluate(() => {
 		(window as unknown as { readingGate: { hold: boolean } }).readingGate.hold =
@@ -78,11 +82,11 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 			),
 		)
 		.toBe(1);
-	const menu = page.getByRole("button", { name: "Game menu", exact: true });
+	const menu = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
 	await menu.click();
-	await expect(menu).toContainText("Pausing…");
+	await expect(menu).toBeDisabled();
 	await expect(
-		page.getByRole("dialog", { name: "Game menu", exact: true }),
+		page.getByRole("dialog", { name: /^Game menu(?: · day \d+)?$/ }),
 	).not.toBeVisible();
 	await page.clock.fastForward(30000);
 	expect(
@@ -100,7 +104,7 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 		for (const release of gate.held.splice(0)) release();
 	});
 	await expect(
-		page.getByRole("dialog", { name: "Game menu", exact: true }),
+		page.getByRole("dialog", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeVisible();
 	const held = await page.locator(".town-time strong").innerText();
 	await page.clock.fastForward(30000);

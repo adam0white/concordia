@@ -2,7 +2,13 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
 import { expect, type Page, test } from "./clock-fixture";
-import { closeSaves, openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openOtherWays,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 const genuine = captureWeekly().candidate;
 async function exported(page: Page) {
@@ -12,8 +18,9 @@ async function exported(page: Page) {
 		? await link.getAttribute("href")
 		: null;
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(async () => {
@@ -31,11 +38,12 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "genuine-town.json",
 		mimeType: "application/json",
@@ -92,9 +100,9 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	expect(after.runtime.controls).toBe(before.runtime.controls);
 	expect(after.runtime.assistance.received).toBe(true);
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await exported(page)).toEqual(after);
 });

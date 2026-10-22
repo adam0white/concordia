@@ -509,13 +509,19 @@ export default function TownMap({
 	}, []);
 	const sheet =
 		box.height > box.width * 1.1 && box.width < 760 ? PORTRAIT : LANDSCAPE;
+	const cropped =
+		box.width < 760 && box.height <= 160 && Boolean(selected || selectedPlace);
+	const cropWidth = sheet.width * 0.55;
+	const cropHeight = (cropWidth * box.height) / Math.max(1, box.width);
 	// Viewbox units per CSS pixel with "meet" scaling; markers keep 44px targets.
 	const markerScale = Math.max(
 		1,
-		Math.max(
-			sheet.width / Math.max(1, box.width),
-			sheet.height / Math.max(1, box.height),
-		),
+		cropped
+			? cropWidth / Math.max(1, box.width)
+			: Math.max(
+					sheet.width / Math.max(1, box.width),
+					sheet.height / Math.max(1, box.height),
+				),
 	);
 	const xs = town.places.map((p) => p.x);
 	const ys = town.places.map((p) => p.y);
@@ -731,6 +737,19 @@ export default function TownMap({
 		return boxes;
 	});
 	const markers = layoutKnownMarkers(visiblePoints, markerScale, sheet, labels);
+	const selectedLocation = town.places.find(
+		(place) => place.id === selectedPlace,
+	);
+	const focusPoint =
+		markers.get(selected) ??
+		(selectedLocation
+			? point(selectedLocation.x, selectedLocation.y)
+			: undefined);
+	const viewBox =
+		cropped && focusPoint
+			? `${focusPoint.x - cropWidth / 2} ${focusPoint.y - cropHeight / 2} ${cropWidth} ${cropHeight}`
+			: `0 0 ${sheet.width} ${sheet.height}`;
+
 	const activePlaceView = town.places.find((place) => place.id === activePlace);
 	const activeCluster = clusters.find(
 		(cluster) => cluster.placeId === activePlace,
@@ -750,7 +769,7 @@ export default function TownMap({
 			<svg
 				ref={map}
 				className={`town-map ${sheet.portrait ? "portrait" : "landscape"}`}
-				viewBox={`0 0 ${sheet.width} ${sheet.height}`}
+				viewBox={viewBox}
 				preserveAspectRatio="xMidYMid meet"
 				role="img"
 				aria-labelledby="map-title map-description"

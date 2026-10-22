@@ -9,15 +9,17 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(page.locator(".clock-rate")).toBeVisible({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
 	for (let i = 0; i < 4; i++) await step(page);
-	const talk = page.locator(".resident-talk > summary");
+	const talk = page.getByRole("button", { name: /^Talk to / });
 	await talk.click();
-	await expect(page.locator(".clock-rate")).toHaveText(
-		"Time held · conversation",
+	await expect(page.locator(".state-words")).toHaveText(
+		"Time holds while you talk",
 	);
 	const held = await page.evaluate(
 		() => (window as unknown as { townNow: number }).townNow,
@@ -28,8 +30,8 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 			() => (window as unknown as { townNow: number }).townNow,
 		),
 	).toBe(held);
-	await expect(page.locator(".person-panel h2")).toHaveText("Ravi");
-	await talk.click();
+	await expect(page.locator(".game-sheet h2")).toHaveText("Ravi");
+	await page.getByRole("button", { name: "Done", exact: true }).click();
 	await step(page);
 	expect(
 		await page.evaluate(

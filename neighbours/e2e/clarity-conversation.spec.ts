@@ -1,116 +1,134 @@
 import { expect, type Locator, type Page, step, test } from "./clock-fixture";
 
-test.use({ hasTouch: true });
-async function openConversation(page: Page, waitPrediction = true) {
+async function openConversation(page: Page) {
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
 	for (let i = 0; i < 4; i++) await step(page);
-	await page.locator(".resident-talk > summary").click();
-	if (
-		await page
-			.locator(
-				".resident-talk[open] .conversation-request:not([open]) > summary",
-			)
-			.count()
-	)
-		await page.locator(".conversation-request > summary").click();
-	if (waitPrediction)
-		await expect(page.getByLabel("Ask them to")).toBeEnabled();
+	await page.getByRole("button", { name: "Talk to Ravi", exact: true }).click();
+	await expect(page.locator("[data-affordance-id]").first()).toBeVisible();
 }
 async function visibleTarget(control: Locator) {
 	await expect(control).toBeInViewport({ ratio: 1 });
 	expect(
 		await control.evaluate((element) => {
-			const box = element.getBoundingClientRect();
+			const b = element.getBoundingClientRect();
 			const hit = document.elementFromPoint(
-				box.x + box.width / 2,
-				box.y + box.height / 2,
+				b.x + b.width / 2,
+				b.y + b.height / 2,
 			);
-			return (
-				box.height >= 44 && box.width >= 44 && !!hit && element.contains(hit)
-			);
+			return b.height >= 44 && b.width >= 44 && !!hit && element.contains(hit);
 		}),
 	).toBe(true);
 }
 for (const width of [360, 1280])
-	test(`offer is complete without scrolling at ${width}`, async ({
+	test(`conversation chips and pinned submit stay usable at ${width}`, async ({
 		page,
 	}, info) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
 		await openConversation(page);
-		// The compact action background must not cover the selected person's name.
-		expect(
-			await page.locator(".person-panel").evaluate((el) => {
-				const name = el.querySelector("h2")?.getBoundingClientRect();
-				const action = el
-					.querySelector(":scope > .player-action")
-					?.getBoundingClientRect();
-				return !!name && !!action && name.bottom <= action.top;
-			}),
-		).toBe(true);
-		const form = page.locator(".promise-choice");
-		for (const label of ["Ask them to", "Your hour", "Done by"]) {
-			const control = form.getByLabel(label);
-			await visibleTarget(control);
-			await expect(control).toHaveValue(label === "Done by" ? "1080" : "");
-		}
-		await visibleTarget(
-			form.getByRole("button", { name: "Promise an hour", exact: true }),
+		const form = page.locator("#town-conversation");
+		await expect(form.locator("select")).toHaveCount(0);
+		await expect(
+			page.getByRole("button", { name: "Offer an hour", exact: true }),
+		).toHaveAttribute("aria-pressed", "true");
+		const submit = page.getByRole("button", {
+			name: "Put it to Ravi",
+			exact: true,
+		});
+		await expect(submit).toBeDisabled();
+		await visibleTarget(submit);
+		await form.locator("[data-affordance-id]").first().click();
+		await form.locator('[data-work-id="help-repair"]').click();
+		await expect(submit).toBeEnabled();
+		await page.getByRole("button", { name: "Urge", exact: true }).click();
+		await expect(form).toContainText("wears on their trust");
+		await expect(submit).toBeEnabled();
+		await page.getByRole("button", { name: "Ask", exact: true }).click();
+		await expect(
+			page.getByRole("button", { name: "Ask", exact: true }),
+		).toHaveAttribute("aria-pressed", "true");
+		await expect(form.locator("[data-work-id]")).toHaveCount(0);
+		await expect(submit).toBeEnabled();
+		const before = await page.evaluate(
+			() => (window as unknown as { townNow: number }).townNow,
 		);
-		await expect(form.locator(".promise-meaning")).toBeInViewport({ ratio: 1 });
-		await expect(form.getByRole("button")).toBeDisabled();
-		await form.getByLabel("Ask them to").selectOption({ index: 1 });
-		await form.getByLabel("Your hour").selectOption("help-repair");
-		await form.getByLabel("Done by").selectOption({ index: 1 });
-		await expect(form.getByRole("button")).toBeEnabled();
-		await page.screenshot({ path: info.outputPath(`offer-${width}.png`) });
+		await page.clock.fastForward(5000);
+		expect(
+			await page.evaluate(
+				() => (window as unknown as { townNow: number }).townNow,
+			),
+		).toBe(before);
+		expect(
+			await page.evaluate(
+				() =>
+					(document.scrollingElement?.scrollHeight ?? Infinity) <= innerHeight,
+			),
+		).toBe(true);
+		await page.screenshot({
+			path: info.outputPath(`conversation-${width}.png`),
+		});
 	});
-
-test("conversation stays mounted and keeps the selected offer while reading holds time", async ({
-	page,
-}) => {
-	await page.setViewportSize({ width: 360, height: 690 });
-	await openConversation(page);
-	const details = page.locator(".resident-talk");
-	const original = await details.elementHandle();
-	if (!original) throw Error("No conversation");
-	await page.getByLabel("Your hour").selectOption("help-repair");
-	const before = await page.locator(".town-time strong").innerText();
-	await page.clock.fastForward(30000);
-	expect(await page.locator(".town-time strong").innerText()).toBe(before);
-	expect(
-		await original.evaluate(
-			(element) => element.isConnected && (element as HTMLDetailsElement).open,
-		),
-	).toBe(true);
-	await expect(page.getByLabel("Your hour")).toHaveValue("help-repair");
-});
-
-test("loading choices leaves offer controls in place", async ({ page }) => {
-	await page.setViewportSize({ width: 360, height: 690 });
-	await page.addInitScript(() => {
-		const post = Worker.prototype.postMessage;
-		Worker.prototype.postMessage = function (message: unknown) {
-			if ((message as { type?: string }).type === "predict-speech") {
-				setTimeout(() => post.call(this, message), 2000);
-			} else post.call(this, message);
-		};
+for (const mode of ["promise", "ask", "urge"] as const)
+	test(`chip selections submit the original ${mode} command`, async ({
+		page,
+	}) => {
+		await page.addInitScript(() => {
+			const post = Worker.prototype.postMessage;
+			Object.assign(window, { speechCommands: [] });
+			Worker.prototype.postMessage = function (message: unknown) {
+				const value = message as {
+					type?: string;
+					intervention?: { kind?: string };
+				};
+				if (
+					value.type === "intervene" &&
+					value.intervention?.kind === "player-speak"
+				)
+					(
+						window as unknown as { speechCommands: unknown[] }
+					).speechCommands.push(structuredClone(value.intervention));
+				return post.call(this, message);
+			};
+		});
+		await openConversation(page);
+		const offer = page.locator("[data-affordance-id]").first();
+		const affordanceId = await offer.getAttribute("data-affordance-id");
+		await offer.click();
+		await page
+			.getByRole("button", {
+				name:
+					mode === "promise"
+						? "Offer an hour"
+						: mode === "ask"
+							? "Ask"
+							: "Urge",
+				exact: true,
+			})
+			.click();
+		if (mode === "promise")
+			await page.locator('[data-work-id="carry-meals"]').click();
+		await page
+			.getByRole("button", { name: "Put it to Ravi", exact: true })
+			.click();
+		await expect(page.locator(".latest-answer")).toBeVisible();
+		const commands = await page.evaluate(
+			() => (window as unknown as { speechCommands: unknown[] }).speechCommands,
+		);
+		expect(commands).toHaveLength(1);
+		expect(commands[0]).toMatchObject({
+			kind: "player-speak",
+			actorId: "ravi",
+			affordanceId,
+			mode,
+		});
+		if (mode === "promise")
+			expect(commands[0]).toMatchObject({
+				pledge: { work: "carry-meals", by: 1080 },
+			});
+		else expect(commands[0]).not.toHaveProperty("pledge");
 	});
-	await openConversation(page, false);
-	const button = page.getByRole("button", {
-		name: "Promise an hour",
-		exact: true,
-	});
-	const pending = await button.boundingBox();
-	await expect(page.getByLabel("Ask them to")).toBeDisabled();
-	await visibleTarget(button);
-	await page.clock.runFor(2100);
-	await expect(page.getByLabel("Ask them to")).toBeEnabled();
-	const ready = await button.boundingBox();
-	expect(ready).toEqual(pending);
-});

@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, step, test } from "./clock-fixture";
-import { closeSaves, openSaves } from "./session-helpers";
+import { closeSaves, openDownload, openSaves } from "./session-helpers";
 
 test.use({
 	viewport: { width: 360, height: 690 },
@@ -14,39 +14,26 @@ test("a player can offer and complete a real hour and see Ada remember it", asyn
 }, info) => {
 	const started = Date.now();
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeEnabled({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await page.locator('[data-map-place="hall"]').tap();
 	await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
 	for (let i = 0; i < 7; i++) await step(page);
 	await page.getByRole("button", { name: "Close place details" }).click();
 	await page.locator('.neighbour-strip [data-person-id="ada"]').click();
-	await page.locator(".resident-talk > summary").click();
-	if (
-		await page
-			.locator(
-				".resident-talk[open] .conversation-request:not([open]) > summary",
-			)
-			.count()
-	)
-		await page.locator(".conversation-request > summary").click();
-	await page.getByLabel("Ask them to").selectOption("open-section");
-	await page.getByLabel("Your hour").selectOption("carry-meals");
-	await page.getByLabel("Done by").selectOption("1080");
-	await page
-		.getByRole("button", { name: "Promise an hour", exact: true })
-		.click();
+	await page.getByRole("button", { name: /^Talk to / }).click();
+	await page.locator('[data-affordance-id="open-section"]').click();
+	await page.locator('[data-work-id="carry-meals"]').click();
+	await page.locator('[data-deadline="1080"]').click();
+	await page.getByRole("button", { name: /^Put it to /, exact: true }).click();
 	await expect(page.locator(".latest-answer")).toBeInViewport();
 	await expect(page.locator(".latest-answer")).toContainText(
 		"Alright, I'll do it.",
 	);
-	await expect(page.locator(".clock-rate")).toHaveText("Time passing");
-	// Editing another choice in the same resolved conversation rearms reading time.
-	await page.getByLabel("Your hour").focus();
-	await expect(page.locator(".clock-rate")).toHaveText(
-		"Time held · conversation",
+	await expect(page.locator(".state-words")).toHaveText(
+		"Time holds while you talk",
 	);
 	await page
 		.getByRole("button", { name: "Start the hour", exact: true })
@@ -66,8 +53,9 @@ test("a player can offer and complete a real hour and see Ada remember it", asyn
 	});
 	// Real browser export verifies the selected deadline survives the worker and persistence.
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	const link = page.getByRole("link", { name: /Download save/ });
 	await expect(link).toBeVisible();

@@ -150,7 +150,7 @@ it("folds raw choice terms while retaining the current activity and controller l
 	expect(html).toContain("A neighbour</div>");
 	expect(html).toContain("Controller · HF");
 	expect(html.indexOf("Controller · HF")).toBeGreaterThan(
-		html.indexOf("Details &amp; evidence"),
+		html.indexOf("Why · the record ▸"),
 	);
 	expect(html).toContain("Right now");
 });
@@ -298,7 +298,7 @@ it("shows activity and current promise before one evidence disclosure, preservin
 	expect(disclosure).toBeGreaterThan(html.indexOf("Actual active job"));
 	expect(disclosure).toBeGreaterThan(html.indexOf("Current pledge"));
 	expect(html.slice(0, disclosure)).not.toContain("<details");
-	expect(html.slice(disclosure)).toContain("Details &amp; evidence");
+	expect(html.slice(disclosure)).toContain("Why · the record ▸");
 	expect(html.slice(disclosure)).toContain("Received observations");
 	expect(html.slice(disclosure)).toContain(
 		"How pressing each need feels · decision evidence",

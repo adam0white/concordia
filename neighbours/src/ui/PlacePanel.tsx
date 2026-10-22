@@ -12,6 +12,7 @@ export default function PlacePanel({
 	select,
 	close,
 	walkNotice,
+	showWalkAction = true,
 }: {
 	town: TownView;
 	place: PlaceView;
@@ -20,6 +21,8 @@ export default function PlacePanel({
 	select: (id: string, talk?: boolean) => void;
 	close: () => void;
 	walkNotice?: ReactNode;
+	/** Disable when the parent pins the walk button in its action bar. */
+	showWalkAction?: boolean;
 }) {
 	const player = town.player;
 	const destination = player?.destinations.find((p) => p.id === place.id);
@@ -50,7 +53,7 @@ export default function PlacePanel({
 			</div>
 			{player && (
 				<div className="place-response">
-					{destination && (
+					{showWalkAction && destination && (
 						<button
 							type="button"
 							className="place-walk"

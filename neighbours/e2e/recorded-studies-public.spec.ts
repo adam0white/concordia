@@ -8,14 +8,11 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	const requests: string[] = [];
 	page.on("request", (request) => requests.push(request.url()));
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
-	await showTab(page, "Compare");
 	await page
-		.getByRole("button", { name: "Recorded studies", exact: true })
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
+	await showTab(page, "Recorded studies");
 	const studies = page.getByRole("region", {
 		name: "Recorded studies",
 		exact: true,

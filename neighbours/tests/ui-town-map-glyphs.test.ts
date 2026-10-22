@@ -196,15 +196,15 @@ describe("neighbour chips", () => {
 					!!child.props["data-person-id"],
 			) as ReactElement<{
 			onClick: () => void;
-			"aria-current"?: string;
+			"aria-pressed"?: boolean;
 			"data-person-id": string;
 		}>[];
 		for (const chip of chips) chip.props.onClick();
 		expect(closed).toBe(0);
 		expect(selected).toEqual(["noor", "sam"]);
-		expect(chips.map((chip) => chip.props["aria-current"])).toEqual([
-			"true",
-			undefined,
+		expect(chips.map((chip) => chip.props["aria-pressed"])).toEqual([
+			true,
+			false,
 		]);
 	});
 });

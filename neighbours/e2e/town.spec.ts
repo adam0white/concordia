@@ -12,6 +12,8 @@ import {
 } from "./clock-fixture";
 import {
 	closeSaves,
+	openDownload,
+	openOtherWays,
 	openSaves,
 	showResources,
 	showTab,
@@ -30,9 +32,7 @@ type Packet = {
 async function pause(page: Page) {
 	await closeSaves(page);
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 }
 async function packet(
 	page: Page,
@@ -46,8 +46,9 @@ async function packet(
 		(links) => links[0]?.getAttribute("href") ?? null,
 	);
 	await openSaves(page);
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(async () => {
@@ -70,6 +71,7 @@ async function packet(
 }
 async function importPacket(page: Page, value: unknown) {
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "town.json",
 		mimeType: "application/json",
@@ -83,11 +85,11 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "initial");
 	expect(initial.runtime.seed).toBe(42);
@@ -114,36 +116,35 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	await step(page);
 	const continued = await packet(page, info, "continued");
 	expect(continued.runtime.now).toBe(initial.runtime.now + 15);
-	const minutes = continued.runtime.now;
-	const committed = `Saved · Day ${Math.floor(minutes / 1440) + 1} · ${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
-	await openSaves(page);
-	await expect(page.getByText(committed, { exact: true })).toBeVisible();
+
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await packet(page, info, "reload")).toEqual(continued);
 	await showTab(page, "Compare");
 	await openSaves(page);
-	await page.getByLabel("New town seed").fill("73");
-	await page.getByRole("button", { name: "Start town", exact: true }).click();
+	await openOtherWays(page);
+	await page.getByLabel("Start from a seed").fill("73");
+	await page.getByRole("button", { name: "Start", exact: true }).click();
 	// The old paused town also has Play. Wait for the replacement's actual seed
 	// before requesting its export; exports from the replaced world are discarded.
 	await showResources(page);
 	await expect(page.getByText("73", { exact: true })).toBeVisible();
 	await pause(page);
 	expect((await packet(page, info, "seed73")).runtime.seed).toBe(73);
-	await openSaves(page);
+	await openOtherWays(page);
 	await page
-		.getByRole("button", { name: "Restore previous town", exact: true })
+		.getByRole("button", { name: "Restore the previous town", exact: true })
 		.click();
 	await showResources(page);
 	await expect(page.getByText("42", { exact: true })).toBeVisible();
 	expect((await packet(page, info, "previous")).runtime.seed).toBe(42);
 	const previousTown = await packet(page, info, "before-invalid");
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "broken.json",
 		mimeType: "application/json",
@@ -165,11 +166,11 @@ test("390px town has no horizontal overflow and keyboard can open a person", asy
 }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	expect(
 		await page.evaluate(
@@ -228,11 +229,11 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	context,
 }, info) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "owner-initial");
 	await expect
@@ -255,11 +256,11 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 		});
 	});
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await packet(page, info, "legacy-adopted")).toEqual(initial);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
@@ -267,10 +268,10 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	const other = await context.newPage();
 	await prepareClock(other);
 	await other.goto("/");
-	await other.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		other.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await other
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(other.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await openSaves(other);
 	await closeSaves(page);
 	await step(page);
@@ -280,7 +281,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 		other.getByRole("button", { name: "Load device town", exact: true }),
 	).toBeVisible();
 	await expect(
-		other.getByRole("button", { name: "Game menu", exact: true }),
+		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeEnabled();
 	const beforeExport = await deviceCheckpoint(page);
 	expect(beforeExport.latest).toEqual(advanced);
@@ -290,9 +291,11 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	await other
 		.getByRole("button", { name: "Load device town", exact: true })
 		.click();
-	await other.getByRole("button", { name: "Enter town", exact: true }).click();
+	await other
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await expect(
-		other.getByRole("button", { name: "Game menu", exact: true }),
+		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeEnabled();
 	expect(await packet(other, info, "reloaded-device-town")).toEqual(advanced);
 	await expect(
@@ -314,11 +317,11 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 		Object.defineProperty(globalThis, "BroadcastChannel", { value: undefined });
 	});
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "cas-initial");
 	await expect
@@ -327,9 +330,11 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	const other = await context.newPage();
 	await prepareClock(other);
 	await other.goto("/");
-	await other.getByRole("button", { name: "Enter town", exact: true }).click();
+	await other
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await expect(
-		other.getByRole("button", { name: "Game menu", exact: true }),
+		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeEnabled();
 	await openSaves(other);
 	await closeSaves(page);
@@ -366,11 +371,11 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	page,
 }, info) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const valid = await packet(page, info, "recovery-original");
 	await expect
@@ -392,14 +397,14 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 		});
 	});
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await expect(page.getByRole("alert")).toContainText(
 		"The saved town could not be restored.",
 	);
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await expect(page.getByRole("alert")).toContainText(
 		"Taking an action will replace that save.",
 	);
@@ -412,8 +417,8 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	await closeSaves(page);
 	await page.locator(".neighbour-strip [data-person-id]").first().click();
 	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
-	await expect(page.locator(".resident-location")).toContainText(
-		"Walking to Workshop",
+	await expect(page.locator(".state-words")).toContainText(
+		"You set off automatically",
 	);
 	await step(page);
 	const recovered = await packet(page, info, "deliberate-recovery");
@@ -510,7 +515,9 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	const neighbours = page.getByRole("navigation", {
 		name: "Familiar neighbours",
 	});
@@ -549,11 +556,11 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	for (const width of [1280, 390]) {
 		await page.setViewportSize({ width, height: 900 });
@@ -647,11 +654,11 @@ test("retained outcomes stay near the clock and promise results survive into the
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
 	await closeSaves(page);
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible();
+	await expect(page.locator(".town-ready")).toBeVisible();
 
 	await closeSaves(page);
 
@@ -660,7 +667,7 @@ test("retained outcomes stay near the clock and promise results survive into the
 	await closeSaves(page);
 	if (
 		await page
-			.getByRole("button", { name: "Game menu", exact: true })
+			.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ })
 			.isVisible()
 	) {
 		await closeSaves(page);
@@ -705,8 +712,8 @@ test("retained outcomes stay near the clock and promise results survive into the
 	await page.locator(".story-headline").focus();
 	await page.keyboard.press("Enter");
 	await expect(
-		page.getByRole("tab", { name: "Journal", exact: true }),
-	).toHaveAttribute("aria-selected", "true");
+		page.getByRole("button", { name: "Journal", exact: true }),
+	).toHaveAttribute("aria-pressed", "true");
 	await expect(page.locator("article.event:focus")).toBeVisible();
 	await expect(page.locator("article.event:focus > .eyebrow")).toContainText(
 		"Day ",

@@ -176,8 +176,8 @@ export default function InspectionSituation({
 						An unused annex could add four places to the hall. Someone must
 						inspect it first.
 					</p>
-					<details>
-						<summary>Situation source and controlled cases</summary>
+					<details className="inspection-record">
+						<summary>Why · the record ▸</summary>
 						<label>
 							Situation
 							<select

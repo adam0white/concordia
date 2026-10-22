@@ -5,10 +5,10 @@ test("a cancelled second comparison keeps the first report selectable and byte-i
 	page,
 }) => {
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 	const panel = page.locator(".day-comparison");
 	await panel

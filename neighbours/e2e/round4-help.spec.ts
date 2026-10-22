@@ -7,13 +7,13 @@ for (const width of [360, 1280])
 	}, info) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
 		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-		await page.getByRole("button", { name: "Enter town", exact: true }).click();
-		await expect(
-			page.getByRole("button", { name: "Game menu", exact: true }),
-		).toBeEnabled({ timeout: 60000 });
+		await page
+			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.click();
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		await page.locator('[data-map-place="hall"] .place-hit-area').tap();
 		await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
-		await expect(page.locator(".playback")).toContainText(
+		await expect(page.locator(".game-state")).toContainText(
 			"You set off automatically",
 		);
 		const time = page.locator(".town-time");
@@ -44,9 +44,9 @@ for (const width of [360, 1280])
 				}),
 			).toBe(true);
 		}
-		expect(await company.evaluate((e) => e.closest(".drawer")?.scrollTop)).toBe(
-			0,
-		);
+		expect(
+			await company.evaluate((e) => e.closest(".game-sheet")?.scrollTop),
+		).toBe(0);
 		await page.screenshot({
 			path: info.outputPath(`round4-hall-${width}.png`),
 		});
@@ -61,7 +61,7 @@ for (const width of [360, 1280])
 		);
 		await page.screenshot({ path: info.outputPath(`round4-ada-${width}.png`) });
 		await help.click();
-		await expect(page.locator(".playback")).toContainText(
+		await expect(page.locator(".game-state")).toContainText(
 			"Your hour starts automatically",
 		);
 		// Leave default speed/story-watch on. Resuming a story is a visible player input.

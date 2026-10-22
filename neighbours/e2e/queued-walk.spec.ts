@@ -1,5 +1,5 @@
 import { expect, step, test } from "./clock-fixture";
-import { closeSaves, openSaves } from "./session-helpers";
+import { closeSaves, openOtherWays, openSaves } from "./session-helpers";
 
 test.use({
 	viewport: { width: 360, height: 690 },
@@ -7,7 +7,7 @@ test.use({
 	isMobile: true,
 });
 
-test("paused walking acknowledges without duplicate inputs and clears after replacement", async ({
+test("walking acknowledges without duplicate inputs and clears after replacement", async ({
 	page,
 }) => {
 	await page.addInitScript(() => {
@@ -33,9 +33,11 @@ test("paused walking acknowledges without duplicate inputs and clears after repl
 		};
 	});
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	const play = page.getByRole("button", { name: "Game menu", exact: true });
-	await expect(play).toBeEnabled({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	const before = await page.locator(".town-time").innerText();
 	await page.locator('[data-map-place="hall"]').tap();
 	const walk = page.getByRole("button", { name: /Walk to Flooded hall ·/ });
@@ -44,10 +46,10 @@ test("paused walking acknowledges without duplicate inputs and clears after repl
 		button.click();
 		button.click();
 	});
-	await expect(page.locator(".playback")).toContainText(
+	await expect(page.locator(".game-state")).toContainText(
 		"You set off automatically",
 	);
-	await expect(page.locator(".place-response")).toContainText(
+	await expect(page.locator(".state-words")).toContainText(
 		"You set off automatically",
 	);
 	await expect(walk).toBeDisabled();
@@ -60,17 +62,18 @@ test("paused walking acknowledges without duplicate inputs and clears after repl
 	).toBe(1);
 	await expect(play).toBeVisible();
 	await step(page);
-	await expect(page.locator(".playback")).toContainText(
+	await expect(page.locator(".game-state")).toContainText(
 		"You keep walking automatically",
 	);
 	await openSaves(page);
-	await page.getByLabel("New town seed").fill("73");
-	await page.getByRole("button", { name: "Start town", exact: true }).click();
+	await openOtherWays(page);
+	await page.getByLabel("Start from a seed").fill("73");
+	await page.getByRole("button", { name: "Start", exact: true }).click();
 	await closeSaves(page);
-	await expect(page.locator(".playback")).not.toContainText("Press Play to");
+	await expect(page.locator(".game-state")).not.toContainText("Press Play to");
 });
 
-test("a held worker reply shows pending immediately without moving Play", async ({
+test("a held worker reply shows pending immediately without moving the menu", async ({
 	page,
 }) => {
 	await page.addInitScript(() => {
@@ -89,9 +92,11 @@ test("a held worker reply shows pending immediately without moving Play", async 
 		};
 	});
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	const play = page.getByRole("button", { name: "Game menu", exact: true });
-	await expect(play).toBeEnabled({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await page.locator('[data-map-place="hall"]').tap();
 	const before = await play.boundingBox();
 	await page.evaluate(() => {
@@ -101,15 +106,13 @@ test("a held worker reply shows pending immediately without moving Play", async 
 	});
 	const walk = page.getByRole("button", { name: /Walk to Flooded hall ·/ });
 	await walk.tap();
-	await expect(page.locator(".place-response")).toContainText(
+	await expect(page.locator(".state-words")).toContainText(
 		"Requesting your action…",
 	);
-	await expect(page.locator(".playback-job-notice")).toContainText(
+	await expect(page.locator(".state-words")).toContainText(
 		"Requesting your action…",
 	);
-	await expect(page.locator(".playback-job-notice")).not.toContainText(
-		"Press Play",
-	);
+	await expect(page.locator(".state-words")).not.toContainText("Press Play");
 	await expect(walk).toBeDisabled();
 	const pending = await play.boundingBox();
 	expect(pending?.x).toBe(before?.x);
@@ -132,10 +135,10 @@ test("a held worker reply shows pending immediately without moving Play", async 
 		gate.hold = false;
 		for (const deliver of gate.held.splice(0)) deliver();
 	});
-	await expect(page.locator(".place-response")).toContainText(
+	await expect(page.locator(".state-words")).toContainText(
 		"You set off automatically",
 	);
-	await expect(page.locator(".playback-job-notice")).not.toContainText(
+	await expect(page.locator(".state-words")).not.toContainText(
 		"Requesting your action…",
 	);
 	const accepted = await play.boundingBox();

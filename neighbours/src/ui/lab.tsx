@@ -4,53 +4,58 @@ import { useEffect, useRef, useState } from "react";
 
 export const lab = createLab({ game: "neighbours" });
 
-export function LabPrivacy() {
-	const [eventsOn, setEventsOn] = useState(lab.telemetryOn);
+function readRecordingPreference() {
+	let switchedOff = false;
+	try {
+		switchedOff = localStorage.getItem("hf-lab-recording-off") === "1";
+	} catch {
+		/* Storage can be unavailable. */
+	}
+	return {
+		switchedOff,
+		telemetryOn: lab.telemetryOn,
+		privacySignalOn: lab.privacySignalOn && !lab.privacyOverride,
+	};
+}
+export function useLabRecording() {
+	const [preference, setPreference] = useState(readRecordingPreference);
 	useEffect(() => {
-		const sync = () => setEventsOn(lab.telemetryOn);
+		const sync = () => setPreference(readRecordingPreference());
 		window.addEventListener("storage", sync);
 		window.addEventListener("focus", sync);
 		window.addEventListener("hf-lab-preference", sync);
-		document.addEventListener("change", sync);
 		return () => {
 			window.removeEventListener("storage", sync);
 			window.removeEventListener("focus", sync);
 			window.removeEventListener("hf-lab-preference", sync);
-			document.removeEventListener("change", sync);
 		};
 	}, []);
+	return {
+		...preference,
+		setRecording: (enabled: boolean) => {
+			lab.setTelemetryOff(!enabled);
+			window.dispatchEvent(new Event("hf-lab-preference"));
+			setPreference(readRecordingPreference());
+		},
+	};
+}
+
+export function LabPrivacy() {
+	const { switchedOff, setRecording } = useLabRecording();
 	return (
-		<details
-			style={{
-				padding: "0.4rem",
-				background: "#f7f0e5",
-				color: "#2b2622",
-				maxWidth: "calc(100vw - 1rem)",
-			}}
-		>
-			<summary
-				style={{
-					minHeight: 44,
-					minWidth: 44,
-					alignContent: "center",
-					cursor: "pointer",
-				}}
-			>
-				Playtest privacy
-			</summary>
+		<div className="lab-privacy">
 			<label>
 				<input
 					type="checkbox"
-					checked={eventsOn}
-					onChange={(event) => {
-						lab.setTelemetryOff(!event.target.checked);
-						setEventsOn(lab.telemetryOn);
-					}}
+					role="switch"
+					aria-checked={!switchedOff}
+					checked={!switchedOff}
+					onChange={(event) => setRecording(event.target.checked)}
 				/>{" "}
 				Record play for the lab
 			</label>
-			<a href="https://human.adamwhite.work/lab/privacy/">Privacy</a>
-		</details>
+			<a href="https://human.adamwhite.work/lab/privacy/">Lab privacy</a>
+		</div>
 	);
 }
 

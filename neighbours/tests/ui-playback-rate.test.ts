@@ -46,3 +46,19 @@ it("notices newest-first stories and repeats whose retained id stays the same", 
 		),
 	).not.toBe(key);
 });
+
+it("uses menu pacing choices while inspection and occupation apply their own slowdowns", async () => {
+	const { automaticPlaybackRate } = await import("../src/ui/playback-rate");
+	expect(automaticPlaybackRate("automatic", false, false).interval).toBe(1200);
+	expect(automaticPlaybackRate("slow", false, false).interval).toBe(2400);
+	expect(automaticPlaybackRate("steady", false, false).interval).toBe(1200);
+	expect(automaticPlaybackRate("fast", false, false).interval).toBe(400);
+	expect(automaticPlaybackRate("fast", true, false).interval).toBe(2400);
+	expect(automaticPlaybackRate("fast", false, false, true).interval).toBe(1200);
+	expect(automaticPlaybackRate("fast", true, true).interval).toBe(0);
+});
+
+it("holds each fresh headline for eight seconds with the story watch detector", async () => {
+	const { STORY_READING_MS } = await import("../src/ui/playback-rate");
+	expect(STORY_READING_MS).toBe(8000);
+});

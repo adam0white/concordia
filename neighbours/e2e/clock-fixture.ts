@@ -60,7 +60,7 @@ export async function postStep(page: Page) {
 		posts: (window as unknown as { townStepPosts: number }).townStepPosts,
 		now: (window as unknown as { townNow: number }).townNow,
 	}));
-	for (let i = 0; i < 80; i++) {
+	for (let i = 0; i < 200; i++) {
 		await page.clock.fastForward(100);
 		if (
 			(await page.evaluate(

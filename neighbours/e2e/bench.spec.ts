@@ -2,7 +2,13 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { captureBench } from "../scripts/capture-bench.ts";
 import { expect, type Page, test } from "./clock-fixture";
-import { closeSaves, openSaves, showTab } from "./session-helpers";
+import {
+	closeSaves,
+	openDownload,
+	openOtherWays,
+	openSaves,
+	showTab,
+} from "./session-helpers";
 
 async function packet(page: Page) {
 	await openSaves(page);
@@ -10,8 +16,9 @@ async function packet(page: Page) {
 	const previous = (await link.count())
 		? await link.getAttribute("href")
 		: null;
+	await openDownload(page);
 	await page
-		.getByRole("button", { name: "Download this run", exact: true })
+		.getByRole("button", { name: "Keep a copy of this run", exact: true })
 		.click();
 	await expect
 		.poll(() => link.getAttribute("href").catch(() => null))
@@ -38,11 +45,12 @@ test("a real mobile bench proposal is received without granting access, and acti
 	const frozen = captureBench(73).checkpoint;
 	await page.setViewportSize({ width: 320, height: 740 });
 	await page.goto("/");
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeEnabled({ timeout: 60000 });
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await openSaves(page);
+	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
 		name: "natural-bench.json",
 		mimeType: "application/json",
@@ -91,10 +99,10 @@ test("a real mobile bench proposal is received without granting access, and acti
 	expect(ravi.person.prospection.entries[0].triggeredAt).toBeUndefined();
 	expect(proposed.rounds).toBe(before.rounds);
 	await page.reload();
-	await page.getByRole("button", { name: "Enter town", exact: true }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeEnabled();
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await packet(page)).toEqual(proposed);
 	panel = await cart(page);
 	await expect(panel).toContainText("No bench booking");

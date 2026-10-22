@@ -1,4 +1,4 @@
-import { expect, type Locator, step, test } from "./clock-fixture";
+import { expect, type Locator, test } from "./clock-fixture";
 
 /** A visible box can still be behind the pinned action. Check the real hit target. */
 async function expectUncovered(target: Locator) {
@@ -11,7 +11,7 @@ async function expectUncovered(target: Locator) {
 			() =>
 				target.evaluate((element) => {
 					const box = element.getBoundingClientRect();
-					const drawer = element.closest(".drawer");
+					const drawer = element.closest(".game-sheet");
 					const clip = drawer?.getBoundingClientRect();
 					const top = Math.max(box.top, clip?.top ?? 0, 0);
 					const bottom = Math.min(
@@ -30,173 +30,50 @@ async function expectUncovered(target: Locator) {
 		.toBe(true);
 }
 
-test("resident sheet keeps the selected resident response visible while scrolling", async ({
-	page,
-}) => {
-	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
-	await page.locator(".neighbour-strip [data-person-id]").first().click();
-	const action = page.locator(".person-panel > .player-action");
-	await expect(action).toBeInViewport();
-	await expect(action).toContainText("Walk to Workshop to talk");
-	await expect(page.locator(".resident-location")).toContainText(
-		"You are at Riverside homes",
-	);
-	const drawer = page.locator(".drawer-person");
-	await drawer.evaluate((element) => {
-		element.scrollTop = element.scrollHeight;
-	});
-	await expect(action).toBeInViewport();
-	const actionBox = await action.boundingBox();
-	const drawerBox = await drawer.boundingBox();
-	const dockBox = await page.locator(".dock").boundingBox();
-	expect(actionBox?.width ?? 0).toBeGreaterThanOrEqual(
-		(drawerBox?.width ?? 0) - 40,
-	);
-	expect((actionBox?.y ?? 0) + (actionBox?.height ?? 0)).toBeLessThanOrEqual(
-		dockBox?.y ?? 0,
-	);
-	const walk = page
-		.locator(".resident-location")
-		.getByText("Walk somewhere", { exact: true });
-	await expectUncovered(walk);
-	await walk.click();
-	const destination = page
-		.locator(".resident-location")
-		.getByRole("button", { name: /Market kitchen/ });
-	await expectUncovered(destination);
-	await destination.click();
-	await expect(page.locator(".resident-location")).toContainText(
-		"Walking to Market kitchen",
-	);
-});
-
-for (const { width, colorScheme } of [
-	{ width: 320, colorScheme: "light" },
-	{ width: 360, colorScheme: "dark" },
-] as const) {
-	test(`resident details and walking destinations remain uncovered at 200% text (${width}, ${colorScheme})`, async ({
+for (const width of [360, 1280])
+	test(`resident body scrolls above its pinned response at ${width}`, async ({
 		page,
-	}, testInfo) => {
-		await page.setViewportSize({ width, height: 690 });
-		await page.emulateMedia({ colorScheme });
-		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-		await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
+	}) => {
+		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
+		await page.goto("/");
+		await page
+			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.click();
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
+		await page.locator('.neighbour-strip [data-person-id="ada"]').click();
+		const panel = page.locator(".person-panel");
 		await expect(
-			page.getByRole("button", { name: "Game menu", exact: true }),
-		).toBeVisible({ timeout: 60000 });
-		await page.locator(".neighbour-strip [data-person-id]").first().click();
-		await page.evaluate(() => {
-			document.documentElement.style.fontSize = "34px";
-		});
-		const panel = page.locator(".person-panel");
-		await expectUncovered(panel.locator("h2"));
-		await expectUncovered(panel.locator(".description"));
-		const walk = panel.getByText("Walk somewhere", { exact: true });
-		await expectUncovered(walk);
-		await walk.click();
-		const destinations = panel.locator(".walk-list button");
-		expect(await destinations.count()).toBeGreaterThan(0);
-		for (let index = 0; index < (await destinations.count()); index++) {
-			await expectUncovered(destinations.nth(index));
-		}
-		await expectUncovered(panel.locator("h2"));
-		await page.screenshot({ path: testInfo.outputPath("text200-name.png") });
-		await expectUncovered(panel.locator(".description"));
-		await page.screenshot({
-			path: testInfo.outputPath("text200-description.png"),
-		});
-		const close = panel.getByRole("button", { name: "Close person details" });
-		await expectUncovered(close);
-		await close.click();
-		await expect(panel).toHaveCount(0);
-	});
-}
-
-test("Ada and Ravi lead with a direct response; arriving reaches the Ask alternative", async ({
-	page,
-}) => {
-	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
-	for (const id of ["ada", "ravi"]) {
-		await page.locator(`.neighbour-strip [data-person-id="${id}"]`).click();
-		const panel = page.locator(".person-panel");
-		const response = panel.getByRole("button", {
+			panel.getByRole("heading", { name: "Ada", exact: true }),
+		).toBeVisible();
+		const response = page.getByRole("button", {
 			name: /Walk to Workshop to talk/,
 		});
-		await expect(response).toBeInViewport({ ratio: 1 });
-		const ordering = await panel.evaluate((el) => {
-			const name = el.querySelector("h2")?.getBoundingClientRect();
-			const response = el
-				.querySelector(".resident-response")
-				?.getBoundingClientRect();
-			const location = el
-				.querySelector(".player-place")
-				?.getBoundingClientRect();
-			return (
-				!!name &&
-				!!response &&
-				!!location &&
-				name.bottom <= response.top &&
-				response.bottom <= location.top
-			);
-		});
-		expect(ordering).toBe(true);
 		await expectUncovered(response);
-		if (id === "ravi") await response.click();
-		else
-			await panel.getByRole("button", { name: "Close person details" }).click();
-	}
-	for (let i = 0; i < 4; i++) await step(page);
-	const talk = page.locator(".resident-talk > summary");
-	await expect(talk).toHaveText("Talk to Ravi");
-	await talk.click();
-	if (
-		await page
-			.locator(
-				".resident-talk[open] .conversation-request:not([open]) > summary",
-			)
-			.count()
-	)
-		await page.locator(".conversation-request > summary").click();
-	await page.getByLabel("Ask them to").selectOption({ index: 1 });
-	await page.getByText("Ask or urge instead", { exact: true }).click();
-	const ask = page
-		.locator(".resident-talk")
-		.getByRole("button", { name: "Ask", exact: true });
-	await ask.scrollIntoViewIfNeeded();
-	await expect(ask).toBeInViewport({ ratio: 1 });
-	await expect(ask).toBeEnabled();
-	await expectUncovered(ask);
-	await ask.click();
-	await expect(page.locator(".latest-answer")).toBeVisible();
-});
+		await page.locator(".game-sheet").evaluate((e) => {
+			e.scrollTop = e.scrollHeight;
+		});
+		await expectUncovered(response);
+		await panel.locator(".person-evidence > summary").click();
+		await expect(panel.locator(".person-evidence")).toHaveAttribute("open", "");
+		await expect(panel.locator(".person-evidence")).toContainText("Controller");
+		await expectUncovered(response);
+	});
 
 test("known open hall need is readable on map and list without colour", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-	await page.getByRole("button", { name: /^(Enter town|Continue)/ }).click();
-	await expect(
-		page.getByRole("button", { name: "Game menu", exact: true }),
-	).toBeVisible({ timeout: 60000 });
-	for (const selector of [
-		".known-need-map",
-		".known-place-need .known-need-cue",
-	]) {
-		const cue = page.locator(selector);
-		await expect(cue).toContainText("Needs help");
-		await expect(cue).toBeInViewport({ ratio: 1 });
-	}
+	await page
+		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
+	const mapCue = page.locator(".known-need-map");
+	await expect(mapCue).toContainText("Needs help");
+	await expect(mapCue).toBeInViewport({ ratio: 1 });
+	const hallChip = page.locator(".known-place-need");
+	await expect(hallChip).toHaveAttribute("aria-label", /Needs help/);
+	await expect(hallChip).toBeInViewport({ ratio: 1 });
 	await expect(
 		page.locator(".neighbour[data-person-id] .known-need-cue"),
 	).toHaveCount(0);

@@ -1,0 +1,47 @@
+.conversation-request.speech {
+	display: grid;
+	gap: 12px;
+	padding-block: 12px;
+}
+.conversation-choices {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+}
+.conversation-choices legend {
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+.conversation-chips {
+	display: flex;
+	gap: 6px;
+	overflow-x: auto;
+	padding-bottom: 4px;
+}
+.conversation-chips button {
+	flex: 0 0 auto;
+	max-width: 100%;
+	min-height: 44px;
+	white-space: normal;
+}
+.conversation-modes {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr 1fr;
+	gap: 4px;
+}
+.conversation-modes button {
+	min-height: 44px;
+	padding-inline: 8px;
+}
+.conversation-request button[aria-pressed="true"] {
+	background: var(--ink);
+	color: var(--paper);
+	border-color: var(--ink);
+}
+.person-evidence > summary,
+.speak-panel .own-work > summary {
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+}
