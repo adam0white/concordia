@@ -59,7 +59,7 @@ export function LabPrivacy() {
 	);
 }
 
-const notice = typeof document === "undefined" ? null : telemetryNotice();
+let notice = typeof document === "undefined" ? null : telemetryNotice();
 if (notice)
 	Object.assign(notice.style, {
 		position: "static",
@@ -69,8 +69,12 @@ if (notice)
 export function LabNotice() {
 	const host = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		if (notice) host.current?.append(notice);
-		return () => notice?.remove();
+		if (notice && host.current) {
+			// The host owns the node through Strict Mode's effect rehearsal.
+			// Removing the host removes the notice; a later title visit cannot append it again.
+			host.current.append(notice);
+			notice = null;
+		}
 	}, []);
 	return <div className="lab-notice-host" ref={host} />;
 }

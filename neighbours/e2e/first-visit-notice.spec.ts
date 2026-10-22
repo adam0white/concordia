@@ -60,8 +60,26 @@ for (const width of [360, 1280]) {
 			});
 		await dismiss.click();
 		await expect(notice).toHaveCount(0);
+		await enter.click();
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
+		await page.getByRole("button", { name: "Game menu", exact: true }).click();
+		await page
+			.getByRole("button", { name: "To the title page", exact: true })
+			.click();
+		await expect(
+			page.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ }),
+		).toBeVisible();
+		await page.evaluate(
+			() =>
+				new Promise<void>((resolve) =>
+					requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+				),
+		);
+		await expect(notice).toHaveCount(0, { timeout: 3000 });
 		await page.reload();
-		await expect(enter).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ }),
+		).toBeVisible();
 		await expect(notice).toHaveCount(0);
 	});
 }
