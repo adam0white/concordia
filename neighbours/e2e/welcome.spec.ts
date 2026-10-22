@@ -79,7 +79,7 @@ test("welcome explains the town before starting any runtime, with keyboard entry
 	).toBeInViewport();
 	await expect(
 		page.getByRole("button", { name: "Step: Advance one round" }),
-	).toHaveCount(0);
+	).toBeInViewport();
 	expect(
 		await page.evaluate(
 			() => document.documentElement.scrollWidth <= innerWidth,

@@ -1,18 +1,19 @@
 import { expect, postStep, step, test } from "./clock-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
-test("automatic clock advances with the default selected person and the menu holds it", async ({
+test("player clock controls retain default progression and menu holds", async ({
 	page,
 }) => {
 	await page.goto("/");
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(page.locator(".clock-rate")).toBeVisible({ timeout: 60000 });
 	await expect(
-		page.getByRole("button", { name: /^(Play|Pause|Step|Next)/ }),
-	).toHaveCount(0);
+		page.getByRole("button", { name: /^(Play|Pause|Step)/ }),
+	).toHaveCount(2);
+	await expect(page.getByRole("button", { name: /^Next/ })).toHaveCount(0);
 	await expect(
 		page.getByRole("combobox", { name: "Playback speed" }),
-	).toHaveCount(0);
+	).toBeVisible();
 	const before = await page.evaluate(
 		() => (window as unknown as { townNow: number }).townNow,
 	);
