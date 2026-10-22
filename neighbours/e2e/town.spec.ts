@@ -41,9 +41,10 @@ async function packet(
 ): Promise<Packet> {
 	await openSaves(page);
 	const link = page.getByRole("link", { name: /Download save/ });
-	const previous = (await link.count())
-		? await link.getAttribute("href")
-		: null;
+	// An accepted import can replace the link between separate count/href reads.
+	const previous = await link.evaluateAll(
+		(links) => links[0]?.getAttribute("href") ?? null,
+	);
 	await openSaves(page);
 	await page
 		.getByRole("button", { name: "Download this run", exact: true })

@@ -42,7 +42,7 @@ test("entry precedes optional introduction and one Game menu owns run controls",
 	}
 	await dialog.getByText("Playtest privacy", { exact: true }).click();
 	await expect(
-		dialog.getByLabel("Anonymous play events", { exact: true }),
+		dialog.getByLabel("Record play for the lab", { exact: true }),
 	).toBeVisible();
 	await page.keyboard.press("Escape");
 	await expect(dialog).not.toBeVisible();
