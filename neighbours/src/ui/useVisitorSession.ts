@@ -287,6 +287,61 @@ export function useVisitorSession({
 			setSaved("Device save changed in another tab");
 		});
 		let runtime: RuntimeClient | null = null;
+		let telemetryTown: TownView | undefined;
+		let committedSave:
+			| {
+					generation: number;
+					data: { slot: "latest" | "previous"; packet: unknown };
+			  }
+			| undefined;
+		const recordCommittedSave = (
+			packet: unknown,
+			slot: "latest" | "previous",
+			generation: number,
+		) => {
+			const data = { slot, packet: structuredClone(packet) };
+			committedSave = { generation, data };
+			lab.captureSave(data);
+		};
+		const telemetryRequests = new Map<
+			number,
+			{
+				generation: number;
+				resolve: (value: unknown) => void;
+				timer: ReturnType<typeof setTimeout>;
+			}
+		>();
+		const stopRecording = lab.trackRun(
+			async () => {
+				if (!runtime || !telemetryTown || !clockHealthy.current) return null;
+				const generation = acceptedGeneration.current;
+				const packet = await new Promise<unknown>((resolve) => {
+					const requestId = -++saveRequestId.current;
+					const timer = setTimeout(() => {
+						telemetryRequests.delete(requestId);
+						resolve(null);
+					}, 15000);
+					telemetryRequests.set(requestId, { generation, resolve, timer });
+					runtime?.send({ type: "save", requestId });
+				});
+				if (!active || generation !== acceptedGeneration.current) return null;
+				// Retry only checkpoints committed by this visitor's accepted world,
+				// after identity is settled. Never attach a prior town's device save.
+				if (committedSave?.generation === generation)
+					lab.captureSave(committedSave.data);
+				return active && generation === acceptedGeneration.current
+					? packet
+					: null;
+			},
+			{
+				runKey: () =>
+					telemetryTown
+						? `${telemetryTown.seed}:${acceptedGeneration.current}`
+						: "title",
+				getLogs: () =>
+					telemetryTown?.events.slice(-40).map((event) => event.text) ?? [],
+			},
+		);
 		let initialSavedPacket: unknown;
 		let savedReadFailed = false;
 		let firstReady = true;
@@ -296,6 +351,24 @@ export function useVisitorSession({
 		setProgress("Checking the saved town on this device…");
 		const handleReply = (reply: UiReply) => {
 			if (!active) return;
+			if (
+				reply.type === "save" &&
+				reply.requestId !== undefined &&
+				telemetryRequests.has(reply.requestId)
+			) {
+				const request = telemetryRequests.get(reply.requestId);
+				if (request) {
+					clearTimeout(request.timer);
+					telemetryRequests.delete(reply.requestId);
+					request.resolve(
+						request.generation === acceptedGeneration.current
+							? reply.save
+							: null,
+					);
+				}
+				return;
+			}
+			if (reply.type === "error") lab.log("error", reply.message);
 			if (reply.type === "progress") {
 				setProgress(reply.message);
 				if (comparisonPending.current) setBranchProgress(reply.message);
@@ -463,6 +536,7 @@ export function useVisitorSession({
 					autosaveEnabled.current = true;
 					persistenceAfterState.current = false;
 				}
+				telemetryTown = reply.view;
 				const restoredAtStartup = restoringStartup && reply.type === "state";
 				if (restoredAtStartup) {
 					restoringStartup = false;
@@ -587,6 +661,11 @@ export function useVisitorSession({
 								generation < acceptedGeneration.current
 							)
 								return;
+							recordCommittedSave(
+								reply.save,
+								replace ? "previous" : "latest",
+								generation,
+							);
 							setSaved(savedLabel(reply.save));
 							if (
 								replace &&
@@ -703,6 +782,7 @@ export function useVisitorSession({
 						generation < acceptedGeneration.current
 					)
 						return;
+					recordCommittedSave(reply.save, "latest", generation);
 					setSaved(savedLabel(reply.save));
 					setHasSave(true);
 				},
@@ -746,6 +826,12 @@ export function useVisitorSession({
 		return () => {
 			advanceOrigin.current = null;
 			active = false;
+			stopRecording();
+			for (const request of telemetryRequests.values()) {
+				clearTimeout(request.timer);
+				request.resolve(null);
+			}
+			telemetryRequests.clear();
 			saves.close();
 			runtime?.close();
 			if (client.current === runtime) client.current = null;

@@ -11,7 +11,7 @@ test("notebook preview contains the actual town and cancel sends no run", async 
 	});
 	await page.goto("/");
 	await page.getByText("Playtest privacy", { exact: true }).click();
-	await page.getByLabel("Anonymous play events", { exact: true }).uncheck();
+	await page.getByLabel("Record play for the lab", { exact: true }).uncheck();
 	await page.getByRole("button", { name: "Enter town", exact: true }).click();
 	await expect(
 		page.getByRole("button", { name: "Game menu", exact: true }),
@@ -25,8 +25,8 @@ test("notebook preview contains the actual town and cancel sends no run", async 
 		exact: true,
 	});
 	await expect(dialog).toBeVisible();
-	await dialog.getByText(/Exactly what is sent/).click();
-	const preview = dialog.getByLabel("The exact text that is sent");
+	await dialog.getByText(/Run and note payload/).click();
+	const preview = dialog.getByLabel("Full payload JSON, formatted for reading");
 	const text = await preview.inputValue();
 	const packet = JSON.parse(text);
 	expect(packet.game).toBe("neighbours");
@@ -38,6 +38,6 @@ test("notebook preview contains the actual town and cancel sends no run", async 
 	await openSaves(page);
 	await page.getByText("Playtest privacy", { exact: true }).click();
 	await expect(
-		page.getByLabel("Anonymous play events", { exact: true }),
+		page.getByLabel("Record play for the lab", { exact: true }),
 	).not.toBeChecked();
 });

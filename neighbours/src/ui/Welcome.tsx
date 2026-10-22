@@ -1,4 +1,5 @@
 import { inkLine } from "./ink";
+import { LabNotice } from "./lab";
 
 type Props = { onEnter: () => void };
 
@@ -6,6 +7,7 @@ type Props = { onEnter: () => void };
 export default function Welcome({ onEnter }: Props) {
 	return (
 		<main className="welcome-screen">
+			<LabNotice />
 			<span className="eyebrow">Alder Quay · a field notebook</span>
 			<h2>A town rebuilding after a flood.</h2>
 			<p className="welcome-goal">

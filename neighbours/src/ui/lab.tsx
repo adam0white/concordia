@@ -1,18 +1,21 @@
 import { createLab } from "@adam0white/lab-client";
-import { useEffect, useState } from "react";
+import { telemetryNotice } from "@adam0white/lab-kit";
+import { useEffect, useRef, useState } from "react";
 
 export const lab = createLab({ game: "neighbours" });
 
 export function LabPrivacy() {
-	const [eventsOn, setEventsOn] = useState(lab.eventsOn);
+	const [eventsOn, setEventsOn] = useState(lab.telemetryOn);
 	useEffect(() => {
-		const sync = () => setEventsOn(lab.eventsOn);
+		const sync = () => setEventsOn(lab.telemetryOn);
 		window.addEventListener("storage", sync);
 		window.addEventListener("focus", sync);
+		window.addEventListener("hf-lab-preference", sync);
 		document.addEventListener("change", sync);
 		return () => {
 			window.removeEventListener("storage", sync);
 			window.removeEventListener("focus", sync);
+			window.removeEventListener("hf-lab-preference", sync);
 			document.removeEventListener("change", sync);
 		};
 	}, []);
@@ -40,13 +43,29 @@ export function LabPrivacy() {
 					type="checkbox"
 					checked={eventsOn}
 					onChange={(event) => {
-						lab.setEventsOff(!event.target.checked);
-						setEventsOn(lab.eventsOn);
+						lab.setTelemetryOff(!event.target.checked);
+						setEventsOn(lab.telemetryOn);
 					}}
 				/>{" "}
-				Anonymous play events
+				Record play for the lab
 			</label>
 			<a href="https://human.adamwhite.work/lab/privacy/">Privacy</a>
 		</details>
 	);
+}
+
+const notice = typeof document === "undefined" ? null : telemetryNotice();
+if (notice)
+	Object.assign(notice.style, {
+		position: "static",
+		transform: "none",
+		margin: "0 auto",
+	});
+export function LabNotice() {
+	const host = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (notice) host.current?.append(notice);
+		return () => notice?.remove();
+	}, []);
+	return <div ref={host} />;
 }
