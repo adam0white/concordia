@@ -989,3 +989,9 @@ body,
 		padding: 0 20px 20px;
 	}
 }
+
+/* The first-visit notice may overlap the drawing, while entry stays pinned. */
+.lab-notice-host {
+	position: relative;
+	z-index: 1;
+}

@@ -72,5 +72,5 @@ export function LabNotice() {
 		if (notice) host.current?.append(notice);
 		return () => notice?.remove();
 	}, []);
-	return <div ref={host} />;
+	return <div className="lab-notice-host" ref={host} />;
 }
