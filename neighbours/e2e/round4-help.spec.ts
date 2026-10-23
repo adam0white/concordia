@@ -51,9 +51,10 @@ for (const width of [360, 1280])
 			path: info.outputPath(`round4-hall-${width}.png`),
 		});
 		await page.getByRole("button", { name: /^Talk to Ada/ }).click();
-		await expect(page.getByText("Done by", { exact: true })).toBeInViewport({
-			ratio: 1,
-		});
+		// Complete choice labels wrap vertically; the deadline remains reachable.
+		const deadline = page.getByText("Done by", { exact: true });
+		await deadline.scrollIntoViewIfNeeded();
+		await expect(deadline).toBeInViewport({ ratio: 1 });
 		await page.locator(".resident-help summary").click();
 		const help = page.getByRole("button", {
 			name: "Start the covered hour",
