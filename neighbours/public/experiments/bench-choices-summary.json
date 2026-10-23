@@ -1,11 +1,11 @@
 {
   "schema": "neighbours/bench-choice-probe@1",
-  "recordedAt": "2026-10-22T21:08:28.292Z",
+  "recordedAt": "2026-10-23T23:32:26.753Z",
   "hf": "2.8.0",
   "modelCalls": 0,
-  "sourceCommit": "7839c5f93cde28ce8f51ce61b0350e7672cb9973",
-  "sourceFingerprint": "7a10dc9d417fba41ef273166132c32aa8e2c984475320d6c955a6c76a6169e67",
-  "sourceWorktreeClean": false,
+  "sourceCommit": "e3b1ed3f1e92ca633ccb64e10c70f9f2a3000eb9",
+  "sourceFingerprint": "0089e7ea69871f4e32b310e6973cac7a42b03517817f73d308deb194bafab41f",
+  "sourceWorktreeClean": true,
   "limitations": [
     "Fresh fixed-seed captures contain eight actual HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
     "This probe runs the actual TypeScript physical host and published HF under Node. It does not run Python Concordia or a live model; native/WASM parity is a separate check.",
@@ -382,5 +382,5 @@
     }
   ],
   "noNaturalCase": [],
-  "rawReportSha256": "fa607dde00b75daad1d294644c53f6e87b21c9aeae3c211987358547de951c73"
+  "rawReportSha256": "978129321f8c8d0a6ad5165aa5d889ac009275d957fac7a96e3610a35c064b89"
 }
