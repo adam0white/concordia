@@ -6,6 +6,11 @@
 	"engines": {
 		"node": ">=24"
 	},
+	"overrides": {
+		"@cloudflare/config": {
+			"zod": "4.6.6"
+		}
+	},
 	"scripts": {
 		"dev": "vite --host 127.0.0.1",
 		"build": "node scripts/prepare-runtime.mjs && tsc --noEmit && vite build",
