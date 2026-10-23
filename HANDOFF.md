@@ -1,5 +1,9 @@
 # Neighbours handoff
 
+## F-468 conversation labels (2026-10-23)
+
+Remaining: publication verification and Adam's feel acceptance are separate. The bounded label fix lets conversation choices wrap into the existing vertically scrolling sheet. The former horizontal strips cut action names at 360×690 and inside the desktop sheet. No action, deadline, cost, outcome, runtime or difficulty changes. A focused browser regression first failed on horizontal overflow at both 360×690 and 1280×800, then passed with every option fitting and an actual submitted response. Five existing conversation tests and 37 native controls pass. One independent Codex correctness/game-design review found no blocker. Beads `nbh-ag6` owns delivery; the exact hosted CI and live `/release.json` establish publication. F-468's separate commitment-wording route remains open.
+
 ## Approved UI grammar (2026-10-22)
 
 Adam accepts feel separately. This section records the source implementation; hosted CI and the live release manifest establish publication. Implementation `7839c5f` replaces the older controls below with automatic pacing, optional menu pace choices and Skip ⏩. It puts the map first, pins context actions, moves saves to the title, studies to the menu, and adds named Send word. Simulation, Python, published HF 2.8.0, contracts and replay/save formats are unchanged. Independent review fixes and regenerated-source evidence are recorded in [UI grammar delivery](docs/neighbours/ui-grammar-2026-10-22.md). Local validation covers 517 unit tests, all 67 browser cases across the full sweep and focused retests, 37 native controls, actual 208-person native/WASM parity, three exact zero-call tape replays and regenerated source provenance. The live `/release.json` remains authoritative.
