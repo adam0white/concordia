@@ -51,7 +51,6 @@ export async function sendFeedbackWithoutRun(
 	name: string,
 	sharePlay = false,
 ): Promise<boolean> {
-	lab.setPersonaRecording(`feedback-note-${crypto.randomUUID()}`);
 	await lab.sendFeedback(note, {
 		name,
 		run: { feedbackOnly: true },
@@ -76,7 +75,6 @@ export class CastSession {
 	private stop: () => void;
 	private checkpointBusy = false;
 	private sources: Record<string, Person> = {};
-	private recordingChoice = 0;
 	private recordReady = false;
 	private sourceQueue: Promise<void> = Promise.resolve();
 	private staged?: {
@@ -96,8 +94,6 @@ export class CastSession {
 	}
 	invalidate = () => {
 		this.generation++;
-		this.recordingChoice++;
-		lab.setPersonaRecording(`pending-${crypto.randomUUID()}`);
 	};
 	preferencesChanged = (event: Event) => {
 		const key = (event as StorageEvent).key;
@@ -105,9 +101,7 @@ export class CastSession {
 			event.type === "hf-lab-preference" ||
 			(typeof key === "string" &&
 				(key.startsWith("hf-lab-") || key.startsWith("hf-persona-recording:")));
-		if (recordingOnly) this.recordingChoice++;
-		else this.invalidate();
-		if (this.recordReady && this.active) void this.recording().catch(() => {});
+		if (!recordingOnly) this.invalidate();
 	};
 	suspend() {
 		this.recordReady = false;
@@ -291,7 +285,6 @@ export class CastSession {
 		this.file = staged.file;
 		this.localOnly = staged.localOnly;
 		this.recordReady = true;
-		void this.recording().catch(() => {});
 	}
 	abortLoad() {
 		this.staged = undefined;
@@ -320,8 +313,15 @@ export class CastSession {
 		sharePlay = false,
 	): Promise<boolean> {
 		if (sharePlay) lab.setTelemetryOff(false);
+		const generation = this.generation;
+		const revisions = this.heads.map((head) => head.revision).join("/");
+		const current = () =>
+			this.active &&
+			this.recordReady &&
+			generation === this.generation &&
+			this.heads.map((head) => head.revision).join("/") === revisions;
 		let run: unknown;
-		if (lab.telemetryOn || sharePlay) {
+		if (lab.telemetryOn && current()) {
 			let cancelTimeout = () => {};
 			try {
 				run = await Promise.race([
@@ -337,54 +337,22 @@ export class CastSession {
 				cancelTimeout();
 			}
 		}
-		await lab.sendFeedback(note, { name, run, sharePlay });
-		return !(lab.telemetryOn || sharePlay) || run === undefined || run === null;
+		const includeRun =
+			run !== undefined && run !== null && current() && lab.telemetryOn;
+		// A marker suppresses the SDK's optional snapshot retry after unavailable/stale capture.
+		// Sharing was applied at Submit; do not override a newer off choice after the await.
+		await lab.sendFeedback(note, {
+			name,
+			run: includeRun ? run : { feedbackOnly: true },
+			sharePlay: false,
+		});
+		return !includeRun;
 	}
-	async recording(allow?: boolean) {
-		if (!this.recordReady || !this.active) {
-			lab.setPersonaRecording("pending-world");
-			return;
-		}
-		const choice = ++this.recordingChoice;
-		const generation = this.generation,
-			revisions = this.heads.map((p) => p.revision).join("/");
-		lab.setPersonaRecording(`group-${crypto.randomUUID()}`);
-		if (this.file) return;
-		if (!this.heads.length) {
-			lab.setPersonaRecording(null);
-			return;
-		}
-		const pinned = structuredClone(this.heads);
-		const current = () =>
-			this.active &&
-			generation === this.generation &&
-			choice === this.recordingChoice &&
-			this.heads.map((p) => p.revision).join("/") === revisions;
-		const reply = await shelf.request<{
-			sameEpoch: boolean;
-			revisions: string[];
-			recordingEpoch: string | null;
-		}>({ action: "recordingBatch", envelopes: pinned });
-		if (!current() || reply.revisions.join("/") !== revisions) return;
-		if (allow !== undefined) {
-			const ack = await shelf.request<{
-				sameEpoch: boolean;
-				revisions: string[];
-				recordingEpoch: string | null;
-			}>({
-				action: "recordingBatch",
-				envelopes: pinned,
-				allowRecording: allow,
-				recordingEpoch: reply.recordingEpoch ?? undefined,
-			});
-			if (
-				current() &&
-				ack.revisions.join("/") === revisions &&
-				ack.sameEpoch === allow
-			)
-				lab.allowPersonaRecording(allow);
-		} else lab.allowPersonaRecording(reply.sameEpoch);
+	/** Deprecated host hook. Recording and source continuity have no RPC dependency. */
+	recording(_allow?: boolean): Promise<void> {
+		return Promise.resolve();
 	}
+
 	private serialize(work: () => Promise<void>): Promise<void> {
 		const next = this.sourceQueue.then(work);
 		this.sourceQueue = next.catch(() => {});
@@ -577,7 +545,6 @@ export class CastSession {
 				envelope,
 			].sort((a, b) => a.castId.localeCompare(b.castId));
 			await this.accepted();
-			await this.recording();
 		}
 	}
 }

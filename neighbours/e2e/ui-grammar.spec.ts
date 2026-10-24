@@ -369,7 +369,7 @@ for (const width of [360, 1280]) {
 			await expect(
 				page.getByText(
 					mode === "off-unticked"
-						? "Note queued without a run or history linkage. This is not a delivery receipt."
+						? "Note queued without a game run. This is not a delivery receipt."
 						: "Note queued. An available run may also be included. This is not a delivery receipt.",
 					{ exact: true },
 				),
@@ -441,7 +441,7 @@ for (const width of [360, 1280]) {
 		await page.getByRole("button", { name: "Submit", exact: true }).click();
 		await expect(
 			page.getByText(
-				"Note queued without a run or history linkage. This is not a delivery receipt.",
+				"Note queued without a game run. This is not a delivery receipt.",
 				{ exact: true },
 			),
 		).toBeVisible();

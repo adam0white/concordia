@@ -90,7 +90,7 @@ export default function SendWord({
 				{sent ? (
 					<p role="status">
 						{noteOnly
-							? "Note queued without a run or history linkage."
+							? "Note queued without a game run."
 							: "Note queued. An available run may also be included."}{" "}
 						This is not a delivery receipt.
 					</p>

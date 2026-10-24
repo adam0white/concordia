@@ -76,6 +76,9 @@ async function head(id = "hf.cast.ece.murmur") {
 beforeEach(() => {
 	vi.clearAllMocks();
 	fake.ready = Promise.resolve(true);
+	fake.setTelemetryOff.mockImplementation((off: boolean) => {
+		fake.telemetryOn = !off;
+	});
 	fake.personaRecordingAllowed = false;
 	fake.telemetryOn = true;
 	fake.privacySignalOn = false;
@@ -104,8 +107,8 @@ describe("browser history recording and ownership", () => {
 			expect(capture).toHaveBeenCalledTimes(on || sharePlay ? 1 : 0);
 			expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
 				name: "tester",
-				run: on || sharePlay ? run : undefined,
-				sharePlay,
+				run: on || sharePlay ? run : { feedbackOnly: true },
+				sharePlay: false,
 			});
 			s.close();
 		},
@@ -114,6 +117,7 @@ describe("browser history recording and ownership", () => {
 		vi.useFakeTimers();
 		try {
 			const s = new CastSession(async () => null);
+			s.commitFresh();
 			fake.telemetryOn = false;
 			const sending = s.feedback(
 				"Keep this note",
@@ -127,8 +131,8 @@ describe("browser history recording and ownership", () => {
 			await sending;
 			expect(fake.sendFeedback).toHaveBeenCalledWith("Keep this note", {
 				name: "",
-				run: undefined,
-				sharePlay: true,
+				run: { feedbackOnly: true },
+				sharePlay: false,
 			});
 			s.close();
 		} finally {
@@ -184,55 +188,68 @@ describe("browser history recording and ownership", () => {
 		).toBe(true);
 		expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
 			name: "",
-			run: undefined,
+			run: { feedbackOnly: true },
 			sharePlay: false,
 		});
 		s.close();
 	});
-	it("rechecks a preference change only after the current world is bound", async () => {
+	it("makes obsolete recording hooks local no-ops without requesting an epoch", async () => {
 		const s = new CastSession(async () => null);
 		s.commitFresh();
-		await s.recording();
-		fake.setPersonaRecording.mockClear();
+		s.heads = [await head()];
+		fake.request.mockRejectedValue(new Error("Obsolete RPC unavailable"));
+		await s.recording(true);
+		await s.recording(false);
 		window.dispatchEvent(new Event("hf-lab-preference"));
-		expect(fake.setPersonaRecording).toHaveBeenLastCalledWith(null);
-		s.suspend();
-		fake.setPersonaRecording.mockClear();
-		window.dispatchEvent(new Event("hf-lab-preference"));
-		expect(fake.setPersonaRecording).not.toHaveBeenCalledWith(null);
-		s.commitFresh();
-		s.file = true;
-		fake.setPersonaRecording.mockClear();
-		window.dispatchEvent(new Event("hf-lab-preference"));
-		expect(fake.setPersonaRecording).not.toHaveBeenCalledWith(null);
+		expect(fake.request).not.toHaveBeenCalled();
 		s.close();
 	});
-
-	it("requires every exact pinned branch and rejects a late positive epoch reply", async () => {
+	it("suppresses a stale run and SDK snapshot fallback while preserving the note", async () => {
+		let finish: ((run: unknown) => void) | undefined;
 		const s = new CastSession(async () => null);
 		s.commitFresh();
-		s.heads = [await head(), await head("hf.cast.derya.stairwell")];
-		let answer: (value: unknown) => void = () => {};
-		fake.request.mockImplementation(
+		const sending = s.feedback(
+			"Stale note",
+			"",
 			() =>
 				new Promise((resolve) => {
-					answer = resolve;
+					finish = resolve;
 				}),
 		);
-		const pending = s.recording();
-		const revisions = s.heads.map((h) => h.revision);
 		s.invalidate();
-		answer({ sameEpoch: true, revisions, recordingEpoch: "old" });
-		await pending;
-		expect(fake.allowPersonaRecording).not.toHaveBeenCalledWith(true);
-		fake.request.mockResolvedValue({
-			sameEpoch: false,
-			revisions,
-			recordingEpoch: "current",
+		finish?.({ runtime: "stale" });
+		await sending;
+		expect(fake.sendFeedback).toHaveBeenCalledWith("Stale note", {
+			name: "",
+			run: { feedbackOnly: true },
+			sharePlay: false,
 		});
-		await s.recording();
-		expect(fake.allowPersonaRecording).toHaveBeenLastCalledWith(false);
-		expect(fake.request.mock.calls.at(-1)?.[0].envelopes).toHaveLength(2);
+		s.close();
+	});
+	it("does not re-enable recording after a newer off choice during capture", async () => {
+		let finish: ((run: unknown) => void) | undefined;
+		const s = new CastSession(async () => null);
+		s.commitFresh();
+		fake.telemetryOn = false;
+		const sending = s.feedback(
+			"Keep off",
+			"",
+			() =>
+				new Promise((resolve) => {
+					finish = resolve;
+				}),
+			true,
+		);
+		expect(fake.telemetryOn).toBe(true);
+		fake.telemetryOn = false;
+		finish?.({ runtime: "available" });
+		await sending;
+		expect(fake.sendFeedback).toHaveBeenCalledWith("Keep off", {
+			name: "",
+			run: { feedbackOnly: true },
+			sharePlay: false,
+		});
+		expect(fake.setTelemetryOff).toHaveBeenCalledTimes(1);
 		s.close();
 	});
 	it("keeps imported files file-origin through local save/reload and refuses embedded ownership", async () => {
@@ -363,13 +380,7 @@ it("persists a real accepted source head, then checkpoints again after exact loc
 			return {};
 		}
 		if (q.action === "recordingBatch")
-			return {
-				sameEpoch: false,
-				revisions: q.envelopes.map(
-					(p: import("@adam0white/lab-client").PersonaEnvelope) => p.revision,
-				),
-				recordingEpoch: "current",
-			};
+			throw Error("Obsolete recording RPC is unavailable");
 		throw Error("Unexpected source request");
 	});
 	let saved: TownPacket | undefined;
@@ -403,6 +414,9 @@ it("persists a real accepted source head, then checkpoints again after exact loc
 	expect(next.heads[0]?.revision).toBe(revision);
 	await next.savePerson("hf.cast.ece.murmur");
 	expect(next.heads[0]?.parentRevision).toBe(revision);
+	expect(
+		fake.request.mock.calls.some(([q]) => q.action === "recordingBatch"),
+	).toBe(false);
 	first.close();
 	next.close();
 });
