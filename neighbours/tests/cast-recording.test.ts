@@ -77,75 +77,46 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 describe("browser history recording and ownership", () => {
-	it("exports continuing replay state without recorded history linkage for unanswered, declined or file consent", async () => {
-		for (const mode of ["unanswered", "declined", "file"] as const) {
+	it.each([
+		{ on: true, sharePlay: false },
+		{ on: false, sharePlay: false },
+		{ on: false, sharePlay: true },
+	])(
+		"sends the note and includes a run when recording=$on or shared=$sharePlay",
+		async ({ on, sharePlay }) => {
 			const s = new CastSession(async () => null);
 			s.commitFresh();
-			s.heads = [await head(), await head("hf.cast.derya.stairwell")];
-			fake.request.mockResolvedValue({
-				sameEpoch: false,
-				revisions: s.heads.map((h) => h.revision),
-				recordingEpoch: "current",
-			});
-			fake.personaRecordingAllowed = mode === "file";
-			s.file = mode === "file";
-			if (mode === "declined") await s.recording(false);
+			fake.telemetryOn = on;
 			const run = {
-				runtime: {
-					chapter: {
-						inputs: [
-							{
-								parent: {
-									branchId: "source-branch",
-									revision: "source-revision",
-								},
-							},
-						],
-						initial: { carried: "source-person-history" },
-					},
-				},
-				castLocal: { heads: ["private-history"] },
+				runtime: { chapter: { initial: "carried history" } },
+				castLocal: { heads: [] },
 			};
 			const capture = vi.fn(async () => run);
-			expect(await s.feedback("note", "tester", capture)).toBe(false);
-			expect(capture).toHaveBeenCalledOnce();
+			expect(await s.feedback("note", "tester", capture, sharePlay)).toBe(
+				!on && !sharePlay,
+			);
+			expect(capture).toHaveBeenCalledTimes(on || sharePlay ? 1 : 0);
 			expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
 				name: "tester",
-				run: { runtime: run.runtime },
+				run: on || sharePlay ? run : undefined,
+				sharePlay,
 			});
-			expect(run.castLocal.heads).toEqual(["private-history"]);
-			expect(run.runtime.chapter.inputs[0]?.parent.revision).toBe(
-				"source-revision",
-			);
 			s.close();
-		}
-	});
-	it("keeps an approved bound run and uses an explicit note marker for unavailable or stale runs", async () => {
+		},
+	);
+	it("sends the note when optional capture fails", async () => {
 		const s = new CastSession(async () => null);
 		s.commitFresh();
-		fake.personaRecordingAllowed = true;
-		const run = { runtime: {}, castLocal: { heads: ["approved"] } };
-		expect(await s.feedback("approved", "", async () => run)).toBe(false);
-		expect(fake.sendFeedback).toHaveBeenLastCalledWith("approved", {
+		expect(
+			await s.feedback("note", "", async () => {
+				throw Error("no save");
+			}),
+		).toBe(true);
+		expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
 			name: "",
-			run,
+			run: undefined,
+			sharePlay: false,
 		});
-		for (const mode of ["off", "privacy", "failed", "stale"] as const) {
-			fake.telemetryOn = mode !== "off";
-			fake.privacySignalOn = mode === "privacy";
-			const capture = vi.fn(async () => {
-				if (mode === "failed") throw new Error("no save");
-				if (mode === "stale") s.invalidate();
-				return run;
-			});
-			expect(await s.feedback(mode, "", capture)).toBe(true);
-			if (mode === "off" || mode === "privacy")
-				expect(capture).not.toHaveBeenCalled();
-			expect(fake.sendFeedback).toHaveBeenLastCalledWith(mode, {
-				name: "",
-				run: { feedbackOnly: true },
-			});
-		}
 		s.close();
 	});
 	it("rechecks a preference change only after the current world is bound", async () => {

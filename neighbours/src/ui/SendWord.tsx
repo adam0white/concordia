@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
-import { LabPrivacy, useLabRecording } from "./lab";
+import { useLabRecording } from "./lab";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -33,6 +33,7 @@ export default function SendWord({
 			download.current?.click();
 		}
 	}, [session.downloadUrl]);
+	const [sharePlay, setSharePlay] = useState(false);
 	const [note, setNote] = useState("");
 	const [verdict, setVerdict] = useState("");
 	const [sending, setSending] = useState(false);
@@ -44,7 +45,7 @@ export default function SendWord({
 		if (error || session.error)
 			feedbackError.current?.scrollIntoView({ block: "nearest" });
 	}, [error, session.error]);
-	const { switchedOff, privacySignalOn } = useLabRecording();
+	const { telemetryOn } = useLabRecording();
 
 	const submit = async () => {
 		if (sending) return;
@@ -55,7 +56,7 @@ export default function SendWord({
 			.join("\n\n");
 		const trimmedName = name.trim().slice(0, 60);
 		try {
-			const onlyNote = await session.sendFeedback(text, trimmedName);
+			const onlyNote = await session.sendFeedback(text, trimmedName, sharePlay);
 			setNoteOnly(onlyNote);
 			try {
 				if (trimmedName) localStorage.setItem(NAME_KEY, trimmedName);
@@ -95,42 +96,16 @@ export default function SendWord({
 					</p>
 				) : (
 					<>
-						<p>
-							{switchedOff
-								? "Recording is off. Send includes only your note and verdict, without history linkage."
-								: privacySignalOn
-									? "Your browser asks for privacy. Send includes only your note and verdict, without history linkage."
-									: "An available run may include continuing character state and replay provenance. Without history permission, it is not linked to recorded history."}
-						</p>
-						{switchedOff && <LabPrivacy />}
-						<details>
-							<summary>Recording carried histories</summary>
-							<p>
-								Notes need no recording permission. Recording a shared chapter
-								can link every carried history. An explicit feedback run can
-								still include continuing character state without that linkage.
-							</p>
-							<button
-								type="button"
-								onClick={() =>
-									void session
-										.allowCastRecording(true)
-										?.catch((failure) => setError(String(failure)))
-								}
-							>
-								Permit recording all pinned histories
-							</button>
-							<button
-								type="button"
-								onClick={() =>
-									void session
-										.allowCastRecording(false)
-										?.catch((failure) => setError(String(failure)))
-								}
-							>
-								Keep this chapter local
-							</button>
-						</details>
+						{!telemetryOn && (
+							<label>
+								<input
+									type="checkbox"
+									checked={sharePlay}
+									onChange={(event) => setSharePlay(event.target.checked)}
+								/>{" "}
+								Share this run and my play with the lab
+							</label>
+						)}
 						<fieldset
 							className="feedback-verdicts"
 							aria-label="Would you keep playing?"
@@ -169,16 +144,16 @@ export default function SendWord({
 								onChange={(event) => setName(event.target.value)}
 							/>
 							<p className="tiny muted">
-								Optional. This name labels your feedback. With history
-								permission, it can also label recorded history on this device.
+								Optional. This name labels your feedback. It also labels
+								recorded history on this device.
 							</p>
 						</details>
 						<details className="feedback-preview">
 							<summary>What is sent</summary>
 							<p>
-								{switchedOff || privacySignalOn || !session.town
+								{(!telemetryOn && !sharePlay) || !session.town
 									? "Your note and verdict, without a game run or state."
-									: "Your note and an available run, including continuing character state and replay provenance. History links require explicit permission."}
+									: "Your note and an available run, including continuing character state and replay provenance. Recorded play links across games on this device."}
 							</p>
 							<p>
 								Current town:{" "}
@@ -237,7 +212,7 @@ export default function SendWord({
 								}
 					}
 				>
-					{sent ? "Back to the game" : sending ? "Sending…" : "Send"}
+					{sent ? "Back to the game" : sending ? "Sending…" : "Submit"}
 				</button>
 			</div>
 		</section>
