@@ -213,9 +213,12 @@ for (const width of [360, 1280]) {
 		await page.getByRole("button", { name: /^Send word/ }).click();
 		await expect(
 			page.getByRole("button", { name: "Send", exact: true }),
-		).toBeDisabled();
+		).toBeEnabled();
 		await expect(
-			page.getByText("Recording is off, so nothing is sent.", { exact: true }),
+			page.getByText(
+				"Recording is off. Send includes only your note and verdict, without history linkage.",
+				{ exact: true },
+			),
 		).toBeVisible();
 		await capture(page, "feedback");
 		await page.getByText("+ Add a name", { exact: true }).click();
@@ -247,7 +250,7 @@ for (const width of [360, 1280]) {
 
 for (const width of [360, 1280]) {
 	for (const privacy of [false, true]) {
-		test(`Send word consent and remembered name at ${width}, privacy=${privacy}`, async ({
+		test(`Send word note and remembered name at ${width}, privacy=${privacy}`, async ({
 			page,
 		}) => {
 			test.setTimeout(120000);
@@ -327,7 +330,7 @@ for (const width of [360, 1280]) {
 			await page.getByRole("button", { name: /^Send word/ }).click();
 			await expect(
 				page.getByRole("button", { name: "Send", exact: true }),
-			).toBeDisabled();
+			).toBeEnabled();
 			await page.getByText("+ Add a name", { exact: true }).click();
 			await expect(page.getByLabel("Your name or tester id")).toHaveValue(
 				"Earlier tester",
@@ -341,37 +344,27 @@ for (const width of [360, 1280]) {
 				)
 				.fill("Intercepted browser verification.");
 			await page.getByRole("button", { name: "Not sure", exact: true }).click();
-			if (privacy)
-				await page
-					.getByLabel("Send this run with my note", { exact: true })
-					.check();
-			else
-				await page
-					.getByRole("switch", { name: "Record play for the lab", exact: true })
-					.click();
 			await expect(
 				page.getByRole("button", { name: "Send", exact: true }),
 			).toBeEnabled();
 			await capture(
 				page,
-				privacy ? "feedback-privacy-consent" : "feedback-recording-enabled",
+				privacy ? "feedback-privacy-note" : "feedback-recording-off-note",
 			);
 			await page.getByRole("button", { name: "Send", exact: true }).click();
 			await expect(
-				page.getByText("Queued. Thank you.", { exact: true }),
+				page.getByText(
+					"Note queued without a run or history linkage. This is not a delivery receipt.",
+					{ exact: true },
+				),
 			).toBeVisible();
 			await expect
-				.poll(
-					() =>
-						received.find((x) =>
-							privacy ? Boolean(x.run) : x.kind === "note",
-						),
-					{ timeout: 30000 },
-				)
+				.poll(() => received.find((x) => Boolean(x.run)), { timeout: 30000 })
 				.toBeTruthy();
-			const envelope = received.find((x) =>
-				privacy ? Boolean(x.run) : x.kind === "note",
-			);
+			const envelope = received.find((x) => Boolean(x.run));
+			expect(envelope?.run).toEqual({ feedbackOnly: true });
+			expect(envelope).not.toHaveProperty("player");
+			expect(envelope).not.toHaveProperty("session");
 			expect(envelope?.name).toBe("QA named tester");
 			expect(envelope?.note ?? envelope?.data?.note).toContain(
 				"Verdict: mixed",
