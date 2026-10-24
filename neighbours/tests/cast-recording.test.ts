@@ -76,7 +76,7 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 describe("browser history recording and ownership", () => {
-	it("never captures raw replay histories for unanswered, declined or file consent", async () => {
+	it("exports continuing replay state without recorded history linkage for unanswered, declined or file consent", async () => {
 		for (const mode of ["unanswered", "declined", "file"] as const) {
 			const s = new CastSession(async () => null);
 			s.commitFresh();
@@ -106,12 +106,13 @@ describe("browser history recording and ownership", () => {
 				castLocal: { heads: ["private-history"] },
 			};
 			const capture = vi.fn(async () => run);
-			expect(await s.feedback("note", "tester", capture)).toBe(true);
-			expect(capture).not.toHaveBeenCalled();
+			expect(await s.feedback("note", "tester", capture)).toBe(false);
+			expect(capture).toHaveBeenCalledOnce();
 			expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
 				name: "tester",
-				run: { feedbackOnly: true },
+				run: { runtime: run.runtime },
 			});
+			expect(run.castLocal.heads).toEqual(["private-history"]);
 			expect(run.runtime.chapter.inputs[0]?.parent.revision).toBe(
 				"source-revision",
 			);
