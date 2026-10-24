@@ -100,15 +100,15 @@ export default function SendWord({
 								? "Recording is off. Send includes only your note and verdict, without history linkage."
 								: privacySignalOn
 									? "Your browser asks for privacy. Send includes only your note and verdict, without history linkage."
-									: "An available run may include continuing character state and replay provenance. Without history permission, it is not linked to recorded history."}
+									: "A run includes continuing character state and replay provenance only with permission for every carried history. Imported files stay local."}
 						</p>
 						{switchedOff && <LabPrivacy />}
 						<details>
 							<summary>Recording carried histories</summary>
 							<p>
-								Notes need no recording permission. Recording a shared chapter
-								can link every carried history. An explicit feedback run can
-								still include continuing character state without that linkage.
+								Notes need no recording permission. Sending a shared chapter
+								requires permission for every carried history. Imported files
+								stay local.
 							</p>
 							<button
 								type="button"
@@ -178,7 +178,7 @@ export default function SendWord({
 							<p>
 								{switchedOff || privacySignalOn || !session.town
 									? "Your note and verdict, without a game run or state."
-									: "Your note and an available run, including continuing character state and replay provenance. History links require explicit permission."}
+									: "Your note. An available run includes continuing character state and replay provenance only with permission for every carried history; imported files stay local."}
 							</p>
 							<p>
 								Current town:{" "}

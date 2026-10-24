@@ -301,7 +301,7 @@ export class CastSession {
 			},
 		};
 	}
-	/** Explicit run exports preserve replay state but link history only with permission. */
+	/** Full replay histories require current complete-group recording permission. */
 	async feedback(
 		note: string,
 		name: string,
@@ -313,6 +313,8 @@ export class CastSession {
 		const current = () =>
 			this.active &&
 			this.recordReady &&
+			!this.file &&
+			lab.personaRecordingAllowed &&
 			generation === this.generation &&
 			choice === this.recordingChoice &&
 			this.heads.map((h) => h.revision).join("/") === revisions &&
@@ -329,16 +331,6 @@ export class CastSession {
 		const noteOnly = !current() || run === undefined || run === null;
 		try {
 			if (noteOnly) return await sendFeedbackWithoutRun(note, name);
-			if (!lab.personaRecordingAllowed || this.file) {
-				// Only browser ownership metadata is omitted. Runtime admission data is replay content.
-				if (run && typeof run === "object") {
-					const unlinked = { ...run } as Record<string, unknown>;
-					delete unlinked.castLocal;
-					run = unlinked;
-				}
-				if (this.file)
-					lab.setPersonaRecording(`feedback-run-${crypto.randomUUID()}`);
-			}
 			await lab.sendFeedback(note, { name, run });
 			return false;
 		} finally {

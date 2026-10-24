@@ -76,23 +76,45 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 describe("browser history recording and ownership", () => {
-	it("includes an unlinked run for unanswered and declined consent without changing replay state", async () => {
-		for (const declined of [false, true]) {
+	it("never captures raw replay histories for unanswered, declined or file consent", async () => {
+		for (const mode of ["unanswered", "declined", "file"] as const) {
 			const s = new CastSession(async () => null);
 			s.commitFresh();
-			if (declined) await s.recording(false);
+			s.heads = [await head(), await head("hf.cast.derya.stairwell")];
+			fake.request.mockResolvedValue({
+				sameEpoch: false,
+				revisions: s.heads.map((h) => h.revision),
+				recordingEpoch: "current",
+			});
+			fake.personaRecordingAllowed = mode === "file";
+			s.file = mode === "file";
+			if (mode === "declined") await s.recording(false);
 			const run = {
-				runtime: { admission: { revision: "replay-required" } },
+				runtime: {
+					chapter: {
+						inputs: [
+							{
+								parent: {
+									branchId: "source-branch",
+									revision: "source-revision",
+								},
+							},
+						],
+						initial: { carried: "source-person-history" },
+					},
+				},
 				castLocal: { heads: ["private-history"] },
 			};
 			const capture = vi.fn(async () => run);
-			expect(await s.feedback("note", "tester", capture)).toBe(false);
-			expect(capture).toHaveBeenCalledOnce();
+			expect(await s.feedback("note", "tester", capture)).toBe(true);
+			expect(capture).not.toHaveBeenCalled();
 			expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
 				name: "tester",
-				run: { runtime: run.runtime },
+				run: { feedbackOnly: true },
 			});
-			expect(run.castLocal.heads).toEqual(["private-history"]);
+			expect(run.runtime.chapter.inputs[0]?.parent.revision).toBe(
+				"source-revision",
+			);
 			s.close();
 		}
 	});
