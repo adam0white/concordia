@@ -103,7 +103,8 @@ export class CastSession {
 		const key = (event as StorageEvent).key;
 		const recordingOnly =
 			event.type === "hf-lab-preference" ||
-			(typeof key === "string" && key.startsWith("hf-lab-"));
+			(typeof key === "string" &&
+				(key.startsWith("hf-lab-") || key.startsWith("hf-persona-recording:")));
 		if (recordingOnly) this.recordingChoice++;
 		else this.invalidate();
 		if (this.recordReady && this.active) void this.recording().catch(() => {});

@@ -144,7 +144,11 @@ describe("browser history recording and ownership", () => {
 		const preparing = s.fresh(42, 8, true);
 		const generation = s.generation;
 		window.dispatchEvent(new Event("hf-lab-preference"));
-		for (const key of ["hf-lab-player", "hf-lab-recording-off"]) {
+		for (const key of [
+			"hf-lab-player",
+			"hf-lab-recording-off",
+			"hf-persona-recording:old-history",
+		]) {
 			const event = new Event("storage");
 			Object.assign(event, { key });
 			window.dispatchEvent(event);
