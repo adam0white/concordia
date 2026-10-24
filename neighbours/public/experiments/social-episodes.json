@@ -12,10 +12,10 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "844b61843eb27a2fc40710c2a060db59b7f2af8b4fdfbe95f2fa238a76343682",
+  "sourceFingerprint": "be161df0260c18e8b5285d85674920672eaa6491e0a3d9127b00f88359d19bbd",
   "sources": {
-    "package-lock.json": "3c1c8895d4fa7561e2aca6bfe676181853ec3fe6fd84b5dfb61fb6c2b2c2dde7",
-    "package.json": "b1c2c1acc8a2115141530de36754a6203928dbd030f1bd7ae5dcd2fae89a7be9",
+    "package-lock.json": "aba6cb4d3cfab75d102b5652a50189e1723bd673443defecf88c6ee018f4d138",
+    "package.json": "dd74800af908b9ef22759d03c9bc742bfd0ceb36aea45e9010547d9bb86233d5",
     "scripts/profile-evenings.ts": "fd7865e8fe2bd114f0f77890c168b8fd72762852ba5895dca7846c1b231bd11c",
     "src/contracts.ts": "597c8344d3a2658d202982163e511085f39d4ba30ea4c87ba0e99cb265b25120",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
@@ -1699,38 +1699,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-42-first-notice.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-42-first-notice.json",
           "at": 11400,
           "round": 728,
           "sha256": "8075e20804330aff3f0c4129a73cf51a12f7d83914d9a633be8c58a8e8c12377"
         },
         "prepared": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-42-first-prepared.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-42-first-prepared.json",
           "at": 11430,
           "round": 730,
           "sha256": "3e0ae6ede2fa4863a7a6ebda682c5edc51789867c4f97d140f75dc19b77423d0"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-42-first-cartProgress.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-42-first-cartProgress.json",
           "at": 12180,
           "round": 780,
           "sha256": "f5eee27f6a969282d84f16c8b2cc3149a04f449cb846265aeda53cb80ac4f6d1"
         },
         "accepted": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-42-first-accepted.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-42-first-accepted.json",
           "at": 12270,
           "round": 786,
           "sha256": "c38b678d1e1b23fb3a10665b2985e8a987a3033398850c55393add68646c08c1"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-42-first-cartReturned.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-42-first-cartReturned.json",
           "at": 14025,
           "round": 903,
           "sha256": "db55335f31da91a2fde7adcb68c7d2cedd530665a267989f57bc294d18d211f9"
         }
       },
       "finalCheckpointSha256": "a3ef7a7ad840ddb6d06c1e5ddefed82620981a4369f7d0380c6606b03445d91f",
-      "wallSeconds": 59.145446750000005
+      "wallSeconds": 57.423980292
     },
     {
       "seed": 73,
@@ -3744,38 +3744,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-73-first-notice.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-73-first-notice.json",
           "at": 5655,
           "round": 345,
           "sha256": "2d9aac128a790810f5db8bfa4a78b112e73edceee0a7e7a8e5a2a5a6b32ce7dd"
         },
         "prepared": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-73-first-prepared.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-73-first-prepared.json",
           "at": 6000,
           "round": 368,
           "sha256": "dea11587b67cccb9c17361d8fe3afb996cb96d95171b3b7770bc44dded032827"
         },
         "accepted": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-73-first-accepted.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-73-first-accepted.json",
           "at": 6390,
           "round": 394,
           "sha256": "cd3ce093d4182aebc9f64f7627736baf9568dc1cdd786fd72262839273af484a"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-73-first-cartProgress.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-73-first-cartProgress.json",
           "at": 7860,
           "round": 492,
           "sha256": "898ba2e0ac7166fab2e7a536c8a3fae6dfd30711c97bc7a8571bb9664aa41259"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-73-first-cartReturned.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-73-first-cartReturned.json",
           "at": 13755,
           "round": 885,
           "sha256": "51fd02cfe79b3709b592ebd1faf55fcffbb186fa32b877fc4ccb9f269b4612cd"
         }
       },
       "finalCheckpointSha256": "1d74286269db265109e27faaf9fb94c006914046fc7b53824352a89091f628e7",
-      "wallSeconds": 65.1303365
+      "wallSeconds": 60.559617625
     },
     {
       "seed": 9,
@@ -5312,38 +5312,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-9-first-notice.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-9-first-notice.json",
           "at": 6990,
           "round": 434,
           "sha256": "5b21256ac9f504d11d068877229c5a6315cd1a10442278ecb78fcd6f2e28e00b"
         },
         "accepted": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-9-first-accepted.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-9-first-accepted.json",
           "at": 7020,
           "round": 436,
           "sha256": "f795629f0de6f66ba10d42bd85497539f3443055d0e16e3808a147ab6b137947"
         },
         "prepared": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-9-first-prepared.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-9-first-prepared.json",
           "at": 7110,
           "round": 442,
           "sha256": "a65166e0f7f2bacba19639bc1a8fc15cab41d17ba03887ea7718c53e51f122db"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-9-first-cartProgress.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-9-first-cartProgress.json",
           "at": 7860,
           "round": 492,
           "sha256": "be62c8fe0a0bb6d403788c022f326eb8c13320e514c687376b41ef79778703d3"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-9-first-cartReturned.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-9-first-cartReturned.json",
           "at": 12555,
           "round": 805,
           "sha256": "4affb12cd257d5ad5a471750d86052091d497f07a4558b89a3ccb410d106b8fc"
         }
       },
       "finalCheckpointSha256": "d6b4872b2ae6243a5aae168576fc2aba28282e6ff2e68bdae79fbcf6b1b13092",
-      "wallSeconds": 63.96890724999999
+      "wallSeconds": 60.031181375
     },
     {
       "seed": 101,
@@ -6830,38 +6830,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-101-first-notice.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-101-first-notice.json",
           "at": 17040,
           "round": 1104,
           "sha256": "921e1371bbc81bae580075658c95de198d1e1ef627a7a4a910b454a46df2ea0b"
         },
         "accepted": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-101-first-accepted.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-101-first-accepted.json",
           "at": 17175,
           "round": 1113,
           "sha256": "a35d5a77582ccc35c0cfddf5f21d3bb7126c9ba1b9adde89139d55e851361cd1"
         },
         "prepared": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-101-first-prepared.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-101-first-prepared.json",
           "at": 17175,
           "round": 1113,
           "sha256": "a35d5a77582ccc35c0cfddf5f21d3bb7126c9ba1b9adde89139d55e851361cd1"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-101-first-cartProgress.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-101-first-cartProgress.json",
           "at": 19485,
           "round": 1267,
           "sha256": "f1b036459bf4eb8ee47fd4bd0aafe4c4605ac5641b3c5a3ef5f41a806fde59ce"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-bug-hunt-20261023-e3b1ed3/social/seed-101-first-cartReturned.json",
+          "path": "/tmp/neighbours-feedback-regeneration-20261024/social/seed-101-first-cartReturned.json",
           "at": 21045,
           "round": 1371,
           "sha256": "215ffb1bc34e20fb88d51a3ddb74dad448a128aa9314ca06aac6643333fa3a37"
         }
       },
       "finalCheckpointSha256": "9981b994de65376bc0b43884396d05fcc318d8517a8d9bb0cd17edc8a079884b",
-      "wallSeconds": 61.38091070899999
+      "wallSeconds": 61.015446084
     }
   ]
 }

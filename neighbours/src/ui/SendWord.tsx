@@ -38,6 +38,7 @@ export default function SendWord({
 	const [verdict, setVerdict] = useState("");
 	const [sending, setSending] = useState(false);
 	const [sent, setSent] = useState(false);
+	const [noteOnly, setNoteOnly] = useState(false);
 	const [error, setError] = useState("");
 	const feedbackError = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -63,7 +64,10 @@ export default function SendWord({
 					/* A broken export must not block feedback. */
 				}
 			}
+			const onlyNote =
+				!lab.telemetryOn || (lab.privacySignalOn && !lab.privacyOverride);
 			await lab.sendFeedback(text, { name: trimmedName, run });
+			setNoteOnly(onlyNote);
 			try {
 				if (trimmedName) localStorage.setItem(NAME_KEY, trimmedName);
 				else localStorage.removeItem(NAME_KEY);
@@ -95,9 +99,9 @@ export default function SendWord({
 			<div className="sheet-scroll">
 				{sent ? (
 					<p role="status">
-						{switchedOff || privacySignalOn
+						{noteOnly
 							? "Note queued without a run or history linkage."
-							: "Run and note queued."}{" "}
+							: "Note queued. An available run may also be included."}{" "}
 						This is not a delivery receipt.
 					</p>
 				) : (
