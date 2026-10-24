@@ -8,7 +8,7 @@ function argument(name: string, fallback: number): number {
 }
 const port = new RuntimePort(
 	argument("--seed", 42),
-	argument("--population", 208),
+	argument("--population", 206),
 );
 const lines = createInterface({ input: process.stdin, crlfDelay: Infinity });
 for await (const line of lines) {

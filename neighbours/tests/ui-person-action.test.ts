@@ -1,11 +1,11 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { createRuntime } from "../src/core/index";
 import PersonPanel from "../src/ui/PersonPanel";
 import { PlayerAction, SpeakPanel } from "../src/ui/SpeakPanel";
 import TownGoal from "../src/ui/TownGoal";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
+import { createRuntime } from "./historical-runtime.ts";
 
 type Session = ReturnType<typeof useVisitorSession>;
 const session = () => ({ town: createRuntime(42, 8).view() }) as Session;

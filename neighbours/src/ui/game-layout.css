@@ -995,3 +995,17 @@ body,
 	position: relative;
 	z-index: 1;
 }
+
+/* Continuity remains optional, with the same touch targets as the existing menu. */
+.cast-menu summary,
+.cast-menu select,
+.cast-menu label,
+.cast-menu a {
+	min-height: 44px;
+}
+.cast-menu label,
+.cast-menu a {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}

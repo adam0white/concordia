@@ -81,12 +81,12 @@ export default function RecordedStudies() {
 						Learned cues · HF, table, random and LLM choices
 					</option>
 					<option value="bench">
-						Town bench access · actual repair and Ada’s work
+						Town bench access · recorded repair and Nora’s work
 					</option>
 					<option value="routes">
 						Future access · asking and consequences
 					</option>
-					<option value="cart">Ravi’s cart · goal intact or removed</option>
+					<option value="cart">Rafi’s cart · goal intact or removed</option>
 					<option value="native">
 						One LLM neighbour · original run and replay
 					</option>

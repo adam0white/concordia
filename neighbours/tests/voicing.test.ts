@@ -1,5 +1,4 @@
 import { expect, it } from "vitest";
-import { createRuntime } from "../src/core/index.ts";
 import { buildOffers } from "../src/core/offers.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import {
@@ -11,6 +10,7 @@ import {
 	refusalWhy,
 	voicedLine,
 } from "../src/core/voicing.ts";
+import { createRuntime } from "./historical-runtime.ts";
 
 /** Labels that a short run does not reach: floor rest, the annex, later evenings and the handcart. */
 const FIXTURES: [string, string][] = [

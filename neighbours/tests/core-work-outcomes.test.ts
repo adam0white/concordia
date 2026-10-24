@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 function resident(r: Runtime, id: string) {
 	const p = r.s.people.find((p) => p.person.id === id);

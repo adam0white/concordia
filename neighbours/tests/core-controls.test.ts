@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core";
 import type { Save } from "../src/core/state.ts";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 describe("causal controls", () => {
 	it("preserves conservation across all208 and measures three-day run", () => {

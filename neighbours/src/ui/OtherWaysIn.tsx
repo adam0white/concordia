@@ -4,6 +4,7 @@ import type { useVisitorSession } from "./useVisitorSession";
 type Session = ReturnType<typeof useVisitorSession>;
 export type TitleActions = {
 	onStart?: () => void;
+	onLocal?: () => void;
 	onRestore?: (slot: "previous" | "latest") => void;
 	onImport?: (file: File) => void | Promise<void>;
 };
@@ -13,6 +14,7 @@ export default function OtherWaysIn({
 	hasPrevious,
 	onClose,
 	onStart,
+	onLocal,
 	onRestore,
 	onImport,
 }: TitleActions & {
@@ -40,6 +42,17 @@ export default function OtherWaysIn({
 				</button>
 			</div>
 			<div className="sheet-scroll">
+				{onLocal && (
+					<>
+						<button type="button" disabled={busy} onClick={onLocal}>
+							Start a fresh local town
+						</button>
+						<p className="tiny muted">
+							Use the canonical opening without admitting browser histories.
+							Existing browser people stay archived and unchanged.
+						</p>
+					</>
+				)}
 				{hasPrevious && (
 					<button
 						type="button"

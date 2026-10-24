@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import type { Save } from "../src/core/state.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 function runningTown(): Save {
 	const r = createRuntime(42, 208);

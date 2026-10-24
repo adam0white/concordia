@@ -19,6 +19,27 @@ const send = (reply: UiReply) => postMessage(reply);
 const port = new RuntimePort();
 const dispatch = (text: string) => port.call(text);
 let py: PythonRuntime;
+const castRequests = new Map<number, string>();
+async function flushCastCaptures() {
+	for (const [requestId, id] of castRequests) {
+		const person = port.boundaries.get(id);
+		if (!person) continue;
+		const save = JSON.parse(
+			String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+		);
+		send({
+			type: "cast-snapshot",
+			requestId,
+			save: { ...save, castBoundary: { actorId: id, person } },
+		});
+		castRequests.delete(requestId);
+		if (![...castRequests.values()].includes(id)) {
+			port.wanted.delete(id);
+			port.boundaries.delete(id);
+		}
+	}
+}
+
 async function boot() {
 	send({
 		type: "progress",
@@ -33,7 +54,7 @@ async function boot() {
 	});
 	send({
 		type: "progress",
-		message: "Connecting Concordia to 208 Human Framework people…",
+		message: "Connecting Concordia to 206 Human Framework people…",
 	});
 	const [manifestResponse, wheelResponse] = await Promise.all([
 		fetch("/runtime/python-files.json", { cache: "no-cache" }),
@@ -93,6 +114,30 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			const q = event.data;
 			const start = performance.now();
 			switch (q.type) {
+				case "cast-cancel": {
+					const id = castRequests.get(q.requestId);
+					castRequests.delete(q.requestId);
+					if (id && ![...castRequests.values()].includes(id)) {
+						port.wanted.delete(id);
+						port.boundaries.delete(id);
+					}
+					break;
+				}
+				case "cast-capture": {
+					castRequests.set(q.requestId, q.actorId);
+					port.wanted.add(q.actorId);
+					const r = (
+						port.runtime.export() as import("./core/state.ts").Save
+					).people.find((r) => r.person.id === q.actorId);
+					if (
+						r &&
+						(!r.person.body.alive ||
+							(r.person.nextDecision > 0 && !r.job && !r.person.activity))
+					)
+						port.boundaries.set(q.actorId, r.person);
+					await flushCastCaptures();
+					break;
+				}
 				case "advance": {
 					const advance = await advanceTown(
 						py,
@@ -109,6 +154,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						},
 						advanceCancelled,
 					);
+					await flushCastCaptures();
 					send({
 						type: "state",
 						view: port.runtime.view(),
@@ -126,6 +172,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					await py.runPythonAsync(
 						"town_engine.advance(requested_rounds)\nNone",
 					);
+					await flushCastCaptures();
 					send({
 						type: "state",
 						view: port.runtime.view(),
@@ -134,9 +181,25 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					break;
 				}
 				case "new":
-					port.reset(q.seed, q.population ?? 208);
+					castRequests.clear();
+					port.wanted.clear();
+					port.boundaries.clear();
+					if (q.initial) {
+						await restoreCheckpoint(py, port, q.initial);
+						send({
+							type: "ready",
+							view: port.runtime.view(),
+							newRequestId: q.newRequestId,
+						});
+						break;
+					}
+					port.reset(q.seed, q.population ?? 206);
 					await py.runPythonAsync("town_engine = TownEngine(call)");
-					send({ type: "ready", view: port.runtime.view() });
+					send({
+						type: "ready",
+						view: port.runtime.view(),
+						newRequestId: q.newRequestId,
+					});
 					break;
 				case "save":
 					send({
@@ -148,8 +211,15 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					});
 					break;
 				case "restore": {
+					castRequests.clear();
+					port.wanted.clear();
+					port.boundaries.clear();
 					await restoreCheckpoint(py, port, q.save);
-					send({ type: "state", view: port.runtime.view() });
+					send({
+						type: "state",
+						view: port.runtime.view(),
+						restoreRequestId: q.restoreRequestId,
+					});
 					break;
 				}
 
@@ -160,6 +230,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					);
 					// A player's answer is shown only after this checkpoint is on the device, so a
 					// reload can never lose an answered request or let the player ask it again.
+					await flushCastCaptures();
 					send({
 						type: "state",
 						view: port.runtime.view(),
@@ -225,6 +296,12 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 			const rejected = message.match(/InterventionRejected: (.+)/)?.[1]?.trim();
 			send({
 				type: "error",
+				...(event.data.type === "new"
+					? { newRequestId: event.data.newRequestId }
+					: {}),
+				...(event.data.type === "restore"
+					? { restoreRequestId: event.data.restoreRequestId }
+					: {}),
 				message: rejected
 					? `Not possible now: ${rejected}. Nothing in the town changed.`
 					: message,

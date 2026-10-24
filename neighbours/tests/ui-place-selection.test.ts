@@ -1,9 +1,9 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { createRuntime } from "../src/core/index";
 import TownMap from "../src/ui/TownMap";
 import { NeighbourStrip } from "../src/ui/TownOverview";
+import { createRuntime } from "./historical-runtime.ts";
 
 it("makes buildings selectable with a visible selected outline", () => {
 	const town = createRuntime(42, 8).view();

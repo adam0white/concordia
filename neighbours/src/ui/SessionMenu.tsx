@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import CastMenu from "./CastMenu";
 import ErrorMessage from "./ErrorMessage";
 import { LabPrivacy } from "./lab";
 import type { useVisitorSession } from "./useVisitorSession";
@@ -50,6 +51,10 @@ export default function SessionMenu({
 			</div>
 			<div className="menu-scroll">
 				<p className="tiny muted">The town waits while it is open.</p>
+				<CastMenu
+					checkpoint={session.checkpointCast}
+					recording={session.allowCastRecording}
+				/>
 				<button
 					type="button"
 					disabled={!session.town}

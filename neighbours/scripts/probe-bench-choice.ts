@@ -143,14 +143,14 @@ function choiceControls(host: Runtime) {
 		},
 	};
 }
-/** Replay earlier actors normally to the captured Ravi turn; never force a choice or clear a job. */
+/** Replay earlier actors normally to the captured Rafi turn; never force a choice or clear a job. */
 function decisionBoundary(initial: Save) {
 	const h = restoreRuntime(initial) as Runtime;
 	assert.equal(h.s.pending.length, 0);
 	const ready = h.prepareRound();
 	assert(
 		ready.includes("ravi"),
-		"Frozen checkpoint no longer reaches Ravi's captured decision",
+		"Frozen checkpoint no longer reaches Rafi's captured decision",
 	);
 	for (const id of ready) {
 		if (id === "ravi") break;
@@ -247,7 +247,7 @@ function continueTown(initial: Save, admitted?: Save) {
 	assert.equal(
 		actualPaidMinutes,
 		paidReceipts.length * 60,
-		"Ada's completed shift ledger and actual job-linked receipts disagree",
+		"Nora's completed shift ledger and actual job-linked receipts disagree",
 	);
 	return {
 		startAt,
@@ -308,8 +308,8 @@ export function runBenchChoiceProbe(
 ) {
 	assert.equal(
 		FRAMEWORK_VERSION,
-		"2.8.0",
-		"Install exact published npm HF 2.8.0 before this probe",
+		"2.18.0",
+		"Install exact published npm HF 2.18.0 before this probe",
 	);
 	const beforeSources = sources(),
 		commit = git("rev-parse", "HEAD"),
@@ -358,7 +358,7 @@ export function runBenchChoiceProbe(
 			adaAtShiftRounds: current.adaAtShift,
 			legacyBenchWindowRounds: legacy.windowRounds,
 			legacyAdaAtShiftRounds: legacy.adaAtShift,
-			reason: `No genuine Ravi cart-ask decision with Ada at the workshop within 40 days. Ada was at her workshop shift in ${current.adaAtShift} of ${current.windowRounds} rounds in which a bench proposal was possible; with legacy timber physics, ${legacy.adaAtShift} of ${legacy.windowRounds}.`,
+			reason: `No genuine Rafi cart-ask decision with Nora at the workshop within 40 days. Nora was at her workshop shift in ${current.adaAtShift} of ${current.windowRounds} rounds in which a bench proposal was possible; with legacy timber physics, ${legacy.adaAtShift} of ${legacy.windowRounds}.`,
 		};
 	});
 	const frozenSetHash = sha(
@@ -458,17 +458,17 @@ export function runBenchChoiceProbe(
 			calibrated: false,
 		},
 		limitations: [
-			"Fresh fixed-seed captures contain eight actual HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
+			"Fresh fixed-seed captures contain six canonical and two generated HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
 			"This probe runs the actual TypeScript physical host and published HF under Node. It does not run Python Concordia or a live model; native/WASM parity is a separate check.",
-			"Three natural complete checkpoints and nine lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 now has a natural case under Phase D and is included again; no seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Ravi turn after earlier actors choose normally.",
-			"Each bench-active checkpoint file is the exact complete start of its physical proposal branch, including actual retained HF knowledge. admissionAt records the complete-boundary notice; decisionAt/startAt records Ravi's later actual decision.",
+			"Three natural complete checkpoints and nine lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 now has a natural case under Phase D and is included again; no seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Rafi turn after earlier actors choose normally.",
+			"Each bench-active checkpoint file is the exact complete start of its physical proposal branch, including actual retained HF knowledge. admissionAt records the complete-boundary notice; decisionAt/startAt records Rafi's later actual decision.",
 			"The physical proposal/no-proposal contrast combines temporal-goal opt-in, received knowledge, one spent allowance and possible legal request-window changes. It does not isolate knowledge causally.",
 			"The person-only intact/removed comparison holds actual legal offers, the entire physical state and temporal goals fixed. Removed deletes structured prospection after actual receipt; no withheld arm was executed.",
 			"Full-offer decision records retain only HF's top-ranked alternatives. An unrecorded offer was not necessarily unevaluated. perOfferDiagnostics separately supplies each same actual cart offer alone to a fresh person clone to expose its terms; those diagnostic choices are not enacted or presented as full-choice decisions.",
-			"Mode-off retains received knowledge while removing temporal valuation. Goal-removed abandons only Ravi's cart goal. These are different controls, not knowledge-only contrasts.",
+			"Mode-off retains received knowledge while removing temporal valuation. Goal-removed abandons only Rafi's cart goal. These are different controls, not knowledge-only contrasts.",
 			"Two-day Node continuations record events after every completed round to avoid the host's rolling-event pruning. They cover this interval only; jobs may span its boundaries.",
 			"Returned is a new handover receipt within the interval; its absence is not proof that the cart can never be returned. Asking, agreement, work and delivery are separate observed outcomes.",
-			"Successor chance0.5 and confidence0.8 are frozen engineering assumptions, not an Ada-consent model or fitted psychological estimates. Current learned action success and source trust are reported separately.",
+			"Successor chance0.5 and confidence0.8 are frozen engineering assumptions, not a Nora-consent model or fitted psychological estimates. Current learned action success and source trust are reported separately.",
 		],
 		cases,
 	};

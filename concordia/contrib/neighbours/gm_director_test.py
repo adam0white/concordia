@@ -8,7 +8,7 @@ import unittest
 
 from concordia.components.game_master import make_observation
 from concordia.contrib.neighbours.gm_director import (
-    ReplayModel, bounded_cli_output, checkpoint_context, digest, parse_proposal, replay_report, run_director,
+    ProviderUsageLimit, ReplayModel, bounded_cli_output, checkpoint_context, digest, parse_proposal, replay_report, run_director,
     runtime_sources, validate_proposal, UPSTREAM_SHA)
 from concordia.typing import entity
 
@@ -48,6 +48,19 @@ class GmDirectorTest(unittest.TestCase):
       self.assertEqual(bounded_cli_output([sys.executable, '-c', 'print("bounded")'], directory), 'bounded\n')
       with self.assertRaisesRegex(RuntimeError, '1 MiB byte limit'):
         bounded_cli_output([sys.executable, '-c', 'import sys; sys.stdout.write("x" * (1024 * 1024 + 1))'], directory)
+
+  def test_usage_limit_escapes_failed_case_handlers_before_another_call(self):
+    with tempfile.TemporaryDirectory() as directory:
+      with self.assertRaisesRegex(ProviderUsageLimit, 'USAGE LIMIT'):
+        bounded_cli_output([sys.executable, '-c', 'import sys; print("Usage limit reached"); sys.exit(1)'], directory)
+    self.assertFalse(issubclass(ProviderUsageLimit, Exception))
+
+  def test_stderr_usage_limit_stops_before_timeout_or_generic_failure(self):
+    with tempfile.TemporaryDirectory() as directory:
+      for ending in ('sys.exit(1)', 'time.sleep(10)'):
+        with self.subTest(ending=ending), self.assertRaisesRegex(ProviderUsageLimit, 'USAGE LIMIT'):
+          bounded_cli_output([sys.executable, '-c',
+              'import sys,time; print("Usage limit reached", file=sys.stderr, flush=True); ' + ending], directory, timeout=0.5)
 
   def test_runtime_fingerprint_covers_actual_inspection_semantics(self):
     root = Path(__file__).resolve().parents[3]

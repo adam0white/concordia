@@ -1,4 +1,4 @@
-import { expect, step, test } from "./clock-fixture";
+import { expect, reachSelectedConversation, step, test } from "./clock-fixture";
 
 test.use({
 	viewport: { width: 360, height: 690 },
@@ -14,10 +14,7 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 		.click();
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
-	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
-	for (let i = 0; i < 4; i++) await step(page);
-	const talk = page.getByRole("button", { name: /^Talk to / });
-	await talk.click();
+	await reachSelectedConversation(page, "Rafi");
 	await expect(page.locator(".state-words")).toHaveText(
 		"Time holds while you talk",
 	);
@@ -30,7 +27,7 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 			() => (window as unknown as { townNow: number }).townNow,
 		),
 	).toBe(held);
-	await expect(page.locator(".game-sheet h2")).toHaveText("Ravi");
+	await expect(page.locator(".game-sheet h2")).toHaveText("Rafi");
 	await page.getByRole("button", { name: "Done", exact: true }).click();
 	await step(page);
 	expect(

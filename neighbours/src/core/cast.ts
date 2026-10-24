@@ -34,7 +34,18 @@ export const INSPECTION_METHOD = "hall-section-inspection";
 const byId = (a: Resident, b: Resident) =>
 	a.person.id < b.person.id ? -1 : a.person.id > b.person.id ? 1 : 0;
 export function holds(r: Resident, position: Position): boolean {
-	return r.role === POSITION_ROLES[position];
+	return (
+		r.role === POSITION_ROLES[position] ||
+		(
+			{
+				teacher: "repair designer",
+				cook: "meal helper",
+				cartOwner: "supply helper",
+				cartRepairer: "repair learner",
+				benchHolder: "repair designer",
+			} as const
+		)[position] === r.role
+	);
 }
 export function holders(s: Pick<Save, "people">, position: Position) {
 	return s.people.filter((r) => holds(r, position)).sort(byId);

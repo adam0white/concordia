@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
 import { ENGINE_VERSION, FRAMEWORK_VERSION } from "@adam0white/human-framework";
 import { expect, it } from "vitest";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Resident, Save } from "../src/core/state.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 // Captured from the numbered-name scenario before introducing synthetic names.
 const legacy = JSON.parse(

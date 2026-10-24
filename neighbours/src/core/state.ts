@@ -11,59 +11,49 @@ export const SCHEMA = "neighbours-1";
 export const known = [
 	[
 		"ada",
-		"Ada",
-		"carpenter",
+		"Nora",
+		"repair designer",
 		"workshop",
-		"Kept the hall tables dry; wants to repair its doors.",
-	],
-	[
-		"musa",
-		"Musa",
-		"gardener",
-		"garden",
-		"Lost seedlings in the flood; grows food for neighbours.",
+		"A repair designer sharing the workshop; her older brother lives elsewhere.",
 	],
 	[
 		"elin",
-		"Elin",
-		"nurse",
-		"clinic",
-		"Moved evening care into a small clinic.",
+		"Derya",
+		"visiting night nurse",
+		"homes",
+		"A night nurse on a bounded relief visit. Morning sleep matters; her family is private.",
 	],
 	[
 		"sam",
 		"Sam",
-		"cook",
+		"meal helper",
 		"market",
-		"Promised a shared meal when the hall opens.",
+		"An eighteen-year-old repair apprentice helping with the shared meal, with experienced kitchen cover.",
 	],
-	["jo", "Jo", "ferry keeper", "quay", "Carries supplies from the quay."],
-	["lea", "Lea", "teacher", "school", "Evening classes need somewhere dry."],
+	[
+		"jo",
+		"Bilal",
+		"supply helper",
+		"quay",
+		"A maintenance technician helping move supplies during a bounded stay; his spouse and stepchild are at home.",
+	],
 	[
 		"ravi",
-		"Ravi",
-		"mechanic",
+		"Rafi",
+		"repair learner",
 		"workshop",
-		"Shares a crowded workshop with Ada.",
+		"A nineteen-year-old dish worker on a workshop exchange. He asks before borrowing tools.",
 	],
 	[
 		"noor",
-		"Noor",
-		"organiser",
+		"Ece",
+		"courier",
 		"homes",
-		"Visits neighbours who have not heard the hall news.",
+		"A courier and part-time logistics student on a temporary supply exchange. She lives with her aunt at home.",
 	],
 ];
-/**
- * Who the returning player already knows (scenario seed data, like `known`): a cousin, a former stall partner
- * and the next-door neighbour. Trust values are engineering starting points; HF's default for an unknown voice
- * is 0.5. Seeded once when the player first acts.
- */
-export const PLAYER_TIES: readonly [string, number][] = [
-	["lea", 0.8],
-	["sam", 0.6],
-	["jo", 0.4],
-];
+/** The returning player has no unearned family relationship or familiarity with this new cohort. */
+export const PLAYER_TIES: readonly [string, number][] = [];
 export const placeSpecs = [
 	["homes", "Riverside homes", 12, 65, 300, "home"],
 	["market", "Market kitchen", 42, 60, 16, "food"],
@@ -140,6 +130,7 @@ export type Resident = {
 	};
 };
 export type Save = {
+	chapter?: import("./cast-continuity.ts").CastChapter;
 	assistance?: import("./assistance.ts").Assistance;
 	/** Observer history begins with the next selected event, including in legacy saves. */
 	townChronicle?: TownChronicle;

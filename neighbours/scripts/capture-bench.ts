@@ -1,4 +1,4 @@
-/** Fresh eight-person HF capture. No injected work, knowledge, or choices. */
+/** Fresh six-canonical plus two-background HF capture. No injected work, knowledge, or choices. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -18,7 +18,7 @@ export function captureBench(seed = 42) {
 		if (canProposeBench(host.s)) {
 			const probe = new Runtime(host.export() as Save);
 			const ready = probe.prepareRound();
-			// Earlier scheduled residents may leave before Ravi can ask. Execute
+			// Earlier scheduled residents may leave before Rafi can ask. Execute
 			// their ordinary HF choices on this disposable copy, never on the capture.
 			const precedingActors: string[] = [];
 			if (ready.includes("ravi")) {
@@ -70,7 +70,7 @@ export function captureBench(seed = 42) {
 						adaPresentAtWorkshop: true,
 						cartProgress: probe.s.handcart?.progress,
 						method:
-							"First natural premise-admissible complete boundary with an actual scheduled next-round legal cart-ask decision after preceding residents choose normally on a disposable copy; no Ravi choice or outcome selection",
+							"First natural premise-admissible complete boundary with an actual scheduled next-round legal cart-ask decision after preceding residents choose normally on a disposable copy; no Rafi choice or outcome selection",
 					},
 				};
 			}
@@ -78,7 +78,7 @@ export function captureBench(seed = 42) {
 		host.step();
 	}
 	throw Error(
-		`No natural premise-admissible boundary with a genuine Ravi cart-ask decision within 40 days for seed ${seed}`,
+		`No natural premise-admissible boundary with a genuine Rafi cart-ask decision within 40 days for seed ${seed}`,
 	);
 }
 

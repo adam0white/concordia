@@ -92,3 +92,24 @@ export async function step(page: Page) {
 			`${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`,
 		);
 }
+
+/** Follow the selected person's actual route; canonical people may leave for class. */
+export async function reachSelectedConversation(page: Page, name: string) {
+	const talk = page.getByRole("button", {
+		name: `Talk to ${name}`,
+		exact: true,
+	});
+	for (let i = 0; i < 16; i++) {
+		if (await talk.isVisible()) {
+			await talk.click();
+			return;
+		}
+		const walk = page.getByRole("button", { name: /^Walk to .* to talk/ });
+		if ((await walk.isVisible()) && (await walk.isEnabled()))
+			await walk.click();
+		await step(page);
+	}
+	throw Error(
+		`Could not meet ${name} through ordinary walking within four simulated hours.`,
+	);
+}

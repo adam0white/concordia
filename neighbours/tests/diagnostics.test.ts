@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { townDiagnostics } from "../src/core/diagnostics.ts";
-import { createRuntime } from "../src/core/index.ts";
 import type { Save } from "../src/core/state.ts";
+import { createRuntime } from "./historical-runtime.ts";
 
 describe("derived diagnostics", () => {
 	it("catches conservation and clock defects without mutating its input", () => {

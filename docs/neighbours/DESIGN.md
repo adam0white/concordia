@@ -1,10 +1,10 @@
 # Neighbours: Alder Quay
 
-Owner selected Concordia and authorized an ambitious autonomous public fork, deployment, ongoing HF development, eight familiar people, hundreds of background residents, observability and a watchable simulation. Technical delivery is the milestone set below; Adam accepts feel by watching/playing later.
+Owner selected Concordia and authorized an ambitious autonomous public fork, deployment, ongoing HF development, six canonical people,200 background residents, observability and a watchable simulation. Technical delivery is the milestone set below; Adam accepts feel by watching/playing later.
 
 Alder Quay is a riverside town reopening its flood-damaged community hall. It used to hold evening classes and shared meals. The storm displaced those activities into the market, clinic and neighbours' homes. Different people promised help, lost things, or quietly kept ordinary life going. Reopening matters, but food, family, rest and existing promises also matter. There is no single town happiness score to optimize. Flood-disrupted businesses offer at most two paid one-hour shifts per resident each day, within 08:00–18:00 including travel. Wages stay fixed; an unlimited paid-work action must not crowd out all ordinary life. Sleep, social contact and teaching report what actually occurred, rather than copying promised benefits into outcomes.
 
-The map is the default view. Eight known people have distinct ordinary lives, relationships and commitments. Two hundred persistent background people create actual demand and occupy shared resources. Their controller and fidelity must be labelled honestly. Actions have duration, destination and physical costs. People may refuse a suggestion. Events and story detectors expose actual causal chains and anomalies rather than scripted success or LLM-authored facts.
+The map is the default view. Six canonical people have distinct ordinary lives, relationships and commitments. Two hundred persistent background people create actual demand and occupy shared resources. Their controller and fidelity must be labelled honestly. Actions have duration, destination and physical costs. People may refuse a suggestion. Events and story detectors expose actual causal chains and anomalies rather than scripted success or LLM-authored facts.
 
 After the hall opens, Sam and Lea can propose competing supper and class evenings. Notices must be received, acceptance creates an appointment, and actual preparation reserves the one room. Awake physical overlap determines delivery. The next small conflict concerns Jo's handcart: Ravi can use a slow side bench or ask Ada to give up a four-hour window at the paid carpentry bench. A returned cart changes Jo's later supply trips. Neither project forces cooperation or success. See [the social episode](evenings.md).
 
@@ -19,6 +19,10 @@ Use a small custom deterministic Concordia `Engine` with real upstream Entity/Ac
 The custom engine exists to batch a town round without the stock sequential engine's all-to-all observation broadcast or Python threads. It retains Concordia's entity, observation, choice validation, resolution and checkpoint boundaries. Upstream core modules remain unchanged. World outcomes are deterministic. No generic HF expansion is selected until a real failing case demonstrates the need.
 
 Renderer is a 2D town map with genuine activity/movement projections. The optional inspector has person evidence, decision alternatives, resources, event ancestry, anomaly list and performance. A few concrete interventions change circumstances and consume real allowance. Comparison controls include simple policies and acquired-state ablations, not just a weak LLM prompt. Mixed LLM neighbours require a genuine model response and explicit policy labels; never silently substitute HF and call it LLM.
+
+## Current cast contract
+
+The public canonical edition contains Nora28, Sam18, Derya44, Rafi19, Bilal41 and Ece24, with200 generated residents. Published HF2.18.0/engine2.17.0 owns their decisions. Retired Lea/Musa arcs and historical eight-person fixtures do not enter fresh public towns. Complete admitted people, exact published transfer inputs and claims are pinned for deterministic restore. A finite native Hearsay6 calendar map supports Derya/Ece; unsupported work/care obligations refuse admission. Local receipt ownership, file origin, full-group recording consent and terminal branch closure remain separate from simulation state. Personal disclosures are optional actual conversations, not automatic biographical knowledge or larger accomplished outcomes.
 
 ## Milestones and acceptance
 

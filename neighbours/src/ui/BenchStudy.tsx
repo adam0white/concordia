@@ -28,8 +28,9 @@ export function BenchStudyResults({
 		<section aria-label="Town bench study">
 			<h3>Did a proposed bench window change the repair?</h3>
 			<p className="tiny muted">
-				Recorded Node host control · two simulated days · eight residents · HF{" "}
-				{report.hf} · no model calls. Separate from your town.
+				Recorded Node host control · two simulated days · six canonical and two
+				generated residents · HF {report.hf} · no model calls. Separate from
+				your town.
 			</p>
 			<p className="tiny muted">
 				{datedClock(
@@ -48,14 +49,14 @@ export function BenchStudyResults({
 						</tr>
 					</thead>
 					<tbody>
-						{row("Ravi received notice", (b) =>
+						{row("Rafi received notice", (b) =>
 							b.chain.receivedNotice ? "Yes" : "No",
 						)}
 						{row(
-							"First Ravi choice",
+							"First Rafi choice",
 							(b) => b.chain.raviFirstDecision?.chosen ?? "No choice recorded",
 						)}
-						{row("Requests received by Ada", (b) =>
+						{row("Requests received by Nora", (b) =>
 							String(b.outcome.newRequests),
 						)}
 						{row("Agreements received", (b) =>
@@ -64,11 +65,11 @@ export function BenchStudyResults({
 						{row("Main-bench work completed", (b) =>
 							String(b.outcome.mainBenchWorkPeriods),
 						)}
-						{row("Returned to Jo", (b) =>
+						{row("Returned to Bilal", (b) =>
 							b.outcome.returned ? "Returned" : "No return in this interval",
 						)}
 						{row(
-							"Ada’s paid work completed",
+							"Nora’s paid work completed",
 							(b) => `${b.outcome.adaPaidMinutesCompleted} minutes`,
 						)}
 					</tbody>

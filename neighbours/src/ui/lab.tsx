@@ -3,6 +3,8 @@ import { telemetryNotice } from "@adam0white/lab-kit";
 import { useEffect, useRef, useState } from "react";
 
 export const lab = createLab({ game: "neighbours" });
+// Close recording before save/run/log hooks can observe an imported or mixed-history chapter.
+lab.setPersonaRecording("pending-startup");
 
 function readRecordingPreference() {
 	let switchedOff = false;

@@ -1,7 +1,6 @@
-import { feedbackPersonaControl } from "@adam0white/lab-kit";
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
-import { LabPrivacy, lab, useLabRecording } from "./lab";
+import { LabPrivacy, useLabRecording } from "./lab";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -56,17 +55,7 @@ export default function SendWord({
 			.join("\n\n");
 		const trimmedName = name.trim().slice(0, 60);
 		try {
-			let run: unknown;
-			if (!switchedOff && !privacySignalOn) {
-				try {
-					run = await session.getRun();
-				} catch {
-					/* A broken export must not block feedback. */
-				}
-			}
-			const onlyNote =
-				!lab.telemetryOn || (lab.privacySignalOn && !lab.privacyOverride);
-			await lab.sendFeedback(text, { name: trimmedName, run });
+			const onlyNote = await session.sendFeedback(text, trimmedName);
 			setNoteOnly(onlyNote);
 			try {
 				if (trimmedName) localStorage.setItem(NAME_KEY, trimmedName);
@@ -111,16 +100,36 @@ export default function SendWord({
 								? "Recording is off. Send includes only your note and verdict, without history linkage."
 								: privacySignalOn
 									? "Your browser asks for privacy. Send includes only your note and verdict, without history linkage."
-									: "Your run, saves and log reach us on their own. Tell us what they can't show."}
+									: "Send your note. A run is included only when recording this exact chapter is permitted."}
 						</p>
 						{switchedOff && <LabPrivacy />}
-						<div
-							ref={(element) => {
-								if (!element) return;
-								const choice = feedbackPersonaControl(lab);
-								element.replaceChildren(...(choice ? [choice] : []));
-							}}
-						/>
+						<details>
+							<summary>Recording carried histories</summary>
+							<p>
+								Notes need no recording permission. Recording a shared chapter
+								can link every carried history. Files stay local.
+							</p>
+							<button
+								type="button"
+								onClick={() =>
+									void session
+										.allowCastRecording(true)
+										?.catch((failure) => setError(String(failure)))
+								}
+							>
+								Permit recording all pinned histories
+							</button>
+							<button
+								type="button"
+								onClick={() =>
+									void session
+										.allowCastRecording(false)
+										?.catch((failure) => setError(String(failure)))
+								}
+							>
+								Keep this chapter local
+							</button>
+						</details>
 						<fieldset
 							className="feedback-verdicts"
 							aria-label="Would you keep playing?"

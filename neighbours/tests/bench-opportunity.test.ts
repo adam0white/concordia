@@ -16,8 +16,8 @@ import {
 	updateHandcart,
 	validateHandcart,
 } from "../src/core/handcart.ts";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 const proposal = (slot = "soon") => ({
 	schema: "neighbours-bench-proposal@1",

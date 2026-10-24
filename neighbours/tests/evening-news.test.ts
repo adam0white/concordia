@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
 import { shareEveningNotice } from "../src/core/evening-news.ts";
 import { updateEvenings } from "../src/core/evenings.ts";
-import { createRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Resident, Save } from "../src/core/state.ts";
+import { createRuntime } from "./historical-runtime.ts";
 
 function fixture() {
 	const host = new Runtime(createRuntime(42, 8).export() as Save);

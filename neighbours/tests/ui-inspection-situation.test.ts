@@ -1,12 +1,12 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { createRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import InspectionSituation, {
 	recordedProposal,
 } from "../src/ui/InspectionSituation";
+import { createRuntime } from "./historical-runtime.ts";
 
 const good = {
 	schema: "native-concordia-gm@1",

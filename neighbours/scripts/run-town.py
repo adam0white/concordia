@@ -16,7 +16,7 @@ def main():
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument('--rounds', type=int, default=12)
   parser.add_argument('--seed', type=int, default=42)
-  parser.add_argument('--population', type=int, default=208)
+  parser.add_argument('--population', type=int, default=206)
   parser.add_argument('--output', type=Path)
   parser.add_argument('--restore', type=Path)
   parser.add_argument('--node')

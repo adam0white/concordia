@@ -105,7 +105,8 @@ export const PHRASES: readonly Phrase[] = [
 	},
 	{
 		kind: "teach",
-		match: /^Teach the displaced evening class/,
+		match:
+			/^Teach (?:the displaced evening|a displaced practical repair) class/,
 		...fixed(
 			"I’ve the evening class to teach first",
 			"teach the evening class",

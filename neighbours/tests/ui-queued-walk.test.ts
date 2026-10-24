@@ -1,8 +1,12 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core/index";
 import QueuedWalkNotice from "../src/ui/QueuedWalkNotice";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 it("acknowledges only an accepted paused walk without advancing time", () => {
 	const runtime = createRuntime(42, 8);

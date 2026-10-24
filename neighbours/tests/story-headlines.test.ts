@@ -1,8 +1,8 @@
 import { expect, it } from "vitest";
 import type { EveningEvent } from "../src/core/evenings.ts";
-import { createRuntime } from "../src/core/index.ts";
 import type { Save } from "../src/core/state.ts";
 import { townStories } from "../src/core/stories.ts";
+import { createRuntime } from "./historical-runtime.ts";
 
 it("headlines distinguish a class invitation, missed class and delivered class", () => {
 	const s = createRuntime(42, 8).export() as Save;

@@ -6,9 +6,13 @@ import {
 	parseInspectionProposal,
 } from "../src/core/assistance.ts";
 import { HF_SOURCE } from "../src/core/hf-version.ts";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 const proposal = {
 	schema: "neighbours-gm-proposal@1",

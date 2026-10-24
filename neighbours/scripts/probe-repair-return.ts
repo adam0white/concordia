@@ -5,7 +5,7 @@
  * HF decision record is read: was repair among the legal offers, was it chosen, and which terms carried it.
  * Nothing is forced; the control arm is the same checkpoint without damage. Not a realism claim.
  *
- * Usage: node scripts/probe-repair-return.ts [--seed 42] [--population 208] [--inject-day 3] [--damage 6]
+ * Usage: node scripts/probe-repair-return.ts [--seed 42] [--population 206] [--inject-day 3] [--damage 6]
  */
 import assert from "node:assert/strict";
 import { createRuntime, restoreRuntime } from "../src/core/index.ts";
@@ -19,7 +19,7 @@ function option(name: string, fallback: number): number {
 	return value;
 }
 const seed = option("--seed", 42);
-const population = option("--population", 208);
+const population = option("--population", 206);
 const injectDay = option("--inject-day", 3);
 const damage = option("--damage", 6);
 

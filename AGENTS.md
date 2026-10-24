@@ -4,7 +4,7 @@ This is a public GitHub fork of Google DeepMind Concordia. Preserve upstream cop
 
 Read `docs/neighbours/DESIGN.md` and `HANDOFF.md` before resuming. Use `bd` for durable tasks and ideas; `bd prime` describes the workflow. The owner explicitly authorizes implementation, reviews, commits, pushes, deployment and generic HF fixes/releases with their own regression checks. Team-maintainer profile applies. No routine approval stalls.
 
-Done: reviewed public watchable town with eight familiar people and 200 background residents, actual released HF choices and Python Concordia orchestration, replay/restore and causal controls, diagnostics, independent source-unread watch evidence. Adam accepts feel. Do not call a replay live or a planned capability implemented.
+Done: reviewed public watchable town with six canonical people and 200 background residents, actual released HF choices and Python Concordia orchestration, replay/restore and causal controls, diagnostics, independent source-unread watch evidence. Adam accepts feel. Do not call a replay live or a planned capability implemented.
 
 Keep world facts, feasible actions and physical outcomes in the host. HF owns HF persons' perceptions, acquired state and decisions. Consume exact published npm HF; no sibling imports or vendored framework source. LLM decisions are labelled and cannot invent outcomes. No unlabelled fallback between policies or runtimes.
 

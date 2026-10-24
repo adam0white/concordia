@@ -15,10 +15,10 @@ import {
 	validateHallCare,
 } from "../src/core/hall-care.ts";
 import { keyed } from "../src/core/hash.ts";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { buildOffers } from "../src/core/offers.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Resident, Save } from "../src/core/state.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 const save = () => createRuntime(42, 8).export() as Save;
 /** A 06:00 on a day whose keyed draw loosens (or not) at full damp. */

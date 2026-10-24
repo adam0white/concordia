@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { speechRead } from "../src/core/impression.ts";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core/index.ts";
 import { advanceGoals, pledgeDeadlines } from "../src/core/player.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import { offeredWork } from "../src/ui/SpeakPanel.tsx";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 const T = 60_000;
 const town = () => createRuntime(42, 208) as Runtime;

@@ -24,7 +24,7 @@ CATALOG = {
 LIMITS = [
     'This proposes a window to discuss, never permission, agreement, knowledge or completed work.',
     'The host maps slots to actual times, checks physical capacity and existing jobs, and routes observations to actual recipients.',
-    'Ada has her own paid main-bench work; lending delays access and has opportunity cost, not guaranteed lost income.',
+    'Nora has her own paid main-bench work; lending delays access and has opportunity cost, not guaranteed lost income.',
     'Main-bench work requires 60 uninterrupted minutes; a 30-minute brief window is deliberately insufficient.',
     'No hidden ability is inferred. Context is host bookkeeping, not shared resident knowledge.',
     'Only the Host inbox receives this typed proposal; no HF person receives it here.',
@@ -94,7 +94,7 @@ def checkpoint_context(checkpoint, capture_evidence=None):
 def run_director(model, checkpoint, capture_evidence=None):
   context = checkpoint_context(checkpoint, capture_evidence)
   request = (
-      'Propose one fictional main-bench window for Ravi to DISCUSS with Ada. '
+      'Propose one fictional main-bench window for Rafi to DISCUSS with Nora. '
       'This does not give access, consent, resident knowledge or a repair outcome. '
       'The host maps the slot to physical time and routes any actual recipient observation. '
       f'Checkpoint SHA256: {digest(checkpoint)}. '

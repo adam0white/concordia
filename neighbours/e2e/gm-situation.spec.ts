@@ -74,7 +74,9 @@ test("a real WASM annex request comparison preserves the live town and the reque
 		})
 		.click();
 	const comparison = page.locator(".day-comparison");
-	await expect(comparison).toContainText("Annex inspection requested from Ada");
+	await expect(comparison).toContainText(
+		"Annex inspection requested from Nora",
+	);
 	await expect(
 		comparison.getByText("Resources and neighbour state at the end", {
 			exact: true,
@@ -93,7 +95,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	await showTab(page, "Help");
 	await configure();
 	await card
-		.getByRole("button", { name: "Ask Ada to inspect", exact: true })
+		.getByRole("button", { name: "Ask Nora to inspect", exact: true })
 		.click();
 	await expect(
 		page.getByRole("status").filter({ hasText: "Inspection request received" }),

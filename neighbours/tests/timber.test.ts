@@ -4,7 +4,6 @@
  */
 import { expect, it } from "vitest";
 import { inspectionKey } from "../src/core/encounters.ts";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core/index.ts";
 import { buildOffers } from "../src/core/offers.ts";
 import { speechOffers } from "../src/core/player.ts";
 import { Runtime } from "../src/core/runtime.ts";
@@ -22,6 +21,11 @@ import {
 	timberMoisture,
 	weatherTimber,
 } from "../src/core/timber.ts";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 const T = 120_000;
 const town = (seed = 42, population = 8) =>

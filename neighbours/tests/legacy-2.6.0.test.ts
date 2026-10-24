@@ -4,11 +4,12 @@
  * decision source. The fixture's `after48` was produced by the 2.6.0 build itself (commit e3d0382).
  */
 import { readFileSync } from "node:fs";
+import { ENGINE_VERSION } from "@adam0white/human-framework";
 import { expect, it } from "vitest";
 import { HF_VERSION } from "../src/core/hf-version.ts";
-import { restoreRuntime } from "../src/core/index.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import { restoreRuntime } from "./historical-runtime.ts";
 
 const fixture = JSON.parse(
 	readFileSync(
@@ -21,7 +22,7 @@ const stamps = (save: unknown) =>
 	JSON.parse(
 		JSON.stringify(save)
 			.replaceAll('"HF 2.6.0"', `"HF ${HF_VERSION}"`)
-			.replaceAll('"engine":"2.6.0"', `"engine":"${HF_VERSION}"`)
+			.replaceAll('"engine":"2.6.0"', `"engine":"${ENGINE_VERSION}"`)
 			.replaceAll('"hf":"2.6.0"', `"hf":"${HF_VERSION}"`),
 	);
 
@@ -32,7 +33,9 @@ it("a played 2.6.0 save migrates its stamps and continues 48 rounds exactly", ()
 	expect(fixture.start.player?.pledges[0]?.status).toBe("open");
 	const r = restoreRuntime(structuredClone(fixture.start)) as Runtime;
 	expect(r.s.hf).toBe(HF_VERSION);
-	expect(r.s.people.every((p) => p.person.engine === HF_VERSION)).toBe(true);
+	expect(r.s.people.every((p) => p.person.engine === ENGINE_VERSION)).toBe(
+		true,
+	);
 	for (let i = 0; i < 48; i++) r.step();
 	const after = r.export() as Save;
 	// The open pledge lapsed inside the window and was reported through the version 1 path.

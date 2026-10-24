@@ -158,7 +158,7 @@ export const studySpecs: Record<
 		schema: "native-concordia-gm@1",
 	},
 	cart: {
-		question: "Did Ravi choose to ask for the main bench?",
+		question: "Did Rafi choose to ask for the main bench?",
 		file: "cart-choice-probe",
 		schema: "neighbours/cart-choice-probe@1",
 	},

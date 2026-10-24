@@ -1,4 +1,4 @@
-import { expect, step, test } from "./clock-fixture";
+import { expect, reachSelectedConversation, test } from "./clock-fixture";
 
 test.use({ hasTouch: true });
 
@@ -93,12 +93,11 @@ test("place company distinguishes meeting from an immediate conversation", async
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await page.locator('[data-map-place="workshop"]').press("Enter");
 	const panel = page.locator(".place-panel");
-	await expect(panel.getByRole("button", { name: /^Meet Ravi/ })).toBeVisible();
+	await expect(panel.getByRole("button", { name: /^Meet Rafi/ })).toBeVisible();
 	await page.getByRole("button", { name: /Walk to Workshop ·/ }).click();
-	for (let i = 0; i < 4; i++) await step(page);
-	const talk = panel.getByRole("button", { name: /^Talk to Ravi/ });
-	await expect(talk).toBeVisible();
-	await talk.click();
+	await panel.getByRole("button", { name: "Close place details" }).click();
+	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
+	await reachSelectedConversation(page, "Rafi");
 
 	await expect(page.locator(".conversation-request")).toBeVisible();
 	await expect(

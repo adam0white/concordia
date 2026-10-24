@@ -59,7 +59,7 @@ for (const width of [360, 1280]) {
 			await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 			if (
 				await page
-					.getByRole("button", { name: "Talk to Ravi", exact: true })
+					.getByRole("button", { name: "Talk to Rafi", exact: true })
 					.isEnabled()
 					.catch(() => false)
 			)
@@ -79,7 +79,7 @@ for (const width of [360, 1280]) {
 		}
 		await expect(page.locator(".town-time strong")).not.toHaveText("08:00");
 		await page
-			.getByRole("button", { name: "Talk to Ravi", exact: true })
+			.getByRole("button", { name: "Talk to Rafi", exact: true })
 			.click();
 		await expect(
 			page.locator("#town-conversation [data-affordance-id]").first(),
@@ -91,7 +91,7 @@ for (const width of [360, 1280]) {
 			"Time holds while you talk",
 		);
 		await expect(
-			page.getByRole("button", { name: "Put it to Ravi", exact: true }),
+			page.getByRole("button", { name: "Put it to Rafi", exact: true }),
 		).toBeInViewport();
 		expect(
 			await page.evaluate(

@@ -39,8 +39,10 @@ const savedLabel = (save: unknown) => {
 // recovery must keep autosaves locked until an explicit visitor action succeeds.
 export function useVisitorSession({
 	enabled = true,
+	freshLocal = false,
 }: {
 	enabled?: boolean;
+	freshLocal?: boolean;
 } = {}) {
 	const [town, setTown] = useState<TownView>();
 	const [healthHistory, setHealthHistory] = useState<HealthHistory>();
@@ -176,7 +178,6 @@ export function useVisitorSession({
 			}
 		>(),
 	);
-	const notebookRequest = useRef<number | null>(null);
 	const rounds = useRef(0);
 	const autosaveEnabled = useRef(false);
 	const persistenceAfterState = useRef(false);
@@ -465,7 +466,11 @@ export function useVisitorSession({
 					freshAtStartup = reply.view;
 					restoringStartup = true;
 					setProgress("Restoring the town saved on this device…");
-					runtime?.send({ type: "restore", save: initialSavedPacket });
+					runtime?.send({
+						type: "restore",
+						save: initialSavedPacket,
+						local: true,
+					});
 					return;
 				}
 			}
@@ -593,6 +598,7 @@ export function useVisitorSession({
 					persistenceAfterState.current = false;
 				}
 				telemetryTown = reply.view;
+				runtime?.acceptView(reply);
 				const restoredAtStartup = restoringStartup && reply.type === "state";
 				if (restoredAtStartup) {
 					restoringStartup = false;
@@ -798,56 +804,48 @@ export function useVisitorSession({
 					exportRequest.current !== null &&
 					reply.requestId === exportRequest.current
 				) {
-					if (notebookRequest.current === reply.requestId) {
-						notebookRequest.current = null;
-						exportRequest.current = null;
-						lab.openSendDialog({ getRun: () => reply.save });
-					} else {
-						const requestId = reply.requestId;
-						const revision = errorRevision.current;
-						void encodeSave(reply.save).then(
-							(blob) => {
-								if (
-									!active ||
-									exportRequest.current !== requestId ||
-									generation < acceptedGeneration.current
-								)
-									return;
-								downloadGeneration.current = generation;
-								const packet = reply.save as {
-									runtime?: { now?: number };
-								} | null;
-								const at = packet?.runtime?.now;
-								setDownloadLabel(
-									typeof at === "number"
-										? datedClock(at)
-										: "Current checkpoint",
-								);
-								setDownloadUrl(URL.createObjectURL(blob));
-								exportRequest.current = null;
-							},
-							(failure: unknown) => {
-								if (
-									!active ||
-									exportRequest.current !== requestId ||
-									generation < acceptedGeneration.current
-								)
-									return;
-								exportRequest.current = null;
-								if (revision !== errorRevision.current) return;
-								errorRevision.current++;
-								const message =
-									failure instanceof SaveFileError
-										? failure.message
-										: "This save could not be compressed. The current town is unchanged.";
-								lastExportFailure.current = {
-									revision: errorRevision.current,
-									message,
-								};
-								setError(message);
-							},
-						);
-					}
+					const requestId = reply.requestId;
+					const revision = errorRevision.current;
+					void encodeSave(reply.save).then(
+						(blob) => {
+							if (
+								!active ||
+								exportRequest.current !== requestId ||
+								generation < acceptedGeneration.current
+							)
+								return;
+							downloadGeneration.current = generation;
+							const packet = reply.save as {
+								runtime?: { now?: number };
+							} | null;
+							const at = packet?.runtime?.now;
+							setDownloadLabel(
+								typeof at === "number" ? datedClock(at) : "Current checkpoint",
+							);
+							setDownloadUrl(URL.createObjectURL(blob));
+							exportRequest.current = null;
+						},
+						(failure: unknown) => {
+							if (
+								!active ||
+								exportRequest.current !== requestId ||
+								generation < acceptedGeneration.current
+							)
+								return;
+							exportRequest.current = null;
+							if (revision !== errorRevision.current) return;
+							errorRevision.current++;
+							const message =
+								failure instanceof SaveFileError
+									? failure.message
+									: "This save could not be compressed. The current town is unchanged.";
+							lastExportFailure.current = {
+								revision: errorRevision.current,
+								message,
+							};
+							setError(message);
+						},
+					);
 				}
 			}
 		};
@@ -899,13 +897,49 @@ export function useVisitorSession({
 		const receive = orderedReplies(handle, persistAnswer);
 		const startRuntime = () => {
 			if (!active) return;
-			runtime = new RuntimeClient(receive);
+			runtime = new RuntimeClient(
+				receive,
+				initialSavedPacket !== undefined,
+				async () => {
+					const generation = worldGeneration.current;
+					if (!runtime || saveConflictRef.current)
+						throw Error("Device ownership save unavailable.");
+					const packet = runtime.cast.decorate(await runtime.capture());
+					if (
+						!active ||
+						generation !== worldGeneration.current ||
+						saveConflictRef.current
+					)
+						throw Error("Run changed before ownership save.");
+					await saves.write(packet, "latest");
+					if (
+						!active ||
+						generation !== worldGeneration.current ||
+						saveConflictRef.current
+					)
+						throw Error("Run changed during ownership save.");
+					recordCommittedSave(packet, "latest", generation);
+					setHasSave(true);
+					setSaved(savedLabel(packet));
+				},
+				freshLocal,
+			);
 			client.current = runtime;
 		};
 		void saves.open().then(
-			(value) => {
+			async (value) => {
+				if (freshLocal && value !== undefined) {
+					try {
+						await saves.write(value, "previous");
+					} catch {
+						setError(
+							"The previous town could not be preserved. Download it before starting a local town.",
+						);
+						return;
+					}
+				}
 				if (!active) return;
-				initialSavedPacket = value;
+				initialSavedPacket = freshLocal ? undefined : value;
 				setHasSave(value !== undefined);
 				startRuntime();
 			},
@@ -942,7 +976,7 @@ export function useVisitorSession({
 			runtime?.close();
 			if (client.current === runtime) client.current = null;
 		};
-	}, [dispatch, enabled, resetWorldFeedback, settleMenu]);
+	}, [dispatch, enabled, freshLocal, resetWorldFeedback, settleMenu]);
 	useEffect(() => {
 		try {
 			localStorage.setItem("alder-follow", selected);
@@ -1245,7 +1279,7 @@ export function useVisitorSession({
 		setAdvanceNotice("");
 		setPlaying(true);
 	};
-	const requestExport = (notebook: boolean) => {
+	const requestExport = () => {
 		if (stateCommands.current.length > 0 || pending.current) return;
 		if (advancePending.current !== null || comparisonPending.current) return;
 		const previousFailure = lastExportFailure.current;
@@ -1259,7 +1293,6 @@ export function useVisitorSession({
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;
-		notebookRequest.current = notebook ? requestId : null;
 		send({ type: "save", requestId });
 	};
 	const getRun = (): Promise<unknown> => {
@@ -1291,8 +1324,7 @@ export function useVisitorSession({
 			client.current?.send({ type: "save", requestId });
 		});
 	};
-	const exportSave = () => requestExport(false);
-	const sendRun = () => requestExport(true);
+	const exportSave = () => requestExport();
 	const reportLocalError = (message: string) => {
 		errorRevision.current++;
 		setError(message);
@@ -1328,7 +1360,7 @@ export function useVisitorSession({
 			.then((save) => {
 				if (save !== undefined && intent === replacementIntent.current) {
 					setPlaying(false);
-					send({ type: "restore", save });
+					send({ type: "restore", save, local: true });
 				}
 			})
 			.catch(() => {
@@ -1362,6 +1394,24 @@ export function useVisitorSession({
 		}
 	};
 	return {
+		askPrivate: (id: string) =>
+			send({
+				type: "intervene",
+				intervention: { kind: "player-private", actorId: id },
+			}),
+		checkpointCast: async (id: string, fork = false) => {
+			await client.current?.cast.savePerson(id, fork);
+		},
+		sendFeedback: (note: string, name: string) => {
+			const current = client.current;
+			if (!current)
+				return Promise.reject(
+					new Error("The town is not ready. Keep your note and retry."),
+				);
+			return current.cast.feedback(note, name, getRun);
+		},
+		allowCastRecording: (allow: boolean) =>
+			client.current?.cast.recording(allow),
 		town,
 		healthHistory,
 		progress,
@@ -1438,7 +1488,6 @@ export function useVisitorSession({
 		play,
 		exportSave,
 		getRun,
-		sendRun,
 		startTown,
 		restoreSave,
 		importSave,

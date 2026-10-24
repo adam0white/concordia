@@ -29,14 +29,14 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	).toHaveCount(9);
 	await expect(
 		bench.getByRole("row", {
-			name: "Returned to Jo Returned Returned",
+			name: "Returned to Bilal Returned Returned",
 			exact: true,
 		}),
 	).toBeVisible();
 	await studies.getByLabel("Frozen town case").selectOption("6");
 	await expect(
 		bench.getByRole("row", {
-			name: "Returned to Jo Returned No return in this interval",
+			name: "Returned to Bilal Returned No return in this interval",
 			exact: true,
 		}),
 	).toBeVisible();

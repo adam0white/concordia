@@ -9,7 +9,8 @@
 	"overrides": {
 		"@cloudflare/config": {
 			"zod": "4.6.6"
-		}
+		},
+		"undici": "7.30.1"
 	},
 	"scripts": {
 		"dev": "vite --host 127.0.0.1",
@@ -26,7 +27,7 @@
 		"check:lane": "npm run check"
 	},
 	"dependencies": {
-		"@adam0white/human-framework": "2.8.0",
+		"@adam0white/human-framework": "2.18.0",
 		"@adam0white/lab-client": "file:vendor/adam0white-lab-client-0.4.2.tgz",
 		"@adam0white/lab-kit": "file:vendor/adam0white-lab-kit-0.5.2.tgz",
 		"pyodide": "314.0.7",

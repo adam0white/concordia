@@ -10,9 +10,9 @@ import {
 	roomBooking,
 	updateEvenings,
 } from "../src/core/evenings.ts";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 function opened() {
 	const host = new Runtime(createRuntime(42, 8).export() as Save);

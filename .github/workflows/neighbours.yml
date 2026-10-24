@@ -48,7 +48,7 @@ jobs:
             neighbours/test-results/
           retention-days: 7
       - name: Thirty-day population and restored-continuation stress check
-        run: node scripts/profile-town.ts --days 30 --population 208 --seed 42 --max-deaths 0
+        run: node scripts/profile-town.ts --days 30 --population 206 --seed 42 --max-deaths 0
         working-directory: neighbours
       - name: Actual native HF bridge and upstream ActionSpec controls
         run: python -m unittest concordia.environment.engine_test concordia.contrib.neighbours.engine_test concordia.contrib.neighbours.bridge_test concordia.contrib.neighbours.gm_director_test concordia.contrib.neighbours.bench_director_test
@@ -56,7 +56,7 @@ jobs:
           PYTHONPATH: .
           NEIGHBOURS_NATIVE_TEST: '1'
       - name: Real social episode milestones and restored continuation
-        run: node scripts/profile-evenings.ts --seeds 42 --population 208 --days 25 --output "$RUNNER_TEMP/evenings.json" --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
+        run: node scripts/profile-evenings.ts --seeds 42 --population 206 --days 25 --output "$RUNNER_TEMP/evenings.json" --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
         working-directory: neighbours
       - name: Actual WASM and native parity and restored continuation
         run: |

@@ -6,6 +6,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { canReceiveInspectionRequest } from "../src/core/assistance.ts";
+import { inspectionInstructor } from "../src/core/cast.ts";
 import { restoreRuntime, type Save } from "../src/core/index.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 
@@ -54,16 +55,22 @@ export function probeAssistance(checkpoint: unknown) {
 	const originalDigest = sha(JSON.stringify(original));
 	const sources = assistanceSourceDigests();
 	const screening = original.people
-		.filter((r) => r.known && r.person.id !== "lea")
+		.filter((r) => r.known && !inspectionInstructor(r))
 		.map((r) => {
 			const rules = (r.person.methods?.rules ?? []).filter(
 				(rule) =>
 					rule.id === methodId &&
-					rule.evidence.some((e) => e.sourceId === "lea"),
+					rule.evidence.some((e) =>
+						original.people.some(
+							(t) => t.person.id === e.sourceId && inspectionInstructor(t),
+						),
+					),
 			);
 			const reasons: string[] = [];
 			if (!rules.length)
-				reasons.push("No retained hall inspection lesson evidence from Lea");
+				reasons.push(
+					"No retained hall inspection lesson evidence from the actual instructor",
+				);
 			if (!canReceiveInspectionRequest(r))
 				reasons.push(
 					"Recipient is not living and awake outside a sleeping activity",
@@ -76,7 +83,7 @@ export function probeAssistance(checkpoint: unknown) {
 			return {
 				id: r.person.id,
 				name: r.person.name,
-				taughtByLea: rules.length > 0,
+				taughtByInstructor: rules.length > 0,
 				eligible: reasons.length === 0,
 				reasons,
 				receivedRuleCount: rules.length,
@@ -89,7 +96,7 @@ export function probeAssistance(checkpoint: unknown) {
 		});
 	assert(screening.length <= 8, "Known-resident probe bound exceeded");
 	const candidates = screening
-		.filter((r) => r.taughtByLea)
+		.filter((r) => r.taughtByInstructor)
 		.map((candidate) => {
 			if (!candidate.eligible) return { ...candidate, arms: [] };
 			const arms = (
@@ -242,7 +249,7 @@ export function probeAssistance(checkpoint: unknown) {
 		candidates,
 		summary: {
 			knownNonLea: screening.length,
-			taughtByLea: candidates.length,
+			taughtByInstructor: candidates.length,
 			eligible: candidates.filter((r) => r.eligible).length,
 			receivedLearnedOpenings: candidates.filter((r) =>
 				r.arms.some((arm) => arm.arm === "received-learned" && arm.opened),
@@ -257,7 +264,7 @@ export function probeAssistance(checkpoint: unknown) {
 			).length,
 		},
 		limits: [
-			"All known non-Lea residents with retained inspection lesson evidence from Lea were screened; nobody was selected by searching for a successful outcome.",
+			"All known non-Lea residents with retained inspection lesson evidence from the actual instructor were screened; nobody was selected by searching for a successful outcome.",
 			"One selective checkpoint and one authored dry-annex premise are local case evidence, not a population benchmark, entertainment acceptance or HF superiority claim.",
 			"The request is authored. This run makes no generative-model calls and does not test a Concordia GM.",
 			"Only the selected person's hall-section-inspection rules are removed initially. Their other acquired state remains; later learning remains possible.",

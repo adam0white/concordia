@@ -19,6 +19,11 @@ try {
 	symlinkSync(join(app, "node_modules"), join(clean, "node_modules"));
 	let count = 0;
 	for (const folder of ["src/core", "src/experiments"])
+		for (const file of readdirSync(join(app, folder)).filter((f) =>
+			f.endsWith(".ts"),
+		))
+			await import(pathToFileURL(join(app, folder, file)).href);
+	for (const folder of ["src/core", "src/experiments"])
 		for (const file of readdirSync(join(clean, folder)).filter((f) =>
 			f.endsWith(".ts"),
 		)) {

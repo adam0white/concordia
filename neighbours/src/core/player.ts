@@ -10,14 +10,15 @@
  * (version 2 player state, HF 2.8.0); version 1 saves keep the earlier `learnFromVoice` report.
  * Only awake people at the player's place hear. There is no host speech credit, no synthetic reward for
  * asking, no inferred consent and no scripted cooperation. A save without `player` is byte-identical to a
- * town where the visitor never acted; the first player input creates this state and seeds the three
- * family/neighbour voices. Not covered: bringing named things, group speech, speech while travelling,
+ * town where the visitor never acted; the first player input creates this state. No canonical
+ * person starts with an authored family or neighbour relationship to the player. Not covered: bringing named things, group speech, speech while travelling,
  * persuasion beyond HF's suggestion strength, or remembering what the player said beyond HF's own memory.
  */
 import {
 	type Affordance,
 	answerNow,
 	type DecisionRecord,
+	decide,
 	interrupt,
 	learnFromVoice,
 	noteVoicePromise,
@@ -44,6 +45,7 @@ import { placeOf, required } from "./invariants.ts";
 import { journalEntries } from "./journal.ts";
 import { buildOffers, socialPreview, WORKPLACE } from "./offers.ts";
 import type { PLAYER_EVENT_KINDS } from "./player-events.ts";
+import { PRIVATE_DISCOVERIES } from "./private-discoveries.ts";
 import { PLAYER_TIES, type Resident, type Save } from "./state.ts";
 import { airTimber, repairHolds, timberMoisture } from "./timber.ts";
 import { validateEvent } from "./validation.ts";
@@ -296,7 +298,7 @@ function activate(host: PlayerHost): PlayerState {
 	playerEvent(
 		host,
 		"player-returned",
-		"You were back in Alder Quay after the flood, lodging with your cousin Lea’s family in the riverside homes.",
+		"You arrived in Alder Quay after the flood, lodging in the riverside homes during a bounded visit.",
 		PLAYER_HOME,
 	);
 	return s.player;
@@ -513,12 +515,83 @@ export function playerIntervene(
 	input: Intervention,
 	others: (r: Resident) => Suggestion[],
 ): void {
-	if (input.kind === "player-move") move(host, input.placeId);
+	if (input.kind === "player-private") privateConversation(host, input);
+	else if (input.kind === "player-move") move(host, input.placeId);
 	else if (input.kind === "player-speak") speak(host, input, others);
 	else if (input.kind === "player-help") directHelp(host, input);
 	else if (input.kind === "player-work")
 		startWork(host, input.pledgeId, input.work, input.actorId);
 	else throw Error("Unknown player action");
+}
+
+function privateConversation(host: PlayerHost, input: Intervention) {
+	const r = hearable(host.s, input.actorId),
+		clue = PRIVATE_DISCOVERIES[r.person.id];
+	if (!r.known || !clue) throw Error("This person has no such conversation.");
+	if (
+		(r.job &&
+			!["rest", "talk", "gather", "eat", "drink"].includes(
+				r.job.offer.action,
+			)) ||
+		(!r.job && r.person.activity)
+	)
+		throw Error(
+			"Wait until their current work has finished, or meet them during a break.",
+		);
+	if (Object.keys(input).some((k) => k !== "kind" && k !== "actorId"))
+		throw Error("A private conversation takes only a person.");
+	const episode = `private-discovery:${r.person.id}`;
+	if (r.person.memory.episodes.some((e) => e.id === episode))
+		throw Error(
+			"They already chose to share this with you. Read your journal.",
+		);
+	activate(host);
+	const choice = decide(
+		r.person,
+		[
+			{
+				id: "share",
+				action: "talk",
+				label: "Share a bounded private confidence",
+				duration: 1,
+				effort: 0.05,
+				advertises: { belonging: 0.25, meaning: 0.1 },
+			},
+			{
+				id: "decline",
+				action: "rest",
+				label: "Keep the matter private",
+				duration: 1,
+				effort: 0,
+				advertises: { rest: 0.08 },
+			},
+		],
+		{ reconsider: true },
+	);
+	const shared = choice.chosenAffordanceId === "share";
+	const text = shared
+		? clue.fact
+		: `${r.person.name} keeps the matter private for now. You have learned no private fact.`;
+	const event = playerEvent(
+		host,
+		"player-answer",
+		text,
+		r.place,
+		[],
+		r.person.id,
+	);
+	notify(host.s, text, event.id);
+	if (shared)
+		r.person.memory.episodes.push({
+			id: episode,
+			at: host.s.now,
+			kind: "private-conversation",
+			actorId: PLAYER_VOICE,
+			valence: 0.1,
+			salience: 0.5,
+			summary: text,
+			tags: ["social"],
+		});
 }
 
 /** Available capacity is a host fact; helping does not demand a resident decision. */
@@ -1200,7 +1273,7 @@ export const PLAYER_GOALS = [
 	{
 		id: "evening",
 		title: "Help a hall evening happen",
-		hint: "Lea’s class and Sam’s supper compete for the reopened hall. Get someone to act on your word for an evening, and see whether it goes ahead with guests.",
+		hint: "Nora’s repair class and Sam’s shared meal compete for the reopened hall. Get someone to act on your word for an evening, and see whether it goes ahead with guests.",
 	},
 ] as const;
 /** Each goal is checked only against recorded outcomes after the previous goal was reached. */

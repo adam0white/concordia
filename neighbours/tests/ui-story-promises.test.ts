@@ -2,11 +2,11 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import type { PersonView, TownEvent, TownView } from "../src/contracts";
-import { createRuntime } from "../src/core/index";
 import { groupStories } from "../src/ui/observations";
 import PersonPanel from "../src/ui/PersonPanel";
 import PersonPromises from "../src/ui/PersonPromises";
 import StoryHeadline from "../src/ui/StoryHeadline";
+import { createRuntime } from "./historical-runtime.ts";
 
 const event = (
 	id: number,

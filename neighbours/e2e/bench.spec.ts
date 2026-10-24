@@ -36,7 +36,7 @@ async function cart(page: Page) {
 	const projects = page.locator("details.project-history");
 	if ((await projects.getAttribute("open")) === null)
 		await projects.getByText("Projects and notices", { exact: true }).click();
-	return page.getByRole("region", { name: "Jo's handcart", exact: true });
+	return page.getByRole("region", { name: "Bilal's handcart", exact: true });
 }
 
 test("a real mobile bench proposal is received without granting access, and active HF knowledge saves exactly", async ({
@@ -59,7 +59,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	let panel = await cart(page);
 	await expect(
 		panel.getByRole("button", {
-			name: "Tell Ravi · 1 credit",
+			name: "Tell Rafi · 1 credit",
 			exact: true,
 		}),
 	).toBeEnabled();
@@ -77,15 +77,15 @@ test("a real mobile bench proposal is received without granting access, and acti
 	panel = await cart(page);
 	await panel
 		.getByRole("button", {
-			name: "Tell Ravi · 1 credit",
+			name: "Tell Rafi · 1 credit",
 			exact: true,
 		})
 		.click();
-	await expect(panel).toContainText("Ravi heard the proposed window");
+	await expect(panel).toContainText("Rafi heard the proposed window");
 	await expect(panel).toContainText("No bench booking");
 	await expect(
 		panel.getByRole("button", {
-			name: "Tell Ravi · 1 credit",
+			name: "Tell Rafi · 1 credit",
 			exact: true,
 		}),
 	).toHaveCount(0);

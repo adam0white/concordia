@@ -22,9 +22,9 @@ it("offers a discussion, with its cost, and never describes the proposal as perm
 			onCompare: () => {},
 		}),
 	);
-	expect(html).toContain("Tell Ravi · 1 credit");
+	expect(html).toContain("Tell Rafi · 1 credit");
 	expect(html).toContain("Compare first");
-	expect(html).toContain("Ada decides whether to lend it");
+	expect(html).toContain("Nora decides whether to lend it");
 });
 it("shows an expired proposal as expired rather than a bench booking", () => {
 	const html = renderToStaticMarkup(

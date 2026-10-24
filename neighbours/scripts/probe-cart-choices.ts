@@ -117,7 +117,7 @@ const result = {
 	limitations: [
 		"This is a probe of actual received choices in one restored town, not a generic planning benchmark.",
 		"HF scores all supplied offers. An absent recorded top-ranked alternative does not establish that the option was not evaluated.",
-		"The goal ablation changes only Ravi's selected goal status; it does not remove his remembered project or legal offers.",
+		"The goal ablation changes only Rafi's selected goal status; it does not remove his remembered project or legal offers.",
 		"The matched duration pair is explicitly hypothetical: access is supplied as an offer, not negotiated or enacted in the town.",
 		"The pair records immediate decision terms, not completion speed or the future value of waiting for tomorrow's agreement.",
 	],

@@ -55,10 +55,10 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	const before = await exported(page);
 	expect(before.runtime.controls).toBe(0);
 	await showTab(page, "Help");
-	await page.getByRole("button", { name: /Compare a week with Lea/ }).click();
+	await page.getByRole("button", { name: /Compare a week with Nora/ }).click();
 	const comparison = page.locator(".day-comparison");
 	await expect(comparison).toHaveAttribute("open", "");
-	await expect(comparison).toContainText("Extra slot for Lea");
+	await expect(comparison).toContainText("Extra slot for Nora");
 	await expect(comparison.getByRole("status")).toContainText(/of 672 rounds/);
 	await expect(
 		comparison.getByLabel("Change in the second run"),
@@ -72,20 +72,22 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	expect(await exported(page)).toEqual(before);
 	await showTab(page, "Help");
 	await expect(choices).toHaveAttribute("open", "");
-	await page.getByRole("button", { name: /Fund another slot for Lea/ }).click();
+	await page
+		.getByRole("button", { name: /Fund another slot for Nora/ })
+		.click();
 	await expect(
 		page.getByRole("status").filter({ hasText: "Extra hall slot funded" }),
 	).toBeVisible();
 	const after = await exported(page);
 	expect(after.runtime.controls).toBe(before.runtime.controls);
-	expect(
-		after.runtime.socialEvenings.recurrence.cycles[0].supportSpent.kind,
-	).toBe("open-evening-slot");
+	const funded = after.runtime.socialEvenings.recurrence.cycles.filter(
+		(c: { supportSpent?: { kind: string } }) =>
+			c.supportSpent?.kind === "open-evening-slot",
+	);
+	expect(funded).toHaveLength(1);
 	expect(after.runtime.people).toEqual(before.runtime.people);
-	expect(
-		after.runtime.socialEvenings.recurrence.cycles[0].openedSlot.to -
-			after.runtime.socialEvenings.recurrence.cycles[0].openedSlot.from,
-	).toBe(1440);
+	expect(funded[0].openedSlot.to - funded[0].openedSlot.from).toBe(1440);
+
 	await page.reload();
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })

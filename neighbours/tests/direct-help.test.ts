@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { playerRound } from "../src/core/player.ts";
 import type { Runtime } from "../src/core/runtime.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 it("direct help starts existing paid work and records HF receipt only after completion", () => {
 	const r = createRuntime(42, 208) as Runtime;

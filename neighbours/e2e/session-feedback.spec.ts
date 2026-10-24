@@ -15,7 +15,10 @@ import {
 	showTab,
 } from "./session-helpers";
 
-type Packet = { runtime: { seed: number; now: number } };
+type Packet = {
+	runtime: { seed: number; now: number };
+	castLocal?: Record<string, unknown>;
+};
 type SaveGate = {
 	hold: boolean;
 	held: (() => void)[];
@@ -152,7 +155,10 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
 		0,
 	);
-	expect(await packet(page, info, "successful-import")).toEqual(original);
+	expect(await packet(page, info, "successful-import")).toEqual({
+		...original,
+		castLocal: { ...original.castLocal, file: true },
+	});
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Start from a seed").fill("73");
@@ -197,7 +203,10 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
 		0,
 	);
-	expect(await packet(page, info, "after-delayed-replies")).toEqual(original);
+	expect(await packet(page, info, "after-delayed-replies")).toEqual({
+		...original,
+		castLocal: { ...original.castLocal, file: true },
+	});
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 });
@@ -267,9 +276,10 @@ test("exports survive rejected imports and exports from a replacement survive it
 		gate.holdState = false;
 		for (const deliver of gate.heldState.splice(0)) deliver();
 	});
-	expect(await packet(page, info, "after-restore-acknowledgement")).toEqual(
-		original,
-	);
+	expect(await packet(page, info, "after-restore-acknowledgement")).toEqual({
+		...original,
+		castLocal: { ...original.castLocal, file: true },
+	});
 	// A title-page file read can fail after a later timer round has been queued.
 	await page.evaluate(() => {
 		const read = File.prototype.text;

@@ -14,11 +14,11 @@ import {
 } from "../src/core/cast.ts";
 import { organiserFor } from "../src/core/evenings.ts";
 import { cartCast } from "../src/core/handcart.ts";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { buildOffers } from "../src/core/offers.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import { teachHallInspection } from "../src/experiments/inspection.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 const town = () => new Runtime(createRuntime(42, 8).export() as Save);
 function round(r: Runtime, requested: Record<string, string> = {}) {

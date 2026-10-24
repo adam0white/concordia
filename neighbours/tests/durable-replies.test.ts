@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { TownView, UiReply } from "../src/contracts";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import { orderedReplies } from "../src/ui/durable-replies";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 const T = 60_000;
 const later = () => new Promise<void>((resolve) => setTimeout(resolve, 5));

@@ -90,9 +90,10 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 	if (await close.isVisible()) await page.keyboard.press("Escape");
 	await closeSaves(page);
 	await step(page);
-	expect(await exportPacket(page, info, "restored-control")).toEqual(
-		continuation,
-	);
+	expect(await exportPacket(page, info, "restored-control")).toEqual({
+		...continuation,
+		castLocal: { ...continuation.castLocal, file: true },
+	});
 });
 
 type InterventionGate = {

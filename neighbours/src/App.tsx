@@ -37,7 +37,8 @@ type Entry =
 export default function App() {
 	const [booted, setBooted] = useState(false);
 	const [inTown, setInTown] = useState(false);
-	const session = useVisitorSession({ enabled: booted });
+	const [freshLocal, setFreshLocal] = useState(false);
+	const session = useVisitorSession({ enabled: booted, freshLocal });
 	const [sheet, setSheet] = useState<Sheet>("town");
 	const [selectedPlace, setSelectedPlace] = useState("");
 	const [info, setInfo] = useState(false);
@@ -190,7 +191,7 @@ export default function App() {
 					.filter((g) => g.status === "done")
 					.map((g) => ({ id: `goal-${g.id}`, text: g.title })) ?? []),
 				...(town.handcart?.returned
-					? [{ id: "cart-returned", text: "Jo has the handcart back" }]
+					? [{ id: "cart-returned", text: "Bilal has the handcart back" }]
 					: []),
 			]
 		: [];
@@ -429,6 +430,11 @@ export default function App() {
 				<Welcome
 					session={session}
 					onEnter={enter}
+					onLocal={() => {
+						setFreshLocal(true);
+						pendingEntry.current = null;
+						enter();
+					}}
 					onStart={() => begin({ kind: "seed", seed: session.seedInput })}
 					onRestore={(slot) => begin({ kind: "restore", slot })}
 					onImport={(file) => begin({ kind: "import", file })}

@@ -65,7 +65,7 @@ async function packet(
 		gunzipSync(await readFile(path)).toString("utf8"),
 	) as Packet;
 	expect(result.schema).toBe("neighbours/concordia@1");
-	expect(result.runtime.people).toHaveLength(208);
+	expect(result.runtime.people).toHaveLength(206);
 	expect(result.runtime.hf).toBe(FRAMEWORK_VERSION);
 	return result;
 }
@@ -179,17 +179,19 @@ test("390px town has no horizontal overflow and keyboard can open a person", asy
 	).toBe(true);
 	const ada = page
 		.getByRole("navigation", { name: "Familiar neighbours" })
-		.getByRole("button", { name: /Ada/ });
+		.getByRole("button", { name: /Nora/ });
 	await ada.focus();
 	await page.keyboard.press("Enter");
-	await expect(page.getByLabel("Ada's details", { exact: true })).toBeVisible();
+	await expect(
+		page.getByLabel("Nora's details", { exact: true }),
+	).toBeVisible();
 	await page
 		.getByRole("button", { name: /Close person details|Back to town/ })
 		.filter({ visible: true })
 		.first()
 		.focus();
 	await page.keyboard.press("Enter");
-	await expect(page.getByLabel("Ada's details", { exact: true })).toHaveCount(
+	await expect(page.getByLabel("Nora's details", { exact: true })).toHaveCount(
 		0,
 	);
 });
@@ -523,11 +525,9 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 	const neighbours = page.getByRole("navigation", {
 		name: "Familiar neighbours",
 	});
-	const ada = neighbours.getByRole("button", { name: /Ada/ });
-	await neighbours.getByRole("button", { name: /Noor/ }).click();
-	await expect(
-		page.getByLabel("Noor's details", { exact: true }),
-	).toBeVisible();
+	const ada = neighbours.getByRole("button", { name: /Nora/ });
+	await neighbours.getByRole("button", { name: /Ece/ }).click();
+	await expect(page.getByLabel("Ece's details", { exact: true })).toBeVisible();
 	await page.evaluate(() => {
 		const original = window.requestAnimationFrame;
 		window.requestAnimationFrame = (callback) => {
@@ -539,7 +539,7 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 			.querySelector<HTMLButtonElement>(".person-panel .close-panel")
 			?.click();
 	});
-	await expect(page.getByLabel("Noor's details", { exact: true })).toHaveCount(
+	await expect(page.getByLabel("Ece's details", { exact: true })).toHaveCount(
 		0,
 	);
 	await ada.focus();
@@ -551,7 +551,9 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 	});
 	await expect(ada).toBeFocused();
 	await page.keyboard.press("Enter");
-	await expect(page.getByLabel("Ada's details", { exact: true })).toBeVisible();
+	await expect(
+		page.getByLabel("Nora's details", { exact: true }),
+	).toBeVisible();
 });
 
 test("map selection keeps 44px targets and places clusters truthfully on narrow maps", async ({
@@ -576,7 +578,7 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 						0,
 					);
 					return (
-						represented === 8 &&
+						represented === 6 &&
 						boxes.every(
 							(box, i) =>
 								box.width >= 43.8 &&
@@ -633,11 +635,11 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 		}
 		const ada = page
 			.getByRole("navigation", { name: "Familiar neighbours" })
-			.getByRole("button", { name: /Ada/ });
+			.getByRole("button", { name: /Nora/ });
 		await ada.focus();
 		await page.keyboard.press("Enter");
 		await expect(
-			page.getByLabel("Ada's details", { exact: true }),
+			page.getByLabel("Nora's details", { exact: true }),
 		).toBeVisible();
 		await page
 			.getByRole("button", { name: /Close person details|Back to town/ })
@@ -685,16 +687,17 @@ test("retained outcomes stay near the clock and promise results survive into the
 	await pause(page);
 	await page
 		.getByRole("navigation", { name: "Familiar neighbours" })
-		.getByRole("button", { name: /Ada/ })
+		.getByRole("button", { name: /Nora/ })
 		.click();
-	const ada = page.getByLabel("Ada's details", { exact: true });
+	const ada = page.getByLabel("Nora's details", { exact: true });
 	await expect(ada.locator(".promise-result")).toContainText(
 		/Promise result · (Kept|Broken|Released)/,
 	);
 	await expect(ada.locator(".promise-result")).toContainText(
 		"Deadline · Day 1",
 	);
-	await expect(ada.locator(".promise-history")).not.toHaveAttribute("open");
+	// The canonical opening gives Nora one promise; no redundant history disclosure.
+	await expect(ada.locator(".promise-history")).toHaveCount(0);
 	await expect(ada.locator(".reason")).not.toHaveAttribute("open");
 	await expect(ada.locator(".reason summary")).toContainText("Why this choice");
 	await page

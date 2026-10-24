@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { PlayerView, PlayerWorkKind, TownView } from "../contracts";
+import { PRIVATE_DISCOVERIES } from "../core/private-discoveries.ts";
 import { actionWords, counterWords, voicedLine } from "../core/voicing";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
@@ -536,6 +537,15 @@ export function SpeakPanel({
 						))}
 					</ul>
 				</div>
+			)}
+			{!recordOnly && personId && here && PRIVATE_DISCOVERIES[personId] && (
+				<button
+					type="button"
+					disabled={busy}
+					onClick={() => session.askPrivate(personId)}
+				>
+					{PRIVATE_DISCOVERIES[personId]?.cue}
+				</button>
 			)}
 			{recordOnly || !personId ? null : !here ? (
 				<p>

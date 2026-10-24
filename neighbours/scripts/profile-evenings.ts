@@ -29,7 +29,7 @@ assert(
 	"Seeds must be unique",
 );
 const population = integer(
-	option("--population", "208"),
+	option("--population", "206"),
 	8,
 	300,
 	"--population",

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { expect, it } from "vitest";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 it("retains attended bulletin evidence once under its host event ID and explicit source", () => {
 	const r = new Runtime(createRuntime(42, 8).export() as Save);

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 import { botchedUnderProtest } from "../src/core/protest.ts";
 import type { Runtime } from "../src/core/runtime.ts";
+import { createRuntime, restoreRuntime } from "./historical-runtime.ts";
 
 const WORK = new Set(["grow", "supply", "work", "repair"]);
 const PLACES = ["garden", "quay", "hall", "market", "workshop"];

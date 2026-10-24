@@ -2,6 +2,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { holds } from "../src/core/cast.ts";
 import {
 	allEvenings,
 	canAdvertiseEvening,
@@ -28,7 +29,9 @@ export function captureWeekly(exhaustOriginal = false, seed = 42) {
 		if (
 			!candidate &&
 			events.some(
-				(e) => e.organiserId === "lea" && canOpenEveningSlot(host.s, e),
+				(e) =>
+					holds(host.actor(e.organiserId), "teacher") &&
+					canOpenEveningSlot(host.s, e),
 			)
 		)
 			candidate = packet();

@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core";
 import { HF_SOURCE } from "../src/core/hf-version.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 describe("physical town", () => {
 	it("has 208 brains and defers consequences", () => {

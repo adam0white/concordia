@@ -10,16 +10,16 @@ it("screens every taught known neighbour and keeps all matched outcomes without 
 	runtime.s.hall = 12;
 	runtime.s.hallSafe = true;
 	teachHallInspection(
-		runtime.actor("ada").person,
-		"lea",
+		runtime.actor("ravi").person,
+		"ada",
 		"synthetic-probe-fixture",
 	);
 	const checkpoint = runtime.export();
 	const before = structuredClone(checkpoint);
 	const report = probeAssistance(checkpoint);
 	expect(checkpoint).toEqual(before);
-	expect(report.screening.map((r) => r.id)).toHaveLength(7);
-	expect(report.candidates.map((r) => r.id)).toEqual(["ada"]);
+	expect(report.screening.map((r) => r.id)).toHaveLength(5);
+	expect(report.candidates.map((r) => r.id)).toEqual(["ravi"]);
 	const arms = report.candidates[0]?.arms;
 	expect(arms?.map((arm) => arm.arm)).toEqual([
 		"received-learned",
@@ -62,11 +62,11 @@ it("records asleep taught neighbours as unavailable rather than waking them", ()
 	runtime.s.hall = 12;
 	runtime.s.hallSafe = true;
 	teachHallInspection(
-		runtime.actor("ada").person,
-		"lea",
+		runtime.actor("ravi").person,
+		"ada",
 		"synthetic-sleep-fixture",
 	);
-	runtime.actor("ada").person.body.asleep = true;
+	runtime.actor("ravi").person.body.asleep = true;
 	const checkpoint = runtime.export();
 	const before = structuredClone(checkpoint);
 	const report = probeAssistance(checkpoint);

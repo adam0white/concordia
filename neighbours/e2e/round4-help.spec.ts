@@ -25,10 +25,7 @@ for (const width of [360, 1280])
 		}
 		await expect(time).toContainText("09:30");
 		const company = page.locator(".place-company");
-		await expect(company.getByRole("button")).toHaveText([
-			/^Talk to Ada ·/,
-			/^Talk to Noor ·/,
-		]);
+		await expect(company.getByRole("button")).toHaveText([/^Talk to Nora ·/]);
 		await expect(company).toBeInViewport({ ratio: 1 });
 		for (const button of await company.getByRole("button").all()) {
 			await expect(button).toBeInViewport({ ratio: 1 });
@@ -50,7 +47,7 @@ for (const width of [360, 1280])
 		await page.screenshot({
 			path: info.outputPath(`round4-hall-${width}.png`),
 		});
-		await page.getByRole("button", { name: /^Talk to Ada/ }).click();
+		await page.getByRole("button", { name: /^Talk to Nora/ }).click();
 		// Complete choice labels wrap vertically; the deadline remains reachable.
 		const deadline = page.getByText("Done by", { exact: true });
 		await deadline.scrollIntoViewIfNeeded();
@@ -62,10 +59,11 @@ for (const width of [360, 1280])
 		});
 		await help.scrollIntoViewIfNeeded();
 		await expect(help).toBeInViewport({ ratio: 1 });
-		await expect(page.locator(".inspector-context")).toContainText(
-			"Ada left a question on the hall noticeboard",
-		);
-		await page.screenshot({ path: info.outputPath(`round4-ada-${width}.png`) });
+		// Nora has her own bounded inspection method; do not invent the retired inspector question.
+		await expect(page.locator(".inspector-context")).toHaveCount(0);
+		await page.screenshot({
+			path: info.outputPath(`round4-nora-${width}.png`),
+		});
 		await help.click();
 		await expect(page.locator(".game-state")).toContainText(
 			"Your hour starts automatically",
@@ -82,7 +80,7 @@ for (const width of [360, 1280])
 			"You covered that hour for me. I received the two coins.",
 		);
 		await expect(page.locator(".pledge-receipt")).toContainText(
-			"Ada received the 2-coin wage",
+			"Nora received the 2-coin wage",
 		);
 		await expect(page.locator(".pledge-receipt")).toBeInViewport({ ratio: 1 });
 		await page.screenshot({

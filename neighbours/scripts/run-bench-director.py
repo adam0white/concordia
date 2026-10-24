@@ -93,6 +93,9 @@ def main():
     case['modelCalls'] = len(case['responseTape'])
     case['modelIds'] = case['responseTape'][0].get('modelIds', []) if case['responseTape'] else []
     report['cases'].append(case)
+    if 'failure' in case:
+      break  # No further provider calls after any failed attempt, including unclassified limits.
+  report['unattemptedSeeds'] = list(SEEDS[len(report['cases']):])
   report['modelCalls'] = len(model.tape)
   if all('result' in case for case in report['cases']):
     report.update(replay_report(report, ROOT))

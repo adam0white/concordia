@@ -1,9 +1,9 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { createRuntime } from "../src/core/index";
 import { SpeakPanel } from "../src/ui/SpeakPanel";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
+import { createRuntime } from "./historical-runtime.ts";
 
 it("keeps request chips before secondary covered work and preserves Ada's inspector question", () => {
 	const r = createRuntime(42, 208);

@@ -1,6 +1,8 @@
 export function stateHash(value: unknown): string {
 	let h = 2166136261;
-	for (const c of JSON.stringify(value)) {
+	for (const c of JSON.stringify(value, (key, value) =>
+		key === "chapter" || key === "castLocal" ? undefined : value,
+	)) {
 		h = Math.imul(h ^ c.charCodeAt(0), 16777619);
 	}
 	return (h >>> 0).toString(16).padStart(8, "0");

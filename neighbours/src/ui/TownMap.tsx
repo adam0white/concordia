@@ -943,7 +943,7 @@ export default function TownMap({
 					>
 						<title>
 							{town.handcart.returned
-								? "Handcart with Jo"
+								? "Handcart with Bilal"
 								: "Handcart at the workshop"}
 						</title>
 						<CartGlyph

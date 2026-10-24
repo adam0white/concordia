@@ -2,6 +2,7 @@ import { restore } from "@adam0white/human-framework";
 import type { TownRuntime } from "../contracts";
 import { reviewDue } from "./activity-reviews.ts";
 import { validateAssistance } from "./assistance.ts";
+import { validateCastChapter } from "./cast-continuity.ts";
 import { validateEvenings } from "./evenings.ts";
 import { validateHandcart } from "./handcart.ts";
 import { HF_VERSION, LEGACY_HF_VERSIONS } from "./hf-version.ts";
@@ -13,6 +14,13 @@ import { validateTimber } from "./timber.ts";
 import { validateTownChronicle } from "./town-chronicle.ts";
 import { validateEvent, validateResidentEvidence } from "./validation.ts";
 export function restoreRuntime(input: unknown): TownRuntime {
+	return restoreWithRoster(input, known);
+}
+/** Internal historical test adapter; public loading always uses the canonical roster. */
+export function restoreWithRoster(
+	input: unknown,
+	roster: string[][],
+): TownRuntime {
 	if (!input || typeof input !== "object") throw Error("Invalid town save");
 	const s = structuredClone(input) as Save;
 	const keys = [
@@ -46,7 +54,8 @@ export function restoreRuntime(input: unknown): TownRuntime {
 					key !== "assistance" &&
 					key !== "timber" &&
 					key !== "together" &&
-					key !== "player",
+					key !== "player" &&
+					key !== "chapter",
 			)
 			.sort()
 			.join() !== keys.sort().join()
@@ -56,7 +65,7 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		s.schema !== SCHEMA ||
 		!LEGACY_HF_VERSIONS.includes(s.hf) ||
 		!Array.isArray(s.people) ||
-		s.people.length < 8 ||
+		s.people.length < 6 ||
 		s.people.length > 300 ||
 		!Array.isArray(s.places) ||
 		s.places.length !== 8 ||
@@ -97,17 +106,18 @@ export function restoreRuntime(input: unknown): TownRuntime {
 			s.firstMealAt > s.now)
 	)
 		throw Error("Invalid first meal marker");
+	if (s.chapter) validateCastChapter(s.chapter, s.seed, s.people.length);
 	const ids = new Set<string>();
 	for (const [i, r] of s.people.entries()) {
 		r.person = restore(r.person);
-		const expected = known[i]?.[0] ?? `resident-${i - 7}`;
+		const expected = roster[i]?.[0] ?? `resident-${i - roster.length + 1}`;
 		if (
 			r.person.id !== expected ||
 			ids.has(r.person.id) ||
 			r.person.now !== s.now ||
 			!Number.isSafeInteger(r.wealth) ||
 			r.wealth < 0 ||
-			r.known !== i < 8 ||
+			r.known !== i < roster.length ||
 			typeof r.role !== "string" ||
 			typeof r.description !== "string" ||
 			!s.places.some((p) => p.id === r.place) ||
@@ -384,7 +394,11 @@ export function restoreRuntime(input: unknown): TownRuntime {
 	const total = s.places.reduce((n, p) => n + p.stock, 0);
 	if (total + s.consumed + reservedFood !== s.initialFood + s.produced)
 		throw Error("Food conservation violation");
-	const initialCash = s.people.reduce((sum, _, i) => sum + 3 + (i % 6), 0);
+	const initialCash = s.people.reduce(
+		(sum, _, i) =>
+			sum + 3 + ((i < roster.length ? i : i + 8 - roster.length) % 6),
+		0,
+	);
 	const cash = s.people.reduce((sum, r) => sum + r.wealth, 0);
 	const paid = s.people.reduce(
 		(sum, r) => sum + ((r.paidWork?.totalMinutes ?? 0) / 60) * 2,

@@ -1,10 +1,10 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
-import { createRuntime } from "../src/core/index";
 import type { Runtime } from "../src/core/runtime";
 import { SpeakPanel } from "../src/ui/SpeakPanel";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
+import { createRuntime } from "./historical-runtime.ts";
 
 it("acknowledges a completed hour only after HF has received the kept promise", () => {
 	const r = createRuntime(42, 208) as Runtime;

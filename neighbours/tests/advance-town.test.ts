@@ -67,10 +67,10 @@ function story(view: TownView, id: string, actorId?: string) {
 describe("actual town advance", () => {
 	it("does not stop for an old result, another person's result or a pending deadline passing", async () => {
 		const e = engine((view, round) => {
-			const musa = view.people.find((p) => p.id === "musa"),
+			const elin = view.people.find((p) => p.id === "elin"),
 				ada = view.people.find((p) => p.id === "ada");
-			if (!musa || !ada) throw Error("Missing resident");
-			musa.commitments = [
+			if (!elin || !ada) throw Error("Missing resident");
+			elin.commitments = [
 				{ label: "Old promise", at: 480, status: "kept" },
 				{ label: "Pending promise", at: 490, status: "pending" },
 			];
@@ -87,7 +87,7 @@ describe("actual town advance", () => {
 			await advanceTown(
 				e.py,
 				e.port,
-				request({ until: "person-story", actorId: "musa", maxRounds: 16 }),
+				request({ until: "person-story", actorId: "elin", maxRounds: 16 }),
 			),
 		).toEqual({ requestId: 1, reason: "horizon", rounds: 16 });
 	});
@@ -101,16 +101,16 @@ describe("actual town advance", () => {
 				await advanceTown(
 					e.py,
 					e.port,
-					request({ until, actorId: "musa", maxRounds: 16 }),
+					request({ until, actorId: "elin", maxRounds: 16 }),
 				),
 			).toEqual({ requestId: 1, reason: "player", rounds: 3 });
 		}
 	});
 	it("stops at the actual invitation missed status, not its earlier accepted status", async () => {
 		const e = engine((view, round) => {
-			const musa = view.people.find((p) => p.id === "musa");
-			if (!musa) throw Error("Missing Musa");
-			musa.invitations = [
+			const elin = view.people.find((p) => p.id === "elin");
+			if (!elin) throw Error("Missing Derya");
+			elin.invitations = [
 				{
 					eventId: "class-1",
 					title: "Class",
@@ -123,15 +123,15 @@ describe("actual town advance", () => {
 			await advanceTown(
 				e.py,
 				e.port,
-				request({ until: "person-story", actorId: "musa" }),
+				request({ until: "person-story", actorId: "elin" }),
 			),
 		).toEqual({ requestId: 1, reason: "person-story", rounds: 4 });
 	});
 	it("stops for the followed person's actual promise result before an unrelated story", async () => {
 		const e = engine((view, round) => {
-			const musa = view.people.find((p) => p.id === "musa");
-			if (!musa) throw Error("Missing Musa");
-			musa.commitments = [
+			const elin = view.people.find((p) => p.id === "elin");
+			if (!elin) throw Error("Missing Derya");
+			elin.commitments = [
 				{
 					label: "Harvest food for Sam",
 					at: 1200,
@@ -144,7 +144,7 @@ describe("actual town advance", () => {
 			await advanceTown(
 				e.py,
 				e.port,
-				request({ until: "person-story", actorId: "musa" }),
+				request({ until: "person-story", actorId: "elin" }),
 			),
 		).toEqual({ requestId: 1, reason: "person-story", rounds: 3 });
 	});

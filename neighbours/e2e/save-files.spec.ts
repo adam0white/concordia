@@ -11,6 +11,7 @@ import {
 
 type Packet = {
 	runtime: { now: number; people: unknown[] };
+	castLocal?: Record<string, unknown>;
 };
 async function exportFile(page: Page, info: TestInfo, name: string) {
 	await openSaves(page);
@@ -65,7 +66,7 @@ test("actual browser gzip export preserves the complete town across import and d
 	page.on("pageerror", (error) => errors.push(error.message));
 	await startPaused(page);
 	const original = await exportFile(page, info, "complete-original");
-	expect(original.packet.runtime.people).toHaveLength(208);
+	expect(original.packet.runtime.people).toHaveLength(206);
 	expect(original.compressed.byteLength).toBeLessThan(
 		original.json.byteLength / 2,
 	);
@@ -84,7 +85,11 @@ test("actual browser gzip export preserves the complete town across import and d
 		0,
 	);
 	const restored = await exportFile(page, info, "restored");
-	expect(restored.json.equals(original.json)).toBe(true);
+	const imported = {
+		...original.packet,
+		castLocal: { ...original.packet.castLocal, file: true },
+	};
+	expect(restored.packet).toEqual(imported);
 	// The uncompressed packet remains the actual device persistence format.
 	await expect
 		.poll(() =>
@@ -112,9 +117,7 @@ test("actual browser gzip export preserves the complete town across import and d
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
-	expect(
-		(await exportFile(page, info, "reload")).json.equals(original.json),
-	).toBe(true);
+	expect((await exportFile(page, info, "reload")).packet).toEqual(imported);
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
@@ -123,11 +126,9 @@ test("actual browser gzip export preserves the complete town across import and d
 		buffer: original.compressed.subarray(0, -8),
 	});
 	await expect(page.getByRole("alert")).toContainText("invalid or incomplete");
-	expect(
-		(await exportFile(page, info, "invalid-preserved")).json.equals(
-			original.json,
-		),
-	).toBe(true);
+	expect((await exportFile(page, info, "invalid-preserved")).packet).toEqual(
+		imported,
+	);
 	expect(errors).toEqual([]);
 });
 
@@ -228,8 +229,9 @@ test("compression finishing after a newer export or accepted import cannot publi
 	await release();
 	await expect(link).toHaveCount(0);
 	expect(
-		(await exportFile(page, info, "after-old-compression")).json.equals(
-			original.json,
-		),
-	).toBe(true);
+		(await exportFile(page, info, "after-old-compression")).packet,
+	).toEqual({
+		...original.packet,
+		castLocal: { ...original.packet.castLocal, file: true },
+	});
 });

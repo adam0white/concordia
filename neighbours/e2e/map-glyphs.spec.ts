@@ -72,7 +72,7 @@ test("a departing traveller cannot block a phone place-count button", async ({
 	await page.setViewportSize({ width: 390, height: 844 });
 	await enter(page);
 	await page
-		.getByRole("button", { name: "Ada: Free to choose", exact: true })
+		.getByRole("button", { name: "Nora: Free to choose", exact: true })
 		.click();
 	await step(page);
 	for (let i = 0; i < 23; i++) await step(page);

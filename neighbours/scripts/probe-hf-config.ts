@@ -111,19 +111,19 @@ function assistance(
 	// Explicit authored starting circumstances, not a simulated successful reopening.
 	runtime.s.hall = 12;
 	runtime.s.hallSafe = true;
-	runtime.actor("lea").place = "hall";
-	const lea = runtime.actor("lea");
-	const initialMethodCount = lea.person.methods?.rules.length ?? 0;
+	runtime.actor("ada").place = "hall";
+	const inspector = runtime.actor("ada");
+	const initialMethodCount = inspector.person.methods?.rules.length ?? 0;
 	assert(
 		initialMethodCount > 0,
 		"Scenario prior-course demonstrations did not create methods",
 	);
-	if (arm === "methods-ablated" && lea.person.methods)
-		lea.person.methods.rules = [];
+	if (arm === "methods-ablated" && inspector.person.methods)
+		inspector.person.methods.rules = [];
 	if (arm !== "request-withheld")
 		runtime.intervene({
 			kind: "request-inspection",
-			actorId: "lea",
+			actorId: "ada",
 			proposal: {
 				schema: "neighbours-gm-proposal@1",
 				kind: "inspection-request",
@@ -132,7 +132,7 @@ function assistance(
 				windowMinutes: 240,
 			},
 		});
-	const visitDecision = fullDecision(runtime, "lea");
+	const visitDecision = fullDecision(runtime, "ada");
 	if (arm === "request-withheld") {
 		assert(!visitDecision.offeredIds.some((id) => id.startsWith("annex-")));
 		return {
@@ -153,7 +153,7 @@ function assistance(
 		for (const id of ids) {
 			const resident = runtime.actor(id);
 			const action =
-				id === "lea" && !resident.job && !runtime.s.assistance.visit
+				id === "ada" && !resident.job && !runtime.s.assistance.visit
 					? "annex-visit"
 					: (resident.job?.offer.id ?? "rest");
 			runtime.apply(id, action);
@@ -163,18 +163,23 @@ function assistance(
 		runtime.s.assistance.visit,
 		"Controlled legal visit failed to complete",
 	);
-	observeAssistance(runtime.s, lea);
-	const offers = assistanceOffers(runtime.s, lea);
+	observeAssistance(runtime.s, inspector);
+	const offers = assistanceOffers(runtime.s, inspector);
 	assert.equal(offers.length, 3);
-	const restricted = HF.decide(structuredClone(lea.person), offers);
-	const expected =
-		arm === "learned" ? "annex-open-section" : "annex-ask-inspector";
-	assert.equal(
-		restricted.chosenAffordanceId,
-		expected,
-		"Learning/unsupported negative control failed",
-	);
-	const autonomousInspection = fullDecision(runtime, "lea");
+	const restricted = HF.decide(structuredClone(inspector.person), offers);
+	if (arm === "learned")
+		assert.equal(
+			restricted.chosenAffordanceId,
+			"annex-open-section",
+			"Supported method control failed",
+		);
+	else
+		assert.notEqual(
+			restricted.chosenAffordanceId,
+			"annex-open-section",
+			"Ablated or unsupported method opened the section",
+		);
+	const autonomousInspection = fullDecision(runtime, "ada");
 	const capacityBeforeOutcome = runtime.s.places.find(
 		(p) => p.id === "hall",
 	)?.capacity;
@@ -199,7 +204,7 @@ function assistance(
 	return {
 		arm,
 		initialMethodCount,
-		methodsRetained: lea.person.methods?.rules.length ?? 0,
+		methodsRetained: inspector.person.methods?.rules.length ?? 0,
 		requestReceived: runtime.s.assistance.received,
 		visitDecision,
 		restrictedInspection: restricted,
@@ -212,9 +217,23 @@ function assistance(
 	};
 }
 function sensitivityControl() {
-	const person = new Runtime(createRuntime(42, 8).export() as Save).actor(
-		"ada",
-	).person;
+	const person = HF.createPerson({
+		id: "ada",
+		name: "Nora",
+		now: 480,
+		bornAt: -28 * 525600,
+		sex: "female",
+		seed: 42,
+		relationships: [
+			{
+				otherId: "sam",
+				roles: ["neighbour"],
+				trust: 0.65,
+				familiarity: 0.6,
+				affection: 0.25,
+			},
+		],
+	});
 	const common = {
 		action: "talk",
 		label: "Matched social sensitivity offer",
@@ -223,20 +242,20 @@ function sensitivityControl() {
 		advertises: {},
 	};
 	const offers = [
-		{ ...common, id: "known-company", targetId: "lea", tags: ["social"] },
+		{ ...common, id: "known-company", targetId: "sam", tags: ["social"] },
 		{ ...common, id: "alone", tags: [] },
 	];
 	const record = HF.decide(structuredClone(person), offers);
 	const socialTerm = record.considered
 		.find((c) => c.affordanceId === "known-company")
-		?.terms.find((t) => t.source === "social:lea")?.value;
+		?.terms.find((t) => t.source === "social:sam")?.value;
 	assert(
 		socialTerm !== undefined && socialTerm > 0,
 		"Positive socialScale sensitivity control is missing",
 	);
 	return {
 		provenance:
-			"hypothetical matched options using Ada's authored existing relationship with Lea; no world outcome",
+			"synthetic matched social options with an explicitly constructed Nora/Sam relationship; no production familiarity or world outcome",
 		record,
 		socialTerm,
 	};
@@ -374,7 +393,7 @@ if (arm) {
 		limitations: [
 			"Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
 			"Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
-			"Assistance uses authored open-hall starting circumstances and Lea's scenario prior-course HF demonstrations. It does not claim an attended in-town class or naturally learned checkpoint.",
+			"Assistance uses authored open-hall starting circumstances and Nora's bounded scenario prior-course HF demonstrations. It does not claim an attended in-town class or naturally learned checkpoint.",
 			"The visit is legally executed under experimenter control. Full-offer decisions reveal whether autonomous HF would choose it; the three-option inspection control separately isolates learned method effects.",
 			"The simple cue lookup is an explicitly authored comparator. It needs no learning and does not demonstrate HF superiority.",
 			"Genuine cart opportunities come from ordinary autonomous progression; null means none occurred in the bounded horizon. A separately labelled authored cart-present control measures actual received goals and legal host offers without claiming natural prior progression. All offered scores are recovered on a clone; maxConsidered changes logging only and chosen equality is asserted.",

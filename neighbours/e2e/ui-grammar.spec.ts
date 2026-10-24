@@ -89,7 +89,7 @@ for (const width of [360, 1280]) {
 		await capture(page, "loading");
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await expect(page.locator(".next-step")).toContainText("Find your feet");
-		await expect(page.locator(".neighbour-strip button")).toHaveCount(9);
+		await expect(page.locator(".neighbour-strip button")).toHaveCount(7);
 		for (const chip of await page.locator(".neighbour-strip button").all())
 			await expect(chip).toBeInViewport();
 		await expect(

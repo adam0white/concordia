@@ -8,11 +8,11 @@ const numeric = (value: number) =>
 	Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
 const names: Record<string, string> = {
 	hallRepairs: "Hall repairs completed",
-	benchNoticesReceived: "Bench proposal received by Ravi",
+	benchNoticesReceived: "Bench proposal received by Rafi",
 	benchReserved: "Agreed main-bench booking",
-	benchRequests: "Bench requests received by Ada",
+	benchRequests: "Bench requests received by Nora",
 	cartSections: "Cart sections restored",
-	cartReturned: "Cart returned to Jo",
+	cartReturned: "Cart returned to Bilal",
 	hallCapacity: "Hall places available",
 	inspectionRequests: "Annex requests sent",
 	annexOpened: "Annex opened",
@@ -34,8 +34,9 @@ const names: Record<string, string> = {
 	totalKnownWealth: "Familiar neighbours’ total money",
 };
 const interventions: Record<Intervention["kind"], string> = {
+	"player-private": "Ask about a private detail",
 	"lend-tools": "Add 3 shared tools",
-	"propose-bench-window": "Tell Ravi about a bench window",
+	"propose-bench-window": "Tell Rafi about a bench window",
 	"request-inspection": "Request an annex inspection",
 	"restore-bus": "Restore bus service",
 	"share-news": "Broadcast hall news",

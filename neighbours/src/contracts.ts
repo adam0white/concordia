@@ -363,7 +363,8 @@ export interface Intervention {
 		| "player-move"
 		| "player-speak"
 		| "player-work"
-		| "player-help";
+		| "player-help"
+		| "player-private";
 	eventId?: string;
 	actorId?: string;
 	/** player-move destination. */
@@ -448,10 +449,23 @@ export type UiCommand =
 	| AdvanceRequest
 	| { type: "cancel-advance"; requestId: number }
 	| { type: "step"; rounds?: number }
-	| { type: "new"; seed: number; population?: number }
+	| {
+			type: "new";
+			seed: number;
+			population?: number;
+			initial?: unknown;
+			newRequestId?: number;
+	  }
 	| { type: "intervene"; intervention: Intervention }
+	| { type: "cast-capture"; requestId: number; actorId: string }
+	| { type: "cast-cancel"; requestId: number }
 	| { type: "save"; requestId?: number }
-	| { type: "restore"; save: unknown }
+	| {
+			type: "restore";
+			save: unknown;
+			local?: boolean;
+			restoreRequestId?: number;
+	  }
 	| { type: "inspect"; actorId: string }
 	| { type: "predict-speech"; requestId: number; actorId: string }
 	| { type: "cancel-comparison" }
@@ -459,6 +473,8 @@ export type UiCommand =
 export type UiReply =
 	| {
 			type: "ready" | "state";
+			restoreRequestId?: number;
+			newRequestId?: number;
 			view: TownView;
 			elapsedMs?: number;
 			advance?: AdvanceResult;
@@ -466,6 +482,7 @@ export type UiReply =
 			save?: unknown;
 	  }
 	| { type: "progress"; message: string; advance?: AdvanceProgress }
+	| { type: "cast-snapshot"; requestId: number; save: unknown }
 	| { type: "save"; save: unknown; requestId?: number }
 	| { type: "inspection"; actorId: string; data: unknown }
 	| {
@@ -476,4 +493,9 @@ export type UiReply =
 			error?: string;
 	  }
 	| { type: "comparison"; report: TownComparison }
-	| { type: "error"; message: string };
+	| {
+			type: "error";
+			message: string;
+			restoreRequestId?: number;
+			newRequestId?: number;
+	  };

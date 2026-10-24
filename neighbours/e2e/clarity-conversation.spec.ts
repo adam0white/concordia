@@ -1,4 +1,10 @@
-import { expect, type Locator, type Page, step, test } from "./clock-fixture";
+import {
+	expect,
+	type Locator,
+	type Page,
+	reachSelectedConversation,
+	test,
+} from "./clock-fixture";
 
 async function openConversation(page: Page) {
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
@@ -7,9 +13,7 @@ async function openConversation(page: Page) {
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
-	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
-	for (let i = 0; i < 4; i++) await step(page);
-	await page.getByRole("button", { name: "Talk to Ravi", exact: true }).click();
+	await reachSelectedConversation(page, "Rafi");
 	await expect(page.locator("[data-affordance-id]").first()).toBeVisible();
 }
 async function visibleTarget(control: Locator) {
@@ -37,7 +41,7 @@ for (const width of [360, 1280])
 			page.getByRole("button", { name: "Offer an hour", exact: true }),
 		).toHaveAttribute("aria-pressed", "true");
 		const submit = page.getByRole("button", {
-			name: "Put it to Ravi",
+			name: "Put it to Rafi",
 			exact: true,
 		});
 		await expect(submit).toBeDisabled();
@@ -113,7 +117,7 @@ for (const mode of ["promise", "ask", "urge"] as const)
 		if (mode === "promise")
 			await page.locator('[data-work-id="carry-meals"]').click();
 		await page
-			.getByRole("button", { name: "Put it to Ravi", exact: true })
+			.getByRole("button", { name: "Put it to Rafi", exact: true })
 			.click();
 		await expect(page.locator(".latest-answer")).toBeVisible();
 		const commands = await page.evaluate(

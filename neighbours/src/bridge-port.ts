@@ -1,9 +1,13 @@
+import { type Person, snapshot } from "@adam0white/human-framework";
 import type { Intervention, TownRuntime } from "./contracts.ts";
 import { createRuntime, restoreRuntime } from "./core/index.ts";
+import type { Save } from "./core/state.ts";
 /** Shared transport boundary for CPython/Node and browser Pyodide. */
 export class RuntimePort {
 	runtime: TownRuntime;
-	constructor(seed = 42, population = 208) {
+	readonly wanted = new Set<string>();
+	readonly boundaries = new Map<string, Person>();
+	constructor(seed = 42, population = 206) {
 		this.runtime = createRuntime(seed, population);
 	}
 	reset(seed: number, population: number) {
@@ -12,8 +16,21 @@ export class RuntimePort {
 	dispatch(request: Record<string, unknown>): unknown {
 		const actorId = request.actorId as string;
 		switch (request.op) {
-			case "prepare":
-				return this.runtime.prepareRound();
+			case "prepare": {
+				const ready = this.runtime.prepareRound();
+				if (this.wanted.size) {
+					const save = this.runtime.export() as Save;
+					for (const r of save.people)
+						if (
+							this.wanted.has(r.person.id) &&
+							r.person.nextDecision > 0 &&
+							!r.job &&
+							!r.person.activity
+						)
+							this.boundaries.set(r.person.id, snapshot(r.person));
+				}
+				return ready;
+			}
 			case "observe":
 				return this.runtime.getObservation(actorId);
 			case "offers":

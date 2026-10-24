@@ -44,7 +44,7 @@ it("shows negative full-town outcomes and separates receipt from permission", ()
 			index: 0,
 		}),
 	);
-	expect(html).toContain("Ravi received notice");
+	expect(html).toContain("Rafi received notice");
 	expect(html).toContain("Agreements received");
 	expect(html).toContain("Main-bench work completed");
 	expect(html).toContain("120 minutes");

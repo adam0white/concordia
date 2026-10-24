@@ -1,4 +1,4 @@
-import { expect, step, test } from "./clock-fixture";
+import { expect, reachSelectedConversation, test } from "./clock-fixture";
 
 for (const width of [360, 1280]) {
 	test(`complete conversation choices fit the sheet at ${width}`, async ({
@@ -13,15 +13,8 @@ for (const width of [360, 1280]) {
 		await page.goto("/");
 		await page.getByRole("button", { name: /^Enter Alder Quay/ }).click();
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
-		await page
-			.getByRole("button", {
-				name: "Inspect Flooded hall · Needs help",
-				exact: true,
-			})
-			.click();
-		await page.getByRole("button", { name: /^Walk to Flooded hall/ }).click();
-		for (let i = 0; i < 14; i++) await step(page);
-		await page.getByRole("button", { name: /^Talk to Ada/ }).click();
+		await page.locator('.neighbour-strip [data-person-id="ada"]').click();
+		await reachSelectedConversation(page, "Nora");
 		const choices = page.locator(".conversation-chips");
 		await expect(page.locator("[data-affordance-id]").first()).toBeVisible();
 		await expect(page.locator('[data-work-id="cover-shift"]')).toHaveText(
@@ -72,7 +65,7 @@ for (const width of [360, 1280]) {
 			await page.screenshot({ path: info.outputPath(`${label}-${width}.png`) });
 		}
 		const submit = page.getByRole("button", {
-			name: "Put it to Ada",
+			name: "Put it to Nora",
 			exact: true,
 		});
 		await expect(submit).toBeEnabled();

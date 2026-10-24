@@ -2,8 +2,8 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import type { TownView } from "../src/contracts";
-import { createRuntime } from "../src/core/index";
 import HallChoices from "../src/ui/HallChoices";
+import { createRuntime } from "./historical-runtime.ts";
 
 function town(): TownView {
 	const view = createRuntime(42, 8).view();

@@ -20,7 +20,7 @@ function integer(name: string, fallback: number, min: number, max: number) {
 }
 const days = integer("--days", 30, 1, 365);
 const seed = integer("--seed", 42, 0, 0xffff_ffff);
-const population = integer("--population", 208, 8, 300);
+const population = integer("--population", 206, 8, 300);
 const maxDeaths = integer("--max-deaths", population, 0, population);
 const runtime = createRuntime(seed, population);
 const started = performance.now();

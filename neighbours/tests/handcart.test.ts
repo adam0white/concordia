@@ -20,8 +20,8 @@ import {
 	validateHandcart,
 } from "../src/core/handcart.ts";
 import type { HandcartSave } from "../src/core/handcart-state.ts";
-import { createRuntime } from "../src/core/index.ts";
 import type { Resident } from "../src/core/state.ts";
+import { createRuntime } from "./historical-runtime.ts";
 
 function host() {
 	const s = createRuntime(42, 8).export() as HandcartSave;

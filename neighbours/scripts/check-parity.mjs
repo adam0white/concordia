@@ -24,7 +24,7 @@ try {
 			"--seed",
 			"77",
 			"--population",
-			"208",
+			"206",
 			"--output",
 			packetPath,
 		],
@@ -52,7 +52,7 @@ try {
 		"/town/absl.whl",
 		await readFile(resolve(app, "public/runtime/absl.whl")),
 	);
-	const port = new RuntimePort(77, 208);
+	const port = new RuntimePort(77, 206);
 	py.registerJsModule("town_bridge", { call: (text) => port.call(text) });
 	await py.runPythonAsync(
 		"import sys, zipfile, json\nsys.path.insert(0, '/town')\nzipfile.ZipFile('/town/absl.whl').extractall('/town')\nfrom concordia.contrib.neighbours.engine import TownEngine\nfrom town_bridge import call\ne = TownEngine(call)\ne.advance(6)\nNone",
@@ -417,7 +417,7 @@ try {
 			`Contextual seven-day checks exercised: ${[...contextualChecks].join(", ") || "none eligible in supplied checkpoints"}`,
 		);
 	console.log(
-		"PASS: 208 HF people match across native/WASM Python; restore, interrupted-engine recovery and isolated comparisons pass.",
+		"PASS: 206 HF people match across native/WASM Python; restore, interrupted-engine recovery and isolated comparisons pass.",
 	);
 } finally {
 	await rm(temporary, { recursive: true, force: true });

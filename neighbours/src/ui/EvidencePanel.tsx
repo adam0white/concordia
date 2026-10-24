@@ -25,7 +25,7 @@ const reports: {
 	},
 	{
 		kind: "cart",
-		title: "Ravi’s cart choice probe",
+		title: "Rafi’s cart choice probe",
 		url: "/experiments/cart-choice-probe.json",
 		schema: "neighbours/cart-choice-probe@1",
 	},
@@ -120,7 +120,7 @@ export function summarizeEvidence(
 		const opportunity = record(data.opportunity);
 		rows.push(
 			["Seed", scalar(data.seed)],
-			["Ravi decisions examined", scalar(data.raviDecisions)],
+			["Rafi decisions examined", scalar(data.raviDecisions)],
 			["Actual choice", scalar(record(opportunity.baseline).chosen)],
 			[
 				"Choice with cart goal removed",

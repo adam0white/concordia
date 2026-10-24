@@ -43,7 +43,7 @@ for (const width of [360, 1280])
 		await page.locator('.neighbour-strip [data-person-id="ada"]').click();
 		const panel = page.locator(".person-panel");
 		await expect(
-			panel.getByRole("heading", { name: "Ada", exact: true }),
+			panel.getByRole("heading", { name: "Nora", exact: true }),
 		).toBeVisible();
 		const response = page.getByRole("button", {
 			name: /Walk to Workshop to talk/,

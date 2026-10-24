@@ -50,16 +50,19 @@ export default function HandcartCard({
 }) {
 	const [slot, setSlot] = useState<BenchSlot>("soon");
 	const cart = town.handcart;
+	const owner = town.people.find((p) => p.id === "jo")?.name ?? "Bilal";
+	const learner = town.people.find((p) => p.id === "ravi")?.name ?? "Rafi";
+	const designer = town.people.find((p) => p.id === "ada")?.name ?? "Nora";
 	if (!cart) return null;
 	const stage = cart.returned
-		? "Back with Jo"
+		? `Back with ${owner}`
 		: cart.progress >= cart.total
 			? "Ready to return"
 			: cart.progress > 0
 				? "Repair in progress"
 				: "Waiting for repair";
 	return (
-		<section className="handcart-card" aria-label="Jo's handcart">
+		<section className="handcart-card" aria-label={`${owner}'s handcart`}>
 			<div className="handcart-overview">
 				<svg
 					viewBox="0 0 120 75"
@@ -70,7 +73,7 @@ export default function HandcartCard({
 				</svg>
 				<div>
 					<span className="eyebrow">A neighbour’s repair</span>
-					<h3>Jo’s handcart</h3>
+					<h3>{owner}’s handcart</h3>
 					<p className="tiny">
 						{stage} · {cart.progress}/{cart.total} work periods
 					</p>
@@ -91,7 +94,7 @@ export default function HandcartCard({
 						</select>
 					</label>
 					<p className="tiny muted">
-						Ada decides whether to lend it. One section needs an hour.
+						{designer} decides whether to lend it. One section needs an hour.
 					</p>
 					<div className="button-row">
 						<button
@@ -99,7 +102,7 @@ export default function HandcartCard({
 							disabled={disabled}
 							onClick={() => onPropose(slot)}
 						>
-							Tell Ravi · 1 credit
+							Tell {learner} · 1 credit
 						</button>
 						{onCompare && (
 							<button
@@ -118,8 +121,8 @@ export default function HandcartCard({
 					{town.now >= cart.opportunity.until
 						? "Proposed window expired"
 						: cart.opportunity.received
-							? "Ravi heard the proposed window"
-							: "Ravi did not receive the proposed window"}{" "}
+							? `${learner} heard the proposed window`
+							: `${learner} did not receive the proposed window`}{" "}
 					· {datedClock(cart.opportunity.from)}–{clock(cart.opportunity.until)}
 					{cart.opportunity.origin.kind === "recorded-gm"
 						? " · Recorded GM proposal"
@@ -132,7 +135,7 @@ export default function HandcartCard({
 					Repairs finished {datedClock(cart.completedAt)}
 					{cart.returnedAt !== undefined
 						? ` · Returned ${datedClock(cart.returnedAt)}`
-						: " · Waiting for handover to Jo"}
+						: ` · Waiting for handover to ${owner}`}
 				</p>
 			)}
 			<div className="handcart-people">

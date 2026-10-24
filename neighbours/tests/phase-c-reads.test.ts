@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { PlayerView, TownEvent } from "../src/contracts.ts";
 import { moodRead } from "../src/core/impression.ts";
-import { createRuntime } from "../src/core/index.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import { collapseRepeats } from "../src/core/stories.ts";
 import { jobLine } from "../src/core/voicing.ts";
 import { FRESH_REPLY, freshReply } from "../src/ui/SpeakPanel.tsx";
+import { createRuntime } from "./historical-runtime.ts";
 
 const T = 60_000;
 

@@ -7,6 +7,7 @@ No resident receives information and no world mutation happens in this module.
 import hashlib
 import json
 import os
+import re
 import selectors
 import subprocess
 import tempfile
@@ -55,24 +56,40 @@ def parse_proposal(raw):
   return validate_proposal(json.loads(raw, object_pairs_hook=unique))
 
 
+class ProviderUsageLimit(BaseException):
+  """Stop the complete evidence wave; ordinary failed-case handlers must not continue."""
+
+
+def refuse_usage_limit(raw):
+  if re.search(r"usage[_ -]limit|rate_limit_error|rate limit exceeded|(?:you've|you have) hit (?:your )?(?:usage |rate )?limit|insufficient credits|quota exhausted|out of extra usage", raw, re.IGNORECASE):
+    raise ProviderUsageLimit('USAGE LIMIT — Claude provider stopped the evidence wave; no retry or substitute.')
+
+
 def bounded_cli_output(command, cwd, timeout=100, max_bytes=MAX_CLI_ENVELOPE_BYTES):
   """Terminate an oversized/late subprocess without retaining its envelope."""
   deadline = time.monotonic() + timeout
-  with subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL) as process:
+  with subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
     try:
-      output = bytearray()
+      output, diagnostic = bytearray(), bytearray()
       with selectors.DefaultSelector() as selector:
-        selector.register(process.stdout, selectors.EVENT_READ)
-        while True:
+        selector.register(process.stdout, selectors.EVENT_READ, output)
+        selector.register(process.stderr, selectors.EVENT_READ, diagnostic)
+        while selector.get_map():
           remaining = deadline - time.monotonic()
-          if remaining <= 0 or not selector.select(remaining):
+          events = selector.select(max(0, remaining)) if remaining > 0 else []
+          if not events:
             raise TimeoutError('Claude CLI exceeded the 100-second response deadline')
-          chunk = os.read(process.stdout.fileno(), min(65536, max_bytes + 1 - len(output)))
-          if not chunk:
-            break
-          output.extend(chunk)
-          if len(output) > max_bytes:
-            raise RuntimeError('Claude CLI envelope exceeded the 1 MiB byte limit')
+          for key, _ in events:
+            chunk = os.read(key.fileobj.fileno(), min(65536, max_bytes + 1 - len(output) - len(diagnostic)))
+            if not chunk:
+              selector.unregister(key.fileobj)
+              continue
+            key.data.extend(chunk)
+            # A detected stop must escape failed-case handlers immediately, including stderr-only
+            # errors and messages followed by a sleeping or oversized provider process.
+            refuse_usage_limit((output + diagnostic).decode('utf-8', errors='replace'))
+            if len(output) + len(diagnostic) > max_bytes:
+              raise RuntimeError('Claude CLI envelope exceeded the 1 MiB byte limit')
       code = process.wait(timeout=max(0.001, deadline - time.monotonic()))
       if code:
         raise RuntimeError(f'Claude CLI failed with exit status {code}')
@@ -81,6 +98,7 @@ def bounded_cli_output(command, cwd, timeout=100, max_bytes=MAX_CLI_ENVELOPE_BYT
       if process.poll() is None:
         process.kill()
         process.wait()
+
 
 
 class ClaudeCliModel(language_model.LanguageModel):

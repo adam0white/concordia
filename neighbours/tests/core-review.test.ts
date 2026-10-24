@@ -2,10 +2,14 @@ import assert from "node:assert/strict";
 import { begin, decide, finish, tick } from "@adam0white/human-framework";
 import { describe, expect, it } from "vitest";
 import { overlapMinutes, presentAt } from "../src/core/encounters.ts";
-import { createRuntime, restoreRuntime, stateHash } from "../src/core/index.ts";
 import { buildOffers } from "../src/core/offers.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Resident, Save } from "../src/core/state.ts";
+import {
+	createRuntime,
+	restoreRuntime,
+	stateHash,
+} from "./historical-runtime.ts";
 
 function exported(r: ReturnType<typeof createRuntime>) {
 	return r.export() as Save;

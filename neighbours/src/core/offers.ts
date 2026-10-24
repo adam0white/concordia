@@ -17,6 +17,11 @@ import { placeOf, required } from "./invariants.ts";
 export const WORK_MINUTES: Record<string, number> = {
 	...HANDCART_MINUTES,
 	rest: 45,
+	pray: 15,
+	"pray-home": 15,
+	"pray-qada": 15,
+	"pray-eid": 30,
+	tea: 15,
 	sleep: 120,
 	drink: 15,
 	eat: 30,
@@ -50,6 +55,12 @@ export const WORK_MINUTES: Record<string, number> = {
 import { type Affordance, inBreak } from "@adam0white/human-framework";
 import type { Save } from "./state.ts";
 export const WORKPLACE: Record<string, [string, string]> = {
+	"repair designer": ["workshop", "Make and repair workshop fittings"],
+	"visiting night nurse": ["clinic", "Work the agreed relief shift"],
+	"meal helper": ["market", "Help the kitchen within your training"],
+	"supply helper": ["quay", "Move supplies within the agreed scope"],
+	"repair learner": ["workshop", "Practise repairs with workshop cover"],
+	courier: ["quay", "Run the supply route"],
 	carpenter: ["workshop", "Work a paid carpentry shift"],
 	mechanic: ["workshop", "Work a paid workshop shift"],
 	gardener: ["garden", "Work a paid garden shift"],
@@ -150,6 +161,23 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 			{ sleep: 0.6 },
 			{ id: "sleep-here", mode: "sleep", effort: 0, tags: ["floor", "rest"] },
 		);
+	for (const action of ["pray", "pray-home", "pray-qada", "pray-eid", "tea"]) {
+		if (
+			r.person.agenda.commitments.some(
+				(c) => c.status === "pending" && c.actions.includes(action),
+			)
+		)
+			add(
+				action,
+				action === "tea"
+					? "Take a tea break"
+					: "Keep the received prayer appointment",
+				"homes",
+				WORK_MINUTES[action] ?? 15,
+				{},
+				{ effort: 0 },
+			);
+	}
 	add("rest", "Rest at home", "homes", 45, { leisure: 0.3 }, { effort: 0 });
 	if (r.place === "homes")
 		add(
@@ -219,7 +247,9 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 	add(
 		teaches ? "teach" : "learn",
 		teaches
-			? "Teach the displaced evening class"
+			? r.role === "repair designer"
+				? "Teach a displaced practical repair class"
+				: "Teach the displaced evening class"
 			: "Attend a practical class at school",
 		"school",
 		teaches ? 120 : 60,
@@ -239,7 +269,12 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 	const day = Math.floor(s.now / 1440),
 		minuteOfDay = s.now - day * 1440;
 	const starts = r.paidWork?.day === day ? r.paidWork.starts : 0;
-	if (historical || (minuteOfDay >= 480 && minuteOfDay < 1080 && starts < 2)) {
+	if (
+		historical ||
+		(minuteOfDay >= (r.role === "visiting night nurse" ? 720 : 480) &&
+			minuteOfDay < 1080 &&
+			starts < 2)
+	) {
 		add(
 			"work",
 			workLabel,
