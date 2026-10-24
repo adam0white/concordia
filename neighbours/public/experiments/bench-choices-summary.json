@@ -1,30 +1,30 @@
 {
   "schema": "neighbours/bench-choice-probe@1",
-  "recordedAt": "2026-10-24T04:12:02.978Z",
-  "hf": "2.8.0",
+  "recordedAt": "2026-10-24T04:38:39.464Z",
+  "hf": "2.18.0",
   "modelCalls": 0,
-  "sourceCommit": "918223a4aa2f2d1a6ec9f75a8bde03e20057847f",
-  "sourceFingerprint": "ea0ab550ccda7053e6987f01e9a21c6cd6f53f06ec95734213bc3ea0d5892fe9",
-  "sourceWorktreeClean": false,
+  "sourceCommit": "8c17cc91733da6151920aff50336e0e0159e8d16",
+  "sourceFingerprint": "826c7dcec97d323451486f78ee619397733f25f62f555f8660ca7b41f24f6bc8",
+  "sourceWorktreeClean": true,
   "limitations": [
-    "Fresh fixed-seed captures contain eight actual HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
+    "Fresh fixed-seed captures contain six canonical and two generated HF residents. They are not forced-success fixtures, population averages or evidence of realism.",
     "This probe runs the actual TypeScript physical host and published HF under Node. It does not run Python Concordia or a live model; native/WASM parity is a separate check.",
-    "Three natural complete checkpoints and nine lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 now has a natural case under Phase D and is included again; no seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Ravi turn after earlier actors choose normally.",
-    "Each bench-active checkpoint file is the exact complete start of its physical proposal branch, including actual retained HF knowledge. admissionAt records the complete-boundary notice; decisionAt/startAt records Ravi's later actual decision.",
+    "Three natural complete checkpoints and nine lawful complete proposal starts are frozen before any outcome evaluation. Seed 101 now has a natural case under Phase D and is included again; no seed was substituted. Proposal admission occurs before prepareRound, as in the browser. Each case scores the real next Rafi turn after earlier actors choose normally.",
+    "Each bench-active checkpoint file is the exact complete start of its physical proposal branch, including actual retained HF knowledge. admissionAt records the complete-boundary notice; decisionAt/startAt records Rafi's later actual decision.",
     "The physical proposal/no-proposal contrast combines temporal-goal opt-in, received knowledge, one spent allowance and possible legal request-window changes. It does not isolate knowledge causally.",
     "The person-only intact/removed comparison holds actual legal offers, the entire physical state and temporal goals fixed. Removed deletes structured prospection after actual receipt; no withheld arm was executed.",
     "Full-offer decision records retain only HF's top-ranked alternatives. An unrecorded offer was not necessarily unevaluated. perOfferDiagnostics separately supplies each same actual cart offer alone to a fresh person clone to expose its terms; those diagnostic choices are not enacted or presented as full-choice decisions.",
-    "Mode-off retains received knowledge while removing temporal valuation. Goal-removed abandons only Ravi's cart goal. These are different controls, not knowledge-only contrasts.",
+    "Mode-off retains received knowledge while removing temporal valuation. Goal-removed abandons only Rafi's cart goal. These are different controls, not knowledge-only contrasts.",
     "Two-day Node continuations record events after every completed round to avoid the host's rolling-event pruning. They cover this interval only; jobs may span its boundaries.",
     "Returned is a new handover receipt within the interval; its absence is not proof that the cart can never be returned. Asking, agreement, work and delivery are separate observed outcomes.",
-    "Successor chance0.5 and confidence0.8 are frozen engineering assumptions, not an Ada-consent model or fitted psychological estimates. Current learned action success and source trust are reported separately."
+    "Successor chance0.5 and confidence0.8 are frozen engineering assumptions, not a Nora-consent model or fitted psychological estimates. Current learned action success and source trust are reported separately."
   ],
   "cases": [
     {
       "seed": 42,
       "slot": "soon",
       "noProposal": {
-        "endAt": 15030,
+        "endAt": 15015,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -38,11 +38,11 @@
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
           "returned": true,
-          "adaPaidMinutesCompleted": 300
+          "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 15030,
+        "endAt": 15015,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -56,7 +56,7 @@
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
           "returned": true,
-          "adaPaidMinutesCompleted": 300
+          "adaPaidMinutesCompleted": 240
         }
       }
     },
@@ -64,7 +64,7 @@
       "seed": 42,
       "slot": "tomorrow",
       "noProposal": {
-        "endAt": 15030,
+        "endAt": 15015,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -78,11 +78,11 @@
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
           "returned": true,
-          "adaPaidMinutesCompleted": 300
+          "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 15030,
+        "endAt": 15015,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -96,7 +96,7 @@
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
           "returned": true,
-          "adaPaidMinutesCompleted": 300
+          "adaPaidMinutesCompleted": 240
         }
       }
     },
@@ -104,7 +104,7 @@
       "seed": 42,
       "slot": "brief",
       "noProposal": {
-        "endAt": 15030,
+        "endAt": 15015,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -118,11 +118,11 @@
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
           "returned": true,
-          "adaPaidMinutesCompleted": 300
+          "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 15030,
+        "endAt": 15015,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -136,7 +136,7 @@
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
           "returned": true,
-          "adaPaidMinutesCompleted": 300
+          "adaPaidMinutesCompleted": 240
         }
       }
     },
@@ -144,7 +144,7 @@
       "seed": 73,
       "slot": "soon",
       "noProposal": {
-        "endAt": 35190,
+        "endAt": 26580,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -157,12 +157,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 35190,
+        "endAt": 26580,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -175,7 +175,7 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       }
@@ -184,7 +184,7 @@
       "seed": 73,
       "slot": "tomorrow",
       "noProposal": {
-        "endAt": 35190,
+        "endAt": 26580,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -197,12 +197,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 35190,
+        "endAt": 26580,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -215,7 +215,7 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       }
@@ -224,7 +224,7 @@
       "seed": 73,
       "slot": "brief",
       "noProposal": {
-        "endAt": 35190,
+        "endAt": 26580,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -237,12 +237,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 35190,
+        "endAt": 26580,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -255,7 +255,7 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       }
@@ -264,7 +264,7 @@
       "seed": 101,
       "slot": "soon",
       "noProposal": {
-        "endAt": 22170,
+        "endAt": 22155,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -277,12 +277,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": true,
+          "returned": false,
           "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 22170,
+        "endAt": 22155,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -295,7 +295,7 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       }
@@ -304,7 +304,7 @@
       "seed": 101,
       "slot": "tomorrow",
       "noProposal": {
-        "endAt": 22170,
+        "endAt": 22155,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -317,12 +317,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": true,
+          "returned": false,
           "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 22170,
+        "endAt": 22155,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -335,7 +335,7 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       }
@@ -344,7 +344,7 @@
       "seed": 101,
       "slot": "brief",
       "noProposal": {
-        "endAt": 22170,
+        "endAt": 22155,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": false,
@@ -357,12 +357,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": true,
+          "returned": false,
           "adaPaidMinutesCompleted": 240
         }
       },
       "proposal": {
-        "endAt": 22170,
+        "endAt": 22155,
         "fullIntervalMinutes": 2880,
         "chain": {
           "receivedNotice": true,
@@ -375,12 +375,12 @@
           "newRequests": 0,
           "newReceivedAgreements": 0,
           "mainBenchWorkPeriods": 0,
-          "returned": false,
+          "returned": true,
           "adaPaidMinutesCompleted": 240
         }
       }
     }
   ],
   "noNaturalCase": [],
-  "rawReportSha256": "b4defdc560c9357f0f3cb56a3698586d14a848a2972e7016b670694a71242efe"
+  "rawReportSha256": "0d6cadc8f5e8a8fbaafa31453e519fb490624316f394150e23ac8ef8a83dca9b"
 }

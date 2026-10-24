@@ -29,9 +29,12 @@ it("rejects absent and malformed case evidence rather than presenting a measured
 	expect(() => projectStudy("cart", { schema: "unknown" })).toThrow();
 });
 it("keeps negative cart evidence and no-effect GM results separate from actual native calls", () => {
-	const cart = projectStudy("cart", recorded("cart-choice-probe"));
-	expect(cart.rows).toContainEqual(["With cart goal", "cart-slow"]);
-	expect(cart.rows).toContainEqual(["Cart goal removed", "work"]);
+	const cartRaw = recorded("cart-choice-probe");
+	expect(cartRaw.opportunity).toBeNull();
+	expect(cartRaw.raviDecisions).toBeGreaterThan(0);
+	const cart = projectStudy("cart", cartRaw);
+	expect(cart.rows).toContainEqual(["With cart goal", "Not recorded"]);
+	expect(cart.rows).toContainEqual(["Cart goal removed", "Not recorded"]);
 	expect(cart.limits.join(" ")).toContain("not negotiated");
 	const gm = projectStudy("gm", recorded("gm-director"));
 	expect(gm.rows).toContainEqual([
