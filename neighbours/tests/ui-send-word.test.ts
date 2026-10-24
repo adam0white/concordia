@@ -28,19 +28,21 @@ afterEach(() => {
 	preference.privacySignalOn = false;
 	vi.unstubAllGlobals();
 });
-test("player recording opt-out blocks sending and retains the local copy action", () => {
+test("player recording opt-out permits notes and retains the local copy action", () => {
 	preference.switchedOff = true;
 	const html = render();
-	expect(html).toContain("Recording is off, so nothing is sent.");
+	expect(html).toContain(
+		"Recording is off. Send includes only your note and verdict, without history linkage.",
+	);
 	expect(html).toContain("Record play for the lab");
-	expect(html).toMatch(/disabled="">Send</);
+	expect(html).not.toMatch(/disabled="">Send</);
 	expect(html).toContain("Keep a copy of this run");
 });
-test("browser privacy requires explicit run consent before Send", () => {
+test("browser privacy permits an unlinked note", () => {
 	preference.privacySignalOn = true;
 	const html = render();
-	expect(html).toContain("Send this run with my note");
-	expect(html).toMatch(/disabled="">Send</);
+	expect(html).toContain("Send includes only your note and verdict");
+	expect(html).not.toMatch(/disabled="">Send</);
 	expect(html).not.toContain("Your run, saves and log reach us on their own.");
 });
 test("normal recording allows feedback and prefills a remembered optional name", () => {

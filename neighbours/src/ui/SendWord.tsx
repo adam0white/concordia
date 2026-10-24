@@ -1,3 +1,4 @@
+import { feedbackPersonaControl } from "@adam0white/lab-kit";
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { LabPrivacy, lab, useLabRecording } from "./lab";
@@ -35,7 +36,6 @@ export default function SendWord({
 	}, [session.downloadUrl]);
 	const [note, setNote] = useState("");
 	const [verdict, setVerdict] = useState("");
-	const [consent, setConsent] = useState(false);
 	const [sending, setSending] = useState(false);
 	const [sent, setSent] = useState(false);
 	const [error, setError] = useState("");
@@ -45,9 +45,9 @@ export default function SendWord({
 			feedbackError.current?.scrollIntoView({ block: "nearest" });
 	}, [error, session.error]);
 	const { switchedOff, privacySignalOn } = useLabRecording();
-	const blocked = switchedOff || (privacySignalOn && !consent);
+
 	const submit = async () => {
-		if (blocked || sending) return;
+		if (sending) return;
 		setSending(true);
 		setError("");
 		const text = [verdict ? `Verdict: ${verdict}` : "", note.trim()]
@@ -55,19 +55,15 @@ export default function SendWord({
 			.join("\n\n");
 		const trimmedName = name.trim().slice(0, 60);
 		try {
-			if (privacySignalOn) {
-				const run = await session.getRun();
+			let run: unknown;
+			if (!switchedOff && !privacySignalOn) {
 				try {
-					await lab.sendRun(run, { note: text, name: trimmedName });
+					run = await session.getRun();
 				} catch {
-					lab.openSendDialog({
-						getRun: () => run,
-						note: text,
-						name: trimmedName,
-					});
-					return;
+					/* A broken export must not block feedback. */
 				}
-			} else await lab.sendFeedback(text, { name: trimmedName });
+			}
+			await lab.sendFeedback(text, { name: trimmedName, run });
 			try {
 				if (trimmedName) localStorage.setItem(NAME_KEY, trimmedName);
 				else localStorage.removeItem(NAME_KEY);
@@ -98,17 +94,29 @@ export default function SendWord({
 			</div>
 			<div className="sheet-scroll">
 				{sent ? (
-					<p role="status">Queued. Thank you.</p>
+					<p role="status">
+						{switchedOff || privacySignalOn
+							? "Note queued without a run or history linkage."
+							: "Run and note queued."}{" "}
+						This is not a delivery receipt.
+					</p>
 				) : (
 					<>
 						<p>
 							{switchedOff
-								? "Recording is off, so nothing is sent."
+								? "Recording is off. Send includes only your note and verdict, without history linkage."
 								: privacySignalOn
-									? "Your browser asks for privacy. Nothing is sent unless you choose to send this run."
+									? "Your browser asks for privacy. Send includes only your note and verdict, without history linkage."
 									: "Your run, saves and log reach us on their own. Tell us what they can't show."}
 						</p>
 						{switchedOff && <LabPrivacy />}
+						<div
+							ref={(element) => {
+								if (!element) return;
+								const choice = feedbackPersonaControl(lab);
+								element.replaceChildren(...(choice ? [choice] : []));
+							}}
+						/>
 						<fieldset
 							className="feedback-verdicts"
 							aria-label="Would you keep playing?"
@@ -171,16 +179,6 @@ export default function SendWord({
 								Lab privacy
 							</a>
 						</details>
-						{privacySignalOn && !switchedOff && (
-							<label className="feedback-consent">
-								<input
-									type="checkbox"
-									checked={consent}
-									onChange={(event) => setConsent(event.target.checked)}
-								/>{" "}
-								Send this run with my note
-							</label>
-						)}
 					</>
 				)}
 				<button
@@ -217,7 +215,7 @@ export default function SendWord({
 				<button
 					type="button"
 					className="primary"
-					disabled={!sent && (blocked || sending)}
+					disabled={!sent && sending}
 					onClick={
 						sent
 							? onClose
