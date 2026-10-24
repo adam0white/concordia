@@ -100,14 +100,15 @@ export default function SendWord({
 								? "Recording is off. Send includes only your note and verdict, without history linkage."
 								: privacySignalOn
 									? "Your browser asks for privacy. Send includes only your note and verdict, without history linkage."
-									: "Send your note. A run is included only when recording this exact chapter is permitted."}
+									: "An available run may include continuing character state and replay provenance. Without history permission, it is not linked to recorded history."}
 						</p>
 						{switchedOff && <LabPrivacy />}
 						<details>
 							<summary>Recording carried histories</summary>
 							<p>
 								Notes need no recording permission. Recording a shared chapter
-								can link every carried history. Files stay local.
+								can link every carried history. An explicit feedback run can
+								still include continuing character state without that linkage.
 							</p>
 							<button
 								type="button"
@@ -168,17 +169,16 @@ export default function SendWord({
 								onChange={(event) => setName(event.target.value)}
 							/>
 							<p className="tiny muted">
-								Optional. This name labels your player id and its past and
-								future history on this device. Leave it empty to stay
-								pseudonymous.
+								Optional. This name labels your feedback. With history
+								permission, it can also label recorded history on this device.
 							</p>
 						</details>
 						<details className="feedback-preview">
 							<summary>What is sent</summary>
 							<p>
-								{privacySignalOn
-									? "Your note and a copy of this run, including its seed, choices, saves and log."
-									: "Your note links to this device's recorded run, saves and log."}
+								{switchedOff || privacySignalOn || !session.town
+									? "Your note and verdict, without a game run or state."
+									: "Your note and an available run, including continuing character state and replay provenance. History links require explicit permission."}
 							</p>
 							<p>
 								Current town:{" "}

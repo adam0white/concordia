@@ -45,6 +45,15 @@ export interface TownPacket {
 	};
 	castBoundary?: { actorId: string; person: Person };
 }
+/** Explicit notes never need a town or an optional snapshot. */
+export async function sendFeedbackWithoutRun(
+	note: string,
+	name: string,
+): Promise<boolean> {
+	lab.setPersonaRecording(`feedback-note-${crypto.randomUUID()}`);
+	await lab.sendFeedback(note, { name, run: { feedbackOnly: true } });
+	return true;
+}
 export const shelf = personaChannel();
 const stamp = () => ({
 	game: "neighbours",
@@ -292,7 +301,7 @@ export class CastSession {
 			},
 		};
 	}
-	/** Notes are independent; run attachments require this exact bound recording generation. */
+	/** Explicit run exports preserve replay state but link history only with permission. */
 	async feedback(
 		note: string,
 		name: string,
@@ -304,11 +313,9 @@ export class CastSession {
 		const current = () =>
 			this.active &&
 			this.recordReady &&
-			!this.file &&
 			generation === this.generation &&
 			choice === this.recordingChoice &&
 			this.heads.map((h) => h.revision).join("/") === revisions &&
-			lab.personaRecordingAllowed &&
 			lab.telemetryOn &&
 			(!lab.privacySignalOn || lab.privacyOverride);
 		let run: unknown;
@@ -320,17 +327,23 @@ export class CastSession {
 			}
 		}
 		const noteOnly = !current() || run === undefined || run === null;
-		if (noteOnly) {
-			run = undefined;
-			// Prevent the client's optional snapshot fallback from reading a different world.
-			lab.setPersonaRecording(`feedback-note-${crypto.randomUUID()}`);
-		}
 		try {
+			if (noteOnly) return await sendFeedbackWithoutRun(note, name);
+			if (!lab.personaRecordingAllowed || this.file) {
+				// Only browser ownership metadata is omitted. Runtime admission data is replay content.
+				if (run && typeof run === "object") {
+					const unlinked = { ...run } as Record<string, unknown>;
+					delete unlinked.castLocal;
+					run = unlinked;
+				}
+				if (this.file)
+					lab.setPersonaRecording(`feedback-run-${crypto.randomUUID()}`);
+			}
 			await lab.sendFeedback(note, { name, run });
-			return noteOnly;
+			return false;
 		} finally {
 			// Restore permission only through the complete current history/epoch check.
-			void this.recording().catch(() => {});
+			if (this.active) void this.recording().catch(() => {});
 		}
 	}
 	async recording(allow?: boolean) {

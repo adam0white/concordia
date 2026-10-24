@@ -378,3 +378,54 @@ for (const width of [360, 1280]) {
 		});
 	}
 }
+
+for (const width of [360, 1280]) {
+	test(`Send word before entering a town at ${width}`, async ({ page }) => {
+		const received: Record<string, unknown>[] = [];
+		await page.setViewportSize({ width, height: 800 });
+		await page.addInitScript(() =>
+			localStorage.setItem("hf-lab-recording-off", "1"),
+		);
+		await page.route("**/lab/api/**", async (route) => {
+			const body = route.request().postDataBuffer();
+			if (body) {
+				const { gunzipSync } = await import("node:zlib");
+				try {
+					received.push(JSON.parse(gunzipSync(body).toString()));
+				} catch {
+					/* Other telemetry. */
+				}
+			}
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				headers: { "Access-Control-Allow-Origin": "*" },
+				body: JSON.stringify({ id: "qa-title-note", ok: true }),
+			});
+		});
+		await page.goto("/");
+		await expect(
+			page.getByRole("button", { name: "Enter Alder Quay", exact: true }),
+		).toBeVisible();
+		await menu(page);
+		await page.getByRole("button", { name: /^Send word/ }).click();
+		await page
+			.getByLabel(
+				"What happened in the town, what you wanted, what got in the way.",
+			)
+			.fill("A note from the title.");
+		await page.getByRole("button", { name: "Send", exact: true }).click();
+		await expect(
+			page.getByText(
+				"Note queued without a run or history linkage. This is not a delivery receipt.",
+				{ exact: true },
+			),
+		).toBeVisible();
+		await expect.poll(() => received.find((x) => Boolean(x.run))).toBeTruthy();
+		const envelope = received.find((x) => Boolean(x.run));
+		expect(envelope?.run).toEqual({ feedbackOnly: true });
+		expect(envelope).not.toHaveProperty("player");
+		expect(envelope).not.toHaveProperty("session");
+		await expect(page.locator(".town-ready")).toHaveCount(0);
+	});
+}

@@ -13,6 +13,8 @@ const fake = vi.hoisted(() => ({
 	allowPersonaRecording: vi.fn(),
 	sendFeedback: vi.fn(),
 	personaRecordingAllowed: false,
+	telemetryOn: true,
+	privacySignalOn: false,
 }));
 vi.mock("../src/ui/lab.tsx", () => ({
 	lab: {
@@ -22,8 +24,12 @@ vi.mock("../src/ui/lab.tsx", () => ({
 		get personaRecordingAllowed() {
 			return fake.personaRecordingAllowed;
 		},
-		telemetryOn: true,
-		privacySignalOn: false,
+		get telemetryOn() {
+			return fake.telemetryOn;
+		},
+		get privacySignalOn() {
+			return fake.privacySignalOn;
+		},
 		privacyOverride: false,
 		sendFeedback: fake.sendFeedback,
 	},
@@ -64,40 +70,58 @@ async function head(id = "hf.cast.ece.murmur") {
 beforeEach(() => {
 	vi.clearAllMocks();
 	fake.personaRecordingAllowed = false;
+	fake.telemetryOn = true;
+	fake.privacySignalOn = false;
 	vi.stubGlobal("window", new EventTarget());
 });
 afterEach(() => vi.unstubAllGlobals());
 describe("browser history recording and ownership", () => {
-	it("sends notes without run capture for denied or file histories and drops a stale prepared run", async () => {
+	it("includes an unlinked run for unanswered and declined consent without changing replay state", async () => {
+		for (const declined of [false, true]) {
+			const s = new CastSession(async () => null);
+			s.commitFresh();
+			if (declined) await s.recording(false);
+			const run = {
+				runtime: { admission: { revision: "replay-required" } },
+				castLocal: { heads: ["private-history"] },
+			};
+			const capture = vi.fn(async () => run);
+			expect(await s.feedback("note", "tester", capture)).toBe(false);
+			expect(capture).toHaveBeenCalledOnce();
+			expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
+				name: "tester",
+				run: { runtime: run.runtime },
+			});
+			expect(run.castLocal.heads).toEqual(["private-history"]);
+			s.close();
+		}
+	});
+	it("keeps an approved bound run and uses an explicit note marker for unavailable or stale runs", async () => {
 		const s = new CastSession(async () => null);
 		s.commitFresh();
-		const capture = vi.fn(async () => ({ privateHistory: true }));
-		fake.personaRecordingAllowed = false;
-		expect(await s.feedback("note", "tester", capture)).toBe(true);
-		expect(capture).not.toHaveBeenCalled();
-		expect(fake.sendFeedback).toHaveBeenLastCalledWith("note", {
-			name: "tester",
-			run: undefined,
-		});
 		fake.personaRecordingAllowed = true;
-		s.file = true;
-		await s.feedback("file note", "", capture);
-		expect(capture).not.toHaveBeenCalled();
-		s.file = false;
-		expect(await s.feedback("approved", "", capture)).toBe(false);
+		const run = { runtime: {}, castLocal: { heads: ["approved"] } };
+		expect(await s.feedback("approved", "", async () => run)).toBe(false);
 		expect(fake.sendFeedback).toHaveBeenLastCalledWith("approved", {
 			name: "",
-			run: { privateHistory: true },
+			run,
 		});
-		const changed = vi.fn(async () => {
-			s.invalidate();
-			return { oldHistory: true };
-		});
-		await s.feedback("changed", "", changed);
-		expect(fake.sendFeedback).toHaveBeenLastCalledWith("changed", {
-			name: "",
-			run: undefined,
-		});
+		for (const mode of ["off", "privacy", "failed", "stale"] as const) {
+			fake.telemetryOn = mode !== "off";
+			fake.privacySignalOn = mode === "privacy";
+			const capture = vi.fn(async () => {
+				if (mode === "failed") throw new Error("no save");
+				if (mode === "stale") s.invalidate();
+				return run;
+			});
+			expect(await s.feedback(mode, "", capture)).toBe(true);
+			if (mode === "off" || mode === "privacy")
+				expect(capture).not.toHaveBeenCalled();
+			expect(fake.sendFeedback).toHaveBeenLastCalledWith(mode, {
+				name: "",
+				run: { feedbackOnly: true },
+			});
+		}
 		s.close();
 	});
 	it("rechecks a preference change only after the current world is bound", async () => {

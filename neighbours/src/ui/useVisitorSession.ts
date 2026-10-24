@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { sendFeedbackWithoutRun } from "../cast-session.ts";
 import type {
 	AdvanceRequest,
 	Intervention,
@@ -1404,10 +1405,7 @@ export function useVisitorSession({
 		},
 		sendFeedback: (note: string, name: string) => {
 			const current = client.current;
-			if (!current)
-				return Promise.reject(
-					new Error("The town is not ready. Keep your note and retry."),
-				);
+			if (!current) return sendFeedbackWithoutRun(note, name);
 			return current.cast.feedback(note, name, getRun);
 		},
 		allowCastRecording: (allow: boolean) =>
