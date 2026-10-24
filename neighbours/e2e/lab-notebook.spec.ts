@@ -9,7 +9,7 @@ test("feedback preview names the current town and closing sends no note", async 
 		if (/\/(run|feedback)$/.test(route.request().url())) notes++;
 		await route.fulfill({ status: 200, body: "{}" });
 	});
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -17,10 +17,10 @@ test("feedback preview names the current town and closing sends no note", async 
 	await openDownload(page);
 	await page.getByText("What is sent", { exact: true }).click();
 	await expect(page.locator(".feedback-preview")).toContainText(
-		"day 1 · seed 42",
+		"Day 1 · seed 42",
 	);
 	await page
-		.getByRole("button", { name: "Close Send word", exact: true })
+		.getByRole("button", { name: "Close Feedback", exact: true })
 		.click();
 	expect(notes).toBe(0);
 });

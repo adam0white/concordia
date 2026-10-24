@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useLabRecording } from "./lab";
+import { labMode } from "./lab-mode";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -66,11 +67,8 @@ export default function SendWord({
 			}
 			setSent(true);
 		} catch (failure) {
-			setError(
-				failure instanceof Error
-					? failure.message
-					: "Your word could not be sent. Please try again.",
-			);
+			console.error("Feedback failed", failure);
+			setError("Your feedback could not be sent. Please try again.");
 		} finally {
 			setSending(false);
 		}
@@ -81,8 +79,8 @@ export default function SendWord({
 			aria-labelledby="send-word-title"
 		>
 			<div className="sheet-heading">
-				<h2 id="send-word-title">Send word</h2>
-				<button type="button" onClick={onClose} aria-label="Close Send word">
+				<h2 id="send-word-title">Feedback</h2>
+				<button type="button" onClick={onClose} aria-label="Close Feedback">
 					×
 				</button>
 			</div>
@@ -124,7 +122,7 @@ export default function SendWord({
 							))}
 						</fieldset>
 						<label className="feedback-note" htmlFor="feedback-note">
-							What happened in the town, what you wanted, what got in the way.
+							What happened? What did you want to do? What got in the way?
 						</label>
 						<textarea
 							id="feedback-note"
@@ -134,7 +132,7 @@ export default function SendWord({
 						/>
 						<details className="feedback-name">
 							<summary>+ Add a name</summary>
-							<label htmlFor="feedback-name">Your name or tester id</label>
+							<label htmlFor="feedback-name">Your name (optional)</label>
 							<input
 								id="feedback-name"
 								type="text"
@@ -158,7 +156,7 @@ export default function SendWord({
 							<p>
 								Current town:{" "}
 								{session.town
-									? `day ${session.town.day} · seed ${session.town.seed}`
+									? `Day ${session.town.day}${labMode() ? ` · seed ${session.town.seed}` : ""}`
 									: "No town has started."}
 							</p>
 							{verdict && <p>Verdict: {verdict}</p>}
@@ -169,26 +167,30 @@ export default function SendWord({
 						</details>
 					</>
 				)}
-				<button
-					type="button"
-					onClick={() => {
-						copyRequested.current = true;
-						session.exportSave();
-					}}
-					disabled={!session.town || session.commandPending}
-				>
-					Keep a copy of this run
-				</button>
-				{session.downloadUrl && (
-					<a
-						ref={download}
-						className="download-save"
-						href={session.downloadUrl}
-						download="alder-quay-save.json.gz"
-					>
-						Download save ↓{" "}
-						<span className="tiny">({session.downloadLabel})</span>
-					</a>
+				{labMode() && (
+					<>
+						<button
+							type="button"
+							onClick={() => {
+								copyRequested.current = true;
+								session.exportSave();
+							}}
+							disabled={!session.town || session.commandPending}
+						>
+							Keep a copy of this run
+						</button>
+						{session.downloadUrl && (
+							<a
+								ref={download}
+								className="download-save"
+								href={session.downloadUrl}
+								download="alder-quay-save.json.gz"
+							>
+								Download save ↓{" "}
+								<span className="tiny">({session.downloadLabel})</span>
+							</a>
+						)}
+					</>
 				)}
 				{(error || session.error) && (
 					<div className="error" role="alert" ref={feedbackError}>

@@ -4,11 +4,12 @@ import { hasHallChoice } from "./hall-choice";
 import ErrorMessage from "./ui/ErrorMessage";
 import { clock, placeName } from "./ui/format";
 import HelpPanel from "./ui/HelpPanel";
-import { lab } from "./ui/lab";
+import { LabNotice, lab } from "./ui/lab";
 import { InkStamp, type Milestone } from "./ui/Notebook";
 import { groupStories } from "./ui/observations";
 import PersonPanel from "./ui/PersonPanel";
 import PlacePanel from "./ui/PlacePanel";
+import { plainText } from "./ui/plain-english";
 import QueuedWalkNotice from "./ui/QueuedWalkNotice";
 import SendWord from "./ui/SendWord";
 import SessionMenu from "./ui/SessionMenu";
@@ -228,7 +229,7 @@ export default function App() {
 						busy || !here || !conversationReady || Boolean(town.player?.job)
 					}
 				>
-					Put it to {person.name}
+					Ask {person.name}
 				</button>
 			) : context && person ? (
 				here && person.lifeState !== "asleep" ? (
@@ -330,7 +331,9 @@ export default function App() {
 		>
 			<header className="game-topbar">
 				{!inTown ? (
-					<a href="https://human.adamwhite.work/games/">All games</a>
+					<a href="https://human.adamwhite.work/games/" target="_top">
+						All games
+					</a>
 				) : (
 					<div className="topbar-words">
 						<span className="desktop-town-name">
@@ -394,8 +397,8 @@ export default function App() {
 					</div>
 					{!inTown ? (
 						<p>
-							A riverside town after a flood. Eight neighbours you will come to
-							know, two hundred more in the background. They decide for
+							A riverside town is recovering after a flood. You can get to know
+							six neighbours. Two hundred more live here. They decide for
 							themselves. This town runs live on this device; nothing is played
 							back. Python Concordia coordinates the town and released Human
 							Framework makes the residents’ decisions.
@@ -454,17 +457,17 @@ export default function App() {
 						</svg>
 					</div>
 					<section>
-						<h2 tabIndex={-1}>Bringing Alder Quay to life.</h2>
+						<h2 tabIndex={-1}>Starting Alder Quay.</h2>
 						<p role="status">{session.progress}</p>
 						<p>The first visit takes longer.</p>
 					</section>
 					<footer>
 						{session.error && (
 							<>
-								<p className="error">
+								<div className="error">
 									The town could not start.{" "}
 									<ErrorMessage message={session.error} />
-								</p>
+								</div>
 								<button
 									type="button"
 									className="primary"
@@ -482,7 +485,7 @@ export default function App() {
 						<RepairTally repairs={Math.min(12, town.stats.hallRepairs ?? 0)} />
 						<span className="state-words" role="status">
 							{conversation ? (
-								"Time holds while you talk"
+								"Time pauses while you talk"
 							) : session.advancing ? (
 								session.advanceProgress || "Skipping…"
 							) : session.playerPending || town.player?.job ? (
@@ -493,12 +496,12 @@ export default function App() {
 									pending={session.playerPending}
 								/>
 							) : context ? (
-								`Slowed: you're with ${person?.name ?? (place ? placeName(place) : "your neighbours")}`
+								`Time slows while you visit ${person?.name ?? (place ? placeName(place) : "your neighbours")}`
 							) : session.clockRate === "Time holds for a new story" ? (
 								stories[0] ? (
 									`A story: ${stories[0].title}`
 								) : (
-									(town.player?.latestNotice?.text ?? "The town is waking")
+									(town.player?.latestNotice?.text ?? "The town is waking up.")
 								)
 							) : town.places.some((p) => p.id === "hall" && p.open) ? (
 								"The hall is open"
@@ -558,9 +561,14 @@ export default function App() {
 								>
 									<strong>
 										Your next step:{" "}
-										<span>{goal?.title ?? "Help your neighbours"}</span> ▸
+										<span>
+											{plainText(goal?.title ?? "Help your neighbours")}
+										</span>{" "}
+										▸
 									</strong>
-									<small>{goal?.hint ?? "Walk, talk, or help the town."}</small>
+									<small>
+										{plainText(goal?.hint ?? "Walk, talk, or help the town.")}
+									</small>
 								</button>
 								<NeighbourStrip
 									town={town}
@@ -649,6 +657,9 @@ export default function App() {
 											title="Help the town"
 											close={() => setSheet("town")}
 										/>
+										<button type="button" onClick={() => setSheet("compare")}>
+											Compare possible outcomes
+										</button>
 										<HelpPanel
 											town={town}
 											disabled={busy}
@@ -703,7 +714,7 @@ export default function App() {
 											title="Journal"
 											close={() => setSheet("town")}
 										/>
-										<h3>Your own lines</h3>
+										<h3>Your actions</h3>
 										{town.player && <PlayerJournal player={town.player} />}
 										<h3>The town's record</h3>
 										<Stories stories={stories} town={town} select={follow} />
@@ -727,6 +738,9 @@ export default function App() {
 					</main>
 				</>
 			)}
+			<footer className="notice-footer">
+				<LabNotice />
+			</footer>
 			<SessionMenu
 				session={session}
 				open={menuOpen}

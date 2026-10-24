@@ -12,10 +12,10 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "97540b784b4fa3ababb8fc7c599eb4020f38e3ca8ac3d5a8f9e517b09f23d40a",
+  "sourceFingerprint": "92259c4e63ac88ea85e17abb72abda90e220fbb1fef54f866b19f13775ff0d3d",
   "sources": {
-    "package-lock.json": "70ddf63d7960c79b9c2022974dae16234c2cc6f082d62058c980de0e3edf161e",
-    "package.json": "f45448b1f3fb1940cf495353c0328b9a3849da373ffb6b10a8dd9057f0ae514b",
+    "package-lock.json": "2aefb9764f6fdcd722f2337838c5bc6242fa5868bdfc64c01dad6573fa426482",
+    "package.json": "585356020e154f539f3ccf3b18cbb2351a73d72ce22540734b1cf61220dda815",
     "scripts/profile-evenings.ts": "70f5e20bc6df4fdef8d3d4f419803172ace547d73bc172d25e657127acc4f85f",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
@@ -1458,38 +1458,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-42-first-notice.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-42-first-notice.json",
           "at": 11415,
           "round": 729,
           "sha256": "eff09fa83679871d35174d32c1c39bc5fd6b44ebae6f6ab88daafce61000b077"
         },
         "prepared": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-42-first-prepared.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-42-first-prepared.json",
           "at": 11715,
           "round": 749,
           "sha256": "737a9f9b15cf838254c19e61e0fd98ee4804177a5cb8976676aa9d9ab6ebf98d"
         },
         "accepted": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-42-first-accepted.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-42-first-accepted.json",
           "at": 12135,
           "round": 777,
           "sha256": "2ad18c165c950ca683940d080779caf6b6773d204731619872a73905fdc94412"
         },
         "cartProgress": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-42-first-cartProgress.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-42-first-cartProgress.json",
           "at": 13710,
           "round": 882,
           "sha256": "60b8028c75b8f8ceff83153ba5959c1856b37de9726b45d278cd7330ebc48504"
         },
         "cartReturned": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-42-first-cartReturned.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-42-first-cartReturned.json",
           "at": 16905,
           "round": 1095,
           "sha256": "009c62bf925d13bed05f6bab7ae569d73f6738309ac38de1e82e102641ceb974"
         }
       },
       "finalCheckpointSha256": "9cbcadeab43cd205607fcd6d4a0d3ffefd193f4f230a424f1bf94be2c0c1d70d",
-      "wallSeconds": 65.744576791
+      "wallSeconds": 59.260329833
     },
     {
       "seed": 73,
@@ -1535,7 +1535,7 @@
       },
       "checkpoints": {},
       "finalCheckpointSha256": "705a1a09190f46a64d20e206aa07d2f61c2504df7a026f87cf66dac2c4b1491c",
-      "wallSeconds": 55.07465333399999
+      "wallSeconds": 47.650583375000004
     },
     {
       "seed": 9,
@@ -1581,7 +1581,7 @@
       },
       "checkpoints": {},
       "finalCheckpointSha256": "6ce155eb966342755b9b6c99bc871cebd907b4f2cb10842d487aee3f74fbf338",
-      "wallSeconds": 54.94206474999999
+      "wallSeconds": 47.30136033299999
     },
     {
       "seed": 101,
@@ -2865,38 +2865,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-101-first-notice.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-101-first-notice.json",
           "at": 18315,
           "round": 1189,
           "sha256": "d7015ddb51e2fd4104b22a1243d72baad616dcfdefb3fdd8cb56dd0cb99eaf7e"
         },
         "accepted": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-101-first-accepted.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-101-first-accepted.json",
           "at": 18510,
           "round": 1202,
           "sha256": "ebdc71fa1564c4b4e9c1d872c1cf826025711d0ef2b8d1c21dd6e4ace9777cd1"
         },
         "prepared": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-101-first-prepared.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-101-first-prepared.json",
           "at": 18555,
           "round": 1205,
           "sha256": "f38ed234757ab0e1a827885ddd503f7a75e02be17bbd21aaa5b441e0a8accdbd"
         },
         "cartProgress": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-101-first-cartProgress.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-101-first-cartProgress.json",
           "at": 19395,
           "round": 1261,
           "sha256": "3b65a0721efe729c1a66ada5b0f43196661fb4ac5465b45cbd2f6483aab0b2e9"
         },
         "cartReturned": {
-          "path": "/Users/abdul/code/.lab-scratch/feedback-frictionless/neighbours-regeneration/social/seed-101-first-cartReturned.json",
+          "path": "/tmp/neighbours-simplify-20261024/social/seed-101-first-cartReturned.json",
           "at": 21225,
           "round": 1383,
           "sha256": "ed82dd8295d25a2f3e18c47bf32d9ac461c78939628eb9eeab078ee445e1e3c2"
         }
       },
       "finalCheckpointSha256": "190463b1c5400deac4331df33fc6b6a847dfdaf381aa05f88e5f6afe78703f0d",
-      "wallSeconds": 62.695020707999994
+      "wallSeconds": 55.573409833000014
     }
   ]
 }

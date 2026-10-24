@@ -56,7 +56,7 @@ async function importPacket(page: Page, value: unknown) {
 test("worker rejects JSON arrays and invalid objects with truthful recovery and exact continuation", async ({
 	page,
 }, info) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -147,7 +147,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 			}
 		};
 	});
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -201,7 +201,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	if (await close.isVisible()) await page.keyboard.press("Escape");
 	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toContainText(
-		"Tools added",
+		"The tools were added",
 	);
 	await expect(lend).toBeEnabled();
 	// A rejected command clears its pending status and never invents a success receipt.
@@ -218,7 +218,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	await expect(lend).toBeEnabled();
 	await lend.click();
 	await expect(page.locator(".intervention-result")).toContainText(
-		"Tools added",
+		"The tools were added",
 	);
 	const repeated = await exportPacket(page, info, "deliberate-repeat");
 	expect(repeated.runtime.controls).toBe(original.runtime.controls - 2);

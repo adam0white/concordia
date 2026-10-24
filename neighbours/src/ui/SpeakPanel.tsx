@@ -4,6 +4,7 @@ import { PRIVATE_DISCOVERIES } from "../core/private-discoveries.ts";
 import { actionWords, counterWords, voicedLine } from "../core/voicing";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
+import { plainText } from "./plain-english";
 import type { useVisitorSession } from "./useVisitorSession";
 import "./conversation.css";
 
@@ -49,7 +50,11 @@ export function freshReply(
 /** The player's own journal: recorded lines only, each traceable to its source events. */
 export function PlayerJournal({ player }: { player: PlayerView }) {
 	if (player.journal.length === 0)
-		return <p>Nothing recorded yet. Your own steps will appear here.</p>;
+		return (
+			<p>
+				{plainText("Nothing recorded yet. Your own steps will appear here.")}
+			</p>
+		);
 	return (
 		<ol className="player-journal">
 			{[...player.journal].reverse().map((entry) => (
@@ -57,7 +62,7 @@ export function PlayerJournal({ player }: { player: PlayerView }) {
 					<small>
 						{datedClock(entry.at)} · {entry.label}
 					</small>{" "}
-					{entry.text}
+					{plainText(entry.text)}
 				</li>
 			))}
 		</ol>
@@ -133,10 +138,10 @@ export function PlayerAction({
 			{walkNotice}
 			<p className="player-place">
 				{player.job?.kind === "travel"
-					? `Walking to ${placeLabel(town, player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
+					? `You are walking to ${placeLabel(town, player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
 					: player.job?.kind === "work"
-						? `Working at ${placeLabel(town, player.job.toId)} until ${clock(player.job.endsAt)}.`
-						: `You are at ${placeLabel(town, player.placeId)}. ${player.presentCount} awake here.`}
+						? `You are working at ${placeLabel(town, player.job.toId)} until ${clock(player.job.endsAt)}.`
+						: `You are at ${placeLabel(town, player.placeId)}. ${player.presentCount} ${player.presentCount === 1 ? "person is" : "people are"} awake here.`}
 			</p>
 			{person && (
 				<p className="person-place">
@@ -235,7 +240,10 @@ export function PlayerAction({
 			<div className="resident-location">{location}</div>
 		</>
 	) : (
-		<section className="player-action" aria-label="Your next step and location">
+		<section
+			className="player-action"
+			aria-label="Your next action and location"
+		>
 			{!person && goal && (
 				<strong>
 					{goal.id === "arrive" ? "Choose a place to walk" : goal.title}
@@ -456,12 +464,12 @@ export function SpeakPanel({
 							</ul>
 						</div>
 					)}
-					{player.latestNotice && <p>{player.latestNotice.text}</p>}
+					{player.latestNotice && <p>{plainText(player.latestNotice.text)}</p>}
 				</>
 			)}
 			{!recordOnly && session.playerError && (
 				<p className="player-error" role="alert">
-					{session.playerError}
+					{plainText(session.playerError)}
 				</p>
 			)}
 
@@ -474,18 +482,19 @@ export function SpeakPanel({
 						<q
 							className={`voice ${latest.verdict === "refused" ? "refusal" : ""}`}
 						>
-							{voicedLine(latest)}
+							{plainText(voicedLine(latest))}
 						</q>{" "}
 						<span className="voice-by">{name}</span>
 					</p>
-					{latest.why && <p className="refusal-why">{latest.why}</p>}
+					{latest.why && <p className="refusal-why">{plainText(latest.why)}</p>}
 					{latest.decision && (
 						<p>
-							Later: <q className="voice">{voicedLine(latest.decision)}</q>{" "}
+							Later:{" "}
+							<q className="voice">{plainText(voicedLine(latest.decision))}</q>{" "}
 							{name} chose to {actionWords(latest.decision.chosenLabel)}.
 						</p>
 					)}
-					{latest.result && <p className="said">{latest.result}</p>}
+					{latest.result && <p className="said">{plainText(latest.result)}</p>}
 					{counter && (
 						<p>
 							They offered to {counterWords(counter)}.{" "}
@@ -684,9 +693,7 @@ export function SpeakPanel({
 							</p>
 						</>
 					)}
-					{mode === "ask" && (
-						<p className="hand">Put it to them. They may say no.</p>
-					)}
+					{mode === "ask" && <p className="hand">Ask them. They may say no.</p>}
 					{mode === "urge" && (
 						<p className="hand">
 							Insist. They may give in under protest, and being pushed wears on
@@ -697,7 +704,7 @@ export function SpeakPanel({
 					{prediction?.prediction && (
 						<p className="speech-read">
 							<span className="eyebrow">You can tell</span>{" "}
-							{prediction.prediction.read.join(". ")}.
+							{prediction.prediction.read.map(plainText).join(". ")}.
 						</p>
 					)}
 					{submissionError && <p role="alert">{submissionError}</p>}

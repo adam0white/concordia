@@ -281,6 +281,7 @@ it("keeps a personal record reachable without opening fresh conversation control
 			status: "held",
 			label: "Rest",
 			why: "Needs a break",
+			says: "I need a break.",
 			verdict: "refused",
 		} as (typeof player.requests)[number],
 	];

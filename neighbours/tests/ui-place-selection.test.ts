@@ -58,7 +58,7 @@ it("shows the host walk estimate, known hall need and actual company", async () 
 	expect(html).toContain(`Walk to Flooded hall · ~${estimate} min`);
 	expect(html).toContain("The hall needs repairs.");
 	expect(html).toContain("Who is around");
-	expect(html).toContain("No familiar neighbours here now.");
+	expect(html).toContain("No familiar neighbours are here now.");
 });
 
 it("acknowledges an actual journey and explains why another walk is unavailable", async () => {
@@ -77,7 +77,7 @@ it("acknowledges an actual journey and explains why another walk is unavailable"
 			close: () => {},
 		}),
 	);
-	expect(html).toContain("Walking to Flooded hall");
+	expect(html).toContain("You are walking to Flooded hall");
 	expect(html).toContain(
 		"Your walk must end before you can walk somewhere else.",
 	);

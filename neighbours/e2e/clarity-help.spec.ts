@@ -13,7 +13,7 @@ test("a player can offer and complete a real hour and see Nora remember it", asy
 	page,
 }, info) => {
 	const started = Date.now();
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

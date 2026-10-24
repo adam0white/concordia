@@ -84,7 +84,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 }, info) => {
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -165,7 +165,7 @@ test("390px town has no horizontal overflow and keyboard can open a person", asy
 	page,
 }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -230,7 +230,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	page,
 	context,
 }, info) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -269,7 +269,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 		.toEqual(initial);
 	const other = await context.newPage();
 	await prepareClock(other);
-	await other.goto("/");
+	await other.goto("/?lab=1");
 	await other
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -320,7 +320,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	await context.addInitScript(() => {
 		Object.defineProperty(globalThis, "BroadcastChannel", { value: undefined });
 	});
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -333,7 +333,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 		.toEqual(initial);
 	const other = await context.newPage();
 	await prepareClock(other);
-	await other.goto("/");
+	await other.goto("/?lab=1");
 	await other
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -374,7 +374,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 test("a corrupt startup checkpoint stays protected until deliberate recovery", async ({
 	page,
 }, info) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -518,7 +518,7 @@ test("closed visitor sessions cannot commit queued or already-started saves", as
 test("closing a person preserves a newer keyboard focus before deferred focus return", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -559,7 +559,7 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 test("map selection keeps 44px targets and places clusters truthfully on narrow maps", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -657,7 +657,7 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 test("retained outcomes stay near the clock and promise results survive into the next day", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

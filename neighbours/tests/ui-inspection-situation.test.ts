@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import InspectionSituation, {
@@ -8,6 +8,7 @@ import InspectionSituation, {
 } from "../src/ui/InspectionSituation";
 import { createRuntime } from "./historical-runtime.ts";
 
+afterEach(() => vi.unstubAllGlobals());
 const good = {
 	schema: "native-concordia-gm@1",
 	proposal: {
@@ -52,8 +53,11 @@ it("keeps new situations absent before the hall opens, with no invented receipt"
 	hall.open = true;
 	const html = render();
 	expect(html).toContain("Choose a neighbour");
-	expect(html).toContain("Concordia GM proposal");
-	expect(html).toContain("Authored case");
+	expect(html).not.toContain("Concordia GM proposal");
+	expect(html).not.toContain("Authored case");
+	vi.stubGlobal("location", { search: "?lab=1" });
+	expect(render()).toContain("Concordia GM proposal");
+	expect(render()).toContain("Authored case");
 	expect(html).not.toContain("Request received");
 	expect(html).not.toContain('open=""');
 });
@@ -76,6 +80,6 @@ it("reports an unheard request without inventing assistance or teaching", () => 
 			onCompare: () => {},
 		}),
 	);
-	expect(html).toContain("Did not receive the request");
+	expect(html).toContain("They did not receive the request");
 	expect(html).not.toContain("Four extra hall places are now available");
 });

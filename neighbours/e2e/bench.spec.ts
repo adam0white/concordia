@@ -44,7 +44,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 }) => {
 	const frozen = captureBench(73).checkpoint;
 	await page.setViewportSize({ width: 320, height: 740 });
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

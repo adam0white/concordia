@@ -15,6 +15,7 @@ import {
 	trustWords,
 	urgencyWord,
 } from "./person-status";
+import { personRead, plainText } from "./plain-english";
 
 export default function PersonPanel({
 	person,
@@ -83,18 +84,17 @@ export default function PersonPanel({
 			</div>
 			{canAct(person) && (
 				<p className="seems">
-					<span className="eyebrow">Seems</span>{" "}
-					{person.read ?? needWords(person.needs)}
+					{personRead(person.name, person.read ?? needWords(person.needs))}
 				</p>
 			)}
-			<p className="description">{person.description}</p>
+			<p className="description">{plainText(person.description)}</p>
 			{person.lifeEvent && (
 				<p className="life-event">
 					<span className="eyebrow">
 						Last condition change · {datedClock(person.lifeEvent.at)}
 					</span>
 					<br />
-					{person.lifeEvent.text}
+					{plainText(person.lifeEvent.text)}
 				</p>
 			)}
 			<PersonPromises person={person} now={town.now} mode="current" />
@@ -126,7 +126,7 @@ export default function PersonPanel({
 								))
 							) : (
 								<p className="tiny muted">
-									No acquired method matched this decision.
+									No learned method matched this decision.
 								</p>
 							)}
 						</details>
@@ -142,7 +142,7 @@ export default function PersonPanel({
 								? ""
 								: ` · ${datedClock(person.decision.decidedAt)}`}
 						</summary>
-						<p>{person.decision.reason}</p>
+						<p>{plainText(person.decision.reason)}</p>
 						<span className="muted tiny">{person.decision.source}</span>
 					</details>
 				)}
@@ -162,11 +162,11 @@ export default function PersonPanel({
 										<time>
 											Day {Math.floor(e.at / 1440) + 1} · {clock(e.at)}
 										</time>{" "}
-										{e.text}
+										{plainText(e.text)}
 									</p>
 								))}
 							{!person.observations.length && (
-								<p>No observations received yet.</p>
+								<p>They have not received any observations yet.</p>
 							)}
 						</div>
 					</details>
@@ -178,11 +178,11 @@ export default function PersonPanel({
 					<div className="received">
 						{history.meaningful.slice(0, 12).map((e) => (
 							<p key={e.key}>
-								<time>{datedClock(e.at)}</time> {e.text}
+								<time>{datedClock(e.at)}</time> {plainText(e.text)}
 							</p>
 						))}
 						{!history.meaningful.length && (
-							<p>No consequential outcomes recorded yet.</p>
+							<p>No important outcomes have been recorded yet.</p>
 						)}
 						{history.meaningful.length > 12 && (
 							<details>
@@ -191,7 +191,7 @@ export default function PersonPanel({
 								</summary>
 								{history.meaningful.slice(12).map((e) => (
 									<p key={e.key}>
-										<time>{datedClock(e.at)}</time> {e.text}
+										<time>{datedClock(e.at)}</time> {plainText(e.text)}
 									</p>
 								))}
 							</details>
@@ -201,7 +201,7 @@ export default function PersonPanel({
 								<summary>Routine activity · {history.routine.length}</summary>
 								{history.routine.map((e) => (
 									<p key={e.id}>
-										<time>{datedClock(e.at)}</time> {e.text}
+										<time>{datedClock(e.at)}</time> {plainText(e.text)}
 									</p>
 								))}
 							</details>
@@ -210,7 +210,7 @@ export default function PersonPanel({
 							<summary>Recorded event details · {history.raw.length}</summary>
 							{history.raw.map((e) => (
 								<p key={e.id}>
-									<time>{datedClock(e.at)}</time> {e.text}
+									<time>{datedClock(e.at)}</time> {plainText(e.text)}
 									<br />
 									<span className="tiny muted">{eventDetail(e)}</span>
 								</p>
@@ -225,12 +225,12 @@ export default function PersonPanel({
 					{person.relationships.map((r) => (
 						<div className="relationship" key={r.id}>
 							<strong>{r.name}</strong>
-							<p>{r.summary}</p>
+							<p>{plainText(r.summary)}</p>
 							{r.origin && (
 								<p className="tiny muted">
 									{r.origin === "initial"
-										? "Initial relationship in this town’s starting state."
-										: "Relationship recorded through an encounter."}
+										? "They already knew each other when this town began."
+										: "They met during this town’s history."}
 								</p>
 							)}
 							<span className="muted tiny">{trustWords(r.trust)}</span>

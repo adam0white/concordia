@@ -8,7 +8,7 @@ import { openOtherWays, openSaves, showTab } from "./session-helpers";
 test.use({ actionTimeout: 15000 });
 
 async function enter(page: Page) {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -211,7 +211,7 @@ test("a genuinely completed hall disables tools before any branch starts", async
 			.locator('option[value="lend-tools"]'),
 	).toHaveAttribute("disabled", "");
 	await expect(comparison).toContainText(
-		"Shared tools cannot be added at this checkpoint",
+		"Shared tools cannot be added right now",
 	);
 	await expect(
 		comparison.getByRole("button", { name: "Compare from here", exact: true }),

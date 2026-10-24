@@ -42,7 +42,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	page,
 }, info) => {
 	test.setTimeout(180_000);
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -60,7 +60,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	const name = (await page.locator(".game-sheet h2").textContent())?.trim();
 	expect(name).toBeTruthy();
 	const promise = page.getByRole("button", {
-		name: /^Put it to /,
+		name: /^Ask [A-Z][a-z]+$/,
 		exact: true,
 	});
 	// No hour is promised by default: the player chooses the work (and may choose the deadline).
@@ -200,7 +200,7 @@ test("an answered request is on the device before it is shown and survives an im
 	test.setTimeout(180_000);
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -219,7 +219,9 @@ test("an answered request is on the device before it is shown and survives an im
 	const before = await deviceRequests(page);
 	await panel.locator("[data-affordance-id]").first().click();
 	await panel.locator('[data-work-id="carry-meals"]').click();
-	await page.getByRole("button", { name: /^Put it to /, exact: true }).click();
+	await page
+		.getByRole("button", { name: /^Ask [A-Z][a-z]+$/, exact: true })
+		.click();
 	const answer = panel.locator(".latest-answer");
 	await expect(answer).toContainText("You made a promise and asked");
 	// Shown means stored: read once, with no Export (which would itself save) and no polling.

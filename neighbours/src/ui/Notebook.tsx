@@ -14,7 +14,9 @@ export function HubMark() {
 export function OtherNotebooks() {
 	return (
 		<nav className="other-notebooks" aria-label="All games">
-			<a href="https://human.adamwhite.work/games/">◇ all games</a>
+			<a href="https://human.adamwhite.work/games/" target="_top">
+				◇ all games
+			</a>
 		</nav>
 	);
 }

@@ -4,7 +4,7 @@ import { showTab } from "./session-helpers";
 test("a cancelled second comparison keeps the first report selectable and byte-identical", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -19,9 +19,9 @@ test("a cancelled second comparison keeps the first report selectable and byte-i
 		exact: true,
 	});
 	await expect(
-		panel.getByText("Checkpoint & limits", { exact: true }),
+		panel.getByText("How this comparison works", { exact: true }),
 	).toBeVisible({ timeout: 60000 });
-	await panel.getByText("Checkpoint & limits", { exact: true }).click();
+	await panel.getByText("How this comparison works", { exact: true }).click();
 	await expect(original).toBeVisible();
 	const href = await original.getAttribute("href");
 	const retry = panel.getByText("Try another comparison", { exact: true });
@@ -47,7 +47,7 @@ test("a cancelled second comparison keeps the first report selectable and byte-i
 		.getAttribute("value");
 	if (!value) throw Error("Previous comparison missing");
 	await history.selectOption(value);
-	const limits = panel.getByText("Checkpoint & limits", { exact: true });
+	const limits = panel.getByText("How this comparison works", { exact: true });
 	if ((await limits.locator("..").getAttribute("open")) === null)
 		await limits.click();
 	await expect(original).toBeVisible();

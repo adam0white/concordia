@@ -8,7 +8,7 @@ test.use({
 test("an explicit conversation holds time and closing it resumes the automatic town", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -16,7 +16,7 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await reachSelectedConversation(page, "Rafi");
 	await expect(page.locator(".state-words")).toHaveText(
-		"Time holds while you talk",
+		"Time pauses while you talk",
 	);
 	const held = await page.evaluate(
 		() => (window as unknown as { townNow: number }).townNow,

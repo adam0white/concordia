@@ -2,7 +2,7 @@ import { expect, type Page, step, test } from "./clock-fixture";
 import { showTab } from "./session-helpers";
 
 async function enter(page: Page) {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

@@ -35,7 +35,7 @@ for (const width of [360, 1280])
 		page,
 	}) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
-		await page.goto("/");
+		await page.goto("/?lab=1");
 		await page
 			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 			.click();
@@ -63,7 +63,7 @@ test("known open hall need is readable on map and list without colour", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

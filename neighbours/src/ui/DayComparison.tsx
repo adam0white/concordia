@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Intervention, TownComparison, TownView } from "../contracts";
 import { comparisonOutcomes } from "./comparison-outcomes";
+import { labMode } from "./lab-mode";
+import { plainText } from "./plain-english";
 
 const at = (minutes: number) =>
 	`Day ${Math.floor(minutes / 1440) + 1}, ${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
@@ -98,11 +100,11 @@ export default function DayComparison({
 		if (!town) return "";
 		if (town.controlsRemaining <= 0) return "No support credits remain.";
 		if (id === "lend-tools" && town.canLendTools === false)
-			return "Shared tools cannot be added at this checkpoint.";
+			return "Shared tools cannot be added right now.";
 		if (id === "restore-bus" && town.canRestoreBus === false)
-			return "Bus service is already restored or unavailable at this checkpoint.";
+			return "Bus service is already restored or unavailable right now.";
 		if (id === "share-news" && town.canShareNews === false)
-			return "There is no new hall news to broadcast at this checkpoint.";
+			return "There is no new hall news to broadcast right now.";
 		return "";
 	};
 	const blocked = unavailable(kind);
@@ -228,15 +230,15 @@ export default function DayComparison({
 			<p className="tiny muted">Hypothetical · Your town is unchanged</p>
 			{report && (
 				<p className="tiny comparison-checkpoint">
-					Checkpoint: {at(report.startAt)} → {at(report.endAt)} ·{" "}
+					Compared time: {at(report.startAt)} → {at(report.endAt)} ·{" "}
 					{report.rounds} rounds (
 					{numeric((report.endAt - report.startAt) / 60)} hours)
 				</p>
 			)}
 			{report && stale && (
 				<p className="tiny comparison-stale" role="status">
-					Your town has changed since this checkpoint. This saved comparison
-					still describes its original starting state.
+					Your town has changed since this comparison began. This saved
+					comparison still describes its original starting state.
 				</p>
 			)}
 			{!busy && !report && setup}
@@ -328,7 +330,7 @@ export default function DayComparison({
 																{at(story.at ?? report.startAt)}
 															</time>
 															<br />
-															{story.summary}
+															{plainText(story.summary)}
 														</p>
 													</article>
 												))
@@ -362,7 +364,7 @@ export default function DayComparison({
 													{at(story.at ?? report.startAt)}
 												</time>
 												<br />
-												{story.summary}
+												{plainText(story.summary)}
 											</p>
 										</article>
 									))}
@@ -376,7 +378,7 @@ export default function DayComparison({
 									<summary>Stories without recorded dates</summary>
 									<p className="tiny muted">
 										These reports lack story times. They may include history
-										from before the checkpoint.
+										from before the comparison began.
 									</p>
 									{(["baseline", "treatment", "shared"] as const).map(
 										(branch) =>
@@ -397,7 +399,7 @@ export default function DayComparison({
 																JSON.stringify([story.title, story.summary])
 															}
 														>
-															<p>{story.summary}</p>
+															<p>{plainText(story.summary)}</p>
 														</article>
 													))}
 												</div>
@@ -491,31 +493,38 @@ export default function DayComparison({
 						</details>
 					</details>
 					<details>
-						<summary>Checkpoint &amp; limits</summary>
+						<summary>How this comparison works</summary>
+						{labMode() && (
+							<p className="tiny muted">
+								Seed {report.seed} · {at(report.startAt)} → {at(report.endAt)} ·{" "}
+								{interventions[report.intervention.kind]}
+							</p>
+						)}
 						<p className="tiny muted">
-							Seed {report.seed} · {at(report.startAt)} → {at(report.endAt)} ·{" "}
-							{interventions[report.intervention.kind]}
-						</p>
-						<p className="tiny muted">
-							Two hypothetical runs from this checkpoint. One carries on as it
-							is; the other receives one intervention. Both use the actual
-							simulation with no LLM calls.
+							Two possible futures start from the same saved town. One carries
+							on as it is; the other receives one intervention. Both use the
+							actual simulation with no LLM calls.
 						</p>
 						<p className="tiny muted">
 							Only recorded outcomes within this interval appear above.
 							Differences describe these two runs; they do not establish a
 							general effect.
 						</p>
-						<a
-							className="text-button"
-							download={`town-comparison-${report.seed}-${report.startAt}.json`}
-							href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report, null, 2))}`}
-						>
-							Download full comparison
-						</a>
-						<p className="tiny checkpoint-hash">
-							Starting state: {report.startHash}
-						</p>
+						{labMode() && (
+							<>
+								{" "}
+								<a
+									className="text-button"
+									download={`town-comparison-${report.seed}-${report.startAt}.json`}
+									href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report, null, 2))}`}
+								>
+									Download full comparison
+								</a>
+								<p className="tiny checkpoint-hash">
+									Starting state: {report.startHash}
+								</p>
+							</>
+						)}
 						{report.limits.map((limit) => (
 							<p className="tiny muted" key={limit}>
 								{limit}

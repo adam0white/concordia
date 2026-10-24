@@ -1,6 +1,6 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base, type Page } from "./local-fixture";
 
-export * from "@playwright/test";
+export * from "./local-fixture";
 
 const prepared = new WeakSet<Page>();
 export async function prepareClock(page: Page) {

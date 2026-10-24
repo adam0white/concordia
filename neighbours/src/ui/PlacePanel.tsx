@@ -3,6 +3,7 @@ import type { PlaceView, TownView } from "../contracts";
 import { clock, placeName } from "./format";
 import { knownOpenNeeds } from "./known-needs";
 import { activityLabel } from "./person-status";
+import { plainText } from "./plain-english";
 
 export default function PlacePanel({
 	town,
@@ -66,9 +67,9 @@ export default function PlacePanel({
 					{walkNotice}
 					<p role="status">
 						{player.job?.kind === "travel"
-							? `Walking to ${location(player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
+							? `You are walking to ${location(player.job.toId)}, arriving about ${clock(player.job.arriveAt)}.`
 							: player.job?.kind === "work"
-								? `Working at ${location(player.job.toId)} until ${clock(player.job.endsAt)}.`
+								? `You are working at ${location(player.job.toId)} until ${clock(player.job.endsAt)}.`
 								: player.placeId === place.id
 									? "You are here."
 									: `You are at ${location(player.placeId ?? "")}.`}
@@ -111,9 +112,9 @@ export default function PlacePanel({
 					))}
 				</ul>
 			) : (
-				<p>No familiar neighbours here now.</p>
+				<p>No familiar neighbours are here now.</p>
 			)}
-			<p className="description">{place.description}</p>
+			<p className="description">{plainText(place.description)}</p>
 		</section>
 	);
 }

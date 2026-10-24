@@ -27,9 +27,9 @@ export default function HelpPanel({
 	const support = [
 		{
 			kind: "restore-bus",
-			title: "Restore public bus",
+			title: "Restore the public bus",
 			available: town.canRestoreBus !== false,
-			effect: "Faster future trips around town.",
+			effect: "Future trips around town will be faster.",
 			unavailable: "Public transport is running.",
 		},
 		{
@@ -51,7 +51,7 @@ export default function HelpPanel({
 		<section className="help-panel">
 			<div className="view-heading">
 				<h2>Help the town</h2>
-				<p>Change a circumstance. People decide how to respond.</p>
+				<p>Your actions change the town. People decide how to respond.</p>
 			</div>
 			{onAdvance && !hasHallChoice(town) && (
 				<button

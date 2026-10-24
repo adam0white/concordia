@@ -1,8 +1,10 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import type { TownComparison } from "../src/contracts";
 import DayComparison from "../src/ui/DayComparison";
+
+afterEach(() => vi.unstubAllGlobals());
 
 it("offers seven days and names contextual reports without adding targetless hall controls", () => {
 	const report: TownComparison = {
@@ -93,8 +95,24 @@ it("leads with differing interval outcomes, folds shared results once and keeps 
 	expect(html).toContain("Same outcomes in both runs · 1");
 	expect(html).toContain("Day 1, 08:00");
 	expect(html).toContain("Day 1, 16:00");
-	expect(html).toContain("Download full comparison");
-	expect(html).toContain(encodeURIComponent(JSON.stringify(report, null, 2)));
+	expect(html).not.toContain("Download full comparison");
+	expect(html).not.toContain("Seed 42");
+	expect(html).not.toContain("Starting state: abc");
+	vi.stubGlobal("location", { search: "?lab=1" });
+	const labHtml = renderToStaticMarkup(
+		createElement(DayComparison, {
+			report,
+			busy: false,
+			progress: "",
+			error: "",
+			selected: "",
+			onRun: () => {},
+		}),
+	);
+	expect(labHtml).toContain("Download full comparison");
+	expect(labHtml).toContain(
+		encodeURIComponent(JSON.stringify(report, null, 2)),
+	);
 	expect(JSON.stringify(report)).toBe(before);
 });
 

@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./local-fixture";
 
 for (const width of [360, 1280]) {
-	test(`a failed local copy is visible in Send word and retry preserves the town at ${width}`, async ({
+	test(`a failed local copy is visible in Feedback and retry preserves the town at ${width}`, async ({
 		page,
 	}, info) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
@@ -19,13 +19,13 @@ for (const width of [360, 1280]) {
 				},
 			});
 		});
-		await page.goto("/");
+		await page.goto("/?lab=1");
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
 		await page.getByLabel("Start from a seed").fill("42");
 		await page.getByRole("button", { name: "Start", exact: true }).click();
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
-		await page.getByRole("button", { name: /^Send word/ }).click();
+		await page.getByRole("button", { name: /^Feedback/ }).click();
 		const copy = page.getByRole("button", {
 			name: "Keep a copy of this run",
 			exact: true,

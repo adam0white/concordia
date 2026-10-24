@@ -35,7 +35,7 @@ async function exported(page: Page) {
 test("a contextual week shows its actual request, cancels safely and retains a real funded slot", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -76,7 +76,9 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 		.getByRole("button", { name: /Fund another slot for Nora/ })
 		.click();
 	await expect(
-		page.getByRole("status").filter({ hasText: "Extra hall slot funded" }),
+		page
+			.getByRole("status")
+			.filter({ hasText: "An extra hall slot was funded" }),
 	).toBeVisible();
 	const after = await exported(page);
 	expect(after.runtime.controls).toBe(before.runtime.controls);

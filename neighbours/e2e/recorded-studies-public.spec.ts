@@ -7,7 +7,7 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await page.setViewportSize({ width: 320, height: 740 });
 	const requests: string[] = [];
 	page.on("request", (request) => requests.push(request.url()));
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

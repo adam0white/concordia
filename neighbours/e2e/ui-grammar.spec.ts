@@ -1,5 +1,5 @@
 import { mkdir } from "node:fs/promises";
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Page, test } from "./local-fixture";
 
 type FeedbackPayload = {
 	kind?: string;
@@ -112,7 +112,7 @@ for (const width of [360, 1280]) {
 				throw Error("Native confirmation forbidden");
 			};
 		});
-		await page.goto("/");
+		await page.goto("/?lab=1");
 		await expect(
 			page.getByRole("button", { name: "Enter Alder Quay", exact: true }),
 		).toBeInViewport();
@@ -125,7 +125,9 @@ for (const width of [360, 1280]) {
 		await page.getByRole("button", { name: "Start", exact: true }).click();
 		await capture(page, "loading");
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
-		await expect(page.locator(".next-step")).toContainText("Find your feet");
+		await expect(page.locator(".next-step")).toContainText(
+			"Choose where to walk",
+		);
 		await expect(page.locator(".neighbour-strip button")).toHaveCount(7);
 		for (const chip of await page.locator(".neighbour-strip button").all())
 			await expect(chip).toBeInViewport();
@@ -157,15 +159,25 @@ for (const width of [360, 1280]) {
 				.querySelector(".game-column")
 				?.getBoundingClientRect()
 				.toJSON(),
+			footer: document
+				.querySelector(".notice-footer")
+				?.getBoundingClientRect()
+				.toJSON(),
 			actions: document
 				.querySelector(".game-actions")
 				?.getBoundingClientRect()
 				.toJSON(),
 		}));
 		if (width === 1280) {
-			expect(rects.scene?.width).toBe(840);
-			expect(rects.column?.width).toBe(440);
-			expect(rects.actions?.bottom).toBe(800);
+			expect(rects.column?.width).toBeGreaterThanOrEqual(360);
+			expect(rects.column?.width).toBeLessThanOrEqual(width / 2);
+			expect(
+				(rects.scene?.width ?? 0) + (rects.column?.width ?? 0),
+			).toBeCloseTo(width, 0);
+			expect(rects.actions?.bottom).toBeCloseTo(
+				800 - (rects.footer?.height ?? 0),
+				0,
+			);
 		}
 		await page.locator('.neighbour-strip [data-person-id="ada"]').click();
 		await expect(page.locator(".game-actions .primary")).toHaveText(
@@ -220,9 +232,10 @@ for (const width of [360, 1280]) {
 			"Paper or lamplight",
 			"Compare futures ▸",
 			"Recorded studies ▸",
-			"Send word ▸",
+			"Feedback ▸",
 			"To the title page",
 			"All games",
+			"New game",
 		]);
 		await expect(
 			page.getByRole("button", { name: "Automatic", exact: true }),
@@ -247,7 +260,7 @@ for (const width of [360, 1280]) {
 		await capture(page, "studies");
 		await page.keyboard.press("Escape");
 		await menu(page);
-		await page.getByRole("button", { name: /^Send word/ }).click();
+		await page.getByRole("button", { name: /^Feedback/ }).click();
 		await expect(
 			page.getByRole("button", { name: "Submit", exact: true }),
 		).toBeEnabled();
@@ -260,8 +273,8 @@ for (const width of [360, 1280]) {
 		await expect(sharePlay).not.toBeChecked();
 		await capture(page, "feedback");
 		await page.getByText("+ Add a name", { exact: true }).click();
-		await expect(page.getByLabel("Your name or tester id")).toBeVisible();
-		await page.getByLabel("Your name or tester id").fill("QA-local");
+		await expect(page.getByLabel("Your name (optional)")).toBeVisible();
+		await page.getByLabel("Your name (optional)").fill("QA-local");
 		const [download] = await Promise.all([
 			page.waitForEvent("download"),
 			page
@@ -270,7 +283,7 @@ for (const width of [360, 1280]) {
 		]);
 		expect(download.suggestedFilename()).toBe("alder-quay-save.json.gz");
 		await page
-			.getByRole("button", { name: "Close Send word", exact: true })
+			.getByRole("button", { name: "Close Feedback", exact: true })
 			.click();
 		await menu(page);
 		await page
@@ -289,7 +302,7 @@ for (const width of [360, 1280]) {
 
 for (const width of [360, 1280]) {
 	for (const mode of ["on", "off-ticked", "off-unticked"]) {
-		test(`Send word Submit shares only the chosen data at ${width}, mode=${mode}`, async ({
+		test(`Feedback Submit shares only the chosen data at ${width}, mode=${mode}`, async ({
 			page,
 		}) => {
 			await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
@@ -315,9 +328,9 @@ for (const width of [360, 1280]) {
 			);
 			const configured =
 				process.env.NEIGHBOURS_LIVE_URL ?? "http://127.0.0.1:5286";
-			let entry = "/";
+			let entry = "/?lab=1";
 			if (!configured.startsWith("https://")) {
-				entry = "https://neighbours-ui-test.invalid/";
+				entry = "https://neighbours-ui-test.invalid/?lab=1";
 				await page.route(
 					"https://neighbours-ui-test.invalid/**",
 					async (route) => {
@@ -338,12 +351,12 @@ for (const width of [360, 1280]) {
 				timeout: 120000,
 			});
 			await menu(page);
-			const recording = page.getByLabel("Record play for the lab", {
+			const recording = page.getByLabel("Recording", {
 				exact: true,
 			});
 			await expect(recording).not.toBeChecked();
 			if (mode === "on") await recording.check();
-			await page.getByRole("button", { name: /^Send word/ }).click();
+			await page.getByRole("button", { name: /^Feedback/ }).click();
 			const share = page.getByLabel("Share this run and my play with the lab", {
 				exact: true,
 			});
@@ -356,12 +369,10 @@ for (const width of [360, 1280]) {
 				page.getByRole("button", { name: "Submit", exact: true }),
 			).toBeEnabled();
 			await page.getByText("+ Add a name", { exact: true }).click();
-			await expect(page.getByLabel("Your name or tester id")).toHaveValue(
+			await expect(page.getByLabel("Your name (optional)")).toHaveValue(
 				"Earlier tester",
 			);
-			await page
-				.getByLabel("Your name or tester id")
-				.fill("  QA named tester  ");
+			await page.getByLabel("Your name (optional)").fill("  QA named tester  ");
 			await page
 				.locator("#feedback-note")
 				.fill("Intercepted Submit verification.");
@@ -415,7 +426,7 @@ for (const width of [360, 1280]) {
 }
 
 for (const width of [360, 1280]) {
-	test(`Send word before entering a town at ${width}`, async ({ page }) => {
+	test(`Feedback before entering a town at ${width}`, async ({ page }) => {
 		await observeLabPayloads(page);
 		await page.setViewportSize({ width, height: 800 });
 		await page.addInitScript(() =>
@@ -429,15 +440,15 @@ for (const width of [360, 1280]) {
 				body: JSON.stringify({ id: "qa-title-note", ok: true }),
 			});
 		});
-		await page.goto("/");
+		await page.goto("/?lab=1");
 		await expect(
 			page.getByRole("button", { name: "Enter Alder Quay", exact: true }),
 		).toBeVisible();
 		await menu(page);
-		await page.getByRole("button", { name: /^Send word/ }).click();
+		await page.getByRole("button", { name: /^Feedback/ }).click();
 		await page
 			.getByLabel(
-				"What happened in the town, what you wanted, what got in the way.",
+				"What happened? What did you want to do? What got in the way?",
 			)
 			.fill("A note from the title.");
 		await page.getByRole("button", { name: "Submit", exact: true }).click();

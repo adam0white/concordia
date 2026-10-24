@@ -69,7 +69,7 @@ function Notice({
 				</p>
 			) : town.now < evening.startsAt && evening.stage !== "closed" ? (
 				<p className="tiny muted">
-					Hall not booked. Advertising does not reserve it.
+					The hall is not booked. Advertising does not reserve it.
 				</p>
 			) : null}
 			{host && (

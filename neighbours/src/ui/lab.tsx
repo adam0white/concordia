@@ -1,6 +1,7 @@
 import { createLab } from "@adam0white/lab-client";
 import { telemetryNotice } from "@adam0white/lab-kit";
 import { useEffect, useRef, useState } from "react";
+import { labMode } from "./lab-mode";
 
 export const lab = createLab({ game: "neighbours" });
 // Close recording before save/run/log hooks can observe an imported or mixed-history chapter.
@@ -54,14 +55,16 @@ export function LabPrivacy() {
 					checked={telemetryOn}
 					onChange={(event) => setRecording(event.target.checked)}
 				/>{" "}
-				Record play for the lab
+				Recording
 			</label>
-			<a href="https://human.adamwhite.work/lab/privacy/">Lab privacy</a>
+			{labMode() && (
+				<a href="https://human.adamwhite.work/lab/privacy/">Lab privacy</a>
+			)}
 		</div>
 	);
 }
 
-let notice = typeof document === "undefined" ? null : telemetryNotice();
+const notice = typeof document === "undefined" ? null : telemetryNotice();
 if (notice)
 	Object.assign(notice.style, {
 		position: "static",
@@ -72,10 +75,8 @@ export function LabNotice() {
 	const host = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (notice && host.current) {
-			// The host owns the node through Strict Mode's effect rehearsal.
-			// Removing the host removes the notice; a later title visit cannot append it again.
+			// Keep the actual SDK node so asynchronous cross-game suppression can remove it.
 			host.current.append(notice);
-			notice = null;
 		}
 	}, []);
 	return <div className="lab-notice-host" ref={host} />;

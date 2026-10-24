@@ -49,7 +49,7 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 	};
 }
 async function startPaused(page: Page) {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -211,7 +211,7 @@ test("compression finishing after a newer export or accepted import cannot publi
 	await showTab(page, "Help");
 	await page.getByRole("button", { name: /^Lend tools/ }).click();
 	await expect(page.locator(".intervention-result")).toContainText(
-		"Tools added",
+		"The tools were added",
 	);
 	await hold();
 	// A valid legacy JSON import accepts a replacement while the old compressor is still running.

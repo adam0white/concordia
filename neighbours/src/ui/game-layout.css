@@ -1009,3 +1009,207 @@ body,
 	align-items: center;
 	gap: 8px;
 }
+
+/* Readable text follows available width. Content scrolls rather than losing its last line. */
+:root {
+	font-size: clamp(16px, 14px + 0.5vw, 20px);
+}
+.app.game-frame {
+	grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+.game-frame[data-screen="title"],
+.game-frame[data-screen="loading"] {
+	grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.game-frame button,
+.game-frame select,
+.game-frame label,
+.game-frame input,
+.game-frame textarea,
+.game-frame summary,
+.game-frame p,
+.game-frame .person-panel p,
+.game-frame .place-panel p,
+.game-frame .feedback-note,
+.game-frame .welcome-goal,
+.game-frame .welcome-device,
+.game-frame .lab-privacy a,
+.game-frame .topbar-words {
+	font-size: 1rem;
+	line-height: 1.45;
+}
+.game-frame small,
+.game-frame .tiny,
+.game-frame .next-step small,
+.game-frame .next-step strong,
+.game-frame .neighbour-strip > button {
+	font-size: 0.9rem;
+	line-height: 1.35;
+}
+.game-frame .game-topbar {
+	min-height: 44px;
+	height: auto;
+}
+.game-frame .game-state {
+	min-height: 36px;
+	height: auto;
+	font-size: 0.9rem;
+}
+.game-frame .state-words {
+	white-space: normal;
+	overflow: visible;
+}
+.game-frame .game-play {
+	grid-template-rows: minmax(120px, 1fr) minmax(360px, 65%);
+}
+.game-frame .game-column {
+	grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.game-frame .town-guidance {
+	overflow: auto;
+	max-height: 38vh;
+}
+.game-frame .next-step {
+	height: auto;
+	min-height: 56px;
+}
+.game-frame .next-step :is(strong, small) {
+	white-space: normal;
+	overflow: visible;
+}
+.game-frame .neighbour-strip {
+	height: auto;
+	grid-auto-rows: minmax(44px, auto);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.game-frame .neighbour-strip > button {
+	overflow-wrap: anywhere;
+	flex-wrap: wrap;
+}
+.game-frame .story-headline {
+	max-height: none;
+	font-size: 0.9rem;
+}
+.game-frame .notice-footer {
+	grid-row: auto;
+	position: relative;
+	min-width: 0;
+	background: var(--paper);
+	z-index: 14;
+}
+.notice-footer:has(.lab-notice-host:empty) {
+	display: none;
+}
+.game-frame .welcome-screen {
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+.game-frame .welcome-scene {
+	flex: 1 0 120px;
+	max-height: 32vh;
+}
+.game-frame .welcome-actions {
+	margin-top: auto;
+}
+.game-frame .game-loading {
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+.game-frame .game-loading .title-drawing {
+	flex: 1 0 100px;
+}
+.game-frame .game-loading > section,
+.game-frame .game-loading > footer {
+	flex-shrink: 0;
+}
+.game-frame .game-loading [role="status"] {
+	white-space: normal;
+}
+.game-frame .session-menu[open] {
+	grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.game-frame .session-menu-heading {
+	min-height: 44px;
+}
+.game-frame .fullscreen-action {
+	display: flex;
+}
+.game-frame .sheet-overlay {
+	top: 48px;
+	bottom: 8px;
+	max-height: calc(100dvh - 56px);
+}
+.game-frame .person-evidence[open],
+.game-frame .inspection-record[open] {
+	position: static;
+	overflow: visible;
+	padding: 0;
+}
+@media (min-width: 768px) {
+	.app.game-frame {
+		grid-template-rows: auto auto minmax(0, 1fr) auto;
+	}
+	.game-frame[data-screen] .game-play {
+		grid-row: 3;
+		grid-template-columns: minmax(0, 1fr) clamp(360px, 43vw, 580px);
+		grid-template-rows: minmax(0, 1fr);
+	}
+	.game-frame[data-screen] .game-scene {
+		display: block;
+	}
+	.game-frame[data-screen] .game-column {
+		grid-template-rows: auto minmax(0, 1fr) auto;
+	}
+	.game-frame[data-screen="selection"] .game-column,
+	.game-frame[data-screen="talk"] .game-column,
+	.game-frame[data-screen="help"] .game-column,
+	.game-frame[data-screen="walk"] .game-column,
+	.game-frame[data-screen="journal"] .game-column {
+		grid-template-rows: minmax(0, 1fr) auto;
+	}
+	.game-frame[data-screen="selection"] .town-guidance,
+	.game-frame[data-screen="talk"] .town-guidance,
+	.game-frame[data-screen="help"] .town-guidance,
+	.game-frame[data-screen="walk"] .town-guidance,
+	.game-frame[data-screen="journal"] .town-guidance {
+		display: none;
+	}
+	.game-frame .game-state {
+		position: static;
+		width: auto;
+		pointer-events: auto;
+	}
+	.game-frame .state-words {
+		max-width: none;
+	}
+	.game-frame .session-menu {
+		width: min(520px, 100%);
+		height: auto;
+		max-height: calc(100dvh - 70px);
+		inset: auto 0 0 auto;
+		margin: 0;
+	}
+	.game-frame .game-overlay {
+		width: min(880px, calc(100vw - 32px));
+	}
+	.game-frame .welcome-scene {
+		max-height: 45vh;
+	}
+	.game-frame .welcome-premise,
+	.game-frame .welcome-actions {
+		width: min(38rem, 100%);
+		margin-inline: auto;
+	}
+}
+
+@media (min-width: 768px) {
+	/* Keep direct resident switching beside the map while reading one person's details. */
+	.game-frame[data-screen="selection"] .game-column {
+		grid-template-rows: auto minmax(0, 1fr) auto;
+	}
+	.game-frame[data-screen="selection"] .town-guidance {
+		display: block;
+	}
+}

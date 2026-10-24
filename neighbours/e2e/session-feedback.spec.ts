@@ -102,7 +102,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	page,
 }, info) => {
 	await installGate(page);
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -111,9 +111,9 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await pause(page);
 	const original = await packet(page, info, "original");
 	await showTab(page, "Help");
-	await page.getByRole("button", { name: /^Restore public bus/ }).click();
+	await page.getByRole("button", { name: /^Restore the public bus/ }).click();
 	await expect(page.locator(".intervention-result")).toContainText(
-		"Bus restored",
+		"The public bus is running again",
 	);
 	await showTab(page, "Compare");
 	const comparison = page.locator(".day-comparison");
@@ -123,7 +123,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 		.getByRole("button", { name: "Compare from here", exact: true })
 		.click();
 	await expect(
-		page.getByText("Checkpoint & limits", { exact: true }),
+		page.getByText("How this comparison works", { exact: true }),
 	).toBeVisible();
 	const changed = await packet(page, info, "changed");
 	const oldLink = await page
@@ -133,11 +133,11 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.getByRole("alert")).toBeVisible();
 	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toContainText(
-		"Bus restored",
+		"The public bus is running again",
 	);
 	await showTab(page, "Compare");
 	await expect(
-		page.getByText("Checkpoint & limits", { exact: true }),
+		page.getByText("How this comparison works", { exact: true }),
 	).toBeVisible();
 	await openDownload(page);
 	await expect(
@@ -149,7 +149,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.locator(".intervention-result")).toHaveCount(0);
 	await showTab(page, "Compare");
 	await expect(
-		page.getByText("Checkpoint & limits", { exact: true }),
+		page.getByText("How this comparison works", { exact: true }),
 	).toHaveCount(0);
 	await openDownload(page);
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
@@ -215,7 +215,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 	page,
 }, info) => {
 	await installGate(page);
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -343,7 +343,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 test("a rejected local JSON file resumes automatic time without another action", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

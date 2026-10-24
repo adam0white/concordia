@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Intervention, ProposalOrigin, TownView } from "../contracts";
 import { datedClock } from "./format";
+import { labMode } from "./lab-mode";
 
 type DirectorReport = {
 	sourceFingerprint: string;
@@ -128,10 +129,10 @@ export default function InspectionSituation({
 								{town.now >= current.expiresAt
 									? "The request expired before an opening decision was completed."
 									: current.visitedAt !== undefined
-										? `Observed the annex at ${datedClock(current.visitedAt)}. No opening decision is complete.`
+										? `They observed the annex at ${datedClock(current.visitedAt)}. No opening decision is complete.`
 										: current.received
-											? "Received the request. Whether to help is their decision."
-											: "Did not receive the request."}
+											? "They received the request. They decide whether to help."
+											: "They did not receive the request."}
 							</>
 						)}
 					</p>
@@ -178,22 +179,24 @@ export default function InspectionSituation({
 					</p>
 					<details className="inspection-record">
 						<summary>Why · the record ▸</summary>
-						<label>
-							Situation
-							<select
-								aria-label="Situation"
-								value={situation}
-								onChange={(event) => setSituation(event.target.value)}
-								disabled={disabled}
-							>
-								<option value="gm">Concordia GM proposal</option>
-								<option value="dry-sound">Authored case · dry timber</option>
-								<option value="wet-sound">Authored case · wet timber</option>
-								<option value="unsupported">
-									Authored case · uncertain supports
-								</option>
-							</select>
-						</label>
+						{labMode() && (
+							<label>
+								Situation
+								<select
+									aria-label="Situation"
+									value={situation}
+									onChange={(event) => setSituation(event.target.value)}
+									disabled={disabled}
+								>
+									<option value="gm">Concordia GM proposal</option>
+									<option value="dry-sound">Authored case · dry timber</option>
+									<option value="wet-sound">Authored case · wet timber</option>
+									<option value="unsupported">
+										Authored case · uncertain supports
+									</option>
+								</select>
+							</label>
+						)}
 						{situation === "gm" &&
 							(!report ? (
 								error ? (
@@ -245,8 +248,9 @@ export default function InspectionSituation({
 						</p>
 					)}
 					<p className="tiny muted">
-						A request teaches nothing and guarantees no help. One inspection
-						situation per town; no original intervention is spent.
+						Your request does not teach anyone an inspection method or guarantee
+						help. You can request one inspection per town. It costs no town
+						credits.
 					</p>
 					{proposal &&
 						typeof proposal === "object" &&

@@ -36,7 +36,7 @@ async function exported(page: Page) {
 test("a real WASM annex request comparison preserves the live town and the request survives paused reload", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -98,7 +98,9 @@ test("a real WASM annex request comparison preserves the live town and the reque
 		.getByRole("button", { name: "Ask Nora to inspect", exact: true })
 		.click();
 	await expect(
-		page.getByRole("status").filter({ hasText: "Inspection request received" }),
+		page
+			.getByRole("status")
+			.filter({ hasText: "The inspection request was received" }),
 	).toBeVisible();
 	const after = await exported(page);
 	expect(after.runtime.controls).toBe(before.runtime.controls);

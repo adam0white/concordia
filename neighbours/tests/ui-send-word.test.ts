@@ -33,6 +33,7 @@ afterEach(() => {
 test("player recording opt-out permits notes and retains the local copy action", () => {
 	preference.switchedOff = true;
 	preference.telemetryOn = false;
+	vi.stubGlobal("location", { search: "?lab=1" });
 	const html = render();
 	expect(html).toContain("Share this run and my play with the lab");
 	expect(html).not.toContain("Record play for the lab");
@@ -53,7 +54,7 @@ test("normal recording allows feedback and prefills a remembered optional name",
 	vi.stubGlobal("localStorage", { getItem: () => "Returning tester" });
 	const html = render();
 	expect(html).toContain('value="Returning tester"');
-	expect(html).toContain("Your name or tester id");
+	expect(html).toContain("Your name (optional)");
 	expect(html).not.toContain("Share this run and my play with the lab");
 	expect(html).not.toMatch(/disabled="">Submit</);
 });

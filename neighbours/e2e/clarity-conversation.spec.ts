@@ -7,7 +7,7 @@ import {
 } from "./clock-fixture";
 
 async function openConversation(page: Page) {
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -41,7 +41,7 @@ for (const width of [360, 1280])
 			page.getByRole("button", { name: "Offer an hour", exact: true }),
 		).toHaveAttribute("aria-pressed", "true");
 		const submit = page.getByRole("button", {
-			name: "Put it to Rafi",
+			name: "Ask Rafi",
 			exact: true,
 		});
 		await expect(submit).toBeDisabled();
@@ -116,9 +116,7 @@ for (const mode of ["promise", "ask", "urge"] as const)
 			.click();
 		if (mode === "promise")
 			await page.locator('[data-work-id="carry-meals"]').click();
-		await page
-			.getByRole("button", { name: "Put it to Rafi", exact: true })
-			.click();
+		await page.getByRole("button", { name: "Ask Rafi", exact: true }).click();
 		await expect(page.locator(".latest-answer")).toBeVisible();
 		const commands = await page.evaluate(
 			() => (window as unknown as { speechCommands: unknown[] }).speechCommands,

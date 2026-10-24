@@ -124,16 +124,12 @@ export class CastSession {
 	): Promise<TownPacket> {
 		this.suspend();
 		const generation = this.generation;
-		this.heads = [];
-		this.sources = {};
-		this.staged = undefined;
-		this.file = false;
 		await shelf.ready;
 		if (!this.active || generation !== this.generation)
 			throw Error("Run changed while preparing cast.");
-		this.localOnly = explicitLocal || !shelf.enabled;
+		const localOnly = explicitLocal || !shelf.enabled;
 		const cast =
-			!this.localOnly && shelf.enabled
+			!localOnly && shelf.enabled
 				? await claimCastChapterBatch(
 						shelf,
 						ALLOCATION.map((p) => p.castId),
@@ -162,7 +158,13 @@ export class CastSession {
 			initial,
 			mapping: "neighbours-calendar/1",
 		} satisfies CastChapter;
+		// Admission can fail after the shared shelf accepted a batch. Keep the old
+		// receipts until this exact candidate is ready; never substitute local people.
 		this.heads = cast?.claims ?? [];
+		this.sources = {};
+		this.staged = undefined;
+		this.file = false;
+		this.localOnly = localOnly;
 
 		return { schema: "neighbours/concordia@1", rounds: 0, runtime };
 	}

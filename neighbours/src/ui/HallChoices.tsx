@@ -40,9 +40,9 @@ export default function HallChoices({
 			</summary>
 			<p className="tiny">
 				{opportunities.length === 0
-					? "No evening support actions available now."
+					? "No evening support actions are available now."
 					: shared
-						? "One room, two possible evenings. Only one can use this hour."
+						? "Two events need the same room. Only one can use this hour."
 						: "The evenings have separate hours."}
 			</p>
 			{schedule && (

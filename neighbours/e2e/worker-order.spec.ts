@@ -4,7 +4,7 @@ import { expect, test } from "./clock-fixture";
 test("worker rejects an invalid queued advance in command order and preserves the preceding step", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	const asset = (await readdir("dist/assets")).find(
 		(name) => name.startsWith("runtime.worker-") && name.endsWith(".js"),
 	);

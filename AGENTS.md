@@ -11,3 +11,5 @@ Keep world facts, feasible actions and physical outcomes in the host. HF owns HF
 Keep public code free of credentials and private workspace/PKM notes. Canonical state is seeded; performance metrics and wall time do not enter rule hashes. Follow progressive disclosure: the map first, one selected-person drawer, optional inspector.
 
 Before code commits run the relevant typecheck, lint, tests, native bridge checks and build. Review substantive work. Record negative findings and track remaining good ideas in beads with a target milestone. Use bounded subagents with explicit model/effort; retain a wildcard reviewer. Do not modify unrelated projects or upstream examples casually.
+
+Player-facing copy follows [Plain English](docs/lab/plain-english.md). Preserve recorded strings through display projections when needed.

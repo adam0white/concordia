@@ -650,17 +650,17 @@ export function useVisitorSession({
 					setInterventionNotice(
 						intervention.kind === "request-inspection"
 							? reply.view.assistance?.received
-								? "Inspection request received. Helping remains their choice."
+								? "The inspection request was received. They decide whether to help."
 								: "The neighbour did not receive the inspection request."
 							: intervention.kind === "lend-tools"
-								? `Tools added. ${reply.view.stats.tools ?? "Updated"} tools now available.`
+								? `The tools were added. ${reply.view.stats.tools ?? "More"} tools are now available.`
 								: intervention.kind === "restore-bus"
-									? "Bus restored. Future trips can use it; current activities keep their durations."
+									? "The public bus is running again. Future trips can use it. Current activities keep their durations."
 									: intervention.kind === "open-evening-slot"
-										? "Extra hall slot funded. The unposted opportunity moves to the next day; hosting remains their choice."
+										? "An extra hall slot was funded. The chance to host an event moves to the next day. The host still decides whether to run it."
 										: intervention.kind === "advertise-evening"
-											? "Invitation advertised to awake neighbours. Hearing it does not mean accepting or attending."
-											: "Hall news broadcast to awake neighbours. Each decides whether to act on it.",
+											? "The invitation was shared with awake neighbours. Hearing it does not mean accepting or attending."
+											: "The hall news was shared with awake neighbours. Each decides whether to act on it.",
 					);
 					interventionPending.current = null;
 					setIntervening(false);

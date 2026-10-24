@@ -10,7 +10,7 @@ for (const viewport of [
 		page,
 	}, testInfo) => {
 		await page.setViewportSize(viewport);
-		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
 		await page
 			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 			.click();
@@ -34,7 +34,7 @@ for (const viewport of [
 			panel.getByRole("heading", { name: "Who is around" }),
 		).toBeInViewport({ ratio: 1 });
 		await expect(
-			panel.getByText("No familiar neighbours here now."),
+			panel.getByText("No familiar neighbours are here now."),
 		).toBeInViewport({ ratio: 1 });
 		await expect(page.locator(".town-time")).toHaveText(clock ?? "");
 		await panel.evaluate(async (element) => {
@@ -70,7 +70,7 @@ for (const viewport of [
 		await expect(panel).toBeVisible();
 		await expect(page.locator(".game-sheet")).toHaveCount(1);
 		await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
-		await expect(panel).toContainText("Walking to Flooded hall");
+		await expect(panel).toContainText("You are walking to Flooded hall");
 		await expect(
 			page.getByRole("button", { name: /Walk to Flooded hall ·/ }),
 		).toBeDisabled();
@@ -86,7 +86,7 @@ test("place company distinguishes meeting from an immediate conversation", async
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -101,6 +101,8 @@ test("place company distinguishes meeting from an immediate conversation", async
 
 	await expect(page.locator(".conversation-request")).toBeVisible();
 	await expect(
-		page.getByRole("button", { name: /^Put it to / }),
-	).toBeInViewport({ ratio: 1 });
+		page.getByRole("button", { name: /^Ask [A-Z][a-z]+$/ }),
+	).toBeInViewport({
+		ratio: 1,
+	});
 });

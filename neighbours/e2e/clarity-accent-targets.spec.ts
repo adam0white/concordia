@@ -1,6 +1,7 @@
 import { expect, type Locator, test } from "./clock-fixture";
 
 async function expectStandaloneTarget(target: Locator) {
+	await target.scrollIntoViewIfNeeded();
 	await expect(target).toBeInViewport();
 	await target.evaluate(async (element) => {
 		for (let node: Element | null = element; node; node = node.parentElement) {
@@ -84,7 +85,7 @@ for (const viewport of [
 		page,
 	}) => {
 		await page.setViewportSize(viewport);
-		await page.goto("/");
+		await page.goto("/?lab=1");
 		await page
 			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 			.click();

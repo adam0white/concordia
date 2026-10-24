@@ -1,8 +1,10 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ErrorMessage from "../src/ui/ErrorMessage";
 
+beforeEach(() => vi.stubGlobal("location", { search: "?lab=1" }));
+afterEach(() => vi.unstubAllGlobals());
 function render(message: string) {
 	return renderToStaticMarkup(createElement(ErrorMessage, { message }));
 }
@@ -34,4 +36,13 @@ describe("action-owned error recovery", () => {
 		expect(html).toContain("The town could not complete that action.");
 		expect(html).not.toContain("Your current town is unchanged.");
 	});
+});
+
+it("keeps raw errors out of the ordinary recovery message", () => {
+	vi.stubGlobal("location", { search: "?lab=true" });
+	const html = render("Shelf unavailable. Use a local file.");
+	expect(html).not.toContain("Shelf unavailable");
+	expect(html).not.toContain("Use a local file");
+	expect(html).not.toContain("Technical details");
+	expect(html).toContain("Feedback");
 });

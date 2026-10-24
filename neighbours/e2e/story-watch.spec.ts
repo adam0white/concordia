@@ -4,7 +4,7 @@ import { closeSaves, openSaves } from "./session-helpers";
 test("automatic pacing hides clock controls and the menu holds", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -62,7 +62,7 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 			}
 		};
 	});
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();

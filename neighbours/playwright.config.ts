@@ -13,7 +13,8 @@ export default defineConfig({
 		baseURL: process.env.NEIGHBOURS_LIVE_URL ?? "http://127.0.0.1:5286",
 		browserName: "chromium",
 		trace: "retain-on-failure",
-		screenshot: "only-on-failure",
+		screenshot:
+			process.env.NEIGHBOURS_NO_SCREENSHOTS === "1" ? "off" : "only-on-failure",
 		viewport: { width: 1280, height: 900 },
 	},
 	webServer: process.env.NEIGHBOURS_LIVE_URL

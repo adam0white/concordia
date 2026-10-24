@@ -1,5 +1,5 @@
 import { mkdir } from "node:fs/promises";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./local-fixture";
 
 for (const width of [360, 1280]) {
 	test(`Skip stops, completes the walk and holds a real conversation at ${width}`, async ({
@@ -28,7 +28,7 @@ for (const width of [360, 1280]) {
 				}
 			};
 		});
-		await page.goto("/");
+		await page.goto("/?lab=1");
 		await page
 			.getByRole("button", { name: "Enter Alder Quay", exact: true })
 			.click();
@@ -88,10 +88,10 @@ for (const width of [360, 1280]) {
 		await page.waitForTimeout(5000);
 		await expect(page.locator(".town-time strong")).toHaveText(before ?? "");
 		await expect(page.locator(".state-words")).toContainText(
-			"Time holds while you talk",
+			"Time pauses while you talk",
 		);
 		await expect(
-			page.getByRole("button", { name: "Put it to Rafi", exact: true }),
+			page.getByRole("button", { name: "Ask Rafi", exact: true }),
 		).toBeInViewport();
 		expect(
 			await page.evaluate(

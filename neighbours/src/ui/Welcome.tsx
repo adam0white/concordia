@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LabNotice } from "./lab";
+import { labMode } from "./lab-mode";
 import OtherWaysIn, { type TitleActions } from "./OtherWaysIn";
 import { localSave } from "./persistence";
 import type { useVisitorSession } from "./useVisitorSession";
@@ -33,7 +33,6 @@ export default function Welcome({
 	const day = session.town?.day ?? deviceDay;
 	return (
 		<main className="welcome-screen">
-			<LabNotice />
 			<div className="welcome-scene" aria-hidden="true">
 				<svg viewBox="0 0 360 200" aria-hidden="true">
 					<path
@@ -54,19 +53,21 @@ export default function Welcome({
 				<span className="eyebrow">NEIGHBOURS · Alder Quay</span>
 			</div>
 			<div className="welcome-premise">
-				<h2>A town rebuilding after a flood.</h2>
+				<h2>A town is rebuilding after a flood.</h2>
 				<p className="welcome-goal">
 					Help your neighbours reopen the flooded hall. They decide for
 					themselves.
 				</p>
 			</div>
-			<button
-				type="button"
-				className="other-ways-trigger"
-				onClick={() => setOtherWays(true)}
-			>
-				Other ways in <span aria-hidden="true">▸</span>
-			</button>
+			{labMode() && (
+				<button
+					type="button"
+					className="other-ways-trigger"
+					onClick={() => setOtherWays(true)}
+				>
+					Other ways in <span aria-hidden="true">▸</span>
+				</button>
+			)}
 			<div className="welcome-actions action-bar">
 				{confirmNew ? (
 					<div className="new-town-confirm">
@@ -95,7 +96,7 @@ export default function Welcome({
 						</button>
 						{hasSave && (
 							<button type="button" onClick={() => setConfirmNew(true)}>
-								A new town
+								New game
 							</button>
 						)}
 					</>

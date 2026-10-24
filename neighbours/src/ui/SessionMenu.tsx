@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import CastMenu from "./CastMenu";
 import ErrorMessage from "./ErrorMessage";
 import { LabPrivacy } from "./lab";
+import { labMode } from "./lab-mode";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -23,6 +24,8 @@ export default function SessionMenu({
 	onNavigate: (destination: MenuDestination) => void;
 }) {
 	const dialog = useRef<HTMLDialogElement>(null);
+	const [confirmNew, setConfirmNew] = useState(false);
+	const diagnostics = labMode();
 	const [fullscreenError, setFullscreenError] = useState("");
 	useEffect(() => {
 		if (open && !dialog.current?.open) dialog.current?.showModal();
@@ -51,58 +54,64 @@ export default function SessionMenu({
 			</div>
 			<div className="menu-scroll">
 				<p className="tiny muted">The town waits while it is open.</p>
-				<CastMenu
-					checkpoint={session.checkpointCast}
-					recording={session.allowCastRecording}
-				/>
-				<button
-					type="button"
-					disabled={!session.town}
-					onClick={() => navigate("journal")}
-				>
-					Read the journal <span aria-hidden="true">▸</span>
-				</button>
-				<button
-					type="button"
-					onClick={() =>
-						document.documentElement.classList.toggle("alternate-theme")
-					}
-				>
-					Paper or lamplight
-				</button>
-				<fieldset className="menu-pacing">
-					<legend>The town's pace</legend>
-					<div className="segmented-control">
-						{(["automatic", "slow", "steady", "fast"] as const).map((mode) => (
-							<button
-								type="button"
-								key={mode}
-								aria-pressed={session.pacingMode === mode}
-								onClick={() => session.setPacingMode(mode)}
-							>
-								{mode[0]?.toUpperCase()}
-								{mode.slice(1)}
-							</button>
-						))}
-					</div>
-				</fieldset>
-				<h3 className="eyebrow">The notebook's studies</h3>
-				<button
-					type="button"
-					disabled={!session.town}
-					onClick={() => navigate("compare")}
-				>
-					Compare futures <span aria-hidden="true">▸</span>
-				</button>
-				<button
-					type="button"
-					disabled={!session.town}
-					onClick={() => navigate("studies")}
-				>
-					Recorded studies <span aria-hidden="true">▸</span>
-				</button>
+				{diagnostics && (
+					<>
+						<CastMenu
+							checkpoint={session.checkpointCast}
+							recording={session.allowCastRecording}
+						/>
+						<button
+							type="button"
+							disabled={!session.town}
+							onClick={() => navigate("journal")}
+						>
+							Read the journal <span aria-hidden="true">▸</span>
+						</button>
+						<button
+							type="button"
+							onClick={() =>
+								document.documentElement.classList.toggle("alternate-theme")
+							}
+						>
+							Paper or lamplight
+						</button>
+						<fieldset className="menu-pacing">
+							<legend>The town's pace</legend>
+							<div className="segmented-control">
+								{(["automatic", "slow", "steady", "fast"] as const).map(
+									(mode) => (
+										<button
+											type="button"
+											key={mode}
+											aria-pressed={session.pacingMode === mode}
+											onClick={() => session.setPacingMode(mode)}
+										>
+											{mode[0]?.toUpperCase()}
+											{mode.slice(1)}
+										</button>
+									),
+								)}
+							</div>
+						</fieldset>
+						<h3 className="eyebrow">The notebook's studies</h3>
+						<button
+							type="button"
+							disabled={!session.town}
+							onClick={() => navigate("compare")}
+						>
+							Compare futures <span aria-hidden="true">▸</span>
+						</button>
+						<button
+							type="button"
+							disabled={!session.town}
+							onClick={() => navigate("studies")}
+						>
+							Recorded studies <span aria-hidden="true">▸</span>
+						</button>
+					</>
+				)}
 				<button type="button" onClick={() => navigate("feedback")}>
-					Send word <span aria-hidden="true">▸</span>
+					Feedback <span aria-hidden="true">▸</span>
 				</button>
 				<button
 					type="button"
@@ -111,6 +120,8 @@ export default function SessionMenu({
 						const request = document.fullscreenElement
 							? document.exitFullscreen?.()
 							: document.documentElement.requestFullscreen?.();
+						if (!request)
+							setFullscreenError("Full screen is unavailable in this browser.");
 						void request?.catch(() =>
 							setFullscreenError("Full screen is unavailable in this browser."),
 						);
@@ -119,10 +130,14 @@ export default function SessionMenu({
 					Full screen
 				</button>
 				{fullscreenError && <p role="status">{fullscreenError}</p>}
-				<button type="button" onClick={() => navigate("title")}>
-					To the title page
-				</button>
-				<a href="https://human.adamwhite.work/lab/">All games</a>
+				{diagnostics && (
+					<button type="button" onClick={() => navigate("title")}>
+						To the title page
+					</button>
+				)}
+				<a href="https://human.adamwhite.work/games/" target="_top">
+					All games
+				</a>
 				{session.error && (
 					<div className="error" role="alert">
 						<ErrorMessage message={session.error} />
@@ -131,8 +146,8 @@ export default function SessionMenu({
 				{session.saveConflict && (
 					<div className="error" role="status">
 						<p>
-							Another tab saved the town. Keep a copy of this run from Send
-							word, or load the device town.
+							Another tab saved the town. This tab is paused. Load the saved
+							town to continue.
 						</p>
 						<button type="button" onClick={() => location.reload()}>
 							Load device town
@@ -140,9 +155,45 @@ export default function SessionMenu({
 					</div>
 				)}
 				<LabPrivacy />
+				{confirmNew ? (
+					<div className="new-town-confirm">
+						<p>Your current town will be kept as the previous town.</p>
+						<button
+							type="button"
+							disabled={
+								session.commandPending ||
+								session.saveConflict ||
+								session.comparing
+							}
+							onClick={() => {
+								session.startTown();
+								setConfirmNew(false);
+								close();
+							}}
+						>
+							Start new game
+						</button>
+						<button type="button" onClick={() => setConfirmNew(false)}>
+							Keep this town
+						</button>
+					</div>
+				) : (
+					<button
+						type="button"
+						disabled={
+							!session.town ||
+							session.saveConflict ||
+							session.commandPending ||
+							session.comparing
+						}
+						onClick={() => setConfirmNew(true)}
+					>
+						New game
+					</button>
+				)}
 			</div>
 			<button type="button" className="primary menu-resume" onClick={close}>
-				Back to Alder Quay
+				Resume
 			</button>
 		</dialog>
 	);

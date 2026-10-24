@@ -51,7 +51,7 @@ vi.mock("@adam0white/lab-client", async (original) => ({
 }));
 
 import { CastSession, type TownPacket } from "../src/cast-session.ts";
-import { CAST_EDITION } from "../src/core/canonical-cast.ts";
+import { ALLOCATION, CAST_EDITION } from "../src/core/canonical-cast.ts";
 import { createRuntime } from "../src/core/index.ts";
 
 async function head(id = "hf.cast.ece.murmur") {
@@ -505,3 +505,30 @@ it.each([undefined, 0, 0.35, "unmapped"] as const)(
 		s.close();
 	},
 );
+
+it("failed atomic admission preserves old ownership receipts and origin", async () => {
+	const s = new CastSession(async () => null);
+	const oldHead = await head();
+	s.heads = [oldHead];
+	s.file = true;
+	s.localOnly = true;
+	fake.request
+		.mockResolvedValueOnce({
+			expectedHeads: Object.fromEntries(
+				ALLOCATION.map((p) => [p.castId, null]),
+			),
+			blocked: [],
+			inputs: [],
+		})
+		.mockRejectedValueOnce(Error("Accepted batch reply was lost"));
+	await expect(s.fresh(73, 8)).rejects.toThrow("Accepted batch reply was lost");
+	expect(s.heads).toEqual([oldHead]);
+	expect(s.file).toBe(true);
+	expect(s.localOnly).toBe(true);
+	expect(fake.request).toHaveBeenCalledTimes(2);
+	expect(fake.request.mock.calls.map(([request]) => request.action)).toEqual([
+		"prepareBatch",
+		"putBatch",
+	]);
+	s.close();
+});

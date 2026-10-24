@@ -12,9 +12,9 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 			requests.push(request.url());
 	});
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await expect(
-		page.getByRole("heading", { name: "A town rebuilding after a flood." }),
+		page.getByRole("heading", { name: "A town is rebuilding after a flood." }),
 	).toBeVisible();
 	await expect(page.locator(".welcome-screen")).toContainText(
 		"They decide for themselves.",
@@ -42,7 +42,7 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 test("a new seed is durably saved while paused before its first round", async ({
 	page,
 }) => {
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	await page
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
@@ -88,7 +88,7 @@ test("one top-bar information panel supports keyboard and Escape", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/");
+	await page.goto("/?lab=1");
 	const info = page.getByRole("button", { name: "Information", exact: true });
 	await expect(info).toHaveCount(1);
 	await info.focus();

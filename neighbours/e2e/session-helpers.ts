@@ -2,7 +2,7 @@ import { expect, type Page } from "@playwright/test";
 
 export async function openSaves(page: Page) {
 	const feedback = page.getByRole("button", {
-		name: "Close Send word",
+		name: "Close Feedback",
 		exact: true,
 	});
 	if (await feedback.isVisible()) await feedback.click();
@@ -13,7 +13,7 @@ export async function openSaves(page: Page) {
 }
 export async function closeSaves(page: Page) {
 	const feedback = page.getByRole("button", {
-		name: "Close Send word",
+		name: "Close Feedback",
 		exact: true,
 	});
 	if (await feedback.isVisible()) await feedback.click();
@@ -44,7 +44,7 @@ export async function openDownload(page: Page) {
 		return;
 	await closeSaves(page);
 	await openSaves(page);
-	await page.getByRole("button", { name: /^Send word/ }).click();
+	await page.getByRole("button", { name: /^Feedback/ }).click();
 	await expect(
 		page.getByRole("button", { name: "Keep a copy of this run", exact: true }),
 	).toBeVisible();
