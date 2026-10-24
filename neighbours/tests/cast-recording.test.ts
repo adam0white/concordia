@@ -10,6 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const fake = vi.hoisted(() => ({
 	request: vi.fn(),
+	ready: Promise.resolve(true),
 	setPersonaRecording: vi.fn(),
 	setTelemetryOff: vi.fn(),
 	allowPersonaRecording: vi.fn(),
@@ -41,7 +42,9 @@ vi.mock("@adam0white/lab-client", async (original) => ({
 	...(await original<typeof import("@adam0white/lab-client")>()),
 	personaChannel: () => ({
 		enabled: true,
-		ready: Promise.resolve(true),
+		get ready() {
+			return fake.ready;
+		},
 		request: fake.request,
 	}),
 	watchPersonaCheckpoint: () => () => {},
@@ -72,6 +75,7 @@ async function head(id = "hf.cast.ece.murmur") {
 }
 beforeEach(() => {
 	vi.clearAllMocks();
+	fake.ready = Promise.resolve(true);
 	fake.personaRecordingAllowed = false;
 	fake.telemetryOn = true;
 	fake.privacySignalOn = false;
@@ -130,6 +134,41 @@ describe("browser history recording and ownership", () => {
 		} finally {
 			vi.useRealTimers();
 		}
+	});
+	it("keeps pending fresh admission through recording identity and preference events", async () => {
+		let release: ((value: boolean) => void) | undefined;
+		fake.ready = new Promise<boolean>((resolve) => {
+			release = resolve;
+		});
+		const s = new CastSession(async () => null);
+		const preparing = s.fresh(42, 8, true);
+		const generation = s.generation;
+		window.dispatchEvent(new Event("hf-lab-preference"));
+		for (const key of ["hf-lab-player", "hf-lab-recording-off"]) {
+			const event = new Event("storage");
+			Object.assign(event, { key });
+			window.dispatchEvent(event);
+		}
+		expect(s.generation).toBe(generation);
+		release?.(true);
+		await expect(preparing).resolves.toMatchObject({
+			schema: "neighbours/concordia@1",
+		});
+		s.close();
+	});
+	it("still cancels pending admission for fictional continuity changes", async () => {
+		let release: ((value: boolean) => void) | undefined;
+		fake.ready = new Promise<boolean>((resolve) => {
+			release = resolve;
+		});
+		const s = new CastSession(async () => null);
+		const preparing = s.fresh(42, 8, true);
+		const event = new Event("storage");
+		Object.assign(event, { key: "hf-persona-opt-in" });
+		window.dispatchEvent(event);
+		release?.(true);
+		await expect(preparing).rejects.toThrow("Run changed while preparing cast");
+		s.close();
 	});
 	it("sends the note when optional capture fails", async () => {
 		const s = new CastSession(async () => null);

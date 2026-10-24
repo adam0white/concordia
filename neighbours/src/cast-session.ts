@@ -99,8 +99,13 @@ export class CastSession {
 		this.recordingChoice++;
 		lab.setPersonaRecording(`pending-${crypto.randomUUID()}`);
 	};
-	preferencesChanged = () => {
-		this.invalidate();
+	preferencesChanged = (event: Event) => {
+		const key = (event as StorageEvent).key;
+		const recordingOnly =
+			event.type === "hf-lab-preference" ||
+			(typeof key === "string" && key.startsWith("hf-lab-"));
+		if (recordingOnly) this.recordingChoice++;
+		else this.invalidate();
 		if (this.recordReady && this.active) void this.recording().catch(() => {});
 	};
 	suspend() {
