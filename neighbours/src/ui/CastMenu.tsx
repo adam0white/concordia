@@ -3,7 +3,7 @@ import { shelf } from "../cast-session.ts";
 import { ALLOCATION } from "../core/canonical-cast.ts";
 export default function CastMenu({
 	checkpoint,
-	recording,
+	recording: _recording,
 }: {
 	checkpoint: (id: string, fork?: boolean) => Promise<void>;
 	recording: (allow: boolean) => Promise<void> | undefined;
@@ -67,20 +67,10 @@ export default function CastMenu({
 					continue. Reopen it to see whether their chapter was saved.
 				</p>
 				<p role="status">{status}</p>
-				<details>
-					<summary>Recording carried histories</summary>
-					<p>
-						Continuity is separate from lab recording. A file stays local.
-						Recording a shared chapter can link every carried history to this
-						recording identity.
-					</p>
-					<button type="button" onClick={() => void recording(true)}>
-						Permit recording all pinned histories
-					</button>
-					<button type="button" onClick={() => void recording(false)}>
-						Keep this chapter local
-					</button>
-				</details>
+				<p>
+					Recorded play links across games on this device. Switch recording off
+					in the game menu.
+				</p>
 				<a
 					href="https://human.adamwhite.work/lab/people/"
 					target="_blank"

@@ -43,15 +43,15 @@ export function useLabRecording() {
 }
 
 export function LabPrivacy() {
-	const { switchedOff, setRecording } = useLabRecording();
+	const { telemetryOn, setRecording } = useLabRecording();
 	return (
 		<div className="lab-privacy">
 			<label>
 				<input
 					type="checkbox"
 					role="switch"
-					aria-checked={!switchedOff}
-					checked={!switchedOff}
+					aria-checked={telemetryOn}
+					checked={telemetryOn}
 					onChange={(event) => setRecording(event.target.checked)}
 				/>{" "}
 				Record play for the lab

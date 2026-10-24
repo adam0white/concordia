@@ -1403,10 +1403,10 @@ export function useVisitorSession({
 		checkpointCast: async (id: string, fork = false) => {
 			await client.current?.cast.savePerson(id, fork);
 		},
-		sendFeedback: (note: string, name: string) => {
+		sendFeedback: (note: string, name: string, sharePlay = false) => {
 			const current = client.current;
-			if (!current) return sendFeedbackWithoutRun(note, name);
-			return current.cast.feedback(note, name, getRun);
+			if (!current) return sendFeedbackWithoutRun(note, name, sharePlay);
+			return current.cast.feedback(note, name, getRun, sharePlay);
 		},
 		allowCastRecording: (allow: boolean) =>
 			client.current?.cast.recording(allow),

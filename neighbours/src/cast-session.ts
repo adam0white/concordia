@@ -49,9 +49,14 @@ export interface TownPacket {
 export async function sendFeedbackWithoutRun(
 	note: string,
 	name: string,
+	sharePlay = false,
 ): Promise<boolean> {
 	lab.setPersonaRecording(`feedback-note-${crypto.randomUUID()}`);
-	await lab.sendFeedback(note, { name, run: { feedbackOnly: true } });
+	await lab.sendFeedback(note, {
+		name,
+		run: { feedbackOnly: true },
+		sharePlay,
+	});
 	return true;
 }
 export const shelf = personaChannel();
@@ -301,50 +306,23 @@ export class CastSession {
 			},
 		};
 	}
-	/** Explicit run exports preserve replay state but link history only with permission. */
+	/** The single recording preference includes cross-game history linkage. */
 	async feedback(
 		note: string,
 		name: string,
 		capture: () => Promise<unknown>,
+		sharePlay = false,
 	): Promise<boolean> {
-		const generation = this.generation,
-			choice = this.recordingChoice;
-		const revisions = this.heads.map((h) => h.revision).join("/");
-		const current = () =>
-			this.active &&
-			this.recordReady &&
-			generation === this.generation &&
-			choice === this.recordingChoice &&
-			this.heads.map((h) => h.revision).join("/") === revisions &&
-			lab.telemetryOn &&
-			(!lab.privacySignalOn || lab.privacyOverride);
 		let run: unknown;
-		if (current()) {
+		if (lab.telemetryOn || sharePlay) {
 			try {
 				run = await capture();
 			} catch {
 				/* The note remains available. */
 			}
 		}
-		const noteOnly = !current() || run === undefined || run === null;
-		try {
-			if (noteOnly) return await sendFeedbackWithoutRun(note, name);
-			if (!lab.personaRecordingAllowed || this.file) {
-				// Only browser ownership metadata is omitted. Runtime admission data is replay content.
-				if (run && typeof run === "object") {
-					const unlinked = { ...run } as Record<string, unknown>;
-					delete unlinked.castLocal;
-					run = unlinked;
-				}
-				if (this.file)
-					lab.setPersonaRecording(`feedback-run-${crypto.randomUUID()}`);
-			}
-			await lab.sendFeedback(note, { name, run });
-			return false;
-		} finally {
-			// Restore permission only through the complete current history/epoch check.
-			if (this.active) void this.recording().catch(() => {});
-		}
+		await lab.sendFeedback(note, { name, run, sharePlay });
+		return !(lab.telemetryOn || sharePlay) || run === undefined || run === null;
 	}
 	async recording(allow?: boolean) {
 		if (!this.recordReady || !this.active) {
