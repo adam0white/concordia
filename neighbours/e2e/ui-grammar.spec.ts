@@ -251,14 +251,16 @@ for (const width of [360, 1280]) {
 		await expect(
 			page.getByRole("button", { name: "Submit", exact: true }),
 		).toBeEnabled();
-		await expect(
-			page.getByText(
-				"Recording is off. Send includes only your note and verdict, without history linkage.",
-				{ exact: true },
-			),
-		).toBeVisible();
+		const sharePlay = page.getByRole("checkbox", {
+			name: "Share this run and my play with the lab",
+			exact: true,
+		});
+		await expect(sharePlay).toHaveCount(1);
+		await expect(sharePlay).toBeVisible();
+		await expect(sharePlay).not.toBeChecked();
 		await capture(page, "feedback");
 		await page.getByText("+ Add a name", { exact: true }).click();
+		await expect(page.getByLabel("Your name or tester id")).toBeVisible();
 		await page.getByLabel("Your name or tester id").fill("QA-local");
 		const [download] = await Promise.all([
 			page.waitForEvent("download"),
