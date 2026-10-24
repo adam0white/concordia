@@ -1,6 +1,43 @@
 import { mkdir } from "node:fs/promises";
 import { expect, type Page, test } from "@playwright/test";
 
+type FeedbackPayload = {
+	kind?: string;
+	name?: string;
+	note?: string;
+	data?: { note?: string };
+	run?: unknown;
+	player?: string;
+	runId?: string;
+};
+async function observeLabPayloads(page: Page) {
+	await page.addInitScript(() => {
+		const payloads: FeedbackPayload[] = [];
+		Object.assign(window, { __qaLabPayloads: payloads });
+		const actual = window.fetch;
+		window.fetch = function (input, options) {
+			const response = actual.apply(this, [input, options]);
+			if (
+				/\/(linked|run)$/.test(String(input)) &&
+				options?.method === "POST" &&
+				options.body instanceof Blob
+			)
+				void new Response(
+					options.body.stream().pipeThrough(new DecompressionStream("gzip")),
+				)
+					.json()
+					.then((payload) => payloads.push(payload));
+			return response;
+		};
+	});
+}
+const labPayloads = (page: Page) =>
+	page.evaluate(
+		() =>
+			(window as unknown as { __qaLabPayloads: FeedbackPayload[] })
+				.__qaLabPayloads,
+	);
+
 const evidence = process.env.NEIGHBOURS_EVIDENCE;
 async function capture(page: Page, name: string) {
 	await expect
@@ -212,7 +249,7 @@ for (const width of [360, 1280]) {
 		await menu(page);
 		await page.getByRole("button", { name: /^Send word/ }).click();
 		await expect(
-			page.getByRole("button", { name: "Send", exact: true }),
+			page.getByRole("button", { name: "Submit", exact: true }),
 		).toBeEnabled();
 		await expect(
 			page.getByText(
@@ -249,63 +286,35 @@ for (const width of [360, 1280]) {
 }
 
 for (const width of [360, 1280]) {
-	for (const privacy of [false, true]) {
-		test(`Send word note and remembered name at ${width}, privacy=${privacy}`, async ({
+	for (const mode of ["on", "off-ticked", "off-unticked"]) {
+		test(`Send word Submit shares only the chosen data at ${width}, mode=${mode}`, async ({
 			page,
 		}) => {
-			test.setTimeout(120000);
-			const received: {
-				kind?: string;
-				name?: string;
-				note?: string;
-				data?: { note?: string };
-				run?: unknown;
-			}[] = [];
 			await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
-			await page.route("**/lab/api/**", async (route) => {
-				const request = route.request();
-				if (request.method() === "POST") {
-					const body = request.postDataBuffer();
-					if (body) {
-						const { gunzipSync } = await import("node:zlib");
-						try {
-							received.push(JSON.parse(gunzipSync(body).toString()));
-						} catch {
-							/* Non-gzip unrelated telemetry. */
-						}
-					}
-				}
-				await route.fulfill({
+			await observeLabPayloads(page);
+			await page.addInitScript(() => {
+				Object.defineProperty(navigator, "doNotTrack", {
+					value: "1",
+					configurable: true,
+				});
+				Object.defineProperty(navigator, "globalPrivacyControl", {
+					value: true,
+					configurable: true,
+				});
+				localStorage.setItem("hf-lab-feedback-name", "Earlier tester");
+			});
+			await page.route("**/lab/api/**", (route) =>
+				route.fulfill({
 					status: 200,
 					contentType: "application/json",
 					headers: { "Access-Control-Allow-Origin": "*" },
 					body: JSON.stringify({ id: "qa-local-receipt", ok: true }),
-				});
-			});
-			await page.addInitScript(
-				({ privacy }) => {
-					if (privacy)
-						Object.defineProperty(navigator, "doNotTrack", {
-							value: "1",
-							configurable: true,
-						});
-					else {
-						localStorage.setItem("hf-lab-recording-off", "1");
-						Object.defineProperty(navigator, "doNotTrack", {
-							value: "0",
-							configurable: true,
-						});
-					}
-					localStorage.setItem("hf-lab-feedback-name", "Earlier tester");
-				},
-				{ privacy },
+				}),
 			);
-			// The client intentionally suppresses linked localhost recording. Serve the
-			// exact local build at a secure synthetic origin; API transport stays intercepted.
 			const configured =
 				process.env.NEIGHBOURS_LIVE_URL ?? "http://127.0.0.1:5286";
 			let entry = "/";
-			if (!privacy && !configured.startsWith("https://")) {
+			if (!configured.startsWith("https://")) {
 				entry = "https://neighbours-ui-test.invalid/";
 				await page.route(
 					"https://neighbours-ui-test.invalid/**",
@@ -327,9 +336,22 @@ for (const width of [360, 1280]) {
 				timeout: 120000,
 			});
 			await menu(page);
+			const recording = page.getByLabel("Record play for the lab", {
+				exact: true,
+			});
+			await expect(recording).not.toBeChecked();
+			if (mode === "on") await recording.check();
 			await page.getByRole("button", { name: /^Send word/ }).click();
+			const share = page.getByLabel("Share this run and my play with the lab", {
+				exact: true,
+			});
+			await expect(share).toHaveCount(mode === "on" ? 0 : 1);
+			if (mode !== "on") {
+				await expect(share).not.toBeChecked();
+				if (mode === "off-ticked") await share.check();
+			}
 			await expect(
-				page.getByRole("button", { name: "Send", exact: true }),
+				page.getByRole("button", { name: "Submit", exact: true }),
 			).toBeEnabled();
 			await page.getByText("+ Add a name", { exact: true }).click();
 			await expect(page.getByLabel("Your name or tester id")).toHaveValue(
@@ -339,39 +361,50 @@ for (const width of [360, 1280]) {
 				.getByLabel("Your name or tester id")
 				.fill("  QA named tester  ");
 			await page
-				.getByLabel(
-					"What happened in the town, what you wanted, what got in the way.",
-				)
-				.fill("Intercepted browser verification.");
+				.locator("#feedback-note")
+				.fill("Intercepted Submit verification.");
 			await page.getByRole("button", { name: "Not sure", exact: true }).click();
-			await expect(
-				page.getByRole("button", { name: "Send", exact: true }),
-			).toBeEnabled();
-			await capture(
-				page,
-				privacy ? "feedback-privacy-note" : "feedback-recording-off-note",
-			);
-			await page.getByRole("button", { name: "Send", exact: true }).click();
+			await capture(page, `feedback-${mode}`);
+			await page.getByRole("button", { name: "Submit", exact: true }).click();
 			await expect(
 				page.getByText(
-					"Note queued without a run or history linkage. This is not a delivery receipt.",
+					mode === "off-unticked"
+						? "Note queued without a run or history linkage. This is not a delivery receipt."
+						: "Note queued. An available run may also be included. This is not a delivery receipt.",
 					{ exact: true },
 				),
 			).toBeVisible();
 			await expect
-				.poll(() => received.find((x) => Boolean(x.run)), { timeout: 30000 })
+				.poll(async () =>
+					(await labPayloads(page)).find((x) =>
+						(x.note ?? x.data?.note)?.includes(
+							"Intercepted Submit verification.",
+						),
+					),
+				)
 				.toBeTruthy();
-			const envelope = received.find((x) => Boolean(x.run));
-			expect(envelope?.run).toEqual({ feedbackOnly: true });
-			expect(envelope).not.toHaveProperty("player");
-			expect(envelope).not.toHaveProperty("session");
-			expect(envelope?.name).toBe("QA named tester");
-			expect(envelope?.note ?? envelope?.data?.note).toContain(
-				"Verdict: mixed",
+			const payloads = await labPayloads(page);
+			const note = payloads.find((x) =>
+				(x.note ?? x.data?.note)?.includes("Intercepted Submit verification."),
 			);
-			expect(envelope?.note ?? envelope?.data?.note).toContain(
-				"Intercepted browser verification.",
-			);
+			expect(note?.name).toBe("QA named tester");
+			expect(note?.note ?? note?.data?.note).toContain("Verdict: mixed");
+			if (mode === "off-unticked") {
+				expect(note?.run).toEqual({ feedbackOnly: true });
+				expect(note).not.toHaveProperty("player");
+				expect(note).not.toHaveProperty("session");
+			} else {
+				expect(note?.kind).toBe("note");
+				expect(note?.player).toBeTruthy();
+				expect(
+					payloads.some(
+						(x) =>
+							x.kind === "run" &&
+							x.player === note?.player &&
+							x.runId === note?.runId,
+					),
+				).toBe(true);
+			}
 			expect(
 				await page.evaluate(() => localStorage.getItem("hf-lab-feedback-name")),
 			).toBe("QA named tester");
@@ -381,21 +414,12 @@ for (const width of [360, 1280]) {
 
 for (const width of [360, 1280]) {
 	test(`Send word before entering a town at ${width}`, async ({ page }) => {
-		const received: Record<string, unknown>[] = [];
+		await observeLabPayloads(page);
 		await page.setViewportSize({ width, height: 800 });
 		await page.addInitScript(() =>
 			localStorage.setItem("hf-lab-recording-off", "1"),
 		);
 		await page.route("**/lab/api/**", async (route) => {
-			const body = route.request().postDataBuffer();
-			if (body) {
-				const { gunzipSync } = await import("node:zlib");
-				try {
-					received.push(JSON.parse(gunzipSync(body).toString()));
-				} catch {
-					/* Other telemetry. */
-				}
-			}
 			await route.fulfill({
 				status: 200,
 				contentType: "application/json",
@@ -414,15 +438,17 @@ for (const width of [360, 1280]) {
 				"What happened in the town, what you wanted, what got in the way.",
 			)
 			.fill("A note from the title.");
-		await page.getByRole("button", { name: "Send", exact: true }).click();
+		await page.getByRole("button", { name: "Submit", exact: true }).click();
 		await expect(
 			page.getByText(
 				"Note queued without a run or history linkage. This is not a delivery receipt.",
 				{ exact: true },
 			),
 		).toBeVisible();
-		await expect.poll(() => received.find((x) => Boolean(x.run))).toBeTruthy();
-		const envelope = received.find((x) => Boolean(x.run));
+		await expect
+			.poll(async () => (await labPayloads(page)).find((x) => Boolean(x.run)))
+			.toBeTruthy();
+		const envelope = (await labPayloads(page)).find((x) => Boolean(x.run));
 		expect(envelope?.run).toEqual({ feedbackOnly: true });
 		expect(envelope).not.toHaveProperty("player");
 		expect(envelope).not.toHaveProperty("session");

@@ -313,12 +313,22 @@ export class CastSession {
 		capture: () => Promise<unknown>,
 		sharePlay = false,
 	): Promise<boolean> {
+		if (sharePlay) lab.setTelemetryOff(false);
 		let run: unknown;
 		if (lab.telemetryOn || sharePlay) {
+			let cancelTimeout = () => {};
 			try {
-				run = await capture();
+				run = await Promise.race([
+					capture(),
+					new Promise<undefined>((resolve) => {
+						const timer = globalThis.setTimeout(resolve, 4000);
+						cancelTimeout = () => globalThis.clearTimeout(timer);
+					}),
+				]);
 			} catch {
-				/* The note remains available. */
+				/* An optional export must never prevent the note. */
+			} finally {
+				cancelTimeout();
 			}
 		}
 		await lab.sendFeedback(note, { name, run, sharePlay });

@@ -11,6 +11,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const fake = vi.hoisted(() => ({
 	request: vi.fn(),
 	setPersonaRecording: vi.fn(),
+	setTelemetryOff: vi.fn(),
 	allowPersonaRecording: vi.fn(),
 	sendFeedback: vi.fn(),
 	personaRecordingAllowed: false,
@@ -20,6 +21,7 @@ const fake = vi.hoisted(() => ({
 vi.mock("../src/ui/lab.tsx", () => ({
 	lab: {
 		setPersonaRecording: fake.setPersonaRecording,
+		setTelemetryOff: fake.setTelemetryOff,
 		allowPersonaRecording: fake.allowPersonaRecording,
 		build: () => ({ c: "test" }),
 		get personaRecordingAllowed() {
@@ -104,6 +106,31 @@ describe("browser history recording and ownership", () => {
 			s.close();
 		},
 	);
+	it("opts in immediately and sends the note after four seconds when optional capture stalls", async () => {
+		vi.useFakeTimers();
+		try {
+			const s = new CastSession(async () => null);
+			fake.telemetryOn = false;
+			const sending = s.feedback(
+				"Keep this note",
+				"",
+				() => new Promise(() => {}),
+				true,
+			);
+			expect(fake.setTelemetryOff).toHaveBeenCalledWith(false);
+			expect(fake.sendFeedback).not.toHaveBeenCalled();
+			await vi.advanceTimersByTimeAsync(4000);
+			await sending;
+			expect(fake.sendFeedback).toHaveBeenCalledWith("Keep this note", {
+				name: "",
+				run: undefined,
+				sharePlay: true,
+			});
+			s.close();
+		} finally {
+			vi.useRealTimers();
+		}
+	});
 	it("sends the note when optional capture fails", async () => {
 		const s = new CastSession(async () => null);
 		s.commitFresh();

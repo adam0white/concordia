@@ -37,7 +37,7 @@ test("player recording opt-out permits notes and retains the local copy action",
 	expect(html).toContain("Share this run and my play with the lab");
 	expect(html).not.toContain("Record play for the lab");
 	expect(html).not.toContain('checked=""');
-	expect(html).not.toMatch(/disabled="">Send</);
+	expect(html).not.toMatch(/disabled="">Submit</);
 	expect(html).toContain("Keep a copy of this run");
 });
 test("browser privacy permits an unlinked note", () => {
@@ -46,7 +46,7 @@ test("browser privacy permits an unlinked note", () => {
 	const html = render();
 	expect(html).toContain("Share this run and my play with the lab");
 	expect(html).not.toContain("Record play for the lab");
-	expect(html).not.toMatch(/disabled="">Send</);
+	expect(html).not.toMatch(/disabled="">Submit</);
 	expect(html).not.toContain("Your run, saves and log reach us on their own.");
 });
 test("normal recording allows feedback and prefills a remembered optional name", () => {
@@ -55,5 +55,5 @@ test("normal recording allows feedback and prefills a remembered optional name",
 	expect(html).toContain('value="Returning tester"');
 	expect(html).toContain("Your name or tester id");
 	expect(html).not.toContain("Share this run and my play with the lab");
-	expect(html).not.toMatch(/disabled="">Send</);
+	expect(html).not.toMatch(/disabled="">Submit</);
 });
