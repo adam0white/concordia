@@ -495,7 +495,8 @@ export class CastSession {
 		const raw = snapshot(r.person);
 		const portable = projectCalendarPersona(raw, {
 			version: "neighbours-calendar/1",
-			skills: { repair: "repair" },
+			// Imports can legitimately carry no host repair skill. Never invent one.
+			skills: Object.hasOwn(raw.skills, "repair") ? { repair: "repair" } : {},
 			calendar: {
 				version: "hf-persona-calendar-map/1",
 				offset: 0,

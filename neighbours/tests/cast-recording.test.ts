@@ -4,6 +4,7 @@ import {
 	createPersona,
 	initialPersonaLife,
 	preparePersonaLife,
+	validatePersona,
 } from "@adam0white/lab-client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -364,3 +365,88 @@ it("persists a real accepted source head, then checkpoints again after exact loc
 	first.close();
 	next.close();
 });
+
+it.each([undefined, 0, 0.35, "unmapped"] as const)(
+	"projects a controlled finished boundary with repair level %s without inventing a skill",
+	async (level) => {
+		const { RuntimePort } = await import("../src/bridge-port.ts");
+		const { createPerson } = await import("@adam0white/human-framework");
+		const port = new RuntimePort(42, 6);
+		port.wanted.add("noor");
+		for (let round = 0; round < 24 && !port.boundaries.has("noor"); round++) {
+			const ids = port.dispatch({ op: "prepare" }) as string[];
+			for (const actorId of ids)
+				port.dispatch({
+					op: "apply",
+					actorId,
+					actionId: port.dispatch({ op: "choose", actorId }),
+				});
+		}
+		const finished = port.boundaries.get("noor");
+		if (!finished) throw Error("No actual action boundary");
+		// Synthetic acquired-state variants of an observed boundary, not a played source tape.
+		const person = structuredClone(finished);
+		person.skills = createPerson({
+			id: "skill-control",
+			name: "Skill control",
+			seed: 1,
+			bornAt: -28 * 525600,
+			sex: "female",
+			skills:
+				level === "unmapped"
+					? { courier: 0.2 }
+					: level === undefined
+						? {}
+						: { repair: level },
+		}).skills;
+		const runtime = port.runtime.export() as TownPacket["runtime"];
+		runtime.chapter = {
+			edition: CAST_EDITION,
+			inputs: [],
+			claims: [],
+			initial: {},
+			mapping: "neighbours-calendar/1",
+		};
+		const s = new CastSession(async () => null);
+		s.commitFresh();
+		fake.request.mockImplementation(async (q) =>
+			q.action === "recordingBatch"
+				? {
+						sameEpoch: false,
+						revisions: q.envelopes.map((h: { revision: string }) => h.revision),
+						recordingEpoch: "current",
+					}
+				: {},
+		);
+		await s.checkpoint(
+			{
+				schema: "neighbours/concordia@1",
+				rounds: runtime.round,
+				runtime,
+				castBoundary: { actorId: "noor", person },
+			},
+			"hf.cast.ece.murmur",
+		);
+		const exported = await validatePersona(s.heads[0]);
+		const portable = exported.transfer.person as {
+			person: { skills: unknown; limitations: string[] };
+		};
+		if (level === "unmapped") {
+			expect(portable.person.skills).toEqual({});
+			expect(portable.person.limitations).toContain("skill:courier");
+			const checkpoint = exported.transfer.checkpoint as { sha256: string };
+			const archived = s.decorate({
+				schema: "neighbours/concordia@1",
+				rounds: runtime.round,
+				runtime,
+			}).castLocal?.sources;
+			expect(archived?.[checkpoint.sha256]?.skills).toEqual(person.skills);
+		} else {
+			expect(portable.person.skills).toEqual(person.skills);
+			expect(Object.keys(portable.person.skills as object)).toEqual(
+				level === undefined ? [] : ["repair"],
+			);
+		}
+		s.close();
+	},
+);
