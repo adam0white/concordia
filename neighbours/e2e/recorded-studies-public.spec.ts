@@ -36,7 +36,7 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await studies.getByLabel("Frozen town case").selectOption("6");
 	await expect(
 		bench.getByRole("row", {
-			name: "Returned to Bilal Returned No return in this interval",
+			name: "Returned to Bilal No return in this interval Returned",
 			exact: true,
 		}),
 	).toBeVisible();

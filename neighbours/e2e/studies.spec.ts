@@ -85,8 +85,21 @@ test("320px recorded studies show actual case outcomes, honest LLM limits and ke
 		),
 	).toBe(true);
 	await page.getByRole("combobox", { name: /^Study/ }).selectOption("cart");
-	await expect(page.locator(".study-results")).toContainText("cart-slow");
-	await expect(page.locator(".study-results")).toContainText("work");
+	const cartReport = await (
+		await page.request.get("/experiments/cart-choice-probe.json")
+	).json();
+	// The regenerated canonical run searched actual decisions without finding a matched opportunity.
+	expect(cartReport.opportunity).toBeNull();
+	expect(cartReport.raviDecisions).toBeGreaterThan(0);
+	const results = page.locator(".study-results");
+	await expect(
+		results.locator("div").filter({ hasText: "With cart goal" }),
+	).toHaveText("With cart goalNot recorded");
+	await expect(
+		results.locator("div").filter({ hasText: "Cart goal removed" }),
+	).toHaveText("Cart goal removedNot recorded");
+	await expect(results).toContainText("Not measured by this choice probe");
+	await expect(results).not.toContainText("cart-slow");
 });
 
 test("actual tools and bus branches retain setup, separate history and mark a same-clock live change stale", async ({
