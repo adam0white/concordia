@@ -25,7 +25,7 @@ export function plainText(text: string): string {
 					`${guestList(names)} ${action.startsWith("ate") ? `ate with ${host}` : `received the practical lesson from ${host}`} at ${possessives[host] ?? "the"} ${activity}.`,
 			)
 			.replace(
-				/\b(Nora|Derya|Ece|Sam|Bilal|Rafi) (finished (?:hosting|getting the hall ready for)) \1’s /g,
+				/\b(Nora|Derya|Ece|Sam|Bilal|Rafi) ((?:finished|could not finish|started to|stopped(?: on the way to [^.!?]+ before starting to)?) (?:host(?:ing)?|get(?:ting)? the hall ready for|invit(?:e|ing) neighbours to|(?:go|going) to|say(?:ing)? yes to|declin(?:e|ing))) \1’s /g,
 				(_all, name: string, action: string) =>
 					`${name} ${action} ${possessives[name]} `,
 			)
@@ -59,9 +59,9 @@ export function plainText(text: string): string {
 	);
 }
 
-/** A drink in progress is an observation, not an assertion about private thirst. */
+/** A planned drink supports an approximate read, not a claim that drinking has begun. */
 export function personRead(name: string, text: string): string {
 	if (text === `${name} plans to keep having a drink of water.`)
-		return `${name} is having a drink of water.`;
+		return `${name} seems thirsty.`;
 	return plainText(text);
 }

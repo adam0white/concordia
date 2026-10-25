@@ -1,6 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, expect, it, vi } from "vitest";
+import { actionWords, ingWords, jobLine } from "../src/core/voicing";
 import { labMode } from "../src/ui/lab-mode";
 import { personRead, plainText } from "../src/ui/plain-english";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
@@ -86,6 +87,24 @@ it("projects complete routed narration without changing the recorded strings", (
 		).toBe(
 			`${names === "Reese Reed" ? names : names === "Reese Reed, Ellis Diaz" ? "Reese Reed and Ellis Diaz" : "Reese Reed, Ellis Diaz and 1 other neighbour"} received the practical lesson from Nora at her practical class.`,
 		);
+	for (const action of [
+		"started to host",
+		"stopped hosting",
+		"could not finish hosting",
+		"stopped on the way to Community hall before starting to host",
+	])
+		expect(plainText(`Nora ${action} Nora’s practical class.`)).toBe(
+			`Nora ${action} her practical class.`,
+		);
+	for (const action of [
+		"started to get the hall ready for",
+		"stopped getting the hall ready for",
+		"could not finish getting the hall ready for",
+		"stopped on the way to Community hall before starting to get the hall ready for",
+	])
+		expect(plainText(`Sam ${action} Sam’s shared supper.`)).toBe(
+			`Sam ${action} his shared supper.`,
+		);
 	expect(plainText("Nora finished hosting Nora’s practical class.")).toBe(
 		"Nora finished hosting her practical class.",
 	);
@@ -111,7 +130,7 @@ it("projects complete routed narration without changing the recorded strings", (
 	);
 	expect(
 		personRead("Nora", "Nora plans to keep having a drink of water."),
-	).toBe("Nora is having a drink of water.");
+	).toBe("Nora seems thirsty.");
 	expect(plainText("0 meals arrived by handcart.")).toBe(
 		"No meals arrived by handcart.",
 	);
@@ -155,4 +174,31 @@ it("projects a single outcome in the actual story card", () => {
 		"Nora started to keep the inspected section of the hall closed.",
 	);
 	expect(html).not.toContain("this section");
+});
+
+it("uses owner pronouns through every generated evening job phase", () => {
+	for (const [name, possessive, activity] of [
+		["Nora", "her", "practical class"],
+		["Sam", "his", "shared supper"],
+	] as const) {
+		for (const label of [
+			`Host ${name}’s ${activity} at the hall`,
+			`Prepare the hall for ${name}’s ${activity}`,
+			`Invite neighbours and promise to host ${name}’s ${activity}`,
+		]) {
+			const lines = [
+				`${name} started to ${actionWords(label)}.`,
+				`${name} stopped ${ingWords(label)} at Community hall.`,
+				`${name} stopped on the way to Community hall before starting to ${actionWords(label)}.`,
+				jobLine(name, label, false),
+				jobLine(name, label, true),
+			];
+			for (const line of lines) {
+				const projected = plainText(line);
+				expect(projected).toContain(`${possessive} ${activity}`);
+				expect(projected).not.toContain(`${name}’s ${activity}`);
+				expect(projected.startsWith(name)).toBe(true);
+			}
+		}
+	}
 });
