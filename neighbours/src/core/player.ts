@@ -536,14 +536,14 @@ function privateConversation(host: PlayerHost, input: Intervention) {
 		(!r.job && r.person.activity)
 	)
 		throw Error(
-			"Wait until their current work has finished, or meet them during a break.",
+			`Wait until ${r.person.name} finishes the current work, or visit during a break.`,
 		);
 	if (Object.keys(input).some((k) => k !== "kind" && k !== "actorId"))
 		throw Error("A private conversation takes only a person.");
 	const episode = `private-discovery:${r.person.id}`;
 	if (r.person.memory.episodes.some((e) => e.id === episode))
 		throw Error(
-			"They already chose to share this with you. Read your journal.",
+			`${r.person.name} already chose to share this with you. Read your journal.`,
 		);
 	activate(host);
 	const choice = decide(
@@ -726,8 +726,8 @@ function speak(
 		accepted?.answer.counterOffer
 			? `You accepted ${r.person.name}’s offer to ${counterWords(accepted.answer.counterOffer)}.`
 			: mode === "promise" && work
-				? `You promised ${r.person.name} you would ${work === "cover-shift" ? `cover one of ${r.person.name}’s paid shifts` : PLAYER_WORK[work].label} and asked them to ${label.toLowerCase()}.`
-				: `You ${verb} ${r.person.name} to ${label.toLowerCase()}.`,
+				? `You asked ${r.person.name} to ${actionWords(label)} and offered to ${work === "cover-shift" ? "cover a paid shift" : PLAYER_WORK[work].label} in return.`
+				: `You ${verb} ${r.person.name} to ${actionWords(label)}.`,
 		at,
 		[],
 		r.person.id,
@@ -748,7 +748,7 @@ function speak(
 	for (const old of p.requests)
 		if (old.targetId === r.person.id && old.status === "held") {
 			old.status = "replaced";
-			releasePledge(host, old, "you asked them something else");
+			releasePledge(host, old, `you asked ${r.person.name} something else`);
 		}
 	const q: PlayerRequest = {
 		id: request.id,
@@ -776,7 +776,7 @@ function speak(
 			"player-pledge",
 			binding
 				? `You are now committed to your promise to ${r.person.name}: ${hour}.`
-				: `Your promise to ${r.person.name} will apply if they act on your request: ${hour}.`,
+				: `If ${r.person.name} acts on your request, you must give ${hour}.`,
 			at,
 			[request.id, answerEvent.id],
 			r.person.id,
@@ -803,7 +803,7 @@ function speak(
 				targetId: r.person.id,
 				placeId: at,
 				salience: 0.7,
-				summary: `They promised to give an hour of their own work by ${clock(dueBy)}.`,
+				summary: `The visitor promised to give an hour of work by ${clock(dueBy)}.`,
 				claims: [{ prop: `pledge:${pledgeId}`, value: true, confidence: 0.8 }],
 			},
 		]);
@@ -886,7 +886,9 @@ function startWork(
 	const target = s.people.find((r) => r.person.id === forId);
 	if (kind === "cover-shift") {
 		if (!target || shiftsLeft(target, day) <= 0)
-			throw Error(`${target?.person.name ?? "They"} has no shift left today`);
+			throw Error(
+				`${target?.person.name ?? "This person"} has no shift left today`,
+			);
 	}
 	const state = activate(host);
 	if (state.work.day !== day) state.work = { day, starts: 0 };
@@ -1043,7 +1045,7 @@ export function playerRound(host: PlayerHost): void {
 				releasePledge(
 					host,
 					q,
-					`${clock(pledge.dueBy)} came before they took up your request`,
+					`${clock(pledge.dueBy)} came before ${nameOf(s, pledge.toId)} took up your request`,
 				);
 		}
 	for (const q of p.requests)
@@ -1052,7 +1054,11 @@ export function playerRound(host: PlayerHost): void {
 			!s.people.find((r) => r.person.id === q.targetId)?.person.body.alive
 		) {
 			q.status = "dropped";
-			releasePledge(host, q, "they can no longer take up your request");
+			releasePledge(
+				host,
+				q,
+				`${nameOf(s, q.targetId)} can no longer take up your request`,
+			);
 		}
 	advanceGoals(s);
 }
@@ -1449,7 +1455,9 @@ export function playerView(s: Save): PlayerView {
 			mode: q.mode,
 			verdict: q.answer.verdict,
 			says: q.answer.says,
-			...(refusalWhy(q.answer) ? { why: refusalWhy(q.answer) } : {}),
+			...(refusalWhy(q.answer, nameOf(s, q.targetId))
+				? { why: refusalWhy(q.answer, nameOf(s, q.targetId)) }
+				: {}),
 			...(q.answer.counterOffer ? { counterOffer: q.answer.counterOffer } : {}),
 			status: q.status,
 			...(q.decision

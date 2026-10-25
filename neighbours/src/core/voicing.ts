@@ -363,9 +363,10 @@ export function offerKind(id: string): string {
 /** Strip menu details: " · one hour", " · Day 3 at 18:00", " (week 2)", a trailing full stop. */
 function tidy(text: string): string {
 	return text
+		.trim()
 		.replace(/\s*·.*$/, "")
 		.replace(/\s*\([^)]*\)/g, "")
-		.replace(/\.$/, "")
+		.replace(/[.!?]+$/, "")
 		.trim();
 }
 function lowerFirst(text: string): string {
@@ -379,7 +380,7 @@ function upperFirst(text: string): string {
 export function phraseFor(
 	label: string,
 ): { phrase: Phrase; m: RegExpMatchArray } | undefined {
-	const clean = label.trim();
+	const clean = tidy(label);
 	for (const phrase of PHRASES) {
 		const m = clean.match(phrase.match);
 		if (m) return { phrase, m };
@@ -396,7 +397,7 @@ export function actionWords(label: string): string {
 /** A gerund phrase for an action label: "working a paid shift". */
 export function ingWords(label: string): string {
 	const hit = phraseFor(label);
-	return hit ? hit.phrase.ing(hit.m) : lowerFirst(tidy(label));
+	return hit ? hit.phrase.ing(hit.m) : `doing the task “${tidy(label)}”`;
 }
 
 /**
@@ -420,6 +421,8 @@ type AnswerLike = {
 
 /** What "after I …" names, or undefined for a plain alternative. */
 function afterAction(label: string): string | undefined {
+	const task = label.match(/^after I finish this task \((.+)\)$/i);
+	if (task) return task[1];
 	const m = label.match(/^after I (.+)$/i);
 	return m?.[1];
 }
@@ -439,7 +442,7 @@ export function counterWords(counter: CounterLike): string {
 		const hit = phraseFor(after);
 		return hit
 			? `do it after ${hit.phrase.ing(hit.m)}`
-			: `do it once they ${lowerFirst(tidy(after))}`;
+			: `do it after finishing the task “${tidy(after)}”`;
 	}
 	return `${actionWords(label)} instead`;
 }
@@ -497,22 +500,25 @@ export function voicedLine(answer: AnswerLike): string {
 }
 
 const NEED_FIRST: Record<string, string> = {
-	food: "they need to eat first",
-	water: "they need a drink first",
-	sleep: "they need sleep first",
-	rest: "they need to rest first",
-	survival: "they cannot manage this while their basic needs are unmet",
+	food: "food comes first",
+	water: "a drink comes first",
+	sleep: "sleep comes first",
+	rest: "rest comes first",
+	survival: "basic needs must be met first",
 };
 /**
  * Refusals that say why: HF's spoken line can be curt ("I can't right now."), so the screen adds the dominant
  * reason HF recorded (`SuggestionResolution.reason`) in plain narrator words. Only reasons HF names are glossed;
  * an unknown reason adds nothing rather than a guess.
  */
-export function refusalWhy(answer: {
-	verdict: string;
-	reason?: string;
-	says?: string;
-}): string | undefined {
+export function refusalWhy(
+	answer: {
+		verdict: string;
+		reason?: string;
+		says?: string;
+	},
+	name = "This person",
+): string | undefined {
 	if (answer.verdict !== "refused" || !answer.reason) return undefined;
 	const reason = answer.reason;
 	// These released sentences already state the same reason. Retain richer host explanations otherwise,
@@ -535,17 +541,16 @@ export function refusalWhy(answer: {
 		return undefined;
 	if (reason.startsWith("need:")) {
 		const need = NEED_FIRST[reason.slice(5)];
-		return need ? `They refused because ${need}.` : undefined;
+		return need ? `${name} refused because ${need}.` : undefined;
 	}
 	if (reason === "distrust")
-		return "They refused because they do not trust your promises right now.";
+		return `${name} does not trust your promises right now.`;
 	if (reason === "unavailable" || reason === "capacity")
-		return "They refused because they cannot do this here and now.";
+		return `${name} cannot do this here and now.`;
 	if (reason === "autonomy")
-		return "They refused because you pressured them and they want to choose for themselves.";
-	if (reason.startsWith("norm:"))
-		return "They refused because this goes against their principles.";
+		return `${name} refused because of your pressure and wants to choose freely.`;
+	if (reason.startsWith("norm:")) return `${name} refused on principle.`;
 	if (reason.startsWith("commitment") || reason.startsWith("omission"))
-		return "They refused because they have another promise to keep first.";
+		return `${name} has another promise to keep first.`;
 	return undefined;
 }

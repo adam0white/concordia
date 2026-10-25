@@ -1,4 +1,5 @@
 import type { PersonView } from "../contracts";
+import { labMode } from "./lab-mode";
 
 const progressWords = (progress: number) =>
 	progress >= 1
@@ -20,14 +21,20 @@ export default function PersonPurposes({
 	return (
 		<details className="person-purposes">
 			<summary>
-				Purposes <span>{person.purposes.length}</span>
+				Goals <span>{person.purposes.length}</span>
 			</summary>
 			{person.purposes.map((purpose) => (
 				<div className="purpose-state" key={purpose.id}>
 					<p>{purpose.label}</p>
 					<span className="tiny muted">
-						{purpose.status.replaceAll("-", " ")} ·{" "}
-						<span className="hand">{progressWords(purpose.progress)}</span>
+						{labMode() && <>{purpose.status.replaceAll("-", " ")} · </>}
+						<span className="hand">
+							{purpose.status === "abandoned"
+								? "No longer pursuing this goal"
+								: purpose.status === "achieved"
+									? "Goal reached"
+									: progressWords(purpose.progress)}
+						</span>
 					</span>
 				</div>
 			))}

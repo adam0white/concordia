@@ -31,6 +31,19 @@ function fixture() {
 	return new Runtime(s);
 }
 describe("review regressions", () => {
+	it("does not say work started when a trip is interrupted before arrival", () => {
+		const r = new Runtime(exported(createRuntime(42, 8)));
+		r.prepareRound();
+		r.apply("ada", "repair");
+		const trip = r.actor("ada").job;
+		assert(trip && r.s.now < trip.arrive);
+		r.interruptJob("ada");
+		const event = r.s.events.at(-1);
+		expect(event?.text).toBe(
+			"Ada stopped on the way to Flooded hall before starting to work on the hall repairs.",
+		);
+		expect(r.s.hall).toBe(0);
+	});
 	it("restores a trip after the destination has opened", () => {
 		const r = new Runtime(exported(createRuntime(42, 8)));
 		r.prepareRound();

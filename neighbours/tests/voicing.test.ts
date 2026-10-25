@@ -162,13 +162,13 @@ it("keeps the recorded line for other verdicts and reads unknown labels grammati
 
 it("refusals say why only from the reason HF recorded", () => {
 	expect(refusalWhy({ verdict: "refused", reason: "need:water" })).toBe(
-		"They refused because they need a drink first.",
+		"This person refused because a drink comes first.",
 	);
 	expect(refusalWhy({ verdict: "refused", reason: "distrust" })).toMatch(
 		/trust your promises/,
 	);
 	expect(refusalWhy({ verdict: "refused", reason: "norm:theft" })).toMatch(
-		/goes against their principles/,
+		/refused on principle/,
 	);
 	expect(refusalWhy({ verdict: "refused", reason: "mystery" })).toBeUndefined();
 	expect(
@@ -224,4 +224,29 @@ it("words every admitted prayer action and tea break without a broken gerund", (
 		);
 		expect(jobLine("Derya", label, false)).not.toMatch(/finished (keep|take) /);
 	}
+});
+
+it("reads punctuated task labels without broken verbs or doubled full stops", () => {
+	for (const ending of ["", ".", "..", ".  "]) {
+		const label = `Make and repair workshop fittings${ending}`;
+		expect(ingWords(label)).toBe("making and repairing workshop fittings");
+		expect(jobLine("Nora", label, false)).toBe(
+			"Nora finished making and repairing workshop fittings.",
+		);
+	}
+	expect(ingWords("Mend the fence.")).toBe("doing the task “Mend the fence”");
+	expect(counterWords({ label: "after I Mend the fence." })).toBe(
+		"do it after finishing the task “Mend the fence”",
+	);
+	expect(refusalWhy({ verdict: "refused", reason: "need:water" }, "Nora")).toBe(
+		"Nora refused because a drink comes first.",
+	);
+});
+
+it("names the actual task inside a published plain deferral", () => {
+	expect(
+		counterWords({
+			label: "after I finish this task (Repair the flood-damaged hall)",
+		}),
+	).toBe("do it after working on the hall repairs");
 });

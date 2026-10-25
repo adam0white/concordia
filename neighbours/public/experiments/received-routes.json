@@ -1,9 +1,9 @@
 {
   "schema": "received-route-study@1",
-  "recordedAt": "2026-10-25T18:08:56.283Z",
+  "recordedAt": "2026-10-25T19:23:46.267Z",
   "execution": "Node; exact published npm HF; two fixed structural domains, nine arms each",
-  "commit": "54e7220728e03f9d1372450b1d9e0bebbce0a004",
-  "dirty": true,
+  "commit": "12b3150537fa5e1be67a4d754d8ba8e8f5ce9b9a",
+  "dirty": false,
   "sources": {
     "package.json": "0bfb9611e0ae5c1b9053ea597f1cf2bd13d62cdad10948fbf2f15af6202f8f96",
     "package-lock.json": "2dfd33e7502d16c8d5a0d73712785e861e9452c1c36b2eaa5d61c1badfb8a90b",

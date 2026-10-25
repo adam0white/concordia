@@ -15,7 +15,7 @@ export default function TownInspector({
 	section?: "town" | "recorded";
 }) {
 	const town = session.town;
-	if (!town) return null;
+	if (!town || (section === "recorded" && !labMode())) return null;
 	return (
 		<section className="inspector focused-inspector">
 			<div hidden={section !== "town"}>
@@ -70,7 +70,7 @@ export default function TownInspector({
 				{labMode() && <TownHealth history={session.healthHistory} />}
 			</div>
 			<div hidden={section !== "recorded"}>
-				<RecordedStudies />
+				{labMode() && <RecordedStudies />}
 			</div>
 			{labMode() && <EvidencePanel />}
 

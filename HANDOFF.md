@@ -1,5 +1,14 @@
 # Neighbours handoff
 
+## Second plain-English pass (2026-10-25)
+
+Remaining: Adam's reading and feel acceptance. The existing reflow follow-up `nbh-01z.45`, target 2026-11-03, now also records oversized map markers after a phone conversation is resized to desktop. Fresh desktop entry and the requested 360×690 text/control checks pass; this text pass does not claim the resize path is fixed.
+
+Current person narration names one resident without assuming gender. Action phrases handle terminal punctuation and the released HF plain-deferral task wrapper. Replies name the speaker first. Invitations, interruptions, journal replies, promises and meal outcomes use complete sentences. A cancelled journey says the task had not started. Promise help preserves the actual later-action binding condition. Delivery nouns agree with a count of one. Ordinary views hide raw controller/source/score research behind exact `?lab=1`, while retaining plain LLM/table/random labels, recorded-AI origin, actual causal facts and stopped/reached goal outcomes. HF stays at exact published 2.21.0 with its current narration choice; labels, IDs and physical rules are unchanged.
+
+One independent Codex review found the journey and pledge wording defects; both were corrected. Reading the rendered and headless text found the counter-offer wrapper and singular delivery noun, also corrected. Final local lane passes 570 tests, lint, three typechecks, 45 Node imports and build. All 81 actual browser cases and all 39 native controls pass. Two complete 25-day seeded comparisons match 50 daily normalized full-state hashes plus 32 continuation hashes; exact current exports restore and continue. Five deterministic studies and three native recordings were genuinely regenerated from final source, using ten real model calls. All three recorded replays use zero calls and source provenance passes. Historical assistance remains byte-pinned. No source digest was patched, no timeout was changed and no negative study outcome was removed. Hosted CI and the public release manifest identify final delivery.
+
+
 ## Published plain-English HF adoption (2026-10-25)
 
 Remaining: exact signed source, CI and live receipts are in the adoption task report; Adam accepts feel separately. Fresh towns, including fresh canonical admissions, persist `lexicon.plainEnglish:true` with exact published HF2.21.0. Loaded narration choices stay saved. Lab-client resolves the same exact published framework through a scoped dependency override. Historical2.17 and exact current2.21 source stamps are accepted only through the existing finite native maps; unknown versions, identities, maps and unsupported obligations still refuse.

@@ -10,11 +10,15 @@ import type { Save } from "./state.ts";
 import { actionWords, counterWords } from "./voicing.ts";
 
 const LIMIT = 40;
-function verdictNote(verdict: string, counter?: { label: string }): string {
+function verdictNote(
+	name: string,
+	verdict: string,
+	counter?: { label: string },
+): string {
 	if (verdict === "refused") return " It was a refusal.";
 	if (counter && (verdict === "deferred" || verdict === "modified"))
-		return ` They offered to ${counterWords(counter)}.`;
-	if (verdict === "complied") return " They agreed under protest.";
+		return ` ${name} offered to ${counterWords(counter)}.`;
+	if (verdict === "complied") return ` ${name} agreed under protest.`;
 	return "";
 }
 export function journalEntries(s: Save): JournalEntry[] {
@@ -42,7 +46,7 @@ export function journalEntries(s: Save): JournalEntry[] {
 			entry(
 				e,
 				answer
-					? `${e.text} ${answer.text}${verdictNote(request.answer.verdict, request.answer.counterOffer)}`
+					? `${e.text} ${answer.text}${verdictNote(s.people.find((r) => r.person.id === request.targetId)?.person.name ?? "This person", request.answer.verdict, request.answer.counterOffer)}`
 					: e.text,
 				answer ? [e.id, answer.id] : [e.id],
 			);

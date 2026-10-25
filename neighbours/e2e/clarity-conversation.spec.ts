@@ -50,7 +50,7 @@ for (const width of [360, 1280])
 		await form.locator('[data-work-id="help-repair"]').click();
 		await expect(submit).toBeEnabled();
 		await page.getByRole("button", { name: "Urge", exact: true }).click();
-		await expect(form).toContainText("can reduce their trust");
+		await expect(form).toContainText("can reduce Rafi’s trust");
 		await expect(submit).toBeEnabled();
 		await page.getByRole("button", { name: "Ask", exact: true }).click();
 		await expect(

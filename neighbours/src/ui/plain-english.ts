@@ -3,7 +3,7 @@ export function plainText(text: string): string {
 	return text;
 }
 
-/** The host now supplies complete sentences for current impressions. */
+/** Impressions arrive as complete sentences from the host. */
 export function personRead(_name: string, text: string): string {
 	return text;
 }

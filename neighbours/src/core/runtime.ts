@@ -104,7 +104,7 @@ import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
 import { repairHolds, timberMoisture, weatherTimber } from "./timber.ts";
 import { recordTownEvent } from "./town-chronicle.ts";
-import { actionWords, jobLine } from "./voicing.ts";
+import { actionWords, ingWords, jobLine } from "./voicing.ts";
 
 function awakeHallNewsListener(r: Save["people"][number]): boolean {
 	return (
@@ -273,7 +273,7 @@ export class Runtime implements TownRuntime {
 			"interrupted",
 			// Towns begun under HF 2.8.0 say it in plain words; older saves keep their recorded wording exactly.
 			this.s.together
-				? `${r.person.name} stopped “${j.offer.label}” ${travelling ? `on the way to ${placeName(this.s, required(j.offer.placeId, "Missing destination"))}` : `at ${placeName(this.s, r.place)}`}${reason === "stopped" ? "" : " to do something else"}.`
+				? `${r.person.name} stopped ${travelling ? `on the way to ${placeName(this.s, required(j.offer.placeId, "Missing destination"))} before starting to ${actionWords(j.offer.label)}` : `${ingWords(j.offer.label)} at ${placeName(this.s, r.place)}`}${reason === "stopped" ? "" : " and did something else"}.`
 				: `${r.person.name}'s ${j.offer.label.toLowerCase()} ${reason} ${travelling ? `before arrival was confirmed, last known at ${j.from} while travelling toward ${j.offer.placeId}` : `at ${r.place}`}; reserved resources were returned.`,
 			r.person.id,
 			r.place,
@@ -349,7 +349,7 @@ export class Runtime implements TownRuntime {
 			else if (downed && r.lifeEvent?.kind !== "incapacity" && !dead)
 				r.lifeEvent = this.lifecycleEvent(
 					"incapacity",
-					`${r.person.name} has collapsed and can only rest where they are.`,
+					`${r.person.name} has collapsed and can only rest in place.`,
 					r.person.id,
 					r.place,
 				);
@@ -671,7 +671,7 @@ export class Runtime implements TownRuntime {
 				const eid = this.event(
 					status === "failed" ? "attempt-failed" : "completed",
 					botched
-						? `${jobLine(r.person.name, j.offer.label, true)} They did the work under protest, and it went wrong.`
+						? `${jobLine(r.person.name, j.offer.label, true)} The work was done under protest and went wrong.`
 						: jobLine(r.person.name, j.offer.label, status === "failed"),
 					r.person.id,
 					p.id,
@@ -739,7 +739,7 @@ export class Runtime implements TownRuntime {
 			this.s.produced += delivery;
 			this.event(
 				"delivery",
-				`${delivery} meals arrived by ${this.s.bus ? "bus" : "handcart"}.`,
+				`${delivery} ${delivery === 1 ? "meal" : "meals"} arrived by ${this.s.bus ? "bus" : "handcart"}.`,
 				undefined,
 				"market",
 			);
@@ -754,7 +754,7 @@ export class Runtime implements TownRuntime {
 					kind: "local-situation",
 					placeId: r.place,
 					salience: 0.35,
-					summary: `They are at ${placeName(this.s, r.place)}. ${r.place === "hall" ? `${this.s.hall} hall repairs are complete.` : r.place === "market" ? `${this.s.places.find((p) => p.id === "market")?.stock} meals are available.` : "Neighbours are going about their day."}`,
+					summary: `${r.person.name} is at ${placeName(this.s, r.place)}. ${r.place === "hall" ? `${this.s.hall} hall repairs are complete.` : r.place === "market" ? `${this.s.places.find((p) => p.id === "market")?.stock} meals are available.` : "Neighbours are going about their day."}`,
 				},
 			]);
 		}

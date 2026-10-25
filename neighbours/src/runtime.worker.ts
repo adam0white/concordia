@@ -43,7 +43,7 @@ async function flushCastCaptures() {
 async function boot() {
 	send({
 		type: "progress",
-		message: "Loading the Python runtime. This first download is about 13 MB.",
+		message: "Loading the town. The first download is about 13 MB.",
 	});
 	const url = new URL("/runtime/pyodide.mjs", self.location.origin).href;
 	const { loadPyodide } = await import(/* @vite-ignore */ url);
@@ -54,15 +54,14 @@ async function boot() {
 	});
 	send({
 		type: "progress",
-		message:
-			"Concordia is connecting to 206 people controlled by the Human Framework…",
+		message: "Your neighbours are getting ready…",
 	});
 	const [manifestResponse, wheelResponse] = await Promise.all([
 		fetch("/runtime/python-files.json", { cache: "no-cache" }),
 		fetch("/runtime/absl.whl"),
 	]);
 	if (!manifestResponse.ok || !wheelResponse.ok)
-		throw Error("The Python runtime files could not load.");
+		throw Error("The town files could not load. Reload to try again.");
 	const manifest = await manifestResponse.json();
 	for (const [path, content] of Object.entries(
 		manifest.files as Record<string, string>,
@@ -82,7 +81,11 @@ async function boot() {
 	send({ type: "ready", view: port.runtime.view() });
 }
 let queue = boot().catch((error) => {
-	send({ type: "error", message: `Python could not start: ${String(error)}` });
+	console.error("Town startup failed", error);
+	send({
+		type: "error",
+		message: "The town could not start. Reload to try again.",
+	});
 	throw error;
 });
 const comparisons = new Set<{ cancelled: boolean }>();

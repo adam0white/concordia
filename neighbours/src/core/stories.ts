@@ -144,11 +144,11 @@ export function townStories(s: Save): TownView["stories"] {
 		)?.inspection;
 		const methodValue =
 			inspection?.methodTerms?.reduce((sum, t) => sum + t.value, 0) ?? 0;
-		const who = e.actorId ? nameOf(s, e.actorId) : "They";
+		const who = e.actorId ? nameOf(s, e.actorId) : "A neighbour";
 		// A choice with no learned-method term says nothing extra; the journal is not a debug log.
 		const explanation = isHfSource(inspection?.source)
 			? methodValue > 0
-				? ` ${who} used a method they had learned.`
+				? ` ${who} used a learned method.`
 				: methodValue < 0
 					? ` What ${who} had learned suggested choosing a different action.`
 					: ""

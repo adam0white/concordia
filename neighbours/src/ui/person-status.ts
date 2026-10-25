@@ -52,7 +52,10 @@ const feelings: Record<string, string> = {
 };
 
 /** A short worded impression from the two most pressing HF need urgencies. */
-export function needWords(needs: Record<string, number>): string {
+export function needWords(
+	needs: Record<string, number>,
+	name = "This person",
+): string {
 	const pressing = Object.entries(needs)
 		.filter(([, urgency]) => urgency >= 0.5)
 		.toSorted((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
@@ -61,18 +64,18 @@ export function needWords(needs: Record<string, number>): string {
 			([id, urgency]) =>
 				`${urgency >= 0.8 ? "very " : ""}${feelings[id] ?? id.replaceAll("_", " ")}`,
 		);
-	if (!pressing.length) return "They look calm. No need seems urgent.";
+	if (!pressing.length) return `${name} looks calm. No need seems urgent.`;
 	const text = pressing.join(" and ");
-	return `They look ${text}.`;
+	return `${name} looks ${text}.`;
 }
 
 /** Words for HF relationship trust (0..1). */
-export function trustWords(trust: number): string {
+export function trustWords(trust: number, name = "This person"): string {
 	return trust >= 0.75
-		? "They trust this person deeply"
+		? `${name} trusts this person deeply`
 		: trust >= 0.5
-			? "They trust this person"
+			? `${name} trusts this person`
 			: trust >= 0.25
-				? "They are cautious with this person"
-				: "They do not trust this person much";
+				? `${name} is cautious with this person`
+				: `${name} does not trust this person much`;
 }

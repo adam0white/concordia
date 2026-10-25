@@ -67,7 +67,8 @@ it("folds actual HF purpose state and does not fabricate missing goals", () => {
 		}),
 	);
 	expect(html).toContain("Return the cart");
-	expect(html).toContain('active · <span class="hand">in progress</span>');
+	expect(html).toContain('<span class="hand">in progress</span>');
+	expect(html).not.toContain("active ·");
 	expect(html).not.toContain("%");
 	expect(html).not.toContain("<details open");
 });
@@ -88,4 +89,28 @@ it("labels the physical place in the chooser and uses native named selection but
 	expect(html).toContain('data-person="ravi"');
 	expect(html).toContain("Asleep");
 	expect(html).toContain("Close place neighbours");
+});
+
+it("keeps stopped and reached goal outcomes clear without internal status labels", () => {
+	for (const [status, wording] of [
+		["abandoned", "No longer pursuing this goal"],
+		["achieved", "Goal reached"],
+	] as const) {
+		const html = renderToStaticMarkup(
+			createElement(PersonPurposes, {
+				person: {
+					purposes: [
+						{
+							id: "g2",
+							label: "Return the cart",
+							progress: 0.5,
+							status,
+						},
+					],
+				},
+			}),
+		);
+		expect(html).toContain(wording);
+		expect(html).not.toContain("in progress");
+	}
 });

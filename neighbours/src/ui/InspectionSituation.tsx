@@ -86,6 +86,8 @@ export default function InspectionSituation({
 	const candidates = town.people.filter(
 		(p) => p.lifeState !== "dead" && (p.known || p.lessons?.length),
 	);
+	const requestedName =
+		town.people.find((p) => p.id === current?.actorId)?.name ?? "This person";
 	const selected = candidates.find((p) => p.id === recipient);
 	const proposal = situation === "gm" ? report?.proposal : authored(situation);
 	const proposalOrigin: ProposalOrigin =
@@ -119,22 +121,15 @@ export default function InspectionSituation({
 			{current ? (
 				<>
 					<p>
-						{current.result ? (
-							current.result.text
-						) : (
-							<>
-								{town.people.find((p) => p.id === current.actorId)?.name ??
-									current.actorId}
-								:{" "}
-								{town.now >= current.expiresAt
-									? "The request expired before an opening decision was completed."
-									: current.visitedAt !== undefined
-										? `They observed the annex at ${datedClock(current.visitedAt)}. They have not finished deciding whether to open it.`
-										: current.received
-											? "They received the request. They decide whether to help."
-											: "They did not receive the request."}
-							</>
-						)}
+						{current.result
+							? current.result.text
+							: town.now >= current.expiresAt
+								? "The request expired before an opening decision was completed."
+								: current.visitedAt !== undefined
+									? `${requestedName} inspected the annex at ${datedClock(current.visitedAt)} and has not yet decided whether to open it.`
+									: current.received
+										? `${requestedName} received the request and will decide whether to help.`
+										: `${requestedName} did not receive the request.`}
 					</p>
 					{current.visitedAt !== undefined &&
 						current.cue === "unsupported" &&
@@ -148,28 +143,32 @@ export default function InspectionSituation({
 						Requested {datedClock(current.request.at)} · Deadline{" "}
 						{datedClock(current.expiresAt)}
 					</p>
-					<details>
-						<summary>Request and decision evidence</summary>
-						<p className="tiny muted">
-							Saved situation label:{" "}
-							{current.origin.kind === "recorded-gm"
-								? `Recorded Concordia GM · ${current.origin.modelIds.join(", ")} · ${current.origin.recordedAt.slice(0, 10)}`
-								: "Authored control case"}
-							.
-						</p>
-						{current.decisionSource && (
-							<p className="tiny">Decision source: {current.decisionSource}</p>
-						)}
-						{!!current.methodTerms?.length && (
+					{labMode() && (
+						<details>
+							<summary>Request and decision evidence</summary>
 							<p className="tiny muted">
-								Recorded contribution from learned methods:{" "}
-								{current.methodTerms
-									.reduce((sum, t) => sum + t.value, 0)
-									.toFixed(3)}
+								Saved situation label:{" "}
+								{current.origin.kind === "recorded-gm"
+									? `Recorded Concordia GM · ${current.origin.modelIds.join(", ")} · ${current.origin.recordedAt.slice(0, 10)}`
+									: "Authored control case"}
 								.
 							</p>
-						)}
-					</details>
+							{current.decisionSource && (
+								<p className="tiny">
+									Decision source: {current.decisionSource}
+								</p>
+							)}
+							{!!current.methodTerms?.length && (
+								<p className="tiny muted">
+									Recorded contribution from learned methods:{" "}
+									{current.methodTerms
+										.reduce((sum, t) => sum + t.value, 0)
+										.toFixed(3)}
+									.
+								</p>
+							)}
+						</details>
+					)}
 					{current.opened && <p>Four extra hall places are now available.</p>}
 				</>
 			) : (
@@ -178,53 +177,72 @@ export default function InspectionSituation({
 						An unused annex could add four places to the hall. Someone must
 						inspect it first.
 					</p>
-					<details className="inspection-record">
-						<summary>Reasons and records ▸</summary>
-						{labMode() && (
-							<label>
-								Situation
-								<select
-									aria-label="Situation"
-									value={situation}
-									onChange={(event) => setSituation(event.target.value)}
-									disabled={disabled}
-								>
-									<option value="gm">Concordia game-master proposal</option>
-									<option value="dry-sound">Authored case · dry timber</option>
-									<option value="wet-sound">Authored case · wet timber</option>
-									<option value="unsupported">
-										Authored case · uncertain supports
-									</option>
-								</select>
-							</label>
-						)}
-						{situation === "gm" &&
-							(!report ? (
-								error ? (
-									<p role="status">
-										{error}{" "}
-										<button
-											type="button"
-											onClick={() => setAttempt((n) => n + 1)}
-										>
-											Retry
-										</button>
-									</p>
+					{labMode() && (
+						<details className="inspection-record">
+							<summary>Reasons and records ▸</summary>
+							{labMode() && (
+								<label>
+									Situation
+									<select
+										aria-label="Situation"
+										value={situation}
+										onChange={(event) => setSituation(event.target.value)}
+										disabled={disabled}
+									>
+										<option value="gm">Concordia game-master proposal</option>
+										<option value="dry-sound">
+											Authored case · dry timber
+										</option>
+										<option value="wet-sound">
+											Authored case · wet timber
+										</option>
+										<option value="unsupported">
+											Authored case · uncertain supports
+										</option>
+									</select>
+								</label>
+							)}
+							{situation === "gm" &&
+								(!report ? (
+									error ? (
+										<p role="status">
+											{error}{" "}
+											<button
+												type="button"
+												onClick={() => setAttempt((n) => n + 1)}
+											>
+												Retry
+											</button>
+										</p>
+									) : (
+										<p role="status">
+											Loading the recorded game-master proposal…
+										</p>
+									)
 								) : (
-									<p role="status">
-										Loading the recorded game-master proposal…
+									<p className="tiny muted">
+										AI-generated situation · {report.modelIds.join(", ")}.
+										Recorded {report.recordedAt.slice(0, 10)}. People are
+										simulated locally; this browser makes no model calls.
 									</p>
-								)
-							) : (
-								<p className="tiny muted">
-									AI-generated situation · {report.modelIds.join(", ")}.
-									Recorded {report.recordedAt.slice(0, 10)}. People are
-									simulated locally; this browser makes no model calls.
-								</p>
-							))}
-					</details>
+								))}
+						</details>
+					)}
+					{situation === "gm" && report && !labMode() && (
+						<p className="tiny muted">
+							This request uses a previously recorded AI suggestion. The
+							neighbour will respond in your town.
+						</p>
+					)}
 					{situation === "gm" && !report && (
-						<p role="status">{error || "Loading the situation…"}</p>
+						<p role="status">
+							{error || "Loading the situation…"}
+							{error && (
+								<button type="button" onClick={() => setAttempt((n) => n + 1)}>
+									Retry
+								</button>
+							)}
+						</p>
 					)}
 					<label>
 						Ask a neighbour
@@ -246,8 +264,8 @@ export default function InspectionSituation({
 					</label>
 					{selected?.canReceiveInspectionRequest === false && (
 						<p className="tiny muted">
-							{selected.name} is resting or heading to sleep. Ask when they are
-							available.
+							{selected.name} is resting or heading to sleep. You can ask after{" "}
+							{selected.name} has rested.
 						</p>
 					)}
 					<p className="tiny muted">

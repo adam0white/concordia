@@ -18,7 +18,7 @@ for (const width of [360, 1280]) {
 		const choices = page.locator(".conversation-chips");
 		await expect(page.locator("[data-affordance-id]").first()).toBeVisible();
 		await expect(page.locator('[data-work-id="cover-shift"]')).toHaveText(
-			"Work one hour of their shift",
+			"Cover a paid shift",
 		);
 		// Every option must fit without horizontal scrolling, even after selection.
 		for (const selected of [false, true]) {

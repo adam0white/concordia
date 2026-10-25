@@ -4,7 +4,7 @@ import { PRIVATE_DISCOVERIES } from "../core/private-discoveries.ts";
 import { actionWords, counterWords, voicedLine } from "../core/voicing";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
-import { plainText } from "./plain-english";
+import { personRead, plainText } from "./plain-english";
 import type { useVisitorSession } from "./useVisitorSession";
 import "./conversation.css";
 
@@ -20,7 +20,7 @@ const SAID: Record<Mode, string> = {
 const WORK: { id: PlayerWorkKind; label: string }[] = [
 	{ id: "carry-meals", label: "Carry food up from the quay" },
 	{ id: "help-repair", label: "Help repair the hall" },
-	{ id: "cover-shift", label: "Work one hour of their shift" },
+	{ id: "cover-shift", label: "Cover a paid shift" },
 	{ id: "dry-timber", label: "Support the hall timber and let it dry" },
 ];
 /** Work the host would accept now: airing the hall timber only while there is damp timber left to air. */
@@ -129,9 +129,9 @@ export function PlayerAction({
 	const here = player.present.some((p) => p.id === personId);
 	const destination = player.destinations.find((p) => p.id === person?.placeId);
 	const unavailable = person?.journey
-		? `${person.name} is on the way to ${placeLabel(town, person.journey.toId)}. Meet them after they arrive.`
+		? `${person.name} is on the way to ${placeLabel(town, person.journey.toId)}. You can talk after ${person.name} arrives.`
 		: person?.lifeState === "asleep"
-			? `${person.name} is asleep. Talk when they are awake.`
+			? `${person.name} is asleep. You can talk after ${person.name} wakes up.`
 			: person
 				? `${person.name} cannot talk here now.`
 				: "";
@@ -153,7 +153,7 @@ export function PlayerAction({
 						: placeLabel(town, person.placeId)}
 					.{" "}
 					{!here && destination
-						? "This is their current location. They may move."
+						? `This is ${person.name}’s current location. ${person.name} may move.`
 						: ""}
 				</p>
 			)}
@@ -481,15 +481,15 @@ export function SpeakPanel({
 			{latest && (
 				<div className="latest-answer" ref={answerPanel}>
 					<p className="said">
-						You {SAID[latest.mode]}: {latest.label}.
+						You {SAID[latest.mode]} {name} to {actionWords(latest.label)}.
 					</p>
 					<p>
+						{name}:{" "}
 						<q
 							className={`voice ${latest.verdict === "refused" ? "refusal" : ""}`}
 						>
 							{plainText(voicedLine(latest))}
-						</q>{" "}
-						<span className="voice-by">{name}</span>
+						</q>
 					</p>
 					{latest.why && <p className="refusal-why">{plainText(latest.why)}</p>}
 					{latest.decision && (
@@ -502,7 +502,7 @@ export function SpeakPanel({
 					{latest.result && <p className="said">{plainText(latest.result)}</p>}
 					{counter && (
 						<p>
-							They offered to {counterWords(counter)}.{" "}
+							{name} offered to {counterWords(counter)}.{" "}
 							{counterId && here && personId && (
 								<button
 									type="button"
@@ -516,7 +516,7 @@ export function SpeakPanel({
 										})
 									}
 								>
-									Accept their suggested alternative
+									Accept {name}’s suggested alternative
 								</button>
 							)}
 						</p>
@@ -624,7 +624,7 @@ export function SpeakPanel({
 								<p>
 									{prediction?.prediction
 										? "No request is available now."
-										: "Checking their available choices…"}
+										: `Checking ${name}’s available choices…`}
 								</p>
 							)}
 						</div>
@@ -695,23 +695,29 @@ export function SpeakPanel({
 							</fieldset>
 							<p className="promise-meaning">
 								{offer && work
-									? `Ask ${name} to ${actionWords(offer.label)}. You offer one hour to ${WORK.find((item) => item.id === work)?.label.toLowerCase()}, by ${datedClock(deadline ?? town.now)}. You must do this work if they agree now or later act on your request.`
-									: "Offer your work. You must do this work if they agree now or later act on your request."}
+									? `Ask ${name} to ${actionWords(offer.label)}. You offer one hour to ${WORK.find((item) => item.id === work)?.label.toLowerCase()}, by ${datedClock(deadline ?? town.now)}. If ${name} agrees now, or later acts on your request, you must do this work.`
+									: `Offer your own work. If ${name} agrees now, or later acts on your request, you must do it.`}
 							</p>
 						</>
 					)}
-					{mode === "ask" && <p className="hand">Ask them. They may say no.</p>}
+					{mode === "ask" && (
+						<p className="hand">
+							Ask {name}. {name} may say no.
+						</p>
+					)}
 					{mode === "urge" && (
 						<p className="hand">
-							Press them to agree. They may agree despite their objections. This
-							pressure can reduce their trust in you.
+							Press {name} to agree despite objections. This can reduce {name}’s
+							trust in you.
 						</p>
 					)}
 					{prediction?.error && <p role="alert">{prediction.error}</p>}
 					{prediction?.prediction && (
 						<p className="speech-read">
-							<span className="eyebrow">You can tell</span>{" "}
-							{prediction.prediction.read.map(plainText).join(" ")}
+							<span className="eyebrow">You can tell:</span>{" "}
+							{prediction.prediction.read
+								.map((text) => personRead(name, text))
+								.join(" ")}
 						</p>
 					)}
 					{submissionError && <p role="alert">{submissionError}</p>}
@@ -754,7 +760,7 @@ export function SpeakPanel({
 			{!recordOnly && inspector && (
 				<p className="inspector-context">
 					{name} is waiting for an inspector. {question?.text} You can help with
-					an hour of work while they wait.
+					an hour of work while {name} waits.
 				</p>
 			)}
 			{!recordOnly && !journalOpen && <OwnWork session={session} />}

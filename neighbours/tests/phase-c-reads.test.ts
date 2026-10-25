@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PlayerView, TownEvent } from "../src/contracts.ts";
-import { moodRead } from "../src/core/impression.ts";
+import { moodRead, speechRead } from "../src/core/impression.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import { collapseRepeats } from "../src/core/stories.ts";
 import { jobLine } from "../src/core/voicing.ts";
@@ -120,4 +120,18 @@ describe("Phase C reads and text", () => {
 		).toBe(9);
 		expect(freshReply(player, "noor", 600)).toBeUndefined();
 	});
+});
+
+it("names one resident in current mood and speech without changing the person", () => {
+	const r = createRuntime(42, 24) as Runtime;
+	const ada = r.actor("ada");
+	const before = JSON.stringify(ada.person);
+	const mood = moodRead(r.s, ada);
+	const speech = speechRead(r.s, ada, [], []);
+	expect(mood).toMatch(/^Ada (seems|is|has)/);
+	expect(speech.every((line) => line.startsWith("Ada "))).toBe(true);
+	expect([mood, ...speech].join(" ")).not.toMatch(
+		/\b(?:They|they|them|their)\b/,
+	);
+	expect(JSON.stringify(ada.person)).toBe(before);
 });

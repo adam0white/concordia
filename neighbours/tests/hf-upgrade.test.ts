@@ -64,7 +64,7 @@ it("keeps released complete replies and only omits duplicate refusal glosses", (
 			reason: "need:sleep",
 			says: "Not now. I can't.",
 		}),
-	).toBe("They refused because they need sleep first.");
+	).toBe("This person refused because sleep comes first.");
 });
 
 it("retains the future promise in a released deferred answer with a host action label", () => {

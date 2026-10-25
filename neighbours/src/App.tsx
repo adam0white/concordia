@@ -255,7 +255,7 @@ export default function App() {
 						{person.name}{" "}
 						{person.lifeState === "asleep"
 							? "is asleep."
-							: "is travelling. Meet them after they arrive."}
+							: `is travelling. You can talk after ${person.name} arrives.`}
 					</p>
 				)
 			) : context && place ? (
@@ -400,8 +400,7 @@ export default function App() {
 							A riverside town is recovering after a flood. You can get to know
 							six neighbours. Two hundred more live here. They decide for
 							themselves. This town runs live on this device; nothing is played
-							back. Python Concordia runs the town. The released Human Framework
-							software makes the residents’ decisions.
+							back. Each resident makes decisions independently.
 						</p>
 					) : context ? (
 						<p>

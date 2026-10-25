@@ -349,7 +349,7 @@ export function updateEvenings(host: EveningHost): void {
 				);
 			const id = host.event(
 				"evening-ended",
-				`${eveningLabel(e, s)}: ${delivered.length ? `${delivered.join(", ")} ${e.kind === "class" ? "received the practical lesson" : "ate supper with the host"}.` : "no guest spent the required fifteen minutes awake with the host."}${!e.bookingEvent ? " The room was never prepared." : ""}`,
+				`${delivered.length ? `${delivered.join(", ")} ${e.kind === "class" ? "received the practical lesson at" : "ate with the host at"} ${eveningLabel(e, s)}.` : `No guest spent fifteen minutes awake with the host at ${eveningLabel(e, s)}.`}${!e.bookingEvent ? " The room was never prepared." : ""}`,
 				e.organiserId,
 				"hall",
 				e.notice ? [e.notice.id] : [],
@@ -700,7 +700,7 @@ export function finishEvening(
 	if (job.offer.id.startsWith("propose:")) {
 		const id = host.event(
 			"evening-proposed",
-			`${r.person.name} invited neighbours to ${eveningLabel(e, s)} in the hall on ${clock(e.startsAt)}. ${e.kind === "meal" ? "Bring one coin for your meal." : "Learn practical timber checks. There is no fee."} Accepting is a promise to attend. The invitation does not require anyone to accept.`,
+			`${r.person.name} invited neighbours to ${e.kind === "class" ? "a practical class" : "a shared supper"} in the hall on ${clock(e.startsAt)}. ${e.kind === "meal" ? "Bring one coin for your meal." : "Learn how to check timber. The class is free."} Accepting is a promise to attend. Nobody has to accept.`,
 			r.person.id,
 			"hall",
 			[job.event],
@@ -755,7 +755,7 @@ export function finishEvening(
 		e.stage = "prepared";
 		host.event(
 			"evening-prepared",
-			`${r.person.name} prepared the hall for ${eveningLabel(e, s)} on ${clock(e.startsAt)}. The other activity cannot use the same room at that time.`,
+			`${r.person.name} prepared the hall for ${e.kind === "class" ? "the practical class" : "the shared supper"} on ${clock(e.startsAt)}. The other activity cannot use the same room at that time.`,
 			r.person.id,
 			"hall",
 			e.notice ? [e.notice.id, job.event] : [job.event],

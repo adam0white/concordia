@@ -80,6 +80,6 @@ it("reports an unheard request without inventing assistance or teaching", () => 
 			onCompare: () => {},
 		}),
 	);
-	expect(html).toContain("They did not receive the request");
+	expect(html).toContain("Lea did not receive the request");
 	expect(html).not.toContain("Four extra hall places are now available");
 });

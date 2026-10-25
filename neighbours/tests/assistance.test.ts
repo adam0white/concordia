@@ -238,7 +238,7 @@ it("retains annex observations and outcomes without claiming a lesson or main-ha
 		);
 	expect(observed?.title).toBe("Someone checked the annex timber");
 	expect(observed?.summary).toBe(
-		"Lea checked the annex timber. The timber was dry. The supports were sound. They still need to decide whether to open it.",
+		"Lea checked the annex timber. The timber was dry. The supports were sound. The decision to open it is still pending.",
 	);
 	expect(observed?.summary).not.toContain("inspected");
 	round(r, "annex-open-section");

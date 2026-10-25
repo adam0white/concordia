@@ -378,7 +378,7 @@ describe("player as a neighbour", () => {
 			expect(first?.verdict).toBe("modified");
 			const counter = first?.counterOffer?.affordanceId;
 			expect(counter).toBe(r.actor("noor").job?.offer.id);
-			expect(r.view().player?.journal.at(-1)?.text).toMatch(/They offered to /);
+			expect(r.view().player?.journal.at(-1)?.text).toMatch(/Noor offered to /);
 			// Accepting "carry on with what I am doing" is the one way to name the current activity.
 			ask("noor", counter as string, true);
 			const second = r.view().player?.requests.at(-1);

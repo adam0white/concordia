@@ -196,7 +196,7 @@ it("keeps promise inputs together with explicit work and a visible evening deadl
 	expect(html).toContain('aria-pressed="true">Day 1 · 18:00');
 	expect(html).toContain("Ask Ada");
 	expect(html).toContain(
-		"You must do this work if they agree now or later act on your request.",
+		"Offer your own work. If Ada agrees now, or later acts on your request, you must do it.",
 	);
 });
 it("reserves the same promise form while predictions load", () => {

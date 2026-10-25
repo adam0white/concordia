@@ -1,6 +1,6 @@
 {
   "schema": "neighbours/bench-choice-probe@1",
-  "recordedAt": "2026-10-25T18:08:59.989Z",
+  "recordedAt": "2026-10-25T19:23:50.155Z",
   "runtime": "node-typescript-host-released-hf",
   "hf": "2.21.0",
   "node": "v26.12.0",
@@ -20,11 +20,11 @@
     "roundsPerPhysicalBranch": 192
   },
   "modelCalls": 0,
-  "sourceCommit": "54e7220728e03f9d1372450b1d9e0bebbce0a004",
+  "sourceCommit": "12b3150537fa5e1be67a4d754d8ba8e8f5ce9b9a",
   "sourceWorktreeClean": false,
   "sourcesStableDuringRun": true,
   "sourceCommitUnchanged": true,
-  "sourceFingerprint": "e165504f5129cb13aa9c1970a9fa0ce15168daf2cd1024e0a57c1722621330b4",
+  "sourceFingerprint": "5186d9c8a509976ed1956e3da30d105717b7d869eb02c59dc341b22ba13231a4",
   "sources": {
     "package-lock.json": "2dfd33e7502d16c8d5a0d73712785e861e9452c1c36b2eaa5d61c1badfb8a90b",
     "package.json": "0bfb9611e0ae5c1b9053ea597f1cf2bd13d62cdad10948fbf2f15af6202f8f96",
@@ -32,7 +32,7 @@
     "scripts/probe-bench-choice.ts": "a8447aab7ebf7f5aa8ac40a5f48b4e58e4caafec78ebe1e2d3fe167262b89fcb",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
-    "src/core/assistance.ts": "0de7ebd67da9c857c0733bba820f6d4e0b5119baa65c48b6cba0f012389ec3dd",
+    "src/core/assistance.ts": "1ea0ca6afe6f0f60bc588565ea4ae8e4c6ec0896445c01a2ec53444e78b99bef",
     "src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
     "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
@@ -41,45 +41,45 @@
     "src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
     "src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
-    "src/core/evenings.ts": "733db24a517ca897ad6a0fc05002a5369d288aeda3266c55c2456a4d1a200e78",
+    "src/core/evenings.ts": "c94b371d6b54ef40d6ba6ba60c5679111c43c96c831176bfae2d32bb8d17af18",
     "src/core/hall-care.ts": "d9d4edcb531ef117b1dbf0d0799d8a7127bfdfb8574c4d28f79f1fa7100becd4",
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
     "src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
     "src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
     "src/core/hf-version.ts": "832f0dae41cc42c343fce5539a2fb6382cdad16a7935a41ba80b00523942324d",
-    "src/core/impression.ts": "89dc524793b3df1449ee5412ff6678ee19d2c5bbcc860ab209950cf6923490d5",
+    "src/core/impression.ts": "fa21aea89f602e0575b0c289b3dfdd4da10ed73f743b9eea33251bef9ce43500",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
-    "src/core/journal.ts": "93ab2463db21ede9d5a9802030c51314f1171b5d0137ab68d93cff52d5eaac8e",
+    "src/core/journal.ts": "671b33f9ec8e004ce888ff59747446649246ce5cea37012b0ad459be5e09d811",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
     "src/core/offers.ts": "704574d32feb8f9a4729042bbd717892f3395231b851037e1b45f0ab2621cbc9",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
     "src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
-    "src/core/player.ts": "54d95231ca40909f04f8e9528ed467c44d5e04da77d1c0041402f5710329c8e0",
+    "src/core/player.ts": "10f24b86c3d4966d945192cd4f5e0e1cf4021ccc651d33a93f86576497422797",
     "src/core/private-discoveries.ts": "5cdf63162a65362615a78b4dcd23a3ec094d7e5762e69e4eb24638698d397b74",
     "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
     "src/core/restore.ts": "1fd03d141cbf7ecfb5a4fe78b80db8e6d0300e25805b338f1848667c1de8c40e",
-    "src/core/runtime.ts": "0dd41594eff4dfb39521263663592003ad6f2783f851a0b646b7cb3db824aa9b",
+    "src/core/runtime.ts": "633f352d5a56007d43541bedcf22d6a2ddbaae3e70e1ebdd734318dfbf2a96c9",
     "src/core/scenario.ts": "6af5d16ff8d94742ed134e8f8261e65fd4423b453d0290ca81fb891e3e09a8e6",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
     "src/core/state.ts": "c8330caaaa4e071a5303083282d29e5885c5f1df02e6fb3b42916a653cef8057",
-    "src/core/stories.ts": "8fb3c28788bd352635cf9a71108ea3a82fefbda34677a4bf5404b075e5a93256",
+    "src/core/stories.ts": "b9801a7971d316acca4a7ceb934b44adf116782019a1c279520ff8c0e0bd2a14",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
     "src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
     "src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
     "src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
-    "src/core/voicing.ts": "1bbbbed9dc5373748cd0b3551cc62d7a48c5b32e2050a27da1967ffb2abb2b79",
+    "src/core/voicing.ts": "da080fc34c231fafc49fdde23b9ebf1f5c637d6fd93243a9873564258db8bead",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b",
     "src/ui/bench-study-report.ts": "665975a792072a35cab96fad0529a9d6d571d200a471e9969e2e45a71dbf9985"
   },
-  "frozenSetHash": "bc38e04cfa44f3a62ace2dafef2b4c5e63e5b0562a8a9b63a6c21b8ce429f1d9",
+  "frozenSetHash": "51c3508a3c2c49b014a719c06f570f76dd6930d026fc65ce75942b878da0790c",
   "activeCheckpoints": [
     {
       "seed": 42,
       "slot": "soon",
       "file": "bench-active-42-soon.json",
-      "sha256": "4b4423897eaf0e80b0fdfacd5d445ef83da740b95a6297640b7c4e470fca8a4d",
+      "sha256": "9cbabb6a19301774e70e15e1f988be72576ece5294199a8afda54db6afc4086a",
       "at": 12135,
       "received": true,
       "retainedEntries": 1
@@ -88,7 +88,7 @@
       "seed": 42,
       "slot": "tomorrow",
       "file": "bench-active-42-tomorrow.json",
-      "sha256": "925130403555ba20fe41038dcdcdd66e38cd7c892a2f24116de4aa145a6d22e2",
+      "sha256": "0d2c6d800412d75d2fff124f6c2656cd5966da1d4feaba0f7f0436a07d65fc06",
       "at": 12135,
       "received": true,
       "retainedEntries": 1
@@ -97,7 +97,7 @@
       "seed": 42,
       "slot": "brief",
       "file": "bench-active-42-brief.json",
-      "sha256": "45744219aee14997623ab74f10823d94dc34478419cf879083487f55599e4713",
+      "sha256": "1c971b259b3766d15f82eb6b4cf6cdf5142ac1a17cda76794214ce8f79ca0895",
       "at": 12135,
       "received": true,
       "retainedEntries": 1
@@ -106,7 +106,7 @@
       "seed": 73,
       "slot": "soon",
       "file": "bench-active-73-soon.json",
-      "sha256": "698fa2f2cf53fd4407c982e685a0307b3064e99567f732434917913e789f32cd",
+      "sha256": "9753b6bdfb649a119314a030ed00b916c2fdf7418bab399caffb49417afd4a54",
       "at": 23700,
       "received": true,
       "retainedEntries": 1
@@ -115,7 +115,7 @@
       "seed": 73,
       "slot": "tomorrow",
       "file": "bench-active-73-tomorrow.json",
-      "sha256": "f1127b6a17de7669d25a8d30ce3edf84d07013ca88a5d4080908f9b4b0e617e7",
+      "sha256": "8e15c9a471c680cd4e5dfeecbd1547edc210217c7d6b2249357792fd09a3a564",
       "at": 23700,
       "received": true,
       "retainedEntries": 1
@@ -124,7 +124,7 @@
       "seed": 73,
       "slot": "brief",
       "file": "bench-active-73-brief.json",
-      "sha256": "640ff348a87fb540407ca4f62c31c93d2bc225c3a5f9ab3389bb5cb6c470e51f",
+      "sha256": "6af3b4e6a3a8b746eed647ab80ef6468698f4e72b9d3718d85cbe22d23f1c060",
       "at": 23700,
       "received": true,
       "retainedEntries": 1
@@ -133,7 +133,7 @@
       "seed": 101,
       "slot": "soon",
       "file": "bench-active-101-soon.json",
-      "sha256": "544ee3f715a8fd3516db734ad8fa2126beac6dab208edb10013268aeed654179",
+      "sha256": "f8bbf4fc3ff1b63f3a367fdf86ea626fdbdf963665ce3bf295f0c758bc1135da",
       "at": 19275,
       "received": true,
       "retainedEntries": 1
@@ -142,7 +142,7 @@
       "seed": 101,
       "slot": "tomorrow",
       "file": "bench-active-101-tomorrow.json",
-      "sha256": "b7cbf146d5b70d197b5becca0e852de71f27a0ddba3f2161d234227b0061413d",
+      "sha256": "dfa0fafccbc44e19bf0793bff7b914b1f119b41a66d1b7544af26c54eccc1e8b",
       "at": 19275,
       "received": true,
       "retainedEntries": 1
@@ -151,7 +151,7 @@
       "seed": 101,
       "slot": "brief",
       "file": "bench-active-101-brief.json",
-      "sha256": "102da43ba751d344774daa5fda743965f843b7037c838406e0db3ffdc988ea28",
+      "sha256": "1cccc69958c79b9be4e894fa8985c96392f62a829397dc301bdc2004f63ca0f2",
       "at": 19275,
       "received": true,
       "retainedEntries": 1
@@ -197,7 +197,7 @@
         "method": "First natural premise-admissible complete boundary with an actual scheduled next-round legal cart-ask decision after preceding residents choose normally on a disposable copy; no Rafi choice or outcome selection"
       },
       "file": "bench-start-42.json",
-      "sha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b"
+      "sha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166"
     },
     {
       "seed": 73,
@@ -237,7 +237,7 @@
         "method": "First natural premise-admissible complete boundary with an actual scheduled next-round legal cart-ask decision after preceding residents choose normally on a disposable copy; no Rafi choice or outcome selection"
       },
       "file": "bench-start-73.json",
-      "sha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2"
+      "sha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679"
     },
     {
       "seed": 101,
@@ -276,7 +276,7 @@
         "method": "First natural premise-admissible complete boundary with an actual scheduled next-round legal cart-ask decision after preceding residents choose normally on a disposable copy; no Rafi choice or outcome selection"
       },
       "file": "bench-start-101.json",
-      "sha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f"
+      "sha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27"
     }
   ],
   "assumptions": {
@@ -303,7 +303,7 @@
     {
       "seed": 42,
       "slot": "soon",
-      "frozenInputSha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b",
+      "frozenInputSha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166",
       "noProposal": {
         "startAt": 12150,
         "admissionAt": null,
@@ -311,9 +311,9 @@
         "endAt": 15015,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "bd73235be6b3997c6d8985ea7e328c4f824871a3673d410246d5f888b3ded669",
-        "branchStartCheckpointSha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b",
-        "finalCheckpointSha256": "bf29a50ed6c1070c137088a2b8f46e620176b971fbcdb5e2d89d056a4de13f1b",
+        "initialStateHash": "bf836eb098b7d484cf09ac68ddf3b0855e33de94e48c80536612b9ba10b3d9c2",
+        "branchStartCheckpointSha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166",
+        "finalCheckpointSha256": "032d371ab2d0c283b37549f62b451ba5876d5e5868afc884b382ab7a7e3535bf",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -21092,7 +21092,7 @@
             "id": 2570,
             "at": 12270,
             "kind": "interrupted",
-            "text": "Derya stopped “Accept Sam’s shared supper · Day 11 at 18:00” at Flooded hall to do something else.",
+            "text": "Derya stopped saying yes to Sam’s shared supper at Flooded hall and did something else.",
             "causes": [
               2552
             ],
@@ -22318,7 +22318,7 @@
             "id": 2681,
             "at": 12720,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -24134,7 +24134,7 @@
             "id": 2847,
             "at": 13575,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               2835
             ],
@@ -26684,7 +26684,7 @@
             "id": 3079,
             "at": 14640,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -27284,7 +27284,7 @@
             "id": 3134,
             "at": 14895,
             "kind": "interrupted",
-            "text": "Ellis Brooks stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ellis Brooks stopped resting at home at Riverside homes and did something else.",
             "causes": [
               3129
             ],
@@ -27570,12 +27570,12 @@
         "endAt": 15015,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "bd73235be6b3997c6d8985ea7e328c4f824871a3673d410246d5f888b3ded669",
-        "branchStartCheckpointSha256": "4b4423897eaf0e80b0fdfacd5d445ef83da740b95a6297640b7c4e470fca8a4d",
-        "finalCheckpointSha256": "2770328f0ea52961d5d517510923ae50abbaca1be53a7df837c5696742e834bb",
+        "initialStateHash": "bf836eb098b7d484cf09ac68ddf3b0855e33de94e48c80536612b9ba10b3d9c2",
+        "branchStartCheckpointSha256": "9cbabb6a19301774e70e15e1f988be72576ece5294199a8afda54db6afc4086a",
+        "finalCheckpointSha256": "3bb8b89db869ffe2c2b5b6db12cb829e25bfa4fd84f25a0bab0ef1a30295b412",
         "controls": {
           "at": 12150,
-          "physicalStateHash": "2fc825bea96c2630b21cc573dbc0cf06878b791a406eb47787b64e9ac15c2598",
+          "physicalStateHash": "fa4f095b25d544a8504db2ad6344e861cbf750180a075539bb1fc23c9a9e6897",
           "offers": [
             {
               "id": "rest",
@@ -50409,7 +50409,7 @@
             "id": 2571,
             "at": 12270,
             "kind": "interrupted",
-            "text": "Derya stopped “Accept Sam’s shared supper · Day 11 at 18:00” at Flooded hall to do something else.",
+            "text": "Derya stopped saying yes to Sam’s shared supper at Flooded hall and did something else.",
             "causes": [
               2553
             ],
@@ -50587,7 +50587,7 @@
             "id": 2587,
             "at": 12330,
             "kind": "interrupted",
-            "text": "Rafi stopped “Restore one cart section on the side bench · two hours” at Workshop to do something else.",
+            "text": "Rafi stopped restoring a cart section on the side bench at Workshop and did something else.",
             "causes": [
               2568
             ],
@@ -51621,7 +51621,7 @@
             "id": 2681,
             "at": 12720,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -56001,7 +56001,7 @@
             "id": 3080,
             "at": 14640,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -56589,7 +56589,7 @@
             "id": 3134,
             "at": 14895,
             "kind": "interrupted",
-            "text": "Ellis Brooks stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ellis Brooks stopped resting at home at Riverside homes and did something else.",
             "causes": [
               3129
             ],
@@ -56928,7 +56928,7 @@
     {
       "seed": 42,
       "slot": "tomorrow",
-      "frozenInputSha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b",
+      "frozenInputSha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166",
       "noProposal": {
         "startAt": 12150,
         "admissionAt": null,
@@ -56936,9 +56936,9 @@
         "endAt": 15015,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "bd73235be6b3997c6d8985ea7e328c4f824871a3673d410246d5f888b3ded669",
-        "branchStartCheckpointSha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b",
-        "finalCheckpointSha256": "bf29a50ed6c1070c137088a2b8f46e620176b971fbcdb5e2d89d056a4de13f1b",
+        "initialStateHash": "bf836eb098b7d484cf09ac68ddf3b0855e33de94e48c80536612b9ba10b3d9c2",
+        "branchStartCheckpointSha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166",
+        "finalCheckpointSha256": "032d371ab2d0c283b37549f62b451ba5876d5e5868afc884b382ab7a7e3535bf",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -77717,7 +77717,7 @@
             "id": 2570,
             "at": 12270,
             "kind": "interrupted",
-            "text": "Derya stopped “Accept Sam’s shared supper · Day 11 at 18:00” at Flooded hall to do something else.",
+            "text": "Derya stopped saying yes to Sam’s shared supper at Flooded hall and did something else.",
             "causes": [
               2552
             ],
@@ -78943,7 +78943,7 @@
             "id": 2681,
             "at": 12720,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -80759,7 +80759,7 @@
             "id": 2847,
             "at": 13575,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               2835
             ],
@@ -83309,7 +83309,7 @@
             "id": 3079,
             "at": 14640,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -83909,7 +83909,7 @@
             "id": 3134,
             "at": 14895,
             "kind": "interrupted",
-            "text": "Ellis Brooks stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ellis Brooks stopped resting at home at Riverside homes and did something else.",
             "causes": [
               3129
             ],
@@ -84195,12 +84195,12 @@
         "endAt": 15015,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "bd73235be6b3997c6d8985ea7e328c4f824871a3673d410246d5f888b3ded669",
-        "branchStartCheckpointSha256": "925130403555ba20fe41038dcdcdd66e38cd7c892a2f24116de4aa145a6d22e2",
-        "finalCheckpointSha256": "f2443bebbf69ce8928c49bf893b17a83c66873736527c1a4a6608e8874cb7a6b",
+        "initialStateHash": "bf836eb098b7d484cf09ac68ddf3b0855e33de94e48c80536612b9ba10b3d9c2",
+        "branchStartCheckpointSha256": "0d2c6d800412d75d2fff124f6c2656cd5966da1d4feaba0f7f0436a07d65fc06",
+        "finalCheckpointSha256": "fe1753f26274d5116e001570a36cde8da9664fb1f8f3cd63a56bf62da629fc96",
         "controls": {
           "at": 12150,
-          "physicalStateHash": "c88ac4acbf834b19c2c2b1b8b1078b6a447a651d71423a73fe07f5e2b13dfa4f",
+          "physicalStateHash": "21a2c3a3452bce0184f6acda5f7733dc16c37096de298f0c095c0057ce518a82",
           "offers": [
             {
               "id": "rest",
@@ -107030,7 +107030,7 @@
             "id": 2571,
             "at": 12270,
             "kind": "interrupted",
-            "text": "Derya stopped “Accept Sam’s shared supper · Day 11 at 18:00” at Flooded hall to do something else.",
+            "text": "Derya stopped saying yes to Sam’s shared supper at Flooded hall and did something else.",
             "causes": [
               2553
             ],
@@ -107208,7 +107208,7 @@
             "id": 2587,
             "at": 12330,
             "kind": "interrupted",
-            "text": "Rafi stopped “Restore one cart section on the side bench · two hours” at Workshop to do something else.",
+            "text": "Rafi stopped restoring a cart section on the side bench at Workshop and did something else.",
             "causes": [
               2568
             ],
@@ -108242,7 +108242,7 @@
             "id": 2681,
             "at": 12720,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -112622,7 +112622,7 @@
             "id": 3080,
             "at": 14640,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -113210,7 +113210,7 @@
             "id": 3134,
             "at": 14895,
             "kind": "interrupted",
-            "text": "Ellis Brooks stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ellis Brooks stopped resting at home at Riverside homes and did something else.",
             "causes": [
               3129
             ],
@@ -113549,7 +113549,7 @@
     {
       "seed": 42,
       "slot": "brief",
-      "frozenInputSha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b",
+      "frozenInputSha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166",
       "noProposal": {
         "startAt": 12150,
         "admissionAt": null,
@@ -113557,9 +113557,9 @@
         "endAt": 15015,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "bd73235be6b3997c6d8985ea7e328c4f824871a3673d410246d5f888b3ded669",
-        "branchStartCheckpointSha256": "25f95832786f1e38771acc111afaaef1bec69b6aff8cf29860366a7f4fe3db1b",
-        "finalCheckpointSha256": "bf29a50ed6c1070c137088a2b8f46e620176b971fbcdb5e2d89d056a4de13f1b",
+        "initialStateHash": "bf836eb098b7d484cf09ac68ddf3b0855e33de94e48c80536612b9ba10b3d9c2",
+        "branchStartCheckpointSha256": "d879cc8d9ffebe486ec679513992829677a38dd01ddbb91764e3172b5f9d1166",
+        "finalCheckpointSha256": "032d371ab2d0c283b37549f62b451ba5876d5e5868afc884b382ab7a7e3535bf",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -134338,7 +134338,7 @@
             "id": 2570,
             "at": 12270,
             "kind": "interrupted",
-            "text": "Derya stopped “Accept Sam’s shared supper · Day 11 at 18:00” at Flooded hall to do something else.",
+            "text": "Derya stopped saying yes to Sam’s shared supper at Flooded hall and did something else.",
             "causes": [
               2552
             ],
@@ -135564,7 +135564,7 @@
             "id": 2681,
             "at": 12720,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -137380,7 +137380,7 @@
             "id": 2847,
             "at": 13575,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               2835
             ],
@@ -139930,7 +139930,7 @@
             "id": 3079,
             "at": 14640,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -140530,7 +140530,7 @@
             "id": 3134,
             "at": 14895,
             "kind": "interrupted",
-            "text": "Ellis Brooks stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ellis Brooks stopped resting at home at Riverside homes and did something else.",
             "causes": [
               3129
             ],
@@ -140816,12 +140816,12 @@
         "endAt": 15015,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "bd73235be6b3997c6d8985ea7e328c4f824871a3673d410246d5f888b3ded669",
-        "branchStartCheckpointSha256": "45744219aee14997623ab74f10823d94dc34478419cf879083487f55599e4713",
-        "finalCheckpointSha256": "da826893e88768c4a41c8080c01cbf97cb29f82d42fac7aa5da66c83c50aeb32",
+        "initialStateHash": "bf836eb098b7d484cf09ac68ddf3b0855e33de94e48c80536612b9ba10b3d9c2",
+        "branchStartCheckpointSha256": "1c971b259b3766d15f82eb6b4cf6cdf5142ac1a17cda76794214ce8f79ca0895",
+        "finalCheckpointSha256": "80512891c22f9ea7b8935d5aa524e8c3edafa2a4229ef669f0292c9f7bbd6df9",
         "controls": {
           "at": 12150,
-          "physicalStateHash": "7feef6dff30ea0affba053f650f2aad0e5cb3b4cea8f10c1b12b191dcccba3b2",
+          "physicalStateHash": "771b330c463e32aa364a4bedffa372858052c6d4923f2228214427beacb21b9d",
           "offers": [
             {
               "id": "rest",
@@ -163659,7 +163659,7 @@
             "id": 2571,
             "at": 12270,
             "kind": "interrupted",
-            "text": "Derya stopped “Accept Sam’s shared supper · Day 11 at 18:00” at Flooded hall to do something else.",
+            "text": "Derya stopped saying yes to Sam’s shared supper at Flooded hall and did something else.",
             "causes": [
               2553
             ],
@@ -163837,7 +163837,7 @@
             "id": 2587,
             "at": 12330,
             "kind": "interrupted",
-            "text": "Rafi stopped “Restore one cart section on the side bench · two hours” at Workshop to do something else.",
+            "text": "Rafi stopped restoring a cart section on the side bench at Workshop and did something else.",
             "causes": [
               2568
             ],
@@ -164871,7 +164871,7 @@
             "id": 2681,
             "at": 12720,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -169251,7 +169251,7 @@
             "id": 3080,
             "at": 14640,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -169839,7 +169839,7 @@
             "id": 3134,
             "at": 14895,
             "kind": "interrupted",
-            "text": "Ellis Brooks stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ellis Brooks stopped resting at home at Riverside homes and did something else.",
             "causes": [
               3129
             ],
@@ -170178,7 +170178,7 @@
     {
       "seed": 73,
       "slot": "soon",
-      "frozenInputSha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2",
+      "frozenInputSha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679",
       "noProposal": {
         "startAt": 23715,
         "admissionAt": null,
@@ -170186,9 +170186,9 @@
         "endAt": 26580,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "5212bceea169f4025af2864cbec1b67a19f5162834a1ed6334821860067135c4",
-        "branchStartCheckpointSha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2",
-        "finalCheckpointSha256": "26583e30016d319e0dde7d4195827fb836ff1d014a7170054d9071ae78930272",
+        "initialStateHash": "d67ec16d4fa239f6be7337c6885933d277e45da04d943b2e0a4ba5de3663289b",
+        "branchStartCheckpointSha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679",
+        "finalCheckpointSha256": "df1dc0185873526c7f365c6f87bd04e78ca6fa3967ad4e4ac8f671d57ceafcf8",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -194172,7 +194172,7 @@
             "id": 5332,
             "at": 25020,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               5324
             ],
@@ -194744,7 +194744,7 @@
             "id": 5384,
             "at": 25230,
             "kind": "interrupted",
-            "text": "Ece stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ece stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5365
             ],
@@ -194800,7 +194800,7 @@
             "id": 5389,
             "at": 25245,
             "kind": "interrupted",
-            "text": "Hayden Diaz stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Hayden Diaz stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5373
             ],
@@ -195926,7 +195926,7 @@
             "id": 5491,
             "at": 25680,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -196554,7 +196554,7 @@
             "id": 5548,
             "at": 25920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -197911,7 +197911,7 @@
             "id": 5672,
             "at": 26550,
             "kind": "interrupted",
-            "text": "Nora stopped “Make and repair workshop fittings” at Workshop to do something else.",
+            "text": "Nora stopped making and repairing workshop fittings at Workshop and did something else.",
             "causes": [
               5652
             ],
@@ -198043,12 +198043,12 @@
         "endAt": 26580,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "5212bceea169f4025af2864cbec1b67a19f5162834a1ed6334821860067135c4",
-        "branchStartCheckpointSha256": "698fa2f2cf53fd4407c982e685a0307b3064e99567f732434917913e789f32cd",
-        "finalCheckpointSha256": "b14acb187bc995638352afa670cb2a66a5e58bb4bbf17c7c872e44f5a112f793",
+        "initialStateHash": "d67ec16d4fa239f6be7337c6885933d277e45da04d943b2e0a4ba5de3663289b",
+        "branchStartCheckpointSha256": "9753b6bdfb649a119314a030ed00b916c2fdf7418bab399caffb49417afd4a54",
+        "finalCheckpointSha256": "5e266536ed15b5e818a8ec6921d74112fc99c3eb1bdca04ebd987b3f8bbffeb7",
         "controls": {
           "at": 23715,
-          "physicalStateHash": "d9ecf5446312d37fa7916881a4cb2ea82a0c8277f77773bae0657dc7cce3bc03",
+          "physicalStateHash": "a7cff43f6024f01b1648eb18d332191d71bb47884a92fcaff3208e65535d7063",
           "offers": [
             {
               "id": "rest",
@@ -223234,7 +223234,7 @@
             "id": 5333,
             "at": 25020,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               5325
             ],
@@ -223806,7 +223806,7 @@
             "id": 5385,
             "at": 25230,
             "kind": "interrupted",
-            "text": "Ece stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ece stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5366
             ],
@@ -223862,7 +223862,7 @@
             "id": 5390,
             "at": 25245,
             "kind": "interrupted",
-            "text": "Hayden Diaz stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Hayden Diaz stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5374
             ],
@@ -224988,7 +224988,7 @@
             "id": 5492,
             "at": 25680,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -225616,7 +225616,7 @@
             "id": 5549,
             "at": 25920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -226973,7 +226973,7 @@
             "id": 5673,
             "at": 26550,
             "kind": "interrupted",
-            "text": "Nora stopped “Make and repair workshop fittings” at Workshop to do something else.",
+            "text": "Nora stopped making and repairing workshop fittings at Workshop and did something else.",
             "causes": [
               5653
             ],
@@ -227102,7 +227102,7 @@
     {
       "seed": 73,
       "slot": "tomorrow",
-      "frozenInputSha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2",
+      "frozenInputSha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679",
       "noProposal": {
         "startAt": 23715,
         "admissionAt": null,
@@ -227110,9 +227110,9 @@
         "endAt": 26580,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "5212bceea169f4025af2864cbec1b67a19f5162834a1ed6334821860067135c4",
-        "branchStartCheckpointSha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2",
-        "finalCheckpointSha256": "26583e30016d319e0dde7d4195827fb836ff1d014a7170054d9071ae78930272",
+        "initialStateHash": "d67ec16d4fa239f6be7337c6885933d277e45da04d943b2e0a4ba5de3663289b",
+        "branchStartCheckpointSha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679",
+        "finalCheckpointSha256": "df1dc0185873526c7f365c6f87bd04e78ca6fa3967ad4e4ac8f671d57ceafcf8",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -251096,7 +251096,7 @@
             "id": 5332,
             "at": 25020,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               5324
             ],
@@ -251668,7 +251668,7 @@
             "id": 5384,
             "at": 25230,
             "kind": "interrupted",
-            "text": "Ece stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ece stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5365
             ],
@@ -251724,7 +251724,7 @@
             "id": 5389,
             "at": 25245,
             "kind": "interrupted",
-            "text": "Hayden Diaz stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Hayden Diaz stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5373
             ],
@@ -252850,7 +252850,7 @@
             "id": 5491,
             "at": 25680,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -253478,7 +253478,7 @@
             "id": 5548,
             "at": 25920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -254835,7 +254835,7 @@
             "id": 5672,
             "at": 26550,
             "kind": "interrupted",
-            "text": "Nora stopped “Make and repair workshop fittings” at Workshop to do something else.",
+            "text": "Nora stopped making and repairing workshop fittings at Workshop and did something else.",
             "causes": [
               5652
             ],
@@ -254967,12 +254967,12 @@
         "endAt": 26580,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "5212bceea169f4025af2864cbec1b67a19f5162834a1ed6334821860067135c4",
-        "branchStartCheckpointSha256": "f1127b6a17de7669d25a8d30ce3edf84d07013ca88a5d4080908f9b4b0e617e7",
-        "finalCheckpointSha256": "76619ea0dbdb0d8884d61952c62611fc61279d7455521498202fcc732b9cfd56",
+        "initialStateHash": "d67ec16d4fa239f6be7337c6885933d277e45da04d943b2e0a4ba5de3663289b",
+        "branchStartCheckpointSha256": "8e15c9a471c680cd4e5dfeecbd1547edc210217c7d6b2249357792fd09a3a564",
+        "finalCheckpointSha256": "191fa06892e5d9550e55217cb4898e63583db249aeb72bd9f1a5f9ed630ce816",
         "controls": {
           "at": 23715,
-          "physicalStateHash": "110650ef786348eeaf4a9a7eb3d383a47f93c74165a4b5b8e46be43c26abfbee",
+          "physicalStateHash": "1245b7cfa2e649f55d3df7a068ce42f07f936fbbbf6bb45c4ebebbe103daf232",
           "offers": [
             {
               "id": "rest",
@@ -280138,7 +280138,7 @@
             "id": 5333,
             "at": 25020,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               5325
             ],
@@ -280710,7 +280710,7 @@
             "id": 5385,
             "at": 25230,
             "kind": "interrupted",
-            "text": "Ece stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ece stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5366
             ],
@@ -280766,7 +280766,7 @@
             "id": 5390,
             "at": 25245,
             "kind": "interrupted",
-            "text": "Hayden Diaz stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Hayden Diaz stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5374
             ],
@@ -281892,7 +281892,7 @@
             "id": 5492,
             "at": 25680,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -282520,7 +282520,7 @@
             "id": 5549,
             "at": 25920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -283877,7 +283877,7 @@
             "id": 5673,
             "at": 26550,
             "kind": "interrupted",
-            "text": "Nora stopped “Make and repair workshop fittings” at Workshop to do something else.",
+            "text": "Nora stopped making and repairing workshop fittings at Workshop and did something else.",
             "causes": [
               5653
             ],
@@ -284006,7 +284006,7 @@
     {
       "seed": 73,
       "slot": "brief",
-      "frozenInputSha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2",
+      "frozenInputSha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679",
       "noProposal": {
         "startAt": 23715,
         "admissionAt": null,
@@ -284014,9 +284014,9 @@
         "endAt": 26580,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "5212bceea169f4025af2864cbec1b67a19f5162834a1ed6334821860067135c4",
-        "branchStartCheckpointSha256": "5287c9ef336974b2aea653f970f5a3eb5a11fee5b0467cacdf1bf8910be428c2",
-        "finalCheckpointSha256": "26583e30016d319e0dde7d4195827fb836ff1d014a7170054d9071ae78930272",
+        "initialStateHash": "d67ec16d4fa239f6be7337c6885933d277e45da04d943b2e0a4ba5de3663289b",
+        "branchStartCheckpointSha256": "266d151300a027c611d8f91eca82578d067d922e0d39df04bfc77a64ab5e2679",
+        "finalCheckpointSha256": "df1dc0185873526c7f365c6f87bd04e78ca6fa3967ad4e4ac8f671d57ceafcf8",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -308000,7 +308000,7 @@
             "id": 5332,
             "at": 25020,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               5324
             ],
@@ -308572,7 +308572,7 @@
             "id": 5384,
             "at": 25230,
             "kind": "interrupted",
-            "text": "Ece stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ece stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5365
             ],
@@ -308628,7 +308628,7 @@
             "id": 5389,
             "at": 25245,
             "kind": "interrupted",
-            "text": "Hayden Diaz stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Hayden Diaz stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5373
             ],
@@ -309754,7 +309754,7 @@
             "id": 5491,
             "at": 25680,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -310382,7 +310382,7 @@
             "id": 5548,
             "at": 25920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -311739,7 +311739,7 @@
             "id": 5672,
             "at": 26550,
             "kind": "interrupted",
-            "text": "Nora stopped “Make and repair workshop fittings” at Workshop to do something else.",
+            "text": "Nora stopped making and repairing workshop fittings at Workshop and did something else.",
             "causes": [
               5652
             ],
@@ -311871,12 +311871,12 @@
         "endAt": 26580,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "5212bceea169f4025af2864cbec1b67a19f5162834a1ed6334821860067135c4",
-        "branchStartCheckpointSha256": "640ff348a87fb540407ca4f62c31c93d2bc225c3a5f9ab3389bb5cb6c470e51f",
-        "finalCheckpointSha256": "5871e8c2093a738ddc364647c3f18f757850fbc6fc3b877012aecabb57e17acf",
+        "initialStateHash": "d67ec16d4fa239f6be7337c6885933d277e45da04d943b2e0a4ba5de3663289b",
+        "branchStartCheckpointSha256": "6af3b4e6a3a8b746eed647ab80ef6468698f4e72b9d3718d85cbe22d23f1c060",
+        "finalCheckpointSha256": "e1132acc092af841225519067d629ccc39f8e7f9d0924ef4293c9a5e163c71cf",
         "controls": {
           "at": 23715,
-          "physicalStateHash": "d520c459c239c302ac710c30d609ab5f26ffaad47826473fd9c6fd697bb458a9",
+          "physicalStateHash": "803877fb3b1dca69f10429c1cb8f271518ff07807787a71c81092262ad92d98a",
           "offers": [
             {
               "id": "rest",
@@ -337042,7 +337042,7 @@
             "id": 5333,
             "at": 25020,
             "kind": "interrupted",
-            "text": "Rafi stopped “Practise repairs with workshop supervision” at Workshop to do something else.",
+            "text": "Rafi stopped practising repairs with workshop supervision at Workshop and did something else.",
             "causes": [
               5325
             ],
@@ -337614,7 +337614,7 @@
             "id": 5385,
             "at": 25230,
             "kind": "interrupted",
-            "text": "Ece stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Ece stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5366
             ],
@@ -337670,7 +337670,7 @@
             "id": 5390,
             "at": 25245,
             "kind": "interrupted",
-            "text": "Hayden Diaz stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Hayden Diaz stopped resting at home at Riverside homes and did something else.",
             "causes": [
               5374
             ],
@@ -338796,7 +338796,7 @@
             "id": 5492,
             "at": 25680,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -339424,7 +339424,7 @@
             "id": 5549,
             "at": 25920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -340781,7 +340781,7 @@
             "id": 5673,
             "at": 26550,
             "kind": "interrupted",
-            "text": "Nora stopped “Make and repair workshop fittings” at Workshop to do something else.",
+            "text": "Nora stopped making and repairing workshop fittings at Workshop and did something else.",
             "causes": [
               5653
             ],
@@ -340910,7 +340910,7 @@
     {
       "seed": 101,
       "slot": "soon",
-      "frozenInputSha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f",
+      "frozenInputSha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27",
       "noProposal": {
         "startAt": 19290,
         "admissionAt": null,
@@ -340918,9 +340918,9 @@
         "endAt": 22155,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "ef6bfa0584aec352b483a694f5f5c0155caa1a4ec7d56b26f6ed9ab9c6630596",
-        "branchStartCheckpointSha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f",
-        "finalCheckpointSha256": "440580fe68318d76b7d13200fc4782cdf8e73e98ecec69e45e06ceec0f4b731f",
+        "initialStateHash": "baaf9c5a06c18eee9adcc0cafec70bacae2f737f481bcbe969723787a7c79d5d",
+        "branchStartCheckpointSha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27",
+        "finalCheckpointSha256": "9bf41ae3cdd7a73e074e2128728a2e2fb643a9f29e4ddc33a90f103b267e8028",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -363520,7 +363520,7 @@
             "id": 4157,
             "at": 19470,
             "kind": "interrupted",
-            "text": "Derya stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Derya stopped resting at home at Riverside homes and did something else.",
             "causes": [
               4150
             ],
@@ -363885,7 +363885,7 @@
             "id": 4190,
             "at": 19590,
             "kind": "interrupted",
-            "text": "Rafi stopped “Restore one cart section on the side bench · two hours” at Workshop to do something else.",
+            "text": "Rafi stopped restoring a cart section on the side bench at Workshop and did something else.",
             "causes": [
               4172
             ],
@@ -364787,7 +364787,7 @@
             "id": 4272,
             "at": 19920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -365306,7 +365306,7 @@
             "id": 4319,
             "at": 20160,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -365819,7 +365819,7 @@
             "id": 4366,
             "at": 20400,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -366972,7 +366972,7 @@
             "id": 4471,
             "at": 20880,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -368851,7 +368851,7 @@
             "id": 4642,
             "at": 21600,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -370132,12 +370132,12 @@
         "endAt": 22155,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "ef6bfa0584aec352b483a694f5f5c0155caa1a4ec7d56b26f6ed9ab9c6630596",
-        "branchStartCheckpointSha256": "544ee3f715a8fd3516db734ad8fa2126beac6dab208edb10013268aeed654179",
-        "finalCheckpointSha256": "999b024841f9e17745a53035f2b4a310e758aa1e5c31567194339167355c4ce7",
+        "initialStateHash": "baaf9c5a06c18eee9adcc0cafec70bacae2f737f481bcbe969723787a7c79d5d",
+        "branchStartCheckpointSha256": "f8bbf4fc3ff1b63f3a367fdf86ea626fdbdf963665ce3bf295f0c758bc1135da",
+        "finalCheckpointSha256": "a10c54b2bb5c431eeef1ef9c68612c45971ceebb14feda1cb3b7f3c2951aa994",
         "controls": {
           "at": 19290,
-          "physicalStateHash": "3e7b56d971702eb240989937e2d49506d5b1ff9fe5b0d191b3c43c3ac25b2b48",
+          "physicalStateHash": "a4bfd737dbfc5f8205afa86c16fdf7117c10cc6fa5049e63ee144b14048c8004",
           "offers": [
             {
               "id": "rest",
@@ -393058,7 +393058,7 @@
             "id": 4158,
             "at": 19470,
             "kind": "interrupted",
-            "text": "Derya stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Derya stopped resting at home at Riverside homes and did something else.",
             "causes": [
               4151
             ],
@@ -394327,7 +394327,7 @@
             "id": 4273,
             "at": 19920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -394834,7 +394834,7 @@
             "id": 4319,
             "at": 20160,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -396544,7 +396544,7 @@
             "id": 4475,
             "at": 20880,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -398410,7 +398410,7 @@
             "id": 4645,
             "at": 21600,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -399622,7 +399622,7 @@
     {
       "seed": 101,
       "slot": "tomorrow",
-      "frozenInputSha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f",
+      "frozenInputSha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27",
       "noProposal": {
         "startAt": 19290,
         "admissionAt": null,
@@ -399630,9 +399630,9 @@
         "endAt": 22155,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "ef6bfa0584aec352b483a694f5f5c0155caa1a4ec7d56b26f6ed9ab9c6630596",
-        "branchStartCheckpointSha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f",
-        "finalCheckpointSha256": "440580fe68318d76b7d13200fc4782cdf8e73e98ecec69e45e06ceec0f4b731f",
+        "initialStateHash": "baaf9c5a06c18eee9adcc0cafec70bacae2f737f481bcbe969723787a7c79d5d",
+        "branchStartCheckpointSha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27",
+        "finalCheckpointSha256": "9bf41ae3cdd7a73e074e2128728a2e2fb643a9f29e4ddc33a90f103b267e8028",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -422232,7 +422232,7 @@
             "id": 4157,
             "at": 19470,
             "kind": "interrupted",
-            "text": "Derya stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Derya stopped resting at home at Riverside homes and did something else.",
             "causes": [
               4150
             ],
@@ -422597,7 +422597,7 @@
             "id": 4190,
             "at": 19590,
             "kind": "interrupted",
-            "text": "Rafi stopped “Restore one cart section on the side bench · two hours” at Workshop to do something else.",
+            "text": "Rafi stopped restoring a cart section on the side bench at Workshop and did something else.",
             "causes": [
               4172
             ],
@@ -423499,7 +423499,7 @@
             "id": 4272,
             "at": 19920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -424018,7 +424018,7 @@
             "id": 4319,
             "at": 20160,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -424531,7 +424531,7 @@
             "id": 4366,
             "at": 20400,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -425684,7 +425684,7 @@
             "id": 4471,
             "at": 20880,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -427563,7 +427563,7 @@
             "id": 4642,
             "at": 21600,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -428844,12 +428844,12 @@
         "endAt": 22155,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "ef6bfa0584aec352b483a694f5f5c0155caa1a4ec7d56b26f6ed9ab9c6630596",
-        "branchStartCheckpointSha256": "b7cbf146d5b70d197b5becca0e852de71f27a0ddba3f2161d234227b0061413d",
-        "finalCheckpointSha256": "1cf5aaa0c2b69833f665257a34b6277a9896d0dae655960b90e5335d81a1d2ce",
+        "initialStateHash": "baaf9c5a06c18eee9adcc0cafec70bacae2f737f481bcbe969723787a7c79d5d",
+        "branchStartCheckpointSha256": "dfa0fafccbc44e19bf0793bff7b914b1f119b41a66d1b7544af26c54eccc1e8b",
+        "finalCheckpointSha256": "1f139af9645de1ae1b95d306096275bbc1804ac8cb01306c2b85bc462c2d16c5",
         "controls": {
           "at": 19290,
-          "physicalStateHash": "b76d190387ff517083cb4598e28e4e4857bab3f499201ccaa42634458f253dbc",
+          "physicalStateHash": "7d86367e86a32ff026d73ad5c0478e230e9e6c8c3085e6240d3822a53fa1cd38",
           "offers": [
             {
               "id": "rest",
@@ -451738,7 +451738,7 @@
             "id": 4158,
             "at": 19470,
             "kind": "interrupted",
-            "text": "Derya stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Derya stopped resting at home at Riverside homes and did something else.",
             "causes": [
               4151
             ],
@@ -453007,7 +453007,7 @@
             "id": 4273,
             "at": 19920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -453514,7 +453514,7 @@
             "id": 4319,
             "at": 20160,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -455224,7 +455224,7 @@
             "id": 4475,
             "at": 20880,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -457090,7 +457090,7 @@
             "id": 4645,
             "at": 21600,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -458302,7 +458302,7 @@
     {
       "seed": 101,
       "slot": "brief",
-      "frozenInputSha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f",
+      "frozenInputSha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27",
       "noProposal": {
         "startAt": 19290,
         "admissionAt": null,
@@ -458310,9 +458310,9 @@
         "endAt": 22155,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "ef6bfa0584aec352b483a694f5f5c0155caa1a4ec7d56b26f6ed9ab9c6630596",
-        "branchStartCheckpointSha256": "8fd59c58fe9964d2c675a9f03070c2add560c1c688a460d0a5506d2940fb1a4f",
-        "finalCheckpointSha256": "440580fe68318d76b7d13200fc4782cdf8e73e98ecec69e45e06ceec0f4b731f",
+        "initialStateHash": "baaf9c5a06c18eee9adcc0cafec70bacae2f737f481bcbe969723787a7c79d5d",
+        "branchStartCheckpointSha256": "5ead0a7ee7958012d4780a80336eab9ad2c1b5a44efe44959a1231d8b85c4e27",
+        "finalCheckpointSha256": "9bf41ae3cdd7a73e074e2128728a2e2fb643a9f29e4ddc33a90f103b267e8028",
         "chain": {
           "notice": null,
           "receivedNotice": false,
@@ -480912,7 +480912,7 @@
             "id": 4157,
             "at": 19470,
             "kind": "interrupted",
-            "text": "Derya stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Derya stopped resting at home at Riverside homes and did something else.",
             "causes": [
               4150
             ],
@@ -481277,7 +481277,7 @@
             "id": 4190,
             "at": 19590,
             "kind": "interrupted",
-            "text": "Rafi stopped “Restore one cart section on the side bench · two hours” at Workshop to do something else.",
+            "text": "Rafi stopped restoring a cart section on the side bench at Workshop and did something else.",
             "causes": [
               4172
             ],
@@ -482179,7 +482179,7 @@
             "id": 4272,
             "at": 19920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -482698,7 +482698,7 @@
             "id": 4319,
             "at": 20160,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -483211,7 +483211,7 @@
             "id": 4366,
             "at": 20400,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -484364,7 +484364,7 @@
             "id": 4471,
             "at": 20880,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -486243,7 +486243,7 @@
             "id": 4642,
             "at": 21600,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -487524,12 +487524,12 @@
         "endAt": 22155,
         "completedRounds": 192,
         "fullIntervalMinutes": 2880,
-        "initialStateHash": "ef6bfa0584aec352b483a694f5f5c0155caa1a4ec7d56b26f6ed9ab9c6630596",
-        "branchStartCheckpointSha256": "102da43ba751d344774daa5fda743965f843b7037c838406e0db3ffdc988ea28",
-        "finalCheckpointSha256": "4c20f4aba673c14e7c55fa037abaa61633d78d0d0e8b622f4488bf06bc0c7179",
+        "initialStateHash": "baaf9c5a06c18eee9adcc0cafec70bacae2f737f481bcbe969723787a7c79d5d",
+        "branchStartCheckpointSha256": "1cccc69958c79b9be4e894fa8985c96392f62a829397dc301bdc2004f63ca0f2",
+        "finalCheckpointSha256": "c93d4e75f5b60417b48041c812617fff2e902cb0e1bda5b118c733f518b10b78",
         "controls": {
           "at": 19290,
-          "physicalStateHash": "27db32b5b0cd1f2585b176c6abd6c8fcd00fb834fb8019d87ad1a3b924fea726",
+          "physicalStateHash": "91379a12e886a2a5809722ae2095a13dba07a4d0cd983b8679a392e5896ca023",
           "offers": [
             {
               "id": "rest",
@@ -510418,7 +510418,7 @@
             "id": 4158,
             "at": 19470,
             "kind": "interrupted",
-            "text": "Derya stopped “Rest at home” at Riverside homes to do something else.",
+            "text": "Derya stopped resting at home at Riverside homes and did something else.",
             "causes": [
               4151
             ],
@@ -511687,7 +511687,7 @@
             "id": 4273,
             "at": 19920,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -512194,7 +512194,7 @@
             "id": 4319,
             "at": 20160,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -513904,7 +513904,7 @@
             "id": 4475,
             "at": 20880,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"
@@ -515770,7 +515770,7 @@
             "id": 4645,
             "at": 21600,
             "kind": "delivery",
-            "text": "1 meals arrived by handcart.",
+            "text": "1 meal arrived by handcart.",
             "causes": [],
             "importance": 0.15,
             "placeId": "market"

@@ -1,6 +1,9 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
+
+afterEach(() => vi.unstubAllGlobals());
+
 import type { PersonView, TownEvent, TownView } from "../src/contracts";
 import { groupStories } from "../src/ui/observations";
 import PersonPanel from "../src/ui/PersonPanel";
@@ -124,7 +127,8 @@ it("preserves exact kept and released statuses", () => {
 		);
 	}
 });
-it("folds raw choice terms while retaining the current activity and controller label", () => {
+it("keeps controller and numeric evidence in lab mode", () => {
+	vi.stubGlobal("location", { search: "?lab=1" });
 	const town = createRuntime(42, 8).view();
 	const person = {
 		...town.people[0],
@@ -301,10 +305,11 @@ it("shows activity and current promise before one evidence disclosure, preservin
 	expect(disclosure).toBeGreaterThan(html.indexOf("Current pledge"));
 	expect(html.slice(0, disclosure)).not.toContain("<details");
 	expect(html.slice(disclosure)).toContain("Reasons and records ▸");
-	expect(html.slice(disclosure)).toContain("Received observations");
-	expect(html.slice(disclosure)).toContain(
+	expect(html.slice(disclosure)).toContain("News received");
+	expect(html.slice(disclosure)).not.toContain(
 		"How urgent each need feels · decision evidence",
 	);
+	expect(html).not.toContain("Controller · HF");
 	expect(html.match(/Current pledge/g)).toHaveLength(1);
 });
 

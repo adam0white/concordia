@@ -330,7 +330,7 @@ export function finishAssistance(host: EveningHost, r: Resident): boolean {
 			host,
 			host.event(
 				"annex-observed",
-				`${r.person.name} checked the annex timber. The timber was ${cues(a).moisture}. The supports were ${cues(a).support}. They still need to decide whether to open it.`,
+				`${r.person.name} checked the annex timber. The timber was ${cues(a).moisture}. The supports were ${cues(a).support}. The decision to open it is still pending.`,
 				r.person.id,
 				"hall",
 				[a.request.id, j.event],
