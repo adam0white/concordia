@@ -236,9 +236,9 @@ it("retains annex observations and outcomes without claiming a lesson or main-ha
 		.stories.find((story) =>
 			story.eventIds.includes(r.s.assistance?.visit?.id ?? -1),
 		);
-	expect(observed?.title).toBe("The annex timber was observed");
+	expect(observed?.title).toBe("Someone checked the annex timber");
 	expect(observed?.summary).toBe(
-		"Lea observed the annex timber. Moisture: dry. Supports: sound. An opening decision remains.",
+		"Lea checked the annex timber. The timber was dry. The supports were sound. They still need to decide whether to open it.",
 	);
 	expect(observed?.summary).not.toContain("inspected");
 	round(r, "annex-open-section");
@@ -250,7 +250,7 @@ it("retains annex observations and outcomes without claiming a lesson or main-ha
 			story.eventIds.includes(r.s.assistance?.result?.id ?? -1),
 		);
 	expect(outcome?.title).toBe(
-		"Four extra hall places opened after annex inspection",
+		"Four extra places in the hall opened after the annex inspection",
 	);
 	expect(restoreRuntime(r.export()).export()).toEqual(r.export());
 });

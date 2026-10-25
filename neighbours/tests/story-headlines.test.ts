@@ -48,5 +48,5 @@ it("headlines distinguish a class invitation, missed class and delivered class",
 	closed.replies = {
 		ada: { heardAt: 480, attendedMinutes: 30, delivered: true },
 	};
-	expect(townStories(s)[0]?.title).toBe("Neighbours received Lea’s class");
+	expect(townStories(s)[0]?.title).toBe("Neighbours attended Lea’s class");
 });

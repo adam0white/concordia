@@ -68,7 +68,7 @@ describe("work under protest (Phase C host physics)", () => {
 			(e) =>
 				e.causes.includes(seen?.event ?? -1) && e.kind === "attempt-failed",
 		);
-		expect(line?.text).toMatch(/done under protest, went wrong/);
+		expect(line?.text).toMatch(/did the work under protest, and it went wrong/);
 		const voice = r
 			.actor(seen.id)
 			.person.will.voices.find((v) => v.voiceId === "player");

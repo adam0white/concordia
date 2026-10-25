@@ -30,6 +30,78 @@ const fixed = (first: string, act: string, ing: string) => ({
 /** Ordered: more specific labels first. */
 export const PHRASES: readonly Phrase[] = [
 	{
+		kind: "pray",
+		match: /^Keep the prayer appointment they received$/,
+		...fixed(
+			"I need to keep my prayer appointment first",
+			"keep the prayer appointment",
+			"keeping the prayer appointment",
+		),
+	},
+	{
+		kind: "tea",
+		match: /^Take a tea break$/,
+		...fixed(
+			"I need a tea break first",
+			"take a tea break",
+			"taking a tea break",
+		),
+	},
+	{
+		kind: "work",
+		match: /^Make and repair workshop fittings$/,
+		...fixed(
+			"I have workshop fittings to make and repair first",
+			"make and repair workshop fittings",
+			"making and repairing workshop fittings",
+		),
+	},
+	{
+		kind: "work",
+		match: /^Work the agreed relief shift$/,
+		...fixed(
+			"I have the agreed relief shift to work first",
+			"work the agreed relief shift",
+			"working the agreed relief shift",
+		),
+	},
+	{
+		kind: "work",
+		match: /^Help the kitchen within your training$/,
+		...fixed(
+			"I need to help in the kitchen within my training first",
+			"help in the kitchen within the agreed training limits",
+			"helping in the kitchen within the agreed training limits",
+		),
+	},
+	{
+		kind: "work",
+		match: /^Move the supplies agreed for this visit$/,
+		...fixed(
+			"I have the agreed supplies to move during this visit first",
+			"move the supplies agreed for this visit",
+			"moving the supplies agreed for this visit",
+		),
+	},
+	{
+		kind: "work",
+		match: /^Practise repairs with workshop supervision$/,
+		...fixed(
+			"I have repairs to practise under supervision first",
+			"practise repairs with workshop supervision",
+			"practising repairs with workshop supervision",
+		),
+	},
+	{
+		kind: "work",
+		match: /^Run the supply route$/,
+		...fixed(
+			"I have supplies to deliver along the route first",
+			"deliver supplies along the route",
+			"delivering supplies along the route",
+		),
+	},
+	{
 		kind: "rest-here",
 		match: /^Rest on the floor here/,
 		...fixed(
@@ -80,7 +152,7 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "supply",
 		match: /^Carry food from the quay/,
 		...fixed(
-			"I’ve food to carry up from the quay first",
+			"I have food to carry up from the quay first",
 			"carry food up from the quay",
 			"carrying food up from the quay",
 		),
@@ -98,17 +170,17 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "learn",
 		match: /^Attend a practical class/,
 		...fixed(
-			"I’ve a class at the school first",
+			"I have a class at the school first",
 			"go to the class at the school",
-			"the class at the school",
+			"attending the class at the school",
 		),
 	},
 	{
 		kind: "teach",
 		match:
-			/^Teach (?:the displaced evening|a displaced practical repair) class/,
+			/^Teach (?:the displaced evening|a displaced practical repair|a practical repair|the evening) class/,
 		...fixed(
-			"I’ve the evening class to teach first",
+			"I have to teach the evening class first",
 			"teach the evening class",
 			"teaching the evening class",
 		),
@@ -126,7 +198,7 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "work",
 		match: /^(Work|Help with) a paid .*shift/,
 		...fixed(
-			"I’ve a paid shift to work first",
+			"I have a paid shift to work first",
 			"work a paid shift",
 			"working a paid shift",
 		),
@@ -135,7 +207,7 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "repair",
 		match: /^Repair the flood-damaged hall/,
 		...fixed(
-			"I’ve repairs to do on the hall first",
+			"I have repairs to do on the hall first",
 			"work on the hall repairs",
 			"working on the hall repairs",
 		),
@@ -153,27 +225,28 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "inspect",
 		match: /^(Go and inspect the hall timber|Visit the hall annex)/,
 		...fixed(
-			"I want a look at the timber first",
-			"look over the timber",
-			"looking over the timber",
+			"I want to check the timber first",
+			"check the timber",
+			"checking the timber",
 		),
 	},
 	{
 		kind: "ask-inspector",
 		match: /^(Leave a question for an inspector|Ask an experienced inspector)/,
 		...fixed(
-			"I’ve a question to leave for the inspector first",
+			"I have a question to leave for the inspector first",
 			"leave the inspector a question",
 			"leaving a question for the inspector",
 		),
 	},
 	{
 		kind: "post-structural-question",
-		match: /^Leave a note requesting a structural opinion/,
+		match:
+			/^Leave a note (?:requesting a structural opinion|asking someone to check the supports)/,
 		...fixed(
-			"I’ve a note to leave asking for a structural opinion first",
-			"leave a note asking for a structural opinion",
-			"leaving a note asking for a structural opinion",
+			"I have to leave a note asking someone to check the supports first",
+			"leave a note asking someone to check the supports",
+			"leaving a note asking someone to check the supports",
 		),
 	},
 	{
@@ -186,7 +259,7 @@ export const PHRASES: readonly Phrase[] = [
 	{
 		kind: "answer-inspection",
 		match: /^Go over the timber checks with (.+)/,
-		first: (m) => `I’ve the timber checks to go over with ${g(m)} first`,
+		first: (m) => `I have to explain the timber checks to ${g(m)} first`,
 		act: (m) => `go over the timber checks with ${g(m)}`,
 		ing: (m) => `going over the timber checks with ${g(m)}`,
 	},
@@ -194,7 +267,7 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "open-section",
 		match: /^Open this section/,
 		...fixed(
-			"I mean to open this section first",
+			"I intend to open this section first",
 			"open this section",
 			"opening this section",
 		),
@@ -211,7 +284,7 @@ export const PHRASES: readonly Phrase[] = [
 	{
 		kind: "propose",
 		match: /^Invite neighbours and promise to host (.+)/,
-		first: (m) => `I’ve neighbours to invite to ${g(m)} first`,
+		first: (m) => `I have to invite neighbours to ${g(m)} first`,
 		act: (m) => `invite neighbours to ${g(m)}`,
 		ing: (m) => `inviting neighbours to ${g(m)}`,
 	},
@@ -225,14 +298,14 @@ export const PHRASES: readonly Phrase[] = [
 	{
 		kind: "decline",
 		match: /^Decline (.+)/,
-		first: (m) => `I need to send word I can’t come to ${g(m)} first`,
-		act: (m) => `turn down ${g(m)}`,
-		ing: (m) => `turning down ${g(m)}`,
+		first: (m) => `I need to say that I cannot come to ${g(m)} first`,
+		act: (m) => `decline ${g(m)}`,
+		ing: (m) => `declining ${g(m)}`,
 	},
 	{
 		kind: "prepare",
 		match: /^Prepare the hall for (.+)/,
-		first: (m) => `I’ve the hall to get ready for ${g(m)} first`,
+		first: (m) => `I have to get the hall ready for ${g(m)} first`,
 		act: (m) => `get the hall ready for ${g(m)}`,
 		ing: (m) => `getting the hall ready for ${g(m)}`,
 	},
@@ -260,7 +333,7 @@ export const PHRASES: readonly Phrase[] = [
 	{
 		kind: "cart-fast",
 		match: /^Restore one cart section on (\S+) main bench/,
-		first: (m) => `I’ve a cart section to restore on ${g(m)} bench first`,
+		first: (m) => `I have a cart section to restore on ${g(m)} bench first`,
 		act: (m) => `restore a cart section on ${g(m)} bench`,
 		ing: (m) => `restoring a cart section on ${g(m)} bench`,
 	},
@@ -268,7 +341,7 @@ export const PHRASES: readonly Phrase[] = [
 		kind: "cart-slow",
 		match: /^Restore one cart section on the side bench/,
 		...fixed(
-			"I’ve a cart section to restore first",
+			"I have a cart section to restore first",
 			"restore a cart section on the side bench",
 			"restoring a cart section on the side bench",
 		),
@@ -276,7 +349,7 @@ export const PHRASES: readonly Phrase[] = [
 	{
 		kind: "cart-handover",
 		match: /^Return the restored handcart to (.+)/,
-		first: (m) => `I’ve the handcart to take back to ${g(m)} first`,
+		first: (m) => `I have to return the handcart to ${g(m)} first`,
 		act: (m) => `take the handcart back to ${g(m)}`,
 		ing: (m) => `taking the handcart back to ${g(m)}`,
 	},
@@ -328,14 +401,14 @@ export function ingWords(label: string): string {
 
 /**
  * A finished or failed job as a journal line: "Ada finished repairing the hall." / "Ada could not finish
- * opening this section." Unknown labels fall back to the tidied label after "the work:".
+ * opening this section." Unknown labels quote the tidied task label.
  */
 export function jobLine(name: string, label: string, failed: boolean): string {
 	const hit = phraseFor(label);
 	const what = hit ? hit.phrase.ing(hit.m) : undefined;
 	if (what)
 		return `${name} ${failed ? "could not finish" : "finished"} ${what}.`;
-	return `${name} ${failed ? "could not finish" : "finished"} the work: ${lowerFirst(tidy(label))}.`;
+	return `${name} ${failed ? "could not finish" : "finished"} the task “${tidy(label)}”.`;
 }
 
 type CounterLike = { label: string } | undefined;
@@ -353,7 +426,7 @@ function afterAction(label: string): string | undefined {
 
 /**
  * The counter-offer as a verb phrase after "offered to": "do it after leaving a question for the inspector"
- * or "look over the timber instead".
+ * or "check the timber instead".
  */
 export function counterWords(counter: CounterLike): string {
 	if (!counter) return "do it later";
@@ -383,8 +456,8 @@ export function voicedLine(answer: AnswerLike): string {
 			return answer.says;
 		if (/^after I pray\b/i.test(counter))
 			return notNowForm
-				? "Not now — after I pray."
-				: "After I pray, then I will.";
+				? "I cannot do that now. I need to pray first."
+				: "I need to pray first. Then I will do it.";
 		const after = afterAction(counter);
 		if (after === undefined) return answer.says;
 		const hit = phraseFor(after);
@@ -392,14 +465,14 @@ export function voicedLine(answer: AnswerLike): string {
 			? hit.phrase.first(hit.m)
 			: `I need to ${lowerFirst(tidy(after))} first`;
 		return notNowForm
-			? `Not now — ${first}.`
-			: `${upperFirst(first)}, then I will.`;
+			? `I cannot do that now. ${upperFirst(first)}.`
+			: `${upperFirst(first)}. Then I will do it.`;
 	}
 	if (answer.verdict === "modified" && counter) {
 		const act = actionWords(counter);
 		return answer.says.startsWith("Not that")
-			? `Not that — I’d rather ${act}.`
-			: `I’d rather ${act} instead.`;
+			? `I do not want to do that. I would rather ${act}.`
+			: `I would rather ${act} instead.`;
 	}
 	return answer.says;
 }
@@ -409,7 +482,7 @@ const NEED_FIRST: Record<string, string> = {
 	water: "they need a drink first",
 	sleep: "they need sleep first",
 	rest: "they need to rest first",
-	survival: "they are in no state for it",
+	survival: "they cannot manage this while their basic needs are unmet",
 };
 /**
  * Refusals that say why: HF's spoken line can be curt ("I can't right now."), so the screen adds the dominant
@@ -424,17 +497,17 @@ export function refusalWhy(answer: {
 	const reason = answer.reason;
 	if (reason.startsWith("need:")) {
 		const need = NEED_FIRST[reason.slice(5)];
-		return need ? `Why: ${need}.` : undefined;
+		return need ? `They refused because ${need}.` : undefined;
 	}
 	if (reason === "distrust")
-		return "Why: they do not trust your word just now.";
+		return "They refused because they do not trust your promises right now.";
 	if (reason === "unavailable" || reason === "capacity")
-		return "Why: it is not something they can do here and now.";
+		return "They refused because they cannot do this here and now.";
 	if (reason === "autonomy")
-		return "Why: you pushed, and they want the choice to be theirs.";
+		return "They refused because you pressured them and they want to choose for themselves.";
 	if (reason.startsWith("norm:"))
-		return "Why: it goes against something they hold to.";
+		return "They refused because this goes against their principles.";
 	if (reason.startsWith("commitment") || reason.startsWith("omission"))
-		return "Why: they have a promise to keep first.";
+		return "They refused because they have another promise to keep first.";
 	return undefined;
 }

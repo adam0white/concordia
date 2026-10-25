@@ -52,11 +52,13 @@ it("keeps a jittered marker ring inside its 22-unit hit circle", () => {
 
 it("words inner state instead of showing meters or percentages", () => {
 	expect(needWords({ food: 0.9, sleep: 0.6, leisure: 0.1 })).toBe(
-		"Very hungry and sleepy.",
+		"They look very hungry and sleepy.",
 	);
-	expect(needWords({ food: 0.1 })).toBe("Settled. Nothing pressing.");
+	expect(needWords({ food: 0.1 })).toBe(
+		"They look calm. No need seems urgent.",
+	);
 	expect(urgencyWord(0.3)).toBe("noticed");
-	expect(trustWords(0.8)).toBe("Trusts them deeply");
+	expect(trustWords(0.8)).toBe("They trust this person deeply");
 	expect(`${needWords({ belonging: 0.7 })}${trustWords(0.1)}`).not.toMatch(
 		/\d|%/,
 	);

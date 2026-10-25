@@ -47,10 +47,10 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 		button.click();
 	});
 	await expect(page.locator(".game-state")).toContainText(
-		"You set off automatically",
+		"You start walking automatically",
 	);
 	await expect(page.locator(".state-words")).toContainText(
-		"You set off automatically",
+		"You start walking automatically",
 	);
 	await expect(walk).toBeDisabled();
 	expect(await page.locator(".town-time").innerText()).toBe(before);
@@ -67,7 +67,7 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 	);
 	await openSaves(page);
 	await openOtherWays(page);
-	await page.getByLabel("Start from a seed").fill("73");
+	await page.getByLabel("Start from a seed number").fill("73");
 	await page.getByRole("button", { name: "Start", exact: true }).click();
 	await closeSaves(page);
 	await expect(page.locator(".game-state")).not.toContainText("Press Play to");
@@ -107,10 +107,10 @@ test("a held worker reply shows pending immediately without moving the menu", as
 	const walk = page.getByRole("button", { name: /Walk to Flooded hall ·/ });
 	await walk.tap();
 	await expect(page.locator(".state-words")).toContainText(
-		"Requesting your action…",
+		"Sending your action…",
 	);
 	await expect(page.locator(".state-words")).toContainText(
-		"Requesting your action…",
+		"Sending your action…",
 	);
 	await expect(page.locator(".state-words")).not.toContainText("Press Play");
 	await expect(walk).toBeDisabled();
@@ -136,10 +136,10 @@ test("a held worker reply shows pending immediately without moving the menu", as
 		for (const deliver of gate.held.splice(0)) deliver();
 	});
 	await expect(page.locator(".state-words")).toContainText(
-		"You set off automatically",
+		"You start walking automatically",
 	);
 	await expect(page.locator(".state-words")).not.toContainText(
-		"Requesting your action…",
+		"Sending your action…",
 	);
 	const accepted = await play.boundingBox();
 	expect(accepted?.x).toBe(before?.x);

@@ -175,7 +175,9 @@ describe("browser history recording and ownership", () => {
 		Object.assign(event, { key: "hf-persona-opt-in" });
 		window.dispatchEvent(event);
 		release?.(true);
-		await expect(preparing).rejects.toThrow("Run changed while preparing cast");
+		await expect(preparing).rejects.toThrow(
+			"The game changed while its people were being prepared",
+		);
 		s.close();
 	});
 	it("sends the note when optional capture fails", async () => {
@@ -273,7 +275,7 @@ describe("browser history recording and ownership", () => {
 		expect(reloaded.heads).toEqual([]);
 		expect(reloaded.file).toBe(true);
 		await expect(reloaded.checkpoint(packet, parent.castId)).rejects.toThrow(
-			/Imported files/,
+			/This imported game/,
 		);
 		imported.close();
 		reloaded.close();

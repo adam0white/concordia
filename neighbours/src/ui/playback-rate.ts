@@ -10,14 +10,14 @@ export function automaticPlaybackRate(
 ) {
 	const speed = mode === "slow" ? 2400 : mode === "fast" ? 400 : 1200;
 	return held
-		? { interval: 0, label: "Time holds while you read" }
+		? { interval: 0, label: "Time pauses while you read" }
 		: {
 				interval: inspecting
 					? Math.max(2400, speed)
 					: occupied
 						? Math.max(1200, speed)
 						: speed,
-				label: inspecting ? "Slowed while you look" : "Time passing",
+				label: inspecting ? "Time slows while you look" : "Time is passing",
 			};
 }
 /** Compare consecutive real rounds. UI timing never enters saved state. */
@@ -79,10 +79,10 @@ export function playbackRate(
 	speed = 1200,
 ) {
 	return conversation
-		? { interval: 0, label: "Time held · conversation" }
+		? { interval: 0, label: "Time pauses while you talk" }
 		: {
 				interval: occupied ? Math.max(1200, speed) : speed,
-				label: "Time passing",
+				label: "Time is passing",
 			};
 }
 

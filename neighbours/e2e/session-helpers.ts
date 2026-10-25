@@ -73,7 +73,7 @@ export async function closeSelection(page: Page) {
 	for (const name of [
 		"Close person details",
 		"Close place details",
-		"Close Compare futures",
+		"Close Compare possible outcomes",
 		"Close Recorded studies",
 		"Close Help the town",
 		"Close Walk somewhere",
@@ -100,7 +100,10 @@ export async function showTab(
 		await openSaves(page);
 		await page
 			.getByRole("button", {
-				name: name === "Compare" ? /^Compare futures/ : /^Recorded studies/,
+				name:
+					name === "Compare"
+						? /^Compare possible outcomes/
+						: /^Recorded studies/,
 			})
 			.click();
 	} else

@@ -14,7 +14,7 @@ export default function QueuedWalkNotice({
 	if (pending)
 		return (
 			<span role="status" aria-busy="true">
-				Requesting your action…
+				Sending your action…
 			</span>
 		);
 	const job = town.player?.job;
@@ -31,7 +31,7 @@ export default function QueuedWalkNotice({
 	return (
 		<span role="status">
 			{starting
-				? "You set off automatically"
+				? "You start walking automatically"
 				: "You keep walking automatically"}
 		</span>
 	);

@@ -40,7 +40,7 @@ it("shows actual choices including asking without a goal, rather than declaring 
 	expect(html).toContain("Goal removed");
 	expect(html.match(/Chose to ask/g)).toHaveLength(3);
 	expect(html).toContain("No goal progress");
-	expect(html).toContain("Request expectation consumed");
+	expect(html).toContain("The request is no longer possible");
 	expect(html).toContain("HF 2.3.0");
 });
 it("rejects unsupported or malformed recordings instead of showing empty success", () => {

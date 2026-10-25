@@ -146,7 +146,7 @@ describe("player pledges (Phase C)", () => {
 			expect(line).toMatch(/Ada will trust your word less/);
 			// The read before speaking says so too.
 			expect(speechRead(r.s, r.actor("ada"), [], [])).toContain(
-				"Still sore about a promise you broke",
+				"They are still upset about a promise you broke.",
 			);
 		},
 		T,

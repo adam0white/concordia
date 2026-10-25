@@ -79,7 +79,7 @@ export function createRuntime(seed = 42, population = 206): TownRuntime {
 				from: 480,
 				until: 720,
 				importance: 0.9,
-				label: "Morning sleep after night work; relief duties wait",
+				label: "Sleep in the morning after night work; cover shifts later",
 			});
 		if (k) {
 			const action = required(
@@ -95,8 +95,8 @@ export function createRuntime(seed = 42, population = 206): TownRuntime {
 				importance: 0.6,
 				label: [
 					"Repair the hall doors before evening",
-					"Keep the relief clinic open within the agreed shift",
-					"Help prepare the shared meal with kitchen cover",
+					"Keep the clinic open during the agreed shift",
+					"Help prepare the shared meal with an experienced kitchen worker",
 					"Carry supplies during the agreed visit",
 					"Practise a repair without claiming expertise",
 					"Check the supply route and meet neighbours",
@@ -131,7 +131,7 @@ export function createRuntime(seed = 42, population = 206): TownRuntime {
 					"Missing background role",
 				),
 			description:
-				k?.[4] ?? "A persistent neighbour with food, rest and social needs.",
+				k?.[4] ?? "This neighbour needs food, rest and time with other people.",
 			known: !!k,
 			place: k?.[3] ?? "homes",
 			wealth: 3 + (ordinal % 6),

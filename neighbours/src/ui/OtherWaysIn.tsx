@@ -48,8 +48,8 @@ export default function OtherWaysIn({
 							Start a fresh local town
 						</button>
 						<p className="tiny muted">
-							Use the canonical opening without admitting browser histories.
-							Existing browser people stay archived and unchanged.
+							Start with the original people and their original history. People
+							saved in this browser stay unchanged in their archives.
 						</p>
 					</>
 				)}
@@ -98,7 +98,7 @@ export default function OtherWaysIn({
 						(onStart ?? session.startTown)();
 					}}
 				>
-					<label htmlFor="town-seed">Start from a seed</label>
+					<label htmlFor="town-seed">Start from a seed number</label>
 					<input
 						id="town-seed"
 						type="number"

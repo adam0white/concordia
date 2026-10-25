@@ -104,7 +104,7 @@ import { townStories } from "./stories.ts";
 import { scheduledFoodDelivery } from "./supply.ts";
 import { repairHolds, timberMoisture, weatherTimber } from "./timber.ts";
 import { recordTownEvent } from "./town-chronicle.ts";
-import { jobLine } from "./voicing.ts";
+import { actionWords, jobLine } from "./voicing.ts";
 
 function awakeHallNewsListener(r: Save["people"][number]): boolean {
 	return (
@@ -310,14 +310,14 @@ export class Runtime implements TownRuntime {
 		if (loosenHall(this.s)) {
 			const id = this.event(
 				"hall-loosened",
-				"A repaired section of the hall worked loose as the wet timber moved.",
+				"A repaired section of the hall came loose as the wet timber moved.",
 				undefined,
 				"hall",
 			);
 			// A visitor who has acted hears of it, so a running advance stops at the crisis instead of passing it.
 			playerHears(
 				this.s,
-				`A repaired section of the hall worked loose overnight on the wet timber (${12 - this.s.hall} of 12 now need work).`,
+				`A repaired section of the hall came loose overnight because the timber was wet. Repairs are now needed for ${12 - this.s.hall} of 12 sections.`,
 				id,
 			);
 		}
@@ -342,14 +342,14 @@ export class Runtime implements TownRuntime {
 			if (dead && r.lifeEvent?.kind !== "death")
 				r.lifeEvent = this.lifecycleEvent(
 					"death",
-					`${r.person.name} was found dead at this round boundary.`,
+					`${r.person.name} was found dead at the end of this round.`,
 					r.person.id,
 					r.place,
 				);
 			else if (downed && r.lifeEvent?.kind !== "incapacity" && !dead)
 				r.lifeEvent = this.lifecycleEvent(
 					"incapacity",
-					`${r.person.name} is down and can only rest where they are.`,
+					`${r.person.name} has collapsed and can only rest where they are.`,
 					r.person.id,
 					r.place,
 				);
@@ -427,7 +427,7 @@ export class Runtime implements TownRuntime {
 					if (this.s.hall === 12)
 						this.event(
 							"hall-repaired",
-							"Twelve repairs are complete. Timber inspection is still needed before reopening.",
+							"All twelve repairs are complete. Someone still needs to inspect the timber before the hall can reopen.",
 							r.person.id,
 							"hall",
 							[j.event],
@@ -440,7 +440,7 @@ export class Runtime implements TownRuntime {
 					inspectionEvent = this.event(
 						safe ? "hall-open" : "inspection-failed",
 						safe
-							? `${r.person.name} checked dry, sound timber and opened the hall.`
+							? `${r.person.name} found dry timber with sound supports and opened the hall.`
 							: `${r.person.name} found ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports. The hall stayed closed.`,
 						r.person.id,
 						"hall",
@@ -509,7 +509,7 @@ export class Runtime implements TownRuntime {
 					} else
 						this.event(
 							"missed-encounter",
-							`${r.person.name} went to explain the timber check, but the person who asked was no longer there.`,
+							`${r.person.name} went to explain the timber check, but the explanation did not reach the person who asked.`,
 							r.person.id,
 							"hall",
 							[j.event],
@@ -671,7 +671,7 @@ export class Runtime implements TownRuntime {
 				const eid = this.event(
 					status === "failed" ? "attempt-failed" : "completed",
 					botched
-						? `${jobLine(r.person.name, j.offer.label, true)} The work, done under protest, went wrong.`
+						? `${jobLine(r.person.name, j.offer.label, true)} They did the work under protest, and it went wrong.`
 						: jobLine(r.person.name, j.offer.label, status === "failed"),
 					r.person.id,
 					p.id,
@@ -754,7 +754,7 @@ export class Runtime implements TownRuntime {
 					kind: "local-situation",
 					placeId: r.place,
 					salience: 0.35,
-					summary: `At ${r.place}. ${r.place === "hall" ? `${this.s.hall} hall repairs completed.` : r.place === "market" ? `${this.s.places.find((p) => p.id === "market")?.stock} meals available.` : "Neighbours are going about their day."}`,
+					summary: `They are at ${placeName(this.s, r.place)}. ${r.place === "hall" ? `${this.s.hall} hall repairs are complete.` : r.place === "market" ? `${this.s.places.find((p) => p.id === "market")?.stock} meals are available.` : "Neighbours are going about their day."}`,
 				},
 			]);
 		}
@@ -1048,7 +1048,7 @@ export class Runtime implements TownRuntime {
 			from: r.place,
 			event: this.event(
 				"started",
-				`${r.person.name}: ${offer.label}.`,
+				`${r.person.name} started to ${actionWords(offer.label)}.`,
 				id,
 				p.id,
 			),
@@ -1132,7 +1132,9 @@ export class Runtime implements TownRuntime {
 			"intervention",
 			input.kind === "share-news"
 				? "Town bulletin: Neighbours are repairing the flood-damaged hall."
-				: input.kind.replaceAll("-", " "),
+				: input.kind === "restore-bus"
+					? "The town bus service has been restored."
+					: "The town has borrowed three extra tools.",
 		);
 		if (input.kind === "share-news") {
 			const event = required(
@@ -1342,10 +1344,10 @@ export class Runtime implements TownRuntime {
 				reserved: p.reserved,
 				description:
 					p.id === "hall"
-						? `${this.s.hall}/12 repairs; ${this.s.hallSafe ? "open after inspection" : "closed pending safe inspection"}`
+						? `${this.s.hall} of 12 repairs are complete. ${this.s.hallSafe ? "The hall opened after an inspection found it safe." : "The hall stays closed until an inspection finds it safe."}`
 						: p.id === "market"
-							? "Meals reserved when an activity starts."
-							: "Shared town space.",
+							? "Meals are reserved when an activity starts."
+							: "Neighbours share this space.",
 			})),
 			events: this.s.events.slice(-100),
 			stories: townStories(this.s),

@@ -59,7 +59,7 @@ export class RuntimePort {
 						rejected:
 							error instanceof Error
 								? error.message
-								: "That cannot be done now",
+								: "You cannot do that now.",
 					};
 				}
 				return null;

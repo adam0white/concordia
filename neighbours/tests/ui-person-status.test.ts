@@ -7,7 +7,7 @@ it("never presents a dead or downed person as doing a stale job", () => {
 	);
 	expect(
 		activityLabel({ lifeState: "downed", activity: "Repair the hall" }),
-	).toBe("Downed · unable to act");
+	).toBe("Unable to get up or act");
 	expect(canAct({ lifeState: "dead" })).toBe(false);
 	expect(canAct({ lifeState: "downed" })).toBe(false);
 });

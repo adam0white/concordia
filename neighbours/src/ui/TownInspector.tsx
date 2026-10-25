@@ -116,8 +116,8 @@ export default function TownInspector({
 						})}
 					</div>
 					<p className="tiny muted">
-						Python Concordia and released HF decisions. This town runs on your
-						device.
+						Python Concordia runs the town. The released HF software makes
+						decisions. This town runs on your device.
 					</p>
 					<div className="resource">
 						<span>Seed</span>
@@ -138,7 +138,9 @@ export default function TownInspector({
 						</p>
 					))}
 					{!town.diagnostics.length && (
-						<p className="tiny muted">No runtime anomalies reported.</p>
+						<p className="tiny muted">
+							No unusual runtime behaviour was reported.
+						</p>
 					)}
 				</details>
 			)}

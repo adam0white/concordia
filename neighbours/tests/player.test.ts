@@ -236,7 +236,7 @@ describe("player as a neighbour", () => {
 			expect(r.view().player?.pledges[0]?.status).toBe("kept");
 			expect(r.s.produced).toBeGreaterThanOrEqual(produced + 5);
 			expect(r.view().player?.journal.at(-1)?.text).toMatch(
-				/5 meals reached the market/,
+				/You delivered 5 meals to the market/,
 			);
 			expect(
 				r.view().diagnostics.filter((d) => d.severity === "error"),

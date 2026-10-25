@@ -49,7 +49,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	await openOtherWays(page);
-	await page.getByLabel("Start from a seed").fill("71");
+	await page.getByLabel("Start from a seed number").fill("71");
 	await page.getByRole("button", { name: "Start", exact: true }).click();
 	const latest = () =>
 		page.evaluate(async () => {

@@ -39,7 +39,7 @@ describe("Phase C reads and text", () => {
 				for (const p of r.view().people) if (p.read) reads.add(p.read);
 			}
 			expect(reads.size).toBeGreaterThan(4);
-			expect([...reads]).not.toContain("Settled. Nothing pressing.");
+			expect([...reads]).not.toContain("They look calm. No need seems urgent.");
 			// A real need shows: lower one person's HF belonging reservoir.
 			const sam = r.actor("sam");
 			sam.person.body.asleep = false;

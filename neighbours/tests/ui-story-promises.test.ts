@@ -33,7 +33,7 @@ function storyTown(): TownView {
 			id: "repair",
 			kind: "hall-repaired",
 			at: 200,
-			title: "Repairs finished; inspection remains",
+			title: "The repairs are finished. The hall still needs an inspection.",
 			summary: "Actual repairs finished",
 			eventIds: [1, 2],
 		},
@@ -72,7 +72,9 @@ it("promotes the latest grouped story and has no initial empty headline", () => 
 	const html = renderToStaticMarkup(
 		createElement(StoryHeadline, { story: latest, open: () => {} }),
 	);
-	expect(html).toContain("Read story: Repairs finished; inspection remains");
+	expect(html).toContain(
+		"Read story: The repairs are finished. The hall still needs an inspection.",
+	);
 	expect(html).toContain("Day 1 · 03:20");
 	expect(
 		renderToStaticMarkup(createElement(StoryHeadline, { open: () => {} })),
@@ -150,7 +152,7 @@ it("folds raw choice terms while retaining the current activity and controller l
 	expect(html).toContain("A neighbour</div>");
 	expect(html).toContain("Controller · HF");
 	expect(html.indexOf("Controller · HF")).toBeGreaterThan(
-		html.indexOf("Why · the record ▸"),
+		html.indexOf("Reasons and records ▸"),
 	);
 	expect(html).toContain("Right now");
 });
@@ -190,7 +192,7 @@ it("keeps received lesson evidence folded and names actual sources without promi
 	expect(html).toContain("Received · Day 1 · 03:20");
 	expect(html).toContain("Sources: Lea, Prior trade course");
 	expect(html).toContain("Recorded successes: 1 · failures: 0");
-	expect(html).toContain("not guaranteed expertise");
+	expect(html).toContain("do not prove that the person has mastered the skill");
 	expect(html).not.toContain("<details open");
 	expect(
 		renderToStaticMarkup(createElement(PersonLessons, { person: {}, town })),
@@ -298,10 +300,10 @@ it("shows activity and current promise before one evidence disclosure, preservin
 	expect(disclosure).toBeGreaterThan(html.indexOf("Actual active job"));
 	expect(disclosure).toBeGreaterThan(html.indexOf("Current pledge"));
 	expect(html.slice(0, disclosure)).not.toContain("<details");
-	expect(html.slice(disclosure)).toContain("Why · the record ▸");
+	expect(html.slice(disclosure)).toContain("Reasons and records ▸");
 	expect(html.slice(disclosure)).toContain("Received observations");
 	expect(html.slice(disclosure)).toContain(
-		"How pressing each need feels · decision evidence",
+		"How urgent each need feels · decision evidence",
 	);
 	expect(html.match(/Current pledge/g)).toHaveLength(1);
 });

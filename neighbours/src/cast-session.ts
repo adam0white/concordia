@@ -126,7 +126,9 @@ export class CastSession {
 		const generation = this.generation;
 		await shelf.ready;
 		if (!this.active || generation !== this.generation)
-			throw Error("Run changed while preparing cast.");
+			throw Error(
+				"The game changed while its people were being prepared. Please try again.",
+			);
 		const localOnly = explicitLocal || !shelf.enabled;
 		const cast =
 			!localOnly && shelf.enabled
@@ -143,7 +145,9 @@ export class CastSession {
 					)
 				: null;
 		if (!this.active || generation !== this.generation)
-			throw Error("Run changed while claiming cast.");
+			throw Error(
+				"The game changed while its people were being loaded. Please try again.",
+			);
 		const runtime =
 			cast?.initial ?? (createRuntime(seed, population).export() as Save);
 		const initial = Object.fromEntries(
@@ -414,10 +418,11 @@ export class CastSession {
 		const captureGeneration = this.generation;
 		if (this.file && !fork)
 			throw Error(
-				"Imported files do not own browser branches. Export locally or explicitly save an alternate branch.",
+				"This imported game cannot update the people saved in this browser. Export it locally, or save a separate version of these people.",
 			);
 		await shelf.ready;
-		if (!shelf.enabled) throw Error("Enable browser continuity first.");
+		if (!shelf.enabled)
+			throw Error("First, turn on saving people in this browser.");
 		if (captureGeneration !== this.generation)
 			throw Error("Run changed before checkpoint.");
 		const generation = captureGeneration,
@@ -449,7 +454,7 @@ export class CastSession {
 		}
 		if (p.runtime.round === 0 || r.job || r.person.activity)
 			throw Error(
-				"Wait for an actual finished action and finish active projects in this town.",
+				"Wait until an action finishes. Finish any projects still in progress in this town.",
 			);
 		const retained = r.person.agenda.commitments.filter((c) =>
 			isContinuingCommitment(r.person.agenda, c),
@@ -510,7 +515,7 @@ export class CastSession {
 				: initialPersonaLife(castId, branchId, Date.now());
 		this.sources[digest] = raw;
 		if (JSON.stringify(this.sources).length > 1048576)
-			throw Error("Export the source journal before saving more people.");
+			throw Error("Export the full history before saving more people.");
 		const envelope = await createPersona({
 			format: "hf-persona/1",
 			castId,
@@ -531,7 +536,7 @@ export class CastSession {
 				},
 			},
 			limitations: [
-				`Full source snapshot retained in the local town/export; ${portable.person.limitations.length} detailed omissions remain in its passport.`,
+				`The saved town and its export keep the full original state. The portable record lists ${portable.person.limitations.length} details that it leaves out.`,
 			],
 		});
 		if (!this.active || generation !== this.generation)

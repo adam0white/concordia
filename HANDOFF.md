@@ -1,5 +1,13 @@
 # Neighbours handoff
 
+## Plain-English source rewrite (2026-10-25)
+
+Remaining: Adam accepts feel. Released HF narration and shared package copy remain separate package work. Before the feedback-package rebase, ordinary fresh cast admission timed out in the local rendered check; the successful ten-minute session explicitly selected local mode, so it does not establish shared cast admission.
+
+Host story, event, person, request, instruction, menu, tooltip and accessible text now use literal English at their source. Redundant display lookup entries are removed. Host action IDs, rules, quantities and the exact published HF dependency stay unchanged. The source review corrected grammar for every cast job and admitted prayer/tea action, promise binding after a later decision, and two condition-specific claims. The rendered check corrected repeated punctuation and agreement in repair counts. Current exports replay exactly; some older active-job exports can be refused, with a plain start-new-game explanation that preserves the current town.
+
+Three seeded three-day runs match all 864 round hashes with named prose fields blanked and only nine rewritten labels mapped one-to-one to their original identities. Other labels, IDs, action histories, reasons, links and numbers remain exact. Every run also restores JSON and matches 16 further rounds exactly. A focused regression preserves semantic labels and string histories. All five deterministic studies and the three native recordings are genuinely regenerated from the final sources; the historical assistance artifact stays byte-pinned. Regeneration preserves negative results and source gates. Review, full local and native checks, real phone/desktop rendering, hosted CI and the final clean release receipt are recorded in the plain-English delivery report. Task `nbh-3jj` owns technical delivery. See [the source rewrite record](docs/neighbours/plain-english-2026-10-25.md).
+
 ## Frictionless feedback (owner, 2026-10-23)
 
 Owner 2026-10-23: recorded play links across games on this device automatically. The first-visit notice covers recording and linking. One menu recording switch controls both. Browser DNT/GPC sets only the default off. Send word offers one unticked “Share this run and my play with the lab” checkbox when recording is off; Submit opts in if ticked and otherwise sends the note alone. No separate continuing-person recording consent or gate applies. Character analysis still needs its separate opt-in.

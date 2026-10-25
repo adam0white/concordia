@@ -43,7 +43,7 @@ export default function HallChoices({
 					? "No evening support actions are available now."
 					: shared
 						? "Two events need the same room. Only one can use this hour."
-						: "The evenings have separate hours."}
+						: "The evening events are at different times."}
 			</p>
 			{schedule && (
 				<p className="tiny muted">
@@ -83,7 +83,7 @@ export default function HallChoices({
 									onAction({ kind: "open-evening-slot", eventId: evening.id })
 								}
 							>
-								Fund another slot for {name} ·{" "}
+								Fund another time for {name} ·{" "}
 								{evening.supportRemaining ? "1 weekly choice" : "1 town credit"}
 							</button>
 						)}
@@ -99,7 +99,7 @@ export default function HallChoices({
 									onCompare({ kind: "open-evening-slot", eventId: evening.id })
 								}
 							>
-								Compare a week with {name}’s extra slot ↗
+								Compare a week with {name}’s extra time ↗
 							</button>
 						)}
 						{evening.canAdvertise && (
@@ -134,8 +134,8 @@ export default function HallChoices({
 						)}
 						{evening.originalStartsAt !== undefined && (
 							<p className="tiny muted">
-								An extra slot was funded. The invitation remains {name}’s
-								choice.
+								Another time was funded. {name} still decides whether to invite
+								people.
 							</p>
 						)}
 						{evening.advertised && (
@@ -150,12 +150,13 @@ export default function HallChoices({
 						{supportRemaining
 							? "1 weekly choice available"
 							: "No weekly choice available"}
-						{` · ${town.controlsRemaining} town credits left.`} Fund a slot or
-						advertise. Further changes cost a town credit.
+						{` · ${town.controlsRemaining} town credits left.`} Fund another
+						time or advertise the event. Further changes cost a town credit.
 					</p>
 					<p className="tiny muted">
-						Funding moves an unposted opportunity to the next day. Advertising
-						informs awake neighbours; it does not make anyone attend.
+						Funding moves an event to the next day if its invitation has not
+						been posted. Advertising tells awake neighbours about it. Each
+						person decides whether to attend.
 					</p>
 				</>
 			)}

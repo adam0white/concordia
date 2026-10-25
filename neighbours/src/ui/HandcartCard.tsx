@@ -82,7 +82,7 @@ export default function HandcartCard({
 			{cart.canProposeBench && onPropose && (
 				<div className="bench-discussion">
 					<label>
-						Suggest a window
+						Suggest a time to use the bench
 						<select
 							value={slot}
 							disabled={disabled}
@@ -119,15 +119,15 @@ export default function HandcartCard({
 			{cart.opportunity && (
 				<p className="tiny muted">
 					{town.now >= cart.opportunity.until
-						? "Proposed window expired"
+						? "The proposed time has passed"
 						: cart.opportunity.received
-							? `${learner} heard the proposed window`
-							: `${learner} did not receive the proposed window`}{" "}
+							? `${learner} heard about the proposed time`
+							: `${learner} did not hear about the proposed time`}{" "}
 					· {datedClock(cart.opportunity.from)}–{clock(cart.opportunity.until)}
 					{cart.opportunity.origin.kind === "recorded-gm"
 						? " · Recorded GM proposal"
 						: " · Authored proposal"}
-					. {cart.bench ? "" : "No bench booking."}
+					. {cart.bench ? "" : "The bench is not booked."}
 				</p>
 			)}
 			{cart.completedAt !== undefined && (
@@ -135,7 +135,7 @@ export default function HandcartCard({
 					Repairs finished {datedClock(cart.completedAt)}
 					{cart.returnedAt !== undefined
 						? ` · Returned ${datedClock(cart.returnedAt)}`
-						: ` · Waiting for handover to ${owner}`}
+						: ` · Waiting to be returned to ${owner}`}
 				</p>
 			)}
 			<div className="handcart-people">

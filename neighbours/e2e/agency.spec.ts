@@ -58,7 +58,7 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	await page.getByRole("button", { name: /Compare a week with Nora/ }).click();
 	const comparison = page.locator(".day-comparison");
 	await expect(comparison).toHaveAttribute("open", "");
-	await expect(comparison).toContainText("Extra slot for Nora");
+	await expect(comparison).toContainText("Extra time for Nora");
 	await expect(comparison.getByRole("status")).toContainText(/of 672 rounds/);
 	await expect(
 		comparison.getByLabel("Change in the second run"),
@@ -73,12 +73,12 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	await showTab(page, "Help");
 	await expect(choices).toHaveAttribute("open", "");
 	await page
-		.getByRole("button", { name: /Fund another slot for Nora/ })
+		.getByRole("button", { name: /Fund another time for Nora/ })
 		.click();
 	await expect(
 		page
 			.getByRole("status")
-			.filter({ hasText: "An extra hall slot was funded" }),
+			.filter({ hasText: "Another time in the hall was funded" }),
 	).toBeVisible();
 	const after = await exported(page);
 	expect(after.runtime.controls).toBe(before.runtime.controls);

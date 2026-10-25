@@ -195,7 +195,7 @@ export function updateEvenings(host: EveningHost): void {
 		if (!purpose) {
 			const eventId = host.event(
 				"hall-purpose",
-				`The reopened hall has room for ${kind === "meal" ? `the shared supper ${resident.person.name} promised` : `${resident.person.name}’s displaced evening class`}.`,
+				`The reopened hall has room for ${kind === "meal" ? `the shared supper ${resident.person.name} promised` : `${resident.person.name}’s evening class that moved after the flood`}.`,
 				id,
 				"hall",
 			);
@@ -247,7 +247,7 @@ export function updateEvenings(host: EveningHost): void {
 			if (!purpose) {
 				const eventId = host.event(
 					"hall-purpose",
-					`${resident.person.name} can arrange another ${kind === "meal" ? "shared supper" : "practical class"}. ${cycle.openedSlot ? "A second hall evening is now available for this week." : `${nameOf(s, organiser("meal"))}’s supper and ${nameOf(s, organiser("class"))}’s class need the hall’s same weekly hour.`}`,
+					`${resident.person.name} can arrange another ${kind === "meal" ? "shared supper" : "practical class"}. ${cycle.openedSlot ? "A second hall evening is now available for this week." : `${nameOf(s, organiser("meal"))}’s supper and ${nameOf(s, organiser("class"))}’s class both need the hall for the same weekly hour.`}`,
 					id,
 					"hall",
 				);
@@ -349,7 +349,7 @@ export function updateEvenings(host: EveningHost): void {
 				);
 			const id = host.event(
 				"evening-ended",
-				`${eveningLabel(e, s)}: ${delivered.length ? `${delivered.join(", ")} ${e.kind === "class" ? "received the practical lesson" : "ate supper with the host"}.` : "nobody received the planned activity."}${!e.bookingEvent ? " The room was never prepared." : ""}`,
+				`${eveningLabel(e, s)}: ${delivered.length ? `${delivered.join(", ")} ${e.kind === "class" ? "received the practical lesson" : "ate supper with the host"}.` : "no guest spent the required fifteen minutes awake with the host."}${!e.bookingEvent ? " The room was never prepared." : ""}`,
 				e.organiserId,
 				"hall",
 				e.notice ? [e.notice.id] : [],
@@ -614,7 +614,7 @@ export function interveneEvening(
 		e.endsAt += 1440;
 		const id = host.event(
 			"intervention",
-			`Opened a second hall evening for ${eveningLabel(e, s)}: ${clock(from)} moved to ${clock(e.startsAt)} before any invitation was posted.`,
+			`A second hall evening opened for ${eveningLabel(e, s)}. It moved from ${clock(from)} to ${clock(e.startsAt)} before any invitation was posted.`,
 			undefined,
 			"hall",
 		);
@@ -634,7 +634,7 @@ export function interveneEvening(
 		if (!notice) throw Error("Missing evening invitation");
 		const id = host.event(
 			"intervention",
-			`Town bulletin shares the posted invitation: ${notice.text}`,
+			`The town bulletin shares the posted invitation: ${notice.text}`,
 			undefined,
 			"hall",
 			[notice.id],
@@ -700,7 +700,7 @@ export function finishEvening(
 	if (job.offer.id.startsWith("propose:")) {
 		const id = host.event(
 			"evening-proposed",
-			`${r.person.name} invited neighbours to ${eveningLabel(e, s)} in the hall on ${clock(e.startsAt)}. ${e.kind === "meal" ? "Bring one coin for your meal." : "Practical timber checks; no fee."} A reply is a promise to attend, not a command.`,
+			`${r.person.name} invited neighbours to ${eveningLabel(e, s)} in the hall on ${clock(e.startsAt)}. ${e.kind === "meal" ? "Bring one coin for your meal." : "Learn practical timber checks. There is no fee."} Accepting is a promise to attend. The invitation does not require anyone to accept.`,
 			r.person.id,
 			"hall",
 			[job.event],
@@ -798,7 +798,7 @@ export function finishEvening(
 		}
 		host.event(
 			"evening-attended",
-			`${r.person.name} ${e.kind === "class" ? `received ${nameOf(s, e.organiserId)}’s practical timber lesson` : `ate supper with ${nameOf(s, e.organiserId)}`} after ${reply?.attendedMinutes} awake minutes together.`,
+			`${r.person.name} ${e.kind === "class" ? `received ${nameOf(s, e.organiserId)}’s practical timber lesson` : `ate supper with ${nameOf(s, e.organiserId)}`} after spending ${reply?.attendedMinutes} minutes awake together.`,
 			r.person.id,
 			"hall",
 			e.notice ? [e.notice.id, job.event] : [job.event],
@@ -807,7 +807,7 @@ export function finishEvening(
 	if (attendance && !delivered)
 		host.event(
 			"evening-missed",
-			`${r.person.name} reached the planned ${e.kind}, but did not spend fifteen awake minutes with the host during its scheduled hour.`,
+			`${r.person.name} arrived for the planned ${e.kind === "class" ? "class" : "meal"}, but did not spend fifteen minutes awake with the host during its scheduled hour.`,
 			r.person.id,
 			"hall",
 			[job.event],

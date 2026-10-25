@@ -43,11 +43,11 @@ export function RepairTally({ repairs }: { repairs: number }) {
 
 const repairWords = (repairs: number) =>
 	repairs >= 12
-		? "Repairs finished. An inspection must pass before it opens."
+		? "The repairs are finished. The hall must pass an inspection before it opens."
 		: repairs >= 6
-			? "More than half the repairs are done. Inspection follows."
+			? "At least half the repairs are done. An inspection comes next."
 			: repairs > 0
-				? "Repairs have begun. Inspection follows."
+				? "The repairs have begun. An inspection comes next."
 				: "Nobody has started the repairs yet.";
 
 /**
@@ -105,7 +105,7 @@ export default function TownGoal({
 				<span>
 					{next
 						? `${datedClock(next.startsAt)} · ${next.stage === "prepared" ? "Room prepared" : "Not yet prepared"}`
-						: `Room for ${hall.capacity}, for classes and supper`}
+						: `The hall has ${hall.capacity} places for classes and supper.`}
 				</span>
 			) : (
 				<>

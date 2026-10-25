@@ -153,7 +153,7 @@ export function updateHandcart(host: HandcartHost): void {
 		c.observation ??= retained(
 			host,
 			"cart-observed",
-			`${owner.person.name}’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.`,
+			`${owner.person.name}’s flood-damaged handcart stands in the workshop. Repairing its axle, load platform and handles takes three work periods.`,
 			ravi.person.id,
 			"workshop",
 		);
@@ -177,7 +177,7 @@ export function updateHandcart(host: HandcartHost): void {
 		c.adaObservation ??= retained(
 			host,
 			"bench-work",
-			`${ada.person.name} can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.`,
+			`${ada.person.name} can earn two paid carpentry shifts each day at the main bench. Lending it means she must wait to work those shifts. It does not necessarily mean she will lose income.`,
 			ada.person.id,
 			"workshop",
 		);
@@ -558,7 +558,7 @@ export function finishHandcart(
 		const e = retained(
 			host,
 			"cart-returned",
-			`${ravi.person.name} returned the restored handcart to ${jo.person.name}. It can carry one extra food unit on each of ${jo.person.name}’s completed supply trips.`,
+			`${ravi.person.name} returned the restored handcart to ${jo.person.name}. It can carry one extra unit of food on each supply trip ${jo.person.name} completes.`,
 			ravi.person.id,
 			"quay",
 			[j.event],

@@ -65,7 +65,7 @@ export default function PersonPanel({
 				<span className="eyebrow">
 					Right now ·{" "}
 					{person.journey && canAct(person)
-						? "In transit"
+						? "Travelling"
 						: place
 							? placeName(place)
 							: person.placeId}
@@ -73,7 +73,7 @@ export default function PersonPanel({
 				<h3 aria-live="polite">{activityLabel(person)}</h3>
 				{person.journey && canAct(person) && (
 					<p>
-						On the way to{" "}
+						Travelling to{" "}
 						{destination ? placeName(destination) : person.journey.toId}
 					</p>
 				)}
@@ -99,7 +99,7 @@ export default function PersonPanel({
 			)}
 			<PersonPromises person={person} now={town.now} mode="current" />
 			<details className="person-evidence">
-				<summary>Why · the record ▸</summary>
+				<summary>Reasons and records ▸</summary>
 				<p className="tiny muted">Controller · {person.policy.toUpperCase()}</p>
 				{person.inspection && (
 					<section
@@ -238,7 +238,7 @@ export default function PersonPanel({
 					))}
 				</details>
 				<details>
-					<summary>How pressing each need feels · decision evidence</summary>
+					<summary>How urgent each need feels · decision evidence</summary>
 					{person.paidWork && (
 						<div className="resource">
 							<span>Paid shifts started today</span>
@@ -259,7 +259,7 @@ export default function PersonPanel({
 					{person.decision?.offeredCount !== undefined && (
 						<p className="tiny muted">
 							{person.decision.recordedCount} of {person.decision.offeredCount}{" "}
-							scored options shown.
+							scored options are shown.
 						</p>
 					)}
 					{person.decision?.options.map((option) => (

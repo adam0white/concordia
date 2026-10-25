@@ -26,7 +26,7 @@ export function BenchStudyResults({
 	);
 	return (
 		<section aria-label="Town bench study">
-			<h3>Did a proposed bench window change the repair?</h3>
+			<h3>Did a proposed time to use the bench change the repair?</h3>
 			<p className="tiny muted">
 				Recorded Node host control · two simulated days · six canonical and two
 				generated residents · HF {report.hf} · no model calls. Separate from
@@ -45,7 +45,7 @@ export function BenchStudyResults({
 						<tr>
 							<th>Observed step</th>
 							<th>No proposal</th>
-							<th>Whole proposal</th>
+							<th>Complete proposal</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -117,14 +117,14 @@ export default function BenchStudy() {
 		return (
 			<p role="status">
 				{error
-					? "Town bench recording unavailable. No result verified here."
+					? "The town bench recording is unavailable. No result has been verified here."
 					: "Loading town bench recording…"}
 			</p>
 		);
 	return (
 		<>
 			<label>
-				Frozen town case
+				Saved town case
 				<select
 					value={index}
 					onChange={(e) => setIndex(Number(e.target.value))}
@@ -139,7 +139,8 @@ export default function BenchStudy() {
 			<BenchStudyResults report={report} index={index} />
 			{report.noNaturalCase?.map((n) => (
 				<p className="tiny muted" key={n.seed}>
-					Seed {n.seed}: no natural case in {n.searchedDays} days. {n.reason}
+					Seed {n.seed}: no case arose naturally in {n.searchedDays} days.{" "}
+					{n.reason}
 				</p>
 			))}
 		</>

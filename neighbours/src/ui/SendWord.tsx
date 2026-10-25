@@ -135,16 +135,16 @@ export default function SendWord({
 								onChange={(event) => setName(event.target.value)}
 							/>
 							<p className="tiny muted">
-								Optional. This name labels your feedback. It also labels
-								recorded history on this device.
+								This name is optional. It labels your feedback and recorded
+								history on this device.
 							</p>
 						</details>
 						<details className="feedback-preview">
 							<summary>What is sent</summary>
 							<p>
 								{(!telemetryOn && !sharePlay) || !session.town
-									? "Your note and verdict, without a game run or state."
-									: "Your note and an available run, including continuing character state and replay provenance. Recorded play links across games on this device."}
+									? "The lab receives your note and verdict without a game run or saved state."
+									: "The lab receives your note and an available run. The run includes saved character state and records of where the replay came from. Recorded play links across games on this device."}
 							</p>
 							<p>
 								Current town:{" "}

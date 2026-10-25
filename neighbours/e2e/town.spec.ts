@@ -127,7 +127,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	await showTab(page, "Compare");
 	await openSaves(page);
 	await openOtherWays(page);
-	await page.getByLabel("Start from a seed").fill("73");
+	await page.getByLabel("Start from a seed number").fill("73");
 	await page.getByRole("button", { name: "Start", exact: true }).click();
 	// The old paused town also has Play. Wait for the replacement's actual seed
 	// before requesting its export; exports from the replaced world are discarded.
@@ -282,7 +282,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	await expect(
 		other
 			.getByRole("dialog", { name: /^Game menu/ })
-			.getByRole("button", { name: "Load device town", exact: true }),
+			.getByRole("button", { name: "Load the saved town", exact: true }),
 	).toBeVisible();
 	await expect(
 		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
@@ -293,7 +293,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	expect(await deviceCheckpoint(page)).toEqual(beforeExport);
 	await closeSaves(other);
 	await other
-		.getByRole("button", { name: "Load device town", exact: true })
+		.getByRole("button", { name: "Load the saved town", exact: true })
 		.click();
 	await other
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
@@ -303,7 +303,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	).toBeEnabled();
 	expect(await packet(other, info, "reloaded-device-town")).toEqual(advanced);
 	await expect(
-		page.getByRole("button", { name: "Load device town", exact: true }),
+		page.getByRole("button", { name: "Load the saved town", exact: true }),
 	).toBeVisible();
 	await closeSaves(other);
 	await step(other);
@@ -356,7 +356,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	// its IndexedDB result before attempting another round: a conflict holds time.
 	for (let i = 0; i < 5; i++) await step(other);
 	await expect(
-		other.getByRole("button", { name: "Load device town", exact: true }),
+		other.getByRole("button", { name: "Load the saved town", exact: true }),
 	).toBeVisible();
 	const staleExport = await packet(other, info, "cas-stale-export");
 	expect(staleExport.runtime.now).toBeGreaterThanOrEqual(
@@ -422,7 +422,7 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	await page.locator(".neighbour-strip [data-person-id]").first().click();
 	await page.getByRole("button", { name: /Walk to Workshop to talk/ }).click();
 	await expect(page.locator(".state-words")).toContainText(
-		"You set off automatically",
+		"You start walking automatically",
 	);
 	await step(page);
 	const recovered = await packet(page, info, "deliberate-recovery");

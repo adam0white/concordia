@@ -2,9 +2,9 @@ import type { PersonView } from "../contracts";
 
 const labels: Partial<Record<NonNullable<PersonView["lifeState"]>, string>> = {
 	asleep: "Asleep",
-	downed: "Downed · unable to act",
+	downed: "Unable to get up or act",
 	dead: "Died",
-	break: "In a mental break",
+	break: "Having a mental break",
 };
 /** Current HF state outranks a job label or a historical lifecycle event. */
 export function activityLabel(
@@ -40,15 +40,15 @@ const feelings: Record<string, string> = {
 	food: "hungry",
 	water: "thirsty",
 	sleep: "sleepy",
-	rest: "worn out",
+	rest: "tired",
 	relief: "uncomfortable",
 	safety: "uneasy",
 	belonging: "lonely",
-	esteem: "low in themselves",
-	autonomy: "hemmed in",
+	esteem: "unconfident",
+	autonomy: "restricted",
 	competence: "unsure of themselves",
 	leisure: "restless",
-	meaning: "adrift",
+	meaning: "unsure of their purpose",
 };
 
 /** A short worded impression from the two most pressing HF need urgencies. */
@@ -61,18 +61,18 @@ export function needWords(needs: Record<string, number>): string {
 			([id, urgency]) =>
 				`${urgency >= 0.8 ? "very " : ""}${feelings[id] ?? id.replaceAll("_", " ")}`,
 		);
-	if (!pressing.length) return "Settled. Nothing pressing.";
+	if (!pressing.length) return "They look calm. No need seems urgent.";
 	const text = pressing.join(" and ");
-	return `${text[0]?.toUpperCase()}${text.slice(1)}.`;
+	return `They look ${text}.`;
 }
 
 /** Words for HF relationship trust (0..1). */
 export function trustWords(trust: number): string {
 	return trust >= 0.75
-		? "Trusts them deeply"
+		? "They trust this person deeply"
 		: trust >= 0.5
-			? "Trusts them"
+			? "They trust this person"
 			: trust >= 0.25
-				? "Cautious with them"
-				: "Wary of them";
+				? "They are cautious with this person"
+				: "They do not trust this person much";
 }

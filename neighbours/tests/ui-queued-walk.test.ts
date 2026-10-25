@@ -22,7 +22,7 @@ it("acknowledges only an accepted paused walk without advancing time", () => {
 	const before = runtime.view().now;
 	runtime.intervene({ kind: "player-move", placeId: "hall" });
 	expect(runtime.view().now).toBe(before);
-	expect(render()).toContain("You set off automatically");
+	expect(render()).toContain("You start walking automatically");
 	expect(render(true)).toContain("automatically");
 	expect(render(false, true)).toBe("");
 	runtime.step();
@@ -66,7 +66,7 @@ it("restores stopped travel from accepted state without changing exact continuat
 				advancing: false,
 			}),
 		),
-	).toContain("You set off automatically");
+	).toContain("You start walking automatically");
 	expect(stateHash(restored.export())).toBe(before);
 	for (let i = 0; i < 8; i++) {
 		runtime.step();
@@ -94,7 +94,7 @@ it("shows an honest pending action before any accepted host job", () => {
 			pending: true,
 		}),
 	);
-	expect(html).toContain("Requesting your action…");
+	expect(html).toContain("Sending your action…");
 	expect(html).not.toContain("Press Play");
 	expect(html).toContain('aria-busy="true"');
 });

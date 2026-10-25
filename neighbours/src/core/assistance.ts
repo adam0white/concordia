@@ -185,7 +185,7 @@ export function requestInspection(
 		throw Error("Inspection assistance is not available");
 	const id = host.event(
 		"intervention",
-		`A visitor asks ${resident.person.name} to inspect the hall annex within ${proposal.windowMinutes} minutes. The request supplies no inspection method and promises no help.`,
+		`A visitor asks ${resident.person.name} to inspect the hall annex within ${proposal.windowMinutes} minutes. The request does not explain how to inspect the timber and does not promise help.`,
 		undefined,
 		"hall",
 	);
@@ -330,7 +330,7 @@ export function finishAssistance(host: EveningHost, r: Resident): boolean {
 			host,
 			host.event(
 				"annex-observed",
-				`${r.person.name} observed the annex timber. Moisture: ${cues(a).moisture}. Supports: ${cues(a).support}. An opening decision remains.`,
+				`${r.person.name} checked the annex timber. The timber was ${cues(a).moisture}. The supports were ${cues(a).support}. They still need to decide whether to open it.`,
 				r.person.id,
 				"hall",
 				[a.request.id, j.event],
@@ -353,7 +353,7 @@ export function finishAssistance(host: EveningHost, r: Resident): boolean {
 		host.event(
 			"annex-inspected",
 			a.opened
-				? `${r.person.name} checked dry, sound annex timber. Four extra hall places are now open.`
+				? `${r.person.name} checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.`
 				: a.action === "ask-inspector"
 					? `${r.person.name} asked for an experienced annex inspector. The annex stays closed.`
 					: `${r.person.name} ${a.action === "keep-closed" ? "kept" : "could not open"} the annex after checking ${cues(a).moisture} timber and ${cues(a).support} supports. No extra places opened.`,

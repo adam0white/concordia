@@ -54,10 +54,10 @@ it("hides future choices until an actual evening opportunity exists", () => {
 it("exposes scarce alternative-slot and notice choices without implying acceptance", () => {
 	const content = html(town());
 	expect(content).toContain("Hall choices");
-	expect(content).toContain("Fund another slot for Lea");
+	expect(content).toContain("Fund another time for Lea");
 	expect(content).toContain("Advertise Sam’s invitation");
 	expect(content).toContain("1 town credit");
-	expect(content).toContain("does not make anyone attend");
+	expect(content).toContain("Each person decides whether to attend");
 	expect(content).not.toContain("<details open");
 });
 it("retains the opportunity but disables spending when budget or session prevents it", () => {

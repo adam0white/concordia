@@ -5,7 +5,7 @@ const measures = [
 	["dead", "Dead"],
 	["underfed", "Underfed"],
 	["lowHealth", "Low health"],
-	["penniless", "Penniless"],
+	["penniless", "Without money"],
 	["meals", "Meals in stock"],
 ] as const;
 type Measure = (typeof measures)[number][0];
@@ -113,8 +113,9 @@ export default function TownHealth({
 				})}
 			</div>
 			<p className="tiny muted health-note">
-				Underfed: food reserve below 10%. Low health: below 50%. Penniless: no
-				money. Lines join observed snapshots; no earlier history is inferred.
+				Underfed means a food reserve below 10%. Low health means health below
+				50%. Without money means no money. Lines join the recorded samples.
+				Earlier history is unknown.
 			</p>
 		</details>
 	);

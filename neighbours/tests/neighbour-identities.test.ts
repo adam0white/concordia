@@ -42,6 +42,9 @@ it("preserves background behavioral defaults and the familiar eight", () => {
 	expected.person.engine = ENGINE_VERSION;
 	// New towns enable HF 2.8.0 fullness for every person (scenario.ts); nothing else in the defaults moved.
 	expected.person.body.fullness = true;
+	// Only the host description changed in the plain-English source rewrite.
+	expected.description =
+		"This neighbour needs food, rest and time with other people.";
 	expect(person).toEqual(expected);
 	expect(town.people.slice(0, 8)).toEqual(
 		(createRuntime(42, 8).export() as Save).people,

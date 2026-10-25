@@ -20,8 +20,8 @@ const SAID: Record<Mode, string> = {
 const WORK: { id: PlayerWorkKind; label: string }[] = [
 	{ id: "carry-meals", label: "Carry food up from the quay" },
 	{ id: "help-repair", label: "Help repair the hall" },
-	{ id: "cover-shift", label: "Cover one hour of their shift" },
-	{ id: "dry-timber", label: "Prop and air the hall timber" },
+	{ id: "cover-shift", label: "Work one hour of their shift" },
+	{ id: "dry-timber", label: "Support the hall timber and let it dry" },
 ];
 /** Work the host would accept now: airing the hall timber only while there is damp timber left to air. */
 export function offeredWork(player: Pick<PlayerView, "canAirTimber">) {
@@ -52,7 +52,9 @@ export function PlayerJournal({ player }: { player: PlayerView }) {
 	if (player.journal.length === 0)
 		return (
 			<p>
-				{plainText("Nothing recorded yet. Your own steps will appear here.")}
+				{plainText(
+					"You have not taken any actions yet. Your actions will appear here.",
+				)}
 			</p>
 		);
 	return (
@@ -84,7 +86,7 @@ function HelpReceipt({ pledge }: { pledge: PlayerView["pledges"][number] }) {
 				<q className="voice">
 					{pledge.direct
 						? "You covered that hour for me. I received the two coins."
-						: "You kept your word about that hour."}
+						: "You kept your promise about that hour."}
 				</q>
 			</p>
 			<p>{pledge.result}</p>
@@ -149,7 +151,10 @@ export function PlayerAction({
 					{person.journey
 						? `travelling to ${placeLabel(town, person.journey.toId)}`
 						: placeLabel(town, person.placeId)}
-					. {!here && destination ? "Current location; they may move." : ""}
+					.{" "}
+					{!here && destination
+						? "This is their current location. They may move."
+						: ""}
 				</p>
 			)}
 			{player.job && person && (
@@ -270,7 +275,7 @@ export function OwnWork({ session }: { session: Session }) {
 			{" "}
 			{player.workHoursLeft > 0 && (
 				<details className="own-work">
-					<summary>Your own work ▸</summary>
+					<summary>Your work ▸</summary>
 					<p className="hand">
 						You can still give {player.workHoursLeft} hour
 						{player.workHoursLeft === 1 ? "" : "s"} of work today, between 08:00
@@ -511,7 +516,7 @@ export function SpeakPanel({
 										})
 									}
 								>
-									Accept their counter-offer
+									Accept their suggested alternative
 								</button>
 							)}
 						</p>
@@ -528,8 +533,8 @@ export function SpeakPanel({
 								{datedClock(pledge.dueBy)}.{" "}
 								{pledge.status === "offered" ? (
 									<small>
-										Offered; it binds you only if {pledge.toName} takes up your
-										request.
+										Your offer becomes a commitment if {pledge.toName} agrees
+										now or later acts on your request.
 									</small>
 								) : pledge.canStart ? (
 									<button
@@ -575,7 +580,9 @@ export function SpeakPanel({
 							return;
 						}
 						if (mode === "promise" && (!validWork || deadline === undefined)) {
-							setSubmissionError("Choose your hour and a deadline first.");
+							setSubmissionError(
+								"Choose the work for your hour and a deadline first.",
+							);
 							return;
 						}
 						setSubmissionError("");
@@ -616,8 +623,8 @@ export function SpeakPanel({
 							{!offers.length && (
 								<p>
 									{prediction?.prediction
-										? "No request available now."
-										: "Considering their choices…"}
+										? "No request is available now."
+										: "Checking their available choices…"}
 								</p>
 							)}
 						</div>
@@ -688,23 +695,23 @@ export function SpeakPanel({
 							</fieldset>
 							<p className="promise-meaning">
 								{offer && work
-									? `Ask ${name} to ${actionWords(offer.label)}. You offer one hour to ${WORK.find((item) => item.id === work)?.label.toLowerCase()}, by ${datedClock(deadline ?? town.now)}. It binds you only if they take it up.`
-									: "Offer your work. It binds you only if they take it up."}
+									? `Ask ${name} to ${actionWords(offer.label)}. You offer one hour to ${WORK.find((item) => item.id === work)?.label.toLowerCase()}, by ${datedClock(deadline ?? town.now)}. You must do this work if they agree now or later act on your request.`
+									: "Offer your work. You must do this work if they agree now or later act on your request."}
 							</p>
 						</>
 					)}
 					{mode === "ask" && <p className="hand">Ask them. They may say no.</p>}
 					{mode === "urge" && (
 						<p className="hand">
-							Insist. They may give in under protest, and being pushed wears on
-							their trust.
+							Press them to agree. They may agree despite their objections. This
+							pressure can reduce their trust in you.
 						</p>
 					)}
 					{prediction?.error && <p role="alert">{prediction.error}</p>}
 					{prediction?.prediction && (
 						<p className="speech-read">
 							<span className="eyebrow">You can tell</span>{" "}
-							{prediction.prediction.read.map(plainText).join(". ")}.
+							{prediction.prediction.read.map(plainText).join(" ")}
 						</p>
 					)}
 					{submissionError && <p role="alert">{submissionError}</p>}
@@ -719,7 +726,7 @@ export function SpeakPanel({
 								(mode === "promise" && (!validWork || deadline === undefined))
 							}
 						>
-							Put it to {name}
+							Ask {name}
 						</button>
 					)}
 				</form>
@@ -740,7 +747,7 @@ export function SpeakPanel({
 					</button>
 					<p className="hand">
 						{help.blocked ??
-							`${help.minutes} min including the walk · ends ${datedClock(help.endsAt)}. Starts your work now; no request in return.`}
+							`${help.minutes} min including the walk · ends ${datedClock(help.endsAt)}. You start work now. You ask for nothing in return.`}
 					</p>
 				</details>
 			)}
@@ -753,7 +760,7 @@ export function SpeakPanel({
 			{!recordOnly && !journalOpen && <OwnWork session={session} />}
 			{!recordOnly && journalOpen ? (
 				<section className="your-journal" aria-label="Your journal">
-					<h4>Your own lines</h4>
+					<h4>Your actions</h4>
 					<PlayerJournal player={player} />
 				</section>
 			) : null}

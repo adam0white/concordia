@@ -161,7 +161,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	});
 	await openSaves(page);
 	await openOtherWays(page);
-	await page.getByLabel("Start from a seed").fill("73");
+	await page.getByLabel("Start from a seed number").fill("73");
 	await page.getByRole("button", { name: "Start", exact: true }).click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -181,7 +181,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 		.click();
 	await openSaves(page);
 	await openOtherWays(page);
-	await page.getByLabel("Start from a seed").fill("99");
+	await page.getByLabel("Start from a seed number").fill("99");
 	await page.getByRole("button", { name: "Start", exact: true }).click();
 	await expect
 		.poll(() =>

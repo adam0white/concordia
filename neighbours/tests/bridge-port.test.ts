@@ -8,7 +8,9 @@ it("a refused own-work hour is answered as rejected and leaves the town byte-ide
 	const port = new RuntimePort(42, 8);
 	while ((port.runtime.export() as Save).now % 1440 < 1080) port.runtime.step();
 	const save = port.runtime.export() as Save;
-	expect(workRefusal(save, "carry-meals")).toMatch(/Work hours/);
+	expect(workRefusal(save, "carry-meals")).toMatch(
+		/You can work from 08:00 to 18:00/,
+	);
 	const reply = JSON.parse(
 		port.call(
 			JSON.stringify({
@@ -18,7 +20,8 @@ it("a refused own-work hour is answered as rejected and leaves the town byte-ide
 		),
 	);
 	expect(reply).toEqual({
-		rejected: "Work hours are 08:00–18:00, including the walk there",
+		rejected:
+			"You can work from 08:00 to 18:00. Your walk there must fit within those hours.",
 	});
 	expect(port.runtime.export()).toEqual(save);
 	expect(

@@ -53,7 +53,7 @@ for (const [width, height] of [
 		await expect(menu.getByRole("link")).toHaveText(["All games"]);
 		await expect(
 			menu.getByRole("button", {
-				name: /Compare futures|Recorded studies|To the title page|Paper or lamplight/,
+				name: /Compare possible outcomes|Recorded studies|To the title page|Switch light or dark colours/,
 			}),
 		).toHaveCount(0);
 		await expect(

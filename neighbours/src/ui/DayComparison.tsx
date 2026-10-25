@@ -18,7 +18,7 @@ const names: Record<string, string> = {
 	hallCapacity: "Hall places available",
 	inspectionRequests: "Annex requests sent",
 	annexOpened: "Annex opened",
-	interventionsSpent: "Support credits spent",
+	interventionsSpent: "Town credits spent",
 	hallSafe: "Hall safe for use",
 	tools: "Shared tools available",
 	totalTools: "Tools owned, including in use",
@@ -38,7 +38,7 @@ const names: Record<string, string> = {
 const interventions: Record<Intervention["kind"], string> = {
 	"player-private": "Ask about a private detail",
 	"lend-tools": "Add 3 shared tools",
-	"propose-bench-window": "Tell Rafi about a bench window",
+	"propose-bench-window": "Tell Rafi about a time to use the bench",
 	"request-inspection": "Request an annex inspection",
 	"restore-bus": "Restore bus service",
 	"share-news": "Broadcast hall news",
@@ -98,7 +98,7 @@ export default function DayComparison({
 	};
 	const unavailable = (id: ComparisonSetup["kind"]) => {
 		if (!town) return "";
-		if (town.controlsRemaining <= 0) return "No support credits remain.";
+		if (town.controlsRemaining <= 0) return "No town credits remain.";
 		if (id === "lend-tools" && town.canLendTools === false)
 			return "Shared tools cannot be added right now.";
 		if (id === "restore-bus" && town.canRestoreBus === false)
@@ -218,7 +218,7 @@ export default function DayComparison({
 	);
 	return (
 		<details ref={disclosure} open className="comparison day-comparison">
-			<summary>Compare futures · hypothetical branches</summary>
+			<summary>Compare possible outcomes</summary>
 			{(request || report) && (
 				<p>
 					<strong>
@@ -227,7 +227,9 @@ export default function DayComparison({
 					</strong>
 				</p>
 			)}
-			<p className="tiny muted">Hypothetical · Your town is unchanged</p>
+			<p className="tiny muted">
+				These are possible outcomes. Your town stays unchanged.
+			</p>
 			{report && (
 				<p className="tiny comparison-checkpoint">
 					Compared time: {at(report.startAt)} → {at(report.endAt)} ·{" "}
@@ -245,7 +247,7 @@ export default function DayComparison({
 			{busy && (
 				<p className="tiny" role="status">
 					{progress ||
-						"Running both hypothetical branches. The live town is paused."}
+						"Running both possible versions of the town. The live town is paused."}
 				</p>
 			)}
 			{busy && onCancel && (
@@ -257,7 +259,7 @@ export default function DayComparison({
 				(/Traceback|BridgeError|PythonError|\n/.test(error) ? (
 					<div>
 						<p className="error" role="alert">
-							Comparison could not finish. Your town is unchanged.
+							The comparison could not finish. Your town is unchanged.
 						</p>
 						<details>
 							<summary>Technical details</summary>
@@ -288,7 +290,7 @@ export default function DayComparison({
 								))}
 							</ul>
 						) : (
-							<p>No resource differences reported.</p>
+							<p>No resource differences were reported.</p>
 						)}
 						{changedKeys.length > 6 && (
 							<p className="tiny muted">
@@ -335,15 +337,17 @@ export default function DayComparison({
 													</article>
 												))
 											) : (
-												<p>No differing outcome recorded in this interval.</p>
+												<p>
+													No different outcome was recorded during this time.
+												</p>
 											)}
 										</div>
 									))}
 								</div>
 							) : (
 								<p>
-									No different story outcome yet. Progress and resources are
-									compared below.
+									No story has a different outcome yet. Progress and resources
+									are compared below.
 								</p>
 							)}
 							{outcomes.shared.length > 0 && (
@@ -501,9 +505,10 @@ export default function DayComparison({
 							</p>
 						)}
 						<p className="tiny muted">
-							Two possible futures start from the same saved town. One carries
-							on as it is; the other receives one intervention. Both use the
-							actual simulation with no LLM calls.
+							Two possible versions start from the same saved town. One
+							continues without help. The other receives one support action.
+							Both run the actual simulation without calling an AI language
+							model.
 						</p>
 						<p className="tiny muted">
 							Only recorded outcomes within this interval appear above.

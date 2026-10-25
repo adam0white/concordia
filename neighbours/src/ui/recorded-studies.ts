@@ -143,7 +143,8 @@ export const studySpecs: Record<
 	{ question: string; file: string; schema: string }
 > = {
 	"bench-gm": {
-		question: "Can Concordia propose a bench window without granting access?",
+		question:
+			"Can Concordia propose a time to use the bench without granting access?",
 		file: "bench-director",
 		schema: "native-concordia-bench@1",
 	},
@@ -188,8 +189,8 @@ export function projectStudy(kind: StudyKind, value: unknown) {
 				rows.push([
 					`Seed ${scalar(seed)} historical exclusion`,
 					seed === 101
-						? "Excluded after the Phase C search from the fixed native 42/73 catalog. The current deterministic study finds a natural case; no current native model coverage for this seed."
-						: "Historical catalog exclusion; no native model call. This does not establish current absence.",
+						? "This seed was excluded after the Phase C search of the fixed native 42/73 case list. A case now arises naturally in the deterministic study. No current native model run covers this seed."
+						: "This seed was excluded from an earlier case list. No native model was called for it. This does not prove that a case is still absent.",
 				]);
 		rows.push(
 			["Actual model calls", scalar(data.modelCalls)],
@@ -204,7 +205,7 @@ export function projectStudy(kind: StudyKind, value: unknown) {
 						result.residentObservationsDelivered === 0
 					);
 				})
-					? "Not applied; no resident receipt or consent claimed"
+					? "The proposal was not applied. No resident is claimed to have received or agreed to it."
 					: "Not verified",
 			],
 		);
@@ -214,7 +215,10 @@ export function projectStudy(kind: StudyKind, value: unknown) {
 		rows.push(
 			["With cart goal", scalar(record(opportunity.baseline).chosen)],
 			["Cart goal removed", scalar(record(opportunity.goalAblated).chosen)],
-			["Completion after these choices", "Not measured by this choice probe"],
+			[
+				"Completion after these choices",
+				"This choice study did not measure completion",
+			],
 		);
 	}
 	if (kind === "native")

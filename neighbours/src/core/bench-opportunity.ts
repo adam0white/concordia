@@ -75,7 +75,7 @@ export function proposeBenchWindow(
 	const window = benchWindow(s.now, slot);
 	const id = host.event(
 		"intervention",
-		`Town bulletin: ${ravi.person.name} could ask ${ada.person.name} about a main-bench window ${benchWindowLabel(window)}. One cart section takes an hour there. ${ada.person.name} still decides whether to lend it; her paid work also uses the bench.`,
+		`Town bulletin: ${ravi.person.name} could ask ${ada.person.name} to use the main bench during ${benchWindowLabel(window)}. One cart section takes an hour there. ${ada.person.name} still decides whether to lend it. She also uses the bench for her paid work.`,
 		undefined,
 		"workshop",
 		[c.observation.id],

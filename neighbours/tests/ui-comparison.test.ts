@@ -160,7 +160,9 @@ it("keeps the ready result preamble short and renders each outcome summary once"
 	expect(before).not.toContain("Both use the actual simulation");
 	expect(html).not.toContain("<b>Lea taught Ada</b>");
 	expect(html).toContain('aria-label="Lea taught Ada"');
-	expect(html).toContain("Hypothetical · Your town is unchanged");
+	expect(html).toContain(
+		"These are possible outcomes. Your town stays unchanged.",
+	);
 	expect(html).toContain("Without help");
 	expect(html).toContain("With help");
 });
@@ -243,7 +245,7 @@ it("keeps Python diagnostics behind a short unchanged-town explanation", () => {
 		}),
 	);
 	expect(html).toContain(
-		"Comparison could not finish. Your town is unchanged.",
+		"The comparison could not finish. Your town is unchanged.",
 	);
 	expect(html).toContain("Technical details");
 	expect(html).not.toContain('class="error" role="alert">Traceback');

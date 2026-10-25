@@ -21,8 +21,8 @@ test("entry stays visible and one menu holds the town", async ({ page }) => {
 	const menu = page.getByRole("dialog", { name: /^Game menu/ });
 	for (const name of [
 		"Read the journal",
-		"Paper or lamplight",
-		"Compare futures",
+		"Switch light or dark colours",
+		"Compare possible outcomes",
 		"Recorded studies",
 		"Feedback",
 		"To the title page",

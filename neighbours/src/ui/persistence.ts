@@ -6,7 +6,7 @@ type Revision = { revision: string; source: string };
 
 export class SaveConflictError extends Error {
 	constructor() {
-		super("Another tab saved the device town.");
+		super("Another tab saved the town on this device.");
 		this.name = "SaveConflictError";
 	}
 }
@@ -31,7 +31,7 @@ function revision(value: unknown): Revision | undefined {
 		typeof value.source === "string"
 	)
 		return { revision: value.revision, source: value.source };
-	throw new Error("The device checkpoint revision could not be read.");
+	throw new Error("The saved-state version on this device could not be read.");
 }
 
 /** Read a raw packet, including saves written before revision protection existed. */
@@ -50,7 +50,7 @@ export async function localSave(slot = "latest"): Promise<unknown> {
 		};
 		tx.onabort = tx.onerror = () => {
 			db.close();
-			reject(tx.error ?? new Error("Device save read aborted"));
+			reject(tx.error ?? new Error("Reading the saved town was cancelled."));
 		};
 	});
 }
@@ -116,7 +116,7 @@ export class DeviceSaves {
 			};
 			tx.onabort = tx.onerror = () => {
 				db.close();
-				reject(tx.error ?? new Error("Device save read aborted"));
+				reject(tx.error ?? new Error("Reading the saved town was cancelled."));
 			};
 		});
 	}
@@ -139,7 +139,8 @@ export class DeviceSaves {
 	}
 
 	private async commit(packet: unknown, slot: "latest" | "previous") {
-		if (!this.opened) throw new Error("Device save ownership is unavailable.");
+		if (!this.opened)
+			throw new Error("This tab cannot take ownership of the saved town.");
 		if (this.conflicted) throw new SaveConflictError();
 		const db = await this.connect();
 		return new Promise<void>((resolve, reject) => {
@@ -185,7 +186,9 @@ export class DeviceSaves {
 				db.close();
 				this.transaction = undefined;
 				if (failure instanceof SaveConflictError) this.conflict();
-				reject(failure ?? tx.error ?? new Error("Device save aborted"));
+				reject(
+					failure ?? tx.error ?? new Error("Saving the town was cancelled."),
+				);
 			};
 		});
 	}

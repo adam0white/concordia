@@ -9,8 +9,8 @@ import { CHRONICLE_KINDS } from "./town-chronicle.ts";
 function storyTitle(s: Save, e: TownEvent): string {
 	if (e.kind === "annex-inspected")
 		return s.assistance?.opened && s.assistance.result?.id === e.id
-			? "Four extra hall places opened after annex inspection"
-			: "The annex inspection left extra places closed";
+			? "Four extra places in the hall opened after the annex inspection"
+			: "The extra places stayed closed after the annex inspection";
 	const evening = allEvenings(s).find(
 		(candidate) =>
 			candidate.notice?.id === e.id || candidate.result?.id === e.id,
@@ -26,24 +26,26 @@ function storyTitle(s: Save, e: TownEvent): string {
 		);
 		return evening.kind === "class"
 			? delivered
-				? `Neighbours received ${host}’s class`
+				? `Neighbours attended ${host}’s class`
 				: `${host}’s class did not happen`
 			: delivered
 				? `Neighbours shared ${host}’s supper`
 				: `${host}’s supper did not happen`;
 	}
 	const titles: Record<string, string> = {
-		"annex-observed": "The annex timber was observed",
+		"annex-observed": "Someone checked the annex timber",
 		"hall-open": "The hall opened after inspection",
 		"hall-closed": "The hall stayed closed after inspection",
 		"inspection-failed": "An opening attempt found unsafe timber",
-		"hall-repaired": "Repairs finished; inspection remains",
+		"hall-repaired":
+			"The repairs are finished. The hall still needs an inspection.",
 		"repair-slipped": "A repair did not hold on damp timber",
-		"hall-loosened": "A repaired section worked loose on wet timber",
-		"hall-explanation": "A question became a shared method",
-		"missed-encounter": "The explanation missed its listener",
-		lesson: "The displaced class passed on a method",
-		"shared-meal": "A shared meal returned",
+		"hall-loosened": "Wet timber caused a repaired section to come loose",
+		"hall-explanation":
+			"A neighbour explained a method in answer to a question",
+		"missed-encounter": "The explanation did not reach the person who asked",
+		lesson: "A class that had moved after the flood taught a method",
+		"shared-meal": "Neighbours shared a meal again",
 	};
 	if (e.kind === "cart-returned")
 		return `${cartCast(s).owner.person.name}’s repaired handcart returned to the quay`;
@@ -105,7 +107,7 @@ export function collapseRepeats(
 		return {
 			...latest,
 			title: `${latest.title} (${run.length} times)`,
-			summary: `${latest.summary} The same happened ${run.length} times between ${when(first.at ?? 0)} and ${when(latest.at ?? 0)}.`,
+			summary: `${latest.summary} This happened ${run.length} times between ${when(first.at ?? 0)} and ${when(latest.at ?? 0)}.`,
 			groupId: `${latest.kind}:${first.id}`,
 			eventIds: ids,
 			missingEventIds: missing,
@@ -146,9 +148,9 @@ export function townStories(s: Save): TownView["stories"] {
 		// A choice with no learned-method term says nothing extra; the journal is not a debug log.
 		const explanation = isHfSource(inspection?.source)
 			? methodValue > 0
-				? ` ${who} went by a method they had learned.`
+				? ` ${who} used a method they had learned.`
 				: methodValue < 0
-					? ` What ${who} had learned pointed against this choice.`
+					? ` What ${who} had learned suggested choosing a different action.`
 					: ""
 			: `${inspection ? ` Decision source: ${inspection.source}.` : ""}`;
 		return {

@@ -53,7 +53,7 @@ export default function SessionMenu({
 				</button>
 			</div>
 			<div className="menu-scroll">
-				<p className="tiny muted">The town waits while it is open.</p>
+				<p className="tiny muted">Time pauses while this menu is open.</p>
 				{diagnostics && (
 					<>
 						<CastMenu
@@ -73,7 +73,7 @@ export default function SessionMenu({
 								document.documentElement.classList.toggle("alternate-theme")
 							}
 						>
-							Paper or lamplight
+							Switch light or dark colours
 						</button>
 						<fieldset className="menu-pacing">
 							<legend>The town's pace</legend>
@@ -93,13 +93,13 @@ export default function SessionMenu({
 								)}
 							</div>
 						</fieldset>
-						<h3 className="eyebrow">The notebook's studies</h3>
+						<h3 className="eyebrow">Studies</h3>
 						<button
 							type="button"
 							disabled={!session.town}
 							onClick={() => navigate("compare")}
 						>
-							Compare futures <span aria-hidden="true">▸</span>
+							Compare possible outcomes <span aria-hidden="true">▸</span>
 						</button>
 						<button
 							type="button"
@@ -150,7 +150,7 @@ export default function SessionMenu({
 							town to continue.
 						</p>
 						<button type="button" onClick={() => location.reload()}>
-							Load device town
+							Load the saved town
 						</button>
 					</div>
 				)}

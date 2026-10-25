@@ -1,6 +1,6 @@
 /**
  * A save written by the HF 2.6.0 site (Phase C: timber, a played promise) restores under the current HF and
- * continues exactly. Only version stamps migrate: the save `hf`, each person's `engine` and the `HF x.y.z`
+ * continues with identical rules. Host prose is blanked for the historical comparison. Version stamps migrate: the save `hf`, each person's `engine` and the `HF x.y.z`
  * decision source. The fixture's `after48` was produced by the 2.6.0 build itself (commit e3d0382).
  */
 import { readFileSync } from "node:fs";
@@ -10,6 +10,7 @@ import { HF_VERSION } from "../src/core/hf-version.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import { restoreRuntime } from "./historical-runtime.ts";
+import { proseFree } from "./prose-free.ts";
 
 const fixture = JSON.parse(
 	readFileSync(
@@ -17,7 +18,7 @@ const fixture = JSON.parse(
 		"utf8",
 	),
 ) as { start: Save; after48: Save };
-/** Stamps only: every other byte must match. */
+/** Normalize dependency stamps before comparing the historical rules state. */
 const stamps = (save: unknown) =>
 	JSON.parse(
 		JSON.stringify(save)
@@ -42,5 +43,5 @@ it("a played 2.6.0 save migrates its stamps and continues 48 rounds exactly", ()
 	expect(after.player?.pledges[0]?.status).toBe("lapsed");
 	expect(after.timber?.care).toBeUndefined();
 	// Records decided before the restore keep their historical "HF 2.6.0" source, so both sides are normalized.
-	expect(stamps(after)).toEqual(stamps(fixture.after48));
+	expect(proseFree(stamps(after))).toEqual(proseFree(stamps(fixture.after48)));
 }, 60_000);

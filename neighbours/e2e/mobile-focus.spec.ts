@@ -39,7 +39,7 @@ for (const width of [360, 1280])
 		await expect(
 			menu.getByRole("button", { name: /^Read the journal/ }),
 		).toBeVisible();
-		await expect(menu.getByLabel("Start from a seed")).toHaveCount(0);
+		await expect(menu.getByLabel("Start from a seed number")).toHaveCount(0);
 		await expect(menu.getByLabel("Import town save")).toHaveCount(0);
 		await page.keyboard.press("Escape");
 		await expect(menu).not.toBeVisible();

@@ -20,7 +20,7 @@ export function InspectionStudy({ report }: { report: InspectionReport }) {
 			className="inspection-study"
 			aria-label="Recorded hall inspection study"
 		>
-			<h3>Can learned inspection cues guide a safe choice?</h3>
+			<h3>Can learned inspection signs guide a safe choice?</h3>
 			<p className="tiny muted">
 				Historical native recording ·{" "}
 				{new Date(report.recordedAt).toLocaleDateString()} · HF{" "}
@@ -82,7 +82,7 @@ export function InspectionStudy({ report }: { report: InspectionReport }) {
 				</table>
 			</div>
 			<details>
-				<summary>Model explanation and provenance for this case</summary>
+				<summary>Model explanation and source records for this case</summary>
 				<p>{call.choice.reason}</p>
 				<p>
 					{call.provenance.provider} ·{" "}
@@ -91,7 +91,7 @@ export function InspectionStudy({ report }: { report: InspectionReport }) {
 				<p>{report.execution}</p>
 			</details>
 			<details>
-				<summary>All cases · aggregate measurements</summary>
+				<summary>All cases · combined measurements</summary>
 				<div className="comparison-table-wrap">
 					<table>
 						<caption>
@@ -140,9 +140,10 @@ export function InspectionStudy({ report }: { report: InspectionReport }) {
 			<details>
 				<summary>Method, limits and original measurements</summary>
 				<p>
-					Two demonstrated cue rules, fixed held-out cases. The table receives
-					equal examples. This recording does not establish general planning or
-					superiority.
+					The study uses two demonstrated rules and fixed cases that were not
+					used for teaching. The table receives the same examples. These results
+					do not prove general planning ability or show that one policy is
+					better overall.
 				</p>
 				{report.limits.map((limit) => (
 					<p className="tiny muted" key={limit}>
@@ -150,8 +151,8 @@ export function InspectionStudy({ report }: { report: InspectionReport }) {
 					</p>
 				))}
 				<p className="tiny muted">
-					Baseline-only limits remain in the original file; the full report’s
-					limits govern this comparison.
+					The original file lists limits that apply only to the baseline. The
+					full report’s limits apply to this comparison.
 				</p>
 				<a href="./experiments/inspection-comparison.json" download>
 					Download recorded measurements ↓
@@ -182,7 +183,7 @@ export default function Comparison() {
 	) : (
 		<p role="status">
 			{error
-				? "Recorded inspection study unavailable. No result verified here."
+				? "The recorded inspection study is unavailable. No result has been verified here."
 				: "Loading recorded inspection study…"}
 		</p>
 	);

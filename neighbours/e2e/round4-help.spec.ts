@@ -14,7 +14,7 @@ for (const width of [360, 1280])
 		await page.locator('[data-map-place="hall"] .place-hit-area').tap();
 		await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
 		await expect(page.locator(".game-state")).toContainText(
-			"You set off automatically",
+			"You start walking automatically",
 		);
 		const time = page.locator(".town-time");
 		for (let i = 0; i < 6; i++) {
@@ -80,7 +80,7 @@ for (const width of [360, 1280])
 			"You covered that hour for me. I received the two coins.",
 		);
 		await expect(page.locator(".pledge-receipt")).toContainText(
-			"Nora received the 2-coin wage",
+			"Nora received 2 coins in wages",
 		);
 		await expect(page.locator(".pledge-receipt")).toBeInViewport({ ratio: 1 });
 		await page.screenshot({

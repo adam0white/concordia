@@ -94,7 +94,7 @@ it("keeps generated bench premises separate from recipient knowledge and consent
 	expect(projected.rows).toContainEqual(["Seed 42 proposal", "soon"]);
 	expect(projected.rows).toContainEqual([
 		"World application",
-		"Not applied; no resident receipt or consent claimed",
+		"The proposal was not applied. No resident is claimed to have received or agreed to it.",
 	]);
 });
 it("labels the native seed 101 exclusion as Phase C history rather than current absence", () => {
@@ -104,7 +104,7 @@ it("labels the native seed 101 exclusion as Phase C history rather than current 
 	expect(raw.seeds).toEqual([42, 73]);
 	expect(projected.rows).toContainEqual([
 		"Seed 101 historical exclusion",
-		"Excluded after the Phase C search from the fixed native 42/73 catalog. The current deterministic study finds a natural case; no current native model coverage for this seed.",
+		"This seed was excluded after the Phase C search of the fixed native 42/73 case list. A case now arises naturally in the deterministic study. No current native model run covers this seed.",
 	]);
 	expect(projected.rows).not.toContainEqual([
 		"Seed 101 proposal",

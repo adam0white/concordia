@@ -53,10 +53,10 @@ it("keeps new situations absent before the hall opens, with no invented receipt"
 	hall.open = true;
 	const html = render();
 	expect(html).toContain("Choose a neighbour");
-	expect(html).not.toContain("Concordia GM proposal");
+	expect(html).not.toContain("Concordia game-master proposal");
 	expect(html).not.toContain("Authored case");
 	vi.stubGlobal("location", { search: "?lab=1" });
-	expect(render()).toContain("Concordia GM proposal");
+	expect(render()).toContain("Concordia game-master proposal");
 	expect(render()).toContain("Authored case");
 	expect(html).not.toContain("Request received");
 	expect(html).not.toContain('open=""');

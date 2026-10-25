@@ -28,7 +28,7 @@ export default function StoryHeadline({
 				type="button"
 				className="story-headline"
 				onClick={() => open(story.id)}
-				aria-label={`Read story: ${story.title}${invitationDate ? `. ${invitationDate}` : ""}${story.at === undefined ? "" : `. Posted ${datedClock(story.at)}`}`}
+				aria-label={`Read story: ${story.title.replace(/\.$/, "")}${invitationDate ? `. ${invitationDate}` : ""}${story.at === undefined ? "" : `. Posted ${datedClock(story.at)}`}`}
 			>
 				<span className="eyebrow">
 					{story.at === undefined ? "Recorded story" : datedClock(story.at)}

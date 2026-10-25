@@ -90,7 +90,7 @@ export function ReceivedRouteResults({
 	if (!trial) return null;
 	return (
 		<section aria-label="Received future access study">
-			<h3>Can a received opportunity make asking useful?</h3>
+			<h3>Can learning about an opportunity make asking useful?</h3>
 			<p className="tiny muted">
 				Recorded control · HF {trial.framework} ·{" "}
 				{report.recordedAt.slice(0, 10)}. Separate from your town.
@@ -117,7 +117,7 @@ export function ReceivedRouteResults({
 								</td>
 								<td>
 									{row.refusal
-										? `${row.refusal.goalProgress === 0 ? "No goal progress" : `Goal progress ${row.refusal.goalProgress}`} · ${row.refusal.feasibleAfter ? "Expectation remains" : "Request expectation consumed"}`
+										? `${row.refusal.goalProgress === 0 ? "No goal progress" : `Goal progress ${row.refusal.goalProgress}`} · ${row.refusal.feasibleAfter ? "The request remains possible" : "The request is no longer possible"}`
 										: "Not simulated"}
 								</td>
 							</tr>
@@ -127,7 +127,7 @@ export function ReceivedRouteResults({
 			</div>
 			<p className="tiny muted">
 				A request is a choice, not a completed repair. Without the goal, asking
-				can still win because it costs less than direct work.
+				can still be chosen because it costs less than direct work.
 			</p>
 			<details>
 				<summary>Method, parameters and original measurements</summary>
@@ -168,7 +168,7 @@ export default function ReceivedRouteStudy() {
 		return (
 			<p role="status">
 				{error
-					? "Recorded opportunity study unavailable. No result verified here."
+					? "The recorded opportunity study is unavailable. No result has been verified here."
 					: "Loading opportunity study…"}
 			</p>
 		);

@@ -25,16 +25,16 @@ it("acknowledges a completed hour only after HF has received the kept promise", 
 				showAction: false,
 			}),
 		);
-	expect(render()).not.toContain("You kept your word about that hour.");
+	expect(render()).not.toContain("You kept your promise about that hour.");
 	r.step();
 	const pledge = r.view().player?.pledges[0];
 	if (!pledge) throw Error("Missing promise");
 	r.intervene({ kind: "player-work", pledgeId: pledge.id });
 	while (r.view().player?.job) r.step();
 	expect(r.s.player?.pledges[0]?.hfReported).toBe(true);
-	expect(render()).toContain("You kept your word about that hour.");
+	expect(render()).toContain("You kept your promise about that hour.");
 	expect(render()).toContain("Ada remembers");
 	if (!r.s.player?.pledges[0]) throw Error("Missing completed promise");
 	r.s.player.pledges[0].hfReported = false;
-	expect(render()).not.toContain("You kept your word about that hour.");
+	expect(render()).not.toContain("You kept your promise about that hour.");
 }, 60000);

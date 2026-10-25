@@ -26,7 +26,7 @@ function SavedStudy({ kind }: { kind: StudyKind }) {
 			{!result ? (
 				<p role="status">
 					{error
-						? "Recorded study unavailable. No result verified here."
+						? "The recorded study is unavailable. No result has been verified here."
 						: "Loading recorded study…"}
 				</p>
 			) : (
@@ -90,8 +90,12 @@ export default function RecordedStudies() {
 					<option value="native">
 						One LLM neighbour · original run and replay
 					</option>
-					<option value="gm">GM annex proposal · physical effect</option>
-					<option value="bench-gm">Concordia GM · typed bench premises</option>
+					<option value="gm">
+						Game-master annex proposal · physical effect
+					</option>
+					<option value="bench-gm">
+						Concordia game master · structured bench proposals
+					</option>
 				</select>
 			</label>
 			{kind === "bench" ? (

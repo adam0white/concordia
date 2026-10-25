@@ -21,7 +21,7 @@ for (const width of [360, 1280]) {
 		});
 		await page.goto("/?lab=1");
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
-		await page.getByLabel("Start from a seed").fill("42");
+		await page.getByLabel("Start from a seed number").fill("42");
 		await page.getByRole("button", { name: "Start", exact: true }).click();
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();

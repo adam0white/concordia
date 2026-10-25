@@ -189,7 +189,7 @@ export function admitTownPerson(
 	for (const skill of omitted) delete p.person.skills[skill];
 	if (omitted.length)
 		p.person.limitations.push(
-			`Unmapped source skills stay in the source archive: ${omitted.join(", ")}. No new trade qualification.`,
+			`These skills have no equivalent here and remain in the source archive: ${omitted.join(", ")}. This person gains no new trade qualification.`,
 		);
 	return admitCalendarPersona(p, target, {
 		mappingVersion: mapping,
@@ -210,7 +210,7 @@ export function prepareTownCast(
 		if (!r) throw Error("Allocated person absent from town.");
 		r.person = admitTownPerson(input, r.person);
 		const life = lifeAdmission(input, "neighbours");
-		r.description += ` ${life.line} Unsupported memories remain in the source archive.`;
+		r.description += ` ${life.line} Memories that cannot be used here remain in the source archive.`;
 		r.place = life.startsAtHome
 			? "homes"
 			: input.life.place === "public-garden"
@@ -237,7 +237,7 @@ export function prepareTownCast(
 				actorId: id,
 				valence: 0,
 				salience: 0.4,
-				summary: `Read ${peer.name}’s public work note: ${peer.work}. No reciprocal meeting or familiarity is implied.`,
+				summary: `Read ${peer.name}’s public work note: ${peer.work}. Reading this note does not mean they have met or know each other.`,
 				tags: ["social", "work"],
 			});
 		}

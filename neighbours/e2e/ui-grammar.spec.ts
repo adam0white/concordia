@@ -121,13 +121,11 @@ for (const width of [360, 1280]) {
 		).toHaveCount(0);
 		await capture(page, "title");
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
-		await page.getByLabel("Start from a seed").fill("42");
+		await page.getByLabel("Start from a seed number").fill("42");
 		await page.getByRole("button", { name: "Start", exact: true }).click();
 		await capture(page, "loading");
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
-		await expect(page.locator(".next-step")).toContainText(
-			"Choose where to walk",
-		);
+		await expect(page.locator(".next-step")).toContainText("Explore the town");
 		await expect(page.locator(".neighbour-strip button")).toHaveCount(7);
 		for (const chip of await page.locator(".neighbour-strip button").all())
 			await expect(chip).toBeInViewport();
@@ -229,8 +227,8 @@ for (const width of [360, 1280]) {
 			rows.map((s) => s.trim()).filter((s) => s !== "Full screen"),
 		).toEqual([
 			"Read the journal ▸",
-			"Paper or lamplight",
-			"Compare futures ▸",
+			"Switch light or dark colours",
+			"Compare possible outcomes ▸",
 			"Recorded studies ▸",
 			"Feedback ▸",
 			"To the title page",
@@ -247,9 +245,14 @@ for (const width of [360, 1280]) {
 		await expect(
 			page.locator('.session-menu input[type="number"]'),
 		).toHaveCount(0);
-		await page.getByRole("button", { name: /^Compare futures/ }).click();
+		await page
+			.getByRole("button", { name: /^Compare possible outcomes/ })
+			.click();
 		await expect(
-			page.getByText("Hypothetical · Your town is unchanged", { exact: true }),
+			page.getByText(
+				"These are possible outcomes. Your town stays unchanged.",
+				{ exact: true },
+			),
 		).toBeVisible();
 		await expect(page.locator(".day-comparison")).toBeVisible();
 		await capture(page, "compare");

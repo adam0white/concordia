@@ -20,6 +20,13 @@ describe("action-owned error recovery", () => {
 		expect(html).toContain("Technical details");
 		expect(html).not.toContain("You can reload");
 	});
+	it("gives a start-fresh explanation for a short old-export rejection in lab mode", () => {
+		const html = render(
+			"This save could not be loaded. Your current town is unchanged. Activity differs from host rules",
+		);
+		expect(html).toContain("Start a new game to use this version.");
+		expect(html).toContain("Your current town is unchanged.");
+	});
 	it("retains the protected corrupt device-save warning", () => {
 		const html = render(
 			"The saved town could not be restored. Traceback: invalid packet",

@@ -19,7 +19,7 @@ export default function CastMenu({
 		void checkpoint(selected, fork).then(
 			() =>
 				setStatus(
-					"Saved for another chapter. This loaded town remains pinned.",
+					"The person is saved for another chapter. This loaded town keeps its current people and history.",
 				),
 			(error) =>
 				setStatus(String(error instanceof Error ? error.message : error)),
@@ -29,7 +29,7 @@ export default function CastMenu({
 		<details className="cast-menu">
 			<summary>People between chapters</summary>
 			<fieldset>
-				<legend>Browser continuity</legend>
+				<legend>People saved in this browser</legend>
 				<label>
 					<input
 						type="checkbox"
@@ -42,9 +42,10 @@ export default function CastMenu({
 					Keep people in this browser
 				</label>
 				<p className="tiny muted">
-					Fresh towns admit all applicable people together. Loaded towns stay
-					pinned. Unfinished work and unsupported care refuse travel. Full
-					source memories stay in their source archives.
+					A fresh town brings in all eligible people together. A loaded town
+					keeps its saved people and history. People cannot travel with
+					unfinished work or care duties the town cannot support. Their full
+					earlier memories remain in the original archives.
 				</p>
 				<label>
 					Save a person{" "}
@@ -60,7 +61,7 @@ export default function CastMenu({
 					Save finished chapter
 				</button>
 				<button type="button" disabled={!enabled} onClick={() => save(true)}>
-					Save an explicit alternate branch
+					Save an alternative version
 				</button>
 				<p className="tiny muted">
 					If the person is finishing an action, close this menu and let the town

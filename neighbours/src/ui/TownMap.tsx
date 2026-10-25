@@ -777,18 +777,19 @@ export default function TownMap({
 			>
 				<title id="map-title">Alder Quay town map</title>
 				<desc id="map-description">
-					A hand-drawn map of live residents at their actual locations. Select a
-					named neighbour to see their activity and decisions. Small ink dots
-					show background residents, offset within their current location for
-					visibility. Travel is projected between places using actual departure
-					and arrival times. Named neighbours at shared places use a count badge
-					on narrow maps; select it for names. Larger maps use short leader
-					lines to their actual place. Named markers use z for sleep, ! for
-					incapacity or a mental break, and × for death. Your own position is a
-					small diamond labelled you. Tally marks under the hall count finished
-					repairs; a dashed line shows the old flood level. Needs help marks a
-					known open need, not someone’s willingness to help. An unmarked
-					neighbour may have needs you do not know.{" "}
+					This map shows residents at their actual locations. Select a named
+					neighbour to see their activity and decisions. Small dots show
+					background residents. The dots are spread within each place so you can
+					see them. Travellers move between places according to their actual
+					departure and arrival times. On narrow maps, a number shows how many
+					named neighbours share a place. Select the number to see their names.
+					On larger maps, short lines connect names to places. The markers use z
+					for sleep, ! for being unable to act or having a mental break, and ×
+					for death. A small diamond labelled you shows your position. Marks
+					under the hall count finished repairs. A dashed line shows the old
+					flood level. Needs help marks a known need that has not been met. It
+					does not show whether someone is willing to help. A neighbour without
+					this mark may have needs you do not know.{" "}
 					{town.people.filter((p) => p.lifeState === "dead").length} deaths
 					recorded; {town.people.filter((p) => p.lifeState === "downed").length}{" "}
 					people currently unable to act.

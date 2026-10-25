@@ -21,7 +21,7 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 	)
 		error(
 			"FOOD_CONSERVATION",
-			"Food stock, reservations and consumption do not balance.",
+			"The amounts of food available, reserved and eaten do not add up correctly.",
 		);
 	for (const p of s.places) {
 		const reserved = s.people.filter(
@@ -30,7 +30,7 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 		if (p.reserved !== reserved || p.reserved > p.capacity || p.reserved < 0)
 			error(
 				"ACTIVITY_RESERVATION",
-				`${p.name} has inconsistent activity reservations.`,
+				`The activity reservations at ${p.name} are invalid or do not match the activities in progress.`,
 			);
 	}
 	const tools = s.tools + s.people.reduce((n, r) => n + (r.job?.tools ?? 0), 0);
@@ -53,10 +53,10 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 	)
 		error(
 			"ACTIVITY_TRACKING",
-			"A physical job and its person's activity disagree.",
+			"A person's work in the town does not match their recorded activity.",
 		);
 	if (s.hall < 0 || s.hall > 12 || (s.hallSafe && s.hall < 12))
-		error("HALL_STATE", "The hall's repair or opening state is inconsistent.");
+		error("HALL_STATE", "The hall's repair or opening records do not match.");
 	if (s.hall === 12 && !s.hallSafe) {
 		const lastInspection = s.people
 			.flatMap((r) => (r.inspection ? [r.inspection] : []))
@@ -66,8 +66,8 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 		out.push({
 			code: "INSPECTION_PENDING",
 			message: lastInspection
-				? `${lastInspection.result} Reopening needs safe conditions and another inspection; people may have other priorities.`
-				: "The repairs are finished. The hall has not yet received a safe inspection; people may have other priorities.",
+				? `${lastInspection.result} The hall needs safe conditions and another inspection before it can reopen. People may have other priorities.`
+				: "The repairs are finished. An inspection has not yet found the hall safe to open. People may have other priorities.",
 			severity: "info",
 		});
 	}
@@ -76,13 +76,13 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 		out.push({
 			code: "MEALS_RESERVED",
 			message:
-				"No unreserved market meals remain. Gardening, deliveries and carrying food can replenish them.",
+				"All meals at the market have been reserved or used. Gardening, deliveries and carrying food can add more meals.",
 			severity: "warning",
 		});
 	out.push({
 		code: "PERSISTENT_PERSONS",
 		message:
-			"Every resident has a persistent HF person. Decision policies are labelled per person.",
+			"Every resident keeps their own HF person state over time. Each person’s decision policy is labelled.",
 		severity: "info",
 	});
 	return out;

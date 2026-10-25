@@ -70,8 +70,8 @@ export default function HelpPanel({
 					<span>{town.controlsRemaining} town credits left</span>
 				</div>
 				<p className="tiny muted">
-					Each action costs 1 town credit. These can also support later hall
-					evenings.
+					Each action costs 1 town credit. Town credits can also support later
+					hall evenings.
 				</p>
 				<div className="support-options">
 					{support.map((option) => (

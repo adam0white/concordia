@@ -53,7 +53,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	const configure = async () => {
 		if ((await card.getAttribute("open")) === null)
 			await card.locator(":scope > summary").click();
-		const source = card.getByText("Why · the record ▸", { exact: true });
+		const source = card.getByText("Reasons and records ▸", { exact: true });
 		if ((await source.locator("..").getAttribute("open")) === null)
 			await source.click();
 		await card

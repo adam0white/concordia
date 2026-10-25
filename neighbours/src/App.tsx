@@ -400,31 +400,33 @@ export default function App() {
 							A riverside town is recovering after a flood. You can get to know
 							six neighbours. Two hundred more live here. They decide for
 							themselves. This town runs live on this device; nothing is played
-							back. Python Concordia coordinates the town and released Human
-							Framework makes the residents’ decisions.
+							back. Python Concordia runs the town. The released Human Framework
+							software makes the residents’ decisions.
 						</p>
 					) : context ? (
 						<p>
 							Only people at the same place, and awake, can hear you. A
-							counter-offer is their way of saying yes, differently. A promise
-							binds you only once they take up your request.
+							counter-offer means they suggest a different action or time. Your
+							promise becomes a commitment if they agree now or later act on
+							your request.
 						</p>
 					) : study ? (
 						<p>
-							A comparison runs a hypothetical branch from now; your town is
-							unchanged.
+							A comparison runs two possible versions of the town from this
+							moment. Your town stays unchanged.
 						</p>
 					) : sheet === "help" ? (
 						<p>
-							Each support act spends a credit and changes a circumstance;
-							people still decide how to respond.
+							Each support action costs one town credit and changes conditions
+							in the town. People decide how to respond.
 						</p>
 					) : (
 						<p>
-							Walk to a place, then talk to whoever is here and awake. Offer an
-							hour of your own work, or simply ask; urging wears on trust.
-							Tokens are town credits; the diamond is the week's hall choice.
-							Tally marks count hall repairs, out of twelve.
+							Walk to a place. Talk to people who are there and awake. Offer an
+							hour of work, or ask for help. Pressing someone can reduce their
+							trust in you. Circles show town credits. The diamond shows whether
+							this week’s hall choice is available. The marks count completed
+							hall repairs, out of twelve.
 						</p>
 					)}
 				</section>
@@ -497,7 +499,7 @@ export default function App() {
 								/>
 							) : context ? (
 								`Time slows while you visit ${person?.name ?? (place ? placeName(place) : "your neighbours")}`
-							) : session.clockRate === "Time holds for a new story" ? (
+							) : session.clockRate === "Time pauses for a new story" ? (
 								stories[0] ? (
 									`A story: ${stories[0].title}`
 								) : (
@@ -581,9 +583,10 @@ export default function App() {
 							<div className="game-sheet" id="town-info-panel" tabIndex={-1}>
 								{session.saveConflict && (
 									<div className="error" role="alert">
-										Another tab saved the device town. This tab is paused.
+										Another tab saved the town on this device. This tab is
+										paused.
 										<button type="button" onClick={() => location.reload()}>
-											Load device town
+											Load the saved town
 										</button>
 									</div>
 								)}
@@ -756,11 +759,17 @@ export default function App() {
 					role="dialog"
 					aria-modal="true"
 					aria-label={
-						sheet === "compare" ? "Compare futures" : "Recorded studies"
+						sheet === "compare"
+							? "Compare possible outcomes"
+							: "Recorded studies"
 					}
 				>
 					<SheetHeading
-						title={sheet === "compare" ? "Compare futures" : "Recorded studies"}
+						title={
+							sheet === "compare"
+								? "Compare possible outcomes"
+								: "Recorded studies"
+						}
 						close={() => {
 							session.cancelComparison();
 							setSheet("town");

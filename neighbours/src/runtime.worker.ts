@@ -54,14 +54,15 @@ async function boot() {
 	});
 	send({
 		type: "progress",
-		message: "Connecting Concordia to 206 Human Framework people…",
+		message:
+			"Concordia is connecting to 206 people controlled by the Human Framework…",
 	});
 	const [manifestResponse, wheelResponse] = await Promise.all([
 		fetch("/runtime/python-files.json", { cache: "no-cache" }),
 		fetch("/runtime/absl.whl"),
 	]);
 	if (!manifestResponse.ok || !wheelResponse.ok)
-		throw Error("Python runtime assets could not load");
+		throw Error("The Python runtime files could not load.");
 	const manifest = await manifestResponse.json();
 	for (const [path, content] of Object.entries(
 		manifest.files as Record<string, string>,
@@ -167,7 +168,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 				case "step": {
 					const rounds = q.rounds ?? 1;
 					if (!Number.isSafeInteger(rounds) || rounds < 1 || rounds > 16)
-						throw Error("Choose between 1 and 16 rounds");
+						throw Error("Choose between 1 and 16 rounds.");
 					py.globals.set("requested_rounds", rounds);
 					await py.runPythonAsync(
 						"town_engine.advance(requested_rounds)\nNone",
@@ -303,7 +304,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					? { restoreRequestId: event.data.restoreRequestId }
 					: {}),
 				message: rejected
-					? `Not possible now: ${rejected}. Nothing in the town changed.`
+					? `You cannot do that now: ${rejected}. The town has not changed.`
 					: message,
 			});
 		});

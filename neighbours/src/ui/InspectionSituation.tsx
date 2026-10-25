@@ -76,7 +76,7 @@ export default function InspectionSituation({
 					setError(
 						reason instanceof Error
 							? reason.message
-							: "GM situation unavailable.",
+							: "The recorded game-master situation is unavailable.",
 					);
 			});
 		return () => abort.abort();
@@ -129,7 +129,7 @@ export default function InspectionSituation({
 								{town.now >= current.expiresAt
 									? "The request expired before an opening decision was completed."
 									: current.visitedAt !== undefined
-										? `They observed the annex at ${datedClock(current.visitedAt)}. No opening decision is complete.`
+										? `They observed the annex at ${datedClock(current.visitedAt)}. They have not finished deciding whether to open it.`
 										: current.received
 											? "They received the request. They decide whether to help."
 											: "They did not receive the request."}
@@ -140,7 +140,8 @@ export default function InspectionSituation({
 						current.cue === "unsupported" &&
 						!current.opened && (
 							<p className="tiny muted">
-								Unknown timber or supports leave the annex closed.
+								The annex stays closed because the timber or supports have not
+								been confirmed safe.
 							</p>
 						)}
 					<p className="tiny muted">
@@ -161,7 +162,7 @@ export default function InspectionSituation({
 						)}
 						{!!current.methodTerms?.length && (
 							<p className="tiny muted">
-								Recorded acquired-method contribution:{" "}
+								Recorded contribution from learned methods:{" "}
 								{current.methodTerms
 									.reduce((sum, t) => sum + t.value, 0)
 									.toFixed(3)}
@@ -178,7 +179,7 @@ export default function InspectionSituation({
 						inspect it first.
 					</p>
 					<details className="inspection-record">
-						<summary>Why · the record ▸</summary>
+						<summary>Reasons and records ▸</summary>
 						{labMode() && (
 							<label>
 								Situation
@@ -188,7 +189,7 @@ export default function InspectionSituation({
 									onChange={(event) => setSituation(event.target.value)}
 									disabled={disabled}
 								>
-									<option value="gm">Concordia GM proposal</option>
+									<option value="gm">Concordia game-master proposal</option>
 									<option value="dry-sound">Authored case · dry timber</option>
 									<option value="wet-sound">Authored case · wet timber</option>
 									<option value="unsupported">
@@ -210,7 +211,9 @@ export default function InspectionSituation({
 										</button>
 									</p>
 								) : (
-									<p role="status">Loading recorded GM proposal…</p>
+									<p role="status">
+										Loading the recorded game-master proposal…
+									</p>
 								)
 							) : (
 								<p className="tiny muted">

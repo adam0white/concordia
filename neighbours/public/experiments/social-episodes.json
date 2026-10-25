@@ -12,51 +12,51 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "9e4eeec4668dc29a05ed16fb03c57bb67044f259b8c64baada5e9ba9b2fadba1",
+  "sourceFingerprint": "0f61f870748a58800b291e58fb314bfa1497bd0143a4a0f2699131f7cb129bb4",
   "sources": {
     "package-lock.json": "d6f5d35954bde9fa8a64fdd001314413c5d81186ef6cd662311a423d8f77e322",
     "package.json": "51563623c16b4170f9222104589dec9a3d4d7fd6b9e3feb748fff2bbc1c0edac",
     "scripts/profile-evenings.ts": "70f5e20bc6df4fdef8d3d4f419803172ace547d73bc172d25e657127acc4f85f",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
-    "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
-    "src/core/bench-opportunity.ts": "ffa8810c0feffc900cba9f2e779e5b3f83f2cd4f38f7cfdc74839d6ce8b29b79",
+    "src/core/assistance.ts": "0de7ebd67da9c857c0733bba820f6d4e0b5119baa65c48b6cba0f012389ec3dd",
+    "src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
     "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
-    "src/core/cast-continuity.ts": "c51f7f0ee5b8b51d8265110a7b153224d9811f97ec28c6454755103c327a983a",
+    "src/core/cast-continuity.ts": "753388a98561efdc9cd1137d65be79ffdc058fbe9b45886feffd2f0160ed45bd",
     "src/core/cast.ts": "7739bf96769e89d0895e47d25ac26b38133652a0c25d07e0166bb9db13783601",
-    "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
+    "src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
     "src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
-    "src/core/evenings.ts": "b8470935ef506afcc25dd59315b78e4440db75d5dbd2bea583a8428f8b713046",
+    "src/core/evenings.ts": "733db24a517ca897ad6a0fc05002a5369d288aeda3266c55c2456a4d1a200e78",
     "src/core/hall-care.ts": "d9d4edcb531ef117b1dbf0d0799d8a7127bfdfb8574c4d28f79f1fa7100becd4",
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
-    "src/core/handcart.ts": "fc43caea8b9f89511ffabda04ec1bd81f7f24139b3603e37ea81e1580b4d2558",
+    "src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
     "src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
     "src/core/hf-version.ts": "1d773447b1625e93f682a40ab203279accb111313a0150d72b31cb6ce976b052",
-    "src/core/impression.ts": "a07326c75d20675cb82f4c6aa89c984e6eb4e8a03bb5c24ea24befafcf597341",
+    "src/core/impression.ts": "89dc524793b3df1449ee5412ff6678ee19d2c5bbcc860ab209950cf6923490d5",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/journal.ts": "93ab2463db21ede9d5a9802030c51314f1171b5d0137ab68d93cff52d5eaac8e",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
-    "src/core/offers.ts": "b4358717a71853919ab86789d2739125c29c9c4b61b0742d222fbbdcbcd8fd32",
+    "src/core/offers.ts": "704574d32feb8f9a4729042bbd717892f3395231b851037e1b45f0ab2621cbc9",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
     "src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
-    "src/core/player.ts": "386f20014286ef72ece7d3225cb6c8622f39dbe2962a758a6fa68664bdf4d997",
-    "src/core/private-discoveries.ts": "6a7c52359928aeee7d1fac30187019da0a4568cd182f325df5a03fd961e73d38",
+    "src/core/player.ts": "54d95231ca40909f04f8e9528ed467c44d5e04da77d1c0041402f5710329c8e0",
+    "src/core/private-discoveries.ts": "5cdf63162a65362615a78b4dcd23a3ec094d7e5762e69e4eb24638698d397b74",
     "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
     "src/core/restore.ts": "1fd03d141cbf7ecfb5a4fe78b80db8e6d0300e25805b338f1848667c1de8c40e",
-    "src/core/runtime.ts": "286133a9772999787e61f75ab6ddfe4c07d478193a7e2c75f5db8f962a4fbe73",
-    "src/core/scenario.ts": "652aa8d587076b356c6183c2629b82998d035a60f1dbebfdd57499cbdf041a90",
+    "src/core/runtime.ts": "0dd41594eff4dfb39521263663592003ad6f2783f851a0b646b7cb3db824aa9b",
+    "src/core/scenario.ts": "8540be7eeefea6581359bd18ea9b66378b61f33f5ee1cfaad5c211039b5d29c1",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "8202e314f11487e40db25b5990ccb26cff69f08eabc3bb49ab496edb2dcfebf1",
-    "src/core/stories.ts": "9cd97012fa55e5da25b535d4ffbb0c457abf8d5b7b9b93dafcd1f108c3eadbd7",
+    "src/core/state.ts": "c8330caaaa4e071a5303083282d29e5885c5f1df02e6fb3b42916a653cef8057",
+    "src/core/stories.ts": "8fb3c28788bd352635cf9a71108ea3a82fefbda34677a4bf5404b075e5a93256",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
     "src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
     "src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
     "src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
-    "src/core/voicing.ts": "2bab2d0227d7ea171d523e661cbdd09995a1a7d6129a99a80d8731b22867ee75",
+    "src/core/voicing.ts": "5a2b734ac0699d8eadc9a45fa52803377e82e735a7e2281b0a2d48a4e5bb5691",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -368,7 +368,7 @@
               "reason": "It's what I do at this hour."
             }
           ],
-          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
         },
         {
           "id": "evening-1-class",
@@ -739,7 +739,7 @@
               "reason": "I'm starving — eating first. I remember: finished Eat a meal at the market."
             }
           ],
-          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
         },
         {
           "id": "weekly-0-class",
@@ -865,7 +865,7 @@
               "reason": "Time for something easier."
             }
           ],
-          "result": "Nora’s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Nora’s practical class: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
         },
         {
           "id": "weekly-0-meal",
@@ -1368,7 +1368,7 @@
           "id": 71972,
           "at": 13500,
           "kind": "bench-work",
-          "text": "Nora can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
+          "text": "Nora can earn two paid carpentry shifts each day at the main bench. Lending it means she must wait to work those shifts. It does not necessarily mean she will lose income.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ada",
@@ -1379,7 +1379,7 @@
           "id": 72541,
           "at": 13590,
           "kind": "cart-observed",
-          "text": "Bilal’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "text": "Bilal’s flood-damaged handcart stands in the workshop. Repairing its axle, load platform and handles takes three work periods.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ravi",
@@ -1390,7 +1390,7 @@
           "id": 91905,
           "at": 16905,
           "kind": "cart-returned",
-          "text": "Rafi returned the restored handcart to Bilal. It can carry one extra food unit on each of Bilal’s completed supply trips.",
+          "text": "Rafi returned the restored handcart to Bilal. It can carry one extra unit of food on each supply trip Bilal completes.",
           "causes": [
             91657
           ],
@@ -1443,13 +1443,13 @@
           "severity": "info",
           "boundaries": 25,
           "firstAt": 1920,
-          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+          "message": "Every resident keeps their own HF person state over time. Each person’s decision policy is labelled."
         },
         "INSPECTION_PENDING": {
           "severity": "info",
           "boundaries": 5,
           "firstAt": 4800,
-          "message": "Nora kept the hall closed after seeing wet timber and sound supports. Reopening needs safe conditions and another inspection; people may have other priorities."
+          "message": "Nora kept the hall closed after seeing wet timber and sound supports. The hall needs safe conditions and another inspection before it can reopen. People may have other priorities."
         }
       },
       "restoredContinuation": {
@@ -1458,38 +1458,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-42-first-notice.json",
+          "path": "/tmp/neighbours-plain2/social/seed-42-first-notice.json",
           "at": 11415,
           "round": 729,
-          "sha256": "eff09fa83679871d35174d32c1c39bc5fd6b44ebae6f6ab88daafce61000b077"
+          "sha256": "645b7655d9f2f413e1049324e0095c116d14d810ff5dc94f63a03ed91e022157"
         },
         "prepared": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-42-first-prepared.json",
+          "path": "/tmp/neighbours-plain2/social/seed-42-first-prepared.json",
           "at": 11715,
           "round": 749,
-          "sha256": "737a9f9b15cf838254c19e61e0fd98ee4804177a5cb8976676aa9d9ab6ebf98d"
+          "sha256": "9ffffbcffb7bc46e4b65c22de2853c8a7a2f47fc84604f4452b3f1715c3adade"
         },
         "accepted": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-42-first-accepted.json",
+          "path": "/tmp/neighbours-plain2/social/seed-42-first-accepted.json",
           "at": 12135,
           "round": 777,
-          "sha256": "2ad18c165c950ca683940d080779caf6b6773d204731619872a73905fdc94412"
+          "sha256": "3f7925e390671ce3df34b2bc3873f246cb22a8345b1f42abf479b19b3b34e250"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-42-first-cartProgress.json",
+          "path": "/tmp/neighbours-plain2/social/seed-42-first-cartProgress.json",
           "at": 13710,
           "round": 882,
-          "sha256": "60b8028c75b8f8ceff83153ba5959c1856b37de9726b45d278cd7330ebc48504"
+          "sha256": "644b9fb7d503b8cfaf02cbee1c6e82ad69e591b4936d276d712df7241a3cea21"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-42-first-cartReturned.json",
+          "path": "/tmp/neighbours-plain2/social/seed-42-first-cartReturned.json",
           "at": 16905,
           "round": 1095,
-          "sha256": "009c62bf925d13bed05f6bab7ae569d73f6738309ac38de1e82e102641ceb974"
+          "sha256": "542736482c444a6c9483498d8add1d78f2cdede315952155ce02d9e98472e773"
         }
       },
-      "finalCheckpointSha256": "9cbcadeab43cd205607fcd6d4a0d3ffefd193f4f230a424f1bf94be2c0c1d70d",
-      "wallSeconds": 66.642013875
+      "finalCheckpointSha256": "4b806238a99be8b2e0e6e73c8d48f6e862a40b7656d309cf7e7493a9369d92a8",
+      "wallSeconds": 69.14533129099999
     },
     {
       "seed": 73,
@@ -1526,7 +1526,7 @@
           "severity": "info",
           "boundaries": 25,
           "firstAt": 1920,
-          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+          "message": "Every resident keeps their own HF person state over time. Each person’s decision policy is labelled."
         }
       },
       "restoredContinuation": {
@@ -1534,8 +1534,8 @@
         "rounds": 8
       },
       "checkpoints": {},
-      "finalCheckpointSha256": "705a1a09190f46a64d20e206aa07d2f61c2504df7a026f87cf66dac2c4b1491c",
-      "wallSeconds": 56.55416833299999
+      "finalCheckpointSha256": "f0cac689ed9fcf77ef89b6f1f22db28f588d54342ff28c7e96868e1c1162c6b7",
+      "wallSeconds": 64.242767417
     },
     {
       "seed": 9,
@@ -1572,7 +1572,7 @@
           "severity": "info",
           "boundaries": 25,
           "firstAt": 1920,
-          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+          "message": "Every resident keeps their own HF person state over time. Each person’s decision policy is labelled."
         }
       },
       "restoredContinuation": {
@@ -1580,8 +1580,8 @@
         "rounds": 8
       },
       "checkpoints": {},
-      "finalCheckpointSha256": "6ce155eb966342755b9b6c99bc871cebd907b4f2cb10842d487aee3f74fbf338",
-      "wallSeconds": 65.574023167
+      "finalCheckpointSha256": "30b01981e74e6d3b026953776c4cd5e093167a08e780cf1bedcc55b0eb13e39e",
+      "wallSeconds": 62.17318174999999
     },
     {
       "seed": 101,
@@ -1845,7 +1845,7 @@
               "reason": "Time for something easier."
             }
           ],
-          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
         },
         {
           "id": "evening-1-class",
@@ -1968,7 +1968,7 @@
               "reason": "Out of habit, really."
             }
           ],
-          "result": "Nora’s practical class: nobody received the planned activity. The room was never prepared."
+          "result": "Nora’s practical class: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
         },
         {
           "id": "evening-1-meal",
@@ -2700,7 +2700,7 @@
               "reason": "Out of habit, really."
             }
           ],
-          "result": "Sam’s shared supper: nobody received the planned activity. The room was never prepared."
+          "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
         }
       ],
       "chosenActions": {
@@ -2779,7 +2779,7 @@
           "id": 105160,
           "at": 19275,
           "kind": "cart-observed",
-          "text": "Bilal’s flood-damaged handcart stands in the workshop. Restoring its axle, bed and handles needs three work periods.",
+          "text": "Bilal’s flood-damaged handcart stands in the workshop. Repairing its axle, load platform and handles takes three work periods.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ravi",
@@ -2790,7 +2790,7 @@
           "id": 105250,
           "at": 19290,
           "kind": "bench-work",
-          "text": "Nora can earn two paid carpentry shifts each day at the main bench. Lending it delays access to those shifts; it does not guarantee lost income.",
+          "text": "Nora can earn two paid carpentry shifts each day at the main bench. Lending it means she must wait to work those shifts. It does not necessarily mean she will lose income.",
           "causes": [],
           "importance": 0.15,
           "actorId": "ada",
@@ -2801,7 +2801,7 @@
           "id": 116808,
           "at": 21225,
           "kind": "cart-returned",
-          "text": "Rafi returned the restored handcart to Bilal. It can carry one extra food unit on each of Bilal’s completed supply trips.",
+          "text": "Rafi returned the restored handcart to Bilal. It can carry one extra unit of food on each supply trip Bilal completes.",
           "causes": [
             116583
           ],
@@ -2850,13 +2850,13 @@
           "severity": "info",
           "boundaries": 25,
           "firstAt": 1920,
-          "message": "Every resident has a persistent HF person. Decision policies are labelled per person."
+          "message": "Every resident keeps their own HF person state over time. Each person’s decision policy is labelled."
         },
         "INSPECTION_PENDING": {
           "severity": "info",
           "boundaries": 8,
           "firstAt": 6240,
-          "message": "Nora kept the hall closed after seeing wet timber and sound supports. Reopening needs safe conditions and another inspection; people may have other priorities."
+          "message": "Nora kept the hall closed after seeing wet timber and sound supports. The hall needs safe conditions and another inspection before it can reopen. People may have other priorities."
         }
       },
       "restoredContinuation": {
@@ -2865,38 +2865,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-101-first-notice.json",
+          "path": "/tmp/neighbours-plain2/social/seed-101-first-notice.json",
           "at": 18315,
           "round": 1189,
-          "sha256": "d7015ddb51e2fd4104b22a1243d72baad616dcfdefb3fdd8cb56dd0cb99eaf7e"
+          "sha256": "db2290c487a280231b63779864784336aa96a1feee9e154938a4dfb8e41f2d4a"
         },
         "accepted": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-101-first-accepted.json",
+          "path": "/tmp/neighbours-plain2/social/seed-101-first-accepted.json",
           "at": 18510,
           "round": 1202,
-          "sha256": "ebdc71fa1564c4b4e9c1d872c1cf826025711d0ef2b8d1c21dd6e4ace9777cd1"
+          "sha256": "d965e3a4799c3f29c260cd9b3af889af0828b9b0d8dfa130dd7212aba516c5f0"
         },
         "prepared": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-101-first-prepared.json",
+          "path": "/tmp/neighbours-plain2/social/seed-101-first-prepared.json",
           "at": 18555,
           "round": 1205,
-          "sha256": "f38ed234757ab0e1a827885ddd503f7a75e02be17bbd21aaa5b441e0a8accdbd"
+          "sha256": "255b7a8efde8f75c96e52ab796a3c3ed1c0792ce73c1690d8fdc204218ff9b89"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-101-first-cartProgress.json",
+          "path": "/tmp/neighbours-plain2/social/seed-101-first-cartProgress.json",
           "at": 19395,
           "round": 1261,
-          "sha256": "3b65a0721efe729c1a66ada5b0f43196661fb4ac5465b45cbd2f6483aab0b2e9"
+          "sha256": "7060bd7e2c5a4b9aa8df11f7a793731148e381a37b680a723fc66e5ff628b95c"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-notelost-20261025-44bea44/social/seed-101-first-cartReturned.json",
+          "path": "/tmp/neighbours-plain2/social/seed-101-first-cartReturned.json",
           "at": 21225,
           "round": 1383,
-          "sha256": "ed82dd8295d25a2f3e18c47bf32d9ac461c78939628eb9eeab078ee445e1e3c2"
+          "sha256": "6354b550b7f564cbae5773f10e72fed572abba03063442887b1e2f3b05a9eb2b"
         }
       },
-      "finalCheckpointSha256": "190463b1c5400deac4331df33fc6b6a847dfdaf381aa05f88e5f6afe78703f0d",
-      "wallSeconds": 76.971372375
+      "finalCheckpointSha256": "7776666f2f8a001725b8bc0a5dd75446dfe6d1d74325c7fa90a276137cc2dd5a",
+      "wallSeconds": 74.799223458
     }
   ]
 }

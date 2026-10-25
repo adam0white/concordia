@@ -20,7 +20,8 @@ export default function PersonLessons({
 				Lessons received <span>{person.lessons.length}</span>
 			</summary>
 			<p className="tiny muted">
-				Received examples are recorded evidence, not guaranteed expertise.
+				These records show which examples the person received. They do not prove
+				that the person has mastered the skill.
 			</p>
 			{person.lessons
 				.toSorted((a, b) => b.at - a.at)

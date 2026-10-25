@@ -81,8 +81,8 @@ test("a real mobile bench proposal is received without granting access, and acti
 			exact: true,
 		})
 		.click();
-	await expect(panel).toContainText("Rafi heard the proposed window");
-	await expect(panel).toContainText("No bench booking");
+	await expect(panel).toContainText("Rafi heard about the proposed time");
+	await expect(panel).toContainText("The bench is not booked");
 	await expect(
 		panel.getByRole("button", {
 			name: "Tell Rafi · 1 credit",
@@ -105,7 +105,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await packet(page)).toEqual(proposed);
 	panel = await cart(page);
-	await expect(panel).toContainText("No bench booking");
+	await expect(panel).toContainText("The bench is not booked");
 	expect(
 		await page.evaluate(
 			() => document.documentElement.scrollWidth <= innerWidth,

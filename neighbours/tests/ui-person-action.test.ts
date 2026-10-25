@@ -16,7 +16,7 @@ it("groups the immediate verb, actual location and walking controls together", (
 	);
 	expect(html).toContain('class="player-action"');
 	expect(html).toContain("Choose a place to walk");
-	expect(html).not.toContain("Find your feet");
+	expect(html).not.toContain("Explore the town");
 	expect(html).toContain('class="current-action"');
 	expect(html).toContain('<details class="walk" open="">');
 	expect(html).toMatch(/player-action[\s\S]*You are at[\s\S]*Walk somewhere/);
@@ -58,7 +58,7 @@ it("names the same initial walking action on the map", () => {
 	);
 	const text = html.replace(/<[^>]*>/g, "");
 	expect(text).toContain("Choose a place to walk");
-	expect(text).not.toContain("Find your feet");
+	expect(text).not.toContain("Explore the town");
 });
 
 it("offers the selected resident's actual destination before player location", () => {
@@ -194,8 +194,10 @@ it("keeps promise inputs together with explicit work and a visible evening deadl
 	expect(html).toContain('aria-pressed="false">Ask');
 	expect(html).toContain('aria-pressed="false">Urge');
 	expect(html).toContain('aria-pressed="true">Day 1 · 18:00');
-	expect(html).toContain("Put it to Ada");
-	expect(html).toContain("It binds you only if they take it up.");
+	expect(html).toContain("Ask Ada");
+	expect(html).toContain(
+		"You must do this work if they agree now or later act on your request.",
+	);
 });
 it("reserves the same promise form while predictions load", () => {
 	const current = session();
@@ -213,7 +215,7 @@ it("reserves the same promise form while predictions load", () => {
 	expect(html).toContain('class="conversation-request speech"');
 	expect(html).toContain("Your hour");
 	expect(html).toContain("Done by");
-	expect(html).toContain("Put it to Ada");
+	expect(html).toContain("Ask Ada");
 });
 
 it("puts a bound hour before another offer so the player can start helping", () => {
@@ -265,7 +267,7 @@ it("connects the pinned submit without duplicating a primary or journal", () => 
 	expect(html).toContain('id="town-conversation"');
 	expect(html).not.toContain('type="submit"');
 	expect(html).not.toContain("Your journal");
-	expect(html).toContain("Your own work");
+	expect(html).toContain("Your work");
 });
 
 it("keeps a personal record reachable without opening fresh conversation controls", () => {
@@ -295,7 +297,7 @@ it("keeps a personal record reachable without opening fresh conversation control
 	);
 	expect(html).toContain("Needs a break");
 	expect(html).not.toContain("conversation-request");
-	expect(html).not.toContain("Your own work");
+	expect(html).not.toContain("Your work");
 	expect(html).not.toContain("Your journal");
 	expect(html).not.toContain("inspector-context");
 });

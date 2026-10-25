@@ -48,6 +48,6 @@ it("shows an expired proposal as expired rather than a bench booking", () => {
 			select: () => {},
 		}),
 	);
-	expect(html).toContain("Proposed window expired");
+	expect(html).toContain("The proposed time has passed");
 	expect(html).not.toContain("Main bench booking");
 });

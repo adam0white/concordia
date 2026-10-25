@@ -98,7 +98,9 @@ test("320px recorded studies show actual case outcomes, honest LLM limits and ke
 	await expect(
 		results.locator("div").filter({ hasText: "Cart goal removed" }),
 	).toHaveText("Cart goal removedNot recorded");
-	await expect(results).toContainText("Not measured by this choice probe");
+	await expect(results).toContainText(
+		"This choice study did not measure completion",
+	);
 	await expect(results).not.toContainText("cart-slow");
 });
 

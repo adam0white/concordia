@@ -25,7 +25,7 @@ const reports: {
 	},
 	{
 		kind: "cart",
-		title: "Rafi’s cart choice probe",
+		title: "Rafi’s cart choice study",
 		url: "/experiments/cart-choice-probe.json",
 		schema: "neighbours/cart-choice-probe@1",
 	},
@@ -37,7 +37,7 @@ const reports: {
 	},
 	{
 		kind: "config",
-		title: "HF configuration sensitivity",
+		title: "Effects of HF settings",
 		url: "/experiments/hf-config.json",
 		schema: "neighbours/hf-config-probe@1",
 	},
@@ -170,7 +170,10 @@ export function summarizeEvidence(
 					: "Not recorded",
 			],
 			["Days per ordinary town", scalar(data.days)],
-			["Production weights", "Unchanged; this is a sensitivity probe"],
+			[
+				"Production weights",
+				"The live settings are unchanged. This study checks the effects of different settings.",
+			],
 			["Source SHA-256", scalar(data.sourceFingerprint)],
 		);
 
@@ -183,7 +186,7 @@ export function summarizeEvidence(
 			["Python bundle SHA-256", scalar(data.pythonBundle)],
 		);
 		limits.push(
-			"Build metadata identifies this published snapshot. It does not certify that the recorded reports used this build.",
+			"These build records identify the published version. They do not prove that the recorded reports used this version.",
 		);
 	}
 	return { rows, limits };
@@ -238,12 +241,13 @@ export default function EvidencePanel() {
 				<section aria-label="Capabilities in use">
 					<h3>Capabilities in use</h3>
 					<p>
-						Concordia runs observation, choice validation, physical resolution
-						and checkpoints through a custom deterministic engine.
+						Concordia gathers observations, checks choices, applies physical
+						outcomes and saves state. Its custom engine produces the same
+						results from the same inputs.
 					</p>
 					<p>
-						HF supplies needs, attention, social memory, promises, purposes and
-						acquired inspection examples.
+						Human Framework (HF) supplies needs, attention, memories of other
+						people, promises, goals and learned inspection examples.
 					</p>
 					<p className="tiny muted">
 						The public browser does not call an LLM. Concordia’s generative
@@ -253,10 +257,10 @@ export default function EvidencePanel() {
 				</section>
 			)}
 			<p>
-				These reports are recorded evidence from separate runs. They do not
-				measure the live town on this device. They do not establish HF
-				superiority or human realism, and their source hashes have not been
-				matched to this live build.
+				These reports record separate runs. They do not measure the live town on
+				this device. They do not prove that HF is better or that people behave
+				realistically. Their source hashes have not been matched to this
+				published version.
 			</p>
 			{open && !loaded && <p role="status">Loading recorded evidence…</p>}
 			{open &&

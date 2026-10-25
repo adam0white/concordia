@@ -105,7 +105,10 @@ for (const viewport of [
 			.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ })
 			.click();
 		await expectStandaloneTarget(
-			page.getByRole("button", { name: "Paper or lamplight", exact: true }),
+			page.getByRole("button", {
+				name: "Switch light or dark colours",
+				exact: true,
+			}),
 		);
 		if (process.env.CLARITY_ARTIFACT_PREFIX)
 			await page.screenshot({

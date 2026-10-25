@@ -4,11 +4,11 @@ const progressWords = (progress: number) =>
 	progress >= 1
 		? "done"
 		: progress >= 0.66
-			? "nearly there"
+			? "nearly finished"
 			: progress >= 0.33
-				? "under way"
+				? "in progress"
 				: progress > 0
-					? "just begun"
+					? "just started"
 					: "not started";
 
 export default function PersonPurposes({

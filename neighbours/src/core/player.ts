@@ -298,7 +298,7 @@ function activate(host: PlayerHost): PlayerState {
 	playerEvent(
 		host,
 		"player-returned",
-		"You arrived in Alder Quay after the flood, lodging in the riverside homes during a bounded visit.",
+		"You arrived in Alder Quay after the flood. You are staying in the riverside homes for a limited visit.",
 		PLAYER_HOME,
 	);
 	return s.player;
@@ -364,7 +364,7 @@ function hearable(s: Save, targetId: unknown): Resident {
 	const r = s.people.find((o) => o.person.id === targetId);
 	if (!r) throw Error("Unknown resident");
 	const at = playerLocation(s);
-	if (!at) throw Error("You are still on your way; nobody can hear you yet");
+	if (!at) throw Error("You are still travelling. Nobody can hear you yet.");
 	if (!presentAt(r, at, s.now))
 		throw Error(`${r.person.name} is not here and awake to hear you`);
 	if (r.policy !== "hf")
@@ -552,7 +552,7 @@ function privateConversation(host: PlayerHost, input: Intervention) {
 			{
 				id: "share",
 				action: "talk",
-				label: "Share a bounded private confidence",
+				label: "Share something private about this matter",
 				duration: 1,
 				effort: 0.05,
 				advertises: { belonging: 0.25, meaning: 0.1 },
@@ -724,7 +724,7 @@ function speak(
 		host,
 		"player-request",
 		accepted?.answer.counterOffer
-			? `You took up ${r.person.name}’s offer to ${counterWords(accepted.answer.counterOffer)}.`
+			? `You accepted ${r.person.name}’s offer to ${counterWords(accepted.answer.counterOffer)}.`
 			: mode === "promise" && work
 				? `You promised ${r.person.name} you would ${work === "cover-shift" ? `cover one of ${r.person.name}’s paid shifts` : PLAYER_WORK[work].label} and asked them to ${label.toLowerCase()}.`
 				: `You ${verb} ${r.person.name} to ${label.toLowerCase()}.`,
@@ -740,7 +740,7 @@ function speak(
 	const answerEvent = playerEvent(
 		host,
 		"player-answer",
-		`${r.person.name} answered: “${voicedLine(answer)}”${wore ? ` Being pushed wore on ${r.person.name}’s trust in you.` : ""}`,
+		`${r.person.name} answered: “${voicedLine(answer)}”${wore ? ` Your pressure reduced ${r.person.name}’s trust in you.` : ""}`,
 		at,
 		[request.id],
 		r.person.id,
@@ -775,8 +775,8 @@ function speak(
 			host,
 			"player-pledge",
 			binding
-				? `Your promise to ${r.person.name} stood: ${hour}.`
-				: `Your promise to ${r.person.name} waits on what they do: ${hour}, if they take up your request.`,
+				? `You are now committed to your promise to ${r.person.name}: ${hour}.`
+				: `Your promise to ${r.person.name} will apply if they act on your request: ${hour}.`,
 			at,
 			[request.id, answerEvent.id],
 			r.person.id,
@@ -835,7 +835,7 @@ export function workRefusal(
 	const minute = s.now - day * 1440;
 	const end = s.now + travel + 60;
 	if (minute < 480 || end > day * 1440 + 1080)
-		return "Work hours are 08:00–18:00, including the walk there";
+		return "You can work from 08:00 to 18:00. Your walk there must fit within those hours.";
 	if (hoursUsed(p, day) >= PLAYER_WORK_HOURS)
 		return "You have already worked two hours today";
 	if (dueBy !== undefined && end > dueBy)
@@ -846,8 +846,9 @@ export function workRefusal(
 				s.people.filter((r) => r.job?.offer.action === "repair").length >=
 			12
 		)
-			return "Nothing is left to repair: every section is fixed or being fixed";
-		if (s.tools <= 0) return "Every tool is in use; wait for one to come free";
+			return "There is nothing left to repair. Every section is fixed or being fixed.";
+		if (s.tools <= 0)
+			return "Every tool is in use. Wait until one is available.";
 	}
 	if (kind === "dry-timber" && !timberToAir(s))
 		return "There is no damp hall timber to air";
@@ -946,7 +947,7 @@ function releasePledge(
 	const e = playerEvent(
 		host,
 		"player-pledge-released",
-		`Your offered hour for ${nameOf(s, pledge.toId)} no longer stands: ${why}.`,
+		`You no longer need to give the hour you offered to ${nameOf(s, pledge.toId)} because ${why}.`,
 		undefined,
 		[pledge.event, ...causes],
 		pledge.toId,
@@ -1030,7 +1031,7 @@ export function playerRound(host: PlayerHost): void {
 			pledge.dueNoticed = true;
 			notify(
 				s,
-				`Your promise to ${nameOf(s, pledge.toId)} falls due at ${clock(pledge.dueBy)}.`,
+				`You must keep your promise to ${nameOf(s, pledge.toId)} by ${clock(pledge.dueBy)}.`,
 				pledge.event,
 			);
 		}
@@ -1084,7 +1085,8 @@ function finishWork(host: PlayerHost, job: PlayerJob): void {
 	if (kind === "carry-meals") {
 		placeOf(s, "market").stock += 5;
 		s.produced += 5;
-		result = "You carried food up from the quay; 5 meals reached the market.";
+		result =
+			"You carried food up from the quay. You delivered 5 meals to the market.";
 	} else if (kind === "help-repair") {
 		// Your repair is subject to the same damp-timber physics as anyone's (timber.ts), keyed by your job event.
 		if (s.hall < 12 && !repairHolds(s, job.event))
@@ -1092,23 +1094,24 @@ function finishWork(host: PlayerHost, job: PlayerJob): void {
 				"You helped repair the hall, but the repair on the damp timber did not hold.";
 		else if (s.hall < 12) {
 			s.hall += 1;
-			result = `You helped repair the hall; ${s.hall} of 12 repairs were done.`;
+			result = `You helped repair the hall. ${s.hall} of 12 repairs were done.`;
 			if (s.hall === 12)
 				host.event(
 					"hall-repaired",
-					"Twelve repairs are complete. Timber inspection is still needed before reopening.",
+					"All twelve repairs are complete. Someone still needs to inspect the timber before the hall can reopen.",
 					undefined,
 					"hall",
 					[job.event],
 				);
 		} else
-			result = "The hall repairs were already complete; your hour added none.";
+			result =
+				"The hall repairs were already complete. Your hour of work added no repairs.";
 	} else if (kind === "dry-timber") {
 		if (timberToAir(s)) {
 			airTimber(s, 60);
 			result = `You propped and aired the hall timber for an hour. ${timberMoisture(s, "Clear") === "dry" ? "It felt dry to the touch now." : "It still felt damp."}`;
 		} else
-			result = "The hall was already open; there was no timber left to air.";
+			result = "The hall was already open. There was no timber left to air.";
 	} else {
 		const target = required(
 			s.people.find((r) => r.person.id === job.forId),
@@ -1118,7 +1121,7 @@ function finishWork(host: PlayerHost, job: PlayerJob): void {
 		ledger.minutes += 60;
 		ledger.totalMinutes += 60;
 		target.wealth += 2;
-		result = `You covered a paid shift for ${target.person.name} at ${placeName(s, job.to)}; ${target.person.name} received the 2-coin wage.`;
+		result = `You covered a paid shift for ${target.person.name} at ${placeName(s, job.to)}; ${target.person.name} received 2 coins in wages.`;
 	}
 	const pledge = s.player?.pledges.find(
 		(x) => x.id === job.pledgeId && x.status === "open",
@@ -1181,10 +1184,10 @@ export function playerDecided(
 		`${
 			followed
 				? answer.verdict === "complied"
-					? `${r.person.name} gave in to your urging and chose to ${actionWords(chosenLabel)}, under protest.`
-					: `${r.person.name} took up your request and chose to ${actionWords(chosenLabel)}.`
-				: `${r.person.name} weighed your request and chose to ${actionWords(chosenLabel)} instead.`
-		}${pushed ? ` Being pushed wore on ${r.person.name}’s trust in you.` : ""}`,
+					? `${r.person.name} gave in to your pressure and chose to ${actionWords(chosenLabel)}, under protest.`
+					: `${r.person.name} acted on your request and chose to ${actionWords(chosenLabel)}.`
+				: `${r.person.name} considered your request and chose to ${actionWords(chosenLabel)} instead.`
+		}${pushed ? ` Your pressure reduced ${r.person.name}’s trust in you.` : ""}`,
 		r.job?.offer.placeId ?? r.place,
 		[q.id, q.answerEvent],
 		r.person.id,
@@ -1206,7 +1209,7 @@ export function playerDecided(
 		playerEvent(
 			host,
 			"player-pledge",
-			`${r.person.name} took up your request, so your promise now stands: one hour to ${pledge.work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[pledge.work].label}, by ${clock(pledge.dueBy)}.`,
+			`${r.person.name} acted on your request, so you are now committed to your promise: one hour to ${pledge.work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[pledge.work].label}, by ${clock(pledge.dueBy)}.`,
 			r.job?.offer.placeId ?? r.place,
 			[pledge.event, e.id],
 			r.person.id,
@@ -1252,28 +1255,28 @@ export function playerJobEnded(
 export const PLAYER_GOALS = [
 	{
 		id: "arrive",
-		title: "Find your feet",
-		hint: "Choose a place to walk there. Travel takes time, and only people at the same place can hear you.",
+		title: "Explore the town",
+		hint: "Choose a place to walk to it. Travel takes time. Only people in the same place can hear you.",
 	},
 	{
 		id: "answer",
 		title: "Get an answer",
-		hint: "Pick someone here and ask for one of the things they could actually do now. You can read how they seem, but you learn their answer only by asking.",
+		hint: "Choose someone here and ask them to do something available to them now. You can see how they seem to feel. You only learn their answer when you ask.",
 	},
 	{
 		id: "objection",
 		title: "Work through an objection",
-		hint: "When someone says “not now” or offers something else, take their counter-offer or promise an hour of your own work, then ask again.",
+		hint: "When someone says “not now” or offers something else, accept their offer or promise an hour of your own work. Then ask again.",
 	},
 	{
 		id: "pledge",
-		title: "Keep your word",
+		title: "Keep your promise",
 		hint: "Do the hour of work you promised before its deadline.",
 	},
 	{
 		id: "evening",
 		title: "Help a hall evening happen",
-		hint: "Nora’s repair class and Sam’s shared meal compete for the reopened hall. Get someone to act on your word for an evening, and see whether it goes ahead with guests.",
+		hint: "Nora’s repair class and Sam’s shared meal compete for the reopened hall. Ask someone to help with an evening at the hall. See whether they act on your request and whether guests attend.",
 	},
 ] as const;
 /** Each goal is checked only against recorded outcomes after the previous goal was reached. */
@@ -1476,11 +1479,11 @@ export function playerView(s: Save): PlayerView {
 					: p?.job
 						? "You are busy"
 						: minute < 480 || end > day * 1440 + 1080
-							? "Work hours are 08:00–18:00, including the walk"
+							? "You can work from 08:00 to 18:00. Your walk must fit within those hours."
 							: end > x.dueBy
-								? "Too late to finish before the promised time"
+								? "You cannot finish before the time you promised."
 								: hoursUsed(p, day) >= PLAYER_WORK_HOURS
-									? "No working hours left today"
+									? "You have no working hours left today."
 									: undefined;
 			return {
 				id: x.id,

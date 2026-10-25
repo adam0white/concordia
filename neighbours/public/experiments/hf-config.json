@@ -3,51 +3,51 @@
   "runtime": "typescript-host-released-hf",
   "hf": "2.18.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "230fcf56d221ff32444cc43d7dfb7cee672f0b51a5da8f6a73af8b2cd2abbaaf",
+  "sourceFingerprint": "e9947dd0607b0bdcb52b4bb0e30353610daa7da3ee7d5d1e4d97754c5726e908",
   "sources": {
     "package-lock.json": "d6f5d35954bde9fa8a64fdd001314413c5d81186ef6cd662311a423d8f77e322",
     "package.json": "51563623c16b4170f9222104589dec9a3d4d7fd6b9e3feb748fff2bbc1c0edac",
     "scripts/probe-hf-config.ts": "ee1a6d67a8933cf0e1c708d3ae29200fe087ab6b6ec8d02484f5ccc5f8143ba2",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
-    "src/core/assistance.ts": "e71e95a42211c43b9aea1493bf09bb426f6dd60a97d1ff876ea1b23464126d11",
-    "src/core/bench-opportunity.ts": "ffa8810c0feffc900cba9f2e779e5b3f83f2cd4f38f7cfdc74839d6ce8b29b79",
+    "src/core/assistance.ts": "0de7ebd67da9c857c0733bba820f6d4e0b5119baa65c48b6cba0f012389ec3dd",
+    "src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
     "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
-    "src/core/cast-continuity.ts": "c51f7f0ee5b8b51d8265110a7b153224d9811f97ec28c6454755103c327a983a",
+    "src/core/cast-continuity.ts": "753388a98561efdc9cd1137d65be79ffdc058fbe9b45886feffd2f0160ed45bd",
     "src/core/cast.ts": "7739bf96769e89d0895e47d25ac26b38133652a0c25d07e0166bb9db13783601",
-    "src/core/diagnostics.ts": "c18f6bace9d7e03d3943beac19e36b4a995e28c84000aa007c97663905cf87d9",
+    "src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
     "src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
-    "src/core/evenings.ts": "b8470935ef506afcc25dd59315b78e4440db75d5dbd2bea583a8428f8b713046",
+    "src/core/evenings.ts": "733db24a517ca897ad6a0fc05002a5369d288aeda3266c55c2456a4d1a200e78",
     "src/core/hall-care.ts": "d9d4edcb531ef117b1dbf0d0799d8a7127bfdfb8574c4d28f79f1fa7100becd4",
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
-    "src/core/handcart.ts": "fc43caea8b9f89511ffabda04ec1bd81f7f24139b3603e37ea81e1580b4d2558",
+    "src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
     "src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
     "src/core/hf-version.ts": "1d773447b1625e93f682a40ab203279accb111313a0150d72b31cb6ce976b052",
-    "src/core/impression.ts": "a07326c75d20675cb82f4c6aa89c984e6eb4e8a03bb5c24ea24befafcf597341",
+    "src/core/impression.ts": "89dc524793b3df1449ee5412ff6678ee19d2c5bbcc860ab209950cf6923490d5",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/journal.ts": "93ab2463db21ede9d5a9802030c51314f1171b5d0137ab68d93cff52d5eaac8e",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
-    "src/core/offers.ts": "b4358717a71853919ab86789d2739125c29c9c4b61b0742d222fbbdcbcd8fd32",
+    "src/core/offers.ts": "704574d32feb8f9a4729042bbd717892f3395231b851037e1b45f0ab2621cbc9",
     "src/core/outcomes.ts": "41434650fe71fef5a42b2ed3b29a5b30e834179eb03af636ec35ac190e6232f5",
     "src/core/person-learning.ts": "b4040b5197fa55bc1ba23f909c970810e9ac986e0e7fc1215af6c9052a747fe0",
     "src/core/player-events.ts": "98012ff0cadad288b18cb4836860ae4c3d38afa294ae7662173f4c1e9e3901ea",
-    "src/core/player.ts": "386f20014286ef72ece7d3225cb6c8622f39dbe2962a758a6fa68664bdf4d997",
-    "src/core/private-discoveries.ts": "6a7c52359928aeee7d1fac30187019da0a4568cd182f325df5a03fd961e73d38",
+    "src/core/player.ts": "54d95231ca40909f04f8e9528ed467c44d5e04da77d1c0041402f5710329c8e0",
+    "src/core/private-discoveries.ts": "5cdf63162a65362615a78b4dcd23a3ec094d7e5762e69e4eb24638698d397b74",
     "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
     "src/core/restore.ts": "1fd03d141cbf7ecfb5a4fe78b80db8e6d0300e25805b338f1848667c1de8c40e",
-    "src/core/runtime.ts": "286133a9772999787e61f75ab6ddfe4c07d478193a7e2c75f5db8f962a4fbe73",
-    "src/core/scenario.ts": "652aa8d587076b356c6183c2629b82998d035a60f1dbebfdd57499cbdf041a90",
+    "src/core/runtime.ts": "0dd41594eff4dfb39521263663592003ad6f2783f851a0b646b7cb3db824aa9b",
+    "src/core/scenario.ts": "8540be7eeefea6581359bd18ea9b66378b61f33f5ee1cfaad5c211039b5d29c1",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
-    "src/core/state.ts": "8202e314f11487e40db25b5990ccb26cff69f08eabc3bb49ab496edb2dcfebf1",
-    "src/core/stories.ts": "9cd97012fa55e5da25b535d4ffbb0c457abf8d5b7b9b93dafcd1f108c3eadbd7",
+    "src/core/state.ts": "c8330caaaa4e071a5303083282d29e5885c5f1df02e6fb3b42916a653cef8057",
+    "src/core/stories.ts": "8fb3c28788bd352635cf9a71108ea3a82fefbda34677a4bf5404b075e5a93256",
     "src/core/supply.ts": "1e802a263792113912bcfebbd22bf06c978048aadefeb4fa4cbbcd7e86156bd8",
     "src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
     "src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
     "src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
-    "src/core/voicing.ts": "2bab2d0227d7ea171d523e661cbdd09995a1a7d6129a99a80d8731b22867ee75",
+    "src/core/voicing.ts": "5a2b734ac0699d8eadc9a45fa52803377e82e735a7e2281b0a2d48a4e5bb5691",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -62,7 +62,7 @@
       101
     ]
   },
-  "wallSeconds": 8.210518749999999,
+  "wallSeconds": 7.837666125000001,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -74,7 +74,7 @@
   ],
   "arms": [
     {
-      "pid": 55807,
+      "pid": 23113,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -2630,7 +2630,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -2828,7 +2828,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -3490,7 +3490,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -3651,7 +3651,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -3820,7 +3820,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -4018,7 +4018,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -4668,7 +4668,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -4965,7 +4965,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -5155,7 +5155,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -5477,7 +5477,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -5675,7 +5675,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -6325,7 +6325,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -6597,7 +6597,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -6813,7 +6813,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -7197,7 +7197,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "d75f0bcac37196d0871526b350c51c368f646bfff05fc34107b5bd09d181dbc6"
+          "finalStateSha256": "482d7c4cd5c15ff164ec9394c111db7288adae8dbd30e4c85fe7146731859fa5"
         },
         {
           "seed": 73,
@@ -7353,7 +7353,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -7551,7 +7551,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -8213,7 +8213,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -8374,7 +8374,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -8543,7 +8543,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -8741,7 +8741,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -9391,7 +9391,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -9688,7 +9688,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -9878,7 +9878,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -10200,7 +10200,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -10398,7 +10398,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -11048,7 +11048,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -11320,7 +11320,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -11536,7 +11536,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -11920,7 +11920,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "8d48b2bdbc4806a9b5d191a59ea5261020d1c2290d615b1cafcf05357c88fa0a"
+          "finalStateSha256": "915052d137780e9279fabad14eadb73d48c00de133cf44d1fef85b2fc9bbeaea"
         },
         {
           "seed": 9,
@@ -12076,7 +12076,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -12274,7 +12274,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -12936,7 +12936,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -13097,7 +13097,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -13266,7 +13266,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -13464,7 +13464,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -14114,7 +14114,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -14411,7 +14411,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -14601,7 +14601,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -14923,7 +14923,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -15121,7 +15121,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -15771,7 +15771,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -16043,7 +16043,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -16259,7 +16259,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -16643,7 +16643,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "66e68a9710b03befcdd8bedb655db673480071097479e900fa4e60757f52b209"
+          "finalStateSha256": "e1a884fa709d91df11cd5809a0db1f6b8af990f2f656b583a50fdf2e0eb76fab"
         },
         {
           "seed": 101,
@@ -16799,7 +16799,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -16997,7 +16997,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -17659,7 +17659,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -17820,7 +17820,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -17989,7 +17989,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -18187,7 +18187,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -18837,7 +18837,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -19134,7 +19134,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -19324,7 +19324,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -19646,7 +19646,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -19844,7 +19844,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -20494,7 +20494,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -20730,7 +20730,7 @@
               {
                 "affordanceId": "work",
                 "action": "work",
-                "label": "Practise repairs with workshop cover",
+                "label": "Practise repairs with workshop supervision",
                 "utility": 0.1449,
                 "terms": [
                   {
@@ -20942,7 +20942,7 @@
               {
                 "affordanceId": "work",
                 "action": "work",
-                "label": "Practise repairs with workshop cover",
+                "label": "Practise repairs with workshop supervision",
                 "utility": 0.1449,
                 "terms": [
                   {
@@ -21433,7 +21433,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -21649,7 +21649,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -22033,12 +22033,12 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "2dfbc95311950232d4fb96f64a6a0c1f7d575b5e1b604dbbb57cf1168804f4e8"
+          "finalStateSha256": "a272065e0a26a3d143de42bca81e2c8a498cb6b29efdedc34a989030b4c8d337"
         }
       ]
     },
     {
-      "pid": 55809,
+      "pid": 23469,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -24594,7 +24594,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -24792,7 +24792,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -25454,7 +25454,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -25615,7 +25615,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -25784,7 +25784,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -25982,7 +25982,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -26632,7 +26632,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -26929,7 +26929,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -27119,7 +27119,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -27441,7 +27441,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -27639,7 +27639,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -28289,7 +28289,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -28561,7 +28561,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -28777,7 +28777,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -29161,7 +29161,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "b280e677ceee795bad15634bd166e6cb1fe493e9501e462a62268f8189e2ae85"
+          "finalStateSha256": "a42c1db3d22564a18da9c64f823a5b9e459ebc7f355741bc1ca3be408839e948"
         },
         {
           "seed": 73,
@@ -29317,7 +29317,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -29515,7 +29515,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -30177,7 +30177,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -30338,7 +30338,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -30507,7 +30507,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -30705,7 +30705,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -31355,7 +31355,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -31652,7 +31652,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -31842,7 +31842,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -32164,7 +32164,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -32362,7 +32362,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -33012,7 +33012,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -33284,7 +33284,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -33500,7 +33500,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -33884,7 +33884,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "8d48b2bdbc4806a9b5d191a59ea5261020d1c2290d615b1cafcf05357c88fa0a"
+          "finalStateSha256": "915052d137780e9279fabad14eadb73d48c00de133cf44d1fef85b2fc9bbeaea"
         },
         {
           "seed": 9,
@@ -34040,7 +34040,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -34238,7 +34238,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -34900,7 +34900,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -35061,7 +35061,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -35230,7 +35230,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -35428,7 +35428,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -36078,7 +36078,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -36375,7 +36375,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -36565,7 +36565,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -36887,7 +36887,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -37085,7 +37085,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -37735,7 +37735,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -38007,7 +38007,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -38223,7 +38223,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -38607,7 +38607,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "f3c9a8aa0b1e8d068431bf7d868f014644f4902a67681d1c4e0aa9ed7d144a48"
+          "finalStateSha256": "829c66f27f048f0168f35569188fbfca3d7d6afddc008d7c3954823f2a4f9058"
         },
         {
           "seed": 101,
@@ -38763,7 +38763,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -38961,7 +38961,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -39623,7 +39623,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -39784,7 +39784,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -39953,7 +39953,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -40151,7 +40151,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -40801,7 +40801,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -41098,7 +41098,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -41288,7 +41288,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -41610,7 +41610,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -41808,7 +41808,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -42458,7 +42458,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -42694,7 +42694,7 @@
               {
                 "affordanceId": "work",
                 "action": "work",
-                "label": "Practise repairs with workshop cover",
+                "label": "Practise repairs with workshop supervision",
                 "utility": 0.1449,
                 "terms": [
                   {
@@ -42906,7 +42906,7 @@
               {
                 "affordanceId": "work",
                 "action": "work",
-                "label": "Practise repairs with workshop cover",
+                "label": "Practise repairs with workshop supervision",
                 "utility": 0.1449,
                 "terms": [
                   {
@@ -43397,7 +43397,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -43613,7 +43613,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -43997,12 +43997,12 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "7cc7e9ab1c82e6c589604e5c6adcc5333d2389e4e89962bf368452e661ae8da6"
+          "finalStateSha256": "4596d0e3e4b65a310cd82479aa1574f8b9d1d7f8e86592b3ed1f74fb42149142"
         }
       ]
     },
     {
-      "pid": 56196,
+      "pid": 23474,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -46558,7 +46558,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -46756,7 +46756,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -47418,7 +47418,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -47579,7 +47579,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -47748,7 +47748,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -47946,7 +47946,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -48596,7 +48596,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -48893,7 +48893,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -49083,7 +49083,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -49405,7 +49405,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -49603,7 +49603,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -50253,7 +50253,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -50525,7 +50525,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -50741,7 +50741,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -51125,7 +51125,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "aa2b6e303e75b2f9428140ce1cca6f2614bcc869f9a69139e9a1498390dd4c09"
+          "finalStateSha256": "9a68fb2f5c3b7a36c083ef43799e3f4ba8fdec083c80c4af5ff01cf81b3a09d7"
         },
         {
           "seed": 73,
@@ -51281,7 +51281,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -51479,7 +51479,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -52141,7 +52141,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -52302,7 +52302,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -52471,7 +52471,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -52669,7 +52669,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -53319,7 +53319,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -53616,7 +53616,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -53806,7 +53806,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -54128,7 +54128,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -54326,7 +54326,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -54976,7 +54976,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -55248,7 +55248,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -55464,7 +55464,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -55848,7 +55848,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "8d48b2bdbc4806a9b5d191a59ea5261020d1c2290d615b1cafcf05357c88fa0a"
+          "finalStateSha256": "915052d137780e9279fabad14eadb73d48c00de133cf44d1fef85b2fc9bbeaea"
         },
         {
           "seed": 9,
@@ -56004,7 +56004,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -56202,7 +56202,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -56864,7 +56864,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -57025,7 +57025,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -57194,7 +57194,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -57392,7 +57392,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -58042,7 +58042,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -58339,7 +58339,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -58529,7 +58529,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -58851,7 +58851,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -59049,7 +59049,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -59699,7 +59699,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -59971,7 +59971,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -60187,7 +60187,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -60571,7 +60571,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "8d5a66aeadd01da34518692e7b310e0155b1c9a4f8aee4869ebe6e2367b3f56d"
+          "finalStateSha256": "e345d97d61a8080f2ff8e6c79517b580d94ff14fdf3028d791667bc8c7229e72"
         },
         {
           "seed": 101,
@@ -60727,7 +60727,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -60925,7 +60925,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -61587,7 +61587,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -61748,7 +61748,7 @@
                   "id": 14,
                   "at": 525,
                   "kind": "annex-inspected",
-                  "text": "Nora checked dry, sound annex timber. Four extra hall places are now open.",
+                  "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
                   "causes": [
                     1,
                     11,
@@ -61917,7 +61917,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -62115,7 +62115,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -62765,7 +62765,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -63062,7 +63062,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -63252,7 +63252,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -63574,7 +63574,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -63772,7 +63772,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0097,
                     "terms": [
                       {
@@ -64422,7 +64422,7 @@
                   {
                     "affordanceId": "teach",
                     "action": "teach",
-                    "label": "Teach a displaced practical repair class",
+                    "label": "Teach a practical repair class that moved after the flood",
                     "utility": -0.0218,
                     "terms": [
                       {
@@ -64658,7 +64658,7 @@
               {
                 "affordanceId": "work",
                 "action": "work",
-                "label": "Practise repairs with workshop cover",
+                "label": "Practise repairs with workshop supervision",
                 "utility": 0.1449,
                 "terms": [
                   {
@@ -64870,7 +64870,7 @@
               {
                 "affordanceId": "work",
                 "action": "work",
-                "label": "Practise repairs with workshop cover",
+                "label": "Practise repairs with workshop supervision",
                 "utility": 0.1449,
                 "terms": [
                   {
@@ -65361,7 +65361,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -65577,7 +65577,7 @@
                 {
                   "affordanceId": "work",
                   "action": "work",
-                  "label": "Practise repairs with workshop cover",
+                  "label": "Practise repairs with workshop supervision",
                   "utility": 0.1772,
                   "terms": [
                     {
@@ -65961,7 +65961,7 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "86aa636f4a2de9d8f831bc851affb624fac5b1d5a4da60014f420fcecee7b067"
+          "finalStateSha256": "849f5e2fa69eec1b3e9bc185a37cd1200c4ad0da41134d41a545b19b21648b0e"
         }
       ]
     }

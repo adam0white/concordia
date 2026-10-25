@@ -9,7 +9,7 @@ vi.mock("../src/ui/lab", () => ({
 	LabPrivacy: () => createElement("label", {}, "Recording"),
 }));
 vi.mock("../src/ui/CastMenu", () => ({
-	default: () => createElement("p", {}, "Browser continuity"),
+	default: () => createElement("p", {}, "People saved in this browser"),
 }));
 
 import SessionMenu from "../src/ui/SessionMenu";
@@ -45,29 +45,23 @@ it("ordinary menu contains only the approved actions; diagnostics remain availab
 	])
 		expect(ordinary).toContain(text);
 	for (const text of [
-		"Browser continuity",
-		"Compare futures",
+		"People saved in this browser",
+		"Compare possible outcomes",
 		"Recorded studies",
 		"town&#x27;s pace",
 		"To the title page",
-		"Paper or lamplight",
+		"Switch light or dark colours",
 	])
 		expect(ordinary).not.toContain(text);
 	expect(ordinary).toContain('href="https://human.adamwhite.work/games/"');
 	vi.stubGlobal("location", { search: "?lab=1" });
-	expect(render()).toContain("Browser continuity");
+	expect(render()).toContain("People saved in this browser");
 	expect(render()).toContain("Recorded studies");
 });
-it("projects old impressions without changing their source", () => {
-	const text = "Cheerful, a little tired. Promised to repair the door.";
-	expect(personRead("Nora", text)).toBe(
-		"Nora looks cheerful, a little tired. Nora promised to repair the door.",
-	);
-	expect(text).toBe("Cheerful, a little tired. Promised to repair the door.");
-	expect(plainText("Set on working a paid shift")).toBe(
-		"They plan to continue working a paid shift",
-	);
-	expect(plainText("Derya says she has not corrected it yet.")).toBe(
-		"Derya says she has not corrected it yet.",
-	);
+it("displays complete source prose and external narration without lookup substitutions", () => {
+	const text =
+		"They seem cheerful and a little tired. They promised to repair the door.";
+	expect(personRead("Nora", text)).toBe(text);
+	const external = "Not now — after I pray.";
+	expect(plainText(external)).toBe(external);
 });

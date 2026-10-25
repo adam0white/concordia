@@ -224,7 +224,7 @@ export function createRuntime(seed = 42, population = 208): TownRuntime {
 					"Missing background role",
 				),
 			description:
-				k?.[4] ?? "A persistent neighbour with food, rest and social needs.",
+				k?.[4] ?? "This neighbour needs food, rest and time with other people.",
 			known: !!k,
 			place: k?.[3] ?? "homes",
 			wealth: 3 + (i % 6),

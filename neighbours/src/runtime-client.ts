@@ -173,7 +173,7 @@ export class RuntimeClient {
 			const timeout = setTimeout(() => {
 				this.captures.delete(id);
 				if (castId) this.send({ type: "cast-cancel", requestId: id });
-				reject(Error("No finished checkpoint is available."));
+				reject(Error("There is no completed save to restore."));
 			}, 30000);
 			this.captures.set(id, (value) => {
 				clearTimeout(timeout);

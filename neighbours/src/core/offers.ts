@@ -58,8 +58,8 @@ export const WORKPLACE: Record<string, [string, string]> = {
 	"repair designer": ["workshop", "Make and repair workshop fittings"],
 	"visiting night nurse": ["clinic", "Work the agreed relief shift"],
 	"meal helper": ["market", "Help the kitchen within your training"],
-	"supply helper": ["quay", "Move supplies within the agreed scope"],
-	"repair learner": ["workshop", "Practise repairs with workshop cover"],
+	"supply helper": ["quay", "Move the supplies agreed for this visit"],
+	"repair learner": ["workshop", "Practise repairs with workshop supervision"],
 	courier: ["quay", "Run the supply route"],
 	carpenter: ["workshop", "Work a paid carpentry shift"],
 	mechanic: ["workshop", "Work a paid workshop shift"],
@@ -171,7 +171,7 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 				action,
 				action === "tea"
 					? "Take a tea break"
-					: "Keep the received prayer appointment",
+					: "Keep the prayer appointment they received",
 				"homes",
 				WORK_MINUTES[action] ?? 15,
 				{},
@@ -248,8 +248,8 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 		teaches ? "teach" : "learn",
 		teaches
 			? r.role === "repair designer"
-				? "Teach a displaced practical repair class"
-				: "Teach the displaced evening class"
+				? "Teach a practical repair class that moved after the flood"
+				: "Teach the evening class that moved after the flood"
 			: "Attend a practical class at school",
 		"school",
 		teaches ? 120 : 60,
@@ -351,11 +351,12 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 								...(postsNote
 									? {
 											id: "post-structural-question",
-											label: "Leave a note requesting a structural opinion",
+											label:
+												"Leave a note asking someone to check the supports",
 										}
 									: {}),
 								label: postsNote
-									? "Leave a note requesting a structural opinion"
+									? "Leave a note asking someone to check the supports"
 									: "Leave a question for an inspector and wait up to two hours",
 							}
 						: {}),

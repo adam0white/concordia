@@ -323,7 +323,7 @@ export function useVisitorSession({
 			persistenceAfterState.current = false;
 			replaceAfterSave.current = null;
 			setPlaying(false);
-			setSaved("Device save changed in another tab");
+			setSaved("Another tab changed the saved town");
 		});
 		let runtime: RuntimeClient | null = null;
 		let telemetryTown: TownView | undefined;
@@ -579,7 +579,7 @@ export function useVisitorSession({
 								: reason === "hall-choice"
 									? `Evening choices are available · ${datedClock(reply.view.now)}.`
 									: reason === "player"
-										? `${reply.view.player?.latestNotice?.text ?? "Something you set in motion happened"} · ${datedClock(reply.view.now)}.`
+										? `${reply.view.player?.latestNotice?.text ?? "Your action had an outcome"} · ${datedClock(reply.view.now)}.`
 										: outcome
 											? `${outcome} · ${datedClock(reply.view.now)}.`
 											: `${reason === "person-story" ? "A new outcome for the followed neighbour" : "A new story"} · ${datedClock(reply.view.now)}.`,
@@ -657,7 +657,7 @@ export function useVisitorSession({
 								: intervention.kind === "restore-bus"
 									? "The public bus is running again. Future trips can use it. Current activities keep their durations."
 									: intervention.kind === "open-evening-slot"
-										? "An extra hall slot was funded. The chance to host an event moves to the next day. The host still decides whether to run it."
+										? "Another time in the hall was funded. The chance to host an event moves to the next day. The host still decides whether to run it."
 										: intervention.kind === "advertise-evening"
 											? "The invitation was shared with awake neighbours. Hearing it does not mean accepting or attending."
 											: "The hall news was shared with awake neighbours. Each decides whether to act on it.",
@@ -672,7 +672,7 @@ export function useVisitorSession({
 					interventionPending.current = null;
 					setIntervening(false);
 					setInterventionNotice(
-						"That intervention was not applied. No allowance was spent.",
+						"That action was not applied. You did not spend any support allowance.",
 					);
 				}
 				setObserved((old) => observe(old, reply.view));
@@ -1047,7 +1047,7 @@ export function useVisitorSession({
 		setBranchStale(false);
 		const label =
 			intervention.kind === "open-evening-slot"
-				? `Extra slot for ${evening?.title ?? "the selected evening"}`
+				? `Extra time for ${evening?.title ?? "the selected evening"}`
 				: intervention.kind === "advertise-evening"
 					? `Advertising ${evening?.title ?? "the selected invitation"}`
 					: intervention.kind === "request-inspection"
@@ -1057,7 +1057,7 @@ export function useVisitorSession({
 		setBranchRequest({ rounds, label });
 		setComparing(true);
 		setBranchError("");
-		setBranchProgress("Pausing the live town and taking its checkpoint…");
+		setBranchProgress("Pausing the live town and saving its current state…");
 		comparisonPending.current = true;
 		client.current?.send({ type: "compare", intervention, rounds });
 	};
@@ -1112,7 +1112,7 @@ export function useVisitorSession({
 		setAdvanceNotice("");
 		if (town.people.some((person) => person.policy === "llm")) {
 			setError(
-				"Browser advance requires local controllers; no live model fallback is available",
+				"Advancing time in this browser requires local decision policies. It cannot switch to a live AI model.",
 			);
 			return;
 		}
@@ -1159,7 +1159,7 @@ export function useVisitorSession({
 			spent: town.stats.interventionsSpent ?? 3 - town.controlsRemaining,
 		};
 		setIntervening(true);
-		setInterventionNotice("Changing the circumstance…");
+		setInterventionNotice("Applying your town support action…");
 		send({ type: "intervene", intervention });
 	};
 	// Player inputs share the worker FIFO, export and replay; they spend no control allowance.
@@ -1437,11 +1437,11 @@ export function useVisitorSession({
 		openMenu,
 		closeMenu,
 		clockRate: conversationPerson
-			? "Time holds while you talk"
+			? "Time pauses while you talk"
 			: readingOpen || menuOpen
-				? "Time holds while you read"
+				? "Time pauses while you read"
 				: Date.now() < readingUntil.current
-					? "Time holds for a new story"
+					? "Time pauses for a new story"
 					: playing
 						? rate.label
 						: "Time stopped",

@@ -17,7 +17,7 @@ export const number = (value: number) =>
 export const metricLabel = (key: string) =>
 	({
 		hallRepairs: "Hall repairs",
-		interventionsSpent: "Support credits spent",
+		interventionsSpent: "Town credits spent",
 		hallSafe: "Hall open",
 		tools: "Available tools",
 		totalTools: "All shared tools",
