@@ -485,17 +485,19 @@ export function SpeakPanel({
 					</p>
 					<p>
 						{name}:{" "}
-						<q
+						<span
 							className={`voice ${latest.verdict === "refused" ? "refusal" : ""}`}
 						>
-							{plainText(voicedLine(latest))}
-						</q>
+							“{plainText(voicedLine(latest))}”
+						</span>
 					</p>
 					{latest.why && <p className="refusal-why">{plainText(latest.why)}</p>}
 					{latest.decision && (
 						<p>
 							Later:{" "}
-							<q className="voice">{plainText(voicedLine(latest.decision))}</q>{" "}
+							<span className="voice">
+								“{plainText(voicedLine(latest.decision))}”
+							</span>{" "}
 							{name} chose to {actionWords(latest.decision.chosenLabel)}.
 						</p>
 					)}
@@ -715,7 +717,6 @@ export function SpeakPanel({
 					{prediction?.error && <p role="alert">{prediction.error}</p>}
 					{prediction?.prediction && (
 						<p className="speech-read">
-							<span className="eyebrow">You can tell:</span>{" "}
 							{prediction.prediction.read
 								.map((text) => personRead(name, text))
 								.join(" ")}

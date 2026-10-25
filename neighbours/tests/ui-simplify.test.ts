@@ -12,7 +12,9 @@ vi.mock("../src/ui/CastMenu", () => ({
 	default: () => createElement("p", {}, "People saved in this browser"),
 }));
 
+import type { TownView } from "../src/contracts";
 import SessionMenu from "../src/ui/SessionMenu";
+import Stories from "../src/ui/Stories";
 
 afterEach(() => vi.unstubAllGlobals());
 it("requires the exact lab flag", () => {
@@ -64,4 +66,93 @@ it("displays complete source prose and external narration without lookup substit
 	expect(personRead("Nora", text)).toBe(text);
 	const external = "Not now — after I pray.";
 	expect(plainText(external)).toBe(external);
+});
+
+it("projects complete routed narration without changing the recorded strings", () => {
+	const guests =
+		"Reese Reed, Ellis Diaz, Charlie Carter, Alex Patel, Alex Silva, Rowan Stone, Cameron Silva, Cameron Das, Quinn Khan";
+	expect(plainText(`${guests} ate with the host at Sam’s shared supper.`)).toBe(
+		"Reese Reed, Ellis Diaz and 7 other neighbours ate with Sam at his shared supper.",
+	);
+	for (const names of [
+		"Reese Reed",
+		"Reese Reed, Ellis Diaz",
+		"Reese Reed, Ellis Diaz, Charlie Carter",
+	])
+		expect(
+			plainText(
+				`${names} received the practical lesson at Nora’s practical class.`,
+			),
+		).toBe(
+			`${names === "Reese Reed" ? names : names === "Reese Reed, Ellis Diaz" ? "Reese Reed and Ellis Diaz" : "Reese Reed, Ellis Diaz and 1 other neighbour"} received the practical lesson from Nora at her practical class.`,
+		);
+	expect(plainText("Nora finished hosting Nora’s practical class.")).toBe(
+		"Nora finished hosting her practical class.",
+	);
+	expect(
+		plainText("Sam finished getting the hall ready for Sam’s shared supper."),
+	).toBe("Sam finished getting the hall ready for his shared supper.");
+	expect(
+		plainText("Derya finished getting the hall ready for Sam’s shared supper."),
+	).toBe("Derya finished getting the hall ready for Sam’s shared supper.");
+	expect(
+		plainText(
+			"Derya stopped visiting the neighbours at the hall at Flooded hall and did something else.",
+		),
+	).toBe(
+		"Derya stopped visiting the neighbours at the flooded hall and did something else.",
+	);
+	expect(
+		plainText(
+			"I cannot do it now. After I finish this task (Repair the flood-damaged hall), I will do it.",
+		),
+	).toBe(
+		"I cannot do it now. After I finish this task (repair the flood-damaged hall), I will do it.",
+	);
+	expect(
+		personRead("Nora", "Nora plans to keep having a drink of water."),
+	).toBe("Nora is having a drink of water.");
+	expect(plainText("0 meals arrived by handcart.")).toBe(
+		"No meals arrived by handcart.",
+	);
+	expect(plainText("Nora started to keep this section closed.")).toBe(
+		"Nora started to keep the inspected section of the hall closed.",
+	);
+	for (const [held, conflict] of [
+		["shared supper", "practical class"],
+		["practical class", "shared supper"],
+	])
+		expect(
+			plainText(
+				`Sam prepared the hall for the ${held} on Day 19 at 18:00. The other activity cannot use the same room at that time.`,
+			),
+		).toBe(
+			`Sam prepared the hall for the ${held} on Day 19 at 18:00. The ${conflict} cannot use the hall at that time.`,
+		);
+	expect(plainText("Keep the annex closed")).toBe("Keep the annex closed");
+});
+
+it("projects a single outcome in the actual story card", () => {
+	const html = renderToStaticMarkup(
+		createElement(Stories, {
+			stories: [
+				{
+					id: "closed",
+					title: "Hall inspection",
+					kind: "outcome",
+					actorIds: [],
+					participantIds: [],
+					summaries: ["Nora started to keep this section closed."],
+					eventIds: [],
+					missingEventIds: [],
+				},
+			],
+			town: { people: [] } as unknown as TownView,
+			select: () => {},
+		}),
+	);
+	expect(html).toContain(
+		"Nora started to keep the inspected section of the hall closed.",
+	);
+	expect(html).not.toContain("this section");
 });

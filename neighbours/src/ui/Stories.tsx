@@ -1,6 +1,7 @@
 import type { TownView } from "../contracts";
 import { datedClock } from "./format";
 import type { StoryGroup } from "./observations";
+import { plainText } from "./plain-english";
 import { storyAnchor } from "./StoryHeadline";
 
 function StoryCard({
@@ -37,14 +38,14 @@ function StoryCard({
 			</div>
 			<p>
 				{s.summaries.length === 1
-					? s.summaries[0]
+					? plainText(s.summaries[0] ?? "")
 					: `${s.summaries.length} recorded outcomes from the same class.`}
 			</p>
 			{s.summaries.length > 1 && (
 				<details>
 					<summary>Recorded outcomes</summary>
 					{s.summaries.map((summary) => (
-						<p key={summary}>{summary}</p>
+						<p key={summary}>{plainText(summary)}</p>
 					))}
 				</details>
 			)}

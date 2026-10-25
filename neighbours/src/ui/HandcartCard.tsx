@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { TownView } from "../contracts";
 import type { BenchSlot } from "../core/bench-window";
 import { clock, datedClock } from "./format";
+import { plainText } from "./plain-english";
 
 export function CartGlyph({
 	progress = 0,
@@ -163,7 +164,7 @@ export default function HandcartCard({
 						<p className="tiny">
 							<span className="muted">{datedClock(cart.latest.at)}</span>
 							<br />
-							{cart.latest.text}
+							{plainText(cart.latest.text)}
 						</p>
 					)}
 					{cart.bench && (

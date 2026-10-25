@@ -1,5 +1,6 @@
 import type { PersonView, TownView } from "../contracts";
 import { clock, datedClock } from "./format";
+import { plainText } from "./plain-english";
 
 type Evening = NonNullable<TownView["evenings"]>[number];
 type Invitation = NonNullable<PersonView["invitations"]>[number];
@@ -96,7 +97,7 @@ function Notice({
 						Accepting an invitation does not reserve a place.
 					</p>
 				)}
-				{evening.result && <p className="tiny">{evening.result}</p>}
+				{evening.result && <p className="tiny">{plainText(evening.result)}</p>}
 				{evening.participantIds.length > 0 && (
 					<section
 						className="evening-participants"
