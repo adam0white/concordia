@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Intervention } from "./contracts";
+import { HF_VERSION } from "./core/hf-version";
 import { hasHallChoice } from "./hall-choice";
 import ErrorMessage from "./ui/ErrorMessage";
 import { clock, placeName } from "./ui/format";
@@ -396,12 +397,23 @@ export default function App() {
 						</button>
 					</div>
 					{!inTown ? (
-						<p>
-							A riverside town is recovering after a flood. You can get to know
-							six neighbours. Two hundred more live here. They decide for
-							themselves. This town runs live on this device; nothing is played
-							back. Each resident makes decisions independently.
-						</p>
+						<>
+							<p>
+								A riverside town is recovering after a flood. You can get to
+								know six neighbours. Two hundred more live here. They decide for
+								themselves. This town runs live on this device; nothing is
+								played back. Each resident makes decisions independently.
+							</p>
+							<p>
+								Human Framework {HF_VERSION} supplies perceptions, memories and
+								decisions for residents using HF. The game and Python Concordia
+								control the physical town and what happens in it.
+							</p>
+							<p>
+								Walk to a place. Talk to someone who is there and awake. Offer
+								an hour of work, or ask for help. People may refuse.
+							</p>
+						</>
 					) : context ? (
 						<p>
 							Only people at the same place, and awake, can hear you. A
