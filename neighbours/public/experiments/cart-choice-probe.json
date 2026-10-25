@@ -9,8 +9,8 @@
   "raviDecisions": 122,
   "opportunity": null,
   "sources": {
-    "package-lock.json": "2aefb9764f6fdcd722f2337838c5bc6242fa5868bdfc64c01dad6573fa426482",
-    "package.json": "585356020e154f539f3ccf3b18cbb2351a73d72ce22540734b1cf61220dda815",
+    "package-lock.json": "d6f5d35954bde9fa8a64fdd001314413c5d81186ef6cd662311a423d8f77e322",
+    "package.json": "51563623c16b4170f9222104589dec9a3d4d7fd6b9e3feb748fff2bbc1c0edac",
     "scripts/probe-cart-choices.ts": "dcf107b48626391a9a9b24002d973fe778d96bcaf8fc29ccf69d254c75e247d0",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
