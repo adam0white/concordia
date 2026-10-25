@@ -498,7 +498,9 @@ export function SpeakPanel({
 							<span className="voice">
 								“{plainText(voicedLine(latest.decision))}”
 							</span>{" "}
-							{name} chose to {actionWords(latest.decision.chosenLabel)}.
+							{plainText(
+								`${name} chose to ${actionWords(latest.decision.chosenLabel)}.`,
+							)}
 						</p>
 					)}
 					{latest.result && <p className="said">{plainText(latest.result)}</p>}

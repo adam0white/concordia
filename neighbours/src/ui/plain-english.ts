@@ -24,10 +24,14 @@ export function plainText(text: string): string {
 				(_all, names: string, action: string, host: string, activity: string) =>
 					`${guestList(names)} ${action.startsWith("ate") ? `ate with ${host}` : `received the practical lesson from ${host}`} at ${possessives[host] ?? "the"} ${activity}.`,
 			)
+			// Only a complete named-subject sentence supplies an owner for a pronoun.
+			// A lowercase predicate prevents a full name such as Sam Reed aliasing Sam.
 			.replace(
-				/\b(Nora|Derya|Ece|Sam|Bilal|Rafi) ((?:finished|could not finish|started to|stopped(?: on the way to [^.!?]+ before starting to)?) (?:host(?:ing)?|get(?:ting)? the hall ready for|invit(?:e|ing) neighbours to|(?:go|going) to|say(?:ing)? yes to|declin(?:e|ing))) \1’s /g,
-				(_all, name: string, action: string) =>
-					`${name} ${action} ${possessives[name]} `,
+				/(^|[.!?]\s+)(Nora|Derya|Ece|Sam|Bilal|Rafi)( [a-z][^.!?]*)/g,
+				(_all, boundary: string, name: string, sentence: string) =>
+					`${boundary}${name}${sentence
+						.replaceAll(`${name}’s `, `${possessives[name]} `)
+						.replaceAll(`${name}'s `, `${possessives[name]} `)}`,
 			)
 			.replace(
 				/at the hall at (Flooded hall|Community hall)/g,

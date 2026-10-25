@@ -1,5 +1,6 @@
 import type { PersonView, TownView } from "../contracts";
 import { datedClock } from "./format";
+import { plainText } from "./plain-english";
 
 const sourceLabel = (id: string, people: Pick<PersonView, "id" | "name">[]) =>
 	people.find((person) => person.id === id)?.name ??
@@ -27,7 +28,7 @@ export default function PersonLessons({
 				.toSorted((a, b) => b.at - a.at)
 				.map((lesson) => (
 					<div className="lesson-evidence" key={lesson.id}>
-						<p>{lesson.label}</p>
+						<p>{plainText(lesson.label)}</p>
 						<time className="tiny muted">
 							Received · {datedClock(lesson.at)}
 						</time>

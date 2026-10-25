@@ -14,7 +14,10 @@ vi.mock("../src/ui/CastMenu", () => ({
 }));
 
 import type { TownView } from "../src/contracts";
+import { createRuntime } from "../src/core/scenario";
+import PersonLessons from "../src/ui/PersonLessons";
 import SessionMenu from "../src/ui/SessionMenu";
+import { SpeakPanel } from "../src/ui/SpeakPanel";
 import Stories from "../src/ui/Stories";
 
 afterEach(() => vi.unstubAllGlobals());
@@ -192,13 +195,108 @@ it("uses owner pronouns through every generated evening job phase", () => {
 				`${name} stopped on the way to Community hall before starting to ${actionWords(label)}.`,
 				jobLine(name, label, false),
 				jobLine(name, label, true),
+				`${name} plans to keep ${ingWords(label)}.`,
+				`${name} seems to prefer ${ingWords(label)}.`,
+				`${name} began to ${actionWords(label)}.`,
+				`${name} offered to ${actionWords(label)}.`,
+				`${name} chose to ${actionWords(label)}.`,
+				`${name} acted on your request and chose to ${actionWords(label)}.`,
+				`${name} gave in to your pressure and chose to ${actionWords(label)}.`,
+				`${name} considered your request and chose to ${actionWords(label)} instead.`,
+				...["promised to", "is expected to", "is due at work to", "has to"].map(
+					(prefix) =>
+						`${name} ${prefix} ${label[0]?.toLowerCase()}${label.slice(1)}.`,
+				),
 			];
 			for (const line of lines) {
 				const projected = plainText(line);
 				expect(projected).toContain(`${possessive} ${activity}`);
 				expect(projected).not.toContain(`${name}’s ${activity}`);
 				expect(projected.startsWith(name)).toBe(true);
+				const other = name === "Nora" ? "Sam" : "Nora";
+				const differentOwner = line.replaceAll(`${name}’s `, `${other}’s `);
+				expect(plainText(differentOwner)).toBe(differentOwner);
 			}
 		}
 	}
+});
+
+it("keeps distinct owners, unknown actors and task labels while projecting every sentence", () => {
+	for (const line of [
+		"Nora finished hosting Sam’s shared supper.",
+		"Sam finished hosting Nora’s practical class.",
+		"Sam Reed finished hosting Sam’s shared supper.",
+		"Alex Patel finished hosting Nora’s practical class.",
+		"Host Nora’s practical class",
+		"Nora’s practical class did not happen",
+		"You asked Nora to host Nora’s practical class.",
+		"Nora: I would host Nora’s practical class.",
+	])
+		expect(plainText(line)).toBe(line);
+	expect(
+		plainText(
+			"Nora quietly arranged Nora’s practical class. Sam began to host Sam’s shared supper. Nora watched Sam’s shared supper.",
+		),
+	).toBe(
+		"Nora quietly arranged her practical class. Sam began to host his shared supper. Nora watched Sam’s shared supper.",
+	);
+	expect(plainText("Nora began to host Nora's practical class.")).toBe(
+		"Nora began to host her practical class.",
+	);
+});
+
+it("projects the actual chosen sentence and learned-case consumer", () => {
+	const town = createRuntime(42, 6).view();
+	const nora = town.people.find((person) => person.name === "Nora");
+	if (!town.player || !nora) throw Error("Missing current town fixture");
+	town.player.requests = [
+		{
+			id: 1,
+			at: town.now,
+			targetId: nora.id,
+			targetName: nora.name,
+			affordanceId: "host-class",
+			label: "Host Nora’s practical class",
+			mode: "ask",
+			verdict: "deferred",
+			says: "I will do it later.",
+			status: "held",
+			decision: {
+				at: town.now,
+				verdict: "assented",
+				says: "I will do it.",
+				chosenAffordanceId: "host-class",
+				chosenLabel: "Host Nora’s practical class",
+			},
+		},
+	];
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, {
+			session: { town } as ReturnType<typeof useVisitorSession>,
+			personId: nora.id,
+			showAction: false,
+			recordOnly: true,
+		}),
+	);
+	expect(html).toContain("Nora chose to host her practical class.");
+	expect(html).not.toContain("Nora chose to host Nora");
+	const lesson = renderToStaticMarkup(
+		createElement(PersonLessons, {
+			person: {
+				lessons: [
+					{
+						id: "wet",
+						label: "Wet timber and sound supports: keep this section closed",
+						at: 0,
+						sourceIds: [],
+						successes: 1,
+						failures: 0,
+					},
+				],
+			},
+			town: { people: [] },
+		}),
+	);
+	expect(lesson).toContain("keep the inspected section of the hall closed");
+	expect(lesson).not.toContain("keep this section closed");
 });
