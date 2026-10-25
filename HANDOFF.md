@@ -1,5 +1,25 @@
 # Neighbours handoff
 
+## Current state — 2026-10-25
+
+Remaining: Adam’s reading, timing and feel acceptance, target **2026-11-03**. Existing F-465 receiving-journey and F-491 owner retests remain separate. The project done definition in AGENTS.md still applies.
+
+Current source baseline and last verified app release: `0e822944663f4922a95fa7e606bbbff4f7b2527b` on `origin/neighbours`; exact green [CI 40239981482](https://github.com/adam0white/concordia/actions/runs/40239981482). Live `/release.json` was re-read for this documentation pass: that exact commit, HF **3.0.0**, `dirty:false`, app schema `neighbours@1`. The npm app version is **0.1.0**. Source-only documentation delivery can advance the branch without advancing the live app.
+
+Fresh canonical towns have Nora, Derya, Sam, Bilal, Rafi and Ece plus **200 background residents**. Published HF library **3.0.0** uses Person engine **2.23.0**. The host retains immutable lab-client **0.4.10** and lab-kit **0.5.11**; later SDK artifacts and their new Feedback labels are not adopted here. HF owns HF people’s perceptions, acquired state and choices. The TypeScript host owns feasible actions and physical outcomes. Actual Python Concordia orchestrates rounds through Pyodide in the browser or the Node bridge in native runs. Default browser residents use HF, with no live browser LLM. Labelled table/random comparisons and native LLM/GM experiments remain distinct.
+
+[README](README.md) describes current play, ordinary versus `?lab=1` controls, storage, recording and continuation. Automatic time, conversation/reading holds and the paused menu are current. Older Play/Step, eight-person, package and menu descriptions below are historical. Per-person inspector and gameplay copy are unchanged by this documentation pass.
+
+The final plain4 delivery verified live entry/menu at **360×690** and **1280×800** without loading/resetting the saved day-3 town. Its controlled React fixtures verified projected copy, not game layout, ordinary played outcomes or owner acceptance. Source/native replay and restored-continuation checks are separate evidence. The earlier HF3 maintenance fixed the phone-to-desktop marker resize issue; broader enlarged-text/Journal proposals retain their existing owner and **2026-11-03** target.
+
+Latest owner policy allows lab-panel rounds on HF3 builds under the playtest director. This documentation pass runs no rounds. Friends’ playtests and Show HN stay paused. Recording/linkage follows the single-switch owner direction preserved below; do not add a separate continuing-person consent gate.
+
+Before each signed commit run `npm run check:lane` from **neighbours/**, not the repository root. Fetch/rebase/push **origin/neighbours**, never origin/main. Use current source and exact release receipts; historical counts below do not establish a fresh result.
+
+## Dated delivery history (preserved 2026-10-25)
+
+The sections below retain their original receipts, owner quotes and limitations. Their package pins, cast counts, controls and pauses describe their dated source unless the current summary above explicitly retains them.
+
 ## HF3 maintenance (2026-10-25)
 
 Remaining: Adam's reading, timing and feel acceptance, including F-492 readiness, target2026-11-03. Existing broader enlarged-text/Journal work and shared-lab identity/receipt routes retain their recorded owners. The exact branch CI and current public release.json identify publication; local checks alone are not delivery.

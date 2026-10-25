@@ -1,20 +1,54 @@
 # Neighbours: Alder Quay
 
-[Watch the town](https://neighbours.adamwhite.work) · [Design and milestones](docs/neighbours/DESIGN.md) · [Run and debug](docs/neighbours/RUNNING.md) · [Prior art](docs/neighbours/PRIOR_ART.md)
+[Play Neighbours](https://neighbours.adamwhite.work) · [Design and milestones](docs/neighbours/DESIGN.md) · [Current handoff](HANDOFF.md) · [Prior art](docs/neighbours/PRIOR_ART.md)
 
-A riverside town after a flood. Eight familiar neighbours and two hundred other residents balance ordinary needs, promises and the work of reopening a community hall. The public town runs actual Python Concordia and Human Framework locally in your browser. It is not a shared server town. Person cards expose decisions. Compare offers hypothetical futures, recorded studies and diagnostics.
+Help a riverside town reopen its flooded community hall. Nora, Derya, Sam, Bilal, Rafi and Ece live alongside 200 persistent background residents: 206 people in a fresh canonical town. Residents choose for themselves. Help can be refused, delayed or left unfinished.
 
-This is a fork of Google DeepMind Concordia. Upstream history and code remain intact. Our application is in `neighbours/`; its custom Python engine is in `concordia/contrib/neighbours/`. Development branch: `neighbours`. Human Framework is consumed as an exact published package. Recorded native LLM experiments are labelled separately from the live all-HF browser town.
+## How to play
 
-The delivered player-agency town has twelve weekly hall conflicts after the original four evenings. Each week supplies one support choice: fund an unposted alternate date or advertise a posted invitation. People choose whether to propose, prepare, accept and attend. Contextual comparisons preserve the live town. History retains distinct dated outcomes; exports are lossless `.json.gz` files, and imports also accept plain JSON. See [player agency and verification](docs/neighbours/player-agency.md).
+Choose **Enter Alder Quay**, or **Return to Alder Quay** to continue this browser’s saved town. The first visit downloads the Python runtime. Time advances automatically. Select a neighbour on the map to read about them. Walk to their location to speak with them while they are awake. Ask for help or offer work. A conversation holds time. A promise binds when the person agrees or later acts on your request. Watch what people actually finish; an offer alone is not completed work.
 
-The delivered town now adds a welcome screen before runtime downloads, automatic time after entry/new-town/import/restore, a bounded reading hold for new stories, explicit conversation holds and a paused Game menu. Dates, news eligibility and cart status describe actual host state. A bounded annex inspection lets a neighbour receive a request, travel, observe timber and use retained HF methods. A safe completed inspection can open four extra hall places. The request supplies no method and guarantees no help.
+Use **Help the town** for support actions that change conditions and spend town credits. **Skip ⏩** advances actual rounds until the next relevant event; it does not guarantee success. Open **Game menu** to pause time. Its ordinary choices include Feedback, Full screen, All games, Recording, New game and Resume. New game keeps the current town as the previous town. The information button explains the current activity.
 
-The browser can apply one authored or recorded GM proposal after host validation. A separate native experiment runs real upstream Concordia GM components with one genuine model call and exact response replay. It proposes a scenario premise; it cannot declare repairs, learning, consent or attendance. Live browser residents still use HF, with no live browser LLM. Isolated HF configuration probes preserve production defaults and report negative results. See [the current increment](docs/neighbours/gm-and-town-agency.md) and [the native GM contract](docs/neighbours/gm-director.md).
+## What runs
 
-The mobile increment separates Town, Help, Stories and Compare. The opening goal and help stay reachable, selecting a person focuses their card, and comparisons lead with changed outcomes. Save, import and town settings live in one dialog. Independent adversarial, speedrunner, entertainment and wildcard visitors tested separate agendas. See [mobile design](docs/neighbours/mobile-focus.md) and [review and verification](docs/neighbours/visitor-2026-10-16-mobile.md). Adam accepts game feel; tests do not establish sustained enjoyment, human realism or HF superiority.
+| Part | Current responsibility |
+| --- | --- |
+| Published Human Framework library **3.0.0** | HF people’s perceptions, acquired state and decisions; saved Person engine version **2.23.0** |
+| TypeScript host in `neighbours/` | World facts, feasible actions, travel, resources, physical outcomes, player inputs and saves |
+| Custom Python engine in `concordia/contrib/neighbours/` | Actual Concordia Entity/ActionSpec observation, choice, resolution and checkpoint orchestration |
+| Browser worker | Runs that Python engine through Pyodide and calls the TypeScript runtime on this device |
 
-The latest public iteration adds cancellable Next navigation, actual followed-person promise and invitation outcomes, a separate recorded-study workbench and received bench-window information without automatic permission. It uses exact published HF2.3.0. The new natural-town bench cases remain negative: received access changes asking value but all nine initial choices still use the side bench. Genuine native Concordia GM recordings and zero-call replays remain separate from the browser. See [received plans](docs/neighbours/received-plans.md) and [visitor evidence and delivery status](docs/neighbours/visitor-2026-10-18-received-plans.md).
+The public default town uses HF choices for every resident. It runs in your browser, not in a shared server town. It needs no model key. Python failure does not silently switch to a recording or another engine. Native runs use CPython and a persistent Node JSON-lines bridge to the same host runtime.
+
+Diagnostics require exact `?lab=1`. They expose hypothetical comparisons, recorded studies, inspector detail and optional pace controls. Table and random policies are labelled comparison controllers; they do not use HF to select their actions. Native mixed-controller studies use genuine model responses for labelled LLM choices over feasible actions, with HF person state. Separate native GM experiments use upstream Concordia GM components to propose validated premises. Neither model prose nor a proposed premise establishes a physical outcome. These experiments do not enable live browser LLM decisions. Recorded response replays make zero model calls; they are not live decisions.
+
+## Saves, recording and continuation
+
+The town autosaves to IndexedDB in this browser. A conflicting tab pauses rather than overwriting a newer checkpoint. Reload restores saved state. Current-version exports preserve runtime state and player inputs for deterministic continuation. Export produces lossless `.json.gz`; import accepts gzip or plain JSON, with a 50 MiB limit on both compressed input and expanded JSON. These diagnostic file tools are not ordinary menu choices: Other ways in is on the title with `?lab=1`, and Feedback supplies **Keep a copy of this run** in lab mode. Unsupported older saves or continuing-person obligations may be refused. A loaded chapter stays pinned to its admitted people; it does not pull newer shelf state into an existing run. Imported files remain file-origin, rather than becoming locally owned history.
+
+Recording is separate from device saving. The one Recording switch controls lab recording and automatic cross-game linkage on this device. DNT/GPC sets the initial default off; turning recording on opts in. Feedback remains available with recording off. Its optional sharing checkbox can opt in when submitting; character analysis keeps its separate opt-in. This host still consumes immutable lab-client **0.4.10** and lab-kit **0.5.11**. Newer SDK feedback artifacts are not adopted here.
+
+## Run and verify
+
+Use Node **24 or newer**. The repository’s CI uses Node 26.12.0 and Python 3.12.13. TypeScript consumers need **7 or newer**. Install from the application directory; Concordia has no root npm lockfile.
+
+```sh
+cd neighbours
+npm ci
+npm run dev -- --port 5190
+npm run check:lane
+```
+
+`check:lane` runs the full local lint, three typechecks, unit tests, plain-Node imports and build. Native checks additionally need Python and `neighbours/native-gm-requirements.txt`; browser checks use actual Python WASM. See `.github/workflows/neighbours.yml` for the current native, browser, parity, restored-continuation, zero-call replay and evidence commands. [Run and debug](docs/neighbours/RUNNING.md) retains older delivery instructions and counts; current source and this handoff take precedence for the cast, clock and ordinary controls.
+
+## Delivery and limits
+
+The public `/release.json` identifies the deployed commit, dirty flag, HF library and Python bundle. It differs from the npm app version `0.1.0` and release schema `neighbours@1`. On 2026-10-25 the verified pre-documentation release was `0e822944663f4922a95fa7e606bbbff4f7b2527b`, HF 3.0.0, `dirty:false`, with [exact green CI 40239981482](https://github.com/adam0white/concordia/actions/runs/40239981482). Later source-only documentation commits need no app deployment.
+
+That delivery checked live entry/menu at phone and desktop sizes without loading the saved town. Its controlled React fixtures verified copy, not game layout or ordinary played outcomes. Historical source-unread visits, deterministic studies and native recordings retain their own dates and limits. None establishes current owner acceptance, sustained enjoyment, human realism or HF superiority. Adam accepts reading, timing and feel separately. Lab-panel rounds on HF3 builds are allowed under the playtest director; friends’ playtests and Show HN remain paused.
+
+This public fork preserves Google DeepMind Concordia’s upstream history, copyright, license and documentation below. Neighbours uses exact published HF, not sibling or vendored framework source. Distributed licenses are in `/third-party-notices.txt`. Development and integration branch: **neighbours**.
 
 ---
 
