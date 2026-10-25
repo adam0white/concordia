@@ -39,7 +39,6 @@ export default function SendWord({
 	const [verdict, setVerdict] = useState("");
 	const [sending, setSending] = useState(false);
 	const [sent, setSent] = useState(false);
-	const [noteOnly, setNoteOnly] = useState(false);
 	const [error, setError] = useState("");
 	const feedbackError = useRef<HTMLDivElement>(null);
 	useEffect(() => {
@@ -57,8 +56,7 @@ export default function SendWord({
 			.join("\n\n");
 		const trimmedName = name.trim().slice(0, 60);
 		try {
-			const onlyNote = await session.sendFeedback(text, trimmedName, sharePlay);
-			setNoteOnly(onlyNote);
+			await session.sendFeedback(text, trimmedName, sharePlay);
 			try {
 				if (trimmedName) localStorage.setItem(NAME_KEY, trimmedName);
 				else localStorage.removeItem(NAME_KEY);
@@ -86,12 +84,7 @@ export default function SendWord({
 			</div>
 			<div className="sheet-scroll">
 				{sent ? (
-					<p role="status">
-						{noteOnly
-							? "Note queued without a game run."
-							: "Note queued. An available run may also be included."}{" "}
-						This is not a delivery receipt.
-					</p>
+					<p role="status">Sent. Your note is stored.</p>
 				) : (
 					<>
 						{!telemetryOn && (

@@ -380,12 +380,7 @@ for (const width of [360, 1280]) {
 			await capture(page, `feedback-${mode}`);
 			await page.getByRole("button", { name: "Submit", exact: true }).click();
 			await expect(
-				page.getByText(
-					mode === "off-unticked"
-						? "Note queued without a game run. This is not a delivery receipt."
-						: "Note queued. An available run may also be included. This is not a delivery receipt.",
-					{ exact: true },
-				),
+				page.getByText("Sent. Your note is stored.", { exact: true }),
 			).toBeVisible();
 			await expect
 				.poll(async () =>
@@ -453,10 +448,7 @@ for (const width of [360, 1280]) {
 			.fill("A note from the title.");
 		await page.getByRole("button", { name: "Submit", exact: true }).click();
 		await expect(
-			page.getByText(
-				"Note queued without a game run. This is not a delivery receipt.",
-				{ exact: true },
-			),
+			page.getByText("Sent. Your note is stored.", { exact: true }),
 		).toBeVisible();
 		await expect
 			.poll(async () => (await labPayloads(page)).find((x) => Boolean(x.run)))

@@ -68,6 +68,7 @@ await writeFile(
 			commit,
 			dirty,
 			app: "neighbours@1",
+			framework: FRAMEWORK_VERSION,
 			hf: FRAMEWORK_VERSION,
 			concordiaUpstream: "6fbfbc58f324aa74f78568c488713210889a801e",
 			pythonBundle: digest,
