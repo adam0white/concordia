@@ -1,5 +1,15 @@
 # Neighbours handoff
 
+## HF3 maintenance (2026-10-25)
+
+Remaining: Adam's reading, timing and feel acceptance, including F-492 readiness, target2026-11-03. Existing broader enlarged-text/Journal work and shared-lab identity/receipt routes retain their recorded owners. The exact branch CI and current public release.json identify publication; local checks alone are not delivery.
+
+The host consumes exact published HF3.0.0 (Person engine2.23.0) and verified immutable lab-client0.4.10/lab-kit0.5.11. One dependency graph replaces the obsolete client HF2.21 override. Current dependencies and the Worker date advance, with explicit compatible Cloudflare beta/Undici exceptions and2026-11-03 review. Source stamps use ENGINE_VERSION, finite registered maps admit known2.23, and unknown source tuples still refuse. Actual current HF2.21 saves and historical decision evidence remain accepted; only named version stamps migrate. Actor RNG and physical controls remain, and current exports replay without hash normalization.
+
+An offered hour says “You do not owe this hour yet,” while retaining assent or later action as the actual binding condition. SVG marker scale updates immediately while movement still animates; a real phone→desktop regression failed before the fix. Dead-export and lint cleanup preserves replay/legacy controls. The empirical bench probe now requires exact package3.0.0 and engine2.23.0 rather than its obsolete2.21 pin. See [the maintenance record](docs/neighbours/hf3-maintenance-2026-10-25.md).
+
+Final local check:573 tests across85 files, strict lint, three typechecks,45 plain-Node imports and build. Full actual browser coverage passes82/82; final resize/current-recorded-study retests pass2/2. Native controls pass39/39 with no skips. Five deterministic studies and three model recordings were genuinely regenerated, with ten actual model calls. Three separate exact replays use zero calls. All current source gates pass, and historical assistance stays byte-pinned. A real naturally finished HF2.23 own passport re-admits with exact RNG and16 raw replay rounds; the captured pre-upgrade fixture preserves physical outcomes and current continuation. Independent review found the historical-save/source literal omission; both identifiers and its regression are corrected. Cloudflare's current build and audit pass. Owner readiness and actual cross-host receiving-journey acceptance remain separate.
+
 ## Second plain-English pass (2026-10-25)
 
 Remaining: Adam's reading and feel acceptance. The existing reflow follow-up `nbh-01z.45`, target 2026-11-03, now also records oversized map markers after a phone conversation is resized to desktop. Fresh desktop entry and the requested 360×690 text/control checks pass; this text pass does not claim the resize path is fixed.

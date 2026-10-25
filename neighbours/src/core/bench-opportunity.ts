@@ -9,7 +9,6 @@ import { presentAt } from "./encounters.ts";
 import type { HandcartHost } from "./handcart.ts";
 import type { HandcartSave } from "./handcart-state.ts";
 
-export const BENCH_VALUATION_MODE = "received-consequences@1";
 export const BENCH_HALF_LIFE = 120;
 const CONSEQUENCE_ID = "cart-bench-window";
 export function canProposeBench(s: HandcartSave): boolean {

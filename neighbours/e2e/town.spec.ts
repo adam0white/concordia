@@ -679,7 +679,9 @@ test("retained outcomes stay near the clock and promise results survive into the
 	for (
 		let i = 0;
 		i < 96 &&
-		!(await page.locator(".town-time .eyebrow").innerText()).includes("Day 2");
+		!((await page.locator(".town-time .eyebrow").textContent()) ?? "").includes(
+			"Day 2",
+		);
 		i++
 	)
 		await step(page);

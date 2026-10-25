@@ -1,6 +1,7 @@
 import {
 	createPerson,
 	DEFAULT_NORMS,
+	ENGINE_VERSION,
 	projectCalendarPersona,
 	snapshot,
 } from "@adam0white/human-framework";
@@ -26,6 +27,7 @@ async function source(
 	castId = "hf.cast.ece.murmur",
 	role = "ece",
 	workshop = false,
+	sourceEngine = "2.17.0",
 ) {
 	const c = canonicalCast(castId),
 		p = createPerson({
@@ -75,7 +77,7 @@ async function source(
 		source: {
 			game: workshop ? "repair" : "hearsay",
 			build: "test",
-			engine: "2.17.0",
+			engine: sourceEngine,
 			rules: workshop ? "canonical-workshop-2" : "hearsay-cast-6",
 		},
 		transfer: {
@@ -291,4 +293,33 @@ describe("current canonical town", () => {
 		expect(after.player?.log.at(-1)?.text).toMatch(/map|private/);
 		expect(restoreRuntime(after).export()).toEqual(after);
 	});
+});
+
+it("admits the registered HF 2.23 source map, keeps RNG, and replays an exact current export", async () => {
+	const { p, input } = await source(
+		"hf.cast.ece.murmur",
+		"ece",
+		false,
+		ENGINE_VERSION,
+	);
+	const prepared = prepareTownCast(73, 6, [input]);
+	expect(
+		prepared.people.find((r) => r.person.id === "noor")?.person.rng,
+	).toEqual(p.rng);
+	const a = restoreRuntime(prepared);
+	for (let i = 0; i < 8; i++) a.step();
+	const b = restoreRuntime(JSON.parse(JSON.stringify(a.export())));
+	for (let i = 0; i < 16; i++) {
+		a.step();
+		b.step();
+		expect(JSON.stringify(b.export())).toBe(JSON.stringify(a.export()));
+	}
+	for (const engine of ["2.22.0", "9.0.0"]) {
+		const bad = structuredClone(input);
+		bad.parent.source.engine = engine;
+		expect(() => prepareTownCast(73, 6, [bad])).toThrow(/adapter/);
+	}
+	const bad = structuredClone(input);
+	bad.parent.source.rules = "hearsay-cast-unknown";
+	expect(() => prepareTownCast(73, 6, [bad])).toThrow(/adapter/);
 });

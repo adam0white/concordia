@@ -1,6 +1,7 @@
 /** Browser-only ownership and recording. Never folded into rule hashes or read by replay. */
 import {
 	DEFAULT_NORMS,
+	ENGINE_VERSION,
 	isContinuingCommitment,
 	type Person,
 	projectCalendarPersona,
@@ -62,7 +63,7 @@ export const shelf = personaChannel();
 const stamp = () => ({
 	game: "neighbours",
 	build: lab.build().c ?? "development",
-	engine: "2.21.0",
+	engine: ENGINE_VERSION,
 	rules: CAST_RULES,
 });
 const identity = (ids: string[]) => Object.fromEntries(ids.map((x) => [x, x]));

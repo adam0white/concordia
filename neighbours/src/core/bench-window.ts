@@ -1,10 +1,5 @@
 /** A discussion premise only. Actual access still requires Ada's received agreement. */
 export type BenchSlot = "soon" | "tomorrow" | "brief";
-export interface BenchProposal {
-	schema: "neighbours-bench-proposal@1";
-	kind: "bench-window";
-	slot: BenchSlot;
-}
 export function validateBenchProposal(value: unknown): BenchSlot {
 	if (!value || typeof value !== "object" || Array.isArray(value))
 		throw Error("Invalid bench proposal");

@@ -64,14 +64,6 @@ export function requireHolder(
 	if (!r) throw Error(`Nobody holds the ${position} position`);
 	return r;
 }
-/** The single holder of a position is this resident. */
-export function isHolder(
-	s: Pick<Save, "people">,
-	r: Resident,
-	position: Position,
-): boolean {
-	return holder(s, position)?.person.id === r.person.id;
-}
 export function nameOf(s: Pick<Save, "people">, id: string): string {
 	return s.people.find((r) => r.person.id === id)?.person.name ?? id;
 }

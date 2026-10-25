@@ -533,8 +533,9 @@ export function SpeakPanel({
 								{datedClock(pledge.dueBy)}.{" "}
 								{pledge.status === "offered" ? (
 									<small>
-										Your offer becomes a commitment if {pledge.toName} agrees
-										now or later acts on your request.
+										You do not owe this hour yet. Your offer becomes a
+										commitment if {pledge.toName} agrees now or later acts on
+										your request.
 									</small>
 								) : pledge.canStart ? (
 									<button

@@ -106,12 +106,12 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 	await expect(
 		page.getByRole("dialog", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeVisible();
-	const held = await page.locator(".town-time strong").innerText();
+	const held = await page.locator(".town-time strong").textContent();
 	await page.clock.fastForward(30000);
-	expect(await page.locator(".town-time strong").innerText()).toBe(held);
+	expect(await page.locator(".town-time strong").textContent()).toBe(held);
 	await closeSaves(page);
 	await page.clock.runFor(5000);
-	expect(await page.locator(".town-time strong").innerText()).toBe(held);
+	expect(await page.locator(".town-time strong").textContent()).toBe(held);
 	await step(page);
-	expect(await page.locator(".town-time strong").innerText()).not.toBe(held);
+	expect(await page.locator(".town-time strong").textContent()).not.toBe(held);
 });

@@ -52,7 +52,8 @@ vi.mock("@adam0white/lab-client", async (original) => ({
 
 import { CastSession, type TownPacket } from "../src/cast-session.ts";
 import { ALLOCATION, CAST_EDITION } from "../src/core/canonical-cast.ts";
-import { createRuntime } from "../src/core/index.ts";
+import { prepareTownCast } from "../src/core/cast-continuity.ts";
+import { createRuntime, restoreRuntime } from "../src/core/index.ts";
 
 async function head(id = "hf.cast.ece.murmur") {
 	const c = canonicalCast(id),
@@ -408,6 +409,22 @@ it("persists a real accepted source head, then checkpoints again after exact loc
 	persist();
 	await saving;
 	if (!saved) throw Error("Accepted head was not persisted");
+	const actualHead = first.heads[0];
+	if (!actualHead) throw Error("Missing actual head");
+	expect(actualHead.source.engine).toBe("2.23.0");
+	const admitted = prepareTownCast(73, 6, [
+		preparePersonaLife(actualHead, 3600000),
+	]);
+	expect(
+		admitted.people.find((r) => r.person.id === "noor")?.person.rng,
+	).toEqual(person.rng);
+	const a = restoreRuntime(admitted);
+	const b = restoreRuntime(JSON.parse(JSON.stringify(a.export())));
+	for (let i = 0; i < 16; i++) {
+		a.step();
+		b.step();
+		expect(JSON.stringify(b.export())).toBe(JSON.stringify(a.export()));
+	}
 	const revision = first.heads[0]?.revision;
 	const next = new CastSession(async () => packet);
 	await next.load(saved, true);
@@ -485,6 +502,7 @@ it.each([undefined, 0, 0.35, "unmapped"] as const)(
 			"hf.cast.ece.murmur",
 		);
 		const exported = await validatePersona(s.heads[0]);
+		expect(exported.source.engine).toBe("2.23.0");
 		const portable = exported.transfer.person as {
 			person: { skills: unknown; limitations: string[] };
 		};

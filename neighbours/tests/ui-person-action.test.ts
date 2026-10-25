@@ -301,3 +301,28 @@ it("keeps a personal record reachable without opening fresh conversation control
 	expect(html).not.toContain("Your journal");
 	expect(html).not.toContain("inspector-context");
 });
+
+it("states that an offered hour is not owed before assent or later action", () => {
+	const current = session();
+	const player = current.town?.player;
+	if (!player) throw Error("Missing player");
+	player.pledges = [
+		{
+			id: "offered-hour",
+			toId: "ada",
+			toName: "Ada",
+			work: "carry-meals",
+			label: "Carry food",
+			placeId: "quay",
+			dueBy: 1080,
+			status: "offered",
+			canStart: false,
+		},
+	];
+	const html = renderToStaticMarkup(
+		createElement(SpeakPanel, { session: current, personId: "ada" }),
+	);
+	expect(html).toContain("You do not owe this hour yet.");
+	expect(html).toContain("later acts on your request");
+	expect(html).not.toContain("Start the hour");
+});

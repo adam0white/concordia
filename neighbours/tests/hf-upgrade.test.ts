@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { FRAMEWORK_VERSION, snapshot } from "@adam0white/human-framework";
+import {
+	ENGINE_VERSION,
+	FRAMEWORK_VERSION,
+	snapshot,
+} from "@adam0white/human-framework";
 import {
 	createPersona,
 	type LifePreparation,
@@ -18,11 +22,12 @@ import type { Save } from "../src/core/state.ts";
 import { refusalWhy, voicedLine } from "../src/core/voicing.ts";
 
 it("pins released HF and persists plain narration for every fresh resident", () => {
-	expect(FRAMEWORK_VERSION).toBe("2.21.0");
+	expect(FRAMEWORK_VERSION).toBe("3.0.0");
+	expect(ENGINE_VERSION).toBe("2.23.0");
 	const save = createRuntime(42, 206).export() as Save;
-	expect(save.hf).toBe("2.21.0");
+	expect(save.hf).toBe("3.0.0");
 	for (const { person } of save.people) {
-		expect(person.engine).toBe("2.21.0");
+		expect(person.engine).toBe(ENGINE_VERSION);
 		expect(person.lexicon?.plainEnglish).toBe(true);
 	}
 });
@@ -180,4 +185,61 @@ it("keeps the actual Small Works Nora work duty and refuses to translate it", ()
 		/source work or care duty has no town adapter/,
 	);
 	expect(JSON.stringify(fixture)).toBe(before);
+});
+
+it("preserves a real pre-upgrade HF2.21 town with decision evidence and exact continuation", () => {
+	const saved = JSON.parse(
+		gunzipSync(
+			readFileSync(
+				new URL(
+					"./fixtures/neighbours-hf221-before-v3.json.gz",
+					import.meta.url,
+				),
+			),
+		).toString("utf8"),
+	);
+	expect(saved.hf).toBe("2.21.0");
+	expect(
+		saved.people.some(
+			(r: Save["people"][number]) => r.decision?.source === "HF 2.21.0",
+		),
+	).toBe(true);
+	// Compare physical outcomes and actor RNG against the pre-upgrade played fixture.
+	const physical = (s: Save) => ({
+		now: s.now,
+		round: s.round,
+		hall: s.hall,
+		hallSafe: s.hallSafe,
+		places: s.places,
+		produced: s.produced,
+		consumed: s.consumed,
+		people: s.people.map((r) => ({
+			id: r.person.id,
+			rng: r.person.rng,
+			wealth: r.wealth,
+			place: r.place,
+			job: r.job,
+		})),
+	});
+	const current = createRuntime(73, 6);
+	for (let i = 0; i < 16; i++) current.step();
+	expect(physical(current.export() as Save)).toEqual(physical(saved));
+	const a = restoreRuntime(structuredClone(saved));
+	const expected = structuredClone(saved);
+	expected.hf = FRAMEWORK_VERSION;
+	for (const resident of expected.people)
+		resident.person.engine = ENGINE_VERSION;
+	expect(a.export()).toEqual(expected);
+	expect(saved.hf).toBe("2.21.0");
+	expect(
+		saved.people.every(
+			(r: Save["people"][number]) => r.person.engine === "2.21.0",
+		),
+	).toBe(true);
+	const b = restoreRuntime(JSON.parse(JSON.stringify(a.export())));
+	for (let i = 0; i < 16; i++) {
+		a.step();
+		b.step();
+		expect(JSON.stringify(b.export())).toBe(JSON.stringify(a.export()));
+	}
 });

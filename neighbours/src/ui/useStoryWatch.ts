@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react";
-
 export interface StoryWatchInput {
 	enabled: boolean;
 	playing: boolean;
@@ -50,39 +48,4 @@ export function advanceStoryWatch(
 				: { ...held, now: input.now }
 			: undefined;
 	return { state: { ...input, pausedFor }, pause };
-}
-export function useStoryWatch(
-	input: Omit<StoryWatchInput, "enabled">,
-	pause: () => void,
-) {
-	const [enabled, setEnabled] = useState(true);
-	const [pausedFor, setPausedFor] = useState<StoryStop>();
-	const previous = useRef<StoryWatchState | undefined>(undefined);
-	const { playing, seed, now, storyId } = input;
-	useEffect(() => {
-		const result = advanceStoryWatch(previous.current, {
-			enabled,
-			playing,
-			seed,
-			now,
-			storyId,
-		});
-		previous.current = result.state;
-		setPausedFor(result.state.pausedFor);
-		if (result.pause) pause();
-	}, [enabled, playing, seed, now, storyId, pause]);
-	return {
-		enabled,
-		setEnabled,
-		resetBaseline: () => {
-			previous.current = undefined;
-			setPausedFor(undefined);
-		},
-		paused:
-			Boolean(pausedFor) &&
-			!playing &&
-			pausedFor?.seed === seed &&
-			pausedFor?.now === now &&
-			pausedFor?.storyId === storyId,
-	};
 }

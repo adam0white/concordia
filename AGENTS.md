@@ -13,3 +13,5 @@ Keep public code free of credentials and private workspace/PKM notes. Canonical 
 Before code commits run the relevant typecheck, lint, tests, native bridge checks and build. Review substantive work. Record negative findings and track remaining good ideas in beads with a target milestone. Use bounded subagents with explicit model/effort; retain a wildcard reviewer. Do not modify unrelated projects or upstream examples casually.
 
 Player-facing copy follows [Plain English](docs/lab/plain-english.md). Preserve recorded strings through display projections when needed.
+
+Stack (2026-10-25): Node >=24; exact npm Human Framework 3.0.0 (Person engine 2.23.0); lab-client 0.4.10; lab-kit 0.5.11; React 19.3.1; TypeScript 7.0.2; Vite 8.3.5; Vitest 5.0.5; Biome 2.6.3; Playwright 1.64.1; cf 1.0.0-beta.21 with Cloudflare Vite plugin 2.0.0-beta.v.4; compatibility date 2026-10-25. See the HF3 maintenance record for compatible dependency exceptions.

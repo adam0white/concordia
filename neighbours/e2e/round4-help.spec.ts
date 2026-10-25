@@ -18,7 +18,7 @@ for (const width of [360, 1280])
 		);
 		const time = page.locator(".town-time");
 		for (let i = 0; i < 6; i++) {
-			const before = await time.innerText();
+			const before = (await time.textContent()) ?? "";
 			await step(page);
 			// A click queues a worker command; wait for its rendered outcome.
 			await expect(time).not.toHaveText(before);

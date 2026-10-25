@@ -11,6 +11,7 @@ import {
 	consequenceEvidence,
 	type DecisionRecord,
 	decide,
+	ENGINE_VERSION,
 	FRAMEWORK_VERSION,
 	type Person,
 	restore,
@@ -308,9 +309,10 @@ export function runBenchChoiceProbe(
 ) {
 	assert.equal(
 		FRAMEWORK_VERSION,
-		"2.21.0",
-		"Install exact published npm HF 2.21.0 before this probe",
+		"3.0.0",
+		"Install exact published npm HF 3.0.0 before this probe",
 	);
+	assert.equal(ENGINE_VERSION, "2.23.0", "HF3 must use Person engine2.23.0");
 	const beforeSources = sources(),
 		commit = git("rev-parse", "HEAD"),
 		status = git("status", "--porcelain", "--untracked-files=all");

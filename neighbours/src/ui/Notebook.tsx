@@ -1,26 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { inkCircle } from "./ink";
 
-/** Shared Field Notebook mark: links back to the Human Framework hub. */
-export function HubMark() {
-	return (
-		<a className="hub-mark" href="https://human.adamwhite.work">
-			<span aria-hidden="true">◇</span> human framework
-		</a>
-	);
-}
-
-/** The design language's footer: one link to the collection of all notebooks. */
-export function OtherNotebooks() {
-	return (
-		<nav className="other-notebooks" aria-label="All games">
-			<a href="https://human.adamwhite.work/games/" target="_top">
-				◇ all games
-			</a>
-		</nav>
-	);
-}
-
 export type Milestone = { id: string; text: string };
 
 /**

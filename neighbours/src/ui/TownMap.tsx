@@ -978,7 +978,7 @@ export default function TownMap({
 							// biome-ignore lint/a11y/useSemanticElements: SVG groups cannot contain HTML buttons; equivalent native buttons follow the map.
 							<g
 								key={person.id}
-								transform={`translate(${marker.x},${marker.y}) scale(${markerScale})`}
+								transform={`translate(${marker.x},${marker.y})`}
 								className={`map-person life-${life} ${travelling ? "travelling" : ""} ${selected === person.id ? "selected" : ""}`}
 								role="button"
 								tabIndex={0}
@@ -991,45 +991,48 @@ export default function TownMap({
 									}
 								}}
 							>
-								<circle r="23" className="person-hit" />
-								{(life === "downed" || life === "break") && (
+								{/* Movement animates; viewport scale must update immediately. */}
+								<g transform={`scale(${markerScale})`}>
+									<circle r="23" className="person-hit" />
+									{(life === "downed" || life === "break") && (
+										<path
+											d={inkCircle(`${person.id}:blot`, 1, 2, 15, 0.2)}
+											className="ink-blot"
+										/>
+									)}
+									{selected === person.id && (
+										<path
+											d={inkCircle(`${person.id}:ring`, 0, 0, 19.5, 0.04)}
+											className="selection-ring"
+										/>
+									)}
+									{travelling && (
+										<path d="M-22 -4h6M-21 4h5" className="motion-marks" />
+									)}
 									<path
-										d={inkCircle(`${person.id}:blot`, 1, 2, 15, 0.2)}
-										className="ink-blot"
+										d={inkCircle(person.id, 0, 0, 14, 0.07)}
+										className="person-head"
 									/>
-								)}
-								{selected === person.id && (
-									<path
-										d={inkCircle(`${person.id}:ring`, 0, 0, 19.5, 0.04)}
-										className="selection-ring"
-									/>
-								)}
-								{travelling && (
-									<path d="M-22 -4h6M-21 4h5" className="motion-marks" />
-								)}
-								<path
-									d={inkCircle(person.id, 0, 0, 14, 0.07)}
-									className="person-head"
-								/>
-								<text textAnchor="middle" dy="5" className="person-initial">
-									{initial(person.name)}
-								</text>
-								{lifeMarker(person) && (
-									<text
-										x="13"
-										y="-10"
-										textAnchor="middle"
-										className="life-note"
-									>
-										{lifeMarker(person)}
+									<text textAnchor="middle" dy="5" className="person-initial">
+										{initial(person.name)}
 									</text>
-								)}
-								<title>
-									{person.name}: {activityLabel(person)}
-									{person.journey && canAct(person)
-										? ` → ${person.journey.toId}`
-										: ""}
-								</title>
+									{lifeMarker(person) && (
+										<text
+											x="13"
+											y="-10"
+											textAnchor="middle"
+											className="life-note"
+										>
+											{lifeMarker(person)}
+										</text>
+									)}
+									<title>
+										{person.name}: {activityLabel(person)}
+										{person.journey && canAct(person)
+											? ` → ${person.journey.toId}`
+											: ""}
+									</title>
+								</g>
 							</g>
 						);
 					})}
@@ -1045,7 +1048,7 @@ export default function TownMap({
 							data-place={cluster.placeId}
 							data-count={cluster.people.length}
 							className="map-cluster"
-							transform={`translate(${cluster.x},${cluster.y}) scale(${markerScale})`}
+							transform={`translate(${cluster.x},${cluster.y})`}
 							role="button"
 							tabIndex={0}
 							aria-label={`${cluster.people.length} neighbours at ${place ? placeName(place) : cluster.placeId}`}
@@ -1059,14 +1062,16 @@ export default function TownMap({
 								}
 							}}
 						>
-							<circle r="23" className="person-hit" />
-							<path
-								d={inkCircle(`cluster:${cluster.placeId}`, 0, 0, 18, 0.05)}
-								className="cluster-ring"
-							/>
-							<text textAnchor="middle" dy="6">
-								{cluster.people.length}
-							</text>
+							<g transform={`scale(${markerScale})`}>
+								<circle r="23" className="person-hit" />
+								<path
+									d={inkCircle(`cluster:${cluster.placeId}`, 0, 0, 18, 0.05)}
+									className="cluster-ring"
+								/>
+								<text textAnchor="middle" dy="6">
+									{cluster.people.length}
+								</text>
+							</g>
 						</g>
 					);
 				})}

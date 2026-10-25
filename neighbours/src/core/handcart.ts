@@ -384,8 +384,6 @@ export function handcartOffers(
 	}
 	return result;
 }
-/** Reservation is created only by a completed, received agreement. */
-export function beginHandcart(_s: HandcartSave, _r: Resident): void {}
 export function interruptHandcart(_s: HandcartSave, _r: Resident): void {
 	// Interrupting one work period does not revoke a received agreement.
 }

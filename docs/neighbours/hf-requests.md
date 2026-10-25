@@ -1,5 +1,11 @@
 # Generic HF requests from Neighbours
 
+## Current HF3 adoption (2026-10-25)
+
+The host consumes exact published HF3.0.0 (Person engine2.23.0). Requests1 and2 remain adopted through seedVoice and noteVoicePromise. Request3 is satisfied by the host correction and the published travel/setup-cost recipe. Request4/4a is host offer design; the current shared-work recipe documents the perception-to-bounded-goal pattern already used here. None is an open request for a new generic API. Current host regressions retain real travel, paid-hour completion and the shared-work perception control. No offer value, RNG seed, religious rule or difficulty change is part of this maintenance pass.
+
+## Historical findings
+
 Gaps found while building the player as a neighbour against the published
 `@adam0white/human-framework` 2.3.0. Each gap is worked around in the host. None needs Neighbours-specific
 code in HF.

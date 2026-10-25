@@ -38,7 +38,7 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 		.click();
 	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
-	const before = await page.locator(".town-time").innerText();
+	const before = await page.locator(".town-time").textContent();
 	await page.locator('[data-map-place="hall"]').tap();
 	const walk = page.getByRole("button", { name: /Walk to Flooded hall ·/ });
 	// Same-render events expose duplicate submissions before disabled state arrives.
@@ -53,7 +53,7 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 		"You start walking automatically",
 	);
 	await expect(walk).toBeDisabled();
-	expect(await page.locator(".town-time").innerText()).toBe(before);
+	expect(await page.locator(".town-time").textContent()).toBe(before);
 	expect(
 		await page.evaluate(
 			() =>

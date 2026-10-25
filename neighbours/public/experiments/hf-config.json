@@ -1,32 +1,32 @@
 {
   "schema": "neighbours/hf-config-probe@1",
   "runtime": "typescript-host-released-hf",
-  "hf": "2.21.0",
+  "hf": "3.0.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "9096618384eed636fc425952e229a6d32871f57c0af37a5bf2775814decb1e5e",
+  "sourceFingerprint": "9c851633eab7ef04539ba936ffa08001bf0646664f420d2493786905a3c8253a",
   "sources": {
-    "package-lock.json": "2dfd33e7502d16c8d5a0d73712785e861e9452c1c36b2eaa5d61c1badfb8a90b",
-    "package.json": "0bfb9611e0ae5c1b9053ea597f1cf2bd13d62cdad10948fbf2f15af6202f8f96",
+    "package-lock.json": "cb96926b7008a94bb02694632eb4207df540332d96d38db6318c716d8eda62ee",
+    "package.json": "215c149981e9008e504f368275da5057d5c210340f9778d1b06034677f122390",
     "scripts/probe-hf-config.ts": "ee1a6d67a8933cf0e1c708d3ae29200fe087ab6b6ec8d02484f5ccc5f8143ba2",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
     "src/core/assistance.ts": "1ea0ca6afe6f0f60bc588565ea4ae8e4c6ec0896445c01a2ec53444e78b99bef",
-    "src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
-    "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
+    "src/core/bench-opportunity.ts": "104f9e8a2c7d7c0795f08c87f164c1317eed6dfdec731d004e2819b5dde7003a",
+    "src/core/bench-window.ts": "6ffb0f35e57632e92ec9f1d3475c3080e651ffe9bf5fb6a3b87130797d70d586",
     "src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
-    "src/core/cast-continuity.ts": "8144f3f4902114f6ae26a7e285c6206c52bfa0a3583af10480d5755d02b5bc85",
-    "src/core/cast.ts": "7739bf96769e89d0895e47d25ac26b38133652a0c25d07e0166bb9db13783601",
+    "src/core/cast-continuity.ts": "987eefc9a9bcbc643e77fd4608112223627b14ecfbd21f2b08db5a2bf1e50ba6",
+    "src/core/cast.ts": "7c50a6dba7cbadc0e436410175171bdc5c948880f3667a7c4dc85ebaac963a6a",
     "src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
     "src/core/evening-news.ts": "7b29673ad2cd6dc3e5e759cbde3f92c3ec12bc0f03a28ac2476c2dfaeac93565",
     "src/core/evenings.ts": "c94b371d6b54ef40d6ba6ba60c5679111c43c96c831176bfae2d32bb8d17af18",
     "src/core/hall-care.ts": "d9d4edcb531ef117b1dbf0d0799d8a7127bfdfb8574c4d28f79f1fa7100becd4",
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
-    "src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
+    "src/core/handcart.ts": "3f2f963fd13cfd1c77b07ecf6cef59590d9009e2e840711affc96f632f4bce3c",
     "src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
-    "src/core/hf-version.ts": "832f0dae41cc42c343fce5539a2fb6382cdad16a7935a41ba80b00523942324d",
+    "src/core/hf-version.ts": "7ac2ec8417de7982dfe3291f7667100042d56089ef7384070b16c20ab36186f9",
     "src/core/impression.ts": "fa21aea89f602e0575b0c289b3dfdd4da10ed73f743b9eea33251bef9ce43500",
-    "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
+    "src/core/index.ts": "b1150c0db615e6a08922ea8111e8433007e43ffcc3b481ad7f54d3e1efc1cecf",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
     "src/core/journal.ts": "671b33f9ec8e004ce888ff59747446649246ce5cea37012b0ad459be5e09d811",
     "src/core/neighbour-names.ts": "359f0bc168755c61d82fb1fa5b4765e39bbced7654a2ad8c58c3b269129f4c36",
@@ -62,7 +62,7 @@
       101
     ]
   },
-  "wallSeconds": 6.597563916,
+  "wallSeconds": 7.679501333999999,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -74,7 +74,7 @@
   ],
   "arms": [
     {
-      "pid": 60420,
+      "pid": 83272,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -7227,7 +7227,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "7f28f712305de21c7a284f7fe6e80c8349081c653b064f60902afc2c4323b6df"
+          "finalStateSha256": "0bf6eeeceb38e1c8e19c6654caac429829774e7bd076d5a1bab902cf2402bc2e"
         },
         {
           "seed": 73,
@@ -11950,7 +11950,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "9c292a86a7011d09376eb63fc3862db9a4355c4b17ac73a386088c6a815c332f"
+          "finalStateSha256": "f49d04a558783f56603a0c9a6569a1825992dd9be2c98ccbf4d65aafd16c6efe"
         },
         {
           "seed": 9,
@@ -16673,7 +16673,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "8c5ea4afd2dcd7a27d1addd036d5c8366c1553e5677ffc06aee7f2d2acdf0d6b"
+          "finalStateSha256": "0826099b4253848e0ca4df5f447780585c7fe47ba1261773090f42e5ce84eb3b"
         },
         {
           "seed": 101,
@@ -22063,12 +22063,12 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "e94c5ea658a6ef59e8b842daea65904a9585304d5882aee1450af65ae79dbde4"
+          "finalStateSha256": "116f5be2a8ff3266e89e9f0d9f74ceb0316eca5a6161d3848ac6f3cb23385cee"
         }
       ]
     },
     {
-      "pid": 60436,
+      "pid": 83275,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -29221,7 +29221,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "fdd940ff182f08cdc5d99128197fecec9f9e5ec158fca0d4d50b609557a3371e"
+          "finalStateSha256": "59aeaf9ee7f5de68c32492a3f9bc234dcafe3b65f75fe6be4403dfb39b298a1c"
         },
         {
           "seed": 73,
@@ -33944,7 +33944,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "9c292a86a7011d09376eb63fc3862db9a4355c4b17ac73a386088c6a815c332f"
+          "finalStateSha256": "f49d04a558783f56603a0c9a6569a1825992dd9be2c98ccbf4d65aafd16c6efe"
         },
         {
           "seed": 9,
@@ -38667,7 +38667,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "26243a3280413cf6d33f344aa79a716a701efa9f8e5f1441c0a77c01a48a9b69"
+          "finalStateSha256": "74f9facdf65eb38dc7cee19064d756ef0af0e57f2c2029bc7bb9f38146bf2ea3"
         },
         {
           "seed": 101,
@@ -44057,12 +44057,12 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "3fc57c201e9c1f0a66411c6be0609b21a6c8851f2600bc861539528d6074b506"
+          "finalStateSha256": "33e1ea54e4a199eae78a386a0738c9a4313af49028ac6e76c0ce3264ffff8c6c"
         }
       ]
     },
     {
-      "pid": 60455,
+      "pid": 83669,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -51215,7 +51215,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "e9ebfa84399d08242b5975b130e6cfaca8c903b2f04082c9b1d842ae6888684d"
+          "finalStateSha256": "1a3bf1ba3b9a3aad9a33557e6e94b1ad189fb0e48510a3ecaa14a9220c7b86b9"
         },
         {
           "seed": 73,
@@ -55938,7 +55938,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "9c292a86a7011d09376eb63fc3862db9a4355c4b17ac73a386088c6a815c332f"
+          "finalStateSha256": "f49d04a558783f56603a0c9a6569a1825992dd9be2c98ccbf4d65aafd16c6efe"
         },
         {
           "seed": 9,
@@ -60661,7 +60661,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "f4c1718c5837dc51b43c7cbb4ae40b21c952c7ffbd5233deee30ec7f3fe95070"
+          "finalStateSha256": "3f93acdb235fc1f65ef766668d7a59d9df7cbe4db74243f822f338e1cb6eb8c2"
         },
         {
           "seed": 101,
@@ -66051,7 +66051,7 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "9c72a1b6564b9a7c211aec210a80f674bc14faa316736f7c3a3749da0f6fe739"
+          "finalStateSha256": "83e20b1e1766df3a67b2277b7151bdf7db2e92d2e0130ff7916a1238eff73619"
         }
       ]
     }
