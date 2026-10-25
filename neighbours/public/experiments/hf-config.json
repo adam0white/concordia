@@ -1,12 +1,12 @@
 {
   "schema": "neighbours/hf-config-probe@1",
   "runtime": "typescript-host-released-hf",
-  "hf": "2.18.0",
+  "hf": "2.21.0",
   "node": "v26.12.0",
-  "sourceFingerprint": "e9947dd0607b0bdcb52b4bb0e30353610daa7da3ee7d5d1e4d97754c5726e908",
+  "sourceFingerprint": "8bf7960178304e575b268e73f5fd0cbf44f247398725c665b2d8d95c2cdbfffd",
   "sources": {
-    "package-lock.json": "d6f5d35954bde9fa8a64fdd001314413c5d81186ef6cd662311a423d8f77e322",
-    "package.json": "51563623c16b4170f9222104589dec9a3d4d7fd6b9e3feb748fff2bbc1c0edac",
+    "package-lock.json": "2dfd33e7502d16c8d5a0d73712785e861e9452c1c36b2eaa5d61c1badfb8a90b",
+    "package.json": "0bfb9611e0ae5c1b9053ea597f1cf2bd13d62cdad10948fbf2f15af6202f8f96",
     "scripts/probe-hf-config.ts": "ee1a6d67a8933cf0e1c708d3ae29200fe087ab6b6ec8d02484f5ccc5f8143ba2",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
@@ -14,7 +14,7 @@
     "src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
     "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
-    "src/core/cast-continuity.ts": "753388a98561efdc9cd1137d65be79ffdc058fbe9b45886feffd2f0160ed45bd",
+    "src/core/cast-continuity.ts": "8144f3f4902114f6ae26a7e285c6206c52bfa0a3583af10480d5755d02b5bc85",
     "src/core/cast.ts": "7739bf96769e89d0895e47d25ac26b38133652a0c25d07e0166bb9db13783601",
     "src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
@@ -24,7 +24,7 @@
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
     "src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
     "src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
-    "src/core/hf-version.ts": "1d773447b1625e93f682a40ab203279accb111313a0150d72b31cb6ce976b052",
+    "src/core/hf-version.ts": "832f0dae41cc42c343fce5539a2fb6382cdad16a7935a41ba80b00523942324d",
     "src/core/impression.ts": "89dc524793b3df1449ee5412ff6678ee19d2c5bbcc860ab209950cf6923490d5",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
@@ -39,7 +39,7 @@
     "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
     "src/core/restore.ts": "1fd03d141cbf7ecfb5a4fe78b80db8e6d0300e25805b338f1848667c1de8c40e",
     "src/core/runtime.ts": "0dd41594eff4dfb39521263663592003ad6f2783f851a0b646b7cb3db824aa9b",
-    "src/core/scenario.ts": "8540be7eeefea6581359bd18ea9b66378b61f33f5ee1cfaad5c211039b5d29c1",
+    "src/core/scenario.ts": "6af5d16ff8d94742ed134e8f8261e65fd4423b453d0290ca81fb891e3e09a8e6",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
     "src/core/state.ts": "c8330caaaa4e071a5303083282d29e5885c5f1df02e6fb3b42916a653cef8057",
     "src/core/stories.ts": "8fb3c28788bd352635cf9a71108ea3a82fefbda34677a4bf5404b075e5a93256",
@@ -47,7 +47,7 @@
     "src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
     "src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
     "src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
-    "src/core/voicing.ts": "5a2b734ac0699d8eadc9a45fa52803377e82e735a7e2281b0a2d48a4e5bb5691",
+    "src/core/voicing.ts": "1bbbbed9dc5373748cd0b3551cc62d7a48c5b32e2050a27da1967ffb2abb2b79",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -62,7 +62,7 @@
       101
     ]
   },
-  "wallSeconds": 7.837666125000001,
+  "wallSeconds": 6.39347475,
   "limitations": [
     "Engineering sensitivity controls, not validated calibration, human realism or HF superiority.",
     "Each socialScale runs in a separate Node process. Production weights are unchanged. All exported HF default objects are recorded.",
@@ -74,7 +74,7 @@
   ],
   "arms": [
     {
-      "pid": 23113,
+      "pid": 72372,
       "socialScale": 0.3,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -298,6 +298,14 @@
             "conflict",
             "injury"
           ]
+        },
+        "BLADDER_DEFAULTS": {
+          "intakeScale": 0.5,
+          "maxPending": 4,
+          "halfLife": 45,
+          "basePerMinute": 0.001,
+          "choiceThreshold": 0.35,
+          "choiceScale": 4
         },
         "BODY_DEFAULTS": {
           "maxSubStep": 15,
@@ -607,6 +615,13 @@
           "slowAlpha": 0.15,
           "maxKeys": 32,
           "maxRecent": 8
+        },
+        "DOZE_DEFAULTS": {
+          "sleepiness": 0.75,
+          "stimulation": 0.5,
+          "hazard": 0.08,
+          "seatedWeight": 0.5,
+          "wakeSalience": 0.8
         },
         "ENVIRONMENT_DEFAULTS": {
           "coldMood": 0.08,
@@ -1480,6 +1495,14 @@
             "injury"
           ]
         },
+        "BLADDER_DEFAULTS": {
+          "intakeScale": 0.5,
+          "maxPending": 4,
+          "halfLife": 45,
+          "basePerMinute": 0.001,
+          "choiceThreshold": 0.35,
+          "choiceScale": 4
+        },
         "BODY_DEFAULTS": {
           "maxSubStep": 15,
           "satietyPerMinute": 0.0008,
@@ -1788,6 +1811,13 @@
           "slowAlpha": 0.15,
           "maxKeys": 32,
           "maxRecent": 8
+        },
+        "DOZE_DEFAULTS": {
+          "sleepiness": 0.75,
+          "stimulation": 0.5,
+          "hazard": 0.08,
+          "seatedWeight": 0.5,
+          "wakeSalience": 0.8
         },
         "ENVIRONMENT_DEFAULTS": {
           "coldMood": 0.08,
@@ -3054,8 +3084,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -4240,8 +4270,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -5897,8 +5927,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -7197,7 +7227,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "482d7c4cd5c15ff164ec9394c111db7288adae8dbd30e4c85fe7146731859fa5"
+          "finalStateSha256": "0d305820b95a19faa54e76ae68e5f632617ae4680cb2b001e22a36f5ab3c8999"
         },
         {
           "seed": 73,
@@ -7777,8 +7807,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -8963,8 +8993,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -10620,8 +10650,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -11920,7 +11950,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "915052d137780e9279fabad14eadb73d48c00de133cf44d1fef85b2fc9bbeaea"
+          "finalStateSha256": "71a357a966e29aa917017a3f904ec481452172e166ea6dd9482bbf9222b5a7fe"
         },
         {
           "seed": 9,
@@ -12500,8 +12530,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -13686,8 +13716,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -15343,8 +15373,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -16643,7 +16673,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "e1a884fa709d91df11cd5809a0db1f6b8af990f2f656b583a50fdf2e0eb76fab"
+          "finalStateSha256": "58dea454b748a6bbdd079ad9d011e63565fd975b850baad9b4b44d1308d189bb"
         },
         {
           "seed": 101,
@@ -17223,8 +17253,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -18409,8 +18439,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -20066,8 +20096,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -22033,12 +22063,12 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "a272065e0a26a3d143de42bca81e2c8a498cb6b29efdedc34a989030b4c8d337"
+          "finalStateSha256": "0b6baeaa3f53989f786dd315e22488fe66103f360ae4f4224738de2e42135292"
         }
       ]
     },
     {
-      "pid": 23469,
+      "pid": 72380,
       "socialScale": 0.6,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -22262,6 +22292,14 @@
             "conflict",
             "injury"
           ]
+        },
+        "BLADDER_DEFAULTS": {
+          "intakeScale": 0.5,
+          "maxPending": 4,
+          "halfLife": 45,
+          "basePerMinute": 0.001,
+          "choiceThreshold": 0.35,
+          "choiceScale": 4
         },
         "BODY_DEFAULTS": {
           "maxSubStep": 15,
@@ -22571,6 +22609,13 @@
           "slowAlpha": 0.15,
           "maxKeys": 32,
           "maxRecent": 8
+        },
+        "DOZE_DEFAULTS": {
+          "sleepiness": 0.75,
+          "stimulation": 0.5,
+          "hazard": 0.08,
+          "seatedWeight": 0.5,
+          "wakeSalience": 0.8
         },
         "ENVIRONMENT_DEFAULTS": {
           "coldMood": 0.08,
@@ -23444,6 +23489,14 @@
             "injury"
           ]
         },
+        "BLADDER_DEFAULTS": {
+          "intakeScale": 0.5,
+          "maxPending": 4,
+          "halfLife": 45,
+          "basePerMinute": 0.001,
+          "choiceThreshold": 0.35,
+          "choiceScale": 4
+        },
         "BODY_DEFAULTS": {
           "maxSubStep": 15,
           "satietyPerMinute": 0.0008,
@@ -23752,6 +23805,13 @@
           "slowAlpha": 0.15,
           "maxKeys": 32,
           "maxRecent": 8
+        },
+        "DOZE_DEFAULTS": {
+          "sleepiness": 0.75,
+          "stimulation": 0.5,
+          "hazard": 0.08,
+          "seatedWeight": 0.5,
+          "wakeSalience": 0.8
         },
         "ENVIRONMENT_DEFAULTS": {
           "coldMood": 0.08,
@@ -25018,8 +25078,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -26204,8 +26264,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -27861,8 +27921,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -29161,7 +29221,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "a42c1db3d22564a18da9c64f823a5b9e459ebc7f355741bc1ca3be408839e948"
+          "finalStateSha256": "84cdc332708221ae195016a8afb0b6606473c2979d2fd287b2a9810e0ad114f1"
         },
         {
           "seed": 73,
@@ -29741,8 +29801,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -30927,8 +30987,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -32584,8 +32644,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -33884,7 +33944,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "915052d137780e9279fabad14eadb73d48c00de133cf44d1fef85b2fc9bbeaea"
+          "finalStateSha256": "71a357a966e29aa917017a3f904ec481452172e166ea6dd9482bbf9222b5a7fe"
         },
         {
           "seed": 9,
@@ -34464,8 +34524,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -35650,8 +35710,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -37307,8 +37367,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -38607,7 +38667,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "829c66f27f048f0168f35569188fbfca3d7d6afddc008d7c3954823f2a4f9058"
+          "finalStateSha256": "37e82c25dd6759c2cc82c83c173b87225230d44c34248b6384953f7e73d6ce30"
         },
         {
           "seed": 101,
@@ -39187,8 +39247,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -40373,8 +40433,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -42030,8 +42090,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -43997,12 +44057,12 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "4596d0e3e4b65a310cd82479aa1574f8b9d1d7f8e86592b3ed1f74fb42149142"
+          "finalStateSha256": "8d2685e651794b710e12cb37dfa1ce796085b8d76032f0c2d21b31679910fe2f"
         }
       ]
     },
     {
-      "pid": 23474,
+      "pid": 72389,
       "socialScale": 0.9,
       "originalConfiguration": {
         "AFFECT_DEFAULTS": {
@@ -44226,6 +44286,14 @@
             "conflict",
             "injury"
           ]
+        },
+        "BLADDER_DEFAULTS": {
+          "intakeScale": 0.5,
+          "maxPending": 4,
+          "halfLife": 45,
+          "basePerMinute": 0.001,
+          "choiceThreshold": 0.35,
+          "choiceScale": 4
         },
         "BODY_DEFAULTS": {
           "maxSubStep": 15,
@@ -44535,6 +44603,13 @@
           "slowAlpha": 0.15,
           "maxKeys": 32,
           "maxRecent": 8
+        },
+        "DOZE_DEFAULTS": {
+          "sleepiness": 0.75,
+          "stimulation": 0.5,
+          "hazard": 0.08,
+          "seatedWeight": 0.5,
+          "wakeSalience": 0.8
         },
         "ENVIRONMENT_DEFAULTS": {
           "coldMood": 0.08,
@@ -45408,6 +45483,14 @@
             "injury"
           ]
         },
+        "BLADDER_DEFAULTS": {
+          "intakeScale": 0.5,
+          "maxPending": 4,
+          "halfLife": 45,
+          "basePerMinute": 0.001,
+          "choiceThreshold": 0.35,
+          "choiceScale": 4
+        },
         "BODY_DEFAULTS": {
           "maxSubStep": 15,
           "satietyPerMinute": 0.0008,
@@ -45716,6 +45799,13 @@
           "slowAlpha": 0.15,
           "maxKeys": 32,
           "maxRecent": 8
+        },
+        "DOZE_DEFAULTS": {
+          "sleepiness": 0.75,
+          "stimulation": 0.5,
+          "hazard": 0.08,
+          "seatedWeight": 0.5,
+          "wakeSalience": 0.8
         },
         "ENVIRONMENT_DEFAULTS": {
           "coldMood": 0.08,
@@ -46982,8 +47072,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -48168,8 +48258,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -49825,8 +49915,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -51125,7 +51215,7 @@
             "brokenPromises": 2,
             "keptPromises": 8
           },
-          "finalStateSha256": "9a68fb2f5c3b7a36c083ef43799e3f4ba8fdec083c80c4af5ff01cf81b3a09d7"
+          "finalStateSha256": "e1818b24b0f6a5e4a4d5dfda9d551f04e56e67983981d9fce735b210dd020b2f"
         },
         {
           "seed": 73,
@@ -51705,8 +51795,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -52891,8 +52981,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -54548,8 +54638,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -55848,7 +55938,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "915052d137780e9279fabad14eadb73d48c00de133cf44d1fef85b2fc9bbeaea"
+          "finalStateSha256": "71a357a966e29aa917017a3f904ec481452172e166ea6dd9482bbf9222b5a7fe"
         },
         {
           "seed": 9,
@@ -56428,8 +56518,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -57614,8 +57704,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -59271,8 +59361,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -60571,7 +60661,7 @@
             "brokenPromises": 0,
             "keptPromises": 6
           },
-          "finalStateSha256": "e345d97d61a8080f2ff8e6c79517b580d94ff14fdf3028d791667bc8c7229e72"
+          "finalStateSha256": "f8159e524a00b107be7196b3722da357de05cc2b9aad665a2b06fda97b58e396"
         },
         {
           "seed": 101,
@@ -61151,8 +61241,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal."
               },
               "autonomousInspection": {
                 "chosen": "annex-open-section",
@@ -62337,8 +62427,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -63994,8 +64084,8 @@
                     "believed": {}
                   }
                 ],
-                "intention": "to Check the flood damaged timber before reopening",
-                "narration": "Keeping at it. It was a close call."
+                "intention": "I want to achieve this goal: Check the flood-damaged timber before reopening.",
+                "narration": "I am continuing to work toward my goal. I almost chose something else."
               },
               "autonomousInspection": {
                 "chosen": "annex-keep-closed",
@@ -65961,7 +66051,7 @@
             "brokenPromises": 1,
             "keptPromises": 7
           },
-          "finalStateSha256": "849f5e2fa69eec1b3e9bc185a37cd1200c4ad0da41134d41a545b19b21648b0e"
+          "finalStateSha256": "59e1c6563937c8fbf5acc9a820f8265335acd3d73fce0a1af2fe7be097351e25"
         }
       ]
     }

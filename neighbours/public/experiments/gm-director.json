@@ -1,6 +1,6 @@
 {
   "schema": "native-concordia-gm@1",
-  "recordedAt": "2026-10-25T14:52:40.996255+00:00",
+  "recordedAt": "2026-10-25T18:09:28.245798+00:00",
   "runtime": "Native upstream Concordia EventResolution + MakeObservation + real Claude CLI",
   "upstreamSha": "6fbfbc58f324aa74f78568c488713210889a801e",
   "runtimeSources": {
@@ -112,7 +112,7 @@
       "neighbours/src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
       "neighbours/src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
       "neighbours/src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
-      "neighbours/src/core/cast-continuity.ts": "753388a98561efdc9cd1137d65be79ffdc058fbe9b45886feffd2f0160ed45bd",
+      "neighbours/src/core/cast-continuity.ts": "8144f3f4902114f6ae26a7e285c6206c52bfa0a3583af10480d5755d02b5bc85",
       "neighbours/src/core/cast.ts": "7739bf96769e89d0895e47d25ac26b38133652a0c25d07e0166bb9db13783601",
       "neighbours/src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
       "neighbours/src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
@@ -122,7 +122,7 @@
       "neighbours/src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
       "neighbours/src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
       "neighbours/src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
-      "neighbours/src/core/hf-version.ts": "1d773447b1625e93f682a40ab203279accb111313a0150d72b31cb6ce976b052",
+      "neighbours/src/core/hf-version.ts": "832f0dae41cc42c343fce5539a2fb6382cdad16a7935a41ba80b00523942324d",
       "neighbours/src/core/impression.ts": "89dc524793b3df1449ee5412ff6678ee19d2c5bbcc860ab209950cf6923490d5",
       "neighbours/src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
       "neighbours/src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
@@ -137,7 +137,7 @@
       "neighbours/src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
       "neighbours/src/core/restore.ts": "1fd03d141cbf7ecfb5a4fe78b80db8e6d0300e25805b338f1848667c1de8c40e",
       "neighbours/src/core/runtime.ts": "0dd41594eff4dfb39521263663592003ad6f2783f851a0b646b7cb3db824aa9b",
-      "neighbours/src/core/scenario.ts": "8540be7eeefea6581359bd18ea9b66378b61f33f5ee1cfaad5c211039b5d29c1",
+      "neighbours/src/core/scenario.ts": "6af5d16ff8d94742ed134e8f8261e65fd4423b453d0290ca81fb891e3e09a8e6",
       "neighbours/src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
       "neighbours/src/core/state.ts": "c8330caaaa4e071a5303083282d29e5885c5f1df02e6fb3b42916a653cef8057",
       "neighbours/src/core/stories.ts": "8fb3c28788bd352635cf9a71108ea3a82fefbda34677a4bf5404b075e5a93256",
@@ -145,14 +145,14 @@
       "neighbours/src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
       "neighbours/src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
       "neighbours/src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
-      "neighbours/src/core/voicing.ts": "5a2b734ac0699d8eadc9a45fa52803377e82e735a7e2281b0a2d48a4e5bb5691",
+      "neighbours/src/core/voicing.ts": "1bbbbed9dc5373748cd0b3551cc62d7a48c5b32e2050a27da1967ffb2abb2b79",
       "neighbours/src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
     },
     "hf": {
       "name": "@adam0white/human-framework",
-      "version": "2.18.0"
+      "version": "2.21.0"
     },
-    "sha256": "d2e8aeb937667b1a004ca8d5c31a66f45d1b0bd9663f6064ba6e91dd1dee6083"
+    "sha256": "28e091cf1208c101c9f697687535ad965ca53be4d4215dade1d9eea8b15cd01c"
   },
   "runtimes": {
     "python": "3.15.0",
@@ -165,15 +165,15 @@
     "termcolor": "3.3.0",
     "typing_extensions": "4.16.0"
   },
-  "sourceFingerprint": "d2e8aeb937667b1a004ca8d5c31a66f45d1b0bd9663f6064ba6e91dd1dee6083",
-  "gitHeadAtRun": "a48801f8d9629816d434f3a734c3a8aa28c1cce2",
+  "sourceFingerprint": "28e091cf1208c101c9f697687535ad965ca53be4d4215dade1d9eea8b15cd01c",
+  "gitHeadAtRun": "54e7220728e03f9d1372450b1d9e0bebbce0a004",
   "sourceWorkingTreeDirty": true,
   "checkpoint": {
     "schema": "neighbours/concordia@1",
     "rounds": 1288,
     "runtime": {
       "schema": "neighbours-1",
-      "hf": "2.18.0",
+      "hf": "2.21.0",
       "seed": 42,
       "now": 19800,
       "round": 1288,
@@ -4574,7 +4574,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "ada",
             "name": "Nora",
             "now": 19800,
@@ -4737,252 +4737,252 @@
                 {
                   "at": 16035,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 16110,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16230,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16245,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16290,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16410,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16530,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16590,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16605,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16710,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16830,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16875,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16935,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 17010,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 17130,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17145,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17265,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17385,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17505,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17520,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17640,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17655,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17700,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17820,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17940,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18000,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18075,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18090,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18165,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18285,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18330,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18375,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18420,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18540,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18555,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 18630,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18720,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18840,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18960,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18975,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19020,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19110,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19200,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19320,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19380,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19395,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19500,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19620,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19740,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19785,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 }
               ],
               "nextBreach": 0
@@ -5623,7 +5623,7 @@
                   "action": "attend-meal",
                   "actorId": "ada",
                   "valence": -0.3,
-                  "summary": "missed appointment: attend-meal",
+                  "summary": "I did not complete this commitment (Sam’s shared supper · Day 8 at 18:00). It required this action: attend meal.",
                   "tags": [
                     "missed",
                     "appointment",
@@ -8947,7 +8947,7 @@
               "focus": 0,
               "mode": "awake",
               "decisionId": "d435",
-              "intention": "because it suits me",
+              "intention": "I am doing this because it suits me.",
               "reviewAt": 19815
             },
             "trace": [
@@ -9125,8 +9125,8 @@
                     }
                   }
                 ],
-                "intention": "to sleep",
-                "narration": "I can't keep my eyes open. Bed."
+                "intention": "I want to sleep.",
+                "narration": "I cannot keep my eyes open. I need to go to bed."
               },
               {
                 "id": "d433",
@@ -9335,8 +9335,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "It's what I do at this hour."
+                "intention": "I am doing this out of habit.",
+                "narration": "It is what I do at this hour."
               },
               {
                 "id": "d434",
@@ -9541,8 +9541,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Same as always.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing what I always do.",
                 "review": true
               },
               {
@@ -9743,11 +9743,14 @@
                     ]
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Might as well."
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason to choose something else."
               }
             ],
             "nextDecision": 436,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -10665,7 +10668,7 @@
                   },
                   {
                     "id": "e414",
-                    "summary": "missed appointment: attend-meal",
+                    "summary": "I did not complete this commitment (Sam’s shared supper · Day 8 at 18:00). It required this action: attend meal.",
                     "valence": -0.3,
                     "salience": 0.47503025112145114,
                     "action": "attend-meal",
@@ -11180,7 +11183,7 @@
             "decidedAt": 19785,
             "round": 1287,
             "label": "Rest at home",
-            "reason": "Might as well.",
+            "reason": "I see no reason to choose something else.",
             "options": [
               {
                 "id": "rest",
@@ -11223,7 +11226,7 @@
                 "utility": -0.0637
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -11249,7 +11252,7 @@
               "support": "sound"
             },
             "result": "Nora found dry timber with sound supports and opened the hall.",
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "methodTerms": [
               {
                 "source": "method:hall-section-inspection:prior-workshop-practice",
@@ -11350,7 +11353,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "elin",
             "name": "Derya",
             "now": 19800,
@@ -11513,252 +11516,252 @@
                 {
                   "at": 15975,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16095,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16215,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16335,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16380,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16395,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16515,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16560,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16665,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16725,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16785,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 16800,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 16875,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16995,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17040,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17160,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17280,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17295,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17340,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17460,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17580,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17700,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17820,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17865,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17880,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17970,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18015,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18120,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18180,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18195,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18285,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18405,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18450,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18570,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18690,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18705,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18750,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18870,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18990,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19050,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19125,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19245,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19290,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19305,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19350,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19470,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19575,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19635,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19650,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19740,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 }
               ],
               "nextBreach": 0
@@ -14021,7 +14024,7 @@
                   "action": "rest",
                   "actorId": "elin",
                   "valence": 0,
-                  "summary": "Rest at home: interrupted",
+                  "summary": "I was interrupted during this action: Rest at home.",
                   "tags": [
                     "interrupted"
                   ],
@@ -15498,7 +15501,7 @@
               "focus": 0,
               "mode": "sleep",
               "decisionId": "d423",
-              "intention": "to sleep",
+              "intention": "I want to sleep.",
               "reviewAt": 19860
             },
             "trace": [
@@ -15713,8 +15716,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Same as always."
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing what I always do."
               },
               {
                 "id": "d421",
@@ -15931,8 +15934,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Out of habit, really.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing this out of habit.",
                 "review": true
               },
               {
@@ -16146,8 +16149,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Out of habit, really.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing this out of habit.",
                 "review": true
               },
               {
@@ -16324,11 +16327,14 @@
                     }
                   }
                 ],
-                "intention": "to sleep",
-                "narration": "Sleep, before anything else."
+                "intention": "I want to sleep.",
+                "narration": "I need to sleep before I do anything else."
               }
             ],
             "nextDecision": 424,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -17689,7 +17695,7 @@
             "decidedAt": 19740,
             "round": 1284,
             "label": "Sleep at home",
-            "reason": "Sleep, before anything else.",
+            "reason": "I need to sleep before I do anything else.",
             "options": [
               {
                 "id": "sleep",
@@ -17732,7 +17738,7 @@
                 "utility": -0.0292
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -17796,7 +17802,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "sam",
             "name": "Sam",
             "now": 19800,
@@ -17959,252 +17965,252 @@
                 {
                   "at": 16305,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16425,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16515,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16575,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16590,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16665,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16785,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16830,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16875,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16935,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 16950,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17025,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17145,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17160,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17205,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17325,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17445,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17460,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17580,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17595,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17670,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17760,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 17850,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17910,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17985,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18000,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 18090,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18210,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18255,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18300,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18420,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18435,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18480,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18600,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18615,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18660,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18780,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18900,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18915,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19035,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19125,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19200,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19290,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19350,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19365,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 19440,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19560,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19605,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 19650,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 19695,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 }
               ],
               "nextBreach": 0
@@ -18762,7 +18768,7 @@
                   "action": "host-meal",
                   "actorId": "sam",
                   "valence": -0.3,
-                  "summary": "missed promise: host-meal",
+                  "summary": "I did not complete this commitment (Host Sam’s shared supper · Day 8 at 18:00). It required this action: host meal.",
                   "tags": [
                     "missed",
                     "promise",
@@ -18777,7 +18783,7 @@
                   "action": "attend-class",
                   "actorId": "sam",
                   "valence": -0.3,
-                  "summary": "missed appointment: attend-class",
+                  "summary": "I did not complete this commitment (Nora’s practical class · Day 8 at 18:00). It required this action: attend class.",
                   "tags": [
                     "missed",
                     "appointment",
@@ -19104,7 +19110,7 @@
                   "action": "host-meal",
                   "actorId": "sam",
                   "valence": -0.3,
-                  "summary": "missed promise: host-meal",
+                  "summary": "I did not complete this commitment (Host Sam’s shared supper · Day 11 at 18:00). It required this action: host meal.",
                   "tags": [
                     "missed",
                     "promise",
@@ -21276,7 +21282,7 @@
                   "action": "rest",
                   "actorId": "sam",
                   "valence": 0,
-                  "summary": "Rest at home: interrupted",
+                  "summary": "I was interrupted during this action: Rest at home.",
                   "tags": [
                     "interrupted"
                   ],
@@ -22112,7 +22118,7 @@
               "focus": 0,
               "mode": "sleep",
               "decisionId": "d451",
-              "intention": "out of habit",
+              "intention": "I am doing this out of habit.",
               "reviewAt": 19815
             },
             "trace": [
@@ -22323,8 +22329,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Out of habit, really.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing this out of habit.",
                 "review": true
               },
               {
@@ -22533,8 +22539,8 @@
                     ]
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Might as well."
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason to choose something else."
               },
               {
                 "id": "d450",
@@ -22731,8 +22737,8 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Out of habit, really.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing this out of habit.",
                 "review": true
               },
               {
@@ -22929,11 +22935,14 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Same as always."
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing what I always do."
               }
             ],
             "nextDecision": 452,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -23717,7 +23726,7 @@
                   },
                   {
                     "id": "e463",
-                    "summary": "missed promise: host-meal",
+                    "summary": "I did not complete this commitment (Host Sam’s shared supper · Day 8 at 18:00). It required this action: host meal.",
                     "valence": -0.3,
                     "salience": 0.47503025112145114,
                     "action": "host-meal"
@@ -24018,7 +24027,7 @@
                   },
                   {
                     "id": "e642",
-                    "summary": "missed promise: host-meal",
+                    "summary": "I did not complete this commitment (Host Sam’s shared supper · Day 11 at 18:00). It required this action: host meal.",
                     "valence": -0.3,
                     "salience": 0.47503025112145114,
                     "action": "host-meal"
@@ -24374,7 +24383,7 @@
             "decidedAt": 19695,
             "round": 1281,
             "label": "Sleep at home",
-            "reason": "Same as always.",
+            "reason": "I am doing what I always do.",
             "options": [
               {
                 "id": "sleep",
@@ -24417,7 +24426,7 @@
                 "utility": -0.027
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -24492,7 +24501,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "jo",
             "name": "Bilal",
             "now": 19800,
@@ -24655,252 +24664,252 @@
                 {
                   "at": 16455,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16515,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16590,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16605,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16650,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16770,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16815,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16860,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16905,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16920,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16965,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17055,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 17145,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 17265,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17280,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17400,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17520,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17535,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17655,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17670,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17790,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17880,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17940,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18015,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18030,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18120,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18210,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18330,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18375,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18390,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18435,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18555,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18600,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18720,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18735,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18855,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18975,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18990,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19110,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19125,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19245,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19335,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19395,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19485,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19560,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19575,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 19695,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19740,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19785,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 19800,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 }
               ],
               "nextBreach": 0
@@ -28625,7 +28634,7 @@
               "focus": 0,
               "mode": "awake",
               "decisionId": "d436",
-              "intention": "out of habit",
+              "intention": "I am doing this out of habit.",
               "reviewAt": 19830
             },
             "trace": [
@@ -28831,8 +28840,8 @@
                     ]
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Might as well."
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason to choose something else."
               },
               {
                 "id": "d434",
@@ -29045,8 +29054,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Same as always.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing what I always do.",
                 "review": true
               },
               {
@@ -29259,8 +29268,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "It's what I do at this hour."
+                "intention": "I am doing this out of habit.",
+                "narration": "It is what I do at this hour."
               },
               {
                 "id": "d436",
@@ -29473,11 +29482,14 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "It's what I do at this hour."
+                "intention": "I am doing this out of habit.",
+                "narration": "It is what I do at this hour."
               }
             ],
             "nextDecision": 437,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -30793,7 +30805,7 @@
             "decidedAt": 19800,
             "round": 1288,
             "label": "Rest at home",
-            "reason": "It's what I do at this hour.",
+            "reason": "It is what I do at this hour.",
             "options": [
               {
                 "id": "rest",
@@ -30836,7 +30848,7 @@
                 "utility": -0.0845
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -30968,7 +30980,7 @@
               "support": "sound"
             },
             "result": "Bilal kept the hall closed after seeing wet timber and sound supports.",
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "methodTerms": [
               {
                 "source": "method:hall-section-inspection:ada",
@@ -31000,7 +31012,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "ravi",
             "name": "Rafi",
             "now": 19800,
@@ -31163,252 +31175,252 @@
                 {
                   "at": 16050,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16170,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16230,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 16305,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16425,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16545,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16605,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16620,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16725,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16845,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16920,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16935,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17025,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 17085,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 17160,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17280,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17400,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17415,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 17535,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17550,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17595,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17715,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17835,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17955,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18015,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18030,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18105,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18180,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18300,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18375,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18390,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18480,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18600,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18615,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18660,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18780,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18900,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18915,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19035,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19050,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19095,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19185,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19230,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19350,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19410,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19425,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19530,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19650,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19695,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 19740,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 }
               ],
               "nextBreach": 0
@@ -34400,7 +34412,7 @@
                   "action": "rest",
                   "actorId": "ravi",
                   "valence": 0,
-                  "summary": "Rest at home: interrupted",
+                  "summary": "I was interrupted during this action: Rest at home.",
                   "tags": [
                     "interrupted"
                   ],
@@ -35275,7 +35287,7 @@
               "focus": 0,
               "mode": "sleep",
               "decisionId": "d406",
-              "intention": "out of habit",
+              "intention": "I am doing this out of habit.",
               "reviewAt": 19860
             },
             "trace": [
@@ -35481,8 +35493,8 @@
                     }
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Might as well.",
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason to choose something else.",
                 "review": true
               },
               {
@@ -35687,8 +35699,8 @@
                     }
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Why not."
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason not to do this."
               },
               {
                 "id": "d405",
@@ -35876,8 +35888,8 @@
                     }
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "This will do.",
+                "intention": "I am doing this because it suits me.",
+                "narration": "This is good enough for me.",
                 "review": true
               },
               {
@@ -36066,11 +36078,14 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "It's what I do at this hour."
+                "intention": "I am doing this out of habit.",
+                "narration": "It is what I do at this hour."
               }
             ],
             "nextDecision": 407,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -37496,7 +37511,7 @@
             "decidedAt": 19740,
             "round": 1284,
             "label": "Sleep at home",
-            "reason": "It's what I do at this hour.",
+            "reason": "It is what I do at this hour.",
             "options": [
               {
                 "id": "sleep",
@@ -37539,7 +37554,7 @@
                 "utility": -0.0275
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -37640,7 +37655,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "noor",
             "name": "Ece",
             "now": 19800,
@@ -37803,252 +37818,252 @@
                 {
                   "at": 16260,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 16335,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16425,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16485,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16500,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16575,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16695,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16740,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16785,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16830,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16950,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16965,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17010,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17130,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17220,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 17310,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 17430,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17445,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17565,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17580,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17700,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17820,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17910,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17970,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17985,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18060,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18150,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18240,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18360,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18375,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18420,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18540,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18660,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18780,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18900,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18915,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19035,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19050,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19170,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19200,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19290,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19350,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19410,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19485,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19500,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 19545,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19665,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19710,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19725,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19770,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 }
               ],
               "nextBreach": 0
@@ -38905,7 +38920,7 @@
                   "action": "attend-meal",
                   "actorId": "noor",
                   "valence": -0.3,
-                  "summary": "missed appointment: attend-meal",
+                  "summary": "I did not complete this commitment (Sam’s shared supper · Day 11 at 18:00). It required this action: attend meal.",
                   "tags": [
                     "missed",
                     "appointment",
@@ -39025,7 +39040,7 @@
                   "action": "rest",
                   "actorId": "noor",
                   "valence": 0,
-                  "summary": "Rest at home: interrupted",
+                  "summary": "I was interrupted during this action: Rest at home.",
                   "tags": [
                     "interrupted"
                   ],
@@ -40867,7 +40882,7 @@
                   "action": "rest",
                   "actorId": "noor",
                   "valence": 0,
-                  "summary": "Rest at home: interrupted",
+                  "summary": "I was interrupted during this action: Rest at home.",
                   "tags": [
                     "interrupted"
                   ],
@@ -41802,7 +41817,7 @@
               "focus": 0,
               "mode": "awake",
               "decisionId": "d440",
-              "intention": "because it suits me",
+              "intention": "I am doing this because it suits me.",
               "reviewAt": 19830
             },
             "trace": [
@@ -42024,8 +42039,8 @@
                     ]
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Might as well."
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason to choose something else."
               },
               {
                 "id": "d439",
@@ -42250,8 +42265,8 @@
                     ]
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Out of habit, really.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing this out of habit.",
                 "review": true
               },
               {
@@ -42468,8 +42483,8 @@
                     }
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "Why not."
+                "intention": "I am doing this because it suits me.",
+                "narration": "I see no reason not to do this."
               },
               {
                 "id": "d441",
@@ -42673,12 +42688,15 @@
                     }
                   }
                 ],
-                "intention": "because it suits me",
-                "narration": "This will do.",
+                "intention": "I am doing this because it suits me.",
+                "narration": "This is good enough for me.",
                 "review": true
               }
             ],
             "nextDecision": 442,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -43687,7 +43705,7 @@
                 "episodes": [
                   {
                     "id": "e642",
-                    "summary": "missed appointment: attend-meal",
+                    "summary": "I did not complete this commitment (Sam’s shared supper · Day 11 at 18:00). It required this action: attend meal.",
                     "valence": -0.3,
                     "salience": 0.47503025112145114,
                     "action": "attend-meal",
@@ -43927,7 +43945,7 @@
             "decidedAt": 19800,
             "round": 1288,
             "label": "Rest at home",
-            "reason": "This will do.",
+            "reason": "This is good enough for me.",
             "options": [
               {
                 "id": "sleep",
@@ -43970,7 +43988,7 @@
                 "utility": -0.0268
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 10,
             "recordedCount": 8
           },
@@ -44059,7 +44077,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "resident-1",
             "name": "Ellis Brooks",
             "now": 19800,
@@ -44222,252 +44240,252 @@
                 {
                   "at": 16380,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16470,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16530,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16590,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16650,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 16665,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16740,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16860,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16905,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16950,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 16995,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 17115,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17130,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17175,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17295,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17415,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17535,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17550,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17670,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17685,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17775,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 17865,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17925,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17985,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18000,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18090,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 18210,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18255,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18300,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18360,
                   "action": "eat",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18375,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18450,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18570,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18585,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18630,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18750,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18870,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18990,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19005,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19125,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19140,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19260,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19350,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19410,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19470,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19515,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19530,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 19620,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19740,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19785,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 }
               ],
               "nextBreach": 0
@@ -48211,7 +48229,7 @@
               "focus": 0,
               "mode": "awake",
               "decisionId": "d432",
-              "intention": "out of habit",
+              "intention": "I am doing this out of habit.",
               "reviewAt": 19815
             },
             "trace": [
@@ -48401,8 +48419,8 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "It's what I do at this hour."
+                "intention": "I am doing this out of habit.",
+                "narration": "It is what I do at this hour."
               },
               {
                 "id": "d430",
@@ -48615,8 +48633,8 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Out of habit, really."
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing this out of habit."
               },
               {
                 "id": "d431",
@@ -48841,8 +48859,8 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Same as always.",
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing what I always do.",
                 "review": true
               },
               {
@@ -49055,11 +49073,14 @@
                     }
                   }
                 ],
-                "intention": "out of habit",
-                "narration": "Same as always."
+                "intention": "I am doing this out of habit.",
+                "narration": "I am doing what I always do."
               }
             ],
             "nextDecision": 433,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -50325,7 +50346,7 @@
             "decidedAt": 19785,
             "round": 1287,
             "label": "Eat a meal at the market",
-            "reason": "Same as always.",
+            "reason": "I am doing what I always do.",
             "options": [
               {
                 "id": "eat",
@@ -50368,7 +50389,7 @@
                 "utility": -0.0248
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -50458,7 +50479,7 @@
         {
           "person": {
             "schema": "human/person@1",
-            "engine": "2.17.0",
+            "engine": "2.21.0",
             "id": "resident-2",
             "name": "Alex Das",
             "now": 19800,
@@ -50621,252 +50642,252 @@
                 {
                   "at": 16170,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16290,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16410,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 16500,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16560,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 16635,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16695,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 16710,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 },
                 {
                   "at": 16785,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 16905,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16950,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 16995,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 17115,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17130,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17175,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17295,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17415,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17430,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17550,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17565,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17685,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 17805,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 17895,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 17955,
                   "action": "eat",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18045,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 18120,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18135,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18255,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18300,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18345,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18390,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18435,
                   "action": "rest",
-                  "intention": "because it suits me"
+                  "intention": "I am doing this because it suits me."
                 },
                 {
                   "at": 18555,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 18570,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18615,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18735,
                   "action": "sleep",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 18825,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 18915,
                   "action": "rest",
-                  "intention": "to enjoy myself"
+                  "intention": "I want to enjoy myself."
                 },
                 {
                   "at": 19035,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19050,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19170,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19290,
                   "action": "sleep",
-                  "intention": "to sleep"
+                  "intention": "I want to sleep."
                 },
                 {
                   "at": 19380,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19440,
                   "action": "work",
-                  "intention": "to earn"
+                  "intention": "I want to earn money."
                 },
                 {
                   "at": 19515,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19530,
                   "action": "drink",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19605,
                   "action": "talk",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19695,
                   "action": "rest",
-                  "intention": "out of habit"
+                  "intention": "I am doing this out of habit."
                 },
                 {
                   "at": 19785,
                   "action": "gather",
-                  "intention": "to feed myself"
+                  "intention": "I want to feed myself."
                 },
                 {
                   "at": 19800,
                   "action": "drink",
-                  "intention": "to drink"
+                  "intention": "I want to drink."
                 }
               ],
               "nextBreach": 0
@@ -54672,7 +54693,7 @@
               "focus": 0,
               "mode": "awake",
               "decisionId": "d430",
-              "intention": "to enjoy myself",
+              "intention": "I want to enjoy myself.",
               "reviewAt": 19830
             },
             "trace": [
@@ -54907,8 +54928,8 @@
                     }
                   }
                 ],
-                "intention": "to feed myself",
-                "narration": "I'm starving — eating first.",
+                "intention": "I want to feed myself.",
+                "narration": "I am very hungry, so I will eat first.",
                 "review": true
               },
               {
@@ -55146,8 +55167,8 @@
                     }
                   }
                 ],
-                "intention": "to feed myself",
-                "narration": "My stomach is growling. Food first.",
+                "intention": "I want to feed myself.",
+                "narration": "My stomach is growling. I will eat first.",
                 "review": true
               },
               {
@@ -55373,8 +55394,8 @@
                     }
                   }
                 ],
-                "intention": "to drink",
-                "narration": "Thirsty — the well, then."
+                "intention": "I want to drink.",
+                "narration": "I am thirsty, so I will go to the well."
               },
               {
                 "id": "d430",
@@ -55591,11 +55612,14 @@
                     }
                   }
                 ],
-                "intention": "to enjoy myself",
+                "intention": "I want to enjoy myself.",
                 "narration": "I need a break from all this."
               }
             ],
             "nextDecision": 431,
+            "lexicon": {
+              "plainEnglish": true
+            },
             "retention": {
               "trace": 4,
               "chronicleDays": 31
@@ -57054,7 +57078,7 @@
                 "utility": -0.1102
               }
             ],
-            "source": "HF 2.18.0",
+            "source": "HF 2.21.0",
             "offeredCount": 9,
             "recordedCount": 8
           },
@@ -57906,13 +57930,13 @@
       }
     }
   },
-  "checkpointSha256": "87c1745b8590e63528d0ddd8c248f56efadcc7bdfa09a08d3d87076cd423072b",
+  "checkpointSha256": "cd9820441c96ccd56eeafed3328e619df9a8de1c9aabccbca7aed1703454ee0a",
   "modelCalls": 1,
   "responseTape": [
     {
-      "promptSha256": "952388cc84421174a86f26efe4668c8e87ac891ab900fca3e84aacf2fa64bd1c",
+      "promptSha256": "2279adde70a1a46ae9f1263e3c6059142fc0924e621005a5e15ab05ff2447c2e",
       "status": "completed",
-      "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":720}",
+      "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
       "modelIds": [
         "claude-opus-5-5"
       ],
@@ -57929,25 +57953,25 @@
     "schema": "neighbours-gm-proposal@1",
     "kind": "inspection-request",
     "target": "hall-annex",
-    "cue": "dry-sound",
-    "windowMinutes": 720
+    "cue": "wet-sound",
+    "windowMinutes": 240
   },
-  "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":720}",
+  "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
   "rejection": null,
   "result": {
-    "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":720}",
+    "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
     "proposal": {
       "schema": "neighbours-gm-proposal@1",
       "kind": "inspection-request",
       "target": "hall-annex",
-      "cue": "dry-sound",
-      "windowMinutes": 720
+      "cue": "wet-sound",
+      "windowMinutes": 240
     },
     "rejection": null,
     "resolution": "Event: Host proposal validated\n",
-    "hostInbox": "{\"cue\": \"dry-sound\", \"kind\": \"inspection-request\", \"schema\": \"neighbours-gm-proposal@1\", \"target\": \"hall-annex\", \"windowMinutes\": 720}\n\n\n",
+    "hostInbox": "{\"cue\": \"wet-sound\", \"kind\": \"inspection-request\", \"schema\": \"neighbours-gm-proposal@1\", \"target\": \"hall-annex\", \"windowMinutes\": 240}\n\n\n",
     "emptyInbox": "",
-    "checkpointSha256": "87c1745b8590e63528d0ddd8c248f56efadcc7bdfa09a08d3d87076cd423072b",
+    "checkpointSha256": "cd9820441c96ccd56eeafed3328e619df9a8de1c9aabccbca7aed1703454ee0a",
     "townContext": {
       "time": {
         "minute": 19800,

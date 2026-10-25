@@ -55,6 +55,7 @@ export function createRuntime(seed = 42, population = 206): TownRuntime {
 				k?.[1] ?? required(backgroundNames[i - 6], "Missing neighbour name"),
 			seed: (seed + ordinal * 7919) >>> 0,
 			now: 480,
+			lexicon: { plainEnglish: true },
 			bornAt: -1440 * 365 * (23 + (ordinal % 47)),
 			sex: ordinal % 2 ? "male" : "female",
 			...(k

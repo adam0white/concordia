@@ -62,7 +62,7 @@ export const shelf = personaChannel();
 const stamp = () => ({
 	game: "neighbours",
 	build: lab.build().c ?? "development",
-	engine: "2.17.0",
+	engine: "2.21.0",
 	rules: CAST_RULES,
 });
 const identity = (ids: string[]) => Object.fromEntries(ids.map((x) => [x, x]));

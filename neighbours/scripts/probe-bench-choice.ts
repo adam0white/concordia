@@ -308,8 +308,8 @@ export function runBenchChoiceProbe(
 ) {
 	assert.equal(
 		FRAMEWORK_VERSION,
-		"2.18.0",
-		"Install exact published npm HF 2.18.0 before this probe",
+		"2.21.0",
+		"Install exact published npm HF 2.21.0 before this probe",
 	);
 	const beforeSources = sources(),
 		commit = git("rev-parse", "HEAD"),

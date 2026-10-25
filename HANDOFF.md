@@ -1,5 +1,11 @@
 # Neighbours handoff
 
+## Published plain-English HF adoption (2026-10-25)
+
+Remaining: exact signed source, CI and live receipts are in the adoption task report; Adam accepts feel separately. Fresh towns, including fresh canonical admissions, persist `lexicon.plainEnglish:true` with exact published HF2.21.0. Loaded narration choices stay saved. Lab-client resolves the same exact published framework through a scoped dependency override. Historical2.17 and exact current2.21 source stamps are accepted only through the existing finite native maps; unknown versions, identities, maps and unsupported obligations still refuse.
+
+The host keeps historical offer grammar projections needed by its own menu labels. Exact complete released deferred and modified replies pass through, and duplicate refusal glosses disappear only where the released sentence already states the same reason. Old recorded speech stays exact. The upgrade regression covers fresh population, saved true/false/absent narration choices and exact exported continuation. See [the adoption record](docs/neighbours/hf-plain-english-2026-10-25.md).
+
 ## Plain-English source rewrite (2026-10-25)
 
 Remaining: Adam accepts feel. Released HF narration and shared package copy remain separate package work. Before the feedback-package rebase, ordinary fresh cast admission timed out in the local rendered check; the successful ten-minute session explicitly selected local mode, so it does not establish shared cast admission.

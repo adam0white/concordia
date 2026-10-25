@@ -104,7 +104,7 @@ export function admitTownPerson(
 	const mapping = own ? "neighbours-calendar/1" : native?.mapping;
 	if (
 		(!own && !native) ||
-		parent.source.engine !== "2.17.0" ||
+		!["2.17.0", "2.21.0"].includes(parent.source.engine) ||
 		!sourceRole ||
 		!mapping ||
 		parent.transfer.sourceRole !== sourceRole

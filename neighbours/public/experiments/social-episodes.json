@@ -12,10 +12,10 @@
     "days": 25
   },
   "node": "v26.12.0",
-  "sourceFingerprint": "0f61f870748a58800b291e58fb314bfa1497bd0143a4a0f2699131f7cb129bb4",
+  "sourceFingerprint": "1e5f4c9c4df27e538cb86dc64f1ccab000b38baa35e696877d4d87b064346cad",
   "sources": {
-    "package-lock.json": "d6f5d35954bde9fa8a64fdd001314413c5d81186ef6cd662311a423d8f77e322",
-    "package.json": "51563623c16b4170f9222104589dec9a3d4d7fd6b9e3feb748fff2bbc1c0edac",
+    "package-lock.json": "2dfd33e7502d16c8d5a0d73712785e861e9452c1c36b2eaa5d61c1badfb8a90b",
+    "package.json": "0bfb9611e0ae5c1b9053ea597f1cf2bd13d62cdad10948fbf2f15af6202f8f96",
     "scripts/profile-evenings.ts": "70f5e20bc6df4fdef8d3d4f419803172ace547d73bc172d25e657127acc4f85f",
     "src/contracts.ts": "b7fdb06fd1fcc4d0e24cd0ff9a56a4e79ace6d29b5487a404687f396a11a62bb",
     "src/core/activity-reviews.ts": "b5867e3a9b107e1580a95b4447c89352bc095a7b8738155b9b9e740c2ee9880a",
@@ -23,7 +23,7 @@
     "src/core/bench-opportunity.ts": "99037b630e3c8a3869ca4ac94575f9985eeeb007782bb2ec74f4206804595461",
     "src/core/bench-window.ts": "4dfd2438c8ba3bd6f003c19823043ad16ffdaf2f011b4ba90d461eb54e26f36e",
     "src/core/canonical-cast.ts": "d9d2b0931ec30bac69be14a1b8a2dac784e92c70dfa88e568d72cebe81a7e20f",
-    "src/core/cast-continuity.ts": "753388a98561efdc9cd1137d65be79ffdc058fbe9b45886feffd2f0160ed45bd",
+    "src/core/cast-continuity.ts": "8144f3f4902114f6ae26a7e285c6206c52bfa0a3583af10480d5755d02b5bc85",
     "src/core/cast.ts": "7739bf96769e89d0895e47d25ac26b38133652a0c25d07e0166bb9db13783601",
     "src/core/diagnostics.ts": "b7a3e12bef839edf83466af0c2efec96ff9ee24410820d7511a13b28d7ab1831",
     "src/core/encounters.ts": "50bfd784bed977cbe61d34e150ec43d5effc560839b3faf9db73afe2fe62a638",
@@ -33,7 +33,7 @@
     "src/core/handcart-state.ts": "507927f46af8faf51d92d8acde3446a008e17de6074535ce588ce5cf2f30d79e",
     "src/core/handcart.ts": "ad7b4a440ba0af8e882f2da6d9398a20fa52c53d7207d775d2d4320b07cf995c",
     "src/core/hash.ts": "fefb6cf4cef485d908ba6d4230fb7d3256b1b036e434ad50561b3ee4eedaa34e",
-    "src/core/hf-version.ts": "1d773447b1625e93f682a40ab203279accb111313a0150d72b31cb6ce976b052",
+    "src/core/hf-version.ts": "832f0dae41cc42c343fce5539a2fb6382cdad16a7935a41ba80b00523942324d",
     "src/core/impression.ts": "89dc524793b3df1449ee5412ff6678ee19d2c5bbcc860ab209950cf6923490d5",
     "src/core/index.ts": "c377cdd215c6ac36db0ed7a2900c847c9592be0e50e3641cc16bc2fc9d32f288",
     "src/core/invariants.ts": "64054667b2aafd71349afab13c107cd7dd76608c16e450d9e9d97f6db54f930b",
@@ -48,7 +48,7 @@
     "src/core/protest.ts": "73fadd04e3e19441881fd7f359d57844cdcb501e66374d9c907dbf86ab12260d",
     "src/core/restore.ts": "1fd03d141cbf7ecfb5a4fe78b80db8e6d0300e25805b338f1848667c1de8c40e",
     "src/core/runtime.ts": "0dd41594eff4dfb39521263663592003ad6f2783f851a0b646b7cb3db824aa9b",
-    "src/core/scenario.ts": "8540be7eeefea6581359bd18ea9b66378b61f33f5ee1cfaad5c211039b5d29c1",
+    "src/core/scenario.ts": "6af5d16ff8d94742ed134e8f8261e65fd4423b453d0290ca81fb891e3e09a8e6",
     "src/core/social-contact.ts": "c9b5e5540c2f988dc96bc5ae6872eb0ac320dd08569b3f2853e4f433e0fc81bb",
     "src/core/state.ts": "c8330caaaa4e071a5303083282d29e5885c5f1df02e6fb3b42916a653cef8057",
     "src/core/stories.ts": "8fb3c28788bd352635cf9a71108ea3a82fefbda34677a4bf5404b075e5a93256",
@@ -56,7 +56,7 @@
     "src/core/timber.ts": "be0c5e7f5b3efd09d4c869d146bc8cc074adf605faeee5ab24b608115f8f0ca8",
     "src/core/town-chronicle.ts": "1df72cf74014b3ac10d6613b87785ab98d70a95394d5560b92620b4f9e33ff9d",
     "src/core/validation.ts": "4022afa734fb662e7d6e2f1c18d72bcaca49c301e878700815f490eca13b3583",
-    "src/core/voicing.ts": "5a2b734ac0699d8eadc9a45fa52803377e82e735a7e2281b0a2d48a4e5bb5691",
+    "src/core/voicing.ts": "1bbbbed9dc5373748cd0b3551cc62d7a48c5b32e2050a27da1967ffb2abb2b79",
     "src/experiments/inspection.ts": "b8d62658dd520209e1f0b234e33bcc8715a2af76a0c85708020bf8c06074165b"
   },
   "sourcesStableDuringRun": true,
@@ -73,7 +73,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.18.0",
+      "hf": "2.21.0",
       "hallSafe": true,
       "activatedAt": 11100,
       "recurringCycles": 2,
@@ -131,7 +131,7 @@
               "chosen": "sleep",
               "offered": [],
               "considered": [],
-              "reason": "Sleep, before anything else."
+              "reason": "I need to sleep before I do anything else."
             },
             {
               "at": 12600,
@@ -172,7 +172,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 12645,
@@ -219,7 +219,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             }
           ],
           "result": "Nora’s practical class: Jordan Carter, Frankie Reed, Reese Stone, Reese Martin, Casey Silva received the practical lesson."
@@ -286,7 +286,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             },
             {
               "at": 12510,
@@ -300,7 +300,7 @@
                 "propose:evening-1-meal"
               ],
               "considered": [],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 12525,
@@ -313,7 +313,7 @@
                 "decline:evening-1-class"
               ],
               "considered": [],
-              "reason": "I've been alone too long. I want company. Nearly did otherwise."
+              "reason": "I've been alone too long. I want company. I nearly chose something else."
             },
             {
               "at": 12540,
@@ -324,7 +324,7 @@
                 "decline:evening-1-class"
               ],
               "considered": [],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             },
             {
               "at": 12585,
@@ -335,7 +335,7 @@
                 "decline:evening-1-class"
               ],
               "considered": [],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             },
             {
               "at": 12615,
@@ -357,7 +357,7 @@
                 "decline:evening-1-class"
               ],
               "considered": [],
-              "reason": "Out of habit, really."
+              "reason": "I am doing this out of habit."
             },
             {
               "at": 12645,
@@ -365,7 +365,7 @@
               "chosen": "sleep",
               "offered": [],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             }
           ],
           "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
@@ -438,7 +438,7 @@
                 "decline:evening-1-meal"
               ],
               "considered": [],
-              "reason": "I'm starving — eating first."
+              "reason": "I am very hungry, so I will eat first."
             },
             {
               "at": 16860,
@@ -481,7 +481,7 @@
                   ]
                 }
               ],
-              "reason": "I'm starving — eating first."
+              "reason": "I am very hungry, so I will eat first."
             },
             {
               "at": 16875,
@@ -516,7 +516,7 @@
                   ]
                 }
               ],
-              "reason": "I have to keep to it."
+              "reason": "I have to keep my commitment."
             },
             {
               "at": 16905,
@@ -549,7 +549,7 @@
                   ]
                 }
               ],
-              "reason": "I said I would, so I will."
+              "reason": "I said I would do it, so I will."
             },
             {
               "at": 16935,
@@ -582,7 +582,7 @@
                   ]
                 }
               ],
-              "reason": "I have to keep to it."
+              "reason": "I have to keep my commitment."
             },
             {
               "at": 16965,
@@ -615,7 +615,7 @@
                   ]
                 }
               ],
-              "reason": "I have to keep to it."
+              "reason": "I have to keep my commitment."
             }
           ],
           "result": "Nora’s practical class: Jordan Patel, Jamie Diaz, Ellis Kim, Alex Silva, Ariel Reed, Cameron Patel, Reese Chen, Jamie Reed, Rowan Stone received the practical lesson."
@@ -704,7 +704,7 @@
                 "decline:evening-1-class"
               ],
               "considered": [],
-              "reason": "There is money in it."
+              "reason": "I can earn money from it."
             },
             {
               "at": 16890,
@@ -712,7 +712,7 @@
               "chosen": "work",
               "offered": [],
               "considered": [],
-              "reason": "There is money in it."
+              "reason": "I can earn money from it."
             },
             {
               "at": 16920,
@@ -720,7 +720,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             },
             {
               "at": 16950,
@@ -728,7 +728,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "My stomach is growling. Food first."
+              "reason": "My stomach is growling. I will eat first."
             },
             {
               "at": 16980,
@@ -736,7 +736,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "I'm starving — eating first. I remember: finished Eat a meal at the market."
+              "reason": "I am very hungry, so I will eat first. I remember: Finished Eat a meal at the market."
             }
           ],
           "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
@@ -800,7 +800,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             },
             {
               "at": 26910,
@@ -808,7 +808,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Might as well."
+              "reason": "I see no reason to choose something else."
             },
             {
               "at": 26940,
@@ -816,7 +816,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Out of habit, really."
+              "reason": "I am doing this out of habit."
             },
             {
               "at": 26955,
@@ -826,7 +826,7 @@
                 "attend:weekly-0-meal"
               ],
               "considered": [],
-              "reason": "I have to keep to it."
+              "reason": "I have to keep my commitment."
             },
             {
               "at": 27000,
@@ -836,7 +836,7 @@
                 "attend:weekly-0-meal"
               ],
               "considered": [],
-              "reason": "I said I would, so I will."
+              "reason": "I said I would do it, so I will."
             },
             {
               "at": 27030,
@@ -846,7 +846,7 @@
                 "attend:weekly-0-meal"
               ],
               "considered": [],
-              "reason": "I have to keep to it."
+              "reason": "I have to keep my commitment."
             },
             {
               "at": 27045,
@@ -854,7 +854,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "I'm parched. Water first."
+              "reason": "I am very thirsty. I will get water first."
             },
             {
               "at": 27060,
@@ -862,7 +862,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             }
           ],
           "result": "Nora’s practical class: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
@@ -935,7 +935,7 @@
                 "decline:weekly-0-class"
               ],
               "considered": [],
-              "reason": "Same as always."
+              "reason": "I am doing what I always do."
             },
             {
               "at": 26895,
@@ -946,7 +946,7 @@
                 "decline:weekly-0-class"
               ],
               "considered": [],
-              "reason": "Why not."
+              "reason": "I see no reason not to do this."
             },
             {
               "at": 26925,
@@ -989,7 +989,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 26970,
@@ -1036,7 +1036,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             },
             {
               "at": 27000,
@@ -1081,7 +1081,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 27030,
@@ -1130,7 +1130,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 27060,
@@ -1179,7 +1179,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             }
           ],
           "result": "Sam’s shared supper: Avery Stone, Alex Carter, Robin Singh, Finley Chen, Nora, Finley Das, Morgan Patel, Blair Khan ate supper with the host."
@@ -1458,38 +1458,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-plain2/social/seed-42-first-notice.json",
+          "path": "/tmp/neighbours-hf221/social/seed-42-first-notice.json",
           "at": 11415,
           "round": 729,
-          "sha256": "645b7655d9f2f413e1049324e0095c116d14d810ff5dc94f63a03ed91e022157"
+          "sha256": "8a3f1d875ed4007ac46fa40e46b397a03fbc246b5a5b1f4a6d6e27fabe474411"
         },
         "prepared": {
-          "path": "/tmp/neighbours-plain2/social/seed-42-first-prepared.json",
+          "path": "/tmp/neighbours-hf221/social/seed-42-first-prepared.json",
           "at": 11715,
           "round": 749,
-          "sha256": "9ffffbcffb7bc46e4b65c22de2853c8a7a2f47fc84604f4452b3f1715c3adade"
+          "sha256": "e4edf637a2777f0bbe83f95a2c666315be359afd4d434d8ab66fc7a6eeb7a105"
         },
         "accepted": {
-          "path": "/tmp/neighbours-plain2/social/seed-42-first-accepted.json",
+          "path": "/tmp/neighbours-hf221/social/seed-42-first-accepted.json",
           "at": 12135,
           "round": 777,
-          "sha256": "3f7925e390671ce3df34b2bc3873f246cb22a8345b1f42abf479b19b3b34e250"
+          "sha256": "b8a175f4776ab13eb2d803c23740867158916e3d072ae8a4c2a8146317f8a5b1"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-plain2/social/seed-42-first-cartProgress.json",
+          "path": "/tmp/neighbours-hf221/social/seed-42-first-cartProgress.json",
           "at": 13710,
           "round": 882,
-          "sha256": "644b9fb7d503b8cfaf02cbee1c6e82ad69e591b4936d276d712df7241a3cea21"
+          "sha256": "1dc973d05da3e3c49626df326053308cf3e2218190e8524f94859e7d01e8f011"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-plain2/social/seed-42-first-cartReturned.json",
+          "path": "/tmp/neighbours-hf221/social/seed-42-first-cartReturned.json",
           "at": 16905,
           "round": 1095,
-          "sha256": "542736482c444a6c9483498d8add1d78f2cdede315952155ce02d9e98472e773"
+          "sha256": "28a2be2d0886ec423afb00d34ba0767172484066c18d06ff3255e0d56d981ef3"
         }
       },
-      "finalCheckpointSha256": "4b806238a99be8b2e0e6e73c8d48f6e862a40b7656d309cf7e7493a9369d92a8",
-      "wallSeconds": 69.14533129099999
+      "finalCheckpointSha256": "5fbf639f7da4a9e9cc4b0df9d1df086a0e8ff09868b38da482f363f36de8d0e2",
+      "wallSeconds": 57.725798749999996
     },
     {
       "seed": 73,
@@ -1497,7 +1497,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.18.0",
+      "hf": "2.21.0",
       "hallSafe": false,
       "activatedAt": null,
       "recurringCycles": 0,
@@ -1534,8 +1534,8 @@
         "rounds": 8
       },
       "checkpoints": {},
-      "finalCheckpointSha256": "f0cac689ed9fcf77ef89b6f1f22db28f588d54342ff28c7e96868e1c1162c6b7",
-      "wallSeconds": 64.242767417
+      "finalCheckpointSha256": "724bc780840e6e247da9d1ec17243c3f566f7ede2eabfeb925aa51610b56ff16",
+      "wallSeconds": 48.218080125
     },
     {
       "seed": 9,
@@ -1543,7 +1543,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.18.0",
+      "hf": "2.21.0",
       "hallSafe": false,
       "activatedAt": null,
       "recurringCycles": 0,
@@ -1580,8 +1580,8 @@
         "rounds": 8
       },
       "checkpoints": {},
-      "finalCheckpointSha256": "30b01981e74e6d3b026953776c4cd5e093167a08e780cf1bedcc55b0eb13e39e",
-      "wallSeconds": 62.17318174999999
+      "finalCheckpointSha256": "30121a95fb0d54be227042bfbde05a50b998c50d0f82de15da83699e393dc4d0",
+      "wallSeconds": 48.41128512499999
     },
     {
       "seed": 101,
@@ -1589,7 +1589,7 @@
       "elapsedDays": 25,
       "at": 36480,
       "rounds": 2400,
-      "hf": "2.18.0",
+      "hf": "2.21.0",
       "hallSafe": true,
       "activatedAt": 17055,
       "recurringCycles": 1,
@@ -1635,7 +1635,7 @@
                   ]
                 }
               ],
-              "reason": "This will do."
+              "reason": "This is good enough for me."
             },
             {
               "at": 18270,
@@ -1661,7 +1661,7 @@
                   ]
                 }
               ],
-              "reason": "Might as well."
+              "reason": "I see no reason to choose something else."
             },
             {
               "at": 18285,
@@ -1671,7 +1671,7 @@
                 "propose:evening-1-class"
               ],
               "considered": [],
-              "reason": "Why not."
+              "reason": "I see no reason not to do this."
             },
             {
               "at": 18315,
@@ -1681,7 +1681,7 @@
                 "propose:evening-1-class"
               ],
               "considered": [],
-              "reason": "Out of habit, really."
+              "reason": "I am doing this out of habit."
             },
             {
               "at": 18330,
@@ -1691,7 +1691,7 @@
                 "propose:evening-1-class"
               ],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             }
           ]
         },
@@ -1744,7 +1744,7 @@
                   ]
                 }
               ],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             },
             {
               "at": 18255,
@@ -1770,7 +1770,7 @@
                   ]
                 }
               ],
-              "reason": "I need to eat. Nearly did otherwise."
+              "reason": "I need to eat. I nearly chose something else."
             },
             {
               "at": 18300,
@@ -1800,7 +1800,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 18315,
@@ -1810,7 +1810,7 @@
                 "propose:evening-1-meal"
               ],
               "considered": [],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 18330,
@@ -1826,7 +1826,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "My stomach is growling. Food first. I remember: finished Eat a meal at the market."
+              "reason": "My stomach is growling. I will eat first. I remember: Finished Eat a meal at the market."
             },
             {
               "at": 18375,
@@ -1834,7 +1834,7 @@
               "chosen": "eat",
               "offered": [],
               "considered": [],
-              "reason": "I need to eat. I remember: finished Eat a meal at the market."
+              "reason": "I need to eat. I remember: Finished Eat a meal at the market."
             },
             {
               "at": 18405,
@@ -1842,7 +1842,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             }
           ],
           "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
@@ -1911,7 +1911,7 @@
                 "decline:evening-1-meal"
               ],
               "considered": [],
-              "reason": "I'm starving — eating first. I remember: finished Eat a meal at the market."
+              "reason": "I am very hungry, so I will eat first. I remember: Finished Eat a meal at the market."
             },
             {
               "at": 22605,
@@ -1949,7 +1949,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Same as always."
+              "reason": "I am doing what I always do."
             },
             {
               "at": 22710,
@@ -1957,7 +1957,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             },
             {
               "at": 22740,
@@ -1965,7 +1965,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Out of habit, really."
+              "reason": "I am doing this out of habit."
             }
           ],
           "result": "Nora’s practical class: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
@@ -2033,7 +2033,7 @@
               "chosen": "work",
               "offered": [],
               "considered": [],
-              "reason": "There is money in it."
+              "reason": "I can earn money from it."
             },
             {
               "at": 22590,
@@ -2041,7 +2041,7 @@
               "chosen": "work",
               "offered": [],
               "considered": [],
-              "reason": "There is money in it."
+              "reason": "I can earn money from it."
             },
             {
               "at": 22620,
@@ -2082,7 +2082,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 22650,
@@ -2123,7 +2123,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             },
             {
               "at": 22680,
@@ -2164,7 +2164,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 22710,
@@ -2209,7 +2209,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             },
             {
               "at": 22740,
@@ -2250,7 +2250,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             }
           ],
           "result": "Sam’s shared supper: Cameron Evans, Charlie Reed, Hayden Chen, Reese Patel, Blair Carter, Blair Chen, Jamie Evans, Jamie Reed ate supper with the host."
@@ -2321,7 +2321,7 @@
                 "decline:weekly-0-meal"
               ],
               "considered": [],
-              "reason": "Same as always."
+              "reason": "I am doing what I always do."
             },
             {
               "at": 32685,
@@ -2332,7 +2332,7 @@
                 "decline:weekly-0-meal"
               ],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             },
             {
               "at": 32700,
@@ -2377,7 +2377,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 32745,
@@ -2426,7 +2426,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             },
             {
               "at": 32775,
@@ -2475,7 +2475,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             },
             {
               "at": 32790,
@@ -2524,7 +2524,7 @@
                   ]
                 }
               ],
-              "reason": "Another step toward what I want."
+              "reason": "This helps me get closer to what I want."
             },
             {
               "at": 32820,
@@ -2573,7 +2573,7 @@
                   ]
                 }
               ],
-              "reason": "Keeping at it."
+              "reason": "I am continuing to work toward my goal."
             }
           ],
           "result": "Nora’s practical class: Robin Grant, Finley Martin, Blair Lane, Reese Evans, Jordan Chen, Charlie Grant, Jamie Grant, Avery Khan received the practical lesson."
@@ -2638,7 +2638,7 @@
                 "decline:weekly-0-class"
               ],
               "considered": [],
-              "reason": "I need to eat. I remember: finished Share a meal in the reopened hall."
+              "reason": "I need to eat. I remember: Finished Share a meal in the reopened hall."
             },
             {
               "at": 32655,
@@ -2649,7 +2649,7 @@
                 "decline:weekly-0-class"
               ],
               "considered": [],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             },
             {
               "at": 32700,
@@ -2665,7 +2665,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "Time for something easier."
+              "reason": "I want to do something easier."
             },
             {
               "at": 32745,
@@ -2673,7 +2673,7 @@
               "chosen": "drink",
               "offered": [],
               "considered": [],
-              "reason": "Same as always."
+              "reason": "I am doing what I always do."
             },
             {
               "at": 32760,
@@ -2681,7 +2681,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             },
             {
               "at": 32790,
@@ -2689,7 +2689,7 @@
               "chosen": "rest",
               "offered": [],
               "considered": [],
-              "reason": "It's what I do at this hour."
+              "reason": "It is what I do at this hour."
             },
             {
               "at": 32805,
@@ -2697,7 +2697,7 @@
               "chosen": "sleep",
               "offered": [],
               "considered": [],
-              "reason": "Out of habit, really."
+              "reason": "I am doing this out of habit."
             }
           ],
           "result": "Sam’s shared supper: no guest spent the required fifteen minutes awake with the host. The room was never prepared."
@@ -2865,38 +2865,38 @@
       },
       "checkpoints": {
         "notice": {
-          "path": "/tmp/neighbours-plain2/social/seed-101-first-notice.json",
+          "path": "/tmp/neighbours-hf221/social/seed-101-first-notice.json",
           "at": 18315,
           "round": 1189,
-          "sha256": "db2290c487a280231b63779864784336aa96a1feee9e154938a4dfb8e41f2d4a"
+          "sha256": "4925b60d84480f4f250615aa8ba14aa0a78f6950dbec09bcf8927646e3278128"
         },
         "accepted": {
-          "path": "/tmp/neighbours-plain2/social/seed-101-first-accepted.json",
+          "path": "/tmp/neighbours-hf221/social/seed-101-first-accepted.json",
           "at": 18510,
           "round": 1202,
-          "sha256": "d965e3a4799c3f29c260cd9b3af889af0828b9b0d8dfa130dd7212aba516c5f0"
+          "sha256": "0cec34176f21383ae189cdf7a23332118e7b07d31a30e8d3a8e379019af25940"
         },
         "prepared": {
-          "path": "/tmp/neighbours-plain2/social/seed-101-first-prepared.json",
+          "path": "/tmp/neighbours-hf221/social/seed-101-first-prepared.json",
           "at": 18555,
           "round": 1205,
-          "sha256": "255b7a8efde8f75c96e52ab796a3c3ed1c0792ce73c1690d8fdc204218ff9b89"
+          "sha256": "a6cd31b5c78bfedb3af7e4fdb9935d65cd608b809d6919f7ed950b4c19416708"
         },
         "cartProgress": {
-          "path": "/tmp/neighbours-plain2/social/seed-101-first-cartProgress.json",
+          "path": "/tmp/neighbours-hf221/social/seed-101-first-cartProgress.json",
           "at": 19395,
           "round": 1261,
-          "sha256": "7060bd7e2c5a4b9aa8df11f7a793731148e381a37b680a723fc66e5ff628b95c"
+          "sha256": "7187432feac650a82d5e70c32082a4245856d16b12612f4c81d18dd201aada26"
         },
         "cartReturned": {
-          "path": "/tmp/neighbours-plain2/social/seed-101-first-cartReturned.json",
+          "path": "/tmp/neighbours-hf221/social/seed-101-first-cartReturned.json",
           "at": 21225,
           "round": 1383,
-          "sha256": "6354b550b7f564cbae5773f10e72fed572abba03063442887b1e2f3b05a9eb2b"
+          "sha256": "38c92ec5935136123f9dc7bc7274246d6e87ed42559fb98c413339916e6dd9b7"
         }
       },
-      "finalCheckpointSha256": "7776666f2f8a001725b8bc0a5dd75446dfe6d1d74325c7fa90a276137cc2dd5a",
-      "wallSeconds": 74.799223458
+      "finalCheckpointSha256": "921ec5f3bd1985738fbdfe9a70758e22a96a76619084872e71beaf86b946484b",
+      "wallSeconds": 56.29975895799999
     }
   ]
 }

@@ -7,12 +7,14 @@ export const isHfSource = (source: unknown): source is string =>
 	source === "HF 2.2.1" ||
 	source === "HF 2.3.0" ||
 	source === "HF 2.6.0" ||
-	source === "HF 2.8.0";
+	source === "HF 2.8.0" ||
+	source === "HF 2.18.0";
 /** Save versions that load; HF restores older person records by their own engine stamp. */
 export const LEGACY_HF_VERSIONS: readonly string[] = [
 	"2.2.1",
 	"2.3.0",
 	"2.6.0",
 	"2.8.0",
+	"2.18.0",
 	HF_VERSION,
 ];

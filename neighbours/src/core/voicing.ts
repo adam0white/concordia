@@ -449,8 +449,27 @@ export function counterWords(counter: CounterLike): string {
  * every other verdict keeps HF's own line. `says` itself is never changed.
  */
 export function voicedLine(answer: AnswerLike): string {
+	// Released plain-English alternatives already form complete sentences. Keep their exact speech.
+	if (
+		answer.verdict === "modified" &&
+		/^I will (?:do this instead:|not do that\.)/.test(answer.says)
+	)
+		return answer.says;
 	const counter = answer.counterOffer?.label?.trim();
-	const notNowForm = !/, then I will\.?$/.test(answer.says);
+	// HF 2.21 names the host's task as a parenthetical label inside a complete sentence.
+	// The old projection below only repairs clipped historical labels.
+	if (
+		answer.verdict === "deferred" &&
+		counter &&
+		/^after I finish this (?:task|duty) \(.+\)$/.test(counter) &&
+		[
+			`${upperFirst(counter)}, I will do it.`,
+			`I cannot do it now. ${upperFirst(counter)}, I will do it.`,
+		].includes(answer.says)
+	)
+		return answer.says;
+
+	const notNowForm = !/(?:, then I will|, I will do it)\.?$/.test(answer.says);
 	if (answer.verdict === "deferred" && counter) {
 		if (/^later$/i.test(counter) || /^after my duty$/i.test(counter))
 			return answer.says;
@@ -492,9 +511,28 @@ const NEED_FIRST: Record<string, string> = {
 export function refusalWhy(answer: {
 	verdict: string;
 	reason?: string;
+	says?: string;
 }): string | undefined {
 	if (answer.verdict !== "refused" || !answer.reason) return undefined;
 	const reason = answer.reason;
+	// These released sentences already state the same reason. Retain richer host explanations otherwise,
+	// including old recorded replies, whose narration choice must never be rewritten.
+	const complete = new Map<string, readonly string[]>([
+		[
+			"unavailable",
+			["That is not available here now.", "I cannot do that here now."],
+		],
+		[
+			"capacity",
+			["I cannot do it. I am exhausted.", "I do not have the strength."],
+		],
+		["need:food", ["I have to eat first."]],
+		["need:water", ["I have to drink first."]],
+		["need:sleep", ["I have to sleep first."]],
+		["need:rest", ["I have to rest first."]],
+	]);
+	if (answer.says && complete.get(reason)?.includes(answer.says))
+		return undefined;
 	if (reason.startsWith("need:")) {
 		const need = NEED_FIRST[reason.slice(5)];
 		return need ? `They refused because ${need}.` : undefined;
