@@ -17,6 +17,12 @@ function guestList(names: string): string {
 }
 
 export function plainText(text: string): string {
+	// This authored introduction is stored in legacy state; rename only its display.
+	if (
+		text ===
+		"You arrived in Alder Quay after the flood. You are staying in the riverside homes for a limited visit."
+	)
+		return "You arrived in Mill Bridge after the flood. You are staying in the riverside homes for a limited visit.";
 	return (
 		text
 			.replace(

@@ -50,7 +50,7 @@ export default function Welcome({
 						opacity=".25"
 					/>
 				</svg>
-				<span className="eyebrow">NEIGHBOURS · Alder Quay</span>
+				<span className="eyebrow">NEIGHBOURS · Mill Bridge</span>
 			</div>
 			<div className="welcome-premise">
 				<h2>A town is rebuilding after a flood.</h2>
@@ -91,8 +91,8 @@ export default function Welcome({
 							onClick={onEnter}
 						>
 							{hasSave
-								? `Return to Alder Quay${day ? ` · day ${day}` : ""}`
-								: "Enter Alder Quay"}
+								? `Return to Mill Bridge${day ? ` · day ${day}` : ""}`
+								: "Enter Mill Bridge"}
 						</button>
 						{hasSave && (
 							<button type="button" onClick={() => setConfirmNew(true)}>

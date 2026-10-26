@@ -792,7 +792,7 @@ export default function TownMap({
 				role="img"
 				aria-labelledby="map-title map-description"
 			>
-				<title id="map-title">Alder Quay town map</title>
+				<title id="map-title">Mill Bridge town map</title>
 				<desc id="map-description">
 					This map shows residents at their actual locations. Select a named
 					neighbour to see their activity and decisions. Small dots show

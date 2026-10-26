@@ -1,3 +1,7 @@
+# Mill Bridge presentation rename — 2026-10-26
+
+Remaining: parent independent review, integration, delivery and Adam’s feel acceptance. Presentation copy names the existing town Mill Bridge. The exact authored player introduction is mapped at display through `ui/plain-english.ts`; its one raw literal in `core/player.ts` remains unchanged for native signatures, saved logs and exact legacy replay. Internal IDs, file format, Worker target and historical provenance are unchanged. No browser or all-screen verification is claimed. `nbh-01z.53` remains open: the interrupted-tab actual cause is unknown. Review target: 2026-10-27.
+
 # Current technical receipt — 2026-10-26
 
 Remaining: Adam accepts reading, timing and feel, target **2026-11-03**.

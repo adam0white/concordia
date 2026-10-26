@@ -24,7 +24,7 @@ export default function TownOverview({
 }) {
 	return (
 		<section className="map-section" aria-label="Town overview">
-			<h2 className="sr-only">Alder Quay</h2>
+			<h2 className="sr-only">Mill Bridge</h2>
 			<TownMap
 				town={town}
 				selected={selected}

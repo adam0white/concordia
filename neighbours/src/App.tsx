@@ -338,7 +338,7 @@ export default function App() {
 				) : (
 					<div className="topbar-words">
 						<span className="desktop-town-name">
-							Neighbours · Alder Quay ·{" "}
+							Neighbours · Mill Bridge ·{" "}
 						</span>
 						{town ? (
 							<span className="town-time">
@@ -346,7 +346,7 @@ export default function App() {
 								<strong>{clock(town.now)}</strong> · {town.weather}
 							</span>
 						) : (
-							"Alder Quay"
+							"Mill Bridge"
 						)}
 					</div>
 				)}
@@ -376,12 +376,12 @@ export default function App() {
 				<section
 					className="game-info"
 					role="dialog"
-					aria-label="About Alder Quay"
+					aria-label="About Mill Bridge"
 				>
 					<div className="sheet-heading">
 						<h2>
 							{!inTown
-								? "Alder Quay"
+								? "Mill Bridge"
 								: context
 									? "Talking with a neighbour"
 									: study
@@ -470,7 +470,7 @@ export default function App() {
 						</svg>
 					</div>
 					<section>
-						<h2 tabIndex={-1}>Starting Alder Quay.</h2>
+						<h2 tabIndex={-1}>Starting Mill Bridge.</h2>
 						<p role="status">{session.progress}</p>
 						<p>The first visit takes longer.</p>
 					</section>
@@ -514,7 +514,9 @@ export default function App() {
 								stories[0] ? (
 									`A story: ${stories[0].title}`
 								) : (
-									(town.player?.latestNotice?.text ?? "The town is waking up.")
+									plainText(
+										town.player?.latestNotice?.text ?? "The town is waking up.",
+									)
 								)
 							) : town.places.some((p) => p.id === "hall" && p.open) ? (
 								"The hall is open"
@@ -562,7 +564,7 @@ export default function App() {
 						</div>
 						<section
 							className="game-column"
-							aria-label="Your part in Alder Quay"
+							aria-label="Your part in Mill Bridge"
 						>
 							<div className="town-guidance lk-strip">
 								<button
