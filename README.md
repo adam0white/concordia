@@ -27,7 +27,10 @@ Diagnostics require exact `?lab=1`. They expose hypothetical comparisons, record
 
 The town autosaves to IndexedDB in this browser. A conflicting tab pauses rather than overwriting a newer checkpoint. Reload restores saved state. Current-version exports preserve runtime state and player inputs for deterministic continuation. Export produces lossless `.json.gz`; import accepts gzip or plain JSON, with a 50 MiB limit on both compressed input and expanded JSON. These diagnostic file tools are not ordinary menu choices: Other ways in is on the title with `?lab=1`, and Feedback supplies **Keep a copy of this run** in lab mode. Unsupported older saves or continuing-person obligations may be refused. A loaded chapter stays pinned to its admitted people; it does not pull newer shelf state into an existing run. Imported files remain file-origin, rather than becoming locally owned history.
 
-Recording is separate from device saving. The one Recording switch controls lab recording and automatic cross-game linkage on this device. DNT/GPC sets the initial default off; turning recording on opts in. Feedback remains available with recording off. Its optional sharing checkbox can opt in when submitting; character analysis keeps its separate opt-in. This host still consumes immutable lab-client **0.4.10** and lab-kit **0.5.11**. Newer SDK feedback artifacts are not adopted here.
+Recording is separate from device saving. The one Recording switch controls lab recording and automatic cross-game linkage on this device. DNT/GPC sets the initial default off; turning recording on opts in. Feedback remains available with recording off. Its optional sharing checkbox can opt in when submitting; character analysis keeps its separate opt-in. Current source consumes immutable lab-client **0.4.11** and lab-kit **0.5.12**. Feedback
+also offers **I'm stopping** and **I'm confused**. Selecting or clearing one sends nothing
+and leaves your edited note unchanged. **Submit** combines the selected words, optional
+verdict and note. See HANDOFF for source versus live-delivery status.
 
 ## Run and verify
 

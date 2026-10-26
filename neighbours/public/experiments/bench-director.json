@@ -1,7 +1,7 @@
 {
   "schema": "native-concordia-bench@1",
   "upstreamSha": "6fbfbc58f324aa74f78568c488713210889a801e",
-  "recordedAt": "2026-10-25T20:39:05.256026+00:00",
+  "recordedAt": "2026-10-26T05:40:32.557169+00:00",
   "seeds": [
     42,
     73
@@ -109,7 +109,7 @@
       "concordia/utils/structured_logging_html.py": "4b4f81fd14da542b2435eca5e88c255bb7522a543c121889b5519b8f8e10c0ae",
       "concordia/utils/text.py": "8052dbde2f78e17d0fce1579dc93d6b66e62ed9bb765d567c14d923d3330e6c9",
       "concordia/utils/visual_interface.py": "cf68ab141bbf1d4e590f9cdb9bb20d70782e39a3d9d94d5f812f726bca14bc39",
-      "neighbours/native-gm-requirements.txt": "b30aea868de83d2fb2fbee4a62eb12d3ac86632169b78d60c96a9ecc896aba91",
+      "neighbours/native-gm-requirements.txt": "1c94079bba183df2fd6e76bce9f8ec170e7e53f2505f5bb8b40dfa516f81da61",
       "neighbours/scripts/capture-weekly.ts": "04d7fb76bb567f4c21f670e439121f3e61fd0f02fb5755cc75a59618531143c5",
       "neighbours/scripts/run-gm-director.py": "145786f7d9f66c3995103c010ef2f2cc16b036c981251f382ceb10b72b5c494a",
       "neighbours/src/bridge-port.ts": "bb25c8331db7991f17ca064da78bad478f298b41a987916e129a0eab66246afe",
@@ -161,10 +161,10 @@
       "name": "@adam0white/human-framework",
       "version": "3.0.0"
     },
-    "sha256": "fded3503941c331eb7fc4a91d9791960bf0cfe92938f4e512b161f2922202276"
+    "sha256": "48da77283c4e0dedb2995665a3496f0a833f5a457d6b7761490751fc0d0e644f"
   },
-  "sourceFingerprint": "fded3503941c331eb7fc4a91d9791960bf0cfe92938f4e512b161f2922202276",
-  "gitHeadAtRun": "cb7486d0138d8b8e13eba768ce8ed064c2fcf5ae",
+  "sourceFingerprint": "48da77283c4e0dedb2995665a3496f0a833f5a457d6b7761490751fc0d0e644f",
+  "gitHeadAtRun": "9645d113efee910d8d4902c080d1c9083f5d9f10",
   "sourceWorkingTreeDirty": true,
   "requestedModel": "opus",
   "cliVersion": "2.1.302 (Claude Code)",

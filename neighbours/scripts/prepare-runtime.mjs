@@ -110,7 +110,7 @@ const notices = [
 	],
 ];
 const noticeParts = [
-	"Neighbours third-party notices. Unmodified Pyodide source: https://github.com/pyodide/pyodide/tree/314.0.7 . CPython source: https://github.com/python/cpython/tree/v3.14.2 . Concordia source and modifications: https://github.com/adam0white/concordia/tree/neighbours . absl-py source: https://github.com/abseil/abseil-py/tree/v2.4.0 .",
+	"Neighbours third-party notices. Unmodified Pyodide source: https://github.com/pyodide/pyodide/tree/314.0.7 . CPython source: https://github.com/python/cpython/tree/v3.14.2 . Concordia source and modifications: https://github.com/adam0white/concordia/tree/neighbours . absl-py source: https://github.com/abseil/abseil-py/tree/v2.5.1 .",
 ];
 for (const [name, path] of notices)
 	noticeParts.push(`${name}\n${await readFile(path, "utf8")}`);
@@ -122,9 +122,9 @@ const py = await loadPyodide({
 });
 py.FS.writeFile("/absl.whl", wheel);
 noticeParts.push(
-	"absl-py 2.4.0\n" +
+	"absl-py 2.5.1\n" +
 		py.runPython(
-			"import zipfile\nzipfile.ZipFile('/absl.whl').read('absl_py-2.4.0.dist-info/licenses/LICENSE').decode()",
+			"import zipfile\nzipfile.ZipFile('/absl.whl').read('absl_py-2.5.1.dist-info/licenses/LICENSE').decode()",
 		),
 );
 await writeFile(

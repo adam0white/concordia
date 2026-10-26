@@ -1,5 +1,42 @@
 # Neighbours handoff
 
+## Current SDK source and technical delivery — 2026-10-26
+
+Signed source `9645d113efee910d8d4902c080d1c9083f5d9f10` on `origin/neighbours`
+adopts immutable lab-client **0.4.11** / lab-kit **0.5.12**. HF3.0.0 / Person
+engine2.23.0 and the six canonical people plus200 background residents are unchanged.
+Exact CI40270610066 succeeded. The final GD report records clean Cloudflare release
+`26b6b344-e7d9-4b25-af77-86e11d08cae5`, exact live9645d11/HF3.0.0/dirty:false,
+28 public files matching the build and a normal locked587-test/86-file lane. The first
+unchanged5165ms timeout is retained; its cause remains unconfirmed.
+
+The custom ordinary Feedback view renders the SDK’s **I'm stopping** and **I'm confused**
+labels. Selection or clearing sends nothing and leaves the textarea unchanged. Submit
+combines the selected label, optional verdict and current note. Recording, optional
+recording-off sharing, privacy and note receipt/error paths remain. Keep a copy of this
+run and other file controls still require exact `?lab=1`.
+
+Existing Chrome checked a fresh local206-person Python/HF town on a literal served-byte
+mirror at360×690 and1280×800 with production services blocked. Controlled WebKit passed
+three mirror checks, including eight task downloads replayed for16 raw rounds each.
+These are builder/source consistency controls, not production gameplay, authenticated
+ownership/CAS, a human cross-host journey or owner readiness. Production storage and
+Submit were untouched. The finite Pass path binds the reviewed signed453be903
+evening1390 Rafi source and raw witness, not arbitrary Pass13 histories. The original
+signed Rafi artifact remains unchanged.
+
+The initialbbfb9b5 source/CI-repair phase is historical; it is not the final release
+receipt. GD reports its release tree, branch, tabs and server cleaned. The next source
+window belongs explicitly to v3 for prepared Python maintenance and actual
+native/WASM/parity checks; that future upgrade is not part of9645d11. Adam’s timing,
+reading and feel acceptance remains2026-11-03. Final authority:
+`~/code/.lab-scratch/games-deferred/neighbours-report.md` and `neighbours-STATUS`.
+
+## Prior root-documentation snapshot
+
+The complete earlier handoff follows. Its SDK pins and current-source/live statements
+record that earlier snapshot, not the new SDK delivery. Owner/history records remain.
+
 ## Current state — 2026-10-25
 
 Remaining: Adam’s reading, timing and feel acceptance, target **2026-11-03**. Existing F-465 receiving-journey and F-491 owner retests remain separate. The project done definition in AGENTS.md still applies.

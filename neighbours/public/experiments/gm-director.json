@@ -1,6 +1,6 @@
 {
   "schema": "native-concordia-gm@1",
-  "recordedAt": "2026-10-25T20:39:02.972433+00:00",
+  "recordedAt": "2026-10-26T05:40:29.420656+00:00",
   "runtime": "Native upstream Concordia EventResolution + MakeObservation + real Claude CLI",
   "upstreamSha": "6fbfbc58f324aa74f78568c488713210889a801e",
   "runtimeSources": {
@@ -102,7 +102,7 @@
       "concordia/utils/structured_logging_html.py": "4b4f81fd14da542b2435eca5e88c255bb7522a543c121889b5519b8f8e10c0ae",
       "concordia/utils/text.py": "8052dbde2f78e17d0fce1579dc93d6b66e62ed9bb765d567c14d923d3330e6c9",
       "concordia/utils/visual_interface.py": "cf68ab141bbf1d4e590f9cdb9bb20d70782e39a3d9d94d5f812f726bca14bc39",
-      "neighbours/native-gm-requirements.txt": "b30aea868de83d2fb2fbee4a62eb12d3ac86632169b78d60c96a9ecc896aba91",
+      "neighbours/native-gm-requirements.txt": "1c94079bba183df2fd6e76bce9f8ec170e7e53f2505f5bb8b40dfa516f81da61",
       "neighbours/scripts/capture-weekly.ts": "04d7fb76bb567f4c21f670e439121f3e61fd0f02fb5755cc75a59618531143c5",
       "neighbours/scripts/run-gm-director.py": "145786f7d9f66c3995103c010ef2f2cc16b036c981251f382ceb10b72b5c494a",
       "neighbours/src/bridge-port.ts": "bb25c8331db7991f17ca064da78bad478f298b41a987916e129a0eab66246afe",
@@ -152,21 +152,21 @@
       "name": "@adam0white/human-framework",
       "version": "3.0.0"
     },
-    "sha256": "a70ea23cde1fbd6a2ed2279dc0507c3da6b7910dc98b73cf701bb5a42ef8a2ba"
+    "sha256": "1bcf271bcc188eddde9c00f3eb937d6e4f1698cd8bcbddfa2387a207e7709390"
   },
   "runtimes": {
-    "python": "3.15.0",
-    "absl-py": "2.4.0",
+    "python": "3.12.13",
+    "absl-py": "2.5.1",
     "numpy": "2.5.4",
-    "pandas": "3.0.6",
-    "python-dateutil": "2.9.0.post0",
-    "reactivex": "6.0.0",
+    "pandas": "3.1.0",
+    "python-dateutil": "3.0.0",
+    "reactivex": "6.1.0",
     "six": "1.17.0",
     "termcolor": "3.3.0",
     "typing_extensions": "4.16.0"
   },
-  "sourceFingerprint": "a70ea23cde1fbd6a2ed2279dc0507c3da6b7910dc98b73cf701bb5a42ef8a2ba",
-  "gitHeadAtRun": "cb7486d0138d8b8e13eba768ce8ed064c2fcf5ae",
+  "sourceFingerprint": "1bcf271bcc188eddde9c00f3eb937d6e4f1698cd8bcbddfa2387a207e7709390",
+  "gitHeadAtRun": "9645d113efee910d8d4902c080d1c9083f5d9f10",
   "sourceWorkingTreeDirty": true,
   "checkpoint": {
     "schema": "neighbours/concordia@1",
@@ -57936,7 +57936,7 @@
     {
       "promptSha256": "55ead396cc2a66a2b5e4e9b4d819b1c12d82ce7481d5c2fa85588c71c313f277",
       "status": "completed",
-      "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
+      "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":180}",
       "modelIds": [
         "claude-opus-5-5"
       ],
@@ -57953,23 +57953,23 @@
     "schema": "neighbours-gm-proposal@1",
     "kind": "inspection-request",
     "target": "hall-annex",
-    "cue": "wet-sound",
-    "windowMinutes": 240
+    "cue": "dry-sound",
+    "windowMinutes": 180
   },
-  "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
+  "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":180}",
   "rejection": null,
   "result": {
-    "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"wet-sound\",\"windowMinutes\":240}",
+    "rawResponse": "{\"schema\":\"neighbours-gm-proposal@1\",\"kind\":\"inspection-request\",\"target\":\"hall-annex\",\"cue\":\"dry-sound\",\"windowMinutes\":180}",
     "proposal": {
       "schema": "neighbours-gm-proposal@1",
       "kind": "inspection-request",
       "target": "hall-annex",
-      "cue": "wet-sound",
-      "windowMinutes": 240
+      "cue": "dry-sound",
+      "windowMinutes": 180
     },
     "rejection": null,
     "resolution": "Event: Host proposal validated\n",
-    "hostInbox": "{\"cue\": \"wet-sound\", \"kind\": \"inspection-request\", \"schema\": \"neighbours-gm-proposal@1\", \"target\": \"hall-annex\", \"windowMinutes\": 240}\n\n\n",
+    "hostInbox": "{\"cue\": \"dry-sound\", \"kind\": \"inspection-request\", \"schema\": \"neighbours-gm-proposal@1\", \"target\": \"hall-annex\", \"windowMinutes\": 180}\n\n\n",
     "emptyInbox": "",
     "checkpointSha256": "588efed7dc91ee9a31f49b4fa9be619dd46a8720b937bf4ab2a3ff2f681744f2",
     "townContext": {
