@@ -105,4 +105,17 @@ test("doubled computed text keeps town controls and scrolled Journal reachable",
 	await reachable(page.getByRole("button", { name: "Game menu", exact: true }));
 	for (const button of await page.locator(".town-verbs button").all())
 		await reachable(button);
+	await openSaves(page);
+	await page.getByRole("button", { name: /^Read the journal/ }).click();
+	await doubleText(page);
+	await sheet.evaluate((e) => {
+		e.scrollTop = e.scrollHeight;
+	});
+	expect(await sheet.evaluate((e) => e.scrollTop)).toBeGreaterThan(0);
+	await reachable(
+		sheet.getByRole("button", { name: "Close Journal", exact: true }),
+	);
+	await expect(
+		sheet.getByRole("heading", { name: "Journal", exact: true }),
+	).toBeInViewport({ ratio: 1 });
 });

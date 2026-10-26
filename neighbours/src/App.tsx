@@ -564,7 +564,7 @@ export default function App() {
 							className="game-column"
 							aria-label="Your part in Alder Quay"
 						>
-							<div className="town-guidance">
+							<div className="town-guidance lk-strip">
 								<button
 									type="button"
 									className="next-step"
@@ -591,7 +591,11 @@ export default function App() {
 									selectPlace={inspectPlace}
 								/>
 							</div>
-							<div className="game-sheet" id="town-info-panel" tabIndex={-1}>
+							<div
+								className="game-sheet lk-sheet"
+								id="town-info-panel"
+								tabIndex={-1}
+							>
 								{session.saveConflict && (
 									<div className="error" role="alert">
 										Another tab saved the town on this device. This tab is

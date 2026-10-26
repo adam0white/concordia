@@ -1,3 +1,4 @@
+import { phoneStage } from "@adam0white/lab-kit";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import type { PersonView, PlaceView, TownView } from "../contracts";
 import { initial, placeName } from "./format";
@@ -498,14 +499,30 @@ export default function TownMap({
 	useEffect(() => {
 		const element = frame.current;
 		if (!element) return;
-		const resize = () => {
-			const rect = element.getBoundingClientRect();
-			setBox({ width: rect.width, height: rect.height });
+		const root = element.closest<HTMLElement>(".game-frame");
+		if (
+			!root?.contains(element) ||
+			root.querySelector(".lk-scene") !== element ||
+			!root.querySelector(".lk-sheet")
+		)
+			throw new Error("Town map needs its current scene and sheet");
+		let active = true;
+		const controller = phoneStage(root, {
+			observeOnly: true,
+			history: false,
+			onSceneRect: ({ width, height }) => {
+				if (!active || !element.isConnected || !root.contains(element)) return;
+				setBox((current) =>
+					current.width === width && current.height === height
+						? current
+						: { width, height },
+				);
+			},
+		});
+		return () => {
+			active = false;
+			controller.destroy();
 		};
-		resize();
-		const observer = new ResizeObserver(resize);
-		observer.observe(element);
-		return () => observer.disconnect();
 	}, []);
 	const sheet =
 		box.height > box.width * 1.1 && box.width < 760 ? PORTRAIT : LANDSCAPE;
@@ -766,7 +783,7 @@ export default function TownMap({
 	};
 
 	return (
-		<div ref={frame} className="map-frame">
+		<div ref={frame} className="map-frame lk-scene">
 			<svg
 				ref={map}
 				className={`town-map ${sheet.portrait ? "portrait" : "landscape"}`}
