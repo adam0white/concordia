@@ -67,7 +67,8 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
 		.click();
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
-	for (let i = 0; i < 5; i++) await step(page);
+	// Seed 42 first publishes a story at 09:00, on the fourth round.
+	for (let i = 0; i < 3; i++) await step(page);
 	await page.evaluate(() => {
 		(window as unknown as { readingGate: { hold: boolean } }).readingGate.hold =
 			true;
@@ -107,10 +108,16 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 		page.getByRole("dialog", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeVisible();
 	const held = await page.locator(".town-time strong").textContent();
+	expect(held).toBe("09:00");
 	await page.clock.fastForward(30000);
 	expect(await page.locator(".town-time strong").textContent()).toBe(held);
 	await closeSaves(page);
 	await page.clock.runFor(5000);
+	expect(
+		await page.evaluate(
+			() => (window as unknown as { townStepPosts: number }).townStepPosts,
+		),
+	).toBe(before.posts + 1);
 	expect(await page.locator(".town-time strong").textContent()).toBe(held);
 	await step(page);
 	expect(await page.locator(".town-time strong").textContent()).not.toBe(held);

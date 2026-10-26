@@ -25,6 +25,10 @@ async function doubleText(page: Page) {
 }
 
 async function reachable(target: Locator) {
+	// Center the control; nearest-edge scrolling can leave a fractional pixel clipped.
+	await target.evaluate((element) =>
+		element.scrollIntoView({ block: "center", inline: "nearest" }),
+	);
 	await expect(target).toBeInViewport({ ratio: 1 });
 	await expect(target).toBeVisible();
 	expect(
@@ -37,7 +41,9 @@ async function reachable(target: Locator) {
 			return {
 				text: element.textContent,
 				hit: !!hit && element.contains(hit),
-				clipped: element.scrollHeight > element.clientHeight + 1,
+				clipped:
+					element.scrollHeight > element.clientHeight + 1 ||
+					element.scrollWidth > element.clientWidth + 1,
 			};
 		}),
 	).toMatchObject({ hit: true, clipped: false });

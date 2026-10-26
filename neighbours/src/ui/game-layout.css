@@ -289,10 +289,11 @@ body,
 }
 .town-verbs {
 	display: grid;
-	grid-template-columns: 1fr 1fr 0.75fr;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 10ch), 1fr));
 	gap: 6px;
 }
 .town-verbs button {
+	overflow-wrap: anywhere;
 	padding: 4px 3px;
 	min-height: 52px;
 	line-height: 1.2;
