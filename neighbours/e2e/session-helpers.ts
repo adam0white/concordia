@@ -28,7 +28,7 @@ export async function closeSaves(page: Page) {
 		await expect(dialog).not.toBeVisible();
 	}
 	const enter = page.getByRole("button", {
-		name: /^(Enter|Return to) Alder Quay/,
+		name: /^(Enter|Return to) Mill Bridge/,
 	});
 	if (await enter.isVisible()) {
 		await enter.click();
@@ -52,7 +52,7 @@ export async function openDownload(page: Page) {
 export async function openOtherWays(page: Page) {
 	if (await page.locator(".other-ways-in").isVisible()) return;
 	const enter = page.getByRole("button", {
-		name: /^(Enter|Return to) Alder Quay/,
+		name: /^(Enter|Return to) Mill Bridge/,
 	});
 	if (!(await enter.isVisible())) {
 		await closeSaves(page);

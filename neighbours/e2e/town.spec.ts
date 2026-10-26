@@ -86,7 +86,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	page.on("pageerror", (error) => errors.push(error.message));
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -119,7 +119,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -167,7 +167,7 @@ test("390px town has no horizontal overflow and keyboard can open a person", asy
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -232,7 +232,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 }, info) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -259,7 +259,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	});
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -271,7 +271,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	await prepareClock(other);
 	await other.goto("/?lab=1");
 	await other
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(other.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await openSaves(other);
@@ -296,7 +296,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 		.getByRole("button", { name: "Load the saved town", exact: true })
 		.click();
 	await other
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(
 		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
@@ -322,7 +322,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	});
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -335,7 +335,7 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	await prepareClock(other);
 	await other.goto("/?lab=1");
 	await other
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(
 		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
@@ -376,7 +376,7 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 }, info) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -402,7 +402,7 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	});
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.getByRole("alert")).toContainText(
 		"The saved town could not be restored.",
@@ -520,7 +520,7 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	const neighbours = page.getByRole("navigation", {
 		name: "Familiar neighbours",
@@ -561,7 +561,7 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -659,7 +659,7 @@ test("retained outcomes stay near the clock and promise results survive into the
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();

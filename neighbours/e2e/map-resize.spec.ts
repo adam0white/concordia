@@ -41,7 +41,7 @@ test("phone-to-desktop resize keeps map marker targets at their screen size", as
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const widths = () =>
@@ -76,7 +76,7 @@ test("shared measurements follow current map lifetime without owning focus or hi
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await measuredMap(page);
@@ -143,7 +143,7 @@ test("shared measurements follow current map lifetime without owning focus or hi
 	);
 	expect(await page.locator(".game-frame").getAttribute("style")).toBe(retired);
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".map-frame")).toHaveCount(1);

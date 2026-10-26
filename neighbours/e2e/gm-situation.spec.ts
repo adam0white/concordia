@@ -38,7 +38,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
@@ -107,7 +107,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	expect(after.runtime.assistance.received).toBe(true);
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await exported(page)).toEqual(after);

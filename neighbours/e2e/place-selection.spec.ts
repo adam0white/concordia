@@ -12,7 +12,7 @@ for (const viewport of [
 		await page.setViewportSize(viewport);
 		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
 		await page
-			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 			.click();
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		const clock = await page.locator(".town-time").textContent();
@@ -88,7 +88,7 @@ test("place company distinguishes meeting from an immediate conversation", async
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await page.locator('[data-map-place="workshop"]').press("Enter");

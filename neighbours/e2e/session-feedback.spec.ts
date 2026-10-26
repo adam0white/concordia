@@ -104,7 +104,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await installGate(page);
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -217,7 +217,7 @@ test("exports survive rejected imports and exports from a replacement survive it
 	await installGate(page);
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -345,7 +345,7 @@ test("a rejected local JSON file resumes automatic time without another action",
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await openOtherWays(page);

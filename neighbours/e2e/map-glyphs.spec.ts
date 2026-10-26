@@ -4,7 +4,7 @@ import { showTab } from "./session-helpers";
 async function enter(page: Page) {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 }

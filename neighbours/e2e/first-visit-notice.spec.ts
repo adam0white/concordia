@@ -19,7 +19,7 @@ for (const width of [360, 1280]) {
 		).toBeLessThan(100);
 		await expect(notice.getByRole("button")).toHaveCount(0);
 		const enter = page.getByRole("button", {
-			name: "Enter Alder Quay",
+			name: "Enter Mill Bridge",
 			exact: true,
 		});
 		await expect(enter).toBeInViewport({ ratio: 1 });
@@ -51,7 +51,7 @@ for (const width of [360, 1280]) {
 			.getByRole("button", { name: "To the title page", exact: true })
 			.click();
 		await expect(
-			page.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ }),
+			page.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ }),
 		).toBeVisible();
 		await page.evaluate(
 			() =>
@@ -62,7 +62,7 @@ for (const width of [360, 1280]) {
 		await expect(notice).toHaveCount(1);
 		await page.reload();
 		await expect(
-			page.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ }),
+			page.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ }),
 		).toBeVisible();
 		await expect(notice).toHaveCount(0);
 	});

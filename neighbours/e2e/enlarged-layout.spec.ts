@@ -56,7 +56,7 @@ test("doubled computed text keeps town controls and scrolled Journal reachable",
 	await page.emulateMedia({ colorScheme: "light" });
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: "Enter Alder Quay", exact: true })
+		.getByRole("button", { name: "Enter Mill Bridge", exact: true })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const base = await page

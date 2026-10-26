@@ -21,7 +21,7 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 	);
 	expect(requests).toEqual([]);
 	const enter = page.getByRole("button", {
-		name: "Enter Alder Quay",
+		name: "Enter Mill Bridge",
 		exact: true,
 	});
 	await expect(enter).toBeInViewport({ ratio: 1 });
@@ -44,7 +44,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
@@ -77,7 +77,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 	expect((await latest())?.runtime.round).toBe(0);
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect((await latest())?.runtime.seed).toBe(71);
@@ -94,7 +94,7 @@ test("one top-bar information panel supports keyboard and Escape", async ({
 	await info.focus();
 	await page.keyboard.press("Space");
 	const popup = page.getByRole("dialog", {
-		name: "About Alder Quay",
+		name: "About Mill Bridge",
 		exact: true,
 	});
 	await expect(popup).toBeVisible();

@@ -46,7 +46,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	await page.setViewportSize({ width: 320, height: 740 });
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await openSaves(page);
@@ -100,7 +100,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	expect(proposed.rounds).toBe(before.rounds);
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await packet(page)).toEqual(proposed);

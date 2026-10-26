@@ -9,7 +9,7 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	page.on("request", (request) => requests.push(request.url()));
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Recorded studies");

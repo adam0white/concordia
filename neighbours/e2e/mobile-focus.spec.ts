@@ -6,7 +6,7 @@ for (const width of [360, 1280])
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
 		await page.goto("/?lab=1");
 		await page
-			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 			.click();
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await expect(page.locator(".game-sheet")).toHaveCount(1);

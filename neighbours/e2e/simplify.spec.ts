@@ -44,7 +44,7 @@ for (const [width, height] of [
 			page.getByRole("button", { name: /Other ways in/ }),
 		).toHaveCount(0);
 		await page
-			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 			.click();
 		await expect(page.locator(".town-ready")).toBeVisible();
 		await page.evaluate(() => document.fonts.ready);

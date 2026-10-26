@@ -5,7 +5,7 @@ test("entry stays visible and one menu holds the town", async ({ page }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto("/?lab=1");
 	const enter = page.getByRole("button", {
-		name: "Enter Alder Quay",
+		name: "Enter Mill Bridge",
 		exact: true,
 	});
 	await expect(enter).toBeInViewport({ ratio: 1 });

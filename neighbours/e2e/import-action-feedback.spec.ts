@@ -58,7 +58,7 @@ test("worker rejects JSON arrays and invalid objects with truthful recovery and 
 }, info) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const original = await exportPacket(page, info, "original");
@@ -149,7 +149,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	});
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const original = await exportPacket(page, info, "before-tools");

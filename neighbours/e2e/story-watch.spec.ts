@@ -6,7 +6,7 @@ test("automatic pacing hides clock controls and the menu holds", async ({
 }) => {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await expect(
@@ -64,7 +64,7 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 	});
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	// Seed 42 first publishes a story at 09:00, on the fourth round.

@@ -34,7 +34,7 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 	});
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
@@ -93,7 +93,7 @@ test("a held worker reply shows pending immediately without moving the menu", as
 	});
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });

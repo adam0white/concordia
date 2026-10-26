@@ -51,7 +51,7 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 async function startPaused(page: Page) {
 	await page.goto("/?lab=1");
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
@@ -113,7 +113,7 @@ test("actual browser gzip export preserves the complete town across import and d
 		.toBe(original.packet.runtime.now);
 	await page.reload();
 	await page
-		.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 		.click();
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();

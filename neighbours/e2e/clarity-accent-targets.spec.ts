@@ -87,7 +87,7 @@ for (const viewport of [
 		await page.setViewportSize(viewport);
 		await page.goto("/?lab=1");
 		await page
-			.getByRole("button", { name: /^(Enter|Return to) Alder Quay/ })
+			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 			.click();
 		await expect(page.locator(".town-ready")).toBeVisible();
 		await expectStandaloneTarget(

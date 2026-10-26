@@ -114,7 +114,7 @@ for (const width of [360, 1280]) {
 		});
 		await page.goto("/?lab=1");
 		await expect(
-			page.getByRole("button", { name: "Enter Alder Quay", exact: true }),
+			page.getByRole("button", { name: "Enter Mill Bridge", exact: true }),
 		).toBeInViewport();
 		await expect(
 			page.locator("details").filter({ hasText: "Playtest privacy" }),
@@ -293,7 +293,7 @@ for (const width of [360, 1280]) {
 			.getByRole("button", { name: "To the title page", exact: true })
 			.click();
 		await expect(
-			page.getByRole("button", { name: /^Return to Alder Quay/ }),
+			page.getByRole("button", { name: /^Return to Mill Bridge/ }),
 		).toBeVisible();
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
 		const path = await download.path();
@@ -348,7 +348,7 @@ for (const width of [360, 1280]) {
 			}
 			await page.goto(entry);
 			await page
-				.getByRole("button", { name: "Enter Alder Quay", exact: true })
+				.getByRole("button", { name: "Enter Mill Bridge", exact: true })
 				.click();
 			await expect(page.locator(".town-ready")).toBeVisible({
 				timeout: 120000,
@@ -440,7 +440,7 @@ for (const width of [360, 1280]) {
 		});
 		await page.goto("/?lab=1");
 		await expect(
-			page.getByRole("button", { name: "Enter Alder Quay", exact: true }),
+			page.getByRole("button", { name: "Enter Mill Bridge", exact: true }),
 		).toBeVisible();
 		await menu(page);
 		await page.getByRole("button", { name: /^Feedback/ }).click();
