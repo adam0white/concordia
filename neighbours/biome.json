@@ -18,5 +18,11 @@
 			}
 		}
 	},
-	"root": true
+	"root": true,
+	"overrides": [
+		{
+			"includes": ["tests/fixtures/pass-rafi-453be903.json"],
+			"formatter": { "enabled": false }
+		}
+	]
 }

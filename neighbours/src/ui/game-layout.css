@@ -1015,7 +1015,8 @@ body,
 	font-size: clamp(16px, 14px + 0.5vw, 20px);
 }
 .app.game-frame {
-	grid-template-rows: auto auto minmax(0, 1fr) auto;
+	grid-template-rows: auto auto minmax(360px, 1fr) auto;
+	overflow-y: auto;
 }
 .game-frame[data-screen="title"],
 .game-frame[data-screen="loading"] {
@@ -1050,6 +1051,17 @@ body,
 	min-height: 44px;
 	height: auto;
 }
+.game-frame .game-topbar button {
+	width: auto;
+	height: auto;
+	min-width: 44px;
+	flex: 0 0 auto;
+	padding: 0.2em;
+}
+.game-frame .topbar-words {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
 .game-frame .game-state {
 	min-height: 36px;
 	height: auto;
@@ -1060,10 +1072,26 @@ body,
 	overflow: visible;
 }
 .game-frame .game-play {
-	grid-template-rows: minmax(120px, 1fr) minmax(360px, 65%);
+	grid-template-rows: minmax(120px, 1fr) minmax(0, 65%);
 }
 .game-frame .game-column {
 	grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.game-frame .game-actions {
+	max-height: 35dvh;
+	min-height: 0;
+	overflow-y: auto;
+}
+/* Bound the phone's resident list before allocating the fixed action area.
+ * The map and actions remain visible when text grows; the list can scroll.
+ */
+@media (max-width: 767px) {
+	.game-frame[data-screen="town"] .game-column {
+		grid-template-rows: minmax(0, 1fr) auto;
+	}
+	.game-frame[data-screen="town"] .game-sheet {
+		display: none;
+	}
 }
 .game-frame .town-guidance {
 	overflow: auto;

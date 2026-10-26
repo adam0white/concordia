@@ -1,10 +1,10 @@
 /// <reference lib="webworker" />
 
 import { AdvanceCancellation, advanceTown } from "./advance-town.ts";
-import { RuntimePort } from "./bridge-port.ts";
 import { compareTown } from "./comparison.ts";
 import type { UiCommand, UiReply } from "./contracts";
 import { restoreCheckpoint } from "./python-session.ts";
+import { ReceivingRuntimePort as RuntimePort } from "./received-town.ts";
 
 interface PythonRuntime {
 	FS: {

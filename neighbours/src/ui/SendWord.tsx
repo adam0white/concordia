@@ -1,3 +1,4 @@
+import { FEEDBACK_LABELS, type FeedbackLabel } from "@adam0white/lab-client";
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useLabRecording } from "./lab";
@@ -36,6 +37,9 @@ export default function SendWord({
 	}, [session.downloadUrl]);
 	const [sharePlay, setSharePlay] = useState(false);
 	const [note, setNote] = useState("");
+	const [feedbackLabel, setFeedbackLabel] = useState<FeedbackLabel | null>(
+		null,
+	);
 	const [verdict, setVerdict] = useState("");
 	const [sending, setSending] = useState(false);
 	const [sent, setSent] = useState(false);
@@ -51,7 +55,11 @@ export default function SendWord({
 		if (sending) return;
 		setSending(true);
 		setError("");
-		const text = [verdict ? `Verdict: ${verdict}` : "", note.trim()]
+		const text = [
+			feedbackLabel ? FEEDBACK_LABELS[feedbackLabel] : "",
+			verdict ? `Verdict: ${verdict}` : "",
+			note.trim(),
+		]
 			.filter(Boolean)
 			.join("\n\n");
 		const trimmedName = name.trim().slice(0, 60);
@@ -97,6 +105,25 @@ export default function SendWord({
 								Share this run and my play with the lab
 							</label>
 						)}
+						<fieldset
+							className="feedback-verdicts"
+							aria-label="What is happening?"
+						>
+							{(Object.keys(FEEDBACK_LABELS) as FeedbackLabel[]).map(
+								(label) => (
+									<button
+										type="button"
+										key={label}
+										aria-pressed={feedbackLabel === label}
+										onClick={() =>
+											setFeedbackLabel(feedbackLabel === label ? null : label)
+										}
+									>
+										{FEEDBACK_LABELS[label]}
+									</button>
+								),
+							)}
+						</fieldset>
 						<fieldset
 							className="feedback-verdicts"
 							aria-label="Would you keep playing?"
@@ -152,6 +179,7 @@ export default function SendWord({
 									? `Day ${session.town.day}${labMode() ? ` · seed ${session.town.seed}` : ""}`
 									: "No town has started."}
 							</p>
+							{feedbackLabel && <p>{FEEDBACK_LABELS[feedbackLabel]}</p>}
 							{verdict && <p>Verdict: {verdict}</p>}
 							{note.trim() && <blockquote>{note.trim()}</blockquote>}
 							<a href="https://human.adamwhite.work/lab/privacy/">

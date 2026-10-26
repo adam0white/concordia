@@ -1,6 +1,6 @@
 /** Native JSON-lines transport. stdout is reserved for protocol replies. */
 import { createInterface } from "node:readline";
-import { RuntimePort } from "../src/bridge-port.ts";
+import { ReceivingRuntimePort as RuntimePort } from "../src/received-town.ts";
 
 function argument(name: string, fallback: number): number {
 	const index = process.argv.indexOf(name);

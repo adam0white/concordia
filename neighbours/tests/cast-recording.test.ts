@@ -1,8 +1,11 @@
+import { readFileSync } from "node:fs";
+import type { Person } from "@adam0white/human-framework";
 import {
 	canonicalCast,
 	closePersonaBranch,
 	createPersona,
 	initialPersonaLife,
+	type PersonaEnvelope,
 	preparePersonaLife,
 	validatePersona,
 } from "@adam0white/lab-client";
@@ -86,6 +89,128 @@ beforeEach(() => {
 	vi.stubGlobal("window", new EventTarget());
 });
 afterEach(() => vi.unstubAllGlobals());
+it("keeps received Rafi's personal source rule through an actual town checkpoint and readmission", async () => {
+	const {
+		prepareReceivingTownCast,
+		restoreReceivingRuntime,
+		ReceivingRuntimePort,
+	} = await import("../src/received-town.ts");
+	const actual = JSON.parse(
+		readFileSync(
+			new URL("./fixtures/pass-rafi-453be903.json", import.meta.url),
+			"utf8",
+		),
+	);
+	const input = preparePersonaLife(
+		actual.envelope,
+		actual.envelope.transfer.life.clock.watermark,
+	);
+	let saved: TownPacket | undefined;
+	const session = new CastSession(async () => {
+		if (!saved) throw Error("No current control packet");
+		return saved;
+	});
+	fake.request.mockImplementation(async (q) => {
+		if (q.action === "prepareBatch")
+			return {
+				expectedHeads: Object.fromEntries(
+					ALLOCATION.map((c) => [
+						c.castId,
+						c.castId === actual.envelope.castId
+							? actual.envelope.revision
+							: null,
+					]),
+				),
+				inputs: [input],
+				blocked: [],
+			};
+		return {};
+	});
+	const initial = await session.fresh(42, 6);
+	const port = new ReceivingRuntimePort(42, 6);
+	port.runtime = restoreReceivingRuntime(initial.runtime);
+	port.wanted.add("ravi");
+	for (let round = 0; round < 384; round++) {
+		const ids = port.dispatch({ op: "prepare" }) as string[];
+		const candidate = port.boundaries.get("ravi");
+		if (
+			candidate &&
+			candidate.now === port.runtime.view().now &&
+			candidate.agenda.goals.every((goal) => goal.status !== "active")
+		)
+			break;
+		for (const actorId of ids)
+			port.dispatch({
+				op: "apply",
+				actorId,
+				actionId: port.dispatch({ op: "choose", actorId }),
+			});
+	}
+	const person = port.boundaries.get("ravi");
+	if (!person) throw Error("No actual idle Rafi boundary");
+	const packet: TownPacket = {
+		schema: "neighbours/concordia@1",
+		rounds: (port.runtime.export() as TownPacket["runtime"]).round,
+		runtime: port.runtime.export() as TownPacket["runtime"],
+		castBoundary: { actorId: "ravi", person },
+	};
+	saved = packet;
+	session.commitFresh();
+	await session.checkpoint(packet, "hf.cast.rafi.pass");
+	const head = await (await import("@adam0white/lab-client")).validatePersona(
+		session.heads[0],
+	);
+	const life = head.transfer.life as { clock: { watermark: number } };
+	// A valid checksum cannot replace the raw-state/origin binding of an own continuation.
+	const { createPersona } = await import("@adam0white/lab-client");
+	for (const mutate of [
+		(p: PersonaEnvelope) => {
+			delete p.transfer.passOrigin;
+		},
+		(p: PersonaEnvelope) => {
+			(p.transfer.passWitness as Person).body.fitness = 0.5;
+		},
+		(p: PersonaEnvelope) => {
+			p.branchId = "unrelated-branch";
+		},
+		(p: PersonaEnvelope) => {
+			(
+				p.transfer.person as { person: { health: { fitness: number } } }
+			).person.health.fitness = 0.5;
+		},
+	]) {
+		const candidate = structuredClone(head);
+		mutate(candidate);
+		const { revision: _revision, ...body } = candidate;
+		const checksummed = await createPersona(body);
+		expect(() =>
+			prepareReceivingTownCast(73, 6, [
+				preparePersonaLife(checksummed, life.clock.watermark),
+			]),
+		).toThrow();
+	}
+
+	const received = prepareReceivingTownCast(73, 6, [
+		preparePersonaLife(head, life.clock.watermark),
+	]);
+	const rafi = received.people.find((r) => r.person.id === "ravi")?.person;
+	expect(rafi?.rng).toEqual(person.rng);
+	expect(
+		rafi?.agenda.commitments.some(
+			(c) =>
+				c.label === "my rule about the jar" && c.violatedBy?.[0] === "skim",
+		),
+	).toBe(true);
+	expect(rafi?.skills).toEqual({});
+	const a = restoreReceivingRuntime(received);
+	const b = restoreReceivingRuntime(JSON.parse(JSON.stringify(a.export())));
+	for (let round = 0; round < 16; round++) {
+		a.step();
+		b.step();
+		expect(b.export()).toEqual(a.export());
+	}
+	session.close();
+});
 describe("browser history recording and ownership", () => {
 	it.each([
 		{ on: true, sharePlay: false },

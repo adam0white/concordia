@@ -89,6 +89,10 @@ const notices = [
 		`Human Framework ${FRAMEWORK_VERSION} (MIT)`,
 		resolve(app, "node_modules/@adam0white/human-framework/LICENSE"),
 	],
+	[
+		"@noble/hashes 2.4.0 (MIT)",
+		resolve(app, "node_modules/@noble/hashes/LICENSE"),
+	],
 	["React (MIT)", resolve(app, "node_modules/react/LICENSE")],
 	["React DOM (MIT)", resolve(app, "node_modules/react-dom/LICENSE")],
 	["Pyodide 314.0.7 (MPL-2.0)", resolve(app, "licenses/pyodide.txt")],

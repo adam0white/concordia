@@ -1,7 +1,7 @@
 import type { RuntimePort } from "./bridge-port.ts";
 import type { Intervention, TownComparison, TownView } from "./contracts.ts";
-import { restoreRuntime } from "./core/index.ts";
 import { type PythonSession, restoreCheckpoint } from "./python-session.ts";
+import { restoreReceivingRuntime as restoreRuntime } from "./received-town.ts";
 
 function project(view: TownView): TownComparison["baseline"] {
 	const known = view.people

@@ -28,10 +28,14 @@ import {
 	type CastRole,
 	HOST_CAST,
 } from "./core/canonical-cast.ts";
-import { type CastChapter, prepareTownCast } from "./core/cast-continuity.ts";
-import { restoreRuntime } from "./core/restore.ts";
+import type { CastChapter } from "./core/cast-continuity.ts";
 import { createRuntime } from "./core/scenario.ts";
 import type { Save } from "./core/state.ts";
+import { isPassInput, passContinuationWitness } from "./pass-rafi.ts";
+import {
+	prepareReceivingTownCast as prepareTownCast,
+	restoreReceivingRuntime as restoreRuntime,
+} from "./received-town.ts";
 import { lab } from "./ui/lab.tsx";
 export interface TownPacket {
 	schema: string;
@@ -517,6 +521,12 @@ export class CastSession {
 		this.sources[digest] = raw;
 		if (JSON.stringify(this.sources).length > 1048576)
 			throw Error("Export the full history before saving more people.");
+		const passInput = p.runtime.chapter.inputs.find(
+			(i) => i.parent.castId === castId && isPassInput(i),
+		);
+		const passWitness = passInput
+			? passContinuationWitness(passInput, raw)
+			: {};
 		const envelope = await createPersona({
 			format: "hf-persona/1",
 			castId,
@@ -528,6 +538,7 @@ export class CastSession {
 				castPassport: "neighbours-cast/1",
 				sourceRole: id,
 				person: portable,
+				...passWitness,
 				life,
 				checkpoint: {
 					schema: raw.schema,
