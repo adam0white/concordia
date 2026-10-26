@@ -1,3 +1,37 @@
+# Current technical receipt — 2026-10-26
+
+Remaining: Adam accepts reading, timing and feel, target **2026-11-03**.
+Authorized lab-panel rounds remain under the playtest director; this receipt is
+not a player round. Friends’ playtests and Show HN remain paused.
+
+Signed source `55f9546553ac90d6a9f08f06f521517d0bb34ebf` is delivered.
+Exact CI **40276129493** succeeded at that SHA. The clean public release reports
+that source, HF **3.0.0** and `dirty:false`; all **28 served files** match the build.
+Cloudflare version: `9a0ff661-3d28-45c7-97de-35b7ef8716c4`.
+
+Native CPython **3.12.13** and absl **2.5.1** are verified. Browser Pyodide
+**314.0.7** / CPython **3.14.2** is preserved. Checks pass: **39 native**,
+**206-person native/WASM parity**, **84 browser assertions** and **587 app tests**.
+Three actual generation calls refreshed the frozen recordings; subsequent exact
+replays made **zero model calls**. Generation and replay are separate evidence.
+
+Existing Chrome ran a local mirror of literal served bytes at **360×690** and
+**1280×800**. Actual Python loaded; full JSON, gzip and compact imports, reload
+and natural continuation passed. Exported packets matched raw receiving-runtime
+continuation and 16 further exact TypeScript host rounds per packet.
+This proves neither production-origin persistence nor authenticated ownership/CAS,
+a human receiving journey, player acceptance or owner readiness. Feedback choices
+were checked locally; Submit was untouched. No fresh native generation occurred
+in the release QA.
+
+Release cleanup removed its tree, server, tab, mirror and exact task downloads.
+Root verified those processes/tab absent and removed the native 3.12 venv.
+Full receipts: `neighbours-python-ready/release-report.md`, `exact-ci.json` and
+`root-final-cleanup.json` in the supplied Python handback. This documentation-only
+prefix does not advance the live app release.
+
+## Dated SDK delivery and earlier history — preserved 2026-10-26
+
 # Neighbours handoff
 
 ## Current SDK source and technical delivery — 2026-10-26
