@@ -1,13 +1,10 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import "./style.css";
-import "./ui/game-layout.css";
+import { classifyEntry } from "./entry";
 
-const root = document.getElementById("root");
-if (!root) throw new Error("Missing application root");
-createRoot(root).render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>,
-);
+const entry = classifyEntry(new URL(location.href));
+if (entry.kind === "redirect") location.replace(entry.href);
+else if (entry.kind === "refuse") {
+	const root = document.getElementById("root");
+	if (root)
+		root.textContent =
+			"Invalid file entry. Open /file/ to choose a saved town.";
+} else void import("./render");
