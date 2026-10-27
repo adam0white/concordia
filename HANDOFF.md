@@ -48,6 +48,20 @@ prefix does not advance the live app release.
 
 # Neighbours handoff
 
+## Canonical preserving file entry candidate — 2026-10-27
+
+Remaining: one director-supplied independent review of the exact READY candidate, signed source and exact `Neighbours` / `verify` source CI, root merge to `neighbours`, exact integration CI and fresh clean deployment/live hashes. No source commit or delivery is claimed by this candidate note. Adam accepts feel separately.
+
+`/file/` is the public memory-file entry. A pure dispatcher runs before the App/Lab/native import. One legacy `?file=1` redirects to `/file/` while retaining other attribution parameters and the fragment. Duplicate or invalid values refuse without importing the application. The build emits literal `file/index.html`; static serving does not require an SPA fallback. The ordinary entry still owns native startup; the public Other ways in link uses `/file/`. App and Shelf construction use that same canonical path. No current source registers a service worker. An active legacy service worker and occupied owner profile remain UNKNOWN; no cache or storage is cleared.
+
+File entry uses the immutable public client0.4.15 `createLab({preservation:"preserve"})`, its `preservationStatus`, and `dispose`. Only `existing-local` admits run tracking under the current policy. Other statuses dispose before tracking and visibly explain that memory play and download remain available. The real persistent Recording switch and SDK privacy signals remain authoritative. The kit notice uses its public preserving option. No ordinary-client fallback, identity creation, forced ON or attribution inference is added. A registered live client is not synchronously disposed on pagehide: host playback stops, the asynchronous final save response returns to the SDK, and the host runtime retires. The SDK owns serialization/queue persistence and page lifetime; it provides no public asynchronous delivery barrier.
+
+The first independent review reproduced late host work during that final capture: a held export published a blob download, and a held player-state reply queued ten additional save chunks after pagehide. The correction separates host activity from the final snapshot's runtime lifetime. Pagehide synchronously invalidates ordinary exports, imports, save requests and run-preparation timers. Export/persistence completions check host activity before UI or SDK writes. Hidden worker replies bypass ordinary persistence and enter only the final-save filter. Controls hold both races independently and still verify the complete asynchronous final SDK queue capture. The same reviewer must clear the corrected exact candidate; the first candidate is not cleared.
+
+The existing file controller, generation/cancellation, staged capacity checks, 50 MiB file bounds, 1 MiB source-journal bound, complete native packets and codecs stay in place. Synthetic controls cover full JSON and gzip imports, identical ordinary-input continuation, complete output and original source-person SHA, native database isolation, real SDK identity/session/Recording preservation, truthful missing/mismatch/incompatible refusal and delayed final pagehide queue capture. A synthetic local queue is not delivery, ACK, ingestion, human attribution or owner-profile preservation. Current whole-source checks and precise receipts are in the external READY freeze, not inferred from historical receipts.
+
+The delivered named-slot increment does not close `nbh-01z.21` matched comparison. Learning/context work in `nbh-01z.10` and budget-gated long-lived service/public model visitors in `nbh-01z.19` remain separate engineering. This file batch does not accept the whole game, player feel or the 2026-11-03 owner review.
+
 ## Current SDK source and technical delivery — 2026-10-26
 
 Signed source `9645d113efee910d8d4902c080d1c9083f5d9f10` on `origin/neighbours`

@@ -14,7 +14,7 @@ import { personOutcome, personOutcomeNotice } from "../person-outcome.ts";
 import { RuntimeClient } from "../runtime-client";
 import { orderedReplies } from "./durable-replies";
 import { datedClock } from "./format";
-import { lab } from "./lab";
+import { fileRecordingAllowed, lab } from "./lab";
 import { type ObservedFeed, observe } from "./observations";
 import {
 	DeviceSaves,
@@ -185,6 +185,7 @@ export function useVisitorSession({
 	const [hasPrevious, setHasPrevious] = useState(false);
 	const [trends, setTrends] = useState<Record<string, number[]>>({});
 	const client = useRef<RuntimeClient | null>(null);
+	const fileRetired = useRef(false);
 	const pending = useRef(false);
 	const saveRequestId = useRef(0);
 	const exportRequest = useRef<number | null>(null);
@@ -249,6 +250,7 @@ export function useVisitorSession({
 		}
 	}, []);
 	const dispatch = useCallback((command: UiCommand) => {
+		if (fileRetired.current) return;
 		if (command.type === "save") {
 			const requestId = command.requestId ?? ++saveRequestId.current;
 			saveRequests.current.set(requestId, {
@@ -331,6 +333,9 @@ export function useVisitorSession({
 		if (!enabled) return;
 		if (freshLocal) setTown(undefined);
 		let active = true;
+		let hiding = false;
+		fileRetired.current = false;
+		const hostActive = () => active && !hiding;
 		const saves = fileSession
 			? null
 			: new DeviceSaves(() => {
@@ -339,7 +344,7 @@ export function useVisitorSession({
 							type: "cancel-advance",
 							requestId: advancePending.current,
 						});
-					if (!active) return;
+					if (!hostActive()) return;
 					saveConflictRef.current = true;
 					setSaveConflict(true);
 					autosaveEnabled.current = false;
@@ -349,6 +354,12 @@ export function useVisitorSession({
 					setSaved("Another tab changed the saved town");
 				});
 		let runtime: RuntimeClient | null = null;
+		let retireTimer: ReturnType<typeof setTimeout> | undefined;
+		const retireRuntime = () => {
+			active = false;
+			runtime?.close();
+			if (client.current === runtime) client.current = null;
+		};
 		let cancelPrepared: (() => void) | undefined;
 		let telemetryTown: TownView | undefined;
 		let committedSave:
@@ -362,6 +373,7 @@ export function useVisitorSession({
 			slot: "latest" | "previous",
 			generation: number,
 		) => {
+			if (!hostActive()) return;
 			const data = { slot, packet: structuredClone(packet) };
 			committedSave = { generation, data };
 			lab.captureSave(fileSession ? { file: true, packet: data.packet } : data);
@@ -374,41 +386,85 @@ export function useVisitorSession({
 				timer: ReturnType<typeof setTimeout>;
 			}
 		>();
-		const stopRecording = lab.trackRun(
-			async () => {
-				if (!runtime || !telemetryTown || !clockHealthy.current) return null;
-				const generation = acceptedGeneration.current;
-				const packet = await new Promise<unknown>((resolve) => {
-					const requestId = -++saveRequestId.current;
-					const timer = setTimeout(() => {
-						telemetryRequests.delete(requestId);
-						resolve(null);
-					}, 15000);
-					telemetryRequests.set(requestId, { generation, resolve, timer });
-					runtime?.send({ type: "save", requestId });
-				});
-				if (!active || generation !== acceptedGeneration.current) return null;
-				// Retry only checkpoints committed by this visitor's accepted world,
-				// after identity is settled. Never attach a prior town's device save.
-				if (committedSave?.generation === generation)
-					lab.captureSave(
-						fileSession
-							? { file: true, packet: committedSave.data.packet }
-							: committedSave.data,
-					);
-				return active && generation === acceptedGeneration.current
-					? packet
-					: null;
-			},
-			{
-				runKey: () =>
-					telemetryTown
-						? `${telemetryTown.seed}:${acceptedGeneration.current}`
-						: "title",
-				getLogs: () =>
-					telemetryTown?.events.slice(-40).map((event) => event.text) ?? [],
-			},
-		);
+		const stopRecording =
+			!fileSession || fileRecordingAllowed()
+				? lab.trackRun(
+						async () => {
+							if (
+								!active ||
+								!runtime ||
+								!telemetryTown ||
+								!clockHealthy.current
+							)
+								return null;
+							const generation = acceptedGeneration.current;
+							const packet = await new Promise<unknown>((resolve) => {
+								const requestId = -++saveRequestId.current;
+								const timer = setTimeout(() => {
+									telemetryRequests.delete(requestId);
+									resolve(null);
+								}, 15000);
+								telemetryRequests.set(requestId, {
+									generation,
+									resolve,
+									timer,
+								});
+								runtime?.send({ type: "save", requestId });
+							});
+							// The SDK still has to serialize and enqueue this returned packet.
+							// Retire only the host runtime; do not dispose the registered live SDK.
+							if (hiding) retireTimer = setTimeout(retireRuntime, 0);
+							if (!active || generation !== acceptedGeneration.current)
+								return null;
+							// Retry only checkpoints committed by this visitor's accepted world,
+							// after identity is settled. Never attach a prior town's device save.
+							if (!hiding && committedSave?.generation === generation)
+								lab.captureSave(
+									fileSession
+										? { file: true, packet: committedSave.data.packet }
+										: committedSave.data,
+								);
+							return active && generation === acceptedGeneration.current
+								? packet
+								: null;
+						},
+						{
+							runKey: () =>
+								telemetryTown
+									? `${telemetryTown.seed}:${acceptedGeneration.current}`
+									: "title",
+							getLogs: () =>
+								telemetryTown?.events.slice(-40).map((event) => event.text) ??
+								[],
+						},
+					)
+				: () => {};
+		const hideFile = () => {
+			if (!fileSession) return;
+			hiding = true;
+			fileRetired.current = true;
+			// Keep only the already requested final SDK save alive. Retire all
+			// ordinary host continuations synchronously, before another reply runs.
+			replacementIntent.current++;
+			exportRequest.current = null;
+			saveRequests.current.clear();
+			autosaveEnabled.current = false;
+			persistenceAfterState.current = false;
+			replaceAfterSave.current = null;
+			advanceOrigin.current = null;
+			skipRun.current = null;
+			for (const request of runRequests.current.values()) {
+				clearTimeout(request.timer);
+				request.reject(
+					new Error("The file session closed before its run was ready."),
+				);
+			}
+			runRequests.current.clear();
+			setPlaying(false);
+			cancelPrepared?.();
+			if (!telemetryRequests.size) retireRuntime();
+		};
+		window.addEventListener("pagehide", hideFile);
 		let initialSavedPacket: unknown = fileSession ? filePacket : undefined;
 		let savedReadFailed = false;
 		let firstReady = true;
@@ -421,13 +477,22 @@ export function useVisitorSession({
 				: "Checking the saved town on this device…",
 		);
 		const owns = (generation: number, owner = runtime) =>
-			active &&
+			hostActive() &&
 			runtime === owner &&
 			client.current === owner &&
 			generation === worldGeneration.current &&
 			!saveConflictRef.current;
 		const handleReply = (reply: UiReply) => {
 			if (!active) return;
+			if (
+				hiding &&
+				!(
+					reply.type === "save" &&
+					reply.requestId !== undefined &&
+					telemetryRequests.has(reply.requestId)
+				)
+			)
+				return;
 			if (
 				reply.type === "save" &&
 				reply.requestId !== undefined &&
@@ -821,7 +886,7 @@ export function useVisitorSession({
 					)
 						.then(() => {
 							if (
-								!active ||
+								!hostActive() ||
 								saveConflictRef.current ||
 								generation < acceptedGeneration.current
 							)
@@ -848,7 +913,7 @@ export function useVisitorSession({
 						})
 						.catch((failure: unknown) => {
 							if (
-								!active ||
+								!hostActive() ||
 								generation < acceptedGeneration.current ||
 								failure instanceof SaveConflictError ||
 								saveConflictRef.current
@@ -879,7 +944,7 @@ export function useVisitorSession({
 					void encodeSave(reply.save).then(
 						(blob) => {
 							if (
-								!active ||
+								!hostActive() ||
 								exportRequest.current !== requestId ||
 								generation < acceptedGeneration.current
 							)
@@ -897,7 +962,7 @@ export function useVisitorSession({
 						},
 						(failure: unknown) => {
 							if (
-								!active ||
+								!hostActive() ||
 								exportRequest.current !== requestId ||
 								generation < acceptedGeneration.current
 							)
@@ -920,7 +985,7 @@ export function useVisitorSession({
 			}
 		};
 		const handle = (reply: UiReply) => {
-			if (!active) return;
+			if (!hostActive()) return;
 			try {
 				handleReply(reply);
 			} finally {
@@ -933,7 +998,7 @@ export function useVisitorSession({
 		const persistAnswer = (reply: UiReply & { save: unknown }) => {
 			const command = stateCommands.current[0];
 			if (
-				!active ||
+				!hostActive() ||
 				saveConflictRef.current ||
 				!command ||
 				command.generation < acceptedGeneration.current ||
@@ -948,7 +1013,7 @@ export function useVisitorSession({
 			).then(
 				() => {
 					if (
-						!active ||
+						!hostActive() ||
 						saveConflictRef.current ||
 						generation < acceptedGeneration.current
 					)
@@ -963,7 +1028,7 @@ export function useVisitorSession({
 				},
 				(failure: unknown) => {
 					if (
-						!active ||
+						!hostActive() ||
 						generation < acceptedGeneration.current ||
 						failure instanceof SaveConflictError ||
 						saveConflictRef.current
@@ -986,7 +1051,13 @@ export function useVisitorSession({
 			setHasSave(true);
 			setSaved(savedLabel(packet));
 		};
-		const receive = orderedReplies(handle, persistAnswer);
+		const ordered = orderedReplies(handle, persistAnswer);
+		const receive = (reply: UiReply) => {
+			// Final capture must not wait behind ordinary persistence. Hidden
+			// replies enter only the final-save filter, never persistAnswer.
+			if (hiding) handleReply(reply);
+			else ordered(reply);
+		};
 		// Named copies are native checkpoints only. The menu holds rounds; this barrier
 		// also drains own storage writes and binds each await and CAS to this runtime.
 		if (saves)
@@ -1119,7 +1190,7 @@ export function useVisitorSession({
 						// an "unchanged" failure. Adopt the committed town if this visitor still
 						// exists; close/disposal never revives a retired UI or runtime.
 						if (
-							!active ||
+							!hostActive() ||
 							runtime !== owner ||
 							client.current !== owner ||
 							generation !== worldGeneration.current
@@ -1153,7 +1224,7 @@ export function useVisitorSession({
 			};
 
 		const startRuntime = () => {
-			if (!active) return;
+			if (!hostActive()) return;
 			const started = new RuntimeClient(
 				(reply) => {
 					if (client.current === started) receive(reply);
@@ -1172,7 +1243,7 @@ export function useVisitorSession({
 				async (value) => {
 					if (freshLocal && value !== undefined) {
 						try {
-							await saves.write(value, "previous", () => active);
+							await saves.write(value, "previous", () => hostActive());
 						} catch {
 							setError(
 								"The previous town could not be preserved. Download it before starting a local town.",
@@ -1180,13 +1251,13 @@ export function useVisitorSession({
 							return;
 						}
 					}
-					if (!active) return;
+					if (!hostActive()) return;
 					initialSavedPacket = freshLocal ? undefined : value;
 					setHasSave(value !== undefined);
 					startRuntime();
 				},
 				() => {
-					if (!active) return;
+					if (!hostActive()) return;
 					savedReadFailed = true;
 					setSaved("Device save unavailable");
 					startRuntime();
@@ -1196,10 +1267,16 @@ export function useVisitorSession({
 		else
 			void localSave("previous")
 				.then((value) => {
-					if (active) setHasPrevious(value !== undefined);
+					if (hostActive()) setHasPrevious(value !== undefined);
 				})
 				.catch(() => {});
 		return () => {
+			window.removeEventListener("pagehide", hideFile);
+			if (fileSession) {
+				fileRetired.current = true;
+				replacementIntent.current++;
+			}
+			clearTimeout(retireTimer);
 			advanceOrigin.current = null;
 			skipRun.current = null;
 			active = false;
@@ -1269,9 +1346,15 @@ export function useVisitorSession({
 				dispatch({ type: "step" });
 			}
 		}, rate.interval);
-		return () => clearInterval(timer);
-	}, [playing, rate.interval, hasTown, dispatch]);
+		const stop = () => clearInterval(timer);
+		if (fileSession) window.addEventListener("pagehide", stop);
+		return () => {
+			stop();
+			window.removeEventListener("pagehide", stop);
+		};
+	}, [playing, rate.interval, hasTown, dispatch, fileSession]);
 	const send = (command: UiCommand) => {
+		if (fileRetired.current) return;
 		if (
 			!comparisonPending.current &&
 			advancePending.current === null &&
@@ -1541,6 +1624,7 @@ export function useVisitorSession({
 		setPlaying(true);
 	};
 	const requestExport = () => {
+		if (fileRetired.current) return;
 		if (stateCommands.current.length > 0 || pending.current) return;
 		if (advancePending.current !== null || comparisonPending.current) return;
 		const previousFailure = lastExportFailure.current;
@@ -1558,6 +1642,7 @@ export function useVisitorSession({
 	};
 	const getRun = (): Promise<unknown> => {
 		if (
+			fileRetired.current ||
 			!client.current ||
 			!town ||
 			stateCommands.current.length > 0 ||
@@ -1587,6 +1672,7 @@ export function useVisitorSession({
 	};
 	const exportSave = () => requestExport();
 	const reportLocalError = (message: string) => {
+		if (fileRetired.current) return;
 		errorRevision.current++;
 		setError(message);
 	};
@@ -1636,7 +1722,7 @@ export function useVisitorSession({
 			});
 	};
 	const importSave = async (file: File) => {
-		if (slotPending.current) return;
+		if (fileRetired.current || slotPending.current) return;
 		if (
 			saveConflictRef.current ||
 			comparisonPending.current ||

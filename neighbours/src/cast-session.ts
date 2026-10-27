@@ -64,8 +64,7 @@ export async function sendFeedbackWithoutRun(
 	return true;
 }
 export const shelf =
-	typeof location !== "undefined" &&
-	new URL(location.href).searchParams.get("file") === "1"
+	typeof location !== "undefined" && location.pathname === "/file/"
 		? null
 		: personaChannel();
 const stamp = () => ({

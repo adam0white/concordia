@@ -2,7 +2,25 @@ import { createLab } from "@adam0white/lab-client";
 import { telemetryNotice } from "@adam0white/lab-kit";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 
-export const lab = createLab({ game: "neighbours" });
+const fileEntry =
+	typeof location !== "undefined" && location.pathname === "/file/";
+export const lab = createLab({
+	game: "neighbours",
+	...(fileEntry ? { preservation: "preserve" as const } : {}),
+});
+// Fail closed before any trackRun registration. Keep the real client; never fall back.
+export function fileRecordingAllowed() {
+	if (!fileEntry || lab.preservationStatus === "existing-local") return true;
+	lab.dispose();
+	return false;
+}
+fileRecordingAllowed();
+
+function recordingStatus() {
+	return fileEntry && !fileRecordingAllowed()
+		? `Recording unavailable: ${lab.preservationStatus}. You can play this file in memory and download a copy.`
+		: "";
+}
 // Close recording before save/run/log hooks can observe an imported or mixed-history chapter.
 lab.setPersonaRecording("pending-startup");
 
@@ -17,6 +35,7 @@ function readRecordingPreference() {
 		switchedOff,
 		telemetryOn: lab.telemetryOn,
 		privacySignalOn: lab.privacySignalOn && !lab.privacyOverride,
+		status: recordingStatus(),
 	};
 }
 export function useLabRecording() {
@@ -43,7 +62,7 @@ export function useLabRecording() {
 }
 
 export function LabPrivacy({ children }: { children?: ReactNode }) {
-	const { telemetryOn, setRecording } = useLabRecording();
+	const { telemetryOn, setRecording, status } = useLabRecording();
 	return (
 		<div className="lab-privacy">
 			<label>
@@ -52,6 +71,7 @@ export function LabPrivacy({ children }: { children?: ReactNode }) {
 					role="switch"
 					aria-checked={telemetryOn}
 					checked={telemetryOn}
+					disabled={Boolean(status)}
 					onChange={(event) => setRecording(event.target.checked)}
 				/>{" "}
 				Recording
@@ -64,7 +84,10 @@ export function LabPrivacy({ children }: { children?: ReactNode }) {
 	);
 }
 
-const notice = typeof document === "undefined" ? null : telemetryNotice();
+const notice =
+	typeof document === "undefined"
+		? null
+		: telemetryNotice(undefined, fileEntry ? { preservation: "preserve" } : {});
 if (notice)
 	Object.assign(notice.style, {
 		position: "static",
@@ -72,6 +95,7 @@ if (notice)
 		margin: "0 auto",
 	});
 export function LabNotice() {
+	const { status } = useLabRecording();
 	const host = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		if (notice && host.current) {
@@ -79,5 +103,10 @@ export function LabNotice() {
 			host.current.append(notice);
 		}
 	}, []);
-	return <div className="lab-notice-host" ref={host} />;
+	return (
+		<>
+			<div className="lab-notice-host" ref={host} />
+			{status && <p role="status">{status}</p>}
+		</>
+	);
 }

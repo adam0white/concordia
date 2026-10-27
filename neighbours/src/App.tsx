@@ -38,9 +38,7 @@ type Entry =
 	| { kind: "import"; file: File };
 
 export default function App() {
-	const [fileSession] = useState(
-		() => new URL(location.href).searchParams.get("file") === "1",
-	);
+	const [fileSession] = useState(() => location.pathname === "/file/");
 	const [filePacket, setFilePacket] = useState<unknown>();
 	const [fileError, setFileError] = useState("");
 	const fileIntent = useRef(0);
@@ -81,12 +79,16 @@ export default function App() {
 				);
 		}
 	};
-	useEffect(
-		() => () => {
+	useEffect(() => {
+		const retire = () => {
 			fileIntent.current++;
-		},
-		[],
-	);
+		};
+		window.addEventListener("pagehide", retire);
+		return () => {
+			retire();
+			window.removeEventListener("pagehide", retire);
+		};
+	}, []);
 	const [sheet, setSheet] = useState<Sheet>("town");
 	const [selectedPlace, setSelectedPlace] = useState("");
 	const [info, setInfo] = useState(false);
