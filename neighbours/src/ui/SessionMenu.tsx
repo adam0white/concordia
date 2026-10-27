@@ -54,7 +54,27 @@ export default function SessionMenu({
 			</div>
 			<div className="menu-scroll">
 				<p className="tiny muted">Time pauses while this menu is open.</p>
-				{diagnostics && (
+				{session.fileSession && (
+					<>
+						<p>
+							File session. Device saves, people checkpoints and forks are
+							unavailable.
+						</p>
+						<button
+							type="button"
+							disabled={!session.town || session.commandPending}
+							onClick={session.exportSave}
+						>
+							Keep a copy of this run
+						</button>
+						{session.downloadUrl && (
+							<a href={session.downloadUrl} download="alder-quay-save.json.gz">
+								Download save
+							</a>
+						)}
+					</>
+				)}
+				{diagnostics && !session.fileSession && (
 					<>
 						<CastMenu
 							checkpoint={session.checkpointCast}
@@ -155,42 +175,43 @@ export default function SessionMenu({
 					</div>
 				)}
 				<LabPrivacy />
-				{confirmNew ? (
-					<div className="new-town-confirm">
-						<p>Your current town will be kept as the previous town.</p>
+				{!session.fileSession &&
+					(confirmNew ? (
+						<div className="new-town-confirm">
+							<p>Your current town will be kept as the previous town.</p>
+							<button
+								type="button"
+								disabled={
+									session.commandPending ||
+									session.saveConflict ||
+									session.comparing
+								}
+								onClick={() => {
+									session.startTown();
+									setConfirmNew(false);
+									close();
+								}}
+							>
+								Start new game
+							</button>
+							<button type="button" onClick={() => setConfirmNew(false)}>
+								Keep this town
+							</button>
+						</div>
+					) : (
 						<button
 							type="button"
 							disabled={
-								session.commandPending ||
+								!session.town ||
 								session.saveConflict ||
+								session.commandPending ||
 								session.comparing
 							}
-							onClick={() => {
-								session.startTown();
-								setConfirmNew(false);
-								close();
-							}}
+							onClick={() => setConfirmNew(true)}
 						>
-							Start new game
+							New game
 						</button>
-						<button type="button" onClick={() => setConfirmNew(false)}>
-							Keep this town
-						</button>
-					</div>
-				) : (
-					<button
-						type="button"
-						disabled={
-							!session.town ||
-							session.saveConflict ||
-							session.commandPending ||
-							session.comparing
-						}
-						onClick={() => setConfirmNew(true)}
-					>
-						New game
-					</button>
-				)}
+					))}
 			</div>
 			<button type="button" className="primary menu-resume" onClick={close}>
 				Resume

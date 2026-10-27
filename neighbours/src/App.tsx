@@ -17,6 +17,7 @@ import SessionMenu from "./ui/SessionMenu";
 import { OwnWork, PlayerJournal, SpeakPanel } from "./ui/SpeakPanel";
 import Stories from "./ui/Stories";
 import StoryHeadline, { storyAnchor } from "./ui/StoryHeadline";
+import { decodeSave } from "./ui/save-codec";
 import { RepairTally } from "./ui/TownGoal";
 import TownInspector from "./ui/TownInspector";
 import TownOverview, { NeighbourStrip } from "./ui/TownOverview";
@@ -37,10 +38,52 @@ type Entry =
 	| { kind: "import"; file: File };
 
 export default function App() {
+	const [fileSession] = useState(
+		() => new URL(location.href).searchParams.get("file") === "1",
+	);
+	const [filePacket, setFilePacket] = useState<unknown>();
+	const [fileError, setFileError] = useState("");
+	const fileIntent = useRef(0);
 	const [booted, setBooted] = useState(false);
 	const [inTown, setInTown] = useState(false);
 	const [freshLocal, setFreshLocal] = useState(false);
-	const session = useVisitorSession({ enabled: booted, freshLocal });
+	const session = useVisitorSession({
+		enabled: booted,
+		freshLocal,
+		fileSession,
+		filePacket,
+	});
+	const closeFile = () => {
+		fileIntent.current++;
+		setBooted(false);
+		setInTown(false);
+		setFilePacket(undefined);
+		setFileError("");
+	};
+	const openFile = async (file: File) => {
+		const intent = ++fileIntent.current;
+		try {
+			const packet = await decodeSave(file);
+			if (intent !== fileIntent.current) return;
+			setFilePacket(packet);
+			setFileError("");
+			setBooted(true);
+			setInTown(true);
+		} catch (error) {
+			if (intent === fileIntent.current)
+				setFileError(
+					error instanceof Error
+						? error.message
+						: "This file could not be opened.",
+				);
+		}
+	};
+	useEffect(
+		() => () => {
+			fileIntent.current++;
+		},
+		[],
+	);
 	const [sheet, setSheet] = useState<Sheet>("town");
 	const [selectedPlace, setSelectedPlace] = useState("");
 	const [info, setInfo] = useState(false);
@@ -442,7 +485,36 @@ export default function App() {
 					)}
 				</section>
 			)}
-			{!inTown ? (
+			{fileSession && inTown && (
+				<button type="button" onClick={closeFile}>
+					Close file session
+				</button>
+			)}
+			{fileSession && !inTown ? (
+				<main>
+					<h1>Open a saved town file</h1>
+					<p>
+						This file stays separate from the town and people saved in this
+						browser. Changes stay in memory. Download a copy before closing.
+					</p>
+					<label>
+						Town file
+						<input
+							type="file"
+							accept=".json,.gz,application/json,application/gzip"
+							onChange={(event) => {
+								const file = event.target.files?.[0];
+								if (file) void openFile(file);
+								event.target.value = "";
+							}}
+						/>
+					</label>
+					<button type="button" onClick={closeFile}>
+						Cancel file selection
+					</button>
+					{fileError && <p role="alert">{fileError}</p>}
+				</main>
+			) : !inTown ? (
 				<Welcome
 					session={session}
 					onEnter={enter}

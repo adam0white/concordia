@@ -41,9 +41,13 @@ const savedLabel = (save: unknown) => {
 export function useVisitorSession({
 	enabled = true,
 	freshLocal = false,
+	fileSession = false,
+	filePacket,
 }: {
 	enabled?: boolean;
 	freshLocal?: boolean;
+	fileSession?: boolean;
+	filePacket?: unknown;
 } = {}) {
 	const [town, setTown] = useState<TownView>();
 	const [healthHistory, setHealthHistory] = useState<HealthHistory>();
@@ -122,7 +126,7 @@ export function useVisitorSession({
 	);
 	const [selected, setSelected] = useState(() => {
 		try {
-			return localStorage.getItem("alder-follow") || "";
+			return fileSession ? "" : localStorage.getItem("alder-follow") || "";
 		} catch {
 			return "";
 		}
@@ -310,21 +314,23 @@ export function useVisitorSession({
 	useEffect(() => {
 		if (!enabled) return;
 		let active = true;
-		const saves = new DeviceSaves(() => {
-			if (advancePending.current !== null)
-				client.current?.send({
-					type: "cancel-advance",
-					requestId: advancePending.current,
+		const saves = fileSession
+			? null
+			: new DeviceSaves(() => {
+					if (advancePending.current !== null)
+						client.current?.send({
+							type: "cancel-advance",
+							requestId: advancePending.current,
+						});
+					if (!active) return;
+					saveConflictRef.current = true;
+					setSaveConflict(true);
+					autosaveEnabled.current = false;
+					persistenceAfterState.current = false;
+					replaceAfterSave.current = null;
+					setPlaying(false);
+					setSaved("Another tab changed the saved town");
 				});
-			if (!active) return;
-			saveConflictRef.current = true;
-			setSaveConflict(true);
-			autosaveEnabled.current = false;
-			persistenceAfterState.current = false;
-			replaceAfterSave.current = null;
-			setPlaying(false);
-			setSaved("Another tab changed the saved town");
-		});
 		let runtime: RuntimeClient | null = null;
 		let telemetryTown: TownView | undefined;
 		let committedSave:
@@ -340,7 +346,7 @@ export function useVisitorSession({
 		) => {
 			const data = { slot, packet: structuredClone(packet) };
 			committedSave = { generation, data };
-			lab.captureSave(data);
+			lab.captureSave(fileSession ? { file: true, packet: data.packet } : data);
 		};
 		const telemetryRequests = new Map<
 			number,
@@ -367,7 +373,11 @@ export function useVisitorSession({
 				// Retry only checkpoints committed by this visitor's accepted world,
 				// after identity is settled. Never attach a prior town's device save.
 				if (committedSave?.generation === generation)
-					lab.captureSave(committedSave.data);
+					lab.captureSave(
+						fileSession
+							? { file: true, packet: committedSave.data.packet }
+							: committedSave.data,
+					);
 				return active && generation === acceptedGeneration.current
 					? packet
 					: null;
@@ -381,13 +391,17 @@ export function useVisitorSession({
 					telemetryTown?.events.slice(-40).map((event) => event.text) ?? [],
 			},
 		);
-		let initialSavedPacket: unknown;
+		let initialSavedPacket: unknown = fileSession ? filePacket : undefined;
 		let savedReadFailed = false;
 		let firstReady = true;
 		let restoringStartup = false;
 		let freshAtStartup: TownView | undefined;
 		autosaveEnabled.current = false;
-		setProgress("Checking the saved town on this device…");
+		setProgress(
+			fileSession
+				? "Opening the saved town file…"
+				: "Checking the saved town on this device…",
+		);
 		const handleReply = (reply: UiReply) => {
 			if (!active) return;
 			if (
@@ -466,11 +480,15 @@ export function useVisitorSession({
 				if (initialSavedPacket !== undefined) {
 					freshAtStartup = reply.view;
 					restoringStartup = true;
-					setProgress("Restoring the town saved on this device…");
+					setProgress(
+						fileSession
+							? "Restoring the saved town file…"
+							: "Restoring the town saved on this device…",
+					);
 					runtime?.send({
 						type: "restore",
 						save: initialSavedPacket,
-						local: true,
+						local: !fileSession,
 					});
 					return;
 				}
@@ -493,6 +511,15 @@ export function useVisitorSession({
 					setAdvanceProgress("");
 				}
 				persistenceAfterState.current = false;
+				if (restoringStartup && fileSession) {
+					restoringStartup = false;
+					autosaveEnabled.current = false;
+					setTown(undefined);
+					setPlaying(false);
+					pending.current = false;
+					setError(`This file could not be restored. ${reply.message}`);
+					return;
+				}
 				if (restoringStartup && freshAtStartup) {
 					restoringStartup = false;
 					autosaveEnabled.current = false;
@@ -605,7 +632,11 @@ export function useVisitorSession({
 					restoringStartup = false;
 					autosaveEnabled.current = true;
 					setPlaying(false);
-					setSaved("Restored town from this device");
+					setSaved(
+						fileSession
+							? "File session · changes stay in memory"
+							: "Restored town from this device",
+					);
 				}
 				if (reply.type === "ready") autosaveEnabled.current = !savedReadFailed;
 				if (completed?.playerAction === playerPendingRef.current) {
@@ -613,7 +644,11 @@ export function useVisitorSession({
 					setPlayerPending(false);
 				}
 				clockHealthy.current = !savedReadFailed;
-				setPlaying(!savedReadFailed && !menuHeld.current);
+				setPlaying(
+					!savedReadFailed &&
+						!menuHeld.current &&
+						!(fileSession && restoredAtStartup),
+				);
 				const storyKey = storyReadingKey(reply.view);
 				const watchedStory = advanceStoryWatch(
 					completed?.replacement ? undefined : previousStory.current,
@@ -752,8 +787,11 @@ export function useVisitorSession({
 				const replace =
 					replacement?.requestId === reply.requestId ? replacement : null;
 				if (!saveConflictRef.current && (autosaveEnabled.current || replace))
-					void saves
-						.write(reply.save, replace ? "previous" : "latest")
+					void (
+						saves
+							? saves.write(reply.save, replace ? "previous" : "latest")
+							: Promise.resolve()
+					)
 						.then(() => {
 							if (
 								!active ||
@@ -766,7 +804,11 @@ export function useVisitorSession({
 								replace ? "previous" : "latest",
 								generation,
 							);
-							setSaved(savedLabel(reply.save));
+							setSaved(
+								fileSession
+									? "File session · changes stay in memory"
+									: savedLabel(reply.save),
+							);
 							if (
 								replace &&
 								replaceAfterSave.current?.requestId === replace.requestId
@@ -851,6 +893,7 @@ export function useVisitorSession({
 			}
 		};
 		const handle = (reply: UiReply) => {
+			if (!active) return;
 			try {
 				handleReply(reply);
 			} finally {
@@ -871,7 +914,9 @@ export function useVisitorSession({
 			)
 				return undefined;
 			const generation = command.generation;
-			return saves.write(reply.save, "latest").then(
+			return (
+				saves ? saves.write(reply.save, "latest") : Promise.resolve()
+			).then(
 				() => {
 					if (
 						!active ||
@@ -880,7 +925,11 @@ export function useVisitorSession({
 					)
 						return;
 					recordCommittedSave(reply.save, "latest", generation);
-					setSaved(savedLabel(reply.save));
+					setSaved(
+						fileSession
+							? "File session · changes stay in memory"
+							: savedLabel(reply.save),
+					);
 					setHasSave(true);
 				},
 				(failure: unknown) => {
@@ -912,6 +961,8 @@ export function useVisitorSession({
 						saveConflictRef.current
 					)
 						throw Error("Run changed before ownership save.");
+					if (!saves)
+						throw Error("Ownership is unavailable in a file session.");
 					await saves.write(packet, "latest");
 					if (
 						!active ||
@@ -924,38 +975,42 @@ export function useVisitorSession({
 					setSaved(savedLabel(packet));
 				},
 				freshLocal,
+				fileSession,
 			);
 			client.current = runtime;
 		};
-		void saves.open().then(
-			async (value) => {
-				if (freshLocal && value !== undefined) {
-					try {
-						await saves.write(value, "previous");
-					} catch {
-						setError(
-							"The previous town could not be preserved. Download it before starting a local town.",
-						);
-						return;
+		if (saves)
+			void saves.open().then(
+				async (value) => {
+					if (freshLocal && value !== undefined) {
+						try {
+							await saves.write(value, "previous");
+						} catch {
+							setError(
+								"The previous town could not be preserved. Download it before starting a local town.",
+							);
+							return;
+						}
 					}
-				}
-				if (!active) return;
-				initialSavedPacket = freshLocal ? undefined : value;
-				setHasSave(value !== undefined);
-				startRuntime();
-			},
-			() => {
-				if (!active) return;
-				savedReadFailed = true;
-				setSaved("Device save unavailable");
-				startRuntime();
-			},
-		);
-		void localSave("previous")
-			.then((value) => {
-				if (active) setHasPrevious(value !== undefined);
-			})
-			.catch(() => {});
+					if (!active) return;
+					initialSavedPacket = freshLocal ? undefined : value;
+					setHasSave(value !== undefined);
+					startRuntime();
+				},
+				() => {
+					if (!active) return;
+					savedReadFailed = true;
+					setSaved("Device save unavailable");
+					startRuntime();
+				},
+			);
+		if (fileSession) startRuntime();
+		else
+			void localSave("previous")
+				.then((value) => {
+					if (active) setHasPrevious(value !== undefined);
+				})
+				.catch(() => {});
 		return () => {
 			advanceOrigin.current = null;
 			skipRun.current = null;
@@ -973,16 +1028,28 @@ export function useVisitorSession({
 				);
 			}
 			runRequests.current.clear();
-			saves.close();
+			saves?.close();
+			if (fileSession) {
+				setPlaying(false);
+				setTown(undefined);
+			}
 			runtime?.close();
 			if (client.current === runtime) client.current = null;
 		};
-	}, [dispatch, enabled, freshLocal, resetWorldFeedback, settleMenu]);
+	}, [
+		dispatch,
+		enabled,
+		freshLocal,
+		fileSession,
+		filePacket,
+		resetWorldFeedback,
+		settleMenu,
+	]);
 	useEffect(() => {
 		try {
-			localStorage.setItem("alder-follow", selected);
+			if (!fileSession) localStorage.setItem("alder-follow", selected);
 		} catch {}
-	}, [selected]);
+	}, [selected, fileSession]);
 	useEffect(
 		() => () => {
 			if (downloadUrl) URL.revokeObjectURL(downloadUrl);
@@ -1331,6 +1398,7 @@ export function useVisitorSession({
 		setError(message);
 	};
 	const startTown = () => {
+		if (fileSession) return;
 		if (
 			saveConflictRef.current ||
 			comparisonPending.current ||
@@ -1349,6 +1417,7 @@ export function useVisitorSession({
 		send({ type: "save", requestId });
 	};
 	const restoreSave = (slot: "previous" | "latest") => {
+		if (fileSession) return;
 		if (
 			saveConflictRef.current ||
 			comparisonPending.current ||
@@ -1395,6 +1464,7 @@ export function useVisitorSession({
 		}
 	};
 	return {
+		fileSession,
 		askPrivate: (id: string) =>
 			send({
 				type: "intervene",

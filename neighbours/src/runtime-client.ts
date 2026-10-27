@@ -20,8 +20,9 @@ export class RuntimeClient {
 		hasLocalSave = false,
 		accepted: () => void | Promise<void> = () => {},
 		explicitLocal = false,
+		private readonly foreign = false,
 	) {
-		this.cast = new CastSession((id) => this.capture(id), accepted);
+		this.cast = new CastSession((id) => this.capture(id), accepted, foreign);
 		this.worker = new Worker(new URL("./runtime.worker.ts", import.meta.url), {
 			type: "module",
 		});
@@ -65,7 +66,7 @@ export class RuntimeClient {
 			}
 			if (reply.type === "ready" && this.booting) {
 				this.booting = false;
-				if (hasLocalSave) {
+				if (hasLocalSave || this.foreign) {
 					this.onReply(reply);
 					return;
 				}
@@ -139,6 +140,13 @@ export class RuntimeClient {
 			(command.type === "step" || command.type === "advance")
 		)
 			return;
+		if (this.foreign && command.type === "new") {
+			this.onReply({
+				type: "error",
+				message: "A file session cannot start a native town.",
+			});
+			return;
+		}
 		if (command.type === "new") {
 			this.starting = true;
 			this.enqueue(async () => {

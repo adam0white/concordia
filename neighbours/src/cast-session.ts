@@ -63,7 +63,11 @@ export async function sendFeedbackWithoutRun(
 	});
 	return true;
 }
-export const shelf = personaChannel();
+export const shelf =
+	typeof location !== "undefined" &&
+	new URL(location.href).searchParams.get("file") === "1"
+		? null
+		: personaChannel();
 const stamp = () => ({
 	game: "neighbours",
 	build: lab.build().c ?? "development",
@@ -92,8 +96,11 @@ export class CastSession {
 	constructor(
 		private capture: (castId?: string) => Promise<unknown>,
 		private accepted: () => void | Promise<void> = () => {},
+		private readonly foreign = shelf === null,
 	) {
-		this.stop = watchPersonaCheckpoint(() => this.checkpointAll());
+		this.stop = this.foreign
+			? () => {}
+			: watchPersonaCheckpoint(() => this.checkpointAll());
 		window.addEventListener("storage", this.preferencesChanged);
 		window.addEventListener("hf-lab-preference", this.preferencesChanged);
 	}
@@ -128,6 +135,8 @@ export class CastSession {
 		explicitLocal = false,
 	): Promise<TownPacket> {
 		this.suspend();
+		if (!shelf || this.foreign)
+			throw Error("A file session cannot start a native town.");
 		const generation = this.generation;
 		await shelf.ready;
 		if (!this.active || generation !== this.generation)
@@ -188,7 +197,10 @@ export class CastSession {
 			await validatePersona(claim);
 		let heads: PersonaEnvelope[] = [],
 			file = true;
-		if (local && packet.castLocal && !packet.castLocal.file) {
+		if (
+			packet.castLocal &&
+			(this.foreign || (local && !packet.castLocal.file))
+		) {
 			if (
 				packet.castLocal.chapter !==
 				canonicalPersona([packet.runtime.seed, packet.runtime.chapter])
@@ -257,7 +269,7 @@ export class CastSession {
 					throw Error("Owned source receipt lacks its full local snapshot.");
 			}
 
-			file = false;
+			file = this.foreign;
 		}
 		if (!this.active || g !== this.generation)
 			throw Error("Run changed during validation.");
@@ -385,6 +397,8 @@ export class CastSession {
 	async checkpointAll() {
 		if (
 			!this.active ||
+			!shelf ||
+			this.foreign ||
 			this.localOnly ||
 			this.checkpointBusy ||
 			!shelf.enabled ||
@@ -418,6 +432,10 @@ export class CastSession {
 		}
 	}
 	async checkpoint(value: unknown, castId: string, fork = false) {
+		if (!shelf || this.foreign)
+			throw Error(
+				"People checkpoints and forks are unavailable in a file session.",
+			);
 		if (this.staged || !this.recordReady)
 			throw Error("Wait for the town to finish loading.");
 		const captureGeneration = this.generation;

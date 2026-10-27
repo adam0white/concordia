@@ -8,12 +8,17 @@ export default function CastMenu({
 	checkpoint: (id: string, fork?: boolean) => Promise<void>;
 	recording: (allow: boolean) => Promise<void> | undefined;
 }) {
-	const [enabled, setEnabled] = useState(shelf.enabled),
+	const [enabled, setEnabled] = useState(shelf?.enabled ?? false),
 		[selected, select] = useState(ALLOCATION[0]?.castId ?? ""),
 		[status, setStatus] = useState("");
 	useEffect(() => {
-		void shelf.ready.then(() => setEnabled(shelf.enabled));
+		const channel = shelf;
+		if (channel) void channel.ready.then(() => setEnabled(channel.enabled));
 	}, []);
+	if (!shelf)
+		return (
+			<p>People checkpoints and forks are unavailable in a file session.</p>
+		);
 	const save = (fork = false) => {
 		setStatus("Checking the finished action and obligations…");
 		void checkpoint(selected, fork).then(
@@ -35,7 +40,7 @@ export default function CastMenu({
 						type="checkbox"
 						checked={enabled}
 						onChange={(e) => {
-							shelf.setEnabled(e.target.checked);
+							shelf?.setEnabled(e.target.checked);
 							setEnabled(e.target.checked);
 						}}
 					/>{" "}
