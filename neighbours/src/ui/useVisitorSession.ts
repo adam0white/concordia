@@ -16,7 +16,12 @@ import { orderedReplies } from "./durable-replies";
 import { datedClock } from "./format";
 import { lab } from "./lab";
 import { type ObservedFeed, observe } from "./observations";
-import { DeviceSaves, localSave, SaveConflictError } from "./persistence";
+import {
+	DeviceSaves,
+	localSave,
+	type NamedTown,
+	SaveConflictError,
+} from "./persistence";
 import {
 	automaticPlaybackRate,
 	type PacingMode,
@@ -149,6 +154,16 @@ export function useVisitorSession({
 		kind: Intervention["kind"];
 		remaining: number;
 		spent: number;
+	} | null>(null);
+	const [namedTowns, setNamedTowns] = useState<NamedTown[]>([]);
+	const [slotBusy, setSlotBusy] = useState(false);
+	const [slotNotice, setSlotNotice] = useState("");
+	const slotPending = useRef(false);
+	const slotSequence = useRef(0);
+	const slotActions = useRef<{
+		list: () => Promise<void>;
+		save: (name: string) => Promise<void>;
+		load: (key: string) => Promise<void>;
 	} | null>(null);
 	const [saveConflict, setSaveConflict] = useState(false);
 	// The player's own speech and movement: their rejections stay beside the speak panel.
@@ -334,6 +349,7 @@ export function useVisitorSession({
 					setSaved("Another tab changed the saved town");
 				});
 		let runtime: RuntimeClient | null = null;
+		let cancelPrepared: (() => void) | undefined;
 		let telemetryTown: TownView | undefined;
 		let committedSave:
 			| {
@@ -404,6 +420,12 @@ export function useVisitorSession({
 				? "Opening the saved town file…"
 				: "Checking the saved town on this device…",
 		);
+		const owns = (generation: number, owner = runtime) =>
+			active &&
+			runtime === owner &&
+			client.current === owner &&
+			generation === worldGeneration.current &&
+			!saveConflictRef.current;
 		const handleReply = (reply: UiReply) => {
 			if (!active) return;
 			if (
@@ -792,7 +814,9 @@ export function useVisitorSession({
 				if (!saveConflictRef.current && (autosaveEnabled.current || replace))
 					void (
 						saves
-							? saves.write(reply.save, replace ? "previous" : "latest")
+							? saves.write(reply.save, replace ? "previous" : "latest", () =>
+									owns(generation),
+								)
 							: Promise.resolve()
 					)
 						.then(() => {
@@ -918,7 +942,9 @@ export function useVisitorSession({
 				return undefined;
 			const generation = command.generation;
 			return (
-				saves ? saves.write(reply.save, "latest") : Promise.resolve()
+				saves
+					? saves.write(reply.save, "latest", () => owns(generation))
+					: Promise.resolve()
 			).then(
 				() => {
 					if (
@@ -947,48 +973,206 @@ export function useVisitorSession({
 				},
 			);
 		};
+		const persistOwnership = async (owner: RuntimeClient) => {
+			const generation = worldGeneration.current;
+			const current = () => owns(generation, owner);
+			if (!current() || !saves)
+				throw Error("Device ownership save unavailable.");
+			const packet = owner.cast.decorate(await owner.capture());
+			if (!current()) throw Error("Run changed before ownership save.");
+			await saves.write(packet, "latest", current);
+			if (!current()) throw Error("Run changed during ownership save.");
+			recordCommittedSave(packet, "latest", generation);
+			setHasSave(true);
+			setSaved(savedLabel(packet));
+		};
 		const receive = orderedReplies(handle, persistAnswer);
+		// Named copies are native checkpoints only. The menu holds rounds; this barrier
+		// also drains own storage writes and binds each await and CAS to this runtime.
+		if (saves)
+			slotActions.current = {
+				list: async () => {
+					const generation = worldGeneration.current,
+						owner = runtime;
+					const rows = await saves.listNamed();
+					if (owns(generation, owner)) setNamedTowns(rows);
+				},
+				save: async (name) => {
+					const generation = worldGeneration.current,
+						owner = runtime;
+					const sourceGeneration = owner?.cast.generation;
+					const sourceHeads = owner?.cast.heads
+						.map((h) => h.revision)
+						.join("/");
+					const current = () =>
+						owns(generation, owner) &&
+						menuHeld.current &&
+						slotPending.current &&
+						owner?.cast.generation === sourceGeneration &&
+						owner?.cast.heads.map((h) => h.revision).join("/") === sourceHeads;
+					if (!owner || !current())
+						throw Error("Wait for the device town to settle.");
+					await saves.settled();
+					if (!current())
+						throw Error("The town changed before saving its copy.");
+					const packet = owner.cast.decorate(await owner.capture());
+					if (!current()) throw Error("The town changed during capture.");
+					await saves.saveNamed(name, packet, current);
+					if (!current()) return;
+					setSlotNotice("Named copy saved on this device.");
+					try {
+						const rows = await saves.listNamed();
+						if (current()) setNamedTowns(rows);
+					} catch {
+						if (current())
+							setSlotNotice(
+								"Named copy saved. Reopen Saved towns to refresh the list.",
+							);
+					}
+				},
+				load: async (key) => {
+					const generation = worldGeneration.current,
+						owner = runtime;
+					const sourceGeneration = owner?.cast.generation;
+					const sourceHeads = owner?.cast.heads
+						.map((h) => h.revision)
+						.join("/");
+					const current = () =>
+						owns(generation, owner) &&
+						menuHeld.current &&
+						slotPending.current &&
+						owner?.cast.generation === sourceGeneration &&
+						owner?.cast.heads.map((h) => h.revision).join("/") === sourceHeads;
+					if (!owner || !current())
+						throw Error("Wait for the device town to settle.");
+					let candidate: RuntimeClient | undefined;
+					let adopted = false;
+					try {
+						await saves.settled();
+						if (!current()) throw Error("The town changed before loading.");
+						const record = await saves.readNamed(key);
+						if (!current())
+							throw Error("The town changed while reading its copy.");
+						const former = owner.cast.decorate(await owner.capture());
+						if (!current()) throw Error("The town changed during capture.");
+						// Reuse the production file codec and native restore, without installing
+						// the candidate or creating new shelf claims. Metadata remains inert.
+						const decoded = await decodeSave(
+							new Blob([JSON.stringify(record.packet)]),
+						);
+						if (!current()) throw Error("The town changed during decoding.");
+						const restored = await new Promise<
+							Extract<UiReply, { type: "ready" | "state" }>
+						>((resolve, reject) => {
+							const timer = setTimeout(
+								() =>
+									reject(Error("The saved town took too long to validate.")),
+								120000,
+							);
+							cancelPrepared = () => {
+								clearTimeout(timer);
+								candidate?.close();
+								reject(Error("The town session closed during validation."));
+							};
+							candidate = new RuntimeClient(
+								(reply) => {
+									if (adopted) {
+										if (client.current === candidate) receive(reply);
+										return;
+									}
+									if (!current()) {
+										clearTimeout(timer);
+										reject(Error("The town changed during validation."));
+										return;
+									}
+									if (reply.type === "ready")
+										candidate?.send({
+											type: "restore",
+											save: decoded,
+											local: true,
+										});
+									else if (reply.type === "error") {
+										clearTimeout(timer);
+										reject(Error(reply.message));
+									} else if (reply.type === "state") {
+										clearTimeout(timer);
+										resolve(reply);
+									}
+								},
+								true,
+								() => {
+									if (!candidate) throw Error("Town is not ready.");
+									return persistOwnership(candidate);
+								},
+							);
+						});
+						if (!current() || !candidate)
+							throw Error("The town changed during validation.");
+						// Settle validated metadata in the detached candidate, then suspend its
+						// source publishing. No native town is installed and no claim is minted.
+						// A later source notification can invalidate checkpoint work without
+						// discarding the complete metadata of an already durable load.
+						candidate.acceptView(restored);
+						candidate.cast.suspend();
+						await saves.replaceNamed(key, record.packet, former, current);
+						// Success means durable commit. A late source event cannot turn it into
+						// an "unchanged" failure. Adopt the committed town if this visitor still
+						// exists; close/disposal never revives a retired UI or runtime.
+						if (
+							!active ||
+							runtime !== owner ||
+							client.current !== owner ||
+							generation !== worldGeneration.current
+						)
+							return;
+						owner.close();
+						runtime = candidate;
+						client.current = candidate;
+						worldGeneration.current++;
+						replacementIntent.current++;
+						replaceAfterSave.current = null;
+						saveRequests.current.clear();
+						persistenceAfterState.current = false;
+						resetWorldFeedback(worldGeneration.current);
+						adopted = true;
+						candidate.cast.commitFresh(); // Re-enable the validated load; no fresh admission.
+						// Accept the already validated native reply without asking the worker to
+						// restore again or autosaving a regenerated version of the named packet.
+						rounds.current = 0;
+						handle(restored);
+						setHasPrevious(true);
+						setHasSave(true);
+						setSlotNotice(
+							`Loaded ${record.name}. The former town is kept as previous.`,
+						);
+					} finally {
+						cancelPrepared = undefined;
+						if (!adopted) candidate?.close();
+					}
+				},
+			};
+
 		const startRuntime = () => {
 			if (!active) return;
-			runtime = new RuntimeClient(
-				receive,
-				initialSavedPacket !== undefined,
-				async () => {
-					const generation = worldGeneration.current;
-					if (!runtime || saveConflictRef.current)
-						throw Error("Device ownership save unavailable.");
-					const packet = runtime.cast.decorate(await runtime.capture());
-					if (
-						!active ||
-						generation !== worldGeneration.current ||
-						saveConflictRef.current
-					)
-						throw Error("Run changed before ownership save.");
-					if (!saves)
-						throw Error("Ownership is unavailable in a file session.");
-					await saves.write(packet, "latest");
-					if (
-						!active ||
-						generation !== worldGeneration.current ||
-						saveConflictRef.current
-					)
-						throw Error("Run changed during ownership save.");
-					recordCommittedSave(packet, "latest", generation);
-					setHasSave(true);
-					setSaved(savedLabel(packet));
+			const started = new RuntimeClient(
+				(reply) => {
+					if (client.current === started) receive(reply);
 				},
+				initialSavedPacket !== undefined,
+				() => persistOwnership(started),
 				freshLocal,
 				fileSession,
 				localStart?.seed ?? 42,
 			);
-			client.current = runtime;
+			runtime = started;
+			client.current = started;
 		};
 		if (saves)
 			void saves.open().then(
 				async (value) => {
 					if (freshLocal && value !== undefined) {
 						try {
-							await saves.write(value, "previous");
+							await saves.write(value, "previous", () => active);
 						} catch {
 							setError(
 								"The previous town could not be preserved. Download it before starting a local town.",
@@ -1019,6 +1203,10 @@ export function useVisitorSession({
 			advanceOrigin.current = null;
 			skipRun.current = null;
 			active = false;
+			cancelPrepared?.();
+			slotActions.current = null;
+			slotSequence.current++;
+			slotPending.current = false;
 			stopRecording();
 			for (const request of telemetryRequests.values()) {
 				clearTimeout(request.timer);
@@ -1332,7 +1520,7 @@ export function useVisitorSession({
 		settleMenu();
 	};
 	const closeMenu = () => {
-		if (!menuHeld.current) return;
+		if (!menuHeld.current || slotPending.current) return;
 		readingUntil.current = Date.now() + remainingReading.current;
 		remainingReading.current = 0;
 		setMenuOpen(false);
@@ -1403,7 +1591,7 @@ export function useVisitorSession({
 		setError(message);
 	};
 	const startTown = () => {
-		if (fileSession) return;
+		if (fileSession || slotPending.current) return;
 		if (
 			saveConflictRef.current ||
 			comparisonPending.current ||
@@ -1422,7 +1610,7 @@ export function useVisitorSession({
 		send({ type: "save", requestId });
 	};
 	const restoreSave = (slot: "previous" | "latest") => {
-		if (fileSession) return;
+		if (fileSession || slotPending.current) return;
 		if (
 			saveConflictRef.current ||
 			comparisonPending.current ||
@@ -1448,6 +1636,7 @@ export function useVisitorSession({
 			});
 	};
 	const importSave = async (file: File) => {
+		if (slotPending.current) return;
 		if (
 			saveConflictRef.current ||
 			comparisonPending.current ||
@@ -1468,7 +1657,54 @@ export function useVisitorSession({
 			);
 		}
 	};
+	const namedOperation = async (operation: "save" | "load", value: string) => {
+		if (
+			fileSession ||
+			slotPending.current ||
+			!menuHeld.current ||
+			menuWaiting.current ||
+			stateCommands.current.length ||
+			pending.current ||
+			saveConflictRef.current ||
+			!client.current ||
+			!town
+		)
+			return;
+		const operationId = ++slotSequence.current;
+		slotPending.current = true;
+		setSlotBusy(true);
+		setSlotNotice("");
+		const owner = client.current;
+		try {
+			await slotActions.current?.[operation](value);
+		} catch (failure) {
+			if (client.current === owner)
+				setSlotNotice(
+					`${failure instanceof Error ? failure.message : "This saved town is unavailable."} Your current town and saved copies are unchanged.`,
+				);
+		} finally {
+			if (client.current && operationId === slotSequence.current) {
+				slotPending.current = false;
+				setSlotBusy(false);
+			}
+		}
+	};
 	return {
+		namedTowns,
+		slotBusy,
+		slotNotice,
+		listNamedTowns: () => {
+			if (!fileSession)
+				void slotActions.current
+					?.list()
+					.catch(() =>
+						setSlotNotice(
+							"Saved towns could not be listed. Existing copies are unchanged.",
+						),
+					);
+		},
+		saveNamedTown: (name: string) => namedOperation("save", name),
+		loadNamedTown: (key: string) => namedOperation("load", key),
 		fileSession,
 		askPrivate: (id: string) =>
 			send({

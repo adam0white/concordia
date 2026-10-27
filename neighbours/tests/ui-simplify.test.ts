@@ -32,6 +32,7 @@ afterEach(() => vi.unstubAllGlobals());
 it("offers gameplay without flags and keeps diagnostics in one closed menu item", () => {
 	const session = {
 		town: { day: 1 },
+		namedTowns: [],
 		error: "Raw technical detail",
 	} as unknown as ReturnType<typeof useVisitorSession>;
 	const render = () =>
@@ -52,6 +53,7 @@ it("offers gameplay without flags and keeps diagnostics in one closed menu item"
 		"New game",
 		"Resume",
 		"Read the journal",
+		"Saved towns",
 		"Compare possible outcomes",
 		"Recorded studies",
 		"town&#x27;s pace",
