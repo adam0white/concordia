@@ -14,7 +14,7 @@ it("names one person in fallback impressions and trust without assuming gender",
 	expect(trustWords(0.5, "Nora")).toBe("Nora trusts this person");
 });
 
-it("keeps numeric decision records behind the exact lab flag", () => {
+it("makes collapsed decision evidence available without query flags", () => {
 	const town = createRuntime(42, 8).view();
 	const person = town.people[0];
 	if (!person) throw new Error("Missing resident");
@@ -38,9 +38,9 @@ it("keeps numeric decision records behind the exact lab flag", () => {
 		vi.stubGlobal("location", { search });
 		const html = render();
 		expect(html).toContain("I need to rest.");
-		expect(html).not.toContain("Controller · HF");
-		expect(html).not.toContain("Exact HF source stamp");
-		expect(html).not.toContain("0.987");
+		expect(html).toContain("Controller · HF");
+		expect(html).toContain("Exact HF source stamp");
+		expect(html).toContain("0.987");
 	}
 	vi.stubGlobal("location", { search: "?lab=1" });
 	const html = render();
@@ -49,16 +49,16 @@ it("keeps numeric decision records behind the exact lab flag", () => {
 	expect(html).toContain("0.987");
 });
 
-it("does not mount recorded research reports outside lab mode", () => {
-	vi.stubGlobal("location", { search: "" });
-	const session = { town: createRuntime(42, 8).view() } as ReturnType<
-		typeof useVisitorSession
-	>;
-	expect(
-		renderToStaticMarkup(
-			createElement(TownInspector, { session, section: "recorded" }),
-		),
-	).toBe("");
+it("mounts recorded studies without a query flag", () => {
+	const session = {
+		town: createRuntime(42, 8).view(),
+		trends: {},
+	} as ReturnType<typeof useVisitorSession>;
+	const html = renderToStaticMarkup(
+		createElement(TownInspector, { session, section: "recorded" }),
+	);
+	expect(html).toContain("Recorded studies");
+	expect(html).not.toContain("Resources and runtime");
 });
 
 it("keeps AI and comparison policy distinctions visible outside lab mode", () => {
@@ -81,6 +81,6 @@ it("keeps AI and comparison policy distinctions visible outside lab mode", () =>
 			}),
 		);
 		expect(html).toContain(label);
-		expect(html).not.toContain("Controller ·");
+		expect(html).toContain("Controller ·");
 	}
 });

@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { expect, test } from "./local-fixture";
+import { enterLocalTown, expect, test } from "./local-fixture";
 
 for (const width of [360, 1280]) {
 	test(`a failed local copy is visible in Feedback and retry preserves the town at ${width}`, async ({
@@ -19,10 +19,10 @@ for (const width of [360, 1280]) {
 				},
 			});
 		});
-		await page.goto("/?lab=1");
+		await page.goto("/");
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
 		await page.getByLabel("Start from a seed number").fill("42");
-		await page.getByRole("button", { name: "Start", exact: true }).click();
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
 		await page.getByRole("button", { name: /^Feedback/ }).click();

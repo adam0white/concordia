@@ -2,7 +2,6 @@ import { FEEDBACK_LABELS, type FeedbackLabel } from "@adam0white/lab-client";
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { useLabRecording } from "./lab";
-import { labMode } from "./lab-mode";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -176,7 +175,7 @@ export default function SendWord({
 							<p>
 								Current town:{" "}
 								{session.town
-									? `Day ${session.town.day}${labMode() ? ` · seed ${session.town.seed}` : ""}`
+									? `Day ${session.town.day}${` · seed ${session.town.seed}`}`
 									: "No town has started."}
 							</p>
 							{feedbackLabel && <p>{FEEDBACK_LABELS[feedbackLabel]}</p>}
@@ -188,31 +187,29 @@ export default function SendWord({
 						</details>
 					</>
 				)}
-				{labMode() && (
-					<>
-						<button
-							type="button"
-							onClick={() => {
-								copyRequested.current = true;
-								session.exportSave();
-							}}
-							disabled={!session.town || session.commandPending}
-						>
-							Keep a copy of this run
-						</button>
-						{session.downloadUrl && (
-							<a
-								ref={download}
-								className="download-save"
-								href={session.downloadUrl}
-								download="alder-quay-save.json.gz"
-							>
-								Download save ↓{" "}
-								<span className="tiny">({session.downloadLabel})</span>
-							</a>
-						)}
-					</>
+
+				<button
+					type="button"
+					onClick={() => {
+						copyRequested.current = true;
+						session.exportSave();
+					}}
+					disabled={!session.town || session.commandPending}
+				>
+					Keep a copy of this run
+				</button>
+				{session.downloadUrl && (
+					<a
+						ref={download}
+						className="download-save"
+						href={session.downloadUrl}
+						download="alder-quay-save.json.gz"
+					>
+						Download save ↓{" "}
+						<span className="tiny">({session.downloadLabel})</span>
+					</a>
 				)}
+
 				{(error || session.error) && (
 					<div className="error" role="alert" ref={feedbackError}>
 						{error && <p>{error}</p>}

@@ -13,6 +13,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const fake = vi.hoisted(() => ({
 	request: vi.fn(),
+	enabled: true,
 	ready: Promise.resolve(true),
 	setPersonaRecording: vi.fn(),
 	setTelemetryOff: vi.fn(),
@@ -44,7 +45,9 @@ vi.mock("../src/ui/lab.tsx", () => ({
 vi.mock("@adam0white/lab-client", async (original) => ({
 	...(await original<typeof import("@adam0white/lab-client")>()),
 	personaChannel: () => ({
-		enabled: true,
+		get enabled() {
+			return fake.enabled;
+		},
 		get ready() {
 			return fake.ready;
 		},
@@ -80,6 +83,7 @@ async function head(id = "hf.cast.ece.murmur") {
 beforeEach(() => {
 	vi.clearAllMocks();
 	fake.ready = Promise.resolve(true);
+	fake.enabled = true;
 	fake.setTelemetryOff.mockImplementation((off: boolean) => {
 		fake.telemetryOn = !off;
 	});
@@ -676,4 +680,18 @@ it("failed atomic admission preserves old ownership receipts and origin", async 
 		"putBatch",
 	]);
 	s.close();
+});
+
+it("requires an explicit local start when the shared shelf is unavailable", async () => {
+	fake.enabled = false;
+	const session = new CastSession(async () => ({}));
+	await expect(session.fresh(73, 8)).rejects.toThrow(
+		"Shared people are unavailable",
+	);
+	expect(fake.request).not.toHaveBeenCalled();
+	const local = await session.fresh(73, 8, true);
+	expect(local.runtime.seed).toBe(73);
+	expect(local.runtime.chapter?.inputs).toEqual([]);
+	expect(session.localOnly).toBe(true);
+	session.close();
 });

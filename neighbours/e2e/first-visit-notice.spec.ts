@@ -1,4 +1,4 @@
-import { expect, test } from "./local-fixture";
+import { enterLocalTown, expect, test } from "./local-fixture";
 
 for (const width of [360, 1280]) {
 	test(`compact footer notice stays readable without hiding entry at ${width}`, async ({
@@ -8,7 +8,7 @@ for (const width of [360, 1280]) {
 		await page.addInitScript(() =>
 			localStorage.setItem("hf-lab-recording-off", "1"),
 		);
-		await page.goto("/?lab=1");
+		await page.goto("/");
 		const notice = page.locator(".lk-telemetry-notice");
 		await expect(notice).toHaveText(
 			"We record and link play across games on this device.",
@@ -44,11 +44,18 @@ for (const width of [360, 1280]) {
 			await page.screenshot({
 				path: `${process.env.NEIGHBOURS_EVIDENCE}/${width}-title-first-visit.png`,
 			});
-		await enter.click();
+		// The notice stays for at least four seconds, then the next click dismisses it.
+		await page.waitForTimeout(4000);
+		await expect(notice).toHaveCount(1);
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
+		await page.locator(".session-menu .menu-debug > summary").click();
 		await page
-			.getByRole("button", { name: "To the title page", exact: true })
+			.getByRole("button", {
+				name: "Restore, import or start from a seed",
+				exact: true,
+			})
 			.click();
 		await expect(
 			page.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ }),
@@ -59,7 +66,7 @@ for (const width of [360, 1280]) {
 					requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
 				),
 		);
-		await expect(notice).toHaveCount(1);
+		await expect(notice).toHaveCount(0);
 		await page.reload();
 		await expect(
 			page.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ }),

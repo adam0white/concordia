@@ -143,7 +143,13 @@ export class CastSession {
 			throw Error(
 				"The game changed while its people were being prepared. Please try again.",
 			);
-		const localOnly = explicitLocal || !shelf.enabled;
+		// A failed bridge and a central opt-out both leave enabled false. Neither
+		// authorizes this host to silently replace shared people with local people.
+		if (!explicitLocal && !shelf.enabled)
+			throw Error(
+				"Shared people are unavailable. Choose Start a fresh local town in Other ways in.",
+			);
+		const localOnly = explicitLocal;
 		const cast =
 			!localOnly && shelf.enabled
 				? await claimCastChapterBatch(

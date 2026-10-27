@@ -1,4 +1,5 @@
 import { expect, reachSelectedConversation, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 test.use({ hasTouch: true });
 
@@ -10,10 +11,8 @@ for (const viewport of [
 		page,
 	}, testInfo) => {
 		await page.setViewportSize(viewport);
-		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
-		await page
-			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-			.click();
+		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		const clock = await page.locator(".town-time").textContent();
 		const hall = page.locator('[data-map-place="hall"]');
@@ -86,10 +85,8 @@ test("place company distinguishes meeting from an immediate conversation", async
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await page.locator('[data-map-place="workshop"]').press("Enter");
 	const panel = page.locator(".place-panel");

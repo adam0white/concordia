@@ -3,15 +3,14 @@ import { createRuntime } from "../src/core/index.ts";
 import { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
 import { expect, type Page, step, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { openOtherWays, openSaves, showTab } from "./session-helpers";
 
 test.use({ actionTimeout: 15000 });
 
 async function enter(page: Page) {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 }

@@ -1,4 +1,5 @@
 import { expect, type Locator, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 /** A visible box can still be behind the pinned action. Check the real hit target. */
 async function expectUncovered(target: Locator) {
@@ -35,10 +36,8 @@ for (const width of [360, 1280])
 		page,
 	}) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
-		await page.goto("/?lab=1");
-		await page
-			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-			.click();
+		await page.goto("/");
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.locator('.neighbour-strip [data-person-id="ada"]').click();
 		const panel = page.locator(".person-panel");
@@ -63,10 +62,8 @@ test("known open hall need is readable on map and list without colour", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	const mapCue = page.locator(".known-need-map");
 	await expect(mapCue).toContainText("Needs help");

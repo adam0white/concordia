@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Intervention, TownComparison, TownView } from "../contracts";
 import { comparisonOutcomes } from "./comparison-outcomes";
-import { labMode } from "./lab-mode";
 import { plainText } from "./plain-english";
 
 const at = (minutes: number) =>
@@ -498,12 +497,10 @@ export default function DayComparison({
 					</details>
 					<details>
 						<summary>How this comparison works</summary>
-						{labMode() && (
-							<p className="tiny muted">
-								Seed {report.seed} · {at(report.startAt)} → {at(report.endAt)} ·{" "}
-								{interventions[report.intervention.kind]}
-							</p>
-						)}
+						<p className="tiny muted">
+							Seed {report.seed} · {at(report.startAt)} → {at(report.endAt)} ·{" "}
+							{interventions[report.intervention.kind]}
+						</p>
 						<p className="tiny muted">
 							Two possible versions start from the same saved town. One
 							continues without help. The other receives one support action.
@@ -514,22 +511,17 @@ export default function DayComparison({
 							Only recorded outcomes within this interval appear above.
 							Differences describe these two runs; they do not establish a
 							general effect.
+						</p>{" "}
+						<a
+							className="text-button"
+							download={`town-comparison-${report.seed}-${report.startAt}.json`}
+							href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report, null, 2))}`}
+						>
+							Download full comparison
+						</a>
+						<p className="tiny checkpoint-hash">
+							Starting state: {report.startHash}
 						</p>
-						{labMode() && (
-							<>
-								{" "}
-								<a
-									className="text-button"
-									download={`town-comparison-${report.seed}-${report.startAt}.json`}
-									href={`data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(report, null, 2))}`}
-								>
-									Download full comparison
-								</a>
-								<p className="tiny checkpoint-hash">
-									Starting state: {report.startHash}
-								</p>
-							</>
-						)}
 						{report.limits.map((limit) => (
 							<p className="tiny muted" key={limit}>
 								{limit}

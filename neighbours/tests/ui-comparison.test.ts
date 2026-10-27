@@ -95,9 +95,9 @@ it("leads with differing interval outcomes, folds shared results once and keeps 
 	expect(html).toContain("Same outcomes in both runs · 1");
 	expect(html).toContain("Day 1, 08:00");
 	expect(html).toContain("Day 1, 16:00");
-	expect(html).not.toContain("Download full comparison");
-	expect(html).not.toContain("Seed 42");
-	expect(html).not.toContain("Starting state: abc");
+	expect(html).toContain("Download full comparison");
+	expect(html).toContain("Seed 42");
+	expect(html).toContain("Starting state: abc");
 	vi.stubGlobal("location", { search: "?lab=1" });
 	const labHtml = renderToStaticMarkup(
 		createElement(DayComparison, {

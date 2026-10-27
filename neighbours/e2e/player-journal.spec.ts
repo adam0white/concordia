@@ -7,6 +7,7 @@ import {
 	type TestInfo,
 	test,
 } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import {
 	closeSaves,
 	openDownload,
@@ -42,10 +43,8 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	page,
 }, info) => {
 	test.setTimeout(180_000);
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 
 	await page.locator('[data-map-place="hall"] .place-hit-area').click();
@@ -200,10 +199,8 @@ test("an answered request is on the device before it is shown and survives an im
 	test.setTimeout(180_000);
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 	await page.locator('[data-map-place="hall"] .place-hit-area').click();
 	await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();
@@ -232,9 +229,7 @@ test("an answered request is on the device before it is shown and survives an im
 
 	// Reload at once: the answered request and its answer come back from the device.
 	await page.reload();
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 	expect(await deviceRequests(page)).toEqual(stored);

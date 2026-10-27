@@ -7,6 +7,7 @@ import {
 	type TestInfo,
 	test,
 } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import {
 	closeSaves,
 	openDownload,
@@ -102,10 +103,8 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	page,
 }, info) => {
 	await installGate(page);
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
@@ -162,7 +161,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Start from a seed number").fill("73");
-	await page.getByRole("button", { name: "Start", exact: true }).click();
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
@@ -182,7 +181,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Start from a seed number").fill("99");
-	await page.getByRole("button", { name: "Start", exact: true }).click();
+	await enterLocalTown(page);
 	await expect
 		.poll(() =>
 			page.evaluate(
@@ -215,10 +214,8 @@ test("exports survive rejected imports and exports from a replacement survive it
 	page,
 }, info) => {
 	await installGate(page);
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
@@ -343,10 +340,8 @@ test("exports survive rejected imports and exports from a replacement survive it
 test("a rejected local JSON file resumes automatic time without another action", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({

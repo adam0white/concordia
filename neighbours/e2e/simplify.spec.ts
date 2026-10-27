@@ -42,7 +42,7 @@ for (const [width, height] of [
 		await page.goto("/");
 		await expect(
 			page.getByRole("button", { name: /Other ways in/ }),
-		).toHaveCount(0);
+		).toBeVisible();
 		await page
 			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 			.click();
@@ -50,12 +50,17 @@ for (const [width, height] of [
 		await page.evaluate(() => document.fonts.ready);
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
 		const menu = page.locator(".session-menu");
-		await expect(menu.getByRole("link")).toHaveText(["All games"]);
+		await expect(menu.getByRole("link")).toHaveText([
+			"All games",
+			"People saved in this browser",
+			"Lab privacy",
+		]);
+		await expect(menu.locator(".menu-debug")).not.toHaveAttribute("open", "");
 		await expect(
 			menu.getByRole("button", {
-				name: /Compare possible outcomes|Recorded studies|To the title page|Switch light or dark colours/,
+				name: /Compare possible outcomes|Recorded studies|Switch light or dark colours/,
 			}),
-		).toHaveCount(0);
+		).toHaveCount(3);
 		await expect(
 			menu.getByLabel("Recording", { exact: true }),
 		).not.toBeChecked();
@@ -76,7 +81,7 @@ for (const [width, height] of [
 				name: "Keep a copy of this run",
 				exact: true,
 			}),
-		).toHaveCount(0);
+		).toBeVisible();
 		await expect(
 			page.getByRole("checkbox", {
 				name: "Share this run and my play with the lab",
@@ -95,7 +100,7 @@ for (const [width, height] of [
 			.getByRole("button", { name: "Start new game", exact: true })
 			.click();
 		await expect(page.locator('.game-sheet [role="alert"]')).toContainText(
-			"The town could not complete that action.",
+			"Shared people are unavailable. Choose Start a fresh local town in Other ways in.",
 		);
 		await expect(page.locator(".town-time strong")).toHaveText(now ?? "");
 		await expect(

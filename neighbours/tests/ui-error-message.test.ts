@@ -14,10 +14,8 @@ describe("action-owned error recovery", () => {
 		const html = render(
 			"This save could not be loaded. Your current town is unchanged. Traceback: Invalid Concordia town checkpoint.",
 		);
-		expect(html).toContain(
-			"This save could not be loaded. Your current town is unchanged.",
-		);
-		expect(html).toContain("Technical details");
+		expect(html).toContain("Your current town is unchanged.");
+		expect(html).not.toContain("Technical details");
 		expect(html).not.toContain("You can reload");
 	});
 	it("gives a start-fresh explanation for a short old-export rejection in lab mode", () => {
@@ -52,4 +50,15 @@ it("keeps raw errors out of the ordinary recovery message", () => {
 	expect(html).not.toContain("Use a local file");
 	expect(html).not.toContain("Technical details");
 	expect(html).toContain("Feedback");
+});
+
+it("preserves compression recovery without exposing the raw exception", () => {
+	const html = render(
+		"This save could not be compressed. The current town is unchanged. Test compression failure",
+	);
+	expect(html).toContain(
+		"This save could not be compressed. The current town is unchanged.",
+	);
+	expect(html).not.toContain("Test compression failure");
+	expect(html).not.toContain("reload");
 });

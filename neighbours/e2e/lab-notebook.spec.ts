@@ -1,4 +1,5 @@
 import { expect, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { openDownload } from "./session-helpers";
 
 test("quiet Feedback choices wait for Submit and recording off sends only a note", async ({
@@ -38,7 +39,7 @@ test("quiet Feedback choices wait for Submit and recording off sends only a note
 			body: JSON.stringify({ id: "mock-note", ok: true }),
 		});
 	});
-	await page.goto("/?lab=1");
+	await page.goto("/");
 	await openDownload(page);
 	const stopping = page.getByRole("button", {
 		name: "I'm stopping",
@@ -75,10 +76,8 @@ test("feedback preview names the current town and closing sends no note", async 
 		if (/\/(run|feedback)$/.test(route.request().url())) notes++;
 		await route.fulfill({ status: 200, body: "{}" });
 	});
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await openDownload(page);
 	await page.getByText("What is sent", { exact: true }).click();

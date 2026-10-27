@@ -40,15 +40,16 @@ const savedLabel = (save: unknown) => {
 // recovery must keep autosaves locked until an explicit visitor action succeeds.
 export function useVisitorSession({
 	enabled = true,
-	freshLocal = false,
+	localStart,
 	fileSession = false,
 	filePacket,
 }: {
 	enabled?: boolean;
-	freshLocal?: boolean;
+	localStart?: { seed: number; revision: number };
 	fileSession?: boolean;
 	filePacket?: unknown;
 } = {}) {
+	const freshLocal = localStart !== undefined;
 	const [town, setTown] = useState<TownView>();
 	const [healthHistory, setHealthHistory] = useState<HealthHistory>();
 	const [progress, setProgress] = useState("Preparing the live town…");
@@ -313,6 +314,7 @@ export function useVisitorSession({
 	);
 	useEffect(() => {
 		if (!enabled) return;
+		if (freshLocal) setTown(undefined);
 		let active = true;
 		const saves = fileSession
 			? null
@@ -760,7 +762,8 @@ export function useVisitorSession({
 					}
 				}
 				if (
-					(++rounds.current % 6 === 0 ||
+					((reply.type === "ready" && freshLocal) ||
+						++rounds.current % 6 === 0 ||
 						reply.advance !== undefined ||
 						typeof completed?.replacement === "number") &&
 					autosaveEnabled.current &&
@@ -976,6 +979,7 @@ export function useVisitorSession({
 				},
 				freshLocal,
 				fileSession,
+				localStart?.seed ?? 42,
 			);
 			client.current = runtime;
 		};
@@ -1039,11 +1043,12 @@ export function useVisitorSession({
 	}, [
 		dispatch,
 		enabled,
-		freshLocal,
+		localStart,
 		fileSession,
 		filePacket,
 		resetWorldFeedback,
 		settleMenu,
+		freshLocal,
 	]);
 	useEffect(() => {
 		try {

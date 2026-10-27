@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, step, type TestInfo, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 import {
 	closeSaves,
@@ -56,10 +57,8 @@ async function importPacket(page: Page, value: unknown) {
 test("worker rejects JSON arrays and invalid objects with truthful recovery and exact continuation", async ({
 	page,
 }, info) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const original = await exportPacket(page, info, "original");
 	const link = page.getByRole("link", { name: /Download save/ });
@@ -147,10 +146,8 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 			}
 		};
 	});
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const original = await exportPacket(page, info, "before-tools");
 	const close = page.getByRole("dialog", { name: /^Game menu/ });

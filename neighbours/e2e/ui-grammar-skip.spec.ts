@@ -1,5 +1,5 @@
 import { mkdir } from "node:fs/promises";
-import { expect, test } from "./local-fixture";
+import { enterLocalTown, expect, test } from "./local-fixture";
 
 for (const width of [360, 1280]) {
 	test(`Skip stops, completes the walk and holds a real conversation at ${width}`, async ({
@@ -28,10 +28,8 @@ for (const width of [360, 1280]) {
 				}
 			};
 		});
-		await page.goto("/?lab=1");
-		await page
-			.getByRole("button", { name: "Enter Mill Bridge", exact: true })
-			.click();
+		await page.goto("/");
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 		await page

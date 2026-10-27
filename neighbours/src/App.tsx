@@ -46,10 +46,13 @@ export default function App() {
 	const fileIntent = useRef(0);
 	const [booted, setBooted] = useState(false);
 	const [inTown, setInTown] = useState(false);
-	const [freshLocal, setFreshLocal] = useState(false);
+	const [localStart, setLocalStart] = useState<{
+		seed: number;
+		revision: number;
+	}>();
 	const session = useVisitorSession({
 		enabled: booted,
-		freshLocal,
+		localStart,
 		fileSession,
 		filePacket,
 	});
@@ -519,7 +522,13 @@ export default function App() {
 					session={session}
 					onEnter={enter}
 					onLocal={() => {
-						setFreshLocal(true);
+						const seed = Number(session.seedInput);
+						if (!Number.isSafeInteger(seed) || seed < 0 || seed > 2147483647)
+							return;
+						setLocalStart((previous) => ({
+							seed,
+							revision: (previous?.revision ?? 0) + 1,
+						}));
 						pendingEntry.current = null;
 						enter();
 					}}
