@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 import { LabPrivacy } from "./lab";
+import SavedTowns from "./SavedTowns";
 import { TownDiagnostics } from "./TownInspector";
 import type { useVisitorSession } from "./useVisitorSession";
 
@@ -33,6 +34,7 @@ export default function SessionMenu({
 		} else if (!open && dialog.current?.open) dialog.current.close();
 	}, [open]);
 	const navigate = (destination: MenuDestination) => {
+		if (session.slotBusy) return;
 		dialog.current?.close();
 		close();
 		onNavigate(destination);
@@ -42,7 +44,10 @@ export default function SessionMenu({
 			ref={dialog}
 			className="session-menu"
 			aria-labelledby="session-menu-title"
-			onCancel={close}
+			onCancel={(event) => {
+				if (session.slotBusy) event.preventDefault();
+				else close();
+			}}
 			onClose={close}
 		>
 			<div className="session-menu-heading">
@@ -96,6 +101,7 @@ export default function SessionMenu({
 								)}
 							</div>
 						</fieldset>
+						<SavedTowns session={session} />
 						<h3 className="eyebrow">Studies</h3>
 						<button
 							type="button"
@@ -159,6 +165,7 @@ export default function SessionMenu({
 							<button
 								type="button"
 								disabled={
+									session.slotBusy ||
 									session.commandPending ||
 									session.saveConflict ||
 									session.comparing
@@ -181,6 +188,7 @@ export default function SessionMenu({
 							disabled={
 								!session.town ||
 								session.saveConflict ||
+								session.slotBusy ||
 								session.commandPending ||
 								session.comparing
 							}
