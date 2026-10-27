@@ -1,13 +1,12 @@
 import { expect, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { showTab } from "./session-helpers";
 
 test("a cancelled second comparison keeps the first report selectable and byte-identical", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 	const panel = page.locator(".day-comparison");

@@ -95,3 +95,38 @@ it("opens recording only after UI accepts the exact fresh or restored worker vie
 	expect(fake.commitLoad).toHaveBeenCalledTimes(1);
 	client.close();
 });
+
+it("keeps explicit local seeds local across new towns and preserves automatic admission by default", async () => {
+	const local = new RuntimeClient(
+		() => {},
+		false,
+		() => {},
+		true,
+		false,
+		73,
+	);
+	worker.onmessage?.({ data: { type: "ready", view } });
+	await vi.waitFor(() =>
+		expect(fake.fresh).toHaveBeenCalledWith(73, 206, true),
+	);
+	expect(fake.postMessage.mock.calls.at(-1)?.[0]).toMatchObject({
+		type: "new",
+		seed: 73,
+	});
+	local.send({ type: "new", seed: 99 });
+	await vi.waitFor(() =>
+		expect(fake.fresh).toHaveBeenCalledWith(99, 206, true),
+	);
+	local.close();
+	fake.fresh.mockClear();
+	const automatic = new RuntimeClient(() => {});
+	worker.onmessage?.({ data: { type: "ready", view } });
+	await vi.waitFor(() =>
+		expect(fake.fresh).toHaveBeenCalledWith(42, 206, false),
+	);
+	automatic.send({ type: "new", seed: 71 });
+	await vi.waitFor(() =>
+		expect(fake.fresh).toHaveBeenCalledWith(71, 206, false),
+	);
+	automatic.close();
+});

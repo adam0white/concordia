@@ -306,10 +306,10 @@ it("shows activity and current promise before one evidence disclosure, preservin
 	expect(html.slice(0, disclosure)).not.toContain("<details");
 	expect(html.slice(disclosure)).toContain("Reasons and records ▸");
 	expect(html.slice(disclosure)).toContain("News received");
-	expect(html.slice(disclosure)).not.toContain(
+	expect(html.slice(disclosure)).toContain(
 		"How urgent each need feels · decision evidence",
 	);
-	expect(html).not.toContain("Controller · HF");
+	expect(html).toContain("Controller · HF");
 	expect(html.match(/Current pledge/g)).toHaveLength(1);
 });
 

@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, reachSelectedConversation, step, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { closeSaves, openDownload, openSaves } from "./session-helpers";
 
 test.use({
@@ -13,10 +14,8 @@ test("a player can offer and complete a real hour and see Nora remember it", asy
 	page,
 }, info) => {
 	const started = Date.now();
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await page.locator('[data-map-place="hall"]').tap();
 	await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();

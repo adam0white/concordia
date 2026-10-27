@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { enterLocalTown } from "./local-fixture";
 
 export async function openSaves(page: Page) {
 	const feedback = page.getByRole("button", {
@@ -10,6 +11,12 @@ export async function openSaves(page: Page) {
 	if (!(await dialog.isVisible()))
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
 	await expect(dialog).toBeVisible();
+}
+export async function openDebug(page: Page) {
+	await openSaves(page);
+	const debug = page.locator(".session-menu .menu-debug");
+	if ((await debug.getAttribute("open")) === null)
+		await debug.locator(":scope > summary").click();
 }
 export async function closeSaves(page: Page) {
 	const feedback = page.getByRole("button", {
@@ -31,7 +38,7 @@ export async function closeSaves(page: Page) {
 		name: /^(Enter|Return to) Mill Bridge/,
 	});
 	if (await enter.isVisible()) {
-		await enter.click();
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	}
 }
@@ -56,9 +63,12 @@ export async function openOtherWays(page: Page) {
 	});
 	if (!(await enter.isVisible())) {
 		await closeSaves(page);
-		await openSaves(page);
+		await openDebug(page);
 		await page
-			.getByRole("button", { name: "To the title page", exact: true })
+			.getByRole("button", {
+				name: "Restore, import or start from a seed",
+				exact: true,
+			})
 			.click();
 	}
 	await page.getByRole("button", { name: /^Other ways in/ }).click();
@@ -115,7 +125,9 @@ export async function showTab(
 			.click();
 }
 export async function showResources(page: Page) {
-	await showTab(page, "Compare");
+	await closeSaves(page);
+	await closeSelection(page);
+	await openDebug(page);
 	const resources = page.locator(".inspector-resources");
 	if ((await resources.getAttribute("open")) === null)
 		await resources.locator(":scope > summary").click();

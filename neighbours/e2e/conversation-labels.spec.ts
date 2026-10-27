@@ -1,4 +1,5 @@
 import { expect, reachSelectedConversation, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 for (const width of [360, 1280]) {
 	test(`complete conversation choices fit the sheet at ${width}`, async ({
@@ -10,8 +11,8 @@ for (const width of [360, 1280]) {
 				? route.abort()
 				: route.continue(),
 		);
-		await page.goto("/?lab=1");
-		await page.getByRole("button", { name: /^Enter Mill Bridge/ }).click();
+		await page.goto("/");
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.locator('.neighbour-strip [data-person-id="ada"]').click();
 		await reachSelectedConversation(page, "Nora");

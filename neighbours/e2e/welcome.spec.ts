@@ -1,4 +1,5 @@
 import { expect, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { openOtherWays, openSaves } from "./session-helpers";
 
 test("title starts no runtime and keeps keyboard entry visible", async ({
@@ -12,7 +13,7 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 			requests.push(request.url());
 	});
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/?lab=1");
+	await page.goto("/");
 	await expect(
 		page.getByRole("heading", { name: "A town is rebuilding after a flood." }),
 	).toBeVisible();
@@ -31,7 +32,13 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 				(document.scrollingElement?.scrollHeight ?? Infinity) <= innerHeight,
 		),
 	).toBe(true);
-	await enter.focus();
+	// Shared admission has its own failure control. Use the explicit local path
+	// here so this keyboard/runtime check has no network ownership dependency.
+	await page.getByRole("button", { name: /^Other ways in/ }).focus();
+	await page.keyboard.press("Enter");
+	await page
+		.getByRole("button", { name: "Start a fresh local town", exact: true })
+		.focus();
 	await page.keyboard.press("Enter");
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await expect(
@@ -42,15 +49,13 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 test("a new seed is durably saved while paused before its first round", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Start from a seed number").fill("71");
-	await page.getByRole("button", { name: "Start", exact: true }).click();
+	await enterLocalTown(page);
 	const latest = () =>
 		page.evaluate(async () => {
 			const database = await new Promise<IDBDatabase>((resolve, reject) => {
@@ -76,9 +81,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 	await expect.poll(async () => (await latest())?.runtime.seed).toBe(71);
 	expect((await latest())?.runtime.round).toBe(0);
 	await page.reload();
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect((await latest())?.runtime.seed).toBe(71);
 	expect((await latest())?.runtime.round).toBe(0);
@@ -88,7 +91,7 @@ test("one top-bar information panel supports keyboard and Escape", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/?lab=1");
+	await page.goto("/");
 	const info = page.getByRole("button", { name: "Information", exact: true });
 	await expect(info).toHaveCount(1);
 	await info.focus();

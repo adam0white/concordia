@@ -1,0 +1,8 @@
+allowBuilds:
+  workerd: true
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - '@adam0white/*'
+overrides:
+  '@cloudflare/config>zod': 4.6.7
+  'miniflare>undici': 7.30.1

@@ -1,4 +1,5 @@
 import { expect, reachSelectedConversation, step, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 test.use({
 	viewport: { width: 360, height: 690 },
@@ -8,10 +9,8 @@ test.use({
 test("an explicit conversation holds time and closing it resumes the automatic town", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await reachSelectedConversation(page, "Rafi");

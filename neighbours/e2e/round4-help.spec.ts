@@ -1,4 +1,5 @@
 import { expect, step, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 test.use({ hasTouch: true });
 for (const width of [360, 1280])
@@ -6,10 +7,8 @@ for (const width of [360, 1280])
 		page,
 	}, info) => {
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
-		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
-		await page
-			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-			.click();
+		await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		await page.locator('[data-map-place="hall"] .place-hit-area').tap();
 		await page.getByRole("button", { name: /Walk to Flooded hall ·/ }).click();

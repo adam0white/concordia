@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import CastMenu from "./CastMenu";
 import ErrorMessage from "./ErrorMessage";
 import { LabPrivacy } from "./lab";
-import { labMode } from "./lab-mode";
+import { TownDiagnostics } from "./TownInspector";
 import type { useVisitorSession } from "./useVisitorSession";
 
 type Session = ReturnType<typeof useVisitorSession>;
@@ -24,12 +23,14 @@ export default function SessionMenu({
 	onNavigate: (destination: MenuDestination) => void;
 }) {
 	const dialog = useRef<HTMLDialogElement>(null);
+	const debug = useRef<HTMLDetailsElement>(null);
 	const [confirmNew, setConfirmNew] = useState(false);
-	const diagnostics = labMode();
 	const [fullscreenError, setFullscreenError] = useState("");
 	useEffect(() => {
-		if (open && !dialog.current?.open) dialog.current?.showModal();
-		else if (!open && dialog.current?.open) dialog.current.close();
+		if (open && !dialog.current?.open) {
+			if (debug.current) debug.current.open = false;
+			dialog.current?.showModal();
+		} else if (!open && dialog.current?.open) dialog.current.close();
 	}, [open]);
 	const navigate = (destination: MenuDestination) => {
 		dialog.current?.close();
@@ -55,31 +56,13 @@ export default function SessionMenu({
 			<div className="menu-scroll">
 				<p className="tiny muted">Time pauses while this menu is open.</p>
 				{session.fileSession && (
-					<>
-						<p>
-							File session. Device saves, people checkpoints and forks are
-							unavailable.
-						</p>
-						<button
-							type="button"
-							disabled={!session.town || session.commandPending}
-							onClick={session.exportSave}
-						>
-							Keep a copy of this run
-						</button>
-						{session.downloadUrl && (
-							<a href={session.downloadUrl} download="alder-quay-save.json.gz">
-								Download save
-							</a>
-						)}
-					</>
+					<p>
+						File session. Device saves, people checkpoints and forks are
+						unavailable. Keep a copy of this run in Debug before leaving.
+					</p>
 				)}
-				{diagnostics && !session.fileSession && (
+				{!session.fileSession && (
 					<>
-						<CastMenu
-							checkpoint={session.checkpointCast}
-							recording={session.allowCastRecording}
-						/>
 						<button
 							type="button"
 							disabled={!session.town}
@@ -150,11 +133,6 @@ export default function SessionMenu({
 					Full screen
 				</button>
 				{fullscreenError && <p role="status">{fullscreenError}</p>}
-				{diagnostics && (
-					<button type="button" onClick={() => navigate("title")}>
-						To the title page
-					</button>
-				)}
 				<a href="https://human.adamwhite.work/games/" target="_top">
 					All games
 				</a>
@@ -174,7 +152,6 @@ export default function SessionMenu({
 						</button>
 					</div>
 				)}
-				<LabPrivacy />
 				{!session.fileSession &&
 					(confirmNew ? (
 						<div className="new-town-confirm">
@@ -212,6 +189,40 @@ export default function SessionMenu({
 							New game
 						</button>
 					))}
+				<a href="https://human.adamwhite.work/lab/people/" target="_top">
+					People saved in this browser
+				</a>
+				<LabPrivacy>
+					<details ref={debug} className="menu-debug">
+						<summary>Debug</summary>
+						<div className="menu-debug-content">
+							<button
+								type="button"
+								disabled={!session.town || session.commandPending}
+								onClick={session.exportSave}
+							>
+								Keep a copy of this run
+							</button>
+							{session.downloadUrl && (
+								<a
+									href={session.downloadUrl}
+									download="alder-quay-save.json.gz"
+								>
+									Download save
+								</a>
+							)}
+							<button type="button" onClick={() => navigate("title")}>
+								Restore, import or start from a seed
+							</button>
+							{session.error && (
+								<p className="tiny" style={{ overflowWrap: "anywhere" }}>
+									{session.error}
+								</p>
+							)}
+							<TownDiagnostics session={session} />
+						</div>
+					</details>
+				</LabPrivacy>
 			</div>
 			<button type="button" className="primary menu-resume" onClick={close}>
 				Resume

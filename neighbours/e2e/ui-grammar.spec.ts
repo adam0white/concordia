@@ -1,5 +1,6 @@
 import { mkdir } from "node:fs/promises";
-import { expect, type Page, test } from "./local-fixture";
+import { gunzipSync } from "node:zlib";
+import { enterLocalTown, expect, type Page, test } from "./local-fixture";
 
 type FeedbackPayload = {
 	kind?: string;
@@ -112,7 +113,7 @@ for (const width of [360, 1280]) {
 				throw Error("Native confirmation forbidden");
 			};
 		});
-		await page.goto("/?lab=1");
+		await page.goto("/");
 		await expect(
 			page.getByRole("button", { name: "Enter Mill Bridge", exact: true }),
 		).toBeInViewport();
@@ -122,7 +123,7 @@ for (const width of [360, 1280]) {
 		await capture(page, "title");
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
 		await page.getByLabel("Start from a seed number").fill("42");
-		await page.getByRole("button", { name: "Start", exact: true }).click();
+		await enterLocalTown(page);
 		await capture(page, "loading");
 		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await expect(page.locator(".next-step")).toContainText("Explore the town");
@@ -231,9 +232,9 @@ for (const width of [360, 1280]) {
 			"Compare possible outcomes ▸",
 			"Recorded studies ▸",
 			"Feedback ▸",
-			"To the title page",
 			"All games",
 			"New game",
+			"People saved in this browser",
 		]);
 		await expect(
 			page.getByRole("button", { name: "Automatic", exact: true }),
@@ -289,8 +290,12 @@ for (const width of [360, 1280]) {
 			.getByRole("button", { name: "Close Feedback", exact: true })
 			.click();
 		await menu(page);
+		await page.locator(".session-menu .menu-debug > summary").click();
 		await page
-			.getByRole("button", { name: "To the title page", exact: true })
+			.getByRole("button", {
+				name: "Restore, import or start from a seed",
+				exact: true,
+			})
 			.click();
 		await expect(
 			page.getByRole("button", { name: /^Return to Mill Bridge/ }),
@@ -321,19 +326,28 @@ for (const width of [360, 1280]) {
 				});
 				localStorage.setItem("hf-lab-feedback-name", "Earlier tester");
 			});
-			await page.route("**/lab/api/**", (route) =>
-				route.fulfill({
+			await page.route("**/lab/api/**", async (route) => {
+				// Linked uploads retire only on a receipt for that exact piece.
+				const body = route.request().postDataBuffer();
+				if (!body) throw Error("Expected a compressed lab upload");
+				const payload = JSON.parse(gunzipSync(body).toString("utf8")) as {
+					id?: string;
+				};
+				await route.fulfill({
 					status: 200,
 					contentType: "application/json",
 					headers: { "Access-Control-Allow-Origin": "*" },
-					body: JSON.stringify({ id: "qa-local-receipt", ok: true }),
-				}),
-			);
+					body: JSON.stringify({
+						id: payload.id ?? "qa-local-receipt",
+						ok: true,
+					}),
+				});
+			});
 			const configured =
 				process.env.NEIGHBOURS_LIVE_URL ?? "http://127.0.0.1:5286";
-			let entry = "/?lab=1";
+			let entry = "/";
 			if (!configured.startsWith("https://")) {
-				entry = "https://neighbours-ui-test.invalid/?lab=1";
+				entry = "https://neighbours-ui-test.invalid/";
 				await page.route(
 					"https://neighbours-ui-test.invalid/**",
 					async (route) => {
@@ -347,9 +361,7 @@ for (const width of [360, 1280]) {
 				);
 			}
 			await page.goto(entry);
-			await page
-				.getByRole("button", { name: "Enter Mill Bridge", exact: true })
-				.click();
+			await enterLocalTown(page);
 			await expect(page.locator(".town-ready")).toBeVisible({
 				timeout: 120000,
 			});
@@ -438,7 +450,7 @@ for (const width of [360, 1280]) {
 				body: JSON.stringify({ id: "qa-title-note", ok: true }),
 			});
 		});
-		await page.goto("/?lab=1");
+		await page.goto("/");
 		await expect(
 			page.getByRole("button", { name: "Enter Mill Bridge", exact: true }),
 		).toBeVisible();

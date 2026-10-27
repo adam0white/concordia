@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { labMode } from "./lab-mode";
 import OtherWaysIn, { type TitleActions } from "./OtherWaysIn";
 import { localSave } from "./persistence";
 import type { useVisitorSession } from "./useVisitorSession";
@@ -59,15 +58,13 @@ export default function Welcome({
 					themselves.
 				</p>
 			</div>
-			{labMode() && (
-				<button
-					type="button"
-					className="other-ways-trigger"
-					onClick={() => setOtherWays(true)}
-				>
-					Other ways in <span aria-hidden="true">▸</span>
-				</button>
-			)}
+			<button
+				type="button"
+				className="other-ways-trigger"
+				onClick={() => setOtherWays(true)}
+			>
+				Other ways in <span aria-hidden="true">▸</span>
+			</button>
 			<div className="welcome-actions action-bar">
 				{confirmNew ? (
 					<div className="new-town-confirm">

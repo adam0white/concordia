@@ -1,4 +1,3 @@
-import { labMode } from "./lab-mode";
 import RecordedStudies from "./RecordedStudies";
 import "./study-workbench.css";
 import DayComparison from "./DayComparison";
@@ -15,7 +14,7 @@ export default function TownInspector({
 	section?: "town" | "recorded";
 }) {
 	const town = session.town;
-	if (!town || (section === "recorded" && !labMode())) return null;
+	if (!town) return null;
 	return (
 		<section className="inspector focused-inspector">
 			<div hidden={section !== "town"}>
@@ -67,83 +66,94 @@ export default function TownInspector({
 					onRun={session.compare}
 					onCancel={session.cancelComparison}
 				/>
-				{labMode() && <TownHealth history={session.healthHistory} />}
 			</div>
 			<div hidden={section !== "recorded"}>
-				{labMode() && <RecordedStudies />}
+				<RecordedStudies />
 			</div>
-			{labMode() && <EvidencePanel />}
-
-			{labMode() && (
-				<details className="inspector-resources">
-					<summary>Resources and runtime</summary>
-					<h3>Shared resources</h3>
-					{town.places.map((place) => (
-						<div className="resource" key={place.id}>
-							<span>{placeName(place)}</span>
-							<span>
-								{place.stock} food · {place.occupants}/{place.capacity} here
-							</span>
-						</div>
-					))}
-					<div className="sparklines">
-						{Object.entries(session.trends).map(([key, values]) => {
-							const min = Math.min(...values),
-								range = Math.max(1, Math.max(...values) - min);
-							return (
-								<div className="sparkline" key={key}>
-									<span>{metricLabel(key)}</span>
-									<svg
-										viewBox="0 0 160 30"
-										role="img"
-										aria-label={`${metricLabel(key)}: ${values.map(number).join(", ")}`}
-									>
-										<polyline
-											points={values
-												.map(
-													(value, index) =>
-														`${(index / Math.max(values.length - 1, 1)) * 160},${27 - ((value - min) / range) * 24}`,
-												)
-												.join(" ")}
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="2"
-										/>
-									</svg>
-									<strong>{number(values.at(-1) ?? 0)}</strong>
-								</div>
-							);
-						})}
-					</div>
-					<p className="tiny muted">
-						Python Concordia runs the town. The released HF software makes
-						decisions. This town runs on your device.
-					</p>
-					<div className="resource">
-						<span>Seed</span>
-						<strong>{town.seed}</strong>
-					</div>
-					{Object.entries(town.metrics).map(([key, value]) => (
-						<div className="resource" key={key}>
-							<span>{metricLabel(key)}</span>
-							<strong>{number(value)}</strong>
-						</div>
-					))}
-					{town.diagnostics.map((diagnostic) => (
-						<p
-							className={`diagnostic ${diagnostic.severity}`}
-							key={`${diagnostic.code}-${diagnostic.message}`}
-						>
-							<strong>{diagnostic.code}</strong> {diagnostic.message}
-						</p>
-					))}
-					{!town.diagnostics.length && (
-						<p className="tiny muted">
-							No unusual runtime behaviour was reported.
-						</p>
-					)}
-				</details>
-			)}
 		</section>
+	);
+}
+
+export function TownDiagnostics({
+	session,
+}: {
+	session: ReturnType<typeof useVisitorSession>;
+}) {
+	const town = session.town;
+	if (!town) return null;
+	return (
+		<>
+			<TownHealth history={session.healthHistory} />
+			<EvidencePanel />
+
+			<details className="inspector-resources">
+				<summary>Resources and runtime</summary>
+				<h3>Shared resources</h3>
+				{town.places.map((place) => (
+					<div className="resource" key={place.id}>
+						<span>{placeName(place)}</span>
+						<span>
+							{place.stock} food · {place.occupants}/{place.capacity} here
+						</span>
+					</div>
+				))}
+				<div className="sparklines">
+					{Object.entries(session.trends).map(([key, values]) => {
+						const min = Math.min(...values),
+							range = Math.max(1, Math.max(...values) - min);
+						return (
+							<div className="sparkline" key={key}>
+								<span>{metricLabel(key)}</span>
+								<svg
+									viewBox="0 0 160 30"
+									role="img"
+									aria-label={`${metricLabel(key)}: ${values.map(number).join(", ")}`}
+								>
+									<polyline
+										points={values
+											.map(
+												(value, index) =>
+													`${(index / Math.max(values.length - 1, 1)) * 160},${27 - ((value - min) / range) * 24}`,
+											)
+											.join(" ")}
+										fill="none"
+										stroke="currentColor"
+										strokeWidth="2"
+									/>
+								</svg>
+								<strong>{number(values.at(-1) ?? 0)}</strong>
+							</div>
+						);
+					})}
+				</div>
+				<p className="tiny muted">
+					Python Concordia runs the town. The released HF software makes
+					decisions. This town runs on your device.
+				</p>
+				<div className="resource">
+					<span>Seed</span>
+					<strong>{town.seed}</strong>
+				</div>
+				{Object.entries(town.metrics).map(([key, value]) => (
+					<div className="resource" key={key}>
+						<span>{metricLabel(key)}</span>
+						<strong>{number(value)}</strong>
+					</div>
+				))}
+				{town.diagnostics.map((diagnostic) => (
+					<p
+						className={`diagnostic ${diagnostic.severity}`}
+						key={`${diagnostic.code}-${diagnostic.message}`}
+					>
+						<strong>{diagnostic.code}</strong> {diagnostic.message}
+					</p>
+				))}
+				{!town.diagnostics.length && (
+					<p className="tiny muted">
+						No unusual runtime behaviour was reported.
+					</p>
+				)}
+			</details>
+		</>
 	);
 }

@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
 import { expect, type Page, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import {
 	openDownload,
 	openOtherWays,
@@ -35,10 +36,8 @@ async function exported(page: Page) {
 test("a contextual week shows its actual request, cancels safely and retains a real funded slot", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	await openOtherWays(page);
@@ -91,9 +90,7 @@ test("a contextual week shows its actual request, cancels safely and retains a r
 	expect(funded[0].openedSlot.to - funded[0].openedSlot.from).toBe(1440);
 
 	await page.reload();
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await exported(page)).toEqual(after);
 });

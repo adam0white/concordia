@@ -2,34 +2,38 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, expect, it, vi } from "vitest";
 import { actionWords, ingWords, jobLine } from "../src/core/voicing";
-import { labMode } from "../src/ui/lab-mode";
 import { personRead, plainText } from "../src/ui/plain-english";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
 
 vi.mock("../src/ui/lab", () => ({
-	LabPrivacy: () => createElement("label", {}, "Recording"),
-}));
-vi.mock("../src/ui/CastMenu", () => ({
-	default: () => createElement("p", {}, "People saved in this browser"),
+	LabPrivacy: ({ children }: { children: import("react").ReactNode }) =>
+		createElement(
+			"div",
+			{},
+			"Recording",
+			createElement("a", {}, "Lab privacy"),
+			children,
+		),
 }));
 
 import type { TownView } from "../src/contracts";
 import { createRuntime } from "../src/core/scenario";
+
+vi.mock("../src/ui/TownInspector", () => ({
+	TownDiagnostics: () => createElement("p", {}, "Runtime diagnostics"),
+}));
+
 import PersonLessons from "../src/ui/PersonLessons";
 import SessionMenu from "../src/ui/SessionMenu";
 import { SpeakPanel } from "../src/ui/SpeakPanel";
 import Stories from "../src/ui/Stories";
 
 afterEach(() => vi.unstubAllGlobals());
-it("requires the exact lab flag", () => {
-	for (const search of ["", "?lab=true", "?lab=0", "?laboratory=1"])
-		expect(labMode(search)).toBe(false);
-	expect(labMode("?lab=1")).toBe(true);
-});
-it("ordinary menu contains only the approved actions; diagnostics remain available", () => {
-	const session = { town: { day: 1 } } as unknown as ReturnType<
-		typeof useVisitorSession
-	>;
+it("offers gameplay without flags and keeps diagnostics in one closed menu item", () => {
+	const session = {
+		town: { day: 1 },
+		error: "Raw technical detail",
+	} as unknown as ReturnType<typeof useVisitorSession>;
 	const render = () =>
 		renderToStaticMarkup(
 			createElement(SessionMenu, {
@@ -39,7 +43,6 @@ it("ordinary menu contains only the approved actions; diagnostics remain availab
 				onNavigate: () => {},
 			}),
 		);
-	vi.stubGlobal("location", { search: "" });
 	const ordinary = render();
 	for (const text of [
 		"Feedback",
@@ -48,21 +51,28 @@ it("ordinary menu contains only the approved actions; diagnostics remain availab
 		"Recording",
 		"New game",
 		"Resume",
-	])
-		expect(ordinary).toContain(text);
-	for (const text of [
-		"People saved in this browser",
+		"Read the journal",
 		"Compare possible outcomes",
 		"Recorded studies",
 		"town&#x27;s pace",
-		"To the title page",
 		"Switch light or dark colours",
+		"People saved in this browser",
 	])
-		expect(ordinary).not.toContain(text);
-	expect(ordinary).toContain('href="https://human.adamwhite.work/games/"');
-	vi.stubGlobal("location", { search: "?lab=1" });
-	expect(render()).toContain("People saved in this browser");
-	expect(render()).toContain("Recorded studies");
+		expect(ordinary).toContain(text);
+	expect(ordinary).not.toContain("Save an alternative version");
+	expect(ordinary).not.toContain("Keep people in this browser");
+	expect(ordinary).toMatch(
+		/<details class="menu-debug"><summary>Debug<\/summary>/,
+	);
+	expect(ordinary).toContain("Runtime diagnostics");
+	expect(ordinary).toContain("Keep a copy of this run");
+	expect(ordinary.indexOf("Raw technical detail")).toBeGreaterThan(
+		ordinary.indexOf("<summary>Debug"),
+	);
+	for (const search of ["?lab=1", "?lab=0", "?lab=true"]) {
+		vi.stubGlobal("location", { search });
+		expect(render()).toBe(ordinary);
+	}
 });
 it("displays complete source prose and external narration without lookup substitutions", () => {
 	const text =

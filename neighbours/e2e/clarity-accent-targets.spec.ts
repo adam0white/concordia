@@ -1,4 +1,5 @@
 import { expect, type Locator, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 async function expectStandaloneTarget(target: Locator) {
 	await target.scrollIntoViewIfNeeded();
@@ -85,10 +86,8 @@ for (const viewport of [
 		page,
 	}) => {
 		await page.setViewportSize(viewport);
-		await page.goto("/?lab=1");
-		await page
-			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-			.click();
+		await page.goto("/");
+		await enterLocalTown(page);
 		await expect(page.locator(".town-ready")).toBeVisible();
 		await expectStandaloneTarget(
 			page.getByRole("button", { name: "Information", exact: true }),

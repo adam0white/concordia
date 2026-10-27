@@ -1,4 +1,5 @@
 import { expect, step, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { closeSaves, openOtherWays, openSaves } from "./session-helpers";
 
 test.use({
@@ -32,10 +33,8 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 			}
 		};
 	});
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	const before = await page.locator(".town-time").textContent();
@@ -68,7 +67,7 @@ test("walking acknowledges without duplicate inputs and clears after replacement
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Start from a seed number").fill("73");
-	await page.getByRole("button", { name: "Start", exact: true }).click();
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".game-state")).not.toContainText("Press Play to");
 });
@@ -91,10 +90,8 @@ test("a held worker reply shows pending immediately without moving the menu", as
 			}
 		};
 	});
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	const play = page.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ });
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await page.locator('[data-map-place="hall"]').tap();

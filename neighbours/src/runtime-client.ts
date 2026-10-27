@@ -19,8 +19,9 @@ export class RuntimeClient {
 		private onReply: (reply: UiReply) => void,
 		hasLocalSave = false,
 		accepted: () => void | Promise<void> = () => {},
-		explicitLocal = false,
+		private readonly explicitLocal = false,
 		private readonly foreign = false,
+		initialSeed = 42,
 	) {
 		this.cast = new CastSession((id) => this.capture(id), accepted, foreign);
 		this.worker = new Worker(new URL("./runtime.worker.ts", import.meta.url), {
@@ -72,11 +73,15 @@ export class RuntimeClient {
 				}
 				this.starting = true;
 				this.enqueue(async () => {
-					const initial = await this.cast.fresh(42, 206, explicitLocal);
+					const initial = await this.cast.fresh(
+						initialSeed,
+						206,
+						this.explicitLocal,
+					);
 					this.pendingNew = ++this.newSequence;
 					this.worker.postMessage({
 						type: "new",
-						seed: 42,
+						seed: initialSeed,
 						initial,
 						newRequestId: this.pendingNew,
 					});
@@ -153,6 +158,7 @@ export class RuntimeClient {
 				const initial = await this.cast.fresh(
 					command.seed,
 					command.population ?? 206,
+					this.explicitLocal,
 				);
 				this.pendingNew = ++this.newSequence;
 				this.worker.postMessage({

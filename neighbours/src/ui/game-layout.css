@@ -1242,3 +1242,21 @@ body,
 		display: block;
 	}
 }
+
+.lab-tools > a {
+	float: left;
+	margin-right: 16px;
+}
+.menu-debug > summary {
+	display: flex;
+	align-items: center;
+	min-height: 44px;
+	font-size: 0.8rem;
+	cursor: pointer;
+}
+.menu-debug-content {
+	clear: both;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}

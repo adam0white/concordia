@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { openSaves } from "./session-helpers";
 
 /** Emulate text-only resize for every rendered element, including px rules.
@@ -54,10 +55,8 @@ test("doubled computed text keeps town controls and scrolled Journal reachable",
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.emulateMedia({ colorScheme: "light" });
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: "Enter Mill Bridge", exact: true })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const base = await page
 		.locator(".town-verbs button")

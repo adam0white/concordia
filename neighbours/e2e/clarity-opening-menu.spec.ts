@@ -1,9 +1,10 @@
 import { expect, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { openSaves } from "./session-helpers";
 
 test("entry stays visible and one menu holds the town", async ({ page }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/?lab=1");
+	await page.goto("/");
 	const enter = page.getByRole("button", {
 		name: "Enter Mill Bridge",
 		exact: true,
@@ -15,7 +16,7 @@ test("entry stays visible and one menu holds the town", async ({ page }) => {
 	await expect(
 		page.getByRole("button", { name: "Game menu", exact: true }),
 	).toHaveCount(1);
-	await enter.click();
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await openSaves(page);
 	const menu = page.getByRole("dialog", { name: /^Game menu/ });
@@ -25,14 +26,14 @@ test("entry stays visible and one menu holds the town", async ({ page }) => {
 		"Compare possible outcomes",
 		"Recorded studies",
 		"Feedback",
-		"To the title page",
 	])
 		await expect(
 			menu.getByRole("button", { name: new RegExp(`^${name}`) }),
 		).toBeVisible();
 	await expect(
 		menu.getByRole("button", { name: /Restore|Import|New town/ }),
-	).toHaveCount(0);
+	).not.toBeVisible();
+	await expect(menu.locator(".menu-debug")).not.toHaveAttribute("open", "");
 	const before = await page.evaluate(
 		() => (window as unknown as { townNow: number }).townNow,
 	);

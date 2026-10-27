@@ -1,7 +1,6 @@
 import { createLab } from "@adam0white/lab-client";
 import { telemetryNotice } from "@adam0white/lab-kit";
-import { useEffect, useRef, useState } from "react";
-import { labMode } from "./lab-mode";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 export const lab = createLab({ game: "neighbours" });
 // Close recording before save/run/log hooks can observe an imported or mixed-history chapter.
@@ -43,7 +42,7 @@ export function useLabRecording() {
 	};
 }
 
-export function LabPrivacy() {
+export function LabPrivacy({ children }: { children?: ReactNode }) {
 	const { telemetryOn, setRecording } = useLabRecording();
 	return (
 		<div className="lab-privacy">
@@ -57,9 +56,10 @@ export function LabPrivacy() {
 				/>{" "}
 				Recording
 			</label>
-			{labMode() && (
+			<div className="lab-tools">
 				<a href="https://human.adamwhite.work/lab/privacy/">Lab privacy</a>
-			)}
+				{children}
+			</div>
 		</div>
 	);
 }

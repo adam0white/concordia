@@ -5,12 +5,11 @@ import {
 	reachSelectedConversation,
 	test,
 } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 
 async function openConversation(page: Page) {
-	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await reachSelectedConversation(page, "Rafi");

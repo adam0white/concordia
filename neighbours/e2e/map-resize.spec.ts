@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "./local-fixture";
+import { enterLocalTown, expect, type Page, test } from "./local-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
 /** Compare published measurements with the actual SVG consumer, not class names. */
@@ -39,10 +39,8 @@ test("phone-to-desktop resize keeps map marker targets at their screen size", as
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	const widths = () =>
 		page
@@ -74,10 +72,8 @@ test("shared measurements follow current map lifetime without owning focus or hi
 	page,
 }) => {
 	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await measuredMap(page);
 	const history = await page.evaluate(() => ({
@@ -128,8 +124,12 @@ test("shared measurements follow current map lifetime without owning focus or hi
 		});
 	expect(hit).toBe(true);
 	await openSaves(page);
+	await page.locator(".session-menu .menu-debug > summary").click();
 	await page
-		.getByRole("button", { name: "To the title page", exact: true })
+		.getByRole("button", {
+			name: "Restore, import or start from a seed",
+			exact: true,
+		})
 		.click();
 	await expect(page.locator(".map-frame")).toHaveCount(0);
 	const retired = await page.locator(".game-frame").getAttribute("style");
@@ -142,9 +142,7 @@ test("shared measurements follow current map lifetime without owning focus or hi
 			),
 	);
 	expect(await page.locator(".game-frame").getAttribute("style")).toBe(retired);
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".map-frame")).toHaveCount(1);
 	await expect(page.locator(".game-topbar")).toHaveCount(1);

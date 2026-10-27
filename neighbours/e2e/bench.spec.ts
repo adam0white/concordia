@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { captureBench } from "../scripts/capture-bench.ts";
 import { expect, type Page, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import {
 	closeSaves,
 	openDownload,
@@ -44,10 +45,8 @@ test("a real mobile bench proposal is received without granting access, and acti
 }) => {
 	const frozen = captureBench(73).checkpoint;
 	await page.setViewportSize({ width: 320, height: 740 });
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await openSaves(page);
 	await openOtherWays(page);
@@ -99,9 +98,7 @@ test("a real mobile bench proposal is received without granting access, and acti
 	expect(ravi.person.prospection.entries[0].triggeredAt).toBeUndefined();
 	expect(proposed.rounds).toBe(before.rounds);
 	await page.reload();
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await packet(page)).toEqual(proposed);
 	panel = await cart(page);

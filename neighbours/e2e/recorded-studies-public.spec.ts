@@ -1,4 +1,5 @@
 import { expect, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { showTab } from "./session-helpers";
 
 test("real recorded bench, route and upstream GM studies render on mobile without loading the large bench trace", async ({
@@ -7,10 +8,8 @@ test("real recorded bench, route and upstream GM studies render on mobile withou
 	await page.setViewportSize({ width: 320, height: 740 });
 	const requests: string[] = [];
 	page.on("request", (request) => requests.push(request.url()));
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Recorded studies");
 	const studies = page.getByRole("region", {

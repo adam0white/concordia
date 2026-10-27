@@ -113,6 +113,8 @@ async function receivedChapter(): Promise<Save> {
 	return save;
 }
 
+// Full 206-person admission plus 32 restored rounds needs the population-control
+// budget on hosted CPUs; this is a correctness check, not a speed assertion.
 it("admits the actual signed Pass13 Rafi without inventing kitchen work or town qualifications", async () => {
 	expect(sha256(bytes)).toBe(
 		"bab614c5f616ba028d5851c38f7ef7c257cca7fea222e0f62f682e4769a029c8",
@@ -193,7 +195,7 @@ it("admits the actual signed Pass13 Rafi without inventing kitchen work or town 
 		);
 	}
 	expect(snapshot(rafi).rng).toEqual(actual.raw.rng);
-});
+}, 30_000);
 
 it("validates Pass chapter lineage and initial people before physical restore", async () => {
 	const original = await receivedChapter();

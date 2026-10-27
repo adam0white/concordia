@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { captureWeekly } from "../scripts/capture-weekly.ts";
 import { expect, type Page, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import {
 	openDownload,
 	openOtherWays,
@@ -36,10 +37,8 @@ async function exported(page: Page) {
 test("a real WASM annex request comparison preserves the live town and the request survives paused reload", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	await openOtherWays(page);
@@ -106,9 +105,7 @@ test("a real WASM annex request comparison preserves the live town and the reque
 	expect(after.runtime.controls).toBe(before.runtime.controls);
 	expect(after.runtime.assistance.received).toBe(true);
 	await page.reload();
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect(await exported(page)).toEqual(after);
 });

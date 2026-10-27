@@ -1,7 +1,7 @@
-import { test as base } from "@playwright/test";
+import { test as base, type Page } from "@playwright/test";
 
 export * from "@playwright/test";
-/** Local regression fixture: explicitly select the labelled lab-only local controller.
+/** Local regression fixture: explicitly select the public local controller.
  * This exercises the real Python/HF town; it does not establish shared cast admission.
  * The ordinary admission-failure regression uses the unmodified base fixture instead.
  */
@@ -16,34 +16,51 @@ export const test = base.extend({
 				await route.fulfill({ status: 204 });
 			else await route.continue();
 		});
-		const prepareLocal = async () => {
-			if (
-				new URL(page.url()).searchParams.get("lab") !== "1" ||
-				!(await page.locator(".welcome-screen").isVisible())
-			)
-				return;
-			await page
-				.getByRole("button", { name: "Game menu", exact: true })
-				.click();
-			await page.locator(".cast-menu > summary").click();
-			await page
-				.getByLabel("Keep people in this browser", { exact: true })
-				.uncheck();
-			await page.locator(".cast-menu > summary").click();
-			await page.keyboard.press("Escape");
-		};
-		const goto = page.goto.bind(page);
-		page.goto = async (...args) => {
-			const result = await goto(...args);
-			await prepareLocal();
-			return result;
-		};
-		const reload = page.reload.bind(page);
-		page.reload = async (...args) => {
-			const result = await reload(...args);
-			await prepareLocal();
-			return result;
-		};
 		await use(page);
 	},
 });
+
+/** Local seeded controls are separate from automatic cast admission. Resume keeps
+ * the saved chapter; a fresh run uses the same public local-start action as a visitor.
+ */
+export async function enterLocalTown(page: Page) {
+	const other = page.locator(".other-ways-in");
+	if (!(await other.isVisible())) {
+		// Welcome reads IndexedDB asynchronously. Read the same save before choosing
+		// between resume and fresh; the first rendered label may still say Enter.
+		const saved = await page.evaluate(async () => {
+			const db = await new Promise<IDBDatabase>((resolve, reject) => {
+				const request = indexedDB.open("alder-quay", 1);
+				request.onupgradeneeded = () => {
+					if (!request.result.objectStoreNames.contains("saves"))
+						request.result.createObjectStore("saves");
+				};
+				request.onsuccess = () => resolve(request.result);
+				request.onerror = () => reject(request.error);
+			});
+			try {
+				return await new Promise<boolean>((resolve, reject) => {
+					const request = db
+						.transaction("saves")
+						.objectStore("saves")
+						.get("latest");
+					request.onsuccess = () => resolve(request.result !== undefined);
+					request.onerror = () => reject(request.error);
+				});
+			} finally {
+				db.close();
+			}
+		});
+		const resume = page.getByRole("button", {
+			name: /^(Enter|Return to) Mill Bridge/,
+		});
+		if (saved) {
+			await resume.click();
+			return;
+		}
+		await page.getByRole("button", { name: /^Other ways in/ }).click();
+	}
+	await page
+		.getByRole("button", { name: "Start a fresh local town", exact: true })
+		.click();
+}

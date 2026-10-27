@@ -1,13 +1,12 @@
 import { expect, postStep, step, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
 test("automatic pacing hides clock controls and the menu holds", async ({
 	page,
 }) => {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await expect(
 		page.getByRole("button", { name: /^(Play|Pause|Step)/ }),
@@ -62,10 +61,8 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 			}
 		};
 	});
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	// Seed 42 first publishes a story at 09:00, on the fourth round.
 	for (let i = 0; i < 3; i++) await step(page);

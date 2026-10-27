@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { expect, type Page, step, type TestInfo, test } from "./clock-fixture";
+import { enterLocalTown } from "./local-fixture";
 import {
 	closeSaves,
 	openDownload,
@@ -49,10 +50,8 @@ async function exportFile(page: Page, info: TestInfo, name: string) {
 	};
 }
 async function startPaused(page: Page) {
-	await page.goto("/?lab=1");
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await page.goto("/");
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await closeSaves(page);
@@ -112,9 +111,7 @@ test("actual browser gzip export preserves the complete town across import and d
 		)
 		.toBe(original.packet.runtime.now);
 	await page.reload();
-	await page
-		.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
-		.click();
+	await enterLocalTown(page);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect((await exportFile(page, info, "reload")).packet).toEqual(imported);
@@ -125,7 +122,9 @@ test("actual browser gzip export preserves the complete town across import and d
 		mimeType: "application/gzip",
 		buffer: original.compressed.subarray(0, -8),
 	});
-	await expect(page.getByRole("alert")).toContainText("invalid or incomplete");
+	await expect(page.getByRole("alert")).toContainText(
+		"The town could not complete that action.",
+	);
 	expect((await exportFile(page, info, "invalid-preserved")).packet).toEqual(
 		imported,
 	);
