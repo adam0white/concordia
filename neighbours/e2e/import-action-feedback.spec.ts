@@ -209,7 +209,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	});
 	await lend.click();
 	await expect(page.getByRole("alert")).toContainText(
-		"Intervention rejected by test gate",
+		"The town could not complete that action.",
 	);
 	await expect(page.locator(".intervention-result")).toHaveCount(0);
 	await expect(lend).toBeEnabled();

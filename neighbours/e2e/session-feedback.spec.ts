@@ -323,7 +323,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 	await page.evaluate(() =>
 		(window as unknown as { releaseFileRead: () => void }).releaseFileRead(),
 	);
-	await expect(page.getByRole("alert")).toContainText("not valid JSON");
+	await expect(page.getByRole("alert")).toContainText(
+		"The town could not complete that action.",
+	);
 	await page.evaluate(() => {
 		const gate = (window as unknown as { sessionSaveGate: SaveGate })
 			.sessionSaveGate;
@@ -334,7 +336,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 	expect((await packet(page, info, "after-delayed-step")).runtime.now).toBe(
 		original.runtime.now + 15,
 	);
-	await expect(page.getByRole("alert")).toContainText("not valid JSON");
+	await expect(page.getByRole("alert")).toContainText(
+		"The town could not complete that action.",
+	);
 });
 
 test("a rejected local JSON file resumes automatic time without another action", async ({
@@ -349,7 +353,9 @@ test("a rejected local JSON file resumes automatic time without another action",
 		mimeType: "application/json",
 		buffer: Buffer.from("{"),
 	});
-	await expect(page.getByRole("alert")).toContainText("not valid JSON");
+	await expect(page.getByRole("alert")).toContainText(
+		"The town could not complete that action.",
+	);
 	// No menu, walking, or other action resumes time after the error.
 	const before = await postStep(page);
 	await expect

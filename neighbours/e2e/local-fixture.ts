@@ -26,8 +26,35 @@ export const test = base.extend({
 export async function enterLocalTown(page: Page) {
 	const other = page.locator(".other-ways-in");
 	if (!(await other.isVisible())) {
-		const resume = page.getByRole("button", { name: /^Return to Mill Bridge/ });
-		if (await resume.isVisible()) {
+		// Welcome reads IndexedDB asynchronously. Read the same save before choosing
+		// between resume and fresh; the first rendered label may still say Enter.
+		const saved = await page.evaluate(async () => {
+			const db = await new Promise<IDBDatabase>((resolve, reject) => {
+				const request = indexedDB.open("alder-quay", 1);
+				request.onupgradeneeded = () => {
+					if (!request.result.objectStoreNames.contains("saves"))
+						request.result.createObjectStore("saves");
+				};
+				request.onsuccess = () => resolve(request.result);
+				request.onerror = () => reject(request.error);
+			});
+			try {
+				return await new Promise<boolean>((resolve, reject) => {
+					const request = db
+						.transaction("saves")
+						.objectStore("saves")
+						.get("latest");
+					request.onsuccess = () => resolve(request.result !== undefined);
+					request.onerror = () => reject(request.error);
+				});
+			} finally {
+				db.close();
+			}
+		});
+		const resume = page.getByRole("button", {
+			name: /^(Enter|Return to) Mill Bridge/,
+		});
+		if (saved) {
 			await resume.click();
 			return;
 		}

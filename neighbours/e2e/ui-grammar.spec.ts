@@ -1,4 +1,5 @@
 import { mkdir } from "node:fs/promises";
+import { gunzipSync } from "node:zlib";
 import { enterLocalTown, expect, type Page, test } from "./local-fixture";
 
 type FeedbackPayload = {
@@ -325,14 +326,23 @@ for (const width of [360, 1280]) {
 				});
 				localStorage.setItem("hf-lab-feedback-name", "Earlier tester");
 			});
-			await page.route("**/lab/api/**", (route) =>
-				route.fulfill({
+			await page.route("**/lab/api/**", async (route) => {
+				// Linked uploads retire only on a receipt for that exact piece.
+				const body = route.request().postDataBuffer();
+				if (!body) throw Error("Expected a compressed lab upload");
+				const payload = JSON.parse(gunzipSync(body).toString("utf8")) as {
+					id?: string;
+				};
+				await route.fulfill({
 					status: 200,
 					contentType: "application/json",
 					headers: { "Access-Control-Allow-Origin": "*" },
-					body: JSON.stringify({ id: "qa-local-receipt", ok: true }),
-				}),
-			);
+					body: JSON.stringify({
+						id: payload.id ?? "qa-local-receipt",
+						ok: true,
+					}),
+				});
+			});
 			const configured =
 				process.env.NEIGHBOURS_LIVE_URL ?? "http://127.0.0.1:5286";
 			let entry = "/";

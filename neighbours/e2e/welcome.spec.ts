@@ -32,7 +32,13 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 				(document.scrollingElement?.scrollHeight ?? Infinity) <= innerHeight,
 		),
 	).toBe(true);
-	await enter.focus();
+	// Shared admission has its own failure control. Use the explicit local path
+	// here so this keyboard/runtime check has no network ownership dependency.
+	await page.getByRole("button", { name: /^Other ways in/ }).focus();
+	await page.keyboard.press("Enter");
+	await page
+		.getByRole("button", { name: "Start a fresh local town", exact: true })
+		.focus();
 	await page.keyboard.press("Enter");
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await expect(

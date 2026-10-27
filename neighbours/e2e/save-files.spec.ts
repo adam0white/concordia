@@ -122,7 +122,9 @@ test("actual browser gzip export preserves the complete town across import and d
 		mimeType: "application/gzip",
 		buffer: original.compressed.subarray(0, -8),
 	});
-	await expect(page.getByRole("alert")).toContainText("invalid or incomplete");
+	await expect(page.getByRole("alert")).toContainText(
+		"The town could not complete that action.",
+	);
 	expect((await exportFile(page, info, "invalid-preserved")).packet).toEqual(
 		imported,
 	);
