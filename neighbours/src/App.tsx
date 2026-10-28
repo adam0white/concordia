@@ -820,7 +820,13 @@ export default function App() {
 										<h3>Your actions</h3>
 										{town.player && <PlayerJournal player={town.player} />}
 										<h3>The town's record</h3>
-										<Stories stories={stories} town={town} select={follow} />
+										<Stories
+											stories={stories}
+											town={town}
+											select={follow}
+											capture={session.getRun}
+											run={session.townEpoch}
+										/>
 									</>
 								) : (
 									<div className="latest-stories">

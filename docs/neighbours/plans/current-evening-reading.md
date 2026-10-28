@@ -1,0 +1,18 @@
+# Current-cast evening reading R2 — same-reviewer correction
+
+Acceptance artifact: one frozen corrected batch for SAME reviewer. R1 remains NOTCLEAR; no commit exists. Root owns STATUS and source/integration/live delivery. Adam accepts feel separately.
+
+Base e1d50935ef5cb7ee4cff019688e43f2b05acefb6; R1 tree13980a60aa78be4830fa4d4636d9af33a545e32c and all8 archived paths restored/verified before correction. The two pinned contracts.ts/core/stories.ts must match base literally. No source/report exclusions, hash rewriting, provider regeneration, protocols, schema or runtime changes.
+
+Diagnosis: R1's modified pinned inputs make four current reports and the recorded mixed replay reject source. Unchanged artifact bytes did not prove compatibility; the prior handoff claim was wrong. Exact zero-call failures reproduced; initial missing-absl attempt is separate. Existing getRun captures a native in-memory packet via a generation-bound request; its reply returns before persistence. It neither changes shelf/CAS/head ownership nor writes a new persistent save. RuntimeClient.decorate only copies metadata. No new capture protocol is needed.
+
+Seven final changed paths: this plan, DESIGN.md, HANDOFF.md, neighbours/src/App.tsx, neighbours/src/ui/Stories.tsx, neighbours/tests/evening-reading.test.ts, neighbours/e2e/evening-reading.spec.ts. Pin restoration also appears in R1-to-R2 delta, but is no base change. No new scenario or detector. Brain index absent at R1; no finding invented. This is the already authorized presentation correction.
+
+1. Read complete same-reviewer report/fix/DONE and actual logs; audit current processes/worktrees/disk; restore R1 exactly; reproduce source and mixed failures.
+2. Restore pinned files literally. Inspect existing public view/getRun/generation/retirement boundaries. Select an explicit Journal disclosure that captures only on opening, narrows to host evening/event facts and public identities, and binds async completion to same run, view and settled time. No new persistence or pacing hold.
+3. Preserve causal wording: receipt/voluntary reply/physical presence/awake overlap/explicit delivery/acquisition/later retained observations stay distinct. Missing/pruned/censored facts remain unknown. Capture no private Person/body/knowledge data. Clear on replacement, close or pagehide; reject stale/changed captures; label snapshot time.
+4. Run meaningful purity, wrong-delivery and stale/closed/replaced/time-mismatch controls. Reuse immutable reviewed actual671-round/Ece/Derya/Nora/native-WASM8round proofs; no new multiweek simulation. Run EXACT source gate/mixed replay, appropriate evidence regressions and existing recorded policy gates. Missing dependencies are limitations, not passes; no environment/package mutation.
+5. Exercise real local file App/ordinary Journal/story at360x690/1280x800, keyboard/focus/scroll/map/nooverflow/Debugclosed and actual asynchronous boundary. Trace/screenshots off. Run final normal Node26 frozen-pnpm check:lane, retaining every failure and actual counts.
+6. Correct docs and freeze base/tree/full patch/R1 delta/all path hashes/bytes/modes, literal pins, gates and limits. Archive full source/proof and read EVERY file/directory member before native-helper removal. Preserve both author refs and foreign resources. Return prefixed READY/DONE/RETURNFROZEN_SOURCE_HANDBACK_FOR_SAME_REVIEW receipts and actual final worktree lists. No commit/push/merge/deploy/release.
+
+Study e1d5093 is research-delivered with both CI40626846923/40630915577 green; app3a9254b unchanged. .37/.10 wider contexts remain2026-10-29; source-unread/player/Adam readiness paused to2026-11-03. .19 services, .53 unknown cause, source/cast/carry authority stay separate.
