@@ -15,6 +15,7 @@ import { RuntimeClient } from "../runtime-client";
 import { orderedReplies } from "./durable-replies";
 import { datedClock } from "./format";
 import { fileRecordingAllowed, lab } from "./lab";
+import { LocalTrace, traceViewport } from "./local-trace";
 import { type ObservedFeed, observe } from "./observations";
 import {
 	DeviceSaves,
@@ -55,6 +56,9 @@ export function useVisitorSession({
 	filePacket?: unknown;
 } = {}) {
 	const freshLocal = localStart !== undefined;
+	const trace = useRef<LocalTrace | null>(null);
+	if (!trace.current) trace.current = new LocalTrace();
+	const traceSession = useRef(0);
 	const [town, setTown] = useState<TownView>();
 	const [healthHistory, setHealthHistory] = useState<HealthHistory>();
 	const [progress, setProgress] = useState("Preparing the live town…");
@@ -222,6 +226,7 @@ export function useVisitorSession({
 			interventionId?: number;
 			playerAction?: number;
 			generation: number;
+			traceCommand: ReturnType<LocalTrace["command"]> | undefined;
 		}[]
 	>([]);
 	// Save replies may arrive after a replacement or its canceled backup.
@@ -247,6 +252,13 @@ export function useVisitorSession({
 			menuWaiting.current = false;
 			setMenuPausing(false);
 			setMenuOpen(true);
+			trace.current?.event(traceSession.current, "menu-open", {
+				...traceViewport(),
+				workerPending: pending.current,
+				advancePending: advancePending.current !== null,
+				comparisonPending: comparisonPending.current,
+				pending: 0,
+			});
 		}
 	}, []);
 	const dispatch = useCallback((command: UiCommand) => {
@@ -284,6 +296,11 @@ export function useVisitorSession({
 				generation: worldGeneration.current,
 				replacement: replacement ? worldGeneration.current : null,
 				errorRevision: errorRevision.current,
+				traceCommand: trace.current?.command(
+					traceSession.current,
+					command.type,
+					stateCommands.current.length + 1,
+				),
 			});
 		}
 		client.current?.send(command);
@@ -331,6 +348,27 @@ export function useVisitorSession({
 	);
 	useEffect(() => {
 		if (!enabled) return;
+		const tracing = trace.current ?? new LocalTrace();
+		const traceOwner = tracing.begin();
+		traceSession.current = traceOwner;
+		const lifecycle = (event: Event) =>
+			tracing.event(
+				traceOwner,
+				event.type as "visibilitychange" | "pagehide" | "pageshow" | "resize",
+				{
+					...traceViewport(),
+					workerPending: pending.current,
+					advancePending: advancePending.current !== null,
+					comparisonPending: comparisonPending.current,
+					pending: stateCommands.current.length,
+					...(event instanceof PageTransitionEvent
+						? { persisted: event.persisted }
+						: {}),
+				},
+			);
+		document.addEventListener("visibilitychange", lifecycle);
+		for (const name of ["pagehide", "pageshow", "resize"])
+			window.addEventListener(name, lifecycle);
 		if (freshLocal) setTown(undefined);
 		let active = true;
 		let hiding = false;
@@ -587,6 +625,14 @@ export function useVisitorSession({
 				const failed = !comparisonPending.current
 					? stateCommands.current.shift()
 					: undefined;
+				tracing.ack(
+					traceOwner,
+					failed?.traceCommand,
+					failed && failed.generation < acceptedGeneration.current
+						? "obsolete"
+						: "error",
+					stateCommands.current.length,
+				);
 				if (failed && failed.generation < acceptedGeneration.current) return;
 				clockHealthy.current = false;
 				// A rejected import leaves the existing engine intact. Closing its menu resumes that town.
@@ -660,6 +706,14 @@ export function useVisitorSession({
 				if (reply.advance && reply.advance.requestId !== advancePending.current)
 					return;
 				const completed = stateCommands.current.shift();
+				tracing.ack(
+					traceOwner,
+					completed?.traceCommand,
+					completed && completed.generation < acceptedGeneration.current
+						? "obsolete"
+						: "accepted",
+					stateCommands.current.length,
+				);
 				if (completed && completed.generation < acceptedGeneration.current)
 					return;
 				// A queued advance starts after preceding commands, so its notice must
@@ -1053,6 +1107,12 @@ export function useVisitorSession({
 		};
 		const ordered = orderedReplies(handle, persistAnswer);
 		const receive = (reply: UiReply) => {
+			tracing.event(traceOwner, "reply", {
+				reply: ["ready", "state", "error", "save"].includes(reply.type)
+					? (reply.type as "ready" | "state" | "error" | "save")
+					: "other",
+				pending: stateCommands.current.length,
+			});
 			// Final capture must not wait behind ordinary persistence. Hidden
 			// replies enter only the final-save filter, never persistAnswer.
 			if (hiding) handleReply(reply);
@@ -1271,6 +1331,10 @@ export function useVisitorSession({
 				})
 				.catch(() => {});
 		return () => {
+			document.removeEventListener("visibilitychange", lifecycle);
+			for (const name of ["pagehide", "pageshow", "resize"])
+				window.removeEventListener(name, lifecycle);
+			tracing.end(traceOwner);
 			window.removeEventListener("pagehide", hideFile);
 			if (fileSession) {
 				fileRetired.current = true;
@@ -1594,6 +1658,13 @@ export function useVisitorSession({
 
 	const openMenu = () => {
 		if (menuHeld.current) return;
+		trace.current?.event(traceSession.current, "menu-request", {
+			...traceViewport(),
+			workerPending: pending.current,
+			advancePending: advancePending.current !== null,
+			comparisonPending: comparisonPending.current,
+			pending: stateCommands.current.length,
+		});
 		remainingReading.current = Math.max(0, readingUntil.current - Date.now());
 		menuHeld.current = true;
 		menuWaiting.current = true;
@@ -1604,6 +1675,13 @@ export function useVisitorSession({
 	};
 	const closeMenu = () => {
 		if (!menuHeld.current || slotPending.current) return;
+		trace.current?.event(traceSession.current, "menu-close", {
+			...traceViewport(),
+			workerPending: pending.current,
+			advancePending: advancePending.current !== null,
+			comparisonPending: comparisonPending.current,
+			pending: stateCommands.current.length,
+		});
 		readingUntil.current = Date.now() + remainingReading.current;
 		remainingReading.current = 0;
 		setMenuOpen(false);
@@ -1830,6 +1908,24 @@ export function useVisitorSession({
 		branchError,
 		commandPending,
 		menuOpen,
+		readLocalTrace: () => {
+			trace.current?.event(traceSession.current, "read", {
+				...traceViewport(),
+				workerPending: pending.current,
+				advancePending: advancePending.current !== null,
+				comparisonPending: comparisonPending.current,
+				pending: stateCommands.current.length,
+			});
+			return {
+				...trace.current?.read(),
+				source: {
+					uiModulePath: new URL(import.meta.url).pathname,
+					buildCommit:
+						"Unknown in this local observation; consult the separately labelled release metadata",
+					runtime: "Browser-local UI; not a native trace or model recording",
+				},
+			};
+		},
 		menuPausing,
 		openMenu,
 		closeMenu,

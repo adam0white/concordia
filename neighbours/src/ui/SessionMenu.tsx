@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
+import LocalTrace from "./LocalTrace";
 import { LabPrivacy } from "./lab";
 import SavedTowns from "./SavedTowns";
 import { TownDiagnostics } from "./TownInspector";
@@ -204,6 +205,7 @@ export default function SessionMenu({
 					<details ref={debug} className="menu-debug">
 						<summary>Debug</summary>
 						<div className="menu-debug-content">
+							<LocalTrace read={session.readLocalTrace} />
 							<button
 								type="button"
 								disabled={!session.town || session.commandPending}
