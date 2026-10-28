@@ -1,0 +1,3187 @@
+{
+  "schema": "neighbours-capacity-summary@1",
+  "scope": "One source-author hypothetical physical pair, not UI-played/native admission, population estimate or player acceptance",
+  "fullResultSha256": "327333102b2c87247be189e619fe89f675ac639e8f3beed6e31b0e8327e8b317",
+  "scriptSha256": "875bb97750795ca88b9a955d5cee4ddeca8060ce5a0c03dd55651f9a889f42d3",
+  "sourceFingerprint": "c907e41ef9487ad926305ff0c9c5ba624420d086b1a50eae2ecfdeceaea65cd7",
+  "base": "bc6681263775d94df60f39d3ccbdf1b660db51d7",
+  "branch": "gd-resume-neighbours-capacity-study",
+  "node": "v26.12.0",
+  "framework": "3.0.0",
+  "engine": "2.23.0",
+  "command": "PATH=/opt/homebrew/bin:$PATH node scripts/capacity-study.ts /Users/abdul/code/.lab-scratch/gd-resume-neighbours-capacity-study/final-run /Users/abdul/code/.lab-scratch/gd-resume-neighbours-capacity-study/run/selection-history.json.gz",
+  "population": {
+    "total": 206,
+    "named": [
+      {
+        "id": "ada",
+        "name": "Nora"
+      },
+      {
+        "id": "elin",
+        "name": "Derya"
+      },
+      {
+        "id": "sam",
+        "name": "Sam"
+      },
+      {
+        "id": "jo",
+        "name": "Bilal"
+      },
+      {
+        "id": "ravi",
+        "name": "Rafi"
+      },
+      {
+        "id": "noor",
+        "name": "Ece"
+      }
+    ],
+    "background": 200
+  },
+  "inputs": [
+    {
+      "atRound": 707,
+      "input": {
+        "kind": "request-inspection",
+        "actorId": "ada",
+        "proposalOrigin": {
+          "kind": "authored"
+        },
+        "proposal": {
+          "schema": "neighbours-gm-proposal@1",
+          "kind": "inspection-request",
+          "target": "hall-annex",
+          "cue": "dry-sound",
+          "windowMinutes": 1440
+        }
+      }
+    }
+  ],
+  "checkpoint": {
+    "at": 17085,
+    "round": 1107,
+    "sha256": "b5baa8d2ca2d4286bec014e77f71ec84861982605886a598a860b3d4e2d3d01d",
+    "hall": {
+      "id": "hall",
+      "name": "Flooded hall",
+      "x": 47,
+      "y": 39,
+      "capacity": 14,
+      "kind": "community",
+      "stock": 0,
+      "reserved": 9
+    },
+    "assistance": {
+      "version": 1,
+      "origin": {
+        "kind": "authored"
+      },
+      "proposal": {
+        "schema": "neighbours-gm-proposal@1",
+        "kind": "inspection-request",
+        "target": "hall-annex",
+        "cue": "dry-sound",
+        "windowMinutes": 1440
+      },
+      "actorId": "ada",
+      "expiresAt": 12525,
+      "request": {
+        "id": 58976,
+        "at": 11085,
+        "kind": "intervention",
+        "text": "A visitor asks Nora to inspect the hall annex within 1440 minutes. The request does not explain how to inspect the timber and does not promise help.",
+        "causes": [],
+        "importance": 0.15,
+        "placeId": "hall",
+        "targetId": "ada",
+        "source": "town-bulletin"
+      },
+      "received": true,
+      "opened": true,
+      "visit": {
+        "id": 59761,
+        "at": 11220,
+        "kind": "annex-observed",
+        "text": "Nora checked the annex timber. The timber was dry. The supports were sound. The decision to open it is still pending.",
+        "causes": [
+          58976,
+          59749
+        ],
+        "importance": 0.15,
+        "actorId": "ada",
+        "placeId": "hall"
+      },
+      "action": "open-section",
+      "decisionSource": "HF 3.0.0",
+      "decisionId": "d239",
+      "methodTerms": [
+        {
+          "source": "method:hall-section-inspection:prior-workshop-practice",
+          "value": 0.2957
+        }
+      ],
+      "result": {
+        "id": 59842,
+        "at": 11235,
+        "kind": "annex-inspected",
+        "text": "Nora checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.",
+        "causes": [
+          58976,
+          59761,
+          59825
+        ],
+        "importance": 0.15,
+        "actorId": "ada",
+        "placeId": "hall"
+      }
+    },
+    "timber": {
+      "damp": 0.043924,
+      "care": {
+        "loosened": 3
+      }
+    },
+    "event": {
+      "id": "weekly-0-class",
+      "startsAt": 27000,
+      "endsAt": 27060,
+      "instantiated": false
+    }
+  },
+  "proofs": {
+    "restoredByteIdentity": true,
+    "ordinaryInputReplay": true,
+    "legalContinuationRounds": 8,
+    "actualUnmodified": true,
+    "nativeGuardPreserved": true,
+    "sourcesStable": true
+  },
+  "arms": [
+    {
+      "capacity": 10,
+      "initialDiff": [
+        "/places/7/capacity"
+      ],
+      "initialSha256": "8bef3056510adbe3b3e7ed6f3fbb3909bb005a3a0d1565bd79f99dba6054452f",
+      "finalSha256": "fb160e28a73e337f1359f3779bc9fdde665584211c434fb0b6b66f6ce5a12580",
+      "rounds": 1337,
+      "endAt": 37140,
+      "maximumReserved": 10,
+      "saturatedBoundaryCount": 953,
+      "firstSaturatedAt": 17115,
+      "knownNextActivities": [
+        {
+          "id": "ada",
+          "name": "Nora",
+          "events": [
+            {
+              "id": "ada",
+              "at": 27120,
+              "event": {
+                "id": 150343,
+                "at": 27120,
+                "kind": "completed",
+                "text": "Nora finished resting at home.",
+                "causes": [
+                  149875
+                ],
+                "importance": 0.3,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27120,
+              "event": {
+                "id": 150408,
+                "at": 27120,
+                "kind": "started",
+                "text": "Nora started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27240,
+              "event": {
+                "id": 150984,
+                "at": 27240,
+                "kind": "completed",
+                "text": "Nora finished sleeping.",
+                "causes": [
+                  150408
+                ],
+                "importance": 0.3,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27240,
+              "event": {
+                "id": 151025,
+                "at": 27240,
+                "kind": "started",
+                "text": "Nora started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27255,
+              "event": {
+                "id": 151062,
+                "at": 27255,
+                "kind": "completed",
+                "text": "Nora finished having a drink of water.",
+                "causes": [
+                  151025
+                ],
+                "importance": 0.3,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27255,
+              "event": {
+                "id": 151110,
+                "at": 27255,
+                "kind": "started",
+                "text": "Nora started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "elin",
+          "name": "Derya",
+          "events": [
+            {
+              "id": "elin",
+              "at": 27090,
+              "event": {
+                "id": 150182,
+                "at": 27090,
+                "kind": "completed",
+                "text": "Derya finished eating.",
+                "causes": [
+                  149905
+                ],
+                "importance": 0.3,
+                "actorId": "elin",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27090,
+              "event": {
+                "id": 150245,
+                "at": 27090,
+                "kind": "started",
+                "text": "Derya started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27165,
+              "event": {
+                "id": 150576,
+                "at": 27165,
+                "kind": "completed",
+                "text": "Derya finished resting at home.",
+                "causes": [
+                  150245
+                ],
+                "importance": 0.3,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27165,
+              "event": {
+                "id": 150646,
+                "at": 27165,
+                "kind": "started",
+                "text": "Derya started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27285,
+              "event": {
+                "id": 151218,
+                "at": 27285,
+                "kind": "completed",
+                "text": "Derya finished sleeping.",
+                "causes": [
+                  150646
+                ],
+                "importance": 0.3,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27285,
+              "event": {
+                "id": 151268,
+                "at": 27285,
+                "kind": "started",
+                "text": "Derya started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sam",
+          "name": "Sam",
+          "events": [
+            {
+              "id": "sam",
+              "at": 27090,
+              "event": {
+                "id": 150183,
+                "at": 27090,
+                "kind": "completed",
+                "text": "Sam finished hosting Sam’s shared supper.",
+                "causes": [
+                  149163
+                ],
+                "importance": 0.3,
+                "actorId": "sam",
+                "placeId": "hall"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27090,
+              "event": {
+                "id": 150246,
+                "at": 27090,
+                "kind": "started",
+                "text": "Sam started to eat at the market.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27150,
+              "event": {
+                "id": 150508,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Sam finished eating.",
+                "causes": [
+                  150246
+                ],
+                "importance": 0.3,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27150,
+              "event": {
+                "id": 150547,
+                "at": 27150,
+                "kind": "started",
+                "text": "Sam started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27165,
+              "event": {
+                "id": 150577,
+                "at": 27165,
+                "kind": "completed",
+                "text": "Sam finished having a drink of water.",
+                "causes": [
+                  150547
+                ],
+                "importance": 0.3,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27165,
+              "event": {
+                "id": 150655,
+                "at": 27165,
+                "kind": "started",
+                "text": "Sam started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "sam",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "jo",
+          "name": "Bilal",
+          "events": [
+            {
+              "id": "jo",
+              "at": 27150,
+              "event": {
+                "id": 150509,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Bilal finished sleeping.",
+                "causes": [
+                  149880
+                ],
+                "importance": 0.3,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27150,
+              "event": {
+                "id": 150548,
+                "at": 27150,
+                "kind": "started",
+                "text": "Bilal started to share a meal at the hall.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "jo",
+                "placeId": "hall"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27240,
+              "event": {
+                "id": 150986,
+                "at": 27240,
+                "kind": "completed",
+                "text": "Bilal finished sharing a meal at the hall.",
+                "causes": [
+                  150548
+                ],
+                "importance": 0.3,
+                "actorId": "jo",
+                "placeId": "hall"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27240,
+              "event": {
+                "id": 151036,
+                "at": 27240,
+                "kind": "started",
+                "text": "Bilal started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "jo",
+                "placeId": "hall"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27255,
+              "event": {
+                "id": 151063,
+                "at": 27255,
+                "kind": "completed",
+                "text": "Bilal finished having a drink of water.",
+                "causes": [
+                  151036
+                ],
+                "importance": 0.3,
+                "actorId": "jo",
+                "placeId": "hall"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27255,
+              "event": {
+                "id": 151126,
+                "at": 27255,
+                "kind": "started",
+                "text": "Bilal started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ravi",
+          "name": "Rafi",
+          "events": [
+            {
+              "id": "ravi",
+              "at": 27075,
+              "event": {
+                "id": 150098,
+                "at": 27075,
+                "kind": "completed",
+                "text": "Rafi finished eating.",
+                "causes": [
+                  149778
+                ],
+                "importance": 0.3,
+                "actorId": "ravi",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27075,
+              "event": {
+                "id": 150180,
+                "at": 27075,
+                "kind": "started",
+                "text": "Rafi started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27150,
+              "event": {
+                "id": 150510,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Rafi finished resting at home.",
+                "causes": [
+                  150180
+                ],
+                "importance": 0.3,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27150,
+              "event": {
+                "id": 150545,
+                "at": 27150,
+                "kind": "started",
+                "text": "Rafi started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27270,
+              "event": {
+                "id": 151144,
+                "at": 27270,
+                "kind": "completed",
+                "text": "Rafi finished sleeping.",
+                "causes": [
+                  150545
+                ],
+                "importance": 0.3,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27270,
+              "event": {
+                "id": 151194,
+                "at": 27270,
+                "kind": "started",
+                "text": "Rafi started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "noor",
+          "name": "Ece",
+          "events": [
+            {
+              "id": "noor",
+              "at": 27075,
+              "event": {
+                "id": 150099,
+                "at": 27075,
+                "kind": "completed",
+                "text": "Ece finished having a drink of water.",
+                "causes": [
+                  150091
+                ],
+                "importance": 0.3,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27075,
+              "event": {
+                "id": 150157,
+                "at": 27075,
+                "kind": "started",
+                "text": "Ece started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27120,
+              "event": {
+                "id": 150344,
+                "at": 27120,
+                "kind": "completed",
+                "text": "Ece finished resting at home.",
+                "causes": [
+                  150157
+                ],
+                "importance": 0.3,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27120,
+              "event": {
+                "id": 150387,
+                "at": 27120,
+                "kind": "started",
+                "text": "Ece started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27240,
+              "event": {
+                "id": 150987,
+                "at": 27240,
+                "kind": "completed",
+                "text": "Ece finished sleeping.",
+                "causes": [
+                  150387
+                ],
+                "importance": 0.3,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27240,
+              "event": {
+                "id": 151061,
+                "at": 27240,
+                "kind": "started",
+                "text": "Ece started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "capacity": 14,
+      "initialDiff": [],
+      "initialSha256": "b5baa8d2ca2d4286bec014e77f71ec84861982605886a598a860b3d4e2d3d01d",
+      "finalSha256": "2926bdd560d75c7396855ccf569d7e81e87d8e61258e88d5550b6ca2908023a5",
+      "rounds": 1337,
+      "endAt": 37140,
+      "maximumReserved": 14,
+      "saturatedBoundaryCount": 717,
+      "firstSaturatedAt": 17175,
+      "knownNextActivities": [
+        {
+          "id": "ada",
+          "name": "Nora",
+          "events": [
+            {
+              "id": "ada",
+              "at": 27105,
+              "event": {
+                "id": 149573,
+                "at": 27105,
+                "kind": "completed",
+                "text": "Nora finished sleeping.",
+                "causes": [
+                  148940
+                ],
+                "importance": 0.3,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27105,
+              "event": {
+                "id": 149655,
+                "at": 27105,
+                "kind": "started",
+                "text": "Nora started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27120,
+              "event": {
+                "id": 149675,
+                "at": 27120,
+                "kind": "completed",
+                "text": "Nora finished having a drink of water.",
+                "causes": [
+                  149655
+                ],
+                "importance": 0.3,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27120,
+              "event": {
+                "id": 149734,
+                "at": 27120,
+                "kind": "started",
+                "text": "Nora started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27240,
+              "event": {
+                "id": 150314,
+                "at": 27240,
+                "kind": "completed",
+                "text": "Nora finished sleeping.",
+                "causes": [
+                  149734
+                ],
+                "importance": 0.3,
+                "actorId": "ada",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ada",
+              "at": 27240,
+              "event": {
+                "id": 150360,
+                "at": 27240,
+                "kind": "started",
+                "text": "Nora started to share a meal at the hall.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ada",
+                "placeId": "hall"
+              }
+            }
+          ]
+        },
+        {
+          "id": "elin",
+          "name": "Derya",
+          "events": [
+            {
+              "id": "elin",
+              "at": 27105,
+              "event": {
+                "id": 149574,
+                "at": 27105,
+                "kind": "completed",
+                "text": "Derya finished sleeping.",
+                "causes": [
+                  148930
+                ],
+                "importance": 0.3,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27105,
+              "event": {
+                "id": 149643,
+                "at": 27105,
+                "kind": "started",
+                "text": "Derya started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27150,
+              "event": {
+                "id": 149806,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Derya finished resting at home.",
+                "causes": [
+                  149643
+                ],
+                "importance": 0.3,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27150,
+              "event": {
+                "id": 149879,
+                "at": 27150,
+                "kind": "started",
+                "text": "Derya started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27270,
+              "event": {
+                "id": 150460,
+                "at": 27270,
+                "kind": "completed",
+                "text": "Derya finished sleeping.",
+                "causes": [
+                  149879
+                ],
+                "importance": 0.3,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "elin",
+              "at": 27270,
+              "event": {
+                "id": 150506,
+                "at": 27270,
+                "kind": "started",
+                "text": "Derya started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "elin",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sam",
+          "name": "Sam",
+          "events": [
+            {
+              "id": "sam",
+              "at": 27090,
+              "event": {
+                "id": 149494,
+                "at": 27090,
+                "kind": "completed",
+                "text": "Sam finished hosting Sam’s shared supper.",
+                "causes": [
+                  148598
+                ],
+                "importance": 0.3,
+                "actorId": "sam",
+                "placeId": "hall"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27090,
+              "event": {
+                "id": 149557,
+                "at": 27090,
+                "kind": "started",
+                "text": "Sam started to eat at the market.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27150,
+              "event": {
+                "id": 149807,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Sam finished eating.",
+                "causes": [
+                  149557
+                ],
+                "importance": 0.3,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27150,
+              "event": {
+                "id": 149853,
+                "at": 27150,
+                "kind": "started",
+                "text": "Sam started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27165,
+              "event": {
+                "id": 149886,
+                "at": 27165,
+                "kind": "completed",
+                "text": "Sam finished having a drink of water.",
+                "causes": [
+                  149853
+                ],
+                "importance": 0.3,
+                "actorId": "sam",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "sam",
+              "at": 27165,
+              "event": {
+                "id": 149949,
+                "at": 27165,
+                "kind": "started",
+                "text": "Sam started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "sam",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "jo",
+          "name": "Bilal",
+          "events": [
+            {
+              "id": "jo",
+              "at": 27075,
+              "event": {
+                "id": 149414,
+                "at": 27075,
+                "kind": "completed",
+                "text": "Bilal finished eating.",
+                "causes": [
+                  149086
+                ],
+                "importance": 0.3,
+                "actorId": "jo",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27075,
+              "event": {
+                "id": 149457,
+                "at": 27075,
+                "kind": "started",
+                "text": "Bilal started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27150,
+              "event": {
+                "id": 149808,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Bilal finished resting at home.",
+                "causes": [
+                  149457
+                ],
+                "importance": 0.3,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27150,
+              "event": {
+                "id": 149855,
+                "at": 27150,
+                "kind": "started",
+                "text": "Bilal started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27270,
+              "event": {
+                "id": 150461,
+                "at": 27270,
+                "kind": "completed",
+                "text": "Bilal finished sleeping.",
+                "causes": [
+                  149855
+                ],
+                "importance": 0.3,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "jo",
+              "at": 27270,
+              "event": {
+                "id": 150518,
+                "at": 27270,
+                "kind": "started",
+                "text": "Bilal started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "jo",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "ravi",
+          "name": "Rafi",
+          "events": [
+            {
+              "id": "ravi",
+              "at": 27075,
+              "event": {
+                "id": 149415,
+                "at": 27075,
+                "kind": "completed",
+                "text": "Rafi finished eating.",
+                "causes": [
+                  149087
+                ],
+                "importance": 0.3,
+                "actorId": "ravi",
+                "placeId": "market"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27075,
+              "event": {
+                "id": 149492,
+                "at": 27075,
+                "kind": "started",
+                "text": "Rafi started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27150,
+              "event": {
+                "id": 149809,
+                "at": 27150,
+                "kind": "completed",
+                "text": "Rafi finished resting at home.",
+                "causes": [
+                  149492
+                ],
+                "importance": 0.3,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27150,
+              "event": {
+                "id": 149850,
+                "at": 27150,
+                "kind": "started",
+                "text": "Rafi started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27270,
+              "event": {
+                "id": 150462,
+                "at": 27270,
+                "kind": "completed",
+                "text": "Rafi finished sleeping.",
+                "causes": [
+                  149850
+                ],
+                "importance": 0.3,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "ravi",
+              "at": 27270,
+              "event": {
+                "id": 150500,
+                "at": 27270,
+                "kind": "started",
+                "text": "Rafi started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "ravi",
+                "placeId": "homes"
+              }
+            }
+          ]
+        },
+        {
+          "id": "noor",
+          "name": "Ece",
+          "events": [
+            {
+              "id": "noor",
+              "at": 27135,
+              "event": {
+                "id": 149752,
+                "at": 27135,
+                "kind": "completed",
+                "text": "Ece finished resting at home.",
+                "causes": [
+                  149291
+                ],
+                "importance": 0.3,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27135,
+              "event": {
+                "id": 149794,
+                "at": 27135,
+                "kind": "started",
+                "text": "Ece started to sleep at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27255,
+              "event": {
+                "id": 150396,
+                "at": 27255,
+                "kind": "completed",
+                "text": "Ece finished sleeping.",
+                "causes": [
+                  149794
+                ],
+                "importance": 0.3,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27255,
+              "event": {
+                "id": 150448,
+                "at": 27255,
+                "kind": "started",
+                "text": "Ece started to get a drink of water.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27270,
+              "event": {
+                "id": 150463,
+                "at": 27270,
+                "kind": "completed",
+                "text": "Ece finished having a drink of water.",
+                "causes": [
+                  150448
+                ],
+                "importance": 0.3,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            },
+            {
+              "id": "noor",
+              "at": 27270,
+              "event": {
+                "id": 150523,
+                "at": 27270,
+                "kind": "started",
+                "text": "Ece started to rest at home.",
+                "causes": [],
+                "importance": 0.15,
+                "actorId": "noor",
+                "placeId": "homes"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "firstEventDifference": {
+    "index": 173,
+    "low": {
+      "id": 92947,
+      "at": 17115,
+      "kind": "started",
+      "text": "Blair Reed started to eat at the market.",
+      "causes": [],
+      "importance": 0.15,
+      "actorId": "resident-153",
+      "placeId": "market"
+    },
+    "high": {
+      "id": 92947,
+      "at": 17115,
+      "kind": "started",
+      "text": "Blair Reed started to share a meal at the hall.",
+      "causes": [],
+      "importance": 0.15,
+      "actorId": "resident-153",
+      "placeId": "hall"
+    }
+  },
+  "rows": [
+    {
+      "capacity": 10,
+      "id": "weekly-0-class",
+      "kind": "class",
+      "startsAt": 27000,
+      "endsAt": 27060,
+      "stage": "closed",
+      "organiser": {
+        "id": "ada",
+        "name": "Nora",
+        "known": true
+      },
+      "noticeAt": 23310,
+      "invited": 205,
+      "accepted": 24,
+      "arrived": 0,
+      "delivered": 0,
+      "namedInvited": [
+        "ravi",
+        "elin",
+        "jo",
+        "sam",
+        "noor"
+      ],
+      "namedAccepted": [],
+      "namedArrived": [],
+      "namedDelivered": [],
+      "deliveredIds": [],
+      "result": "No guest spent fifteen minutes awake with the host at Nora’s practical class. The room was never prepared.",
+      "nextActivities": [
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 150180,
+              "at": 27075,
+              "kind": "started",
+              "text": "Rafi started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 150098,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Rafi finished eating.",
+              "causes": [
+                149778
+              ],
+              "importance": 0.3,
+              "actorId": "ravi",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": {
+            "id": "elin",
+            "at": 27090,
+            "event": {
+              "id": 150245,
+              "at": 27090,
+              "kind": "started",
+              "text": "Derya started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "elin",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "elin",
+            "at": 27090,
+            "event": {
+              "id": 150182,
+              "at": 27090,
+              "kind": "completed",
+              "text": "Derya finished eating.",
+              "causes": [
+                149905
+              ],
+              "importance": 0.3,
+              "actorId": "elin",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": {
+            "id": "jo",
+            "at": 27150,
+            "event": {
+              "id": 150548,
+              "at": 27150,
+              "kind": "started",
+              "text": "Bilal started to share a meal at the hall.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "jo",
+              "placeId": "hall"
+            }
+          },
+          "nextCompleted": {
+            "id": "jo",
+            "at": 27150,
+            "event": {
+              "id": 150509,
+              "at": 27150,
+              "kind": "completed",
+              "text": "Bilal finished sleeping.",
+              "causes": [
+                149880
+              ],
+              "importance": 0.3,
+              "actorId": "jo",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "sam",
+          "delivered": false,
+          "nextStarted": {
+            "id": "sam",
+            "at": 27090,
+            "event": {
+              "id": 150246,
+              "at": 27090,
+              "kind": "started",
+              "text": "Sam started to eat at the market.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "sam",
+              "placeId": "market"
+            }
+          },
+          "nextCompleted": {
+            "id": "sam",
+            "at": 27090,
+            "event": {
+              "id": 150183,
+              "at": 27090,
+              "kind": "completed",
+              "text": "Sam finished hosting Sam’s shared supper.",
+              "causes": [
+                149163
+              ],
+              "importance": 0.3,
+              "actorId": "sam",
+              "placeId": "hall"
+            }
+          }
+        },
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": {
+            "id": "noor",
+            "at": 27075,
+            "event": {
+              "id": 150157,
+              "at": 27075,
+              "kind": "started",
+              "text": "Ece started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "noor",
+            "at": 27075,
+            "event": {
+              "id": 150099,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Ece finished having a drink of water.",
+              "causes": [
+                150091
+              ],
+              "importance": 0.3,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "capacity": 10,
+      "id": "weekly-0-meal",
+      "kind": "meal",
+      "startsAt": 27000,
+      "endsAt": 27060,
+      "stage": "closed",
+      "organiser": {
+        "id": "sam",
+        "name": "Sam",
+        "known": true
+      },
+      "noticeAt": 21360,
+      "invited": 205,
+      "accepted": 40,
+      "arrived": 9,
+      "delivered": 9,
+      "namedInvited": [
+        "ravi",
+        "jo",
+        "noor",
+        "ada",
+        "elin"
+      ],
+      "namedAccepted": [
+        "noor",
+        "ada"
+      ],
+      "namedArrived": [
+        "ada"
+      ],
+      "namedDelivered": [
+        "ada"
+      ],
+      "deliveredIds": [
+        "resident-184",
+        "resident-164",
+        "resident-58",
+        "resident-30",
+        "resident-113",
+        "resident-96",
+        "resident-169",
+        "ada",
+        "resident-94"
+      ],
+      "result": "Jamie Lane, Avery Rivera, Cameron Silva, Jamie Brooks, Charlie Carter, Jordan Stone, Jordan Rivera, Nora, Robin Diaz ate with the host at Sam’s shared supper.",
+      "nextActivities": [
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 150180,
+              "at": 27075,
+              "kind": "started",
+              "text": "Rafi started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 150098,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Rafi finished eating.",
+              "causes": [
+                149778
+              ],
+              "importance": 0.3,
+              "actorId": "ravi",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "resident-184",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-184",
+            "at": 27120,
+            "event": {
+              "id": 150417,
+              "at": 27120,
+              "kind": "started",
+              "text": "Jamie Lane started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-184",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-184",
+            "at": 27120,
+            "event": {
+              "id": 150381,
+              "at": 27120,
+              "kind": "completed",
+              "text": "Jamie Lane finished resting at home.",
+              "causes": [
+                149892
+              ],
+              "importance": 0.3,
+              "actorId": "resident-184",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": {
+            "id": "jo",
+            "at": 27150,
+            "event": {
+              "id": 150548,
+              "at": 27150,
+              "kind": "started",
+              "text": "Bilal started to share a meal at the hall.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "jo",
+              "placeId": "hall"
+            }
+          },
+          "nextCompleted": {
+            "id": "jo",
+            "at": 27150,
+            "event": {
+              "id": 150509,
+              "at": 27150,
+              "kind": "completed",
+              "text": "Bilal finished sleeping.",
+              "causes": [
+                149880
+              ],
+              "importance": 0.3,
+              "actorId": "jo",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-164",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-164",
+            "at": 27150,
+            "event": {
+              "id": 150542,
+              "at": 27150,
+              "kind": "started",
+              "text": "Avery Rivera started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-164",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-164",
+            "at": 27150,
+            "event": {
+              "id": 150538,
+              "at": 27150,
+              "kind": "completed",
+              "text": "Avery Rivera finished resting at home.",
+              "causes": [
+                150075
+              ],
+              "importance": 0.3,
+              "actorId": "resident-164",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-58",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-58",
+            "at": 27150,
+            "event": {
+              "id": 150575,
+              "at": 27150,
+              "kind": "started",
+              "text": "Cameron Silva started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-58",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-58",
+            "at": 27150,
+            "event": {
+              "id": 150524,
+              "at": 27150,
+              "kind": "completed",
+              "text": "Cameron Silva finished resting at home.",
+              "causes": [
+                150082
+              ],
+              "importance": 0.3,
+              "actorId": "resident-58",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": {
+            "id": "noor",
+            "at": 27075,
+            "event": {
+              "id": 150157,
+              "at": 27075,
+              "kind": "started",
+              "text": "Ece started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "noor",
+            "at": 27075,
+            "event": {
+              "id": 150099,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Ece finished having a drink of water.",
+              "causes": [
+                150091
+              ],
+              "importance": 0.3,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-30",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-30",
+            "at": 27075,
+            "event": {
+              "id": 150142,
+              "at": 27075,
+              "kind": "started",
+              "text": "Jamie Brooks started to get a drink of water.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-30",
+              "placeId": "hall"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-30",
+            "at": 27075,
+            "event": {
+              "id": 150108,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Jamie Brooks finished going to Sam’s shared supper.",
+              "causes": [
+                149705
+              ],
+              "importance": 0.3,
+              "actorId": "resident-30",
+              "placeId": "hall"
+            }
+          }
+        },
+        {
+          "id": "resident-113",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-113",
+            "at": 27105,
+            "event": {
+              "id": 150328,
+              "at": 27105,
+              "kind": "started",
+              "text": "Charlie Carter started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-113",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-113",
+            "at": 27105,
+            "event": {
+              "id": 150288,
+              "at": 27105,
+              "kind": "completed",
+              "text": "Charlie Carter finished resting at home.",
+              "causes": [
+                149819
+              ],
+              "importance": 0.3,
+              "actorId": "resident-113",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-96",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-96",
+            "at": 27135,
+            "event": {
+              "id": 150502,
+              "at": 27135,
+              "kind": "started",
+              "text": "Jordan Stone started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-96",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-96",
+            "at": 27135,
+            "event": {
+              "id": 150448,
+              "at": 27135,
+              "kind": "completed",
+              "text": "Jordan Stone finished resting at home.",
+              "causes": [
+                149960
+              ],
+              "importance": 0.3,
+              "actorId": "resident-96",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-169",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-169",
+            "at": 27075,
+            "event": {
+              "id": 150153,
+              "at": 27075,
+              "kind": "started",
+              "text": "Jordan Rivera started to get a drink of water.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-169",
+              "placeId": "hall"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-169",
+            "at": 27075,
+            "event": {
+              "id": 150136,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Jordan Rivera finished going to Sam’s shared supper.",
+              "causes": [
+                149701
+              ],
+              "importance": 0.3,
+              "actorId": "resident-169",
+              "placeId": "hall"
+            }
+          }
+        },
+        {
+          "id": "ada",
+          "delivered": true,
+          "nextStarted": {
+            "id": "ada",
+            "at": 27120,
+            "event": {
+              "id": 150408,
+              "at": 27120,
+              "kind": "started",
+              "text": "Nora started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "ada",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "ada",
+            "at": 27120,
+            "event": {
+              "id": 150343,
+              "at": 27120,
+              "kind": "completed",
+              "text": "Nora finished resting at home.",
+              "causes": [
+                149875
+              ],
+              "importance": 0.3,
+              "actorId": "ada",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-94",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-94",
+            "at": 27135,
+            "event": {
+              "id": 150496,
+              "at": 27135,
+              "kind": "started",
+              "text": "Robin Diaz started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-94",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-94",
+            "at": 27135,
+            "event": {
+              "id": 150447,
+              "at": 27135,
+              "kind": "completed",
+              "text": "Robin Diaz finished resting at home.",
+              "causes": [
+                149988
+              ],
+              "importance": 0.3,
+              "actorId": "resident-94",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": {
+            "id": "elin",
+            "at": 27090,
+            "event": {
+              "id": 150245,
+              "at": 27090,
+              "kind": "started",
+              "text": "Derya started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "elin",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "elin",
+            "at": 27090,
+            "event": {
+              "id": 150182,
+              "at": 27090,
+              "kind": "completed",
+              "text": "Derya finished eating.",
+              "causes": [
+                149905
+              ],
+              "importance": 0.3,
+              "actorId": "elin",
+              "placeId": "market"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "capacity": 10,
+      "id": "weekly-1-class",
+      "kind": "class",
+      "startsAt": 37080,
+      "endsAt": 37140,
+      "stage": "prepared",
+      "organiser": {
+        "id": "ada",
+        "name": "Nora",
+        "known": true
+      },
+      "noticeAt": 31380,
+      "invited": 205,
+      "accepted": 43,
+      "arrived": 7,
+      "delivered": 4,
+      "namedInvited": [
+        "jo",
+        "noor",
+        "ravi",
+        "sam",
+        "elin"
+      ],
+      "namedAccepted": [
+        "noor",
+        "sam"
+      ],
+      "namedArrived": [],
+      "namedDelivered": [],
+      "deliveredIds": [
+        "resident-88",
+        "resident-15",
+        "resident-128",
+        "resident-78"
+      ],
+      "result": null,
+      "nextActivities": [
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-88",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-15",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "sam",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-128",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-78",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        }
+      ]
+    },
+    {
+      "capacity": 10,
+      "id": "weekly-1-meal",
+      "kind": "meal",
+      "startsAt": 37080,
+      "endsAt": 37140,
+      "stage": "proposed",
+      "organiser": {
+        "id": "sam",
+        "name": "Sam",
+        "known": true
+      },
+      "noticeAt": 32280,
+      "invited": 205,
+      "accepted": 23,
+      "arrived": 0,
+      "delivered": 0,
+      "namedInvited": [
+        "elin",
+        "noor",
+        "ravi",
+        "jo",
+        "ada"
+      ],
+      "namedAccepted": [
+        "noor"
+      ],
+      "namedArrived": [],
+      "namedDelivered": [],
+      "deliveredIds": [],
+      "result": null,
+      "nextActivities": [
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "ada",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        }
+      ]
+    },
+    {
+      "capacity": 14,
+      "id": "weekly-0-class",
+      "kind": "class",
+      "startsAt": 27000,
+      "endsAt": 27060,
+      "stage": "closed",
+      "organiser": {
+        "id": "ada",
+        "name": "Nora",
+        "known": true
+      },
+      "noticeAt": 22305,
+      "invited": 205,
+      "accepted": 27,
+      "arrived": 0,
+      "delivered": 0,
+      "namedInvited": [
+        "jo",
+        "noor",
+        "elin",
+        "ravi",
+        "sam"
+      ],
+      "namedAccepted": [
+        "noor"
+      ],
+      "namedArrived": [],
+      "namedDelivered": [],
+      "deliveredIds": [],
+      "result": "No guest spent fifteen minutes awake with the host at Nora’s practical class. The room was never prepared.",
+      "nextActivities": [
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": {
+            "id": "jo",
+            "at": 27075,
+            "event": {
+              "id": 149457,
+              "at": 27075,
+              "kind": "started",
+              "text": "Bilal started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "jo",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "jo",
+            "at": 27075,
+            "event": {
+              "id": 149414,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Bilal finished eating.",
+              "causes": [
+                149086
+              ],
+              "importance": 0.3,
+              "actorId": "jo",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": {
+            "id": "noor",
+            "at": 27135,
+            "event": {
+              "id": 149794,
+              "at": 27135,
+              "kind": "started",
+              "text": "Ece started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "noor",
+            "at": 27135,
+            "event": {
+              "id": 149752,
+              "at": 27135,
+              "kind": "completed",
+              "text": "Ece finished resting at home.",
+              "causes": [
+                149291
+              ],
+              "importance": 0.3,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": {
+            "id": "elin",
+            "at": 27105,
+            "event": {
+              "id": 149643,
+              "at": 27105,
+              "kind": "started",
+              "text": "Derya started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "elin",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "elin",
+            "at": 27105,
+            "event": {
+              "id": 149574,
+              "at": 27105,
+              "kind": "completed",
+              "text": "Derya finished sleeping.",
+              "causes": [
+                148930
+              ],
+              "importance": 0.3,
+              "actorId": "elin",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 149492,
+              "at": 27075,
+              "kind": "started",
+              "text": "Rafi started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 149415,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Rafi finished eating.",
+              "causes": [
+                149087
+              ],
+              "importance": 0.3,
+              "actorId": "ravi",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "sam",
+          "delivered": false,
+          "nextStarted": {
+            "id": "sam",
+            "at": 27090,
+            "event": {
+              "id": 149557,
+              "at": 27090,
+              "kind": "started",
+              "text": "Sam started to eat at the market.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "sam",
+              "placeId": "market"
+            }
+          },
+          "nextCompleted": {
+            "id": "sam",
+            "at": 27090,
+            "event": {
+              "id": 149494,
+              "at": 27090,
+              "kind": "completed",
+              "text": "Sam finished hosting Sam’s shared supper.",
+              "causes": [
+                148598
+              ],
+              "importance": 0.3,
+              "actorId": "sam",
+              "placeId": "hall"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "capacity": 14,
+      "id": "weekly-0-meal",
+      "kind": "meal",
+      "startsAt": 27000,
+      "endsAt": 27060,
+      "stage": "closed",
+      "organiser": {
+        "id": "sam",
+        "name": "Sam",
+        "known": true
+      },
+      "noticeAt": 21435,
+      "invited": 205,
+      "accepted": 13,
+      "arrived": 7,
+      "delivered": 7,
+      "namedInvited": [
+        "ada",
+        "jo",
+        "noor",
+        "elin",
+        "ravi"
+      ],
+      "namedAccepted": [
+        "noor",
+        "elin"
+      ],
+      "namedArrived": [
+        "noor"
+      ],
+      "namedDelivered": [
+        "noor"
+      ],
+      "deliveredIds": [
+        "resident-191",
+        "resident-62",
+        "resident-193",
+        "noor",
+        "resident-9",
+        "resident-130",
+        "resident-120"
+      ],
+      "result": "Casey Silva, Jamie Chen, Jamie Diaz, Ece, Quinn Reed, Finley Kim, Avery Kim ate with the host at Sam’s shared supper.",
+      "nextActivities": [
+        {
+          "id": "resident-191",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-191",
+            "at": 27120,
+            "event": {
+              "id": 149739,
+              "at": 27120,
+              "kind": "started",
+              "text": "Casey Silva started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-191",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-191",
+            "at": 27120,
+            "event": {
+              "id": 149711,
+              "at": 27120,
+              "kind": "completed",
+              "text": "Casey Silva finished resting at home.",
+              "causes": [
+                149204
+              ],
+              "importance": 0.3,
+              "actorId": "resident-191",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "ada",
+          "delivered": false,
+          "nextStarted": {
+            "id": "ada",
+            "at": 27105,
+            "event": {
+              "id": 149655,
+              "at": 27105,
+              "kind": "started",
+              "text": "Nora started to get a drink of water.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "ada",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "ada",
+            "at": 27105,
+            "event": {
+              "id": 149573,
+              "at": 27105,
+              "kind": "completed",
+              "text": "Nora finished sleeping.",
+              "causes": [
+                148940
+              ],
+              "importance": 0.3,
+              "actorId": "ada",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-62",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-62",
+            "at": 27150,
+            "event": {
+              "id": 149865,
+              "at": 27150,
+              "kind": "started",
+              "text": "Jamie Chen started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-62",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-62",
+            "at": 27150,
+            "event": {
+              "id": 149816,
+              "at": 27150,
+              "kind": "completed",
+              "text": "Jamie Chen finished resting at home.",
+              "causes": [
+                149389
+              ],
+              "importance": 0.3,
+              "actorId": "resident-62",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-193",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-193",
+            "at": 27150,
+            "event": {
+              "id": 149878,
+              "at": 27150,
+              "kind": "started",
+              "text": "Jamie Diaz started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-193",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-193",
+            "at": 27150,
+            "event": {
+              "id": 149844,
+              "at": 27150,
+              "kind": "completed",
+              "text": "Jamie Diaz finished resting at home.",
+              "causes": [
+                149395
+              ],
+              "importance": 0.3,
+              "actorId": "resident-193",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": {
+            "id": "jo",
+            "at": 27075,
+            "event": {
+              "id": 149457,
+              "at": 27075,
+              "kind": "started",
+              "text": "Bilal started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "jo",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "jo",
+            "at": 27075,
+            "event": {
+              "id": 149414,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Bilal finished eating.",
+              "causes": [
+                149086
+              ],
+              "importance": 0.3,
+              "actorId": "jo",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "noor",
+          "delivered": true,
+          "nextStarted": {
+            "id": "noor",
+            "at": 27135,
+            "event": {
+              "id": 149794,
+              "at": 27135,
+              "kind": "started",
+              "text": "Ece started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "noor",
+            "at": 27135,
+            "event": {
+              "id": 149752,
+              "at": 27135,
+              "kind": "completed",
+              "text": "Ece finished resting at home.",
+              "causes": [
+                149291
+              ],
+              "importance": 0.3,
+              "actorId": "noor",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": {
+            "id": "elin",
+            "at": 27105,
+            "event": {
+              "id": 149643,
+              "at": 27105,
+              "kind": "started",
+              "text": "Derya started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "elin",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "elin",
+            "at": 27105,
+            "event": {
+              "id": 149574,
+              "at": 27105,
+              "kind": "completed",
+              "text": "Derya finished sleeping.",
+              "causes": [
+                148930
+              ],
+              "importance": 0.3,
+              "actorId": "elin",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "resident-9",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-9",
+            "at": 27075,
+            "event": {
+              "id": 149486,
+              "at": 27075,
+              "kind": "started",
+              "text": "Quinn Reed started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-9",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-9",
+            "at": 27075,
+            "event": {
+              "id": 149418,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Quinn Reed finished going to Sam’s shared supper.",
+              "causes": [
+                148932
+              ],
+              "importance": 0.3,
+              "actorId": "resident-9",
+              "placeId": "hall"
+            }
+          }
+        },
+        {
+          "id": "resident-130",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-130",
+            "at": 27135,
+            "event": {
+              "id": 149802,
+              "at": 27135,
+              "kind": "started",
+              "text": "Finley Kim started to sleep at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-130",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-130",
+            "at": 27135,
+            "event": {
+              "id": 149772,
+              "at": 27135,
+              "kind": "completed",
+              "text": "Finley Kim finished resting at home.",
+              "causes": [
+                149281
+              ],
+              "importance": 0.3,
+              "actorId": "resident-130",
+              "placeId": "homes"
+            }
+          }
+        },
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 149492,
+              "at": 27075,
+              "kind": "started",
+              "text": "Rafi started to rest at home.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "ravi",
+              "placeId": "homes"
+            }
+          },
+          "nextCompleted": {
+            "id": "ravi",
+            "at": 27075,
+            "event": {
+              "id": 149415,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Rafi finished eating.",
+              "causes": [
+                149087
+              ],
+              "importance": 0.3,
+              "actorId": "ravi",
+              "placeId": "market"
+            }
+          }
+        },
+        {
+          "id": "resident-120",
+          "delivered": true,
+          "nextStarted": {
+            "id": "resident-120",
+            "at": 27075,
+            "event": {
+              "id": 149472,
+              "at": 27075,
+              "kind": "started",
+              "text": "Avery Kim started to get a drink of water.",
+              "causes": [],
+              "importance": 0.15,
+              "actorId": "resident-120",
+              "placeId": "hall"
+            }
+          },
+          "nextCompleted": {
+            "id": "resident-120",
+            "at": 27075,
+            "event": {
+              "id": 149442,
+              "at": 27075,
+              "kind": "completed",
+              "text": "Avery Kim finished going to Sam’s shared supper.",
+              "causes": [
+                149034
+              ],
+              "importance": 0.3,
+              "actorId": "resident-120",
+              "placeId": "hall"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "capacity": 14,
+      "id": "weekly-1-class",
+      "kind": "class",
+      "startsAt": 37080,
+      "endsAt": 37140,
+      "stage": "prepared",
+      "organiser": {
+        "id": "ada",
+        "name": "Nora",
+        "known": true
+      },
+      "noticeAt": 31380,
+      "invited": 205,
+      "accepted": 20,
+      "arrived": 13,
+      "delivered": 9,
+      "namedInvited": [
+        "noor",
+        "ravi",
+        "sam",
+        "elin",
+        "jo"
+      ],
+      "namedAccepted": [
+        "noor"
+      ],
+      "namedArrived": [
+        "noor"
+      ],
+      "namedDelivered": [],
+      "deliveredIds": [
+        "resident-62",
+        "resident-107",
+        "resident-166",
+        "resident-172",
+        "resident-81",
+        "resident-101",
+        "resident-134",
+        "resident-14",
+        "resident-193"
+      ],
+      "result": null,
+      "nextActivities": [
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-62",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-107",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-166",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-172",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-81",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-101",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-134",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-14",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "sam",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "resident-193",
+          "delivered": true,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        }
+      ]
+    },
+    {
+      "capacity": 14,
+      "id": "weekly-1-meal",
+      "kind": "meal",
+      "startsAt": 37080,
+      "endsAt": 37140,
+      "stage": "proposed",
+      "organiser": {
+        "id": "sam",
+        "name": "Sam",
+        "known": true
+      },
+      "noticeAt": 32280,
+      "invited": 205,
+      "accepted": 11,
+      "arrived": 0,
+      "delivered": 0,
+      "namedInvited": [
+        "noor",
+        "elin",
+        "ada",
+        "jo",
+        "ravi"
+      ],
+      "namedAccepted": [
+        "noor"
+      ],
+      "namedArrived": [],
+      "namedDelivered": [],
+      "deliveredIds": [],
+      "result": null,
+      "nextActivities": [
+        {
+          "id": "noor",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "elin",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "ada",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "jo",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        },
+        {
+          "id": "ravi",
+          "delivered": false,
+          "nextStarted": null,
+          "nextCompleted": null
+        }
+      ]
+    }
+  ],
+  "changes": [
+    {
+      "id": "weekly-0-class",
+      "gained": [],
+      "lost": [],
+      "net": 0
+    },
+    {
+      "id": "weekly-0-meal",
+      "gained": [
+        "resident-191",
+        "resident-62",
+        "resident-193",
+        "noor",
+        "resident-9",
+        "resident-130",
+        "resident-120"
+      ],
+      "lost": [
+        "resident-184",
+        "resident-164",
+        "resident-58",
+        "resident-30",
+        "resident-113",
+        "resident-96",
+        "resident-169",
+        "ada",
+        "resident-94"
+      ],
+      "net": -2
+    },
+    {
+      "id": "weekly-1-class",
+      "gained": [
+        "resident-62",
+        "resident-107",
+        "resident-166",
+        "resident-172",
+        "resident-81",
+        "resident-101",
+        "resident-134",
+        "resident-14",
+        "resident-193"
+      ],
+      "lost": [
+        "resident-88",
+        "resident-15",
+        "resident-128",
+        "resident-78"
+      ],
+      "net": 5
+    },
+    {
+      "id": "weekly-1-meal",
+      "gained": [],
+      "lost": [],
+      "net": 0
+    }
+  ],
+  "unionGained": [
+    "noor",
+    "resident-101",
+    "resident-107",
+    "resident-120",
+    "resident-130",
+    "resident-134",
+    "resident-14",
+    "resident-166",
+    "resident-172",
+    "resident-191",
+    "resident-193",
+    "resident-62",
+    "resident-81",
+    "resident-9"
+  ],
+  "unionLost": [
+    "ada",
+    "resident-113",
+    "resident-128",
+    "resident-15",
+    "resident-164",
+    "resident-169",
+    "resident-184",
+    "resident-30",
+    "resident-58",
+    "resident-78",
+    "resident-88",
+    "resident-94",
+    "resident-96"
+  ],
+  "files": {
+    "selection-history.json.gz": {
+      "sha256": "c073a05bd375c41e94bcd9d70cb13983f88aff6afe4a4a4d0d7223d40497d8cb",
+      "bytes": 1351913,
+      "uncompressedSha256": "c84de7e923cdf4ea15c8b633d1b093e5cb65326e9b1e50301dd18b023bd43123"
+    },
+    "actual-checkpoint.json.gz": {
+      "sha256": "6c7eb9528cc3d57bd59f0ce47004aca1450c8ef3b8014b373cb1bd51e5c92689",
+      "bytes": 2546777,
+      "uncompressedSha256": "6e4e20409c29d23d18107c51cd9fa6a8fc5b549091c4f9dbfcb33cbac9aae6ad"
+    },
+    "actual-legal-continuation.json.gz": {
+      "sha256": "6d9fc0a356aeb9a2296b775e2a9ad853d58428217c8776de91e393b40788d4d0",
+      "bytes": 2551225,
+      "uncompressedSha256": "81679e0560170896c9ac18174f030ee159480ef433111cd9936c20454d0fa27a"
+    },
+    "research-10-initial.json.gz": {
+      "sha256": "9450ef2329e99875b8b6abca5362c5214f07771b865041ac23ecfe5353807a45",
+      "bytes": 2546757,
+      "uncompressedSha256": "6d60cd8450e19abec35c01a4875c1b625f4267ef2e7adcf1e6e6a07fb09d3e20"
+    },
+    "research-10-trace.json.gz": {
+      "sha256": "86e1617036afcb64321dab73b0e74338f3e08efc5e973eb2cd31f55754a3e214",
+      "bytes": 3470089,
+      "uncompressedSha256": "94853634d19558830a4cf715432e54002496f91b102b87357ca35df08d7394d4"
+    },
+    "research-10-final.json.gz": {
+      "sha256": "55584aa809334f1ba235d6887ad706df273f3864226b61b154e020cc6d3b6686",
+      "bytes": 3174269,
+      "uncompressedSha256": "8ba20020be7efecade85b755daf8a43cc6137d109c0ad411ce107067fa216237"
+    },
+    "research-14-initial.json.gz": {
+      "sha256": "30130a7f9ce89b45e3e3dbf9cc13a1a2d9fd3d28196aed6237b8f6aecb94d845",
+      "bytes": 2546754,
+      "uncompressedSha256": "772c9513a66659ef80c4833b84a81c4c008c18c53020235a57fc5789ca8641b8"
+    },
+    "research-14-trace.json.gz": {
+      "sha256": "08ab659e80a5b30a0b9dcab43e530e21ef09d2624c18ed5a2a6f1ce02f4da32c",
+      "bytes": 3434226,
+      "uncompressedSha256": "ff43f9eb4c738614407cb2b463e5d540baf70d73433e5fc2e8b6e86045f7f2b2"
+    },
+    "research-14-final.json.gz": {
+      "sha256": "26ce45d5a8012549378ae6aaefde9cc6f4cdac628503369df45301249c5bff68",
+      "bytes": 3214183,
+      "uncompressedSha256": "5bf9f2180d30b6b42f4cc0378a477604290612232afa2f3c17b0b9891e2aac6d"
+    }
+  },
+  "limits": [
+    "One predetermined seed and one pair, not a population estimate or HF superiority.",
+    "Research capacity10 contradicts native opened-annex invariant and is intentionally not admitted/exported as native.",
+    "Request, learning, assent, goal, time, all Persons/RNG and world initial state identical except declared capacity. No derived change.",
+    "Arrivals are actual reached job boundaries, separate from awake overlap and delivered15minutes.",
+    "Invited counts mean guests with actual received notice/reply records, not everyone who could see a noticeboard.",
+    "Later events are observed actions/completions, not inferred motives or calibrated benefit.",
+    "No new gameplay, provider/model calls, owner browser, source-unread visitor or player/taste acceptance.",
+    "nextActivityByGuest in the full report means first after checkpoint; laterByEvening and this summary use activities strictly after each evening end.",
+    "Invited means actual received invitation records, not intended audience. Arrived excludes the organiser and records observed job arrival, independent of awake delivery.",
+    "Only672 rounds occur after selected event end; additional pre-event rounds bridge the already-fixed future recurrence from the unchanged selected checkpoint."
+  ]
+}
