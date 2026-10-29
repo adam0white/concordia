@@ -231,7 +231,10 @@ export function useVisitorSession({
 	>([]);
 	// Save replies may arrive after a replacement or its canceled backup.
 	const saveRequests = useRef(
-		new Map<number, { generation: number; backup: boolean }>(),
+		new Map<
+			number,
+			{ generation: number; backup: boolean; journalFile: boolean }
+		>(),
 	);
 	const menuHeld = useRef(false);
 	const menuWaiting = useRef(false);
@@ -263,11 +266,12 @@ export function useVisitorSession({
 	}, []);
 	const dispatch = useCallback((command: UiCommand) => {
 		if (fileRetired.current) return;
-		if (command.type === "save") {
+		if (command.type === "save" || command.type === "save-journal") {
 			const requestId = command.requestId ?? ++saveRequestId.current;
 			saveRequests.current.set(requestId, {
 				generation: worldGeneration.current,
 				backup: replaceAfterSave.current?.requestId === requestId,
+				journalFile: command.type === "save-journal",
 			});
 			client.current?.send({ ...command, requestId });
 			return;
@@ -447,7 +451,8 @@ export function useVisitorSession({
 									resolve,
 									timer,
 								});
-								runtime?.send({ type: "save", requestId });
+								// Capture the full replayable journal, including every host/native input.
+								runtime?.send({ type: "save-journal", requestId });
 							});
 							// The SDK still has to serialize and enqueue this returned packet.
 							// Retire only the host runtime; do not dispose the registered live SDK.
@@ -930,7 +935,11 @@ export function useVisitorSession({
 				const replacement = replaceAfterSave.current;
 				const replace =
 					replacement?.requestId === reply.requestId ? replacement : null;
-				if (!saveConflictRef.current && (autosaveEnabled.current || replace))
+				if (
+					!request.journalFile &&
+					!saveConflictRef.current &&
+					(autosaveEnabled.current || replace)
+				)
 					void (
 						saves
 							? saves.write(reply.save, replace ? "previous" : "latest", () =>
@@ -1146,7 +1155,9 @@ export function useVisitorSession({
 					await saves.settled();
 					if (!current())
 						throw Error("The town changed before saving its copy.");
-					const packet = owner.cast.decorate(await owner.capture());
+					const packet = owner.cast.decorate(
+						await owner.capture(undefined, "journal"),
+					);
 					if (!current()) throw Error("The town changed during capture.");
 					await saves.saveNamed(name, packet, current);
 					if (!current()) return;
@@ -1422,7 +1433,9 @@ export function useVisitorSession({
 		if (
 			!comparisonPending.current &&
 			advancePending.current === null &&
-			(!saveConflictRef.current || command.type === "save")
+			(!saveConflictRef.current ||
+				command.type === "save" ||
+				command.type === "save-journal")
 		) {
 			if (
 				command.type === "step" ||
@@ -1716,7 +1729,7 @@ export function useVisitorSession({
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;
-		send({ type: "save", requestId });
+		send({ type: "save-journal", requestId });
 	};
 	const getRun = (): Promise<unknown> => {
 		if (

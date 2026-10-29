@@ -73,6 +73,7 @@ import { physicalOffer } from "./hf4-offers.ts";
 import {
 	minutePercept,
 	type OwnerArchive,
+	type OwnerJournalArchive,
 	type TownRunOwner,
 } from "./hf4-owner.ts";
 import { MINUTE, nativeMilliseconds } from "./hf4-run.ts";
@@ -120,7 +121,7 @@ export type PhysicalSave = Omit<Save, "owner" | "people"> & {
 export type NativeTownArchive = {
 	format: "neighbours-native";
 	schema: typeof SCHEMA;
-	hf: "4.9.0";
+	hf: "4.10.0";
 	physical: PhysicalSave;
 	owner: OwnerArchive;
 	boundary: {
@@ -133,6 +134,10 @@ export type NativeTownArchive = {
 		witnesses: Omit<PhysicalWitness, "owner">[];
 	};
 	inputs: Record<string, unknown>[];
+};
+export type JournalTownArchive = Omit<NativeTownArchive, "format" | "owner"> & {
+	format: "neighbours-journal";
+	owner: OwnerJournalArchive;
 };
 export class Runtime implements TownRuntime {
 	s: Save;
@@ -1535,9 +1540,29 @@ export class Runtime implements TownRuntime {
 		return structuredClone({
 			format: "neighbours-native",
 			schema: SCHEMA,
-			hf: "4.9.0",
+			hf: "4.10.0",
 			physical: this.physicalState(),
 			owner: this.s.owner.export(),
+			boundary: {
+				targetAt: this.targetAt,
+				resolutions: this.resolutions,
+				projectedRevision: this.projectedRevision,
+				requests: this.boundaryRequests,
+				complete: this.complete,
+				worldDirty: this.worldDirty,
+				witnesses: this.witnesses,
+			},
+			inputs: structuredClone(this.wireHistory),
+		});
+	}
+	/** SCOPE: local files only. Native/device/recording exports retain their complete format. */
+	exportJournal(): JournalTownArchive {
+		return structuredClone({
+			format: "neighbours-journal",
+			schema: SCHEMA,
+			hf: "4.10.0",
+			physical: this.physicalState(),
+			owner: this.s.owner.exportJournal(),
 			boundary: {
 				targetAt: this.targetAt,
 				resolutions: this.resolutions,

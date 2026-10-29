@@ -187,6 +187,12 @@ class TownEngine(Engine):
     return {'schema': 'neighbours/concordia@2', 'rounds': self.rounds,
             'runtime': self._request('save')}
 
+  def save_journal(self):
+    """Complete local file; the default native checkpoint stays unchanged."""
+    self._require_ready()
+    return {'schema': 'neighbours/concordia@2', 'rounds': self.rounds,
+            'runtime': self._request('save-journal')}
+
   def restore(self, save):
     if (not isinstance(save, dict) or save.get('schema') != 'neighbours/concordia@2'
         or type(save.get('rounds')) is not int or save['rounds'] < 0

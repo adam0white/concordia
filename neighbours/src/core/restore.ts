@@ -1,7 +1,12 @@
+import { restoreRunJournal } from "@adam0white/human-framework";
 import type { Intervention, TownRuntime } from "../contracts.ts";
 import { HF_VERSION } from "./hf-version.ts";
 import { TownRunOwner } from "./hf4-owner.ts";
-import { type NativeTownArchive, Runtime } from "./runtime.ts";
+import {
+	type JournalTownArchive,
+	type NativeTownArchive,
+	Runtime,
+} from "./runtime.ts";
 import { createRuntime } from "./scenario.ts";
 import { known, SCHEMA } from "./state.ts";
 
@@ -35,12 +40,19 @@ export function sameJSONValue(a: unknown, b: unknown): boolean {
 		)
 	);
 }
+/** Validate the closed public schema, exact engine and all accepted transactions.
+ * Release this temporary Run before separately replaying the complete host controls. */
+function validateJournal(input: unknown): void {
+	const restored = restoreRunJournal(input);
+	if (!restored.ok) throw Error(restored.error.message);
+}
 export function restoreRuntime(input: unknown): TownRuntime {
 	if (!input || typeof input !== "object" || Array.isArray(input))
 		throw Error("Invalid town save");
-	const archive = input as NativeTownArchive;
+	const archive = input as NativeTownArchive | JournalTownArchive;
 	if (
-		archive.format !== "neighbours-native" ||
+		(archive.format !== "neighbours-native" &&
+			archive.format !== "neighbours-journal") ||
 		archive.schema !== SCHEMA ||
 		archive.hf !== HF_VERSION ||
 		!archive.physical ||
@@ -52,7 +64,12 @@ export function restoreRuntime(input: unknown): TownRuntime {
 		throw Error(
 			"Unsupported town save. Start a fresh HF4 town; historical 3.x reports remain readable separately.",
 		);
-	const owner = TownRunOwner.restore(archive.owner);
+	if (archive.format === "neighbours-journal")
+		validateJournal(archive.owner.journal);
+	const owner =
+		archive.format === "neighbours-native"
+			? TownRunOwner.restore(archive.owner)
+			: null;
 	// Rebuild every host consequence from actual accepted public controls. This also
 	// validates canonical offer bodies, resource ledgers, pending receipts and counters.
 	// No person, time, RNG, fingerprint or private history is patched to make it fit.
@@ -85,8 +102,17 @@ export function restoreRuntime(input: unknown): TownRuntime {
 			replayed.intervene(record.input as Intervention);
 		else throw Error("Unsupported town replay input");
 	}
-	if (!sameJSONValue(archive, replayed.export()))
+	// After public journal validation, independently execute every host control
+	// and compare all native transaction outcomes/digests plus host/owner fields.
+	// Keep only this replayed owner alive; never install supplied current state.
+	const regenerated =
+		archive.format === "neighbours-journal"
+			? (replayed as Runtime).exportJournal()
+			: replayed.export();
+	if (!sameJSONValue(archive, regenerated))
 		throw Error("Town replay differs from host rules or native Run");
+	if (archive.format === "neighbours-journal") return replayed;
+	if (!owner) throw Error("Missing validated native owner");
 	return Runtime.hydrate(archive, owner);
 }
 /** Historical callers can no longer substitute a roster into a current Run. */

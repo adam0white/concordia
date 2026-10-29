@@ -82,7 +82,9 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 }) => {
 	const { createHash } = await import("node:crypto");
 	const { gzipSync } = await import("node:zlib");
-	const { createRuntime } = await import("../src/core/index.ts");
+	const { createRuntime, restoreRuntime } = await import(
+		"../src/core/index.ts"
+	);
 	const { canonicalPersona } = await import("@adam0white/lab-client");
 	const { openDebug } = await import("./session-helpers");
 	const runtime = createRuntime(
@@ -239,7 +241,7 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 		});
 		await expect(page.locator(".town-ready")).toBeVisible();
 		const full = await exportFile();
-		expect(full.runtime).toEqual(runtime);
+		expect(restoreRuntime(full.runtime).export()).toEqual(runtime);
 		expect(canonicalPersona(full.castLocal.sources[sha])).toBe(original);
 		await page
 			.getByRole("button", { name: "Close Game menu", exact: true })
@@ -678,7 +680,10 @@ test("regression: pending export must not publish after file pagehide while fina
 			result.download,
 			"retired export callback published a new download after pagehide",
 		).toBeUndefined();
-		expect((await finalQueuedRun(page)).runtime).toEqual(runtime);
+		const { restoreRuntime } = await import("../src/core/index.ts");
+		expect(
+			restoreRuntime((await finalQueuedRun(page)).runtime).export(),
+		).toEqual(runtime);
 		await expect(
 			page.getByRole("link", { name: "Download save", exact: true }),
 		).toHaveCount(0);

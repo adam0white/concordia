@@ -201,11 +201,18 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					});
 					break;
 				case "save":
+				case "save-journal":
 					send({
 						type: "save",
 						...(q.requestId === undefined ? {} : { requestId: q.requestId }),
 						save: JSON.parse(
-							String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+							String(
+								await py.runPythonAsync(
+									q.type === "save-journal"
+										? "json.dumps(town_engine.save_journal())"
+										: "json.dumps(town_engine.save())",
+								),
+							),
 						),
 					});
 					break;
