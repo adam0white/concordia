@@ -1,3 +1,11 @@
+# Browser failure diagnosis — 2026-10-29
+
+Remaining: Linux browser acceptance, full96/day2700s, whole-host file/later recording fit, full parity/30day, complete cheap owner reads, six roles/custody, root review/integration/live and owner feel. Player/friends/Show HN remain paused. This is not a performance fix or a release.
+
+The file lifecycle tests now decode actual SDK-reassembled recordings with the shipped bounded reader and original source-receipt checks before their unchanged whole-journal comparisons. The source-bearing lifecycle also compares both complete strict cold native exports. Privacy, identity, pagehide, retirement, inputs, history, RNG and all original budgets remain. Only tests and these qualifications changed; all production bodies remain exact cd5fd9d.
+
+The retained216f Linux trace reaches town-ready after27.03s and posts steps1–7 successfully through585. Step8 is posted107.74s into the trace, and its600 check is interrupted by the original120s test limit, after11.06s of polling. This is cumulative elapsed-cost evidence, not proof of a wrong clock target or a particular HF hot site. Both retained file-startup traces remain at “Restoring the saved town file…” after the original30s visibility wait; no admission error is shown. Local focused file startup succeeds, so Linux startup remains unproved. No deadline, actor, horizon, cache invalidation or public-history requirement was weakened. Full diagnosis and raw source-bound traces are in recovery-neighbours-browser-cause-* outside the repo; root owns exact CI qualification.
+
 # Complete encoded recording candidate — 2026-10-29
 
 Remaining: exact source CI/root review, whole96/2700s and whole-host file/recording fit, full parity/30day, complete cheap current reads, six roles/custody and owner input. Player/friends/Show HN stay paused. This is a source candidate, not delivery.
