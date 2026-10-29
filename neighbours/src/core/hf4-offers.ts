@@ -58,6 +58,10 @@ export function physicalOffer(
 		duration: offer.durationMs / MINUTE,
 		effort: offer.demands.effort,
 		focus: offer.demands.focus,
+		// Continuation reviews must retain the original authored difficulty.
+		...(offer.demands.skill
+			? { skill: structuredClone(offer.demands.skill) }
+			: {}),
 		mode: offer.demands.mode,
 		advertises: structuredClone(offer.expected.needs),
 		...(offer.expected.material === undefined

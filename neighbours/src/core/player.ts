@@ -25,7 +25,7 @@ import type {
 	TownEvent,
 } from "../contracts.ts";
 import { reviewOffers } from "./activity-reviews.ts";
-import { presentAt } from "./encounters.ts";
+import { locatedAt, presentAt } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import { speechRead } from "./impression.ts";
 import { placeOf, required } from "./invariants.ts";
@@ -497,13 +497,20 @@ export function playerIntervene(
 	else throw Error("Unknown player action");
 }
 
-export function privateConversationOffers(r: Resident): Affordance[] {
+export function privateConversationOffers(
+	r: Resident,
+	now: number,
+): Affordance[] {
+	// A job can already be at its destination while r.place still holds departure.
+	const destination = r.job?.offer.placeId;
+	const placeId =
+		destination && locatedAt(r, destination, now) ? destination : r.place;
 	return [
 		{
 			id: "private-share",
 			action: "talk",
 			label: "Share something private about this matter",
-			placeId: r.place,
+			placeId,
 			duration: 1,
 			effort: 0.05,
 			tags: ["floor"],
@@ -513,7 +520,7 @@ export function privateConversationOffers(r: Resident): Affordance[] {
 			id: "private-decline",
 			action: "rest",
 			label: "Keep the matter private",
-			placeId: r.place,
+			placeId,
 			duration: 1,
 			effort: 0,
 			tags: ["floor"],
@@ -544,7 +551,7 @@ function privateConversation(host: PlayerHost, input: Intervention) {
 	if (r.privateConversation)
 		throw Error("This conversation is already in progress.");
 	activate(host);
-	const offers = privateConversationOffers(r);
+	const offers = privateConversationOffers(r, host.s.now);
 	const decision = r.owner.requestDecision(
 		r.id,
 		offers,
