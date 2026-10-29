@@ -15,14 +15,14 @@ import {
 import { HF_VERSION } from "./core/hf-version.ts";
 import { canonicalHash } from "./core/hf4-canonical.ts";
 import { restoreRuntime } from "./core/restore.ts";
-import type { NativeTownArchive } from "./core/runtime.ts";
+import type { JournalTownArchive, NativeTownArchive } from "./core/runtime.ts";
 import { createRuntime } from "./core/scenario.ts";
 import { persistPreparedTown } from "./prepared-town-store.ts";
 import { lab } from "./ui/lab.tsx";
 export interface TownPacket {
 	schema: string;
 	rounds: number;
-	runtime: NativeTownArchive;
+	runtime: NativeTownArchive | JournalTownArchive;
 	castLocal?: {
 		heads: PersonaEnvelope[];
 		file: boolean;
@@ -51,7 +51,10 @@ const chapter = (packet: TownPacket) =>
 	canonicalHash({
 		seed: packet.runtime.physical.seed,
 		hf: packet.runtime.hf,
-		initial: packet.runtime.owner.run.initial,
+		initial:
+			packet.runtime.format === "neighbours-journal"
+				? packet.runtime.owner.journal.opening.initial
+				: packet.runtime.owner.run.initial,
 	});
 export class CastSession {
 	generation = 0;

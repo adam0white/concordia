@@ -23,6 +23,22 @@ class NativeBridgeTest(unittest.TestCase):
       self.assertEqual(engine.advance(4), expected_view)
       self.assertEqual(engine.save(), expected_save)
 
+  def test_public_journal_file_restores_complete_native_and_continues(self):
+    with NodeBridge(seed=42, population=6) as bridge:
+      engine = TownEngine(bridge)
+      engine.advance(2)
+      saved = engine.save_journal()
+      native = engine.save()
+      self.assertEqual(saved['runtime']['format'], 'neighbours-journal')
+      expected_view = engine.advance(1)
+      expected_native = engine.save()
+    with NodeBridge(seed=42, population=6) as bridge:
+      engine = TownEngine(bridge)
+      engine.restore(saved)
+      self.assertEqual(engine.save(), native)
+      self.assertEqual(engine.advance(1), expected_view)
+      self.assertEqual(engine.save(), expected_native)
+
   def test_concordia_matches_same_runtime_direct_control(self):
     with NodeBridge(seed=77, population=208) as bridge:
       engine = TownEngine(bridge)

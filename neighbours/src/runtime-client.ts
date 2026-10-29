@@ -181,7 +181,12 @@ export class RuntimeClient {
 				this.worker.postMessage(command);
 			});
 	}
-	capture(castId?: string): Promise<unknown> {
+	capture(
+		castId?: string,
+		format: "native" | "journal" = "native",
+	): Promise<unknown> {
+		if (castId && format === "journal")
+			return Promise.reject(Error("A journal must include the complete town."));
 		return new Promise((resolve, reject) => {
 			const id = this.captureSequence--;
 			const timeout = setTimeout(() => {
@@ -196,7 +201,10 @@ export class RuntimeClient {
 			this.send(
 				castId
 					? { type: "cast-capture", requestId: id, actorId: roleFor(castId) }
-					: { type: "save", requestId: id },
+					: {
+							type: format === "journal" ? "save-journal" : "save",
+							requestId: id,
+						},
 			);
 		});
 	}

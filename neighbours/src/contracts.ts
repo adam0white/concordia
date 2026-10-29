@@ -465,7 +465,7 @@ export type UiCommand =
 	| { type: "intervene"; intervention: Intervention }
 	| { type: "cast-capture"; requestId: number; actorId: string }
 	| { type: "cast-cancel"; requestId: number }
-	| { type: "save"; requestId?: number }
+	| { type: "save" | "save-journal"; requestId?: number }
 	| {
 			type: "restore";
 			save: unknown;

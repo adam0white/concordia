@@ -2,6 +2,7 @@ import type { Intervention, TownRuntime } from "./contracts.ts";
 import type { OwnerArchive } from "./core/hf4-owner.ts";
 import type { NativeActor } from "./core/host-types.ts";
 import { createRuntime, restoreRuntime } from "./core/index.ts";
+import type { Runtime } from "./core/runtime.ts";
 /** Shared transport boundary for CPython/Node and browser Pyodide. */
 export class RuntimePort {
 	runtime: TownRuntime;
@@ -46,6 +47,8 @@ export class RuntimePort {
 				return null;
 			case "view":
 				return this.runtime.view();
+			case "save-journal":
+				return (this.runtime as Runtime).exportJournal();
 			case "save":
 				return this.runtime.export();
 			case "restore":

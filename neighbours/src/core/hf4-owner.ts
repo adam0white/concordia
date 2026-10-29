@@ -1,12 +1,14 @@
 import {
 	type DeepReadonly,
 	exportRun,
+	exportRunJournal,
 	type Input,
 	inspect,
 	type PerceptData,
 	preview,
 	type Run,
 	type RunArchive,
+	type RunJournalArchive,
 	restoreRun,
 	type StepResult,
 	step,
@@ -32,6 +34,9 @@ export type OwnerArchive = {
 	run: DeepReadonly<RunArchive>;
 	queued: Input[];
 	nextInput: number;
+};
+export type OwnerJournalArchive = Omit<OwnerArchive, "run"> & {
+	journal: DeepReadonly<RunJournalArchive>;
 };
 /** SCOPE: the sole public Run owner. Readings are exact immutable HF4 snapshots, not mutable Persons. */
 export class TownRunOwner {
@@ -484,6 +489,21 @@ export class TownRunOwner {
 				select,
 			}),
 		);
+	}
+	/** Complete lossless file evidence. Cursor deltas are not substituted for a full file. */
+	exportJournal(): OwnerJournalArchive {
+		const journal = need(exportRunJournal(this.run));
+		if (!journal.opening) throw Error("Missing journal opening");
+		return {
+			lessons: structuredClone(this.lessons),
+			journal: {
+				opening: journal.opening,
+				chunks: journal.chunk ? [journal.chunk] : [],
+				head: journal.head,
+			},
+			queued: structuredClone(this.queued),
+			nextInput: this.nextInput,
+		};
 	}
 	export(): OwnerArchive {
 		return {
