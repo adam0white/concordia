@@ -111,8 +111,14 @@ export async function reachSelectedConversation(page: Page, name: string) {
 			return;
 		}
 		const walk = page.getByRole("button", { name: /^Walk to .* to talk/ });
-		if ((await walk.isVisible()) && (await walk.isEnabled()))
+		if ((await walk.isVisible()) && (await walk.isEnabled())) {
 			await walk.click();
+			// The real player reply persists before playback resumes. Do not spend
+			// the paused browser clock while that worker command is still pending.
+			await base
+				.expect(page.getByText(/^You (start|keep) walking automatically$/))
+				.toBeVisible();
+		}
 		await step(page);
 	}
 	throw Error(
