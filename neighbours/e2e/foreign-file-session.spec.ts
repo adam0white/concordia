@@ -180,7 +180,7 @@ test("foreign file preserves occupied native slots through full export and reimp
 			.getByRole("button", { name: "Market kitchen about 30 min", exact: true })
 			.click();
 		const played = await exportPacket();
-		expect(played.packet.runtime.player).toBeDefined();
+		expect(played.packet.runtime.physical.player).toBeDefined();
 		// Independent full restore, identical ordinary input, whole packet replay equality.
 		await page
 			.getByRole("button", { name: "Close file session", exact: true })
