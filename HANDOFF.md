@@ -1,3 +1,7 @@
+# Composed correctness allowances — 2026-10-29
+
+The 206-person two-Run/full-hash/15-minute authoring case and actual repair/continuation/native-cold/next-step case each have an explicit 15-second correctness allowance, as does the private/native/journal case. Their bodies remain unchanged. CI 40895243386 passed the private case and timed out on the other two at the former default. Other test defaults and explicit performance assertions, original 96-round/2700-second day, CI/month/stress, heap and file/recording limits remain unchanged. These allowances establish no runtime performance result; earlier five-second restrictions below describe historical source.
+
 # Private replay correctness allowance — 2026-10-29
 
 The new private-choice correctness test has a 15-second allowance for the actual choice and complete native and journal cold restores. CI 40890154616 timed out at 5,869 ms under the former 5-second default. The original 206-person, repair, history and other test deadlines and all game budgets remain unchanged. This is not a day or startup performance result; earlier no-deadline-change statements describe their historical source.

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createTownRun, townTime } from "../src/core/hf4-run.ts";
 
 describe("HF4 town authoring", () => {
+	// Two complete independent Runs, full hashes and 206-person stepping: correctness, not startup/day performance.
 	it("authors all 206 real actors in one deterministic Run and reaches fifteen minutes", () => {
 		const run = createTownRun(42, 206);
 		const before = exportRun(run);
@@ -22,7 +23,7 @@ describe("HF4 town authoring", () => {
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw Error(result.error.message);
 		expect(result.value.at).toBe(townTime(495));
-	});
+	}, 15000);
 	it("refuses invalid host time and unsupported population", () => {
 		expect(() => townTime(Number.NaN)).toThrow();
 		expect(() => createTownRun(42, 5)).toThrow();

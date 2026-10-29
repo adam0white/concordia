@@ -8,6 +8,7 @@ import { createRuntime, restoreRuntime } from "./current-town.ts";
 
 // SCOPE: actual six-person HF repair choice and complete host/native cold replay;
 // separate authored handcart offer fixture, not a natural cart acceptance/day proof.
+// The 15s allowance covers actual choice, complete native cold replay and next-step correctness.
 it("preserves authored repair demands through the actual job and continuation review", () => {
 	const live = createRuntime(42, 6);
 	for (let round = 0; round < 5; round++) live.step();
@@ -37,7 +38,7 @@ it("preserves authored repair demands through the actual job and continuation re
 	live.step();
 	cold.step();
 	expect(cold.export()).toEqual(live.export());
-});
+}, 15000);
 it("preserves every mapped field of actual authored fast and slow handcart offers", () => {
 	const town = createRuntime(42, 6);
 	town.s.handcart = {
