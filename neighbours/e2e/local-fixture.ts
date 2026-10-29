@@ -1,4 +1,4 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
 
 export * from "@playwright/test";
 /** Local regression fixture: explicitly select the public local controller.
@@ -56,6 +56,7 @@ export async function enterLocalTown(page: Page) {
 		});
 		if (saved) {
 			await resume.click();
+			await expect(page.locator(".town-ready")).toBeVisible();
 			return;
 		}
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
@@ -63,4 +64,5 @@ export async function enterLocalTown(page: Page) {
 	await page
 		.getByRole("button", { name: "Start a fresh local town", exact: true })
 		.click();
+	await expect(page.locator(".town-ready")).toBeVisible();
 }

@@ -16,6 +16,7 @@ import { HF_VERSION } from "./core/hf-version.ts";
 import { canonicalHash } from "./core/hf4-canonical.ts";
 import { restoreRuntime } from "./core/restore.ts";
 import type { NativeTownArchive } from "./core/runtime.ts";
+import { createRuntime } from "./core/scenario.ts";
 import { persistPreparedTown } from "./prepared-town-store.ts";
 import { lab } from "./ui/lab.tsx";
 export interface TownPacket {
@@ -108,7 +109,7 @@ export class CastSession {
 			throw Error("A file session cannot start a native town.");
 		const generation = this.generation;
 		const current = () => this.active && generation === this.generation;
-		await shelf.ready;
+		if (!explicitLocal) await shelf.ready;
 		if (!current()) throw Error("Run changed while preparing people.");
 		if (!explicitLocal && !shelf.enabled)
 			throw Error(
@@ -152,13 +153,18 @@ export class CastSession {
 				);
 			// null means successful empty preparation AND acknowledged exact empty CAS.
 		}
-		const runtime = await prepareIncomingTownDurably(
-			seed,
-			population,
-			[],
-			persistPreparedTown,
-			current,
-		);
+		// An explicitly authored local town has no incoming people or shared claim.
+		// The worker still validates this complete packet before installing it;
+		// its ordinary device-save path persists the accepted initial town.
+		const runtime = explicitLocal
+			? (createRuntime(seed, population).export() as NativeTownArchive)
+			: await prepareIncomingTownDurably(
+					seed,
+					population,
+					[],
+					persistPreparedTown,
+					current,
+				);
 		if (!current())
 			throw Error("Run changed while its complete town was saved.");
 		this.heads = [];
