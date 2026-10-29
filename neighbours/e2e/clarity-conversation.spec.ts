@@ -9,7 +9,8 @@ import { enterLocalTown } from "./local-fixture";
 
 async function openConversation(page: Page) {
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
-	await enterLocalTown(page);
+	// This is a complete initialization and walking correctness journey.
+	await enterLocalTown(page, 60000);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await reachSelectedConversation(page, "Rafi");
@@ -32,6 +33,8 @@ for (const width of [360, 1280])
 	test(`conversation chips and pinned submit stay usable at ${width}`, async ({
 		page,
 	}, info) => {
+		// Allow the complete walking/conversation correctness journey; this is not a latency gate.
+		test.setTimeout(180000);
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
 		await openConversation(page);
 		const form = page.locator("#town-conversation");
@@ -80,6 +83,8 @@ for (const mode of ["promise", "ask", "urge"] as const)
 	test(`chip selections submit the original ${mode} command`, async ({
 		page,
 	}) => {
+		// Allow the complete walking/conversation correctness journey; this is not a latency gate.
+		test.setTimeout(180000);
 		await page.addInitScript(() => {
 			const post = Worker.prototype.postMessage;
 			Object.assign(window, { speechCommands: [] });

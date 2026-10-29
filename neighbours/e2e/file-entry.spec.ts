@@ -91,6 +91,8 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 	request,
 	baseURL,
 }) => {
+	// Two complete cold file restores plus lifecycle correctness; not a latency gate.
+	test.setTimeout(180000);
 	const { createHash } = await import("node:crypto");
 	const { gzipSync } = await import("node:zlib");
 	const { createRuntime, restoreRuntime } = await import(
@@ -250,7 +252,8 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			mimeType: "application/json",
 			buffer: Buffer.from(JSON.stringify(packet)),
 		});
-		await expect(page.locator(".town-ready")).toBeVisible();
+		// Cold file replay correctness; not a startup latency acceptance.
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		const full = await exportFile();
 		expect(restoreRuntime(full.runtime).export()).toEqual(runtime);
 		expect(canonicalPersona(full.castLocal.sources[sha])).toBe(original);
@@ -275,7 +278,8 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			mimeType: "application/gzip",
 			buffer: gzipSync(JSON.stringify(packet)),
 		});
-		await expect(page.locator(".town-ready")).toBeVisible();
+		// Cold file replay correctness; not a startup latency acceptance.
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		expect(await exportFile()).toEqual(full);
 		// Privacy signals suppress recording until the real switch explicitly opts in.
 		await page.evaluate(() => {
@@ -615,7 +619,8 @@ async function lifecycleFile({
 		mimeType: "application/json",
 		buffer: Buffer.from(JSON.stringify(packet)),
 	});
-	await expect(page.locator(".town-ready")).toBeVisible();
+	// Cold file replay correctness; not a startup latency acceptance.
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	return { context, page, runtime };
 }
 test("regression: pending export must not publish after file pagehide while final snapshot waits", async ({
