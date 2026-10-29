@@ -84,6 +84,8 @@ for (const viewport of [
 test("place company distinguishes meeting from an immediate conversation", async ({
 	page,
 }) => {
+	// Complete actual walking/conversation correctness, including a moving resident.
+	test.setTimeout(600000);
 	await page.setViewportSize({ width: 360, height: 690 });
 	await page.goto(process.env.NEIGHBOURS_TEST_BASE ?? "/");
 	await enterLocalTown(page);

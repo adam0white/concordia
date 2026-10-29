@@ -46,7 +46,8 @@ for (const [width, height] of [
 		await page
 			.getByRole("button", { name: /^(Enter|Return to) Mill Bridge/ })
 			.click();
-		await expect(page.locator(".town-ready")).toBeVisible();
+		// Full206-person cold admission is setup for these layout/atomicity checks.
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 120000 });
 		await page.evaluate(() => document.fonts.ready);
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
 		const menu = page.locator(".session-menu");

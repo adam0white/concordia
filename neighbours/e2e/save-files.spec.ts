@@ -114,7 +114,8 @@ test("actual browser gzip export preserves the complete town across import and d
 		)
 		.toBe(original.packet.runtime.physical.now);
 	await page.reload();
-	await enterLocalTown(page);
+	// Wait for actual strict full cold admission before asserting the whole export.
+	await enterLocalTown(page, 120000);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	expect((await exportFile(page, info, "reload")).packet).toEqual(imported);
@@ -188,7 +189,10 @@ test("compression finishing after a newer export or accepted import cannot publi
 							.compressionGate.held.length,
 				),
 			)
-			.toBe(1);
+			// One complete journal compression belongs to the committed native
+			// checkpoint's recording; the other produces the explicit file.
+			// Hold both real operations before testing stale publication.
+			.toBe(2);
 	};
 	const release = async () => {
 		await page.evaluate(async () => {

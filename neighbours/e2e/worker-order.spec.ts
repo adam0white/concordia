@@ -1,4 +1,6 @@
 import { readdir } from "node:fs/promises";
+import { restoreRuntime } from "../src/core/index.ts";
+import type { NativeTownArchive } from "../src/core/runtime.ts";
 import { expect, test } from "./clock-fixture";
 
 test("worker rejects an invalid queued advance in command order and preserves the preceding step", async ({
@@ -13,7 +15,12 @@ test("worker rejects an invalid queued advance in command order and preserves th
 		const worker = new Worker(new URL(`/assets/${path}`, location.href), {
 			type: "module",
 		});
-		const replies: { type: string; now?: number; message?: string }[] = [];
+		const replies: {
+			type: string;
+			now?: number;
+			message?: string;
+			save?: { schema: string; rounds: number; runtime: NativeTownArchive };
+		}[] = [];
 		try {
 			return await new Promise<typeof replies>((resolve, reject) => {
 				const timeout = setTimeout(
@@ -29,8 +36,9 @@ test("worker rejects an invalid queued advance in command order and preserves th
 					if (reply.type === "progress") return;
 					replies.push({
 						type: reply.type,
-						now: reply.view?.now ?? reply.save?.runtime?.now,
+						now: reply.view?.now ?? reply.save?.runtime?.physical?.now,
 						message: reply.message,
+						...(reply.type === "save" ? { save: reply.save } : {}),
 					});
 					if (reply.type === "save") {
 						clearTimeout(timeout);
@@ -59,4 +67,9 @@ test("worker rejects an invalid queued advance in command order and preserves th
 	expect(replies[2]?.message).toContain("positive safe request ID");
 	expect(replies[1]?.now).toBe(495);
 	expect(replies[3]?.now).toBe(495);
+	const save = replies[3]?.save;
+	expect(save?.schema).toBe("neighbours/concordia@2");
+	expect(save?.rounds).toBe(1);
+	expect(save?.runtime.format).toBe("neighbours-native");
+	expect(restoreRuntime(save?.runtime).export()).toEqual(save?.runtime);
 });

@@ -64,8 +64,9 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 	await page.goto("/");
 	await enterLocalTown(page);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
-	// Seed 42 first publishes a story at 09:00, on the fourth round.
-	for (let i = 0; i < 3; i++) await step(page);
+	// Current HF4 seed42 has no story through09:00. Its first actual
+	// inspection story arrives at09:15, on the fifth round.
+	for (let i = 0; i < 4; i++) await step(page);
 	await page.evaluate(() => {
 		(window as unknown as { readingGate: { hold: boolean } }).readingGate.hold =
 			true;
@@ -105,7 +106,12 @@ test("the menu drains an in-flight story round and preserves its remaining readi
 		page.getByRole("dialog", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeVisible();
 	const held = await page.locator(".town-time strong").textContent();
-	expect(held).toBe("09:00");
+	expect(held).toBe("09:15");
+	await expect(
+		page.getByRole("button", {
+			name: /^Read story: The hall stayed closed after inspection/,
+		}),
+	).toBeVisible();
 	await page.clock.fastForward(30000);
 	expect(await page.locator(".town-time strong").textContent()).toBe(held);
 	await closeSaves(page);

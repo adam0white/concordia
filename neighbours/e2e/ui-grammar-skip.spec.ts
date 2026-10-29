@@ -55,13 +55,13 @@ for (const width of [360, 1280]) {
 		).toBeVisible();
 		for (let i = 0; i < 8; i++) {
 			await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
-			if (
-				await page
-					.getByRole("button", { name: "Talk to Rafi", exact: true })
-					.isEnabled()
-					.catch(() => false)
-			)
-				break;
+			const talk = page.getByRole("button", {
+				name: "Talk to Rafi",
+				exact: true,
+			});
+			// Travelling residents have an explanation instead of a Talk button.
+			// Do not wait for an absent button while the test owns time advancement.
+			if ((await talk.isVisible()) && (await talk.isEnabled())) break;
 			await page
 				.getByRole("button", { name: "Close person details", exact: true })
 				.click();

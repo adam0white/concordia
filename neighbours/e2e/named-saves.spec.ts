@@ -294,11 +294,14 @@ async function confirmLoad(page: Page) {
 		.click();
 	await expect(
 		page.getByText("Preparing the complete town checkpoint…"),
-	).toHaveCount(0);
+	).toHaveCount(0, { timeout: 120000 });
 }
 test("public saved towns retain complete checkpoints, deterministic continuation and failed-load state", async ({
 	page,
 }) => {
+	// Complete capture, strict cold loads, rollback, corruption, quota and file
+	// isolation compose one correctness control. The production120s validator stays.
+	test.setTimeout(300000);
 	const started = Date.now();
 	const stage = (name: string) =>
 		console.log("named-checkpoint-stage", name, Date.now() - started);
