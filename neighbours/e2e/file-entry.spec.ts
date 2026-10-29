@@ -6,7 +6,18 @@ import {
 	type Page,
 	test,
 } from "@playwright/test";
+import type { TownPacket } from "../src/cast-session.ts";
+import { checkpointSources } from "../src/checkpoint-source.ts";
 import { canonicalHash } from "../src/core/hf4-canonical.ts";
+import { decodeSave } from "../src/ui/save-codec.ts";
+
+/** SDK chunks carry the complete encoded journal. Decode with the shipped reader;
+ * keep the original whole-packet assertions and strict cold replay below. */
+async function recordedCheckpoint(json: string) {
+	const packet = (await decodeSave(new Blob([json]))) as TownPacket;
+	checkpointSources(packet);
+	return packet;
+}
 
 test("built entry refuses invalid selectors and preserves missing-identity memory play", async ({
 	page,
@@ -372,8 +383,14 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			.filter((r) => r.data.upload === upload)
 			.sort((a, b) => a.data.index - b.data.index);
 		expect(captured).toHaveLength(captured[0].data.total);
-		const final = JSON.parse(captured.map((r) => r.data.text).join(""));
+		const final = await recordedCheckpoint(
+			captured.map((r) => r.data.text).join(""),
+		);
 		expect(final).toEqual(continued);
+		// Compare complete native state too, including every actor, input and RNG field.
+		expect(restoreRuntime(final.runtime).export()).toEqual(
+			restoreRuntime(continued.runtime).export(),
+		);
 		await test.info().attach("synthetic-local-final-queue-proof", {
 			contentType: "application/json",
 			body: JSON.stringify({
@@ -472,7 +489,7 @@ async function finalQueuedRun(page: Page) {
 		.toBeGreaterThan(0);
 	const pieces = (await queuedPieces(page)).filter((r) => r.kind === "run");
 	expect(pieces).toHaveLength(pieces[0].data.total);
-	return JSON.parse(
+	return recordedCheckpoint(
 		pieces
 			.sort((a, b) => a.data.index - b.data.index)
 			.map((r) => r.data.text)
