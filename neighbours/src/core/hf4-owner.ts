@@ -9,6 +9,7 @@ import {
 	type Run,
 	type RunArchive,
 	type RunJournalArchive,
+	type RunJournalCursor,
 	restoreRun,
 	type StepResult,
 	step,
@@ -53,6 +54,7 @@ export class TownRunOwner {
 	private attended = new Map<string, number>();
 	private receivedTimes = new Map<string, number>();
 	private snapshot: DeepReadonly<RunArchive>;
+	private snapshotCursor: RunJournalCursor | undefined;
 	private frameAvailability = new Map<
 		string,
 		{ alive: boolean; asleep: boolean; downed: boolean }
@@ -63,6 +65,7 @@ export class TownRunOwner {
 	constructor(run: Run) {
 		this.run = run;
 		this.snapshot = exportRun(run);
+		this.snapshotCursor = need(exportRunJournal(run)).cursor;
 	}
 	static restore(value: OwnerArchive): TownRunOwner {
 		const owner = new TownRunOwner(need(restoreRun(value.run)));
@@ -419,6 +422,7 @@ export class TownRunOwner {
 			(x) => !eligible.some((y) => y.id === x.id),
 		);
 		this.snapshot = exportRun(this.run);
+		this.snapshotCursor = this.snapshotJournal().cursor;
 		this.last = result;
 		for (const event of result.events)
 			if (event.person && event.data.kind === "observation-attended") {
@@ -505,10 +509,28 @@ export class TownRunOwner {
 			nextInput: this.nextInput,
 		};
 	}
+	/** The public opaque cursor detects external steps at the same time and changes
+	 * to initial authoring. It is only an in-memory invalidation witness, never a
+	 * persisted journal cursor or a replacement for the complete native archive. */
+	private snapshotJournal() {
+		const journal = exportRunJournal(this.run, this.snapshotCursor);
+		if (
+			!journal.ok &&
+			journal.error.code === "invalid-admission" &&
+			journal.error.path === "$.cursor"
+		)
+			return need(exportRunJournal(this.run));
+		return need(journal);
+	}
 	export(): OwnerArchive {
+		const journal = this.snapshotJournal();
+		if (journal.chunk || journal.opening) this.snapshot = exportRun(this.run);
+		this.snapshotCursor = journal.cursor;
 		return {
 			lessons: structuredClone(this.lessons),
-			run: exportRun(this.run),
+			// Reuse only after validating the exact public transaction/authoring prefix.
+			// Queue/lesson/counter metadata is copied separately.
+			run: this.snapshot,
 			queued: structuredClone(this.queued),
 			nextInput: this.nextInput,
 		};
