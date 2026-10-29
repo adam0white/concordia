@@ -1090,6 +1090,14 @@ body,
 	.game-frame[data-screen="town"] .game-sheet {
 		display: none;
 	}
+	/* Show recovery instead of compact guidance when the map has an error. */
+	.game-frame[data-screen="town"]:has(.game-sheet > .error) .town-guidance {
+		display: none;
+	}
+	.game-frame[data-screen="town"] .game-sheet:has(> .error) {
+		display: block;
+		padding: 0 12px 12px;
+	}
 }
 .game-frame .town-guidance {
 	overflow: auto;
