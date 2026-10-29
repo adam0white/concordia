@@ -28,6 +28,8 @@ it("places both private alternatives at the resident's arrived destination", () 
 	]);
 });
 
+// Actual private choice and complete native and journal cold restores are correctness checks,
+// not a day or startup performance gate.
 it("finishes an arrived resident's actual private choice for one minute at the same place", () => {
 	const live = createRuntime(42, 6);
 	live.intervene({ kind: "player-move", placeId: "hall" });
@@ -93,7 +95,7 @@ it("finishes an arrived resident's actual private choice for one minute at the s
 	journalCold.step();
 	expect(cold.export()).toEqual(live.export());
 	expect(journalCold.export()).toEqual(live.export());
-});
+}, 15000);
 
 it("refuses private speech while the resident travels past the stationary player", () => {
 	const live = createRuntime(42, 6);

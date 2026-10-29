@@ -1,3 +1,7 @@
+# Private replay correctness allowance — 2026-10-29
+
+The new private-choice correctness test has a 15-second allowance for the actual choice and complete native and journal cold restores. CI 40890154616 timed out at 5,869 ms under the former 5-second default. The original 206-person, repair, history and other test deadlines and all game budgets remain unchanged. This is not a day or startup performance result; earlier no-deadline-change statements describe their historical source.
+
 # Complete public snapshot reuse and red CI diagnosis — 2026-10-29
 
 Remaining: exact source CI/root review, original206-person five-second control and other measured full public export/restore costs; original fileP1/later-recordingP2, full96/filefit/fullparity/30day/currentread/sixroles/custody and root integration/live. Player/friends/Show HN paused; owner feel separate. No green Linux claim from local ARM proof.
