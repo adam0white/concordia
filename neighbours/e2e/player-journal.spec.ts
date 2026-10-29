@@ -76,12 +76,12 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 
 	// HF may refuse; a refusal holds no pledge. Otherwise keep the pledge.
 	const packet = await exportPacket(page, info, "after-speech");
-	const request = packet.runtime.player.requests.at(-1);
+	const request = packet.runtime.physical.player.requests.at(-1);
 	expect(request).toBeDefined();
 	// Only a yes binds at once; an offered pledge waits on their decision and is not worked yet.
 	const pledged =
 		Boolean(request.pledgeId) &&
-		packet.runtime.player.pledges.find(
+		packet.runtime.physical.player.pledges.find(
 			(p: { id: string }) => p.id === request.pledgeId,
 		)?.status === "open";
 	if (pledged) {
@@ -102,7 +102,7 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 	await expect(lines.first()).toBeVisible();
 	const saved = await exportPacket(page, info, "after-journal");
 	await showTab(page, "Journal");
-	const player = saved.runtime.player as {
+	const player = saved.runtime.physical.player as {
 		log: { id: number }[];
 		requests: {
 			id: number;
