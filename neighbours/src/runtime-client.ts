@@ -10,6 +10,7 @@ export class RuntimeClient {
 	private current = true;
 	private captures = new Map<number, (value: unknown) => void>();
 	private captureSequence = -1000000;
+	private readonly recordings = new WeakMap<object, unknown>();
 	private restoring: number | null = null;
 	private restoreSequence = 0;
 	private pendingNew: number | null = null;
@@ -61,6 +62,13 @@ export class RuntimeClient {
 				const capture = this.captures.get(reply.requestId);
 				if (capture) {
 					this.captures.delete(reply.requestId);
+					if (
+						reply.type === "save" &&
+						reply.recording &&
+						reply.save &&
+						typeof reply.save === "object"
+					)
+						this.recordings.set(reply.save, reply.recording);
 					capture(reply.save);
 					return;
 				}
@@ -89,8 +97,11 @@ export class RuntimeClient {
 				return;
 			}
 
-			if ((reply.type === "save" || reply.type === "state") && reply.save)
+			if ((reply.type === "save" || reply.type === "state") && reply.save) {
 				reply.save = this.cast.decorate(reply.save);
+				if (reply.recording)
+					reply.recording = this.cast.decorate(reply.recording);
+			}
 			this.onReply(reply);
 		};
 		this.worker.onerror = () =>
@@ -207,6 +218,12 @@ export class RuntimeClient {
 						},
 			);
 		});
+	}
+	/** Only an exact captured native object can name its atomic public journal. */
+	recordingFor(packet: unknown): unknown {
+		return packet && typeof packet === "object"
+			? this.recordings.get(packet)
+			: undefined;
 	}
 	close() {
 		this.current = false;

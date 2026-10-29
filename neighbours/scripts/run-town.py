@@ -8,6 +8,8 @@ from pathlib import Path
 import sys
 import time
 
+from recording_codec import load_checkpoint
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from concordia.contrib.neighbours.bridge import NodeBridge
 from concordia.contrib.neighbours.engine import TownEngine
@@ -53,11 +55,22 @@ def main():
               json.dumps({'scope': 'Actual engine/bridge request and response bodies',
                           'records': proof_records}, indent=2) + '\n')
     engine = TownEngine(call)
+    source_checkpoint = None
     if args.restore:
-      source = json.loads(args.restore.read_text())
-      engine.restore(source.get('checkpoint', source))
+      source = load_checkpoint(args.restore)
+      source_checkpoint = source.get('checkpoint', source)
+      checked = json.loads(call(json.dumps({'op': 'validate-checkpoint-source',
+                                             'packet': source_checkpoint})))
+      if checked is not True:
+        raise ValueError(f'Invalid checkpoint source receipt: {checked}')
+      engine.restore(source_checkpoint)
     view = engine.advance(args.rounds)
     save = engine.save()
+    if source_checkpoint:
+      # Keep original top-level source/provenance fields; engine state comes only from save().
+      for key, value in source_checkpoint.items():
+        if key not in ('schema', 'rounds', 'runtime'):
+          save[key] = value
     digest = hashlib.sha256(json.dumps(save, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
     result = {'runtime': 'native-python-concordia-node-hf', 'checkpoint': save,
               'view': view, 'checkpointSha256': digest,

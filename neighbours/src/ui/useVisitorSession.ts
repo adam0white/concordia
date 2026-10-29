@@ -30,7 +30,12 @@ import {
 	skipStopReason,
 	storyReadingKey,
 } from "./playback-rate";
-import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
+import {
+	decodeSave,
+	encodeRecording,
+	encodeSave,
+	SaveFileError,
+} from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
 import { advanceStoryWatch, type StoryWatchState } from "./useStoryWatch";
 
@@ -408,17 +413,37 @@ export function useVisitorSession({
 			| {
 					generation: number;
 					data: { slot: "latest" | "previous"; packet: unknown };
+					recording?: Promise<unknown>;
 			  }
 			| undefined;
 		const recordCommittedSave = (
 			packet: unknown,
 			slot: "latest" | "previous",
 			generation: number,
+			recording?: unknown,
 		) => {
 			if (!hostActive()) return;
 			const data = { slot, packet: structuredClone(packet) };
-			committedSave = { generation, data };
-			lab.captureSave(fileSession ? { file: true, packet: data.packet } : data);
+			const committed = {
+				generation,
+				data,
+				recording: recording
+					? encodeRecording(recording).catch(() => null)
+					: undefined,
+			};
+			committedSave = committed;
+			void committed.recording?.then((packet) => {
+				if (
+					packet &&
+					hostActive() &&
+					!saveConflictRef.current &&
+					committedSave === committed &&
+					generation === acceptedGeneration.current
+				)
+					lab.captureSave(
+						fileSession ? { file: true, packet } : { slot, packet },
+					);
+			});
 		};
 		const telemetryRequests = new Map<
 			number,
@@ -456,19 +481,34 @@ export function useVisitorSession({
 							});
 							// The SDK still has to serialize and enqueue this returned packet.
 							// Retire only the host runtime; do not dispose the registered live SDK.
-							if (hiding) retireTimer = setTimeout(retireRuntime, 0);
+
 							if (!active || generation !== acceptedGeneration.current)
 								return null;
 							// Retry only checkpoints committed by this visitor's accepted world,
 							// after identity is settled. Never attach a prior town's device save.
-							if (!hiding && committedSave?.generation === generation)
+							const committed = committedSave;
+							const encoded = packet
+								? await encodeRecording(packet).catch(() => null)
+								: null;
+							const savedRecording =
+								!hiding && committed?.generation === generation
+									? await committed.recording
+									: null;
+							if (
+								active &&
+								generation === acceptedGeneration.current &&
+								committedSave === committed &&
+								savedRecording &&
+								!saveConflictRef.current
+							)
 								lab.captureSave(
 									fileSession
-										? { file: true, packet: committedSave.data.packet }
-										: committedSave.data,
+										? { file: true, packet: savedRecording }
+										: { ...committed?.data, packet: savedRecording },
 								);
+							if (hiding) retireTimer = setTimeout(retireRuntime, 0);
 							return active && generation === acceptedGeneration.current
-								? packet
+								? encoded
 								: null;
 						},
 						{
@@ -958,6 +998,7 @@ export function useVisitorSession({
 								reply.save,
 								replace ? "previous" : "latest",
 								generation,
+								reply.recording,
 							);
 							setSaved(
 								fileSession
@@ -1058,7 +1099,9 @@ export function useVisitorSession({
 		};
 		// A player input's state reply carries its checkpoint; store it before the answer is shown.
 		// The head of the state FIFO is this reply's command, because replies are delivered in order.
-		const persistAnswer = (reply: UiReply & { save: unknown }) => {
+		const persistAnswer = (
+			reply: UiReply & { save: unknown; recording?: unknown },
+		) => {
 			const command = stateCommands.current[0];
 			if (
 				!hostActive() ||
@@ -1081,7 +1124,12 @@ export function useVisitorSession({
 						generation < acceptedGeneration.current
 					)
 						return;
-					recordCommittedSave(reply.save, "latest", generation);
+					recordCommittedSave(
+						reply.save,
+						"latest",
+						generation,
+						reply.recording,
+					);
 					setSaved(
 						fileSession
 							? "File session · changes stay in memory"
@@ -1106,11 +1154,14 @@ export function useVisitorSession({
 			const current = () => owns(generation, owner);
 			if (!current() || !saves)
 				throw Error("Device ownership save unavailable.");
-			const packet = owner.cast.decorate(await owner.capture());
+			const native = await owner.capture();
+			const packet = owner.cast.decorate(native);
+			const journal = owner.recordingFor(native);
+			const recording = journal ? owner.cast.decorate(journal) : undefined;
 			if (!current()) throw Error("Run changed before ownership save.");
 			await saves.write(packet, "latest", current);
 			if (!current()) throw Error("Run changed during ownership save.");
-			recordCommittedSave(packet, "latest", generation);
+			recordCommittedSave(packet, "latest", generation, recording);
 			setHasSave(true);
 			setSaved(savedLabel(packet));
 		};
@@ -1731,7 +1782,7 @@ export function useVisitorSession({
 		exportRequest.current = requestId;
 		send({ type: "save-journal", requestId });
 	};
-	const getRun = (): Promise<unknown> => {
+	const requestRun = (format: "native" | "journal"): Promise<unknown> => {
 		if (
 			fileRetired.current ||
 			!client.current ||
@@ -1758,8 +1809,25 @@ export function useVisitorSession({
 				reject,
 				timer,
 			});
-			client.current?.send({ type: "save", requestId });
+			client.current?.send({
+				type: format === "journal" ? "save-journal" : "save",
+				requestId,
+			});
 		});
+	};
+	const getRun = () => requestRun("native");
+	const getRecording = async () => {
+		const generation = worldGeneration.current,
+			owner = client.current;
+		const packet = await requestRun("journal");
+		const encoded = await encodeRecording(packet);
+		if (
+			fileRetired.current ||
+			generation !== worldGeneration.current ||
+			owner !== client.current
+		)
+			throw Error("The town changed before its recording was ready.");
+		return encoded;
 	};
 	const exportSave = () => requestExport();
 	const reportLocalError = (message: string) => {
@@ -1894,7 +1962,7 @@ export function useVisitorSession({
 		sendFeedback: (note: string, name: string, sharePlay = false) => {
 			const current = client.current;
 			if (!current) return sendFeedbackWithoutRun(note, name, sharePlay);
-			return current.cast.feedback(note, name, getRun, sharePlay);
+			return current.cast.feedback(note, name, getRecording, sharePlay);
 		},
 		allowCastRecording: (allow: boolean) =>
 			client.current?.cast.recording(allow),

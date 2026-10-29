@@ -20,6 +20,18 @@ const port = new RuntimePort();
 const dispatch = (text: string) => port.call(text);
 let py: PythonRuntime;
 const castRequests = new Map<number, string>();
+
+// Both public exports run in one FIFO slot without an intervening town command.
+async function checkpointPair() {
+	return JSON.parse(
+		String(
+			await py.runPythonAsync(
+				"json.dumps({'save': town_engine.save(), 'recording': town_engine.save_journal()})",
+			),
+		),
+	) as { save: unknown; recording: unknown };
+}
+
 async function flushCastCaptures() {
 	for (const [requestId, id] of castRequests) {
 		const person = port.boundaries.get(id);
@@ -201,6 +213,12 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					});
 					break;
 				case "save":
+					send({
+						type: "save",
+						...(q.requestId === undefined ? {} : { requestId: q.requestId }),
+						...(await checkpointPair()),
+					});
+					break;
 				case "save-journal":
 					send({
 						type: "save",
@@ -208,9 +226,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						save: JSON.parse(
 							String(
 								await py.runPythonAsync(
-									q.type === "save-journal"
-										? "json.dumps(town_engine.save_journal())"
-										: "json.dumps(town_engine.save())",
+									"json.dumps(town_engine.save_journal())",
 								),
 							),
 						),
@@ -241,13 +257,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						type: "state",
 						view: port.runtime.view(),
 						...(q.intervention.kind.startsWith("player-")
-							? {
-									save: JSON.parse(
-										String(
-											await py.runPythonAsync("json.dumps(town_engine.save())"),
-										),
-									),
-								}
+							? await checkpointPair()
 							: {}),
 					});
 					break;

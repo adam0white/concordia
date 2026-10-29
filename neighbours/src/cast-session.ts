@@ -7,13 +7,16 @@ import {
 	type PersonaEnvelope,
 	personaChannel,
 } from "@adam0white/lab-client";
+import {
+	checkpointChapter as chapter,
+	checkpointSources,
+} from "./checkpoint-source.ts";
 import { ALLOCATION, CAST_RULES } from "./core/canonical-cast.ts";
 import {
 	admitTownPerson,
 	prepareIncomingTownDurably,
 } from "./core/cast-continuity.ts";
 import { HF_VERSION } from "./core/hf-version.ts";
-import { canonicalHash } from "./core/hf4-canonical.ts";
 import { restoreRuntime } from "./core/restore.ts";
 import type { JournalTownArchive, NativeTownArchive } from "./core/runtime.ts";
 import { createRuntime } from "./core/scenario.ts";
@@ -47,15 +50,6 @@ export async function sendFeedbackWithoutRun(
 	});
 	return true;
 }
-const chapter = (packet: TownPacket) =>
-	canonicalHash({
-		seed: packet.runtime.physical.seed,
-		hf: packet.runtime.hf,
-		initial:
-			packet.runtime.format === "neighbours-journal"
-				? packet.runtime.owner.journal.opening.initial
-				: packet.runtime.owner.run.initial,
-	});
 export class CastSession {
 	generation = 0;
 	heads: PersonaEnvelope[] = [];
@@ -190,20 +184,9 @@ export class CastSession {
 				"Unsupported town checkpoint. Keep the historical file and start a fresh HF4 town.",
 			);
 		restoreRuntime(packet.runtime);
-		if (packet.castLocal?.heads.length)
-			throw Error(
-				"Current shared per-actor custody cannot be resumed by this published Neighbours contract. Keep the source file.",
-			);
-		if (packet.castLocal && packet.castLocal.chapter !== chapter(packet))
-			throw Error("Native town identity differs from its local receipt.");
+		const sources = checkpointSources(packet);
 		if (!this.active || generation !== this.generation)
 			throw Error("Run changed during validation.");
-		const sources = structuredClone(packet.castLocal?.sources ?? {});
-		if (!sources || typeof sources !== "object" || Array.isArray(sources))
-			throw Error("Invalid archived source journal");
-		for (const [digest, body] of Object.entries(sources))
-			if (!/^[a-f0-9]{64}$/.test(digest) || canonicalHash(body) !== digest)
-				throw Error("Archived source journal digest differs");
 		this.staged = {
 			file: this.foreign || !local || packet.castLocal?.file === true,
 			localOnly: true,
