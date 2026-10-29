@@ -1,3 +1,5 @@
+import type { TownPacket } from "./cast-session.ts";
+import { checkpointSources } from "./checkpoint-source.ts";
 import type { Intervention, TownRuntime } from "./contracts.ts";
 import type { OwnerArchive } from "./core/hf4-owner.ts";
 import type { NativeActor } from "./core/host-types.ts";
@@ -51,6 +53,9 @@ export class RuntimePort {
 				return (this.runtime as Runtime).exportJournal();
 			case "save":
 				return this.runtime.export();
+			case "validate-checkpoint-source":
+				checkpointSources(request.packet as TownPacket);
+				return true;
 			case "restore":
 				this.runtime = restoreRuntime(request.save);
 				return null;

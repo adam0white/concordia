@@ -486,10 +486,12 @@ export type UiReply =
 			advance?: AdvanceResult;
 			/** A player input's checkpoint, taken in the same FIFO slot; the UI stores it before showing the view. */
 			save?: unknown;
+			/** Complete journal taken in the same worker queue slot as save. */
+			recording?: unknown;
 	  }
 	| { type: "progress"; message: string; advance?: AdvanceProgress }
 	| { type: "cast-snapshot"; requestId: number; save: unknown }
-	| { type: "save"; save: unknown; requestId?: number }
+	| { type: "save"; save: unknown; recording?: unknown; requestId?: number }
 	| { type: "inspection"; actorId: string; data: unknown }
 	| {
 			type: "speech-predictions";
