@@ -5,7 +5,7 @@ import type {
 	Input,
 	ObservedOutcome,
 } from "@adam0white/human-framework";
-import { replay } from "@adam0white/human-framework";
+import { readRunHistory, replay } from "@adam0white/human-framework";
 import { expect, it } from "vitest";
 import {
 	HOST_SOURCE,
@@ -134,9 +134,8 @@ it("withholds every botched work benefit and resolves a real native protest as f
 						: "other",
 				),
 		).toEqual(["failed"]);
-		const failed = owner
-			.export()
-			.run.history.flatMap((transaction) => transaction.inputs)
+		const failed = readRunHistory(owner.export().run)
+			.flatMap((transaction) => transaction.inputs)
 			.filter(
 				(input) =>
 					input.kind === "action.resolved" && input.payload.stage === "finish",

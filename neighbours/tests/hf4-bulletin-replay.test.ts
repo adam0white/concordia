@@ -1,3 +1,4 @@
+import { readRunHistory } from "@adam0white/human-framework";
 import { expect, it } from "vitest";
 import { required } from "../src/core/invariants.ts";
 import { createRuntime, restoreRuntime } from "./current-town.ts";
@@ -36,9 +37,8 @@ it("cold restores a genuine default-town pending bulletin with complete wire rep
 	expect(
 		live.actor("ada").received?.filter((item) => item.id === event.id),
 	).toHaveLength(1);
-	const deliveries = live.s.owner
-		.export()
-		.run.history.flatMap((transaction) => transaction.inputs)
+	const deliveries = readRunHistory(live.s.owner.export().run)
+		.flatMap((transaction) => transaction.inputs)
 		.filter(
 			(input) =>
 				input.kind === "observation.received" &&

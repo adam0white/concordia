@@ -1,3 +1,4 @@
+import { readRunHistory } from "@adam0white/human-framework";
 /** Host-authored lifecycle receipt, not a natural-death experiment. One actual
  * public Run supplies event-time bodies and observation attention. */
 import { expect, it } from "vitest";
@@ -78,17 +79,15 @@ it("delivers one native death observation only to actual awake boundary witnesse
 			).toHaveLength(1);
 		}
 	expect(
-		town.s.owner
-			.export()
-			.run.history.flatMap((transaction) => transaction.inputs)
+		readRunHistory(town.s.owner.export().run)
+			.flatMap((transaction) => transaction.inputs)
 			.filter((input) => input.kind === "death.heard"),
 	).toEqual([]);
 	town.step();
 	cold.step();
 	expect(cold.export()).toEqual(town.export());
-	const deathInputs = town.s.owner
-		.export()
-		.run.history.flatMap((transaction) => transaction.inputs)
+	const deathInputs = readRunHistory(town.s.owner.export().run)
+		.flatMap((transaction) => transaction.inputs)
 		.filter(
 			(input) =>
 				input.kind === "observation.received" &&

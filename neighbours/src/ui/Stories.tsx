@@ -55,7 +55,7 @@ export function projectEveningReading(
 		fields.some((field) => !Object.hasOwn(native, field)) ||
 		native.format !== "neighbours-native" ||
 		native.schema !== "neighbours-hf4/1" ||
-		native.hf !== "4.8.1"
+		native.hf !== "4.9.0"
 	)
 		return undefined;
 	const s = native.physical as HostSnapshot | undefined;

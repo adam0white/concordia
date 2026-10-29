@@ -33,7 +33,7 @@ it("an explicitly authored local town remains available when unrelated incoming 
 		const packet = await session.fresh(71, 6, true);
 		expect(packet.runtime.physical.seed).toBe(71);
 		expect(packet.runtime.physical.people).toHaveLength(6);
-		expect(packet.runtime.hf).toBe("4.8.1");
+		expect(packet.runtime.hf).toBe("4.9.0");
 		expect(session.localOnly).toBe(true);
 		expect(receiving.persist).not.toHaveBeenCalled();
 		expect(receiving.claim).not.toHaveBeenCalled();

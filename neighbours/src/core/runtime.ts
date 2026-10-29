@@ -120,7 +120,7 @@ export type PhysicalSave = Omit<Save, "owner" | "people"> & {
 export type NativeTownArchive = {
 	format: "neighbours-native";
 	schema: typeof SCHEMA;
-	hf: "4.8.1";
+	hf: "4.9.0";
 	physical: PhysicalSave;
 	owner: OwnerArchive;
 	boundary: {
@@ -1535,7 +1535,7 @@ export class Runtime implements TownRuntime {
 		return structuredClone({
 			format: "neighbours-native",
 			schema: SCHEMA,
-			hf: "4.8.1",
+			hf: "4.9.0",
 			physical: this.physicalState(),
 			owner: this.s.owner.export(),
 			boundary: {

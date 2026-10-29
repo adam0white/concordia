@@ -1,4 +1,4 @@
-/** Scope: current receiving preparation. Published client0.5.7 has no Neighbours
+/** Scope: current receiving preparation. Published client0.5.8 has no Neighbours
  * target roles. A valid source passport is preserved and refused before any write.
  * Historical calendar/person mutation adapters are archived with their HF3 science.
  */
