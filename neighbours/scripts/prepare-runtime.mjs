@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const FRAMEWORK_VERSION = "4.8.1";
+const FRAMEWORK_VERSION = "4.9.0";
 
 const app = resolve(import.meta.dirname, "..");
 const root = resolve(app, "..");

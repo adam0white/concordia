@@ -11,6 +11,6 @@ export function passContinuationWitness(): never {
 }
 export function admitPassRafi(): never {
 	throw Error(
-		"Published client0.5.7 has no Neighbours receiving role. Continue or export the source chapter.",
+		"Published client0.5.8 has no Neighbours receiving role. Continue or export the source chapter.",
 	);
 }
