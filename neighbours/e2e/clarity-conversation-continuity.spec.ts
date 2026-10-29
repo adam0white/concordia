@@ -1,4 +1,10 @@
-import { expect, reachSelectedConversation, step, test } from "./clock-fixture";
+import {
+	expect,
+	nextRoundAt,
+	reachSelectedConversation,
+	step,
+	test,
+} from "./clock-fixture";
 import { enterLocalTown } from "./local-fixture";
 
 test.use({
@@ -33,5 +39,5 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 		await page.evaluate(
 			() => (window as unknown as { townNow: number }).townNow,
 		),
-	).toBe(held + 15);
+	).toBe(nextRoundAt(held));
 });

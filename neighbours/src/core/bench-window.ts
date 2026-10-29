@@ -1,3 +1,4 @@
+import { nativeMilliseconds } from "./hf4-run.ts";
 /** A discussion premise only. Actual access still requires Ada's received agreement. */
 export type BenchSlot = "soon" | "tomorrow" | "brief";
 export function validateBenchProposal(value: unknown): BenchSlot {
@@ -18,7 +19,7 @@ export function benchWindow(
 	now: number,
 	slot: BenchSlot,
 ): { from: number; until: number } {
-	if (!Number.isSafeInteger(now) || now < 0)
+	if (now < 0 || !Number.isSafeInteger(nativeMilliseconds(now)))
 		throw Error("Invalid bench proposal clock");
 	const day = Math.floor(now / 1440);
 	const duration = slot === "brief" ? 30 : 240;

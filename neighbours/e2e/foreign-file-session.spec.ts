@@ -23,7 +23,7 @@ test("foreign file preserves occupied native slots through full export and reimp
 			"Bind NEIGHBOURS_FOREIGN_FIXTURE to the complete retained packet",
 		);
 	const original = JSON.parse(await readFile(file, "utf8"));
-	expect(original.runtime.people).toHaveLength(206);
+	expect(original.runtime.physical.people).toHaveLength(206);
 	const profile = info.outputPath("source-test-profile");
 	const baseURL = info.project.use.baseURL;
 	if (

@@ -167,6 +167,18 @@ class ReplayModel(language_model.LanguageModel):
 def checkpoint_context(checkpoint):
   """Project saved host facts; retained rule counts do not certify expertise."""
   runtime = checkpoint.get('runtime', {})
+  if runtime.get('format') == 'neighbours-native':
+    physical = runtime['physical']
+    native_people = runtime['owner']['run']['current']['people']
+    residents = []
+    for resident in physical['people']:
+      person = native_people.get(resident['id'])
+      if person is None or person.get('id') != resident['id']:
+        raise ValueError('Host resident has no matching native person')
+      residents.append({**resident, 'person': person})
+    # Only the bounded context below leaves the complete current checkpoint.
+    # The source packet and native person state remain unchanged.
+    runtime = {**physical, 'people': residents}
   now = runtime.get('now')
   hall = next((p for p in runtime.get('places', []) if p.get('id') == 'hall'), {})
   residents = []
@@ -272,7 +284,11 @@ def run_director(model, checkpoint):
 
 
 def runtime_sources(root):
-  """Bind replay to actual Python upstream/custom and current physical host code."""
+  """Bind current component replay to actual upstream, host and engineering paths.
+
+  This does not certify a historical HF3 capture or a natural current town case.
+  The historical report bodies retain their original, incompatible fingerprint.
+  """
   paths = set()
   for folder in ('concordia/agents', 'concordia/components/agent',
                  'concordia/components/game_master', 'concordia/document',
@@ -283,7 +299,12 @@ def runtime_sources(root):
   paths.update((root / 'neighbours/src/core').glob('*.ts'))
   paths.update(root / p for p in ('neighbours/src/contracts.ts', 'neighbours/src/bridge-port.ts',
                                  'neighbours/src/experiments/inspection.ts',
-                                 'neighbours/scripts/run-gm-director.py', 'neighbours/scripts/capture-weekly.ts',
+                                 'neighbours/scripts/run-gm-director.py',
+                                 'neighbours/scripts/bridge.ts', 'neighbours/scripts/run-town.py',
+                                 'neighbours/scripts/check-hf4-continuation.ts',
+                                 'neighbours/scripts/check-parity.mjs', 'neighbours/scripts/profile-town.ts',
+                                 'neighbours/src/python-session.ts', 'neighbours/src/advance-town.ts',
+                                 'neighbours/src/comparison.ts',
                                  'neighbours/native-gm-requirements.txt'))
   files = {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)}
   package = json.loads((root / 'neighbours/node_modules/@adam0white/human-framework/package.json').read_text())

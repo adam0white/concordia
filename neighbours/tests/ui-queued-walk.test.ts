@@ -2,14 +2,10 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import QueuedWalkNotice from "../src/ui/QueuedWalkNotice";
-import {
-	createRuntime,
-	restoreRuntime,
-	stateHash,
-} from "./historical-runtime.ts";
+import { createRuntime, restoreRuntime, stateHash } from "./current-town.ts";
 
 it("acknowledges only an accepted paused walk without advancing time", () => {
-	const runtime = createRuntime(42, 8);
+	const runtime = createRuntime(42, 6);
 	const render = (playing = false, advancing = false) =>
 		renderToStaticMarkup(
 			createElement(QueuedWalkNotice, {
@@ -27,12 +23,12 @@ it("acknowledges only an accepted paused walk without advancing time", () => {
 	expect(render(false, true)).toBe("");
 	runtime.step();
 	expect(render()).toContain("You keep walking automatically");
-	for (let i = 0; i < 12; i++) runtime.step();
+	for (let i = 0; i < 12 && runtime.view().player?.job; i++) runtime.step();
 	expect(render()).toBe("");
 });
 
 it("acknowledges accepted stopped work and clears on resumed playback", () => {
-	const town = createRuntime(42, 8).view();
+	const town = createRuntime(42, 6).view();
 	if (!town.player) throw Error("Missing player");
 	town.player.job = {
 		kind: "work",
@@ -54,7 +50,7 @@ it("acknowledges accepted stopped work and clears on resumed playback", () => {
 });
 
 it("restores stopped travel from accepted state without changing exact continuation", () => {
-	const runtime = createRuntime(42, 8);
+	const runtime = createRuntime(42, 6);
 	runtime.intervene({ kind: "player-move", placeId: "hall" });
 	const restored = restoreRuntime(runtime.export());
 	const before = stateHash(restored.export());
@@ -68,7 +64,7 @@ it("restores stopped travel from accepted state without changing exact continuat
 		),
 	).toContain("You start walking automatically");
 	expect(stateHash(restored.export())).toBe(before);
-	for (let i = 0; i < 8; i++) {
+	for (let i = 0; i < 8 && runtime.view().player?.job; i++) {
 		runtime.step();
 		restored.step();
 	}
@@ -85,7 +81,7 @@ it("restores stopped travel from accepted state without changing exact continuat
 });
 
 it("shows an honest pending action before any accepted host job", () => {
-	const town = createRuntime(42, 8).view();
+	const town = createRuntime(42, 6).view();
 	const html = renderToStaticMarkup(
 		createElement(QueuedWalkNotice, {
 			town,

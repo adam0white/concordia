@@ -9,7 +9,7 @@ import { groupStories } from "../src/ui/observations";
 import PersonPanel from "../src/ui/PersonPanel";
 import PersonPromises from "../src/ui/PersonPromises";
 import StoryHeadline from "../src/ui/StoryHeadline";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 const event = (
 	id: number,
@@ -28,7 +28,7 @@ const event = (
 function storyTown(): TownView {
 	const town = createRuntime(42, 8).view();
 	town.events = [
-		event(1, 100, "completed", "musa"),
+		event(1, 100, "completed", "noor"),
 		event(2, 200, "hall-repaired", "ada"),
 	];
 	town.stories = [
@@ -163,10 +163,10 @@ it("keeps controller and numeric evidence in lab mode", () => {
 
 it("does not turn a received repair bulletin into a participant claim", () => {
 	const town = storyTown();
-	const receiver = town.people.find((person) => person.id === "musa");
+	const receiver = town.people.find((person) => person.id === "noor");
 	if (receiver)
 		receiver.observations = [
-			{ ...event(2, 200, "hall-repaired", "ada"), targetId: "musa" },
+			{ ...event(2, 200, "hall-repaired", "ada"), targetId: "noor" },
 		];
 	expect(groupStories(town, undefined)[0]?.actorIds).toEqual(["ada"]);
 });
@@ -182,7 +182,7 @@ it("keeps received lesson evidence folded and names actual sources without promi
 						id: "method-1",
 						label: "Inspect wet timber",
 						at: 200,
-						sourceIds: ["lea", "prior-trade-course"],
+						sourceIds: ["elin", "prior-trade-course"],
 						successes: 1,
 						failures: 0,
 					},
@@ -194,7 +194,7 @@ it("keeps received lesson evidence folded and names actual sources without promi
 	expect(html).toContain("Lessons received");
 	expect(html).toContain("Inspect wet timber");
 	expect(html).toContain("Received · Day 1 · 03:20");
-	expect(html).toContain("Sources: Lea, Prior trade course");
+	expect(html).toContain("Sources: Derya, Prior trade course");
 	expect(html).toContain("Recorded successes: 1 · failures: 0");
 	expect(html).toContain("do not prove that the person has mastered the skill");
 	expect(html).not.toContain("<details open");
@@ -219,7 +219,7 @@ it("uses only a unique matching recorded evening result for attendance", () => {
 		{
 			id: "class-1",
 			kind: "class",
-			organiserId: "lea",
+			organiserId: "elin",
 			title: "Class",
 			startsAt: 140,
 			endsAt: 180,
@@ -280,7 +280,7 @@ it("renders six recent stories and keeps dated older actors and sources in a clo
 	expect(html.slice(0, archive).match(/<article/g)).toHaveLength(6);
 	expect(html.slice(archive)).toContain("Older stories · 2");
 	expect(html.slice(archive)).toContain("Day 1 · 01:50");
-	expect(html.slice(archive)).toContain("Follow Ada");
+	expect(html.slice(archive)).toContain("Follow Nora");
 	expect(html).not.toContain('<details class="story-archive" open');
 });
 
@@ -335,8 +335,8 @@ it("keeps one person link per story and removes repeated actor and participant c
 			],
 		}),
 	);
-	expect(html.match(/Follow Ada/g)).toHaveLength(1);
-	expect(html.match(/Follow Noor/g)).toHaveLength(1);
+	expect(html.match(/Follow Nora/g)).toHaveLength(1);
+	expect(html.match(/Follow Ece/g)).toHaveLength(1);
 	expect(html).not.toContain("Recorded actor:");
 	expect(html).not.toContain("Recorded participants:");
 	expect(html).toContain("Recorded teaching");

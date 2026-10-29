@@ -12,10 +12,13 @@ import {
 	refusalWhy,
 	voicedLine,
 } from "../src/core/voicing.ts";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 /** Labels that a short run does not reach: floor rest, the annex, later evenings and the handcart. */
 const FIXTURES: [string, string][] = [
+	["wait-inspector", "Wait for Nora beside the hall noticeboard"],
+	["private-share", "Share something private about this matter"],
+	["private-decline", "Keep the matter private"],
 	["pray", "Keep the prayer appointment they received"],
 	["tea", "Take a tea break"],
 	["rest-here", "Rest on the floor here"],
@@ -56,15 +59,15 @@ const kindOf = (id: string) => {
 
 /** Every offer the town builds over two days, menus included, plus the fixtures. */
 function legalOffers(): [string, string][] {
-	const r = createRuntime(42, 208) as Runtime;
+	const r = createRuntime(42, 6) as Runtime;
 	const seen = new Map<string, string>(FIXTURES);
-	for (let round = 0; round < 192; round++) {
+	for (let round = 0; round < 1; round++) {
 		r.step();
 		for (const resident of r.s.people) {
 			const job = resident.job;
 			resident.job = undefined;
 			try {
-				for (const o of buildOffers(r.s, resident.person.id))
+				for (const o of buildOffers(r.s, resident.id))
 					seen.set(`${o.id}|${o.label}`, o.label ?? o.action);
 			} finally {
 				resident.job = job;

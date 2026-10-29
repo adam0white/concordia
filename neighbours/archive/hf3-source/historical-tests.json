@@ -1,0 +1,648 @@
+{
+  "scope": "Frozen HF3 test bodies. Current source uses actual public HF4 Run controls; these are historical inputs, not runnable current4 or regenerated science.",
+  "base": "refs/codex/gd-resume-neighbours-restore-title-frozen",
+  "files": [
+    {
+      "path": "tests/activity-reviews.test.ts",
+      "bytes": 4408,
+      "sha256": "0266fb5663f465a73479e22e59d23bb7212ea24c2ec325535c64384015774249",
+      "capturePath": "neighbours/tests/activity-reviews.test.ts.historical"
+    },
+    {
+      "path": "tests/advance-town.test.ts",
+      "bytes": 10151,
+      "sha256": "fd61986efc09de8705748ece885178e98d95970ba181f72ac02a4cbb6e4bf832",
+      "capturePath": "neighbours/tests/advance-town.test.ts.historical"
+    },
+    {
+      "path": "tests/assistance-probe.test.ts",
+      "bytes": 2646,
+      "sha256": "9a02be9f3a5c3648e5c54e71d479adc03e114319ec26f3aaf4713f9e3896c8d8",
+      "capturePath": "neighbours/tests/assistance-probe.test.ts.historical"
+    },
+    {
+      "path": "tests/assistance.test.ts",
+      "bytes": 13652,
+      "sha256": "72eda75bd1c59b4ba58f889cbd98e2b239b83c804fae83d239394c709f7558b0",
+      "capturePath": "neighbours/tests/assistance.test.ts.historical"
+    },
+    {
+      "path": "tests/bench-opportunity.test.ts",
+      "bytes": 9330,
+      "sha256": "dc76576a1d669de645b1cdf74e71db5ee631160379c288dc24f3425e3c5561e6",
+      "capturePath": "neighbours/tests/bench-opportunity.test.ts.historical"
+    },
+    {
+      "path": "tests/bench-study-report.test.ts",
+      "bytes": 6141,
+      "sha256": "20d71e8c2f85a3cf53205d195abc5e9de41965fc2ada01ee3aff17e35ae571ac",
+      "capturePath": "neighbours/tests/bench-study-report.test.ts.historical"
+    },
+    {
+      "path": "tests/bench-window.test.ts",
+      "bytes": 1553,
+      "sha256": "f83a7a5d1fa84d5ed9b13a9f5d7f392aff627994a48a2259e9c3df335495d2bd",
+      "capturePath": "neighbours/tests/bench-window.test.ts.historical"
+    },
+    {
+      "path": "tests/bridge-port.test.ts",
+      "bytes": 1086,
+      "sha256": "3ad5a22a8fe885446443a2cd71bab573754ac5818ea4c684b1243a5e1fef9bc5",
+      "capturePath": "neighbours/tests/bridge-port.test.ts.historical"
+    },
+    {
+      "path": "tests/canonical-cast.test.ts",
+      "bytes": 10211,
+      "sha256": "0e86a502e94ef458145d4d5d3ffc4c3a804b1e171282d1559504bec471475dec",
+      "capturePath": "neighbours/tests/canonical-cast.test.ts.historical"
+    },
+    {
+      "path": "tests/capacity-study.test.ts",
+      "bytes": 1795,
+      "sha256": "17e4eea07f5105219aff5ffc374cc376bdb84839c1f842ca301b56c213cb8035",
+      "capturePath": "neighbours/tests/capacity-study.test.ts.historical"
+    },
+    {
+      "path": "tests/cast-boundary.test.ts",
+      "bytes": 6175,
+      "sha256": "8d98c9eb9c456df336f8730d4c1d9cbeb7ec98e9901fca856740a75c0590c5f9",
+      "capturePath": "neighbours/tests/cast-boundary.test.ts.historical"
+    },
+    {
+      "path": "tests/cast-client.test.ts",
+      "bytes": 3776,
+      "sha256": "b873c6fb894192d9dc683f8255787d2386268871ef83fc9fe1b23ff378ec189c",
+      "capturePath": "neighbours/tests/cast-client.test.ts.historical"
+    },
+    {
+      "path": "tests/cast-recording.test.ts",
+      "bytes": 21712,
+      "sha256": "42fed59473813ea8023d7285f2bf8891ddfeb3e81b54197590703809a44aeedb",
+      "capturePath": "neighbours/tests/cast-recording.test.ts.historical"
+    },
+    {
+      "path": "tests/cast.test.ts",
+      "bytes": 10247,
+      "sha256": "a92a7d902c2e4c7264b5e6c1a5d311a0ba350204a56e99c67c9b5e617da5265b",
+      "capturePath": "neighbours/tests/cast.test.ts.historical"
+    },
+    {
+      "path": "tests/comparison-boundary.test.ts",
+      "bytes": 3141,
+      "sha256": "84a8a7be9643fb6215625f9d151b227fe381382da073486269ef37a55c4bae07",
+      "capturePath": "neighbours/tests/comparison-boundary.test.ts.historical"
+    },
+    {
+      "path": "tests/core-bulletin.test.ts",
+      "bytes": 1556,
+      "sha256": "d5454a7a9ad267ec818bb83b1b24d716d806d246d8a1a6fc3e5ed9026b96ef29",
+      "capturePath": "neighbours/tests/core-bulletin.test.ts.historical"
+    },
+    {
+      "path": "tests/core-controls.test.ts",
+      "bytes": 4376,
+      "sha256": "8867865bfc024e5f3c4113b44fd603cedffc318d570ebd33d00cb9bac0147380",
+      "capturePath": "neighbours/tests/core-controls.test.ts.historical"
+    },
+    {
+      "path": "tests/core-lifecycle.test.ts",
+      "bytes": 7212,
+      "sha256": "708a01944c46cb5748e97c1998eb1d31af21a41b6a01c5d0d96bf68ad227c97f",
+      "capturePath": "neighbours/tests/core-lifecycle.test.ts.historical"
+    },
+    {
+      "path": "tests/core-review.test.ts",
+      "bytes": 12058,
+      "sha256": "e87beef9b7a5cac68aa0ea2fa2a6008defaa5714540a167bc7a719b750ab3bbb",
+      "capturePath": "neighbours/tests/core-review.test.ts.historical"
+    },
+    {
+      "path": "tests/core-social.test.ts",
+      "bytes": 4357,
+      "sha256": "d97b83727128b94bbf72286c76900cb477e6ee36e3b71e6e510c954e5d9b28ea",
+      "capturePath": "neighbours/tests/core-social.test.ts.historical"
+    },
+    {
+      "path": "tests/core-work-outcomes.test.ts",
+      "bytes": 5849,
+      "sha256": "e947cc9e4633cc187cb70b668bd90bbda515e31e4472badf6bd70b3b983b2c0e",
+      "capturePath": "neighbours/tests/core-work-outcomes.test.ts.historical"
+    },
+    {
+      "path": "tests/core.test.ts",
+      "bytes": 5495,
+      "sha256": "a99a393b1f99feadecdc6cd3ddecdabfe74cb27da539d24d603c2d72d7f7593c",
+      "capturePath": "neighbours/tests/core.test.ts.historical"
+    },
+    {
+      "path": "tests/diagnostics.test.ts",
+      "bytes": 1077,
+      "sha256": "efb80119f4a1cabae8362afce9b93a79382d054f540dc3a7dec062506dd5108c",
+      "capturePath": "neighbours/tests/diagnostics.test.ts.historical"
+    },
+    {
+      "path": "tests/direct-help.test.ts",
+      "bytes": 4282,
+      "sha256": "6cfd141a7b194dce27b6af86f7e897bf779fcc6dcb252f5b2604d19b2e3779a0",
+      "capturePath": "neighbours/tests/direct-help.test.ts.historical"
+    },
+    {
+      "path": "tests/durable-replies.test.ts",
+      "bytes": 4571,
+      "sha256": "a6152c3f1ed00ac581affd8d3595c299a2486bad97fb891c74dc68f9470512a8",
+      "capturePath": "neighbours/tests/durable-replies.test.ts.historical"
+    },
+    {
+      "path": "tests/entry.test.ts",
+      "bytes": 1080,
+      "sha256": "17920802a6145806a961b0a5de8a6af4b7878ebbe6991535bb21ec91cea256c9",
+      "capturePath": "neighbours/tests/entry.test.ts.historical"
+    },
+    {
+      "path": "tests/evening-news.test.ts",
+      "bytes": 4277,
+      "sha256": "7d2b63623db892b64d093f2e3c52cb0c55794f98204423355655a5ea9234e0db",
+      "capturePath": "neighbours/tests/evening-news.test.ts.historical"
+    },
+    {
+      "path": "tests/evening-reading.test.ts",
+      "bytes": 6563,
+      "sha256": "efa8660192e64a7ecc902cbb64514a389fc9f8c7922b4f92774368a5b2f906d6",
+      "capturePath": "neighbours/tests/evening-reading.test.ts.historical"
+    },
+    {
+      "path": "tests/evenings-physical.test.ts",
+      "bytes": 8042,
+      "sha256": "061da5928133d43b285f9bbf2874f2ae2280d1df07d46fbc1455972b22ac3585",
+      "capturePath": "neighbours/tests/evenings-physical.test.ts.historical"
+    },
+    {
+      "path": "tests/evenings.test.ts",
+      "bytes": 6508,
+      "sha256": "18f7a486b02dd33f40781e422251556f17fae50d7b7c5642b3c314920fe847bb",
+      "capturePath": "neighbours/tests/evenings.test.ts.historical"
+    },
+    {
+      "path": "tests/experiments.test.ts",
+      "bytes": 3984,
+      "sha256": "f6375f1866fdc07a8ee5cccb42ff3c776c225f05dea2a04abd05b359359b599b",
+      "capturePath": "neighbours/tests/experiments.test.ts.historical"
+    },
+    {
+      "path": "tests/fixtures/hearsay-hf221-native.json.gz",
+      "bytes": 129635,
+      "sha256": "1173b1a0b958a984ab407506e51006796a91c1cd21b6f74ef637bd4d21d05d63",
+      "capturePath": "neighbours/tests/fixtures/hearsay-hf221-native.json.gz"
+    },
+    {
+      "path": "tests/fixtures/hearsay-hf221-native.provenance.json",
+      "bytes": 488,
+      "sha256": "776c1c00ec2e42386c2b7416bddb0889641d9e0284d0e4b9ed9d33d9c4b59666",
+      "capturePath": "neighbours/tests/fixtures/hearsay-hf221-native.provenance.json"
+    },
+    {
+      "path": "tests/fixtures/hf-2.6.0-played.json",
+      "bytes": 722354,
+      "sha256": "d805d33ba5b29e8bf6fad93313154fc55817621a6ec0c81b64706096172635b6",
+      "capturePath": "neighbours/tests/fixtures/hf-2.6.0-played.json"
+    },
+    {
+      "path": "tests/fixtures/murmur-hf221-native.json",
+      "bytes": 150989,
+      "sha256": "0e3cee63023d22f20cd154c5940a84c970fea090684ce2db8c62f737baa9c5b3",
+      "capturePath": "neighbours/tests/fixtures/murmur-hf221-native.json"
+    },
+    {
+      "path": "tests/fixtures/neighbours-hf221-before-v3.json.gz",
+      "bytes": 13470,
+      "sha256": "b80575df8c8f00785932f662c67b1e5895402fa1e8f3bf2767bde54a4737266e",
+      "capturePath": "neighbours/tests/fixtures/neighbours-hf221-before-v3.json.gz"
+    },
+    {
+      "path": "tests/fixtures/numbered-neighbour.json",
+      "bytes": 118023,
+      "sha256": "88233cf0eb8faa829fa96f805e01703053d548936a4586bf21552d2407d0701d",
+      "capturePath": "neighbours/tests/fixtures/numbered-neighbour.json"
+    },
+    {
+      "path": "tests/fixtures/pass-rafi-453be903.json",
+      "bytes": 203200,
+      "sha256": "bab614c5f616ba028d5851c38f7ef7c257cca7fea222e0f62f682e4769a029c8",
+      "capturePath": "neighbours/tests/fixtures/pass-rafi-453be903.json"
+    },
+    {
+      "path": "tests/fixtures/repair-hf221-native.json",
+      "bytes": 34508,
+      "sha256": "cc520f1484f00a84b37e8141a445b907e186cd778c51a90ef0e49c265e9275e1",
+      "capturePath": "neighbours/tests/fixtures/repair-hf221-native.json"
+    },
+    {
+      "path": "tests/hall-care.test.ts",
+      "bytes": 6266,
+      "sha256": "0592b8d9c48174d4cbf2af7ec34073eb128866e33cf7076f5d1da77569188935",
+      "capturePath": "neighbours/tests/hall-care.test.ts.historical"
+    },
+    {
+      "path": "tests/hall-choice.test.ts",
+      "bytes": 2785,
+      "sha256": "41c95957528d9551ef0f2bcedd958e621558bbbf1546221baf60f21a8f0352ed",
+      "capturePath": "neighbours/tests/hall-choice.test.ts.historical"
+    },
+    {
+      "path": "tests/handcart-runtime.test.ts",
+      "bytes": 4582,
+      "sha256": "e3812f37645ce5dde53a77d2014f2d0fc69ab05568104f6ef6950fc8a2708798",
+      "capturePath": "neighbours/tests/handcart-runtime.test.ts.historical"
+    },
+    {
+      "path": "tests/handcart.test.ts",
+      "bytes": 13129,
+      "sha256": "db087a545eb3f504bda1f86c903875d5f3836318d972030dbdc6ac0976055c9d",
+      "capturePath": "neighbours/tests/handcart.test.ts.historical"
+    },
+    {
+      "path": "tests/hf-upgrade.test.ts",
+      "bytes": 7595,
+      "sha256": "4e0ee68fee9723cb9dce4556ce8bb9a4fa07c653ef447040ef27d1bed75680c3",
+      "capturePath": "neighbours/tests/hf-upgrade.test.ts.historical"
+    },
+    {
+      "path": "tests/historical-runtime.ts",
+      "bytes": 6437,
+      "sha256": "3e1e5b0c4ccae7b62aa964f0d013fa551a7e43f672f33cacb3dda6a54e383f92",
+      "capturePath": "neighbours/tests/historical-runtime.ts.historical"
+    },
+    {
+      "path": "tests/import-boundary.test.ts",
+      "bytes": 2053,
+      "sha256": "e714c6f7f59be152cf8c0f7aab3b676c4ba32402fda2c671e378a859aa854cd1",
+      "capturePath": "neighbours/tests/import-boundary.test.ts.historical"
+    },
+    {
+      "path": "tests/legacy-2.6.0.test.ts",
+      "bytes": 2229,
+      "sha256": "28860d73b9a08dd3d445b89f9ce735a1fa57502fbd8d0843dded1e4b6fb9d142",
+      "capturePath": "neighbours/tests/legacy-2.6.0.test.ts.historical"
+    },
+    {
+      "path": "tests/llm-inspection.test.ts",
+      "bytes": 1949,
+      "sha256": "d52fd2cf8d7ef2cb2ceb15ce1ad72334c98d90a8dc8f15517c3e6b3088c53edf",
+      "capturePath": "neighbours/tests/llm-inspection.test.ts.historical"
+    },
+    {
+      "path": "tests/local-trace.test.ts",
+      "bytes": 1883,
+      "sha256": "fdfea82d092aa16db3bd48aa2a3e7e2ab7eb53382b9896413076c55f6548820d",
+      "capturePath": "neighbours/tests/local-trace.test.ts.historical"
+    },
+    {
+      "path": "tests/mixed-adapter.test.ts",
+      "bytes": 2061,
+      "sha256": "53fae5fd851a47ea3bde3a478ad245ebf8ccb2787a709cc907124df8b4742853",
+      "capturePath": "neighbours/tests/mixed-adapter.test.ts.historical"
+    },
+    {
+      "path": "tests/neighbour-identities.test.ts",
+      "bytes": 3752,
+      "sha256": "3d12e5079706649ca1f8ac3df12cf2ff070d9d7561ce48ede13b6f6d64642b68",
+      "capturePath": "neighbours/tests/neighbour-identities.test.ts.historical"
+    },
+    {
+      "path": "tests/offer-restore.test.ts",
+      "bytes": 2483,
+      "sha256": "ca9b7976f663e95d7919d3b020717b0f484fa1837268eccdb7fc72d5b53b8305",
+      "capturePath": "neighbours/tests/offer-restore.test.ts.historical"
+    },
+    {
+      "path": "tests/outcomes.test.ts",
+      "bytes": 2599,
+      "sha256": "0e5502a96dd92ec4bc0be9c492c8dec4cf487bcd035a46921e3cb13372ace73c",
+      "capturePath": "neighbours/tests/outcomes.test.ts.historical"
+    },
+    {
+      "path": "tests/pass-rafi.test.ts",
+      "bytes": 13068,
+      "sha256": "5c83082a7b1639714af3076332ee4b880eaaaef354b370243c7cd11e3d1830b7",
+      "capturePath": "neighbours/tests/pass-rafi.test.ts.historical"
+    },
+    {
+      "path": "tests/person-learning.test.ts",
+      "bytes": 3497,
+      "sha256": "3019fd7f5cf07da4ca9d321f8ffecab361c3eccb9742759ec59506e8bd768dc3",
+      "capturePath": "neighbours/tests/person-learning.test.ts.historical"
+    },
+    {
+      "path": "tests/person-outcome.test.ts",
+      "bytes": 3721,
+      "sha256": "88d11fd950eb53c5f5f73ca96436ac8a137ec07c00b2f3ae7e8fd6478dd69021",
+      "capturePath": "neighbours/tests/person-outcome.test.ts.historical"
+    },
+    {
+      "path": "tests/phase-c-reads.test.ts",
+      "bytes": 4400,
+      "sha256": "cfd26f1f05be78e7bb012da28a715820862779484efe703ea33bd7b389f31445",
+      "capturePath": "neighbours/tests/phase-c-reads.test.ts.historical"
+    },
+    {
+      "path": "tests/player-pledges.test.ts",
+      "bytes": 9222,
+      "sha256": "931b063675379977c8fb7cf473ea60d2aa7ab7d34481cedd6fcd7b5f7ca40192",
+      "capturePath": "neighbours/tests/player-pledges.test.ts.historical"
+    },
+    {
+      "path": "tests/player.test.ts",
+      "bytes": 13579,
+      "sha256": "f90937806ccdfadd3ff3faf1608d617a14e2707a1dfe0a8c42921b09ac660373",
+      "capturePath": "neighbours/tests/player.test.ts.historical"
+    },
+    {
+      "path": "tests/prose-free.test.ts",
+      "bytes": 1452,
+      "sha256": "579120e55d24b299973327b69aa0fea8e5d385c7e829d97b446e92d9041147cd",
+      "capturePath": "neighbours/tests/prose-free.test.ts.historical"
+    },
+    {
+      "path": "tests/prose-free.ts",
+      "bytes": 1794,
+      "sha256": "7c44c0de664b52f5171d8b99b804a4959d09ffcd320c86065f743296e8e13e08",
+      "capturePath": "neighbours/tests/prose-free.ts.historical"
+    },
+    {
+      "path": "tests/protest.test.ts",
+      "bytes": 2921,
+      "sha256": "de8c5089a8ec0c76883bf35e621b2f207663b78bcdf0bb17bc511b7b89f3007c",
+      "capturePath": "neighbours/tests/protest.test.ts.historical"
+    },
+    {
+      "path": "tests/recurring-evenings.test.ts",
+      "bytes": 19371,
+      "sha256": "74174c0d67fea8e00bebedeffebc6c78c842a4d128ddc2093f0feb581ce32ef3",
+      "capturePath": "neighbours/tests/recurring-evenings.test.ts.historical"
+    },
+    {
+      "path": "tests/save-codec.test.ts",
+      "bytes": 2707,
+      "sha256": "bf0b2e25f7f629d4467f22f65c5c390159bd839a3c4ff1e41f956b0d4d6a1bee",
+      "capturePath": "neighbours/tests/save-codec.test.ts.historical"
+    },
+    {
+      "path": "tests/social-contact-restore.test.ts",
+      "bytes": 2517,
+      "sha256": "e7eb8727e3728d7bd384cdf38d543964556273e0772257b67876cc5a2e4f4323",
+      "capturePath": "neighbours/tests/social-contact-restore.test.ts.historical"
+    },
+    {
+      "path": "tests/story-headlines.test.ts",
+      "bytes": 1434,
+      "sha256": "73db69005fab9b16239b5dfe4e3abaa70270c0abaeff0d834b16d7dcb2f63b52",
+      "capturePath": "neighbours/tests/story-headlines.test.ts.historical"
+    },
+    {
+      "path": "tests/supply.test.ts",
+      "bytes": 1066,
+      "sha256": "15b4adb60577ef11b88fd96ef16fec6cdc3e2c73d55c0912f19efc6ff515de17",
+      "capturePath": "neighbours/tests/supply.test.ts.historical"
+    },
+    {
+      "path": "tests/timber.test.ts",
+      "bytes": 12352,
+      "sha256": "7ab2e0fcf50463e3ae4f87886fafc44d8a49cf930fef6c1ddc8be9d49365efed",
+      "capturePath": "neighbours/tests/timber.test.ts.historical"
+    },
+    {
+      "path": "tests/town-chronicle.test.ts",
+      "bytes": 7060,
+      "sha256": "15535271b95be9c603fbe3386decab25a40350381f5fdfc85e8baefcce2dbca5",
+      "capturePath": "neighbours/tests/town-chronicle.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-bench-study.test.ts",
+      "bytes": 1791,
+      "sha256": "41519d855e9cba6908fae0c6d5902ca8e67b1184cc1b9e3d51f04611add2c9e9",
+      "capturePath": "neighbours/tests/ui-bench-study.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-bench-window.test.ts",
+      "bytes": 1314,
+      "sha256": "d533444353e176dbacce815456a060a0a6b85d17bb7f343accec6283020f5dde",
+      "capturePath": "neighbours/tests/ui-bench-window.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-comparison-outcomes.test.ts",
+      "bytes": 2888,
+      "sha256": "09b806e8bf05519afa0b46c9b03bd2ee3beb3dc4e9295b0e922f5b866b439fee",
+      "capturePath": "neighbours/tests/ui-comparison-outcomes.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-comparison.test.ts",
+      "bytes": 6941,
+      "sha256": "aebed214b72162e9890dca62ad4964462c459b62e682d04b52d84ec9a4d50d96",
+      "capturePath": "neighbours/tests/ui-comparison.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-error-message.test.ts",
+      "bytes": 2652,
+      "sha256": "eb6e769813117227f9b94745efec5c42cb7795e11666f5e57c91bfa846c1d197",
+      "capturePath": "neighbours/tests/ui-error-message.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-evenings.test.ts",
+      "bytes": 3387,
+      "sha256": "f33fd692e04236d1148176d0c0e58d58d3fd39345c4dabe4913f2e8a566cb3fa",
+      "capturePath": "neighbours/tests/ui-evenings.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-evidence.test.ts",
+      "bytes": 1835,
+      "sha256": "acbc666f6cada2b7b70b876decf1602797dbeca9115fbef9ea69b40f33102c5a",
+      "capturePath": "neighbours/tests/ui-evidence.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-hall-choices.test.ts",
+      "bytes": 3063,
+      "sha256": "ec037457a55f79231703c0dff032d1dbce842771938ac64536d80bc8768165aa",
+      "capturePath": "neighbours/tests/ui-hall-choices.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-handcart.test.ts",
+      "bytes": 3574,
+      "sha256": "64eda92fe9e0ac451356b06955f6395de0b44b17d873d494d68fcbb1474131ea",
+      "capturePath": "neighbours/tests/ui-handcart.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-help-receipt.test.ts",
+      "bytes": 1608,
+      "sha256": "bba66d6ad3a889642d0a31e268c57e4c2b5aca7318f2736b598ed60e57204a78",
+      "capturePath": "neighbours/tests/ui-help-receipt.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-ink.test.ts",
+      "bytes": 1849,
+      "sha256": "3dfa74bbe20fd652d24b47b704950fe49400ed209612cfaf70bc34a116b48d5f",
+      "capturePath": "neighbours/tests/ui-ink.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-inspection-situation.test.ts",
+      "bytes": 2737,
+      "sha256": "7b806a4b12a7caade4db434081a32245e69d0f64924ab3ef50fced86484321b2",
+      "capturePath": "neighbours/tests/ui-inspection-situation.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-known-needs.test.ts",
+      "bytes": 2146,
+      "sha256": "fd33a42a95271c1065bc2a2e9547062486b3c842071345b14e9a62e4998a2978",
+      "capturePath": "neighbours/tests/ui-known-needs.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-map-markers.test.ts",
+      "bytes": 4187,
+      "sha256": "7fc22127d1dbd97470cfbd2df99f912e5846e585ce2f59e8e7120a0a6ee6b71c",
+      "capturePath": "neighbours/tests/ui-map-markers.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-observations.test.ts",
+      "bytes": 3057,
+      "sha256": "83d76c4a24d0415538c3fca9c0264f644c8fc1831a11651506107ca67b70280f",
+      "capturePath": "neighbours/tests/ui-observations.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-person-action.test.ts",
+      "bytes": 9746,
+      "sha256": "26fb709209c35d33ce6ef0bf772dd06920a1ebed059657532a54059f67a3dbbb",
+      "capturePath": "neighbours/tests/ui-person-action.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-person-history.test.ts",
+      "bytes": 4491,
+      "sha256": "d28004bfa72068dec3113c489e2f90ecc472df5ed3e8b471559a90ad476b0bd6",
+      "capturePath": "neighbours/tests/ui-person-history.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-person-status.test.ts",
+      "bytes": 845,
+      "sha256": "c88dcda5846295931683dfb1814632a98b092485d4128b2684e5f13106e5211c",
+      "capturePath": "neighbours/tests/ui-person-status.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-place-selection.test.ts",
+      "bytes": 3539,
+      "sha256": "c99b426c52125ab5a0a51adcf1577b81a587470e52542a07cfe48f25d008bfff",
+      "capturePath": "neighbours/tests/ui-place-selection.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-plain-audit.test.ts",
+      "bytes": 2867,
+      "sha256": "7e11b3a5d2a04489b89be488d28aa6023a20893b45fee1d0a7f2ac2972fc5bbb",
+      "capturePath": "neighbours/tests/ui-plain-audit.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-playback-rate.test.ts",
+      "bytes": 2201,
+      "sha256": "8675f83e4d878c78491401d0bbc35a30692e51546f20b66cd51d15762234f969",
+      "capturePath": "neighbours/tests/ui-playback-rate.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-queued-walk.test.ts",
+      "bytes": 3027,
+      "sha256": "6fd9c27538e5acd35c0e6f14e6d81b37ba478254af0deef9a84799adb72e290c",
+      "capturePath": "neighbours/tests/ui-queued-walk.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-received-routes.test.ts",
+      "bytes": 1601,
+      "sha256": "ab6c047fba1d1c804cc4c177b05e919e929c6db1c6887c5fb8c20c131ec53022",
+      "capturePath": "neighbours/tests/ui-received-routes.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-recorded-studies.test.ts",
+      "bytes": 4430,
+      "sha256": "d4a737ed715c64d08d86ee035286cb81db6755f589bb42772edc4f646a1fb12a",
+      "capturePath": "neighbours/tests/ui-recorded-studies.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-resident-help.test.ts",
+      "bytes": 2560,
+      "sha256": "af2b3435f4cd0ca424fbaf1e7d4dd3d2986103aa088ba9b70f73ee9f8e81a364",
+      "capturePath": "neighbours/tests/ui-resident-help.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-send-word.test.ts",
+      "bytes": 2270,
+      "sha256": "9f2a67dd6575800e679ee695a1237cd9d35c1fb650a8b27ed8f03c2aaaaef9fe",
+      "capturePath": "neighbours/tests/ui-send-word.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-simplify.test.ts",
+      "bytes": 10831,
+      "sha256": "1fe93e0afdcf5640a0041f19b4621e496516ed0e4172494abd23461944279193",
+      "capturePath": "neighbours/tests/ui-simplify.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-skip-pacing.test.ts",
+      "bytes": 3621,
+      "sha256": "f314df71c672c3e93b3e79981f58a22be600523cc730e2a164e19f0b7627c9af",
+      "capturePath": "neighbours/tests/ui-skip-pacing.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-story-promises.test.ts",
+      "bytes": 10707,
+      "sha256": "b2e52bc3dae5da724b7c39d472865d6d6946ef17fd46702215c3a39a6ae24e2e",
+      "capturePath": "neighbours/tests/ui-story-promises.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-story-watch.test.ts",
+      "bytes": 3656,
+      "sha256": "82978f866e7eccb819d46bbfd55bdf6c9ee9ccc5fb4eb3206a40e6adda293cd2",
+      "capturePath": "neighbours/tests/ui-story-watch.test.ts.historical"
+    },
+    {
+      "path": "tests/ui-town-map-glyphs.test.ts",
+      "bytes": 6731,
+      "sha256": "b50e09f9b0cd15f393ddad1e9f98626d457f62f045203cc3e3fa9bf14eb629dd",
+      "capturePath": "neighbours/tests/ui-town-map-glyphs.test.ts.historical"
+    },
+    {
+      "path": "tests/voicing.test.ts",
+      "bytes": 8691,
+      "sha256": "00667b0f2ba4650022cdd3ee45fa095b9570b70ef5d32e890d48ca9688bc4b06",
+      "capturePath": "neighbours/tests/voicing.test.ts.historical"
+    },
+    {
+      "path": "e2e/agency.spec.ts",
+      "capturePath": "neighbours/e2e/agency.spec.ts.historical",
+      "sha256": "0fc8a40e6e46debaa9a33fe55bad3528e3ab0aa1d9450f07bc6a4ea0916fe1de",
+      "bytes": 3518
+    },
+    {
+      "path": "e2e/bench.spec.ts",
+      "capturePath": "neighbours/e2e/bench.spec.ts.historical",
+      "sha256": "a5c71b524383cb57b9bfccf71dffbe69d37c9cee529ef207330c12eae473798a",
+      "bytes": 3704
+    },
+    {
+      "path": "e2e/gm-situation.spec.ts",
+      "capturePath": "neighbours/e2e/gm-situation.spec.ts.historical",
+      "sha256": "75c9526a39abed77738c0ed117427d90c928f5b6ef8929467ca90520ae5704bf",
+      "bytes": 3579
+    },
+    {
+      "path": "neighbours/scripts/check-evidence.mjs",
+      "capturePath": "neighbours/scripts/check-evidence.mjs.historical",
+      "bytes": 3541,
+      "sha256": "95e04a2bdac321690c7c1f3160906b01135473bcc147ee47f6b37b25f8aca1eb"
+    },
+    {
+      "path": ".github/workflows/neighbours.yml",
+      "capturePath": ".github/workflows/neighbours.yml.historical",
+      "bytes": 4770,
+      "sha256": "373e9e4ace431ec8e9987ebf2253831a3c51912b086f57d802e62339903bc438"
+    },
+    {
+      "path": "neighbours/e2e/studies.spec.ts",
+      "capturePath": "neighbours/e2e/studies.spec.ts.historical",
+      "bytes": 8576,
+      "sha256": "db41ae81bdf32c2a1d9caedb79c68d3e3c9a3df08f236de86236a21a4d5433a7"
+    }
+  ]
+}

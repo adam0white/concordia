@@ -1,3 +1,4 @@
+import type { DeepReadonly, HostRequest } from "@adam0white/human-framework";
 export type Policy = "hf" | "table" | "random" | "llm";
 export interface TownEvent {
 	id: number;
@@ -385,7 +386,12 @@ export interface Choice {
 	label: string;
 }
 export interface TownRuntime {
-	prepareRound(): string[];
+	prepareBoundary(): {
+		at: number;
+		done: boolean;
+		requests: DeepReadonly<HostRequest>[];
+	};
+	roundComplete(): boolean;
 	getObservation(id: string): string;
 	getChoices(id: string): Choice[];
 	choose(id: string, policy?: Policy): string;

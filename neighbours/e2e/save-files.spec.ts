@@ -11,7 +11,8 @@ import {
 } from "./session-helpers";
 
 type Packet = {
-	runtime: { now: number; people: unknown[] };
+	rounds: number;
+	runtime: { physical: { now: number; people: unknown[] } };
 	castLocal?: Record<string, unknown>;
 };
 async function exportFile(page: Page, info: TestInfo, name: string) {
@@ -65,14 +66,16 @@ test("actual browser gzip export preserves the complete town across import and d
 	page.on("pageerror", (error) => errors.push(error.message));
 	await startPaused(page);
 	const original = await exportFile(page, info, "complete-original");
-	expect(original.packet.runtime.people).toHaveLength(206);
+	expect(original.packet.runtime.physical.people).toHaveLength(206);
 	expect(original.compressed.byteLength).toBeLessThan(
 		original.json.byteLength / 2,
 	);
 	await closeSaves(page);
 	await step(page);
 	const advanced = await exportFile(page, info, "advanced");
-	expect(advanced.packet.runtime.now).toBe(original.packet.runtime.now + 15);
+	expect(advanced.packet.runtime.physical.now).toBe(
+		480 + 15 * (original.packet.rounds + 1),
+	);
 	await openSaves(page);
 	await openOtherWays(page);
 	await page.getByLabel("Import town save").setInputFiles({
@@ -104,12 +107,12 @@ test("actual browser gzip export preserves the complete town across import and d
 						.get("latest");
 					request.onsuccess = () => {
 						db.close();
-						resolve(request.result.runtime.now);
+						resolve(request.result.runtime.physical.now);
 					};
 				});
 			}),
 		)
-		.toBe(original.packet.runtime.now);
+		.toBe(original.packet.runtime.physical.now);
 	await page.reload();
 	await enterLocalTown(page);
 	await closeSaves(page);

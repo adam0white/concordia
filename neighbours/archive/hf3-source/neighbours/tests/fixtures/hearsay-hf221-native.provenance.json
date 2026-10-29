@@ -1,0 +1,11 @@
+{
+	"format": "gzip-compressed actual HF2.21 source fixture",
+	"sourceCommit": "834541aa168bc8fe5d3f3355265c3661e0afdd59",
+	"producer": "freshGarden(17);advanceGarden(run,20160);captureGardenSource(run,'ece')",
+	"jsonSha256": "3b4ee305120fe35862ca51d007ec48da70e6f69216661399a4a6a379256e3e87",
+	"gzipSha256": "1173b1a0b958a984ab407506e51006796a91c1cd21b6f74ef637bd4d21d05d63",
+	"jsonBytes": 1198962,
+	"gzipBytes": 129635,
+	"rawStateRewritten": false,
+	"transportEnvelopeSynthetic": true
+}

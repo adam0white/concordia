@@ -1,14 +1,15 @@
 /** Received observations and attended lessons for a bounded hall inspection.
  * This host rule is deliberately simple. It is not a building safety model.
  */
-import {
-	type Affordance,
-	clearMethodContext,
-	demonstrateMethod,
-	type MethodCue,
-	type Person,
-	receiveMethodCues,
-} from "@adam0white/human-framework";
+
+import type { Input } from "@adam0white/human-framework";
+import type { Affordance } from "../core/host-types.ts";
+import type { Resident } from "../core/state.ts";
+
+type MethodCue = Extract<
+	Input,
+	{ kind: "method.cues" }
+>["payload"]["cues"][number];
 
 export type InspectionAction = "open-section" | "keep-closed" | "ask-inspector";
 export interface InspectionCues {
@@ -50,55 +51,45 @@ function cues(input: InspectionCues): MethodCue[] {
 	];
 }
 export function observeHallInspection(
-	person: Person,
+	resident: Resident,
 	observation: InspectionObservation,
 ): boolean {
-	return receiveMethodCues(person, {
+	resident.owner.enqueue("method.cues", {
+		person: resident.id,
+		evidenceId: resident.owner.allocate("inspection-evidence"),
 		contextId: observation.contextId,
 		cues: cues(observation),
 	});
+	return true;
 }
-/** Does not invent an observation. HF rejects a lesson with no matching received cues. */
+/** The caller must supply attention from the actual Run observation receipt. */
 export function demonstrateHallInspection(
-	person: Person,
+	resident: Resident,
 	example: InspectionDemonstration,
 ): boolean {
-	return demonstrateMethod(person, {
-		id: "hall-section-inspection",
+	if (example.attention === undefined)
+		throw Error("A demonstration requires actual Run attention");
+	resident.owner.enqueue("method.demonstrated", {
+		person: resident.id,
+		evidenceId: `demo-evidence:${example.demonstrationId}`,
 		demonstrationId: example.demonstrationId,
+		methodId: "hall-section-inspection",
 		contextId: example.contextId,
 		conditions: cues(example),
 		action: example.action,
-		sourceId: example.sourceId,
+		teacher: example.sourceId,
 		outcome: example.outcome,
-		...(example.attention === undefined
-			? {}
-			: { attention: example.attention }),
+		receivedAttention: example.attention,
 	});
+	return true;
 }
-/** Call only for an attended lesson. Explain two cases, each demonstrated twice. */
+/** Physical witnesses receive an observation first; the Run's attention determines retained demonstration input. */
 export function teachHallInspection(
-	person: Person,
+	resident: Resident,
 	sourceId: string,
 	lessonId: string,
 ): void {
-	for (const [index, example] of INSPECTION_EXAMPLES.entries()) {
-		const contextId = `${lessonId}-example-${index}`;
-		observeHallInspection(person, {
-			...example,
-			contextId,
-			sectionId: `class-example-${index}`,
-		});
-		for (let repeat = 0; repeat < 2; repeat++)
-			demonstrateHallInspection(person, {
-				...example,
-				contextId,
-				sourceId,
-				demonstrationId: `${lessonId}-${index}-${repeat}`,
-				outcome: "success",
-			});
-	}
-	clearMethodContext(person);
+	resident.owner.lesson(resident.id, sourceId, lessonId);
 }
 /** Same offers in every arm; lower effort makes asking a deliberately authored fallback. */
 export function hallInspectionOffers(

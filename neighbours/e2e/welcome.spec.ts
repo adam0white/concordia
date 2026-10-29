@@ -12,8 +12,24 @@ test("title starts no runtime and keeps keyboard entry visible", async ({
 		)
 			requests.push(request.url());
 	});
-	await page.setViewportSize({ width: 360, height: 690 });
-	await page.goto("/");
+	for (const viewport of [
+		{ width: 360, height: 690 },
+		{ width: 1280, height: 800 },
+	]) {
+		await page.setViewportSize(viewport);
+		await page.goto("/");
+		const scene = await page.locator(".welcome-scene").boundingBox();
+		const premise = await page.locator(".welcome-premise").boundingBox();
+		expect(scene).not.toBeNull();
+		expect(premise).not.toBeNull();
+		if (!scene || !premise) throw Error("Missing title regions");
+		expect(scene.y + scene.height).toBeLessThanOrEqual(premise.y);
+		expect(
+			await page.evaluate(
+				() => document.documentElement.scrollWidth <= innerWidth,
+			),
+		).toBe(true);
+	}
 	await expect(
 		page.getByRole("heading", { name: "A town is rebuilding after a flood." }),
 	).toBeVisible();
@@ -65,7 +81,7 @@ test("a new seed is durably saved while paused before its first round", async ({
 			});
 			try {
 				return await new Promise<
-					{ runtime: { seed: number; round: number } } | undefined
+					{ runtime: { physical: { seed: number; round: number } } } | undefined
 				>((resolve, reject) => {
 					const r = database
 						.transaction("saves")
@@ -78,13 +94,15 @@ test("a new seed is durably saved while paused before its first round", async ({
 				database.close();
 			}
 		});
-	await expect.poll(async () => (await latest())?.runtime.seed).toBe(71);
-	expect((await latest())?.runtime.round).toBe(0);
+	await expect
+		.poll(async () => (await latest())?.runtime.physical.seed)
+		.toBe(71);
+	expect((await latest())?.runtime.physical.round).toBe(0);
 	await page.reload();
 	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
-	expect((await latest())?.runtime.seed).toBe(71);
-	expect((await latest())?.runtime.round).toBe(0);
+	expect((await latest())?.runtime.physical.seed).toBe(71);
+	expect((await latest())?.runtime.physical.round).toBe(0);
 });
 
 test("one top-bar information panel supports keyboard and Escape", async ({

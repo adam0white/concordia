@@ -1,22 +1,24 @@
-import type { Affordance } from "@adam0white/human-framework";
+import type { Affordance } from "./host-types.ts";
+
 import { buildOffers, usesActivitySlot } from "./offers.ts";
 import type { Resident, Save } from "./state.ts";
 
 /** Travel completes at its next physical location before optional re-planning. */
 export function reviewDue(r: Resident, now: number): boolean {
+	const activity = r.owner.actor(r.id).activity;
 	return (
 		!!r.job &&
 		r.job.arrive <= now &&
 		r.job.end > now &&
-		!!r.person.activity &&
-		(r.person.activity.reviewAt <= now || !!r.person.activity.interrupt)
+		!!activity &&
+		(activity.reviewAt <= now * 60000 || !!activity.interrupt)
 	);
 }
 
 /** Feasible alternatives after releasing this job, without changing the world. */
 export function reviewOffers(s: Save, r: Resident): Affordance[] {
 	const job = r.job;
-	if (!job) return buildOffers(s, r.person.id);
+	if (!job) return buildOffers(s, r.id);
 	const destination = job.offer.placeId;
 	const actor = {
 		...r,
@@ -27,9 +29,7 @@ export function reviewOffers(s: Save, r: Resident): Affordance[] {
 	const hypothetical: Save = {
 		...s,
 		tools: s.tools + job.tools,
-		people: s.people.map((other) =>
-			other.person.id === r.person.id ? actor : other,
-		),
+		people: s.people.map((other) => (other.id === r.id ? actor : other)),
 		places: s.places.map((place) => ({
 			...place,
 			reserved:
@@ -39,10 +39,10 @@ export function reviewOffers(s: Save, r: Resident): Affordance[] {
 		})),
 	};
 	return [
-		...buildOffers(hypothetical, r.person.id).filter(
+		...buildOffers(hypothetical, r.id).filter(
 			(offer) =>
 				offer.id !== job.offer.id &&
-				!(r.person.body.asleep && offer.mode === "sleep"),
+				!(r.owner.actor(r.id).body.asleep && offer.mode === "sleep"),
 		),
 		{ ...job.offer, duration: job.end - s.now },
 	];

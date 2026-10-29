@@ -1,13 +1,9 @@
-import type {
-	Affordance,
-	DecisionRecord,
-	Person,
-} from "@adam0white/human-framework";
 import type { PersonView, Policy, TownEvent } from "../contracts";
 import type { SocialEvenings } from "./evenings.ts";
 import type { Handcart } from "./handcart-state.ts";
+import type { Affordance, DecisionRecord } from "./host-types.ts";
 import type { TownChronicle } from "./town-chronicle.ts";
-export const SCHEMA = "neighbours-1";
+export const SCHEMA = "neighbours-hf4/1";
 export const known = [
 	[
 		"ada",
@@ -75,6 +71,9 @@ export type Place = {
 	reserved: number;
 };
 export type Job = {
+	personId: string;
+	activityId: string;
+	startedAt: number;
 	assistanceDecision?: {
 		id: string;
 		source: string;
@@ -91,7 +90,12 @@ export type Job = {
 	socialContacts?: { otherId: string; event: number }[];
 };
 export type Resident = {
-	person: Person;
+	privateConversation?: { offerId: string; text: string };
+	disclosures?: { event: number; text: string }[];
+	id: string;
+	name: string;
+	/** Ephemeral reference to the one Run owner; omitted from native host state. */
+	owner: import("./hf4-owner.ts").TownRunOwner;
 	role: string;
 	description: string;
 	known: boolean;
@@ -130,6 +134,7 @@ export type Resident = {
 	};
 };
 export type Save = {
+	owner: import("./hf4-owner.ts").TownRunOwner;
 	chapter?: import("./cast-continuity.ts").CastChapter;
 	assistance?: import("./assistance.ts").Assistance;
 	/** Observer history begins with the next selected event, including in legacy saves. */

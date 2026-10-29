@@ -1,0 +1,6152 @@
+{
+	"provenance": {
+		"sourceCommit": "57072e35be03c9e915ed8a1464e68923868823c9",
+		"producer": "newGame(17,0.6.0);quiet week;cast-pause ece;createCastSource(ece)",
+		"publishedHF": "2.21.0",
+		"syntheticEnvelope": true
+	},
+	"envelope": {
+		"format": "hf-persona/1",
+		"castId": "hf.cast.ece.murmur",
+		"castRevision": "1",
+		"branchId": "neighbours-real-murmur-221",
+		"parentRevision": null,
+		"source": {
+			"game": "murmur",
+			"build": "57072e35be03c9e915ed8a1464e68923868823c9",
+			"engine": "2.21.0",
+			"rules": "0.6.0"
+		},
+		"transfer": {
+			"castPassport": "murmur-cast/1",
+			"sourceRole": "ece",
+			"person": {
+				"format": "hf-persona-calendar/1",
+				"person": {
+					"format": "hf-persona-state/1",
+					"mappingVersion": "murmur-calendar/1",
+					"source": {
+						"schema": "human/person@1",
+						"engine": "2.21.0",
+						"id": "ece",
+						"now": 583801
+					},
+					"name": "Ece",
+					"life": {
+						"bornAt": -12038001,
+						"sex": "female"
+					},
+					"rng": {
+						"a": 1199964979,
+						"b": 761617090,
+						"c": 3812073681,
+						"d": 2259942228
+					},
+					"traits": {
+						"honesty": 0.65,
+						"emotionality": 0.45,
+						"extraversion": 0.65,
+						"agreeableness": 0.55,
+						"conscientiousness": 0.7,
+						"openness": 0.75
+					},
+					"values": {
+						"benevolence": 0.5,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"health": {
+						"health": 1,
+						"fitness": 0.49029621053044903,
+						"circadianPeak": 960
+					},
+					"family": null,
+					"bonds": null,
+					"skills": {},
+					"skillRetention": null,
+					"episodes": [],
+					"commitments": [],
+					"limitations": [
+						"source transient body/needs/affect/ambient omitted; target arrival policy",
+						"source habits/methods/beliefs/social and conscience breaches omitted; target authored state; held norms transported",
+						"source optional behaviour stores and decision history omitted; target authored state",
+						"family/bonds provenance checked; target authored state",
+						"episode:e4334",
+						"episode:e4582",
+						"episode:e4583",
+						"episode:e4584",
+						"episode:e4585",
+						"episode:e4586",
+						"episode:e4587",
+						"episode:e4588",
+						"episode:e4589",
+						"episode:e4590",
+						"episode:e4591",
+						"episode:e4592",
+						"episode:e4593",
+						"episode:e4594",
+						"episode:e4595",
+						"episode:e4596",
+						"episode:e4597",
+						"episode:e4598",
+						"episode:e4599",
+						"episode:e4600",
+						"episode:e4601",
+						"episode:e4602",
+						"episode:e4603",
+						"episode:e4604",
+						"episode:e4605",
+						"episode:e4606",
+						"episode:e4607",
+						"episode:e4608",
+						"episode:e4609",
+						"episode:e4610",
+						"episode:e4611",
+						"episode:e4612",
+						"episode:e4613",
+						"episode:e4614",
+						"episode:e4629",
+						"episode:e4630",
+						"episode:e4631",
+						"episode:e4632",
+						"episode:e4633",
+						"episode:e4634",
+						"episode:e4635",
+						"episode:e4636",
+						"episode:e4637",
+						"episode:e4638",
+						"episode:e4639",
+						"episode:e4640",
+						"episode:e4641",
+						"episode:e4642",
+						"episode:e4643",
+						"episode:e4644",
+						"episode:e4645",
+						"episode:e4646",
+						"episode:e4647",
+						"episode:e4648",
+						"episode:e4649",
+						"episode:e4650",
+						"episode:e4651",
+						"episode:e4652",
+						"episode:e4653",
+						"episode:e4654",
+						"episode:e4655",
+						"episode:e4656",
+						"episode:e4657",
+						"episode:e4658",
+						"episode:e4659",
+						"episode:e4660",
+						"episode:e4661",
+						"episode:e4662",
+						"episode:e4663",
+						"episode:e4664",
+						"episode:e4665",
+						"episode:e4666",
+						"episode:e4667",
+						"episode:e4668",
+						"episode:e4669",
+						"episode:e4670",
+						"episode:e4671",
+						"episode:e4672",
+						"episode:e4673",
+						"episode:e4674",
+						"episode:e4675",
+						"episode:e4676",
+						"episode:e4677",
+						"episode:e4678",
+						"episode:e4679",
+						"episode:e4680",
+						"episode:e4681",
+						"episode:e4682",
+						"episode:e4683",
+						"episode:e4684",
+						"episode:e4685",
+						"episode:e4686",
+						"episode:e4687",
+						"episode:e4688",
+						"episode:e4689",
+						"episode:e4690",
+						"episode:e4691",
+						"episode:e4692",
+						"episode:e4693",
+						"episode:e4694",
+						"episode:e4695",
+						"episode:e4696",
+						"episode:e4697",
+						"episode:e4698",
+						"episode:e4699",
+						"episode:e4700",
+						"episode:e4701",
+						"episode:e4702",
+						"episode:e4703",
+						"episode:e4704",
+						"episode:e4705",
+						"episode:e4706",
+						"episode:e4707",
+						"episode:e4708",
+						"episode:e4709",
+						"episode:e4710",
+						"episode:e4711",
+						"episode:e4712",
+						"episode:e4713",
+						"episode:e4714",
+						"episode:e4715",
+						"episode:e4716",
+						"episode:e4717",
+						"episode:e4718",
+						"episode:e4719",
+						"episode:e4720",
+						"episode:e4721",
+						"episode:e4722",
+						"episode:e4723",
+						"episode:e4724",
+						"episode:e4725",
+						"episode:e4726",
+						"episode:e4727",
+						"episode:e4728",
+						"episode:e4729",
+						"episode:e4730",
+						"episode:e4731",
+						"episode:e4732",
+						"episode:e4733",
+						"episode:e4734",
+						"episode:e4735",
+						"episode:e4736",
+						"episode:e4737",
+						"episode:e4738",
+						"episode:e4739",
+						"episode:e4740",
+						"episode:e4741",
+						"episode:e4742",
+						"episode:e4743",
+						"episode:e4744",
+						"episode:e4745",
+						"episode:e4746",
+						"episode:e4747",
+						"episode:e4748",
+						"episode:e4749",
+						"episode:e4750",
+						"episode:e4751",
+						"episode:e4752",
+						"episode:e4753",
+						"episode:e4754",
+						"episode:e4755",
+						"episode:e4756",
+						"episode:e4757",
+						"episode:e4758",
+						"episode:e4759",
+						"episode:e4760",
+						"episode:e4761",
+						"episode:e4762",
+						"episode:e4763",
+						"episode:e4764",
+						"episode:e4765",
+						"episode:e4766",
+						"episode:e4767",
+						"episode:e4768",
+						"episode:e4769",
+						"episode:e4770",
+						"episode:e4771",
+						"episode:e4772",
+						"episode:e4773",
+						"episode:e4774",
+						"episode:e4775",
+						"episode:e4776",
+						"episode:e4777",
+						"episode:e4778",
+						"episode:e4779",
+						"episode:e4780",
+						"episode:e4781",
+						"episode:e4782",
+						"episode:e4783",
+						"episode:e4784",
+						"episode:e4785",
+						"episode:e4786",
+						"episode:e4787",
+						"episode:e4788",
+						"episode:e4789",
+						"episode:e4790",
+						"episode:e4791",
+						"episode:e4792",
+						"episode:e4793",
+						"episode:e4794"
+					]
+				},
+				"calendar": {
+					"offset": 0,
+					"commitments": [],
+					"owed": [],
+					"lapse": null,
+					"heldNorms": [
+						{
+							"normId": "salah",
+							"standing": "obligatory",
+							"conviction": 0.475
+						},
+						{
+							"normId": "sawm-ramadan",
+							"standing": "obligatory",
+							"conviction": 0.475
+						},
+						{
+							"normId": "zakat",
+							"standing": "obligatory",
+							"conviction": 0.475
+						},
+						{
+							"normId": "charity",
+							"standing": "recommended",
+							"conviction": 0.475
+						},
+						{
+							"normId": "lying",
+							"standing": "forbidden",
+							"conviction": 0.75
+						},
+						{
+							"normId": "theft",
+							"standing": "forbidden",
+							"conviction": 0.75
+						},
+						{
+							"normId": "keep-promise",
+							"standing": "obligatory",
+							"conviction": 0.75
+						},
+						{
+							"normId": "kindness-to-parents",
+							"standing": "obligatory",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "backbiting",
+							"standing": "forbidden",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "help-neighbor",
+							"standing": "recommended",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "gratitude",
+							"standing": "recommended",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "harm-others",
+							"standing": "forbidden",
+							"conviction": 0.75
+						},
+						{
+							"normId": "intoxicants",
+							"standing": "forbidden",
+							"conviction": 0.475
+						},
+						{
+							"normId": "forbidden-food",
+							"standing": "forbidden",
+							"conviction": 0.475
+						},
+						{
+							"normId": "fairness",
+							"standing": "obligatory",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "care-dependents",
+							"standing": "obligatory",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "punctuality",
+							"standing": "recommended",
+							"conviction": 0.6000000000000001
+						},
+						{
+							"normId": "eid-prayer",
+							"standing": "recommended",
+							"conviction": 0.475
+						}
+					],
+					"norms": [
+						{
+							"id": "salah",
+							"label": "Perform the daily prayers",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:43"
+								},
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 4:103 (prayer at prescribed times)"
+								},
+								{
+									"kind": "interpretation",
+									"ref": "A missed prayer is still owed (qada); sleep, forgetting and unconsciousness lift the blame, not the debt; the debt for a stretch of unconsciousness beyond five prayer times drops (Hanafi count, kept as the default): research/capacity-and-excuse-sources.md \u00a70, \u00a72, \u00a74; research/decisions.md"
+								},
+								{
+									"kind": "assumption",
+									"ref": "Window boundaries (Fajr until sunrise, one-shadow Asr, red-twilight Maghrib) are the most common positions, chosen in research/decisions.md; agenda/prayer.ts"
+								}
+							]
+						},
+						{
+							"id": "sawm-ramadan",
+							"label": "Fast in Ramadan",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:183"
+								},
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:185 (the month of Ramadan)"
+								},
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:187 (eat and drink until dawn, then complete the fast until nightfall)"
+								}
+							],
+							"exemptions": [
+								{
+									"when": "illness",
+									"makeUp": true,
+									"sources": [
+										{
+											"kind": "revelation",
+											"ref": "Qur'an 2:184 (whoever is ill or on a journey: an equal number of days after)"
+										},
+										{
+											"kind": "revelation",
+											"ref": "Qur'an 2:185 (repeated; Allah intends ease, not hardship)"
+										},
+										{
+											"kind": "assumption",
+											"ref": "Which illness qualifies is the person\u2019s judgment; the severity threshold is an engineering stand-in"
+										},
+										{
+											"kind": "interpretation",
+											"ref": "Qur'an 2:184 continues: 'For those who can only fast with extreme difficulty, compensation can be made by feeding a needy person' (quran.com, checked 2026-10-03). Commonly read as covering chronic illness with no expected recovery (fidya instead of make-up); NOT modelled: every qualifying illness, chronic or acute, owes a make-up, because whether a condition is beyond recovery cannot be derived from body state"
+										}
+									]
+								},
+								{
+									"when": "travel",
+									"makeUp": true,
+									"sources": [
+										{
+											"kind": "revelation",
+											"ref": "Qur'an 2:184 (whoever is ill or on a journey: an equal number of days after)"
+										},
+										{
+											"kind": "revelation",
+											"ref": "Qur'an 2:185"
+										},
+										{
+											"kind": "assumption",
+											"ref": "What counts as a journey is supplied by the host as a traveling flag"
+										}
+									]
+								}
+							]
+						},
+						{
+							"id": "zakat",
+							"label": "Pay zakat",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:43"
+								}
+							]
+						},
+						{
+							"id": "charity",
+							"label": "Give voluntary charity (sadaqah)",
+							"standing": "recommended",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:261"
+								}
+							]
+						},
+						{
+							"id": "lying",
+							"label": "Lying (truthfulness is required)",
+							"standing": "forbidden",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 22:30 (shun words of falsehood; quran.com, checked 2026-10-03)"
+								},
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 9:119 (be with the truthful)"
+								}
+							]
+						},
+						{
+							"id": "theft",
+							"label": "Theft",
+							"standing": "forbidden",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 5:38"
+								},
+								{
+									"kind": "assumption",
+									"ref": "Listed in CONSCIENCE_DEFAULTS.necessityEligible: taking food in extremity is a juristic extension of the 2:173 necessity exception by analogy (2:173 itself names forbidden food); not yet sourced in research/, recorded as an engineering assumption pending a Hanafi source"
+								}
+							]
+						},
+						{
+							"id": "keep-promise",
+							"label": "Keep promises and commitments",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 17:34"
+								}
+							]
+						},
+						{
+							"id": "kindness-to-parents",
+							"label": "Kindness to parents",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 17:23"
+								}
+							]
+						},
+						{
+							"id": "backbiting",
+							"label": "Backbiting",
+							"standing": "forbidden",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 49:12"
+								}
+							]
+						},
+						{
+							"id": "help-neighbor",
+							"label": "Help and be good to neighbours",
+							"standing": "recommended",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 4:36 (be kind to neighbours; a command)"
+								},
+								{
+									"kind": "interpretation",
+									"ref": "Standing recorded as recommended for everyday help beyond basic kindness is an engineering simplification; the verse itself is a command"
+								}
+							]
+						},
+						{
+							"id": "gratitude",
+							"label": "Gratitude",
+							"standing": "recommended",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:152 (thank Me, and never be ungrateful)"
+								},
+								{
+									"kind": "interpretation",
+									"ref": "Standing as recommended for expressed gratitude toward people is an engineering simplification"
+								}
+							]
+						},
+						{
+							"id": "harm-others",
+							"label": "Harming others without right",
+							"standing": "forbidden",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 33:58 (abusing believers unjustifiably)"
+								},
+								{
+									"kind": "interpretation",
+									"ref": "General prohibition of unjust harm to any person, extended from specific texts; scope of \"without right\" left to the host"
+								}
+							]
+						},
+						{
+							"id": "intoxicants",
+							"label": "Intoxicants",
+							"standing": "forbidden",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 5:90"
+								}
+							]
+						},
+						{
+							"id": "forbidden-food",
+							"label": "Eating forbidden food (carrion, blood, swine)",
+							"standing": "forbidden",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 2:173 ('if someone is compelled by necessity\u2014neither driven by desire nor exceeding immediate need\u2014they will not be sinful'; quran.com, checked 2026-10-03)"
+								}
+							]
+						},
+						{
+							"id": "fairness",
+							"label": "Deal fairly (no cheating in trade)",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "revelation",
+									"ref": "Qur'an 83:1-3 (woe to the defrauders)"
+								},
+								{
+									"kind": "assumption",
+									"ref": "Generalised to fair dealing for secular hosts"
+								}
+							]
+						},
+						{
+							"id": "care-dependents",
+							"label": "Care for those who depend on you",
+							"standing": "obligatory",
+							"sources": [
+								{
+									"kind": "interpretation",
+									"ref": "Obligations toward family alongside those toward Allah and oneself (Bukhari 1968, as cited in research/islamic-foundations.md \u00a72); extending it to every dependent\u2019s urgent needs is the host\u2019s reading"
+								},
+								{
+									"kind": "assumption",
+									"ref": "Standing obligatory for secular hosts as a shared caregiving norm; engineering default"
+								}
+							]
+						},
+						{
+							"id": "punctuality",
+							"label": "Be on time",
+							"standing": "recommended",
+							"sources": [
+								{
+									"kind": "assumption",
+									"ref": "Secular social norm; engineering default"
+								}
+							]
+						},
+						{
+							"id": "eid-prayer",
+							"label": "Pray the Eid prayer in congregation",
+							"standing": "recommended",
+							"sources": [
+								{
+									"kind": "interpretation",
+									"ref": "Strongly emphasised in every school: wajib for Hanafis, sunnah mu'akkada (Maliki), sunnah (Shafi'i), fard kifaya (Hanbali), per TDV \"Bayram\" in research/eid-and-mourning-sources.md \u00a71"
+								},
+								{
+									"kind": "assumption",
+									"ref": "Recorded as recommended (the most common standing overall, research/decisions.md), so missing it is no breach; congregational, with no individual make-up (eid-and-mourning-sources.md \u00a71)"
+								}
+							]
+						}
+					]
+				}
+			},
+			"checkpoint": {
+				"schema": "human/person@1",
+				"sourceMinute": 583801,
+				"rng": {
+					"a": 1199964979,
+					"b": 761617090,
+					"c": 3812073681,
+					"d": 2259942228
+				},
+				"sha256": "efb5f9586e8621a53ed14a4bddf75d0fdda47c2248fd524aa859eba3e4902ba0"
+			},
+			"life": {
+				"version": "hf-coarse-life/1",
+				"clock": {
+					"version": "hf-chapter-clock/1",
+					"watermark": 0,
+					"seed": 1793642630
+				},
+				"assignment": 0,
+				"work": "own-routine",
+				"place": "home",
+				"notices": [],
+				"events": [],
+				"skipped": 0
+			}
+		},
+		"limitations": [
+			"Full native Murmur source state and played input prefix stay in the local export.",
+			"Private discoveries, unsupported source habits and relationships remain in that archive. This projection awards no knowledge or qualification."
+		],
+		"revision": "96ab93020890b98ac0c1346f5889a8d04e4f5944321b0d941e478246741eb5be"
+	},
+	"input": {
+		"parent": {
+			"format": "hf-persona/1",
+			"castId": "hf.cast.ece.murmur",
+			"castRevision": "1",
+			"branchId": "neighbours-real-murmur-221",
+			"parentRevision": null,
+			"source": {
+				"game": "murmur",
+				"build": "57072e35be03c9e915ed8a1464e68923868823c9",
+				"engine": "2.21.0",
+				"rules": "0.6.0"
+			},
+			"transfer": {
+				"castPassport": "murmur-cast/1",
+				"sourceRole": "ece",
+				"person": {
+					"format": "hf-persona-calendar/1",
+					"person": {
+						"format": "hf-persona-state/1",
+						"mappingVersion": "murmur-calendar/1",
+						"source": {
+							"schema": "human/person@1",
+							"engine": "2.21.0",
+							"id": "ece",
+							"now": 583801
+						},
+						"name": "Ece",
+						"life": {
+							"bornAt": -12038001,
+							"sex": "female"
+						},
+						"rng": {
+							"a": 1199964979,
+							"b": 761617090,
+							"c": 3812073681,
+							"d": 2259942228
+						},
+						"traits": {
+							"honesty": 0.65,
+							"emotionality": 0.45,
+							"extraversion": 0.65,
+							"agreeableness": 0.55,
+							"conscientiousness": 0.7,
+							"openness": 0.75
+						},
+						"values": {
+							"benevolence": 0.5,
+							"universalism": 0.5,
+							"tradition": 0.5,
+							"conformity": 0.5,
+							"security": 0.5,
+							"achievement": 0.5,
+							"power": 0.5,
+							"hedonism": 0.5,
+							"stimulation": 0.5,
+							"selfDirection": 0.5
+						},
+						"health": {
+							"health": 1,
+							"fitness": 0.49029621053044903,
+							"circadianPeak": 960
+						},
+						"family": null,
+						"bonds": null,
+						"skills": {},
+						"skillRetention": null,
+						"episodes": [],
+						"commitments": [],
+						"limitations": [
+							"source transient body/needs/affect/ambient omitted; target arrival policy",
+							"source habits/methods/beliefs/social and conscience breaches omitted; target authored state; held norms transported",
+							"source optional behaviour stores and decision history omitted; target authored state",
+							"family/bonds provenance checked; target authored state",
+							"episode:e4334",
+							"episode:e4582",
+							"episode:e4583",
+							"episode:e4584",
+							"episode:e4585",
+							"episode:e4586",
+							"episode:e4587",
+							"episode:e4588",
+							"episode:e4589",
+							"episode:e4590",
+							"episode:e4591",
+							"episode:e4592",
+							"episode:e4593",
+							"episode:e4594",
+							"episode:e4595",
+							"episode:e4596",
+							"episode:e4597",
+							"episode:e4598",
+							"episode:e4599",
+							"episode:e4600",
+							"episode:e4601",
+							"episode:e4602",
+							"episode:e4603",
+							"episode:e4604",
+							"episode:e4605",
+							"episode:e4606",
+							"episode:e4607",
+							"episode:e4608",
+							"episode:e4609",
+							"episode:e4610",
+							"episode:e4611",
+							"episode:e4612",
+							"episode:e4613",
+							"episode:e4614",
+							"episode:e4629",
+							"episode:e4630",
+							"episode:e4631",
+							"episode:e4632",
+							"episode:e4633",
+							"episode:e4634",
+							"episode:e4635",
+							"episode:e4636",
+							"episode:e4637",
+							"episode:e4638",
+							"episode:e4639",
+							"episode:e4640",
+							"episode:e4641",
+							"episode:e4642",
+							"episode:e4643",
+							"episode:e4644",
+							"episode:e4645",
+							"episode:e4646",
+							"episode:e4647",
+							"episode:e4648",
+							"episode:e4649",
+							"episode:e4650",
+							"episode:e4651",
+							"episode:e4652",
+							"episode:e4653",
+							"episode:e4654",
+							"episode:e4655",
+							"episode:e4656",
+							"episode:e4657",
+							"episode:e4658",
+							"episode:e4659",
+							"episode:e4660",
+							"episode:e4661",
+							"episode:e4662",
+							"episode:e4663",
+							"episode:e4664",
+							"episode:e4665",
+							"episode:e4666",
+							"episode:e4667",
+							"episode:e4668",
+							"episode:e4669",
+							"episode:e4670",
+							"episode:e4671",
+							"episode:e4672",
+							"episode:e4673",
+							"episode:e4674",
+							"episode:e4675",
+							"episode:e4676",
+							"episode:e4677",
+							"episode:e4678",
+							"episode:e4679",
+							"episode:e4680",
+							"episode:e4681",
+							"episode:e4682",
+							"episode:e4683",
+							"episode:e4684",
+							"episode:e4685",
+							"episode:e4686",
+							"episode:e4687",
+							"episode:e4688",
+							"episode:e4689",
+							"episode:e4690",
+							"episode:e4691",
+							"episode:e4692",
+							"episode:e4693",
+							"episode:e4694",
+							"episode:e4695",
+							"episode:e4696",
+							"episode:e4697",
+							"episode:e4698",
+							"episode:e4699",
+							"episode:e4700",
+							"episode:e4701",
+							"episode:e4702",
+							"episode:e4703",
+							"episode:e4704",
+							"episode:e4705",
+							"episode:e4706",
+							"episode:e4707",
+							"episode:e4708",
+							"episode:e4709",
+							"episode:e4710",
+							"episode:e4711",
+							"episode:e4712",
+							"episode:e4713",
+							"episode:e4714",
+							"episode:e4715",
+							"episode:e4716",
+							"episode:e4717",
+							"episode:e4718",
+							"episode:e4719",
+							"episode:e4720",
+							"episode:e4721",
+							"episode:e4722",
+							"episode:e4723",
+							"episode:e4724",
+							"episode:e4725",
+							"episode:e4726",
+							"episode:e4727",
+							"episode:e4728",
+							"episode:e4729",
+							"episode:e4730",
+							"episode:e4731",
+							"episode:e4732",
+							"episode:e4733",
+							"episode:e4734",
+							"episode:e4735",
+							"episode:e4736",
+							"episode:e4737",
+							"episode:e4738",
+							"episode:e4739",
+							"episode:e4740",
+							"episode:e4741",
+							"episode:e4742",
+							"episode:e4743",
+							"episode:e4744",
+							"episode:e4745",
+							"episode:e4746",
+							"episode:e4747",
+							"episode:e4748",
+							"episode:e4749",
+							"episode:e4750",
+							"episode:e4751",
+							"episode:e4752",
+							"episode:e4753",
+							"episode:e4754",
+							"episode:e4755",
+							"episode:e4756",
+							"episode:e4757",
+							"episode:e4758",
+							"episode:e4759",
+							"episode:e4760",
+							"episode:e4761",
+							"episode:e4762",
+							"episode:e4763",
+							"episode:e4764",
+							"episode:e4765",
+							"episode:e4766",
+							"episode:e4767",
+							"episode:e4768",
+							"episode:e4769",
+							"episode:e4770",
+							"episode:e4771",
+							"episode:e4772",
+							"episode:e4773",
+							"episode:e4774",
+							"episode:e4775",
+							"episode:e4776",
+							"episode:e4777",
+							"episode:e4778",
+							"episode:e4779",
+							"episode:e4780",
+							"episode:e4781",
+							"episode:e4782",
+							"episode:e4783",
+							"episode:e4784",
+							"episode:e4785",
+							"episode:e4786",
+							"episode:e4787",
+							"episode:e4788",
+							"episode:e4789",
+							"episode:e4790",
+							"episode:e4791",
+							"episode:e4792",
+							"episode:e4793",
+							"episode:e4794"
+						]
+					},
+					"calendar": {
+						"offset": 0,
+						"commitments": [],
+						"owed": [],
+						"lapse": null,
+						"heldNorms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"norms": [
+							{
+								"id": "salah",
+								"label": "Perform the daily prayers",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:43"
+									},
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 4:103 (prayer at prescribed times)"
+									},
+									{
+										"kind": "interpretation",
+										"ref": "A missed prayer is still owed (qada); sleep, forgetting and unconsciousness lift the blame, not the debt; the debt for a stretch of unconsciousness beyond five prayer times drops (Hanafi count, kept as the default): research/capacity-and-excuse-sources.md \u00a70, \u00a72, \u00a74; research/decisions.md"
+									},
+									{
+										"kind": "assumption",
+										"ref": "Window boundaries (Fajr until sunrise, one-shadow Asr, red-twilight Maghrib) are the most common positions, chosen in research/decisions.md; agenda/prayer.ts"
+									}
+								]
+							},
+							{
+								"id": "sawm-ramadan",
+								"label": "Fast in Ramadan",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:183"
+									},
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:185 (the month of Ramadan)"
+									},
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:187 (eat and drink until dawn, then complete the fast until nightfall)"
+									}
+								],
+								"exemptions": [
+									{
+										"when": "illness",
+										"makeUp": true,
+										"sources": [
+											{
+												"kind": "revelation",
+												"ref": "Qur'an 2:184 (whoever is ill or on a journey: an equal number of days after)"
+											},
+											{
+												"kind": "revelation",
+												"ref": "Qur'an 2:185 (repeated; Allah intends ease, not hardship)"
+											},
+											{
+												"kind": "assumption",
+												"ref": "Which illness qualifies is the person\u2019s judgment; the severity threshold is an engineering stand-in"
+											},
+											{
+												"kind": "interpretation",
+												"ref": "Qur'an 2:184 continues: 'For those who can only fast with extreme difficulty, compensation can be made by feeding a needy person' (quran.com, checked 2026-10-03). Commonly read as covering chronic illness with no expected recovery (fidya instead of make-up); NOT modelled: every qualifying illness, chronic or acute, owes a make-up, because whether a condition is beyond recovery cannot be derived from body state"
+											}
+										]
+									},
+									{
+										"when": "travel",
+										"makeUp": true,
+										"sources": [
+											{
+												"kind": "revelation",
+												"ref": "Qur'an 2:184 (whoever is ill or on a journey: an equal number of days after)"
+											},
+											{
+												"kind": "revelation",
+												"ref": "Qur'an 2:185"
+											},
+											{
+												"kind": "assumption",
+												"ref": "What counts as a journey is supplied by the host as a traveling flag"
+											}
+										]
+									}
+								]
+							},
+							{
+								"id": "zakat",
+								"label": "Pay zakat",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:43"
+									}
+								]
+							},
+							{
+								"id": "charity",
+								"label": "Give voluntary charity (sadaqah)",
+								"standing": "recommended",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:261"
+									}
+								]
+							},
+							{
+								"id": "lying",
+								"label": "Lying (truthfulness is required)",
+								"standing": "forbidden",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 22:30 (shun words of falsehood; quran.com, checked 2026-10-03)"
+									},
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 9:119 (be with the truthful)"
+									}
+								]
+							},
+							{
+								"id": "theft",
+								"label": "Theft",
+								"standing": "forbidden",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 5:38"
+									},
+									{
+										"kind": "assumption",
+										"ref": "Listed in CONSCIENCE_DEFAULTS.necessityEligible: taking food in extremity is a juristic extension of the 2:173 necessity exception by analogy (2:173 itself names forbidden food); not yet sourced in research/, recorded as an engineering assumption pending a Hanafi source"
+									}
+								]
+							},
+							{
+								"id": "keep-promise",
+								"label": "Keep promises and commitments",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 17:34"
+									}
+								]
+							},
+							{
+								"id": "kindness-to-parents",
+								"label": "Kindness to parents",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 17:23"
+									}
+								]
+							},
+							{
+								"id": "backbiting",
+								"label": "Backbiting",
+								"standing": "forbidden",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 49:12"
+									}
+								]
+							},
+							{
+								"id": "help-neighbor",
+								"label": "Help and be good to neighbours",
+								"standing": "recommended",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 4:36 (be kind to neighbours; a command)"
+									},
+									{
+										"kind": "interpretation",
+										"ref": "Standing recorded as recommended for everyday help beyond basic kindness is an engineering simplification; the verse itself is a command"
+									}
+								]
+							},
+							{
+								"id": "gratitude",
+								"label": "Gratitude",
+								"standing": "recommended",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:152 (thank Me, and never be ungrateful)"
+									},
+									{
+										"kind": "interpretation",
+										"ref": "Standing as recommended for expressed gratitude toward people is an engineering simplification"
+									}
+								]
+							},
+							{
+								"id": "harm-others",
+								"label": "Harming others without right",
+								"standing": "forbidden",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 33:58 (abusing believers unjustifiably)"
+									},
+									{
+										"kind": "interpretation",
+										"ref": "General prohibition of unjust harm to any person, extended from specific texts; scope of \"without right\" left to the host"
+									}
+								]
+							},
+							{
+								"id": "intoxicants",
+								"label": "Intoxicants",
+								"standing": "forbidden",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 5:90"
+									}
+								]
+							},
+							{
+								"id": "forbidden-food",
+								"label": "Eating forbidden food (carrion, blood, swine)",
+								"standing": "forbidden",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 2:173 ('if someone is compelled by necessity\u2014neither driven by desire nor exceeding immediate need\u2014they will not be sinful'; quran.com, checked 2026-10-03)"
+									}
+								]
+							},
+							{
+								"id": "fairness",
+								"label": "Deal fairly (no cheating in trade)",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "revelation",
+										"ref": "Qur'an 83:1-3 (woe to the defrauders)"
+									},
+									{
+										"kind": "assumption",
+										"ref": "Generalised to fair dealing for secular hosts"
+									}
+								]
+							},
+							{
+								"id": "care-dependents",
+								"label": "Care for those who depend on you",
+								"standing": "obligatory",
+								"sources": [
+									{
+										"kind": "interpretation",
+										"ref": "Obligations toward family alongside those toward Allah and oneself (Bukhari 1968, as cited in research/islamic-foundations.md \u00a72); extending it to every dependent\u2019s urgent needs is the host\u2019s reading"
+									},
+									{
+										"kind": "assumption",
+										"ref": "Standing obligatory for secular hosts as a shared caregiving norm; engineering default"
+									}
+								]
+							},
+							{
+								"id": "punctuality",
+								"label": "Be on time",
+								"standing": "recommended",
+								"sources": [
+									{
+										"kind": "assumption",
+										"ref": "Secular social norm; engineering default"
+									}
+								]
+							},
+							{
+								"id": "eid-prayer",
+								"label": "Pray the Eid prayer in congregation",
+								"standing": "recommended",
+								"sources": [
+									{
+										"kind": "interpretation",
+										"ref": "Strongly emphasised in every school: wajib for Hanafis, sunnah mu'akkada (Maliki), sunnah (Shafi'i), fard kifaya (Hanbali), per TDV \"Bayram\" in research/eid-and-mourning-sources.md \u00a71"
+									},
+									{
+										"kind": "assumption",
+										"ref": "Recorded as recommended (the most common standing overall, research/decisions.md), so missing it is no breach; congregational, with no individual make-up (eid-and-mourning-sources.md \u00a71)"
+									}
+								]
+							}
+						]
+					}
+				},
+				"checkpoint": {
+					"schema": "human/person@1",
+					"sourceMinute": 583801,
+					"rng": {
+						"a": 1199964979,
+						"b": 761617090,
+						"c": 3812073681,
+						"d": 2259942228
+					},
+					"sha256": "efb5f9586e8621a53ed14a4bddf75d0fdda47c2248fd524aa859eba3e4902ba0"
+				},
+				"life": {
+					"version": "hf-coarse-life/1",
+					"clock": {
+						"version": "hf-chapter-clock/1",
+						"watermark": 0,
+						"seed": 1793642630
+					},
+					"assignment": 0,
+					"work": "own-routine",
+					"place": "home",
+					"notices": [],
+					"events": [],
+					"skipped": 0
+				}
+			},
+			"limitations": [
+				"Full native Murmur source state and played input prefix stay in the local export.",
+				"Private discoveries, unsupported source habits and relationships remain in that archive. This projection awards no knowledge or qualification."
+			],
+			"revision": "96ab93020890b98ac0c1346f5889a8d04e4f5944321b0d941e478246741eb5be"
+		},
+		"life": {
+			"version": "hf-coarse-life/1",
+			"clock": {
+				"version": "hf-chapter-clock/1",
+				"watermark": 0,
+				"seed": 1793642630
+			},
+			"assignment": 0,
+			"work": "own-routine",
+			"place": "home",
+			"notices": [],
+			"events": [],
+			"skipped": 0
+		},
+		"clockMs": 0
+	},
+	"raw": {
+		"schema": "human/person@1",
+		"engine": "2.21.0",
+		"id": "ece",
+		"name": "Ece",
+		"now": 583801,
+		"rng": {
+			"a": 1199964979,
+			"b": 761617090,
+			"c": 3812073681,
+			"d": 2259942228
+		},
+		"life": {
+			"bornAt": -12038001,
+			"sex": "female"
+		},
+		"body": {
+			"satiety": 0.8998734738386382,
+			"hydration": 1,
+			"sleepPressure": 0.32741927673339377,
+			"exertion": 0.018772889599461523,
+			"circadianPeak": 960,
+			"pain": 0,
+			"health": 1,
+			"fitness": 0.49029621053044903,
+			"sleepDebt": 0,
+			"alive": true,
+			"asleep": false,
+			"since": 583620,
+			"injuries": [],
+			"illnesses": [],
+			"nextId": 0,
+			"lastSleep": {
+				"from": 583619,
+				"to": 583620
+			}
+		},
+		"needs": {
+			"safety": 0.8,
+			"belonging": 0.11200626719829374,
+			"esteem": 0.5302666018241216,
+			"autonomy": 0.9520261810319333,
+			"competence": 1,
+			"leisure": 0.6,
+			"meaning": 0.3719946686728942
+		},
+		"traits": {
+			"honesty": 0.65,
+			"emotionality": 0.45,
+			"extraversion": 0.65,
+			"agreeableness": 0.55,
+			"conscientiousness": 0.7,
+			"openness": 0.75
+		},
+		"values": {
+			"benevolence": 0.5,
+			"universalism": 0.5,
+			"tradition": 0.5,
+			"conformity": 0.5,
+			"security": 0.5,
+			"achievement": 0.5,
+			"power": 0.5,
+			"hedonism": 0.5,
+			"stimulation": 0.5,
+			"selfDirection": 0.5
+		},
+		"conscience": {
+			"norms": [
+				{
+					"normId": "salah",
+					"standing": "obligatory",
+					"conviction": 0.475
+				},
+				{
+					"normId": "sawm-ramadan",
+					"standing": "obligatory",
+					"conviction": 0.475
+				},
+				{
+					"normId": "zakat",
+					"standing": "obligatory",
+					"conviction": 0.475
+				},
+				{
+					"normId": "charity",
+					"standing": "recommended",
+					"conviction": 0.475
+				},
+				{
+					"normId": "lying",
+					"standing": "forbidden",
+					"conviction": 0.75
+				},
+				{
+					"normId": "theft",
+					"standing": "forbidden",
+					"conviction": 0.75
+				},
+				{
+					"normId": "keep-promise",
+					"standing": "obligatory",
+					"conviction": 0.75
+				},
+				{
+					"normId": "kindness-to-parents",
+					"standing": "obligatory",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "backbiting",
+					"standing": "forbidden",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "help-neighbor",
+					"standing": "recommended",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "gratitude",
+					"standing": "recommended",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "harm-others",
+					"standing": "forbidden",
+					"conviction": 0.75
+				},
+				{
+					"normId": "intoxicants",
+					"standing": "forbidden",
+					"conviction": 0.475
+				},
+				{
+					"normId": "forbidden-food",
+					"standing": "forbidden",
+					"conviction": 0.475
+				},
+				{
+					"normId": "fairness",
+					"standing": "obligatory",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "care-dependents",
+					"standing": "obligatory",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "punctuality",
+					"standing": "recommended",
+					"conviction": 0.6000000000000001
+				},
+				{
+					"normId": "eid-prayer",
+					"standing": "recommended",
+					"conviction": 0.475
+				}
+			],
+			"breaches": [],
+			"intentions": [
+				{
+					"at": 583752,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583753,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583754,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583755,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583756,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583757,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583758,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583759,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583760,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583761,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583762,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583763,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583764,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583765,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583766,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583767,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583768,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583769,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583770,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583771,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583772,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583773,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583774,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583775,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583776,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583777,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583778,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583779,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583780,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583781,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583782,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583783,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583784,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583785,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583786,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583787,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583788,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583789,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583790,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583791,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583792,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583793,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583794,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583795,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583796,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583797,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583798,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583799,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583800,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				},
+				{
+					"at": 583801,
+					"action": "work",
+					"intention": "I am doing this because it suits me."
+				}
+			],
+			"nextBreach": 0
+		},
+		"affect": {
+			"mood": {
+				"valence": -0.024476645372321665,
+				"arousal": 0.3313872939298987
+			},
+			"emotions": [
+				{
+					"id": "loneliness",
+					"intensity": 0.5237003344077173,
+					"cause": "need:belonging",
+					"since": 583800,
+					"halfLife": 720
+				},
+				{
+					"id": "joy",
+					"intensity": 0.04730670609220759,
+					"cause": "outcome:rest",
+					"since": 582782,
+					"halfLife": 90
+				}
+			],
+			"regulation": 0.35069996678346926,
+			"lastUpdated": 583801
+		},
+		"skills": {},
+		"habits": [
+			{
+				"cue": {
+					"hour": 6,
+					"placeId": "home"
+				},
+				"action": "sleep",
+				"strength": 0.03332612396366003,
+				"repetitions": 1,
+				"lastAt": 576400,
+				"withheld": 180,
+				"lastWithheldAt": 583650
+			},
+			{
+				"cue": {
+					"hour": 6,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.14652789887642698,
+				"repetitions": 144,
+				"lastAt": 583620,
+				"withheld": 6,
+				"lastWithheldAt": 583621
+			},
+			{
+				"cue": {
+					"hour": 7,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "meal",
+				"strength": 0.20112195108124586,
+				"repetitions": 6,
+				"lastAt": 583621,
+				"withheld": 114,
+				"lastWithheldAt": 583620
+			},
+			{
+				"cue": {
+					"hour": 7,
+					"placeId": "home",
+					"after": "meal"
+				},
+				"action": "meal",
+				"strength": 0.2160224707009985,
+				"repetitions": 354,
+				"lastAt": 583680
+			},
+			{
+				"cue": {
+					"hour": 8,
+					"placeId": "delivery district",
+					"after": "meal"
+				},
+				"action": "work",
+				"strength": 0.20739969126375654,
+				"repetitions": 6,
+				"lastAt": 583681
+			},
+			{
+				"cue": {
+					"hour": 8,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.21661713018495224,
+				"repetitions": 384,
+				"lastAt": 583740
+			},
+			{
+				"cue": {
+					"hour": 9,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.21608909361676282,
+				"repetitions": 360,
+				"lastAt": 583800
+			},
+			{
+				"cue": {
+					"hour": 10,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.2146518086247532,
+				"repetitions": 301,
+				"lastAt": 583801
+			},
+			{
+				"cue": {
+					"hour": 11,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.18259796368644435,
+				"repetitions": 270,
+				"lastAt": 582480
+			},
+			{
+				"cue": {
+					"hour": 12,
+					"placeId": "home",
+					"after": "work"
+				},
+				"action": "meal",
+				"strength": 0.17576541224752756,
+				"repetitions": 5,
+				"lastAt": 582481
+			},
+			{
+				"cue": {
+					"hour": 12,
+					"placeId": "home",
+					"after": "meal"
+				},
+				"action": "meal",
+				"strength": 0.18327353155963272,
+				"repetitions": 295,
+				"lastAt": 582540
+			},
+			{
+				"cue": {
+					"hour": 13,
+					"placeId": "delivery district",
+					"after": "meal"
+				},
+				"action": "work",
+				"strength": 0.17580771987324156,
+				"repetitions": 5,
+				"lastAt": 582541
+			},
+			{
+				"cue": {
+					"hour": 13,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.18388383096011598,
+				"repetitions": 325,
+				"lastAt": 582600
+			},
+			{
+				"cue": {
+					"hour": 14,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.1832966258448,
+				"repetitions": 300,
+				"lastAt": 582660
+			},
+			{
+				"cue": {
+					"hour": 15,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.18334074627180355,
+				"repetitions": 300,
+				"lastAt": 582720
+			},
+			{
+				"cue": {
+					"hour": 16,
+					"placeId": "delivery district",
+					"after": "work"
+				},
+				"action": "work",
+				"strength": 0.1828178307846234,
+				"repetitions": 270,
+				"lastAt": 582780
+			},
+			{
+				"cue": {
+					"hour": 17,
+					"placeId": "home",
+					"after": "work"
+				},
+				"action": "rest",
+				"strength": 0.17597705223721308,
+				"repetitions": 5,
+				"lastAt": 582781
+			},
+			{
+				"cue": {
+					"hour": 17,
+					"placeId": "home",
+					"after": "rest"
+				},
+				"action": "rest",
+				"strength": 0.18348416210986937,
+				"repetitions": 295,
+				"lastAt": 582840,
+				"withheld": 5,
+				"lastWithheldAt": 582841
+			},
+			{
+				"cue": {
+					"hour": 18,
+					"placeId": "home",
+					"after": "rest"
+				},
+				"action": "meal",
+				"strength": 0.17130253418076993,
+				"repetitions": 5,
+				"lastAt": 582841,
+				"withheld": 269,
+				"lastWithheldAt": 582930
+			},
+			{
+				"cue": {
+					"hour": 18,
+					"placeId": "home",
+					"after": "meal"
+				},
+				"action": "meal",
+				"strength": 0.1835283276778029,
+				"repetitions": 295,
+				"lastAt": 582900,
+				"withheld": 5,
+				"lastWithheldAt": 582901
+			},
+			{
+				"cue": {
+					"hour": 19,
+					"placeId": "home",
+					"after": "meal"
+				},
+				"action": "rest",
+				"strength": 0.17209658707542888,
+				"repetitions": 5,
+				"lastAt": 582901,
+				"withheld": 124,
+				"lastWithheldAt": 582900
+			},
+			{
+				"cue": {
+					"hour": 19,
+					"placeId": "home",
+					"after": "rest"
+				},
+				"action": "rest",
+				"strength": 0.18414956144341268,
+				"repetitions": 325,
+				"lastAt": 582960
+			},
+			{
+				"cue": {
+					"hour": 20,
+					"placeId": "home",
+					"after": "rest"
+				},
+				"action": "rest",
+				"strength": 0.18356150775811533,
+				"repetitions": 300,
+				"lastAt": 583020
+			},
+			{
+				"cue": {
+					"hour": 21,
+					"placeId": "home",
+					"after": "rest"
+				},
+				"action": "rest",
+				"strength": 0.1832166954022442,
+				"repetitions": 168,
+				"lastAt": 583080,
+				"withheld": 1,
+				"lastWithheldAt": 583081
+			},
+			{
+				"cue": {
+					"hour": 22,
+					"placeId": "home",
+					"after": "rest"
+				},
+				"action": "sleep",
+				"strength": 0.17220254244394104,
+				"repetitions": 5,
+				"lastAt": 583081,
+				"withheld": 50,
+				"lastWithheldAt": 583080
+			},
+			{
+				"cue": {
+					"hour": 23,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.16584958825507554,
+				"repetitions": 12,
+				"lastAt": 583171
+			},
+			{
+				"cue": {
+					"hour": 0,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.18017124499791706,
+				"repetitions": 10,
+				"lastAt": 583231
+			},
+			{
+				"cue": {
+					"hour": 1,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.18021461312990836,
+				"repetitions": 10,
+				"lastAt": 583291
+			},
+			{
+				"cue": {
+					"hour": 2,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.18025799170082882,
+				"repetitions": 10,
+				"lastAt": 583351
+			},
+			{
+				"cue": {
+					"hour": 3,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.18030138071319102,
+				"repetitions": 10,
+				"lastAt": 583411
+			},
+			{
+				"cue": {
+					"hour": 4,
+					"placeId": "home",
+					"after": "sleep"
+				},
+				"action": "sleep",
+				"strength": 0.1832869304836667,
+				"repetitions": 14,
+				"lastAt": 583501
+			}
+		],
+		"memory": {
+			"episodes": [
+				{
+					"at": 582841,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.07620839637975728,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4334",
+					"salience": 0.3155373876402452
+				},
+				{
+					"at": 583321,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03363304422143287,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4582",
+					"salience": 0.3017992670910572
+				},
+				{
+					"at": 583351,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.033633043918543104,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4583",
+					"salience": 0.30291649078827954
+				},
+				{
+					"at": 583381,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.033633043595486994,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4584",
+					"salience": 0.3040378503009752
+				},
+				{
+					"at": 583411,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03363304329260299,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4585",
+					"salience": 0.30516336096698715
+				},
+				{
+					"at": 583441,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03363304296955301,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4586",
+					"salience": 0.30629303812610204
+				},
+				{
+					"at": 583471,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.0336330426666748,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4587",
+					"salience": 0.30742689722927935
+				},
+				{
+					"at": 583501,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03363304234363095,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed", "night"],
+					"placeId": "home",
+					"id": "e4588",
+					"salience": 0.3085649537307401
+				},
+				{
+					"at": 583531,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03363304204075847,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4589",
+					"salience": 0.3097072231954183
+				},
+				{
+					"at": 583561,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03363304171772085,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4590",
+					"salience": 0.3108537211927819
+				},
+				{
+					"at": 583591,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.033633041414854126,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4591",
+					"salience": 0.31200446340259874
+				},
+				{
+					"at": 583599,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030968774600575715,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4592",
+					"salience": 0.310607821459049
+				},
+				{
+					"at": 583600,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096444137595,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4593",
+					"salience": 0.310103912390104
+				},
+				{
+					"at": 583601,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096443789942,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4594",
+					"salience": 0.31014305953662646
+				},
+				{
+					"at": 583602,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109644344225,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4595",
+					"salience": 0.3101822116250317
+				},
+				{
+					"at": 583603,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096443094596,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4596",
+					"salience": 0.3102213686559498
+				},
+				{
+					"at": 583604,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109644274691,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4597",
+					"salience": 0.31026053063000475
+				},
+				{
+					"at": 583605,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109644239922,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4598",
+					"salience": 0.3102996975478205
+				},
+				{
+					"at": 583606,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096442051565,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4599",
+					"salience": 0.31033886941002814
+				},
+				{
+					"at": 583607,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096441703875,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4600",
+					"salience": 0.3103780462172382
+				},
+				{
+					"at": 583608,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096441356188,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4601",
+					"salience": 0.31041722797008175
+				},
+				{
+					"at": 583609,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096441008532,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4602",
+					"salience": 0.31045641466918267
+				},
+				{
+					"at": 583610,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096440660845,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4603",
+					"salience": 0.3104956063151661
+				},
+				{
+					"at": 583611,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109644031319,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4604",
+					"salience": 0.31053480290866253
+				},
+				{
+					"at": 583612,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.0301210964399655,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4605",
+					"salience": 0.3105740044502842
+				},
+				{
+					"at": 583613,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109643961781,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4606",
+					"salience": 0.3106132109406612
+				},
+				{
+					"at": 583614,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096439270155,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4607",
+					"salience": 0.3106524223804186
+				},
+				{
+					"at": 583615,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096438922468,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4608",
+					"salience": 0.310691638770182
+				},
+				{
+					"at": 583616,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096438574812,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4609",
+					"salience": 0.3107308601105816
+				},
+				{
+					"at": 583617,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096438227125,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4610",
+					"salience": 0.31077008640223003
+				},
+				{
+					"at": 583618,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109643787947,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4611",
+					"salience": 0.3108093176457589
+				},
+				{
+					"at": 583619,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.030121096437531778,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4612",
+					"salience": 0.31084855384179316
+				},
+				{
+					"at": 583620,
+					"kind": "outcome",
+					"action": "sleep",
+					"actorId": "ece",
+					"valence": 0.03012109643718409,
+					"summary": "I completed this action: sleep.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4613",
+					"salience": 0.31088779499096425
+				},
+				{
+					"at": 583621,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.11455325688357564,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4614",
+					"salience": 0.3635255814144683
+				},
+				{
+					"at": 583636,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063762409098,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4629",
+					"salience": 0.29248725122768654
+				},
+				{
+					"at": 583637,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063748119855,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4630",
+					"salience": 0.2925339754753133
+				},
+				{
+					"at": 583638,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.000497706373383061,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4631",
+					"salience": 0.29258070718705037
+				},
+				{
+					"at": 583639,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063719541033,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4632",
+					"salience": 0.2926274463640853
+				},
+				{
+					"at": 583640,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063705251788,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4633",
+					"salience": 0.29267419300760533
+				},
+				{
+					"at": 583641,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063690962543,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4634",
+					"salience": 0.29272094711881363
+				},
+				{
+					"at": 583642,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.00049770636766733,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4635",
+					"salience": 0.2927677086988927
+				},
+				{
+					"at": 583643,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063662383722,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4636",
+					"salience": 0.2928144777490459
+				},
+				{
+					"at": 583644,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063648094477,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4637",
+					"salience": 0.29286125427045695
+				},
+				{
+					"at": 583645,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063633805235,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4638",
+					"salience": 0.2929080382643284
+				},
+				{
+					"at": 583646,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.000497706361951599,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4639",
+					"salience": 0.2929548297318504
+				},
+				{
+					"at": 583647,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063605226745,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4640",
+					"salience": 0.2930016286742109
+				},
+				{
+					"at": 583648,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063590937501,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4641",
+					"salience": 0.29304843509261347
+				},
+				{
+					"at": 583649,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063576648256,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4642",
+					"salience": 0.2930952489882435
+				},
+				{
+					"at": 583650,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063562358678,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4643",
+					"salience": 0.2931420703623048
+				},
+				{
+					"at": 583651,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063548069435,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4644",
+					"salience": 0.2931888992159828
+				},
+				{
+					"at": 583652,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.000497706353378019,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4645",
+					"salience": 0.29323573555048094
+				},
+				{
+					"at": 583653,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063519490945,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4646",
+					"salience": 0.29328257936699076
+				},
+				{
+					"at": 583654,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063505201701,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4647",
+					"salience": 0.29332943066670175
+				},
+				{
+					"at": 583655,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063490912458,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4648",
+					"salience": 0.2933762894508194
+				},
+				{
+					"at": 583656,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063476623213,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4649",
+					"salience": 0.2934231557205295
+				},
+				{
+					"at": 583657,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063462333969,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4650",
+					"salience": 0.2934700294770375
+				},
+				{
+					"at": 583658,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063448044724,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4651",
+					"salience": 0.2935169107215342
+				},
+				{
+					"at": 583659,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063433755479,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4652",
+					"salience": 0.2935637994552126
+				},
+				{
+					"at": 583660,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063419466236,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4653",
+					"salience": 0.29361069567927595
+				},
+				{
+					"at": 583661,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063405176992,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4654",
+					"salience": 0.29365759939491415
+				},
+				{
+					"at": 583662,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063390887747,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4655",
+					"salience": 0.2937045106033312
+				},
+				{
+					"at": 583663,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063376598503,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4656",
+					"salience": 0.2937514293057166
+				},
+				{
+					"at": 583664,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063362309592,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4657",
+					"salience": 0.29379835550327466
+				},
+				{
+					"at": 583665,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063348020013,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4658",
+					"salience": 0.2938452891971996
+				},
+				{
+					"at": 583666,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.000497706333373077,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4659",
+					"salience": 0.2938922303886842
+				},
+				{
+					"at": 583667,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063319441525,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4660",
+					"salience": 0.293939179078935
+				},
+				{
+					"at": 583668,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063305152614,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4661",
+					"salience": 0.2939861352691408
+				},
+				{
+					"at": 583669,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063290863371,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4662",
+					"salience": 0.2940330989605093
+				},
+				{
+					"at": 583670,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063276574126,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4663",
+					"salience": 0.29408007015423315
+				},
+				{
+					"at": 583671,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063262284881,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4664",
+					"salience": 0.2941270488515075
+				},
+				{
+					"at": 583672,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.000497706324799597,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4665",
+					"salience": 0.2941740350535389
+				},
+				{
+					"at": 583673,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063233706392,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4666",
+					"salience": 0.2942210287615192
+				},
+				{
+					"at": 583674,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063219417147,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4667",
+					"salience": 0.2942680299766539
+				},
+				{
+					"at": 583675,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063205128236,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4668",
+					"salience": 0.29431503870013526
+				},
+				{
+					"at": 583676,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063190838992,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4669",
+					"salience": 0.29436205493317047
+				},
+				{
+					"at": 583677,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063176549748,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4670",
+					"salience": 0.29440907867695537
+				},
+				{
+					"at": 583678,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063162260836,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4671",
+					"salience": 0.29445610993268506
+				},
+				{
+					"at": 583679,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063147971593,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4672",
+					"salience": 0.2945031487015686
+				},
+				{
+					"at": 583680,
+					"kind": "outcome",
+					"action": "meal",
+					"actorId": "ece",
+					"valence": 0.0004977063133682349,
+					"summary": "I completed this action: meal.",
+					"tags": ["completed"],
+					"placeId": "home",
+					"id": "e4673",
+					"salience": 0.2945501949847974
+				},
+				{
+					"at": 583681,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015258494000632204,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4674",
+					"salience": 0.30396538415616364
+				},
+				{
+					"at": 583682,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458695518033,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4675",
+					"salience": 0.30400257387798774
+				},
+				{
+					"at": 583683,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458694801838,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4676",
+					"salience": 0.30404546777673563
+				},
+				{
+					"at": 583684,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458694085644,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4677",
+					"salience": 0.3040883677276915
+				},
+				{
+					"at": 583685,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458693369449,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4678",
+					"salience": 0.3041312737317089
+				},
+				{
+					"at": 583686,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458692653255,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4679",
+					"salience": 0.30417418578964167
+				},
+				{
+					"at": 583687,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945869193706,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4680",
+					"salience": 0.3042171039023406
+				},
+				{
+					"at": 583688,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458691220867,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4681",
+					"salience": 0.3042600280706679
+				},
+				{
+					"at": 583689,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458690504673,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4682",
+					"salience": 0.30430295829547366
+				},
+				{
+					"at": 583690,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458689788479,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4683",
+					"salience": 0.30434589457761196
+				},
+				{
+					"at": 583691,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458689072284,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4684",
+					"salience": 0.3043888369179384
+				},
+				{
+					"at": 583692,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945868835609,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4685",
+					"salience": 0.304431785317304
+				},
+				{
+					"at": 583693,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458687639895,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4686",
+					"salience": 0.30447473977657
+				},
+				{
+					"at": 583694,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458686923702,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4687",
+					"salience": 0.3045177002965895
+				},
+				{
+					"at": 583695,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458686207508,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4688",
+					"salience": 0.3045606668782165
+				},
+				{
+					"at": 583696,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458685491313,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4689",
+					"salience": 0.3046036395223065
+				},
+				{
+					"at": 583697,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458684775119,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4690",
+					"salience": 0.3046466182297109
+				},
+				{
+					"at": 583698,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458684058925,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4691",
+					"salience": 0.3046896030012932
+				},
+				{
+					"at": 583699,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945868334273,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4692",
+					"salience": 0.30473259383790463
+				},
+				{
+					"at": 583700,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945868262657,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4693",
+					"salience": 0.3047755907404015
+				},
+				{
+					"at": 583701,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458681910376,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4694",
+					"salience": 0.3048185937096391
+				},
+				{
+					"at": 583702,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458681194181,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4695",
+					"salience": 0.3048616027464714
+				},
+				{
+					"at": 583703,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458680477987,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4696",
+					"salience": 0.3049046178517598
+				},
+				{
+					"at": 583704,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458679761792,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4697",
+					"salience": 0.30494763902635774
+				},
+				{
+					"at": 583705,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.0152494586790456,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4698",
+					"salience": 0.30499066627112154
+				},
+				{
+					"at": 583706,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458678329405,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4699",
+					"salience": 0.30503369958690785
+				},
+				{
+					"at": 583707,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945867761321,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4700",
+					"salience": 0.3050767389745699
+				},
+				{
+					"at": 583708,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945867689705,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4701",
+					"salience": 0.30511978443497084
+				},
+				{
+					"at": 583709,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458676180857,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4702",
+					"salience": 0.30516283596896476
+				},
+				{
+					"at": 583710,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458675464662,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4703",
+					"salience": 0.30520589357740774
+				},
+				{
+					"at": 583711,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458674748468,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4704",
+					"salience": 0.30524895726115703
+				},
+				{
+					"at": 583712,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458674032273,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4705",
+					"salience": 0.30529202702106767
+				},
+				{
+					"at": 583713,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458673316079,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4706",
+					"salience": 0.3053351028580018
+				},
+				{
+					"at": 583714,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458672599919,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4707",
+					"salience": 0.3053781847728153
+				},
+				{
+					"at": 583715,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458671883724,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4708",
+					"salience": 0.3054212727663643
+				},
+				{
+					"at": 583716,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945867116753,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4709",
+					"salience": 0.30546436683950734
+				},
+				{
+					"at": 583717,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458670451336,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4710",
+					"salience": 0.30550746699309955
+				},
+				{
+					"at": 583718,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458669735141,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4711",
+					"salience": 0.3055505732280037
+				},
+				{
+					"at": 583719,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458669018981,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4712",
+					"salience": 0.305593685545076
+				},
+				{
+					"at": 583720,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458668302787,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4713",
+					"salience": 0.30563680394517406
+				},
+				{
+					"at": 583721,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458667586592,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4714",
+					"salience": 0.3056799284291559
+				},
+				{
+					"at": 583722,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458666870398,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4715",
+					"salience": 0.30572305899787794
+				},
+				{
+					"at": 583723,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458666154238,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4716",
+					"salience": 0.30576619565220364
+				},
+				{
+					"at": 583724,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458665438044,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4717",
+					"salience": 0.3058093383929892
+				},
+				{
+					"at": 583725,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945866472185,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4718",
+					"salience": 0.3058524872210927
+				},
+				{
+					"at": 583726,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458664005655,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4719",
+					"salience": 0.3058956421373744
+				},
+				{
+					"at": 583727,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458663289493,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4720",
+					"salience": 0.3059388031426895
+				},
+				{
+					"at": 583728,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.0152494586625733,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4721",
+					"salience": 0.3059819702379032
+				},
+				{
+					"at": 583729,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458661857106,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4722",
+					"salience": 0.30602514342387177
+				},
+				{
+					"at": 583730,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458661140912,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4723",
+					"salience": 0.30606832270145445
+				},
+				{
+					"at": 583731,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945866042475,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4724",
+					"salience": 0.3061115080715105
+				},
+				{
+					"at": 583732,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458659708557,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4725",
+					"salience": 0.3061546995348983
+				},
+				{
+					"at": 583733,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458658992363,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4726",
+					"salience": 0.30619789709248096
+				},
+				{
+					"at": 583734,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458658276201,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4727",
+					"salience": 0.3062411007451169
+				},
+				{
+					"at": 583735,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458657560007,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4728",
+					"salience": 0.30628431049366606
+				},
+				{
+					"at": 583736,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458656843812,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4729",
+					"salience": 0.3063275263389882
+				},
+				{
+					"at": 583737,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458656127653,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4730",
+					"salience": 0.30637074828194166
+				},
+				{
+					"at": 583738,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458655411458,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4731",
+					"salience": 0.3064139763233908
+				},
+				{
+					"at": 583739,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458654695264,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4732",
+					"salience": 0.3064572104641945
+				},
+				{
+					"at": 583740,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458653979104,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4733",
+					"salience": 0.3065004507052125
+				},
+				{
+					"at": 583741,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945865326291,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4734",
+					"salience": 0.3065436970473064
+				},
+				{
+					"at": 583742,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458652546748,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4735",
+					"salience": 0.30658694949133447
+				},
+				{
+					"at": 583743,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458651830554,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4736",
+					"salience": 0.3066302080381622
+				},
+				{
+					"at": 583744,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458651114359,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4737",
+					"salience": 0.30667347268864825
+				},
+				{
+					"at": 583745,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.0152494586503982,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4738",
+					"salience": 0.3067167434436539
+				},
+				{
+					"at": 583746,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458649682005,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4739",
+					"salience": 0.3067600203040406
+				},
+				{
+					"at": 583747,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458648965843,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4740",
+					"salience": 0.3068033032706677
+				},
+				{
+					"at": 583748,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458648249649,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4741",
+					"salience": 0.30684659234440087
+				},
+				{
+					"at": 583749,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458647533456,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4742",
+					"salience": 0.3068898875260998
+				},
+				{
+					"at": 583750,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458646817295,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4743",
+					"salience": 0.3069331888166261
+				},
+				{
+					"at": 583751,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.0152494586461011,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4744",
+					"salience": 0.30697649621684014
+				},
+				{
+					"at": 583752,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945864538494,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4745",
+					"salience": 0.30701980972760756
+				},
+				{
+					"at": 583753,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458644668746,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4746",
+					"salience": 0.30706312934978813
+				},
+				{
+					"at": 583754,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458643952584,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4747",
+					"salience": 0.30710645508424533
+				},
+				{
+					"at": 583755,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945864323639,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4748",
+					"salience": 0.3071497869318407
+				},
+				{
+					"at": 583756,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945864252023,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4749",
+					"salience": 0.3071931248934354
+				},
+				{
+					"at": 583757,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458641804036,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4750",
+					"salience": 0.30723646896989554
+				},
+				{
+					"at": 583758,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458641087874,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4751",
+					"salience": 0.30727981916208214
+				},
+				{
+					"at": 583759,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945864037168,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4752",
+					"salience": 0.3073231754708578
+				},
+				{
+					"at": 583760,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458639655487,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4753",
+					"salience": 0.30736653789708585
+				},
+				{
+					"at": 583761,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458638939326,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4754",
+					"salience": 0.3074099064416281
+				},
+				{
+					"at": 583762,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458638223164,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4755",
+					"salience": 0.3074532811053508
+				},
+				{
+					"at": 583763,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945863750697,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4756",
+					"salience": 0.3074966618891156
+				},
+				{
+					"at": 583764,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945863679081,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4757",
+					"salience": 0.307540048793786
+				},
+				{
+					"at": 583765,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458636074615,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4758",
+					"salience": 0.3075834418202258
+				},
+				{
+					"at": 583766,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458635358454,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4759",
+					"salience": 0.3076268409692975
+				},
+				{
+					"at": 583767,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458634642261,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4760",
+					"salience": 0.30767024624186745
+				},
+				{
+					"at": 583768,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.0152494586339261,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4761",
+					"salience": 0.3077136576387984
+				},
+				{
+					"at": 583769,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458633209905,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4762",
+					"salience": 0.3077570751609546
+				},
+				{
+					"at": 583770,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458632493744,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4763",
+					"salience": 0.30780049880920024
+				},
+				{
+					"at": 583771,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458631777551,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4764",
+					"salience": 0.30784392858439846
+				},
+				{
+					"at": 583772,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945863106139,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4765",
+					"salience": 0.30788736448741616
+				},
+				{
+					"at": 583773,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458630345228,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4766",
+					"salience": 0.3079308065191167
+				},
+				{
+					"at": 583774,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458629629035,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4767",
+					"salience": 0.3079742546803648
+				},
+				{
+					"at": 583775,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458628912874,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4768",
+					"salience": 0.30801770897202535
+				},
+				{
+					"at": 583776,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945862819668,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4769",
+					"salience": 0.30806116939496264
+				},
+				{
+					"at": 583777,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458627480518,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4770",
+					"salience": 0.30810463595004345
+				},
+				{
+					"at": 583778,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458626764358,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4771",
+					"salience": 0.3081481086381321
+				},
+				{
+					"at": 583779,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458626048163,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4772",
+					"salience": 0.30819158746009373
+				},
+				{
+					"at": 583780,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458625332002,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4773",
+					"salience": 0.30823507241679415
+				},
+				{
+					"at": 583781,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458624615842,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4774",
+					"salience": 0.30827856350909805
+				},
+				{
+					"at": 583782,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458623899648,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4775",
+					"salience": 0.30832206073787255
+				},
+				{
+					"at": 583783,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458623183486,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4776",
+					"salience": 0.3083655641039829
+				},
+				{
+					"at": 583784,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458622467326,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4777",
+					"salience": 0.308409073608295
+				},
+				{
+					"at": 583785,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458621751132,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4778",
+					"salience": 0.3084525892516748
+				},
+				{
+					"at": 583786,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945862103497,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4779",
+					"salience": 0.30849611103498825
+				},
+				{
+					"at": 583787,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945862031881,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4780",
+					"salience": 0.30853963895910264
+				},
+				{
+					"at": 583788,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458619602616,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4781",
+					"salience": 0.3085831730248838
+				},
+				{
+					"at": 583789,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458618886455,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4782",
+					"salience": 0.30862671323319846
+				},
+				{
+					"at": 583790,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458618170293,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4783",
+					"salience": 0.30867025958491295
+				},
+				{
+					"at": 583791,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.0152494586174541,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4784",
+					"salience": 0.3087138120808942
+				},
+				{
+					"at": 583792,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458616737939,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4785",
+					"salience": 0.3087573707220094
+				},
+				{
+					"at": 583793,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458616021777,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4786",
+					"salience": 0.3088009355091257
+				},
+				{
+					"at": 583794,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458615305618,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4787",
+					"salience": 0.30884450644311
+				},
+				{
+					"at": 583795,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458614589423,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4788",
+					"salience": 0.30888808352482977
+				},
+				{
+					"at": 583796,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458613873262,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4789",
+					"salience": 0.30893166675515205
+				},
+				{
+					"at": 583797,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458613157102,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4790",
+					"salience": 0.308975256134945
+				},
+				{
+					"at": 583798,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.01524945861244094,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4791",
+					"salience": 0.30901885166507587
+				},
+				{
+					"at": 583799,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458611724746,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4792",
+					"salience": 0.30906245334641264
+				},
+				{
+					"at": 583800,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458611008586,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4793",
+					"salience": 0.30910606117982314
+				},
+				{
+					"at": 583801,
+					"kind": "outcome",
+					"action": "work",
+					"actorId": "ece",
+					"valence": 0.015249458610292425,
+					"summary": "I completed this action: courier round.",
+					"tags": ["completed"],
+					"placeId": "delivery district",
+					"id": "e4794",
+					"salience": 0.3091496751661754
+				}
+			],
+			"beliefs": [],
+			"expectations": [
+				{
+					"key": "sleep",
+					"needs": {
+						"water": 0.0014100102892238974,
+						"autonomy": 0.1
+					},
+					"successRate": 1,
+					"samples": 216,
+					"valence": 0.030423015463392405
+				},
+				{
+					"key": "meal",
+					"needs": {
+						"food": 0.0009008439577000095,
+						"water": 0.0008315286680548276
+					},
+					"successRate": 1,
+					"samples": 960,
+					"valence": 0.0005205067545278887
+				},
+				{
+					"key": "work",
+					"needs": {
+						"competence": 0.05,
+						"water": 0.0008315283761088591
+					},
+					"successRate": 1,
+					"samples": 2521,
+					"valence": 0.015249458619657551
+				},
+				{
+					"key": "rest",
+					"needs": {
+						"water": 0.0008315300975190923,
+						"autonomy": 0.1
+					},
+					"successRate": 1,
+					"samples": 1098,
+					"valence": 0.03024945974190762
+				}
+			],
+			"sourceTrust": {},
+			"nextEpisode": 4795
+		},
+		"social": {
+			"relationships": [
+				{
+					"otherId": "dilan",
+					"affection": 0.1,
+					"trust": 0.55,
+					"respect": 0.15,
+					"familiarity": 0.3980524448521069,
+					"roles": ["colleague"],
+					"ledger": 0,
+					"lastInteraction": 576399
+				}
+			]
+		},
+		"agenda": {
+			"commitments": [],
+			"goals": [
+				{
+					"label": "make-friend",
+					"serves": ["belonging"],
+					"advancedBy": [
+						{
+							"action": "chat",
+							"amount": 0.1
+						},
+						{
+							"action": "help",
+							"amount": 0.15
+						},
+						{
+							"action": "gift",
+							"amount": 0.15
+						}
+					],
+					"importance": 0.6414769608694895,
+					"baseImportance": 0.6414769608694895,
+					"id": "g1",
+					"status": "abandoned",
+					"progress": 0,
+					"adoptedAt": 583800,
+					"lastAdvancedAt": 583800
+				}
+			],
+			"nextId": 2,
+			"lastProposalDay": 405
+		},
+		"will": {
+			"voices": [],
+			"precommitments": [],
+			"switchMargin": 0.15,
+			"temperature": 0
+		},
+		"activity": null,
+		"trace": [
+			{
+				"id": "d4763",
+				"at": 583769,
+				"chosenAffordanceId": "routine-583769",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583769",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011314904970751993
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4764",
+				"at": 583770,
+				"chosenAffordanceId": "routine-583770",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583770",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011313701729540604
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4765",
+				"at": 583771,
+				"chosenAffordanceId": "routine-583771",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583771",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011312499453236813
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4766",
+				"at": 583772,
+				"chosenAffordanceId": "routine-583772",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583772",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001131129814067905
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4767",
+				"at": 583773,
+				"chosenAffordanceId": "routine-583773",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583773",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011310097790706852
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4768",
+				"at": 583774,
+				"chosenAffordanceId": "routine-583774",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583774",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001130889840216226
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4769",
+				"at": 583775,
+				"chosenAffordanceId": "routine-583775",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583775",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001130769997388953
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4770",
+				"at": 583776,
+				"chosenAffordanceId": "routine-583776",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583776",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011306502504734584
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4771",
+				"at": 583777,
+				"chosenAffordanceId": "routine-583777",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583777",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001130530599354529
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4772",
+				"at": 583778,
+				"chosenAffordanceId": "routine-583778",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583778",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001130411043917201
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4773",
+				"at": 583779,
+				"chosenAffordanceId": "routine-583779",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583779",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011302915840466221
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4774",
+				"at": 583780,
+				"chosenAffordanceId": "routine-583780",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583780",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011301722196281894
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4775",
+				"at": 583781,
+				"chosenAffordanceId": "routine-583781",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583781",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011300529505474666
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4776",
+				"at": 583782,
+				"chosenAffordanceId": "routine-583782",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583782",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011299337766902118
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4777",
+				"at": 583783,
+				"chosenAffordanceId": "routine-583783",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583783",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001129814697942405
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4778",
+				"at": 583784,
+				"chosenAffordanceId": "routine-583784",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583784",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011296957141901376
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4779",
+				"at": 583785,
+				"chosenAffordanceId": "routine-583785",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583785",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001129576825319778
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4780",
+				"at": 583786,
+				"chosenAffordanceId": "routine-583786",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583786",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001129458031217806
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4781",
+				"at": 583787,
+				"chosenAffordanceId": "routine-583787",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583787",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011293393317708955
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4782",
+				"at": 583788,
+				"chosenAffordanceId": "routine-583788",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583788",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011292207268659982
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4783",
+				"at": 583789,
+				"chosenAffordanceId": "routine-583789",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583789",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011291022163900655
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4784",
+				"at": 583790,
+				"chosenAffordanceId": "routine-583790",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583790",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011289838002304653
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4785",
+				"at": 583791,
+				"chosenAffordanceId": "routine-583791",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583791",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.00112886547827451
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4786",
+				"at": 583792,
+				"chosenAffordanceId": "routine-583792",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583792",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011287472504099005
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4787",
+				"at": 583793,
+				"chosenAffordanceId": "routine-583793",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583793",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011286291165243656
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4788",
+				"at": 583794,
+				"chosenAffordanceId": "routine-583794",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583794",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011285110765059114
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4789",
+				"at": 583795,
+				"chosenAffordanceId": "routine-583795",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583795",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011283931302426553
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4790",
+				"at": 583796,
+				"chosenAffordanceId": "routine-583796",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583796",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011282752776229643
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason to choose something else."
+			},
+			{
+				"id": "d4791",
+				"at": 583797,
+				"chosenAffordanceId": "routine-583797",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583797",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.001128157518535261
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4792",
+				"at": 583798,
+				"chosenAffordanceId": "routine-583798",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583798",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011280398528683566
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			},
+			{
+				"id": "d4793",
+				"at": 583799,
+				"chosenAffordanceId": "routine-583799",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583799",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011279222805110067
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "This is good enough for me."
+			},
+			{
+				"id": "d4794",
+				"at": 583800,
+				"chosenAffordanceId": "routine-583800",
+				"chosenAction": "work",
+				"considered": [
+					{
+						"affordanceId": "routine-583800",
+						"action": "work",
+						"label": "courier round",
+						"utility": -0.0037,
+						"terms": [
+							{
+								"source": "effort",
+								"value": -0.0037
+							}
+						],
+						"advertised": {
+							"competence": 0.05,
+							"water": 0.25
+						},
+						"believed": {
+							"competence": 0.05,
+							"water": 0.0011278048013523279
+						}
+					}
+				],
+				"intention": "I am doing this because it suits me.",
+				"narration": "I see no reason not to do this."
+			}
+		],
+		"nextDecision": 4795,
+		"lexicon": {
+			"plainEnglish": true
+		},
+		"chronicleDay": {
+			"day": 405,
+			"baseline": {
+				"habits": {
+					"sleep@h6,p:home": 0.03419352591997061,
+					"sleep@h6,p:home,a:sleep": 0.12699612730071388,
+					"meal@h7,p:home,a:sleep": 0.17159714979941065,
+					"meal@h7,p:home,a:meal": 0.18349494815839493,
+					"work@h8,p:delivery district,a:meal": 0.17602011686826424,
+					"work@h8,p:delivery district,a:work": 0.18410598487438826,
+					"work@h9,p:delivery district,a:work": 0.18351807034425274,
+					"work@h10,p:delivery district,a:work": 0.18356224407406996,
+					"work@h11,p:delivery district,a:work": 0.18303869684171806,
+					"meal@h12,p:home,a:work": 0.17618965380621698,
+					"meal@h12,p:home,a:meal": 0.18371589531994925,
+					"work@h13,p:delivery district,a:meal": 0.17623206354902488,
+					"work@h13,p:delivery district,a:work": 0.18432766778823131,
+					"work@h14,p:delivery district,a:work": 0.18373904534734353,
+					"work@h15,p:delivery district,a:work": 0.18378327226696414,
+					"work@h16,p:delivery district,a:work": 0.18325909462883805,
+					"rest@h17,p:home,a:work": 0.17640180462723135,
+					"rest@h17,p:home,a:rest": 0.18392703426504994,
+					"meal@h18,p:home,a:rest": 0.17171600377742754,
+					"meal@h18,p:home,a:meal": 0.18397130643455623,
+					"rest@h19,p:home,a:meal": 0.17251197326212175,
+					"rest@h19,p:home,a:rest": 0.18459403966002957,
+					"rest@h20,p:home,a:rest": 0.18400456660098363,
+					"rest@h21,p:home,a:rest": 0.18365892197823233,
+					"sleep@h22,p:home,a:rest": 0.1726181843730471,
+					"sleep@h23,p:home,a:sleep": 0.16624989618215644,
+					"sleep@h0,p:home,a:sleep": 0.14688409299273444,
+					"sleep@h1,p:home,a:sleep": 0.14691944873849966,
+					"sleep@h2,p:home,a:sleep": 0.14695481299457203,
+					"sleep@h3,p:home,a:sleep": 0.14699018576300002,
+					"sleep@h4,p:home,a:sleep": 0.14928778303667206
+				},
+				"trust": {},
+				"illnesses": {},
+				"openBreaches": []
+			},
+			"kept": [],
+			"broken": [],
+			"released": [],
+			"actions": [
+				{
+					"action": "sleep",
+					"done": 36,
+					"prompted": 0,
+					"by": {}
+				},
+				{
+					"action": "meal",
+					"done": 60,
+					"prompted": 0,
+					"by": {}
+				},
+				{
+					"action": "work",
+					"done": 121,
+					"prompted": 0,
+					"by": {}
+				}
+			],
+			"verdicts": [],
+			"material": 0,
+			"moodSum": 0.13285605091636718,
+			"moodSamples": 10,
+			"decisions": 216
+		},
+		"chronicle": [
+			{
+				"day": 400,
+				"kept": [],
+				"broken": [],
+				"released": [],
+				"keptByKind": {},
+				"brokenByKind": {},
+				"prayers": {
+					"kept": [],
+					"missed": [],
+					"prompted": []
+				},
+				"actions": [
+					{
+						"action": "meal",
+						"done": 180,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "rest",
+						"done": 212,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "sleep",
+						"done": 24,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "work",
+						"done": 480,
+						"prompted": 0,
+						"by": {}
+					}
+				],
+				"habits": [],
+				"trust": [],
+				"episodes": [
+					{
+						"id": "e681",
+						"summary": "I completed this action: meal.",
+						"valence": 0.0762096991143093,
+						"salience": 0.3341129035450433,
+						"action": "meal"
+					},
+					{
+						"id": "e895",
+						"summary": "I completed this action: sleep.",
+						"valence": 0.03363310594560092,
+						"salience": 0.3190382618721152,
+						"action": "sleep"
+					}
+				],
+				"breaches": [],
+				"repairs": [],
+				"material": 0,
+				"illness": {
+					"onset": [],
+					"recovered": [],
+					"worse": [],
+					"better": []
+				},
+				"mood": 0.207185817342749,
+				"verdicts": [],
+				"decisions": 897,
+				"alive": true
+			},
+			{
+				"day": 401,
+				"kept": [],
+				"broken": [],
+				"released": [],
+				"keptByKind": {},
+				"brokenByKind": {},
+				"prayers": {
+					"kept": [],
+					"missed": [],
+					"prompted": []
+				},
+				"actions": [
+					{
+						"action": "meal",
+						"done": 180,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "rest",
+						"done": 212,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "sleep",
+						"done": 39,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "work",
+						"done": 480,
+						"prompted": 0,
+						"by": {}
+					}
+				],
+				"habits": [],
+				"trust": [],
+				"episodes": [
+					{
+						"id": "e932",
+						"summary": "I completed this action: meal.",
+						"valence": 0.11469621219790066,
+						"salience": 0.3403079122507448,
+						"action": "meal"
+					},
+					{
+						"id": "e1592",
+						"summary": "I completed this action: meal.",
+						"valence": 0.07620937320737536,
+						"salience": 0.33411269470784394,
+						"action": "meal"
+					}
+				],
+				"breaches": [],
+				"repairs": [],
+				"material": 0,
+				"illness": {
+					"onset": [],
+					"recovered": [],
+					"worse": [],
+					"better": []
+				},
+				"mood": 0.37544938363438995,
+				"verdicts": [],
+				"decisions": 911,
+				"alive": true
+			},
+			{
+				"day": 402,
+				"kept": [],
+				"broken": [],
+				"released": [],
+				"keptByKind": {},
+				"brokenByKind": {},
+				"prayers": {
+					"kept": [],
+					"missed": [],
+					"prompted": []
+				},
+				"actions": [
+					{
+						"action": "meal",
+						"done": 180,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "rest",
+						"done": 222,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "sleep",
+						"done": 39,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "work",
+						"done": 480,
+						"prompted": 0,
+						"by": {}
+					}
+				],
+				"habits": [],
+				"trust": [],
+				"episodes": [
+					{
+						"id": "e1843",
+						"summary": "I completed this action: meal.",
+						"valence": 0.11469570412300008,
+						"salience": 0.34030756936805956,
+						"action": "meal"
+					},
+					{
+						"id": "e2503",
+						"summary": "I completed this action: meal.",
+						"valence": 0.07620904744935121,
+						"salience": 0.3341124859660253,
+						"action": "meal"
+					}
+				],
+				"breaches": [],
+				"repairs": [],
+				"material": 0,
+				"illness": {
+					"onset": [],
+					"recovered": [],
+					"worse": [],
+					"better": []
+				},
+				"mood": 0.35854561388807893,
+				"verdicts": [],
+				"decisions": 921,
+				"alive": true
+			},
+			{
+				"day": 403,
+				"kept": [],
+				"broken": [],
+				"released": [],
+				"keptByKind": {},
+				"brokenByKind": {},
+				"prayers": {
+					"kept": [],
+					"missed": [],
+					"prompted": []
+				},
+				"actions": [
+					{
+						"action": "meal",
+						"done": 180,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "rest",
+						"done": 212,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "sleep",
+						"done": 38,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "work",
+						"done": 480,
+						"prompted": 0,
+						"by": {}
+					}
+				],
+				"habits": [],
+				"trust": [],
+				"episodes": [
+					{
+						"id": "e2763",
+						"summary": "I completed this action: meal.",
+						"valence": 0.11610620246668361,
+						"salience": 0.3412588384044929,
+						"action": "meal"
+					},
+					{
+						"id": "e3423",
+						"summary": "I completed this action: meal.",
+						"valence": 0.07620872184016725,
+						"salience": 0.33411227731952964,
+						"action": "meal"
+					}
+				],
+				"breaches": [],
+				"repairs": [],
+				"material": 0,
+				"illness": {
+					"onset": [],
+					"recovered": [],
+					"worse": [],
+					"better": []
+				},
+				"mood": 0.2698022797782231,
+				"verdicts": [],
+				"decisions": 910,
+				"alive": true
+			},
+			{
+				"day": 404,
+				"kept": [],
+				"broken": [],
+				"released": [],
+				"keptByKind": {},
+				"brokenByKind": {},
+				"prayers": {
+					"kept": [],
+					"missed": [],
+					"prompted": []
+				},
+				"actions": [
+					{
+						"action": "meal",
+						"done": 180,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "rest",
+						"done": 240,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "sleep",
+						"done": 40,
+						"prompted": 0,
+						"by": {}
+					},
+					{
+						"action": "work",
+						"done": 480,
+						"prompted": 0,
+						"by": {}
+					}
+				],
+				"habits": [],
+				"trust": [],
+				"episodes": [
+					{
+						"id": "e3674",
+						"summary": "I completed this action: meal.",
+						"valence": 0.11469468867015876,
+						"salience": 0.3403068840726134,
+						"action": "meal"
+					},
+					{
+						"id": "e4334",
+						"summary": "I completed this action: meal.",
+						"valence": 0.07620839637975728,
+						"salience": 0.3341120687683238,
+						"action": "meal"
+					}
+				],
+				"breaches": [],
+				"repairs": [],
+				"material": 0,
+				"illness": {
+					"onset": [],
+					"recovered": [],
+					"worse": [],
+					"better": []
+				},
+				"mood": 0.10574547014655555,
+				"verdicts": [],
+				"decisions": 940,
+				"alive": true,
+				"state": {
+					"habits": {
+						"sleep@h6,p:home": 0.03419352591997061,
+						"sleep@h6,p:home,a:sleep": 0.12699612730071388,
+						"meal@h7,p:home,a:sleep": 0.17159714979941065,
+						"meal@h7,p:home,a:meal": 0.18349494815839493,
+						"work@h8,p:delivery district,a:meal": 0.17602011686826424,
+						"work@h8,p:delivery district,a:work": 0.18410598487438826,
+						"work@h9,p:delivery district,a:work": 0.18351807034425274,
+						"work@h10,p:delivery district,a:work": 0.18356224407406996,
+						"work@h11,p:delivery district,a:work": 0.18303869684171806,
+						"meal@h12,p:home,a:work": 0.17618965380621698,
+						"meal@h12,p:home,a:meal": 0.18371589531994925,
+						"work@h13,p:delivery district,a:meal": 0.17623206354902488,
+						"work@h13,p:delivery district,a:work": 0.18432766778823131,
+						"work@h14,p:delivery district,a:work": 0.18373904534734353,
+						"work@h15,p:delivery district,a:work": 0.18378327226696414,
+						"work@h16,p:delivery district,a:work": 0.18325909462883805,
+						"rest@h17,p:home,a:work": 0.17640180462723135,
+						"rest@h17,p:home,a:rest": 0.18392703426504994,
+						"meal@h18,p:home,a:rest": 0.17171600377742754,
+						"meal@h18,p:home,a:meal": 0.18397130643455623,
+						"rest@h19,p:home,a:meal": 0.17251197326212175,
+						"rest@h19,p:home,a:rest": 0.18459403966002957,
+						"rest@h20,p:home,a:rest": 0.18400456660098363,
+						"rest@h21,p:home,a:rest": 0.18365892197823233,
+						"sleep@h22,p:home,a:rest": 0.1726181843730471,
+						"sleep@h23,p:home,a:sleep": 0.16624989618215644,
+						"sleep@h0,p:home,a:sleep": 0.14688409299273444,
+						"sleep@h1,p:home,a:sleep": 0.14691944873849966,
+						"sleep@h2,p:home,a:sleep": 0.14695481299457203,
+						"sleep@h3,p:home,a:sleep": 0.14699018576300002,
+						"sleep@h4,p:home,a:sleep": 0.14928778303667206
+					},
+					"trust": {},
+					"illnesses": {},
+					"openBreaches": []
+				}
+			}
+		]
+	}
+}

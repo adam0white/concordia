@@ -13,6 +13,7 @@ import {
 	HANDCART_MINUTES,
 	handcartOffers,
 } from "./handcart.ts";
+import type { Affordance } from "./host-types.ts";
 import { placeOf, required } from "./invariants.ts";
 export const WORK_MINUTES: Record<string, number> = {
 	...HANDCART_MINUTES,
@@ -52,7 +53,6 @@ export const WORK_MINUTES: Record<string, number> = {
 	"attend-meal": 45,
 };
 
-import { type Affordance, inBreak } from "@adam0white/human-framework";
 import type { Save } from "./state.ts";
 export const WORKPLACE: Record<string, [string, string]> = {
 	"repair designer": ["workshop", "Make and repair workshop fittings"],
@@ -79,15 +79,16 @@ export function usesActivitySlot(offer: Affordance): boolean {
 	return !offer.tags?.includes("floor") && !offer.tags?.includes("noticeboard");
 }
 export function workMinutesFor(offer: Affordance): number {
+	if (offer.id === "private-share" || offer.id === "private-decline") return 1;
 	return required(
 		offer.id === "post-structural-question" ? 15 : WORK_MINUTES[offer.action],
 		"Unknown action duration",
 	);
 }
 export function buildOffers(s: Save, id: string, historical?: Affordance) {
-	const r = s.people.find((p) => p.person.id === id);
+	const r = s.people.find((p) => p.id === id);
 	if (!r) throw Error("Unknown resident");
-	if ((r.job || !r.person.body.alive) && !historical) return [];
+	if ((r.job || !r.owner.actor(r.id).body.alive) && !historical) return [];
 	const available = s.places.filter(
 		(p) => historical || p.reserved < p.capacity,
 	);
@@ -119,15 +120,18 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 			duration: duration + travel,
 			effort: 0.15,
 			advertises,
-			fulfills: r.person.agenda.commitments
-				.filter((c) => c.status === "pending" && c.actions.includes(action))
+			fulfills: r.owner
+				.actor(r.id)
+				.agenda.commitments.filter(
+					(c) => c.status === "pending" && c.actions.includes(action),
+				)
 				.map((c) => c.id),
 			...extra,
 		});
 	};
 	if (
-		r.person.body.downed ||
-		inBreak(r.person) ||
+		r.owner.actor(r.id).body.downed ||
+		r.owner.actor(r.id).affect.crisis.active ||
 		historical?.id === "rest-here"
 	) {
 		add(
@@ -146,10 +150,12 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 			{ sleep: 0.6 },
 			{ id: "sleep-here", mode: "sleep", effort: 0, tags: ["floor", "rest"] },
 		);
-		if (!historical && r.person.body.downed) return list;
+		if (!historical && r.owner.actor(r.id).body.downed) return list;
 	}
 	if (
-		(r.person.body.asleep && !r.person.body.downed && !inBreak(r.person)) ||
+		(r.owner.actor(r.id).body.asleep &&
+			!r.owner.actor(r.id).body.downed &&
+			!r.owner.actor(r.id).affect.crisis.active) ||
 		(historical?.id === "sleep-here" &&
 			!list.some((a) => a.id === "sleep-here"))
 	)
@@ -163,9 +169,11 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 		);
 	for (const action of ["pray", "pray-home", "pray-qada", "pray-eid", "tea"]) {
 		if (
-			r.person.agenda.commitments.some(
-				(c) => c.status === "pending" && c.actions.includes(action),
-			)
+			r.owner
+				.actor(r.id)
+				.agenda.commitments.some(
+					(c) => c.status === "pending" && c.actions.includes(action),
+				)
 		)
 			add(
 				action,
@@ -371,7 +379,7 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 	)
 		add(
 			"wait-inspector",
-			`Wait for ${inspectionInstructors(s)[0]?.person.name ?? "an inspector"} beside the hall noticeboard`,
+			`Wait for ${inspectionInstructors(s)[0]?.name ?? "an inspector"} beside the hall noticeboard`,
 			"hall",
 			30,
 			{ leisure: 0.1 },
@@ -379,20 +387,20 @@ export function buildOffers(s: Save, id: string, historical?: Affordance) {
 	if (instructor)
 		for (const requester of s.people.filter(
 			(o) =>
-				o.person.id !== r.person.id &&
+				o.id !== r.id &&
 				(historical
-					? o.person.id === historical.targetId
+					? o.id === historical.targetId
 					: receivedRequest(r, o) && waitingAtHall(o, s.now)),
 		)) {
 			add(
 				"answer-inspection",
-				`Go over the timber checks with ${requester.person.name}`,
+				`Go over the timber checks with ${requester.name}`,
 				"hall",
 				30,
 				{ meaning: 0.45, belonging: 0.3, competence: 0.2 },
 				{
-					id: `answer-inspection:${requester.person.id}`,
-					targetId: requester.person.id,
+					id: `answer-inspection:${requester.id}`,
+					targetId: requester.id,
 					tags: ["teaching"],
 				},
 			);
@@ -425,17 +433,17 @@ export function socialPreview(
 	offer: Affordance,
 ): Affordance {
 	if (offer.action !== "talk" && offer.action !== "gather") return offer;
-	const r = s.people.find((p) => p.person.id === id);
+	const r = s.people.find((p) => p.id === id);
 	if (!r) return offer;
 	const arrival = s.now + offer.duration - workMinutesFor(offer);
 	const end = s.now + offer.duration;
 	const companions = s.people.filter(
 		(o) =>
-			o.person.id !== id &&
+			o.id !== id &&
 			o.job &&
 			(o.job.offer.action === "talk" || o.job.offer.action === "gather") &&
 			presentAt(o, offer.placeId ?? "", s.now) &&
 			Math.min(end, o.job.end) - Math.max(arrival, o.job.arrive) >= 15,
 	);
-	return { ...offer, with: companions.map((o) => o.person.id).sort() };
+	return { ...offer, with: companions.map((o) => o.id).sort() };
 }
