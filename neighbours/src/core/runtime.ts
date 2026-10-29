@@ -760,7 +760,7 @@ export class Runtime implements TownRuntime {
 		throw Error("Immediate speech boundary exceeded its native request budget");
 	}
 	private completeConversation(person: string): void {
-		const until = this.s.owner.at + MINUTE;
+		let until = this.s.owner.at + MINUTE;
 		for (let budget = 0; budget < 10000; budget++) {
 			if (this.s.owner.pending.length) {
 				this.boundaryRequests = [...this.s.owner.pending];
@@ -773,6 +773,12 @@ export class Runtime implements TownRuntime {
 				: this.s.owner.advance(until);
 			this.resolutions = [];
 			this.acceptStep(result);
+			// Interruption may admit the chosen one-minute activity at a later exact
+			// boundary. Finish at its public end, rather than re-requesting an earlier time.
+			const actor = this.actor(person);
+			const activity = actor.owner.actor(person).activity;
+			if (activity && actor.privateConversation?.offerId === activity.offer.id)
+				until = Math.max(until, activity.endsAt);
 			if (
 				result.at === until &&
 				!this.s.owner.pending.length &&
@@ -1360,7 +1366,7 @@ export class Runtime implements TownRuntime {
 		return r.job
 			? reviewOffers(this.s, r)
 			: r.privateConversation
-				? privateConversationOffers(r)
+				? privateConversationOffers(r, this.s.now)
 				: buildOffers(this.s, id);
 	}
 

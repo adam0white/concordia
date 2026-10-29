@@ -85,7 +85,11 @@ The original96-round/206-person45-minute day failed after36 rounds at physical10
 Fresh actual browser files are20,347,235 bytes; first15 files23,895,655 bytes. They fit50MiB only at that measured boundary, while both exceed the published16MiB linked bound. No file/capture limit, actor count, cognition, history, horizon or deadline was changed. Efficient complete current reading/lossless journal export and compatible recording contracts remain shared HF/SDK dependencies, target2026-10-29/recheck2026-10-30. Unpublished4.10 and synthetic journal results are not game acceptance. Client.8 still has no Neighbours source roles, and its portable readers remain empty. Old reports, tapes and failed4.8 proofs are retained as history. Root owns integration/deployment/cleanup after exact gates; this source is not live.
 
 
-## Published4.10 local file journal — 2026-10-29
+## Source binding after automatic review corrections — 2026-10-29
+
+The physical projection now preserves exact public skill demands; private locations follow existing physical presence, and interrupted private completion uses the actual public activity end for its authored one minute. Fresh six-person affected-route controls compare complete native/journal cold restores and next-step exports. Prior79 whole-host CPython/Pyodide/browser results below are historical source79, not current full-host parity. Published4.10 engine artifacts are unchanged, so the600-fixed-request engine/journal/maps evidence retains that engine-only scope. The owner full-read implementation remains, but changed authored demands and physical destinations can change choices and future cost. No whole-host timing/request-sequence equivalence or full-day pass is inferred. Old file/later-recording findings remain open. No new model call, reviewer or limit waiver.
+
+## Published4.10 local file journal at source79 — 2026-10-29
 
 The current candidate consumes verified published4.10.0/client0.5.9/kit0.5.26. Explicit file and named-copy capture uses public exportRunJournal with a full opening and complete accepted-history chunk, not a cursor delta. The file retains every physical, boundary, witness, host replay, owner queue/lesson/counter and castLocal/source field. The separate native capture remains complete and deterministic. Latest autosaves, previous backups and manual inspector captures stay native; automatic full-run recording uses the complete journal with the same consent/generation guards. A journal file capture does not replace the device save.
 

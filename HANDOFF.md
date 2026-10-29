@@ -1,3 +1,13 @@
+# Existing automatic review corrections — 2026-10-29
+
+Remaining: exact new source CI/coordinator review, existing file P1/later-recording P2, whole96/2700s day/file fit, full parity/30day, complete cheap owner reads, six roles/custody and root integration/live. Player/friends/Show HN stay paused; Adam accepts feel separately. Same PR8, no new review request or model call.
+
+The host now retains the public native skill demand when projecting a selected physical job, so continuing repair/handcart work retains its authored difficulty. Both private alternatives use the resident's actual physical presence, including an arrived job whose departure remains in r.place. A current arrived-job regression also exposed repeated requests one millisecond before a newly admitted private activity's end; completion now follows that activity's public endsAt, preserving its exact60000ms duration and all wall-clock deadlines. No choice/assent is authored by the host.
+
+Fresh focused controls cover the actual six-person repair choice, authored fast/slow cart roundtrip, both private locations, travelling/hearing refusal, actual selected private answer and physical one-minute completion, complete native/journal cold replay and same useful next step. The mandatory native/Python43 controls pass on the corrected host. Source79 whole-host CPython/Pyodide/browser receipts remain historical79 evidence; they are not relabelled current after these behavior changes. Unchanged published HF4.10 engine600-request/journal/native/maps evidence remains generic engine evidence, not the new host's request sequence. Owner full-read implementation remains, but changed offers/locations can change future choices and costs; no new whole-host workload/timing equivalence is claimed.
+
+Root receives the new signed source/proofs/CI snapshot and verified unique backup packet, owns actual thread resolution/review/integration and cleans the retained unmerged tree after archive acceptance. Prior79 and old43/4.9 raw receipts remain immutable.
+
 # Published HF4.10 local journal file candidate — 2026-10-29
 
 Remaining: exact source CI/review, original96-round/45-minute day, full parity,30-day stress, complete linked recording, six-role/custody contracts and root integration/live. Player/friends/Show HN stay paused. Adam accepts feel separately. This candidate is not a release.
