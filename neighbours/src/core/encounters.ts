@@ -1,29 +1,37 @@
-import type { Percept } from "@adam0white/human-framework";
-import { perceive } from "@adam0white/human-framework";
+import type { PerceptData } from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts";
+import { minutePercept } from "./hf4-owner.ts";
+import { MINUTE, nativeMilliseconds } from "./hf4-run.ts";
 import type { Job, Resident, Save } from "./state.ts";
 import { timberMoisture } from "./timber.ts";
+/** Exact host facts at one physical action boundary. Native state is always
+ * read from the sole Run owner, never copied into this witness record. */
+export type PhysicalWitness = Pick<
+	Resident,
+	"id" | "name" | "place" | "job" | "idleSince" | "owner"
+>;
 
 /** Physical presence includes sleepers but excludes people still travelling. */
 export function locatedAt(
-	resident: Resident,
+	resident: Pick<PhysicalWitness, "job" | "place">,
 	placeId: string,
 	now: number,
 ): boolean {
 	return resident.job
 		? resident.job.offer.placeId === placeId &&
-				resident.job.arrive <= now &&
-				resident.job.end >= now
+				nativeMilliseconds(resident.job.arrive) <= nativeMilliseconds(now) &&
+				nativeMilliseconds(resident.job.end) >= nativeMilliseconds(now)
 		: resident.place === placeId;
 }
 export function presentAt(
-	resident: Resident,
+	resident: Pick<PhysicalWitness, "id" | "owner" | "job" | "place">,
 	placeId: string,
 	now: number,
 ): boolean {
 	return (
-		resident.person.body.alive &&
-		!resident.person.body.asleep &&
+		resident.owner.actor(resident.id).body.alive &&
+		!resident.owner.actor(resident.id).body.asleep &&
+		!resident.owner.actor(resident.id).body.downed &&
 		locatedAt(resident, placeId, now) &&
 		resident.job?.offer.mode !== "sleep"
 	);
@@ -37,31 +45,38 @@ export function inspectionKey(state: Save): string {
 export function receiveEvent(
 	resident: Resident,
 	event: TownEvent,
-	channel: Percept["channel"] = "saw",
+	channel: PerceptData["channel"] = "saw",
 	summary = event.text,
 ): boolean {
-	const attended = perceive(resident.person, [
-		{
-			at: resident.person.now,
+	const attended = resident.owner.observe(
+		resident.id,
+		minutePercept(`town:${event.id}:${resident.id}`, event.at, {
 			channel,
 			kind: event.kind,
-			actorId: event.actorId,
-			targetId: resident.person.id,
-			placeId: event.placeId,
+			...(event.actorId ? { actorId: event.actorId } : {}),
+			targetId: resident.id,
+			...(event.placeId ? { placeId: event.placeId } : {}),
 			salience: 0.85,
-			...(event.kind === "question"
-				? { advice: [{ action: "answer-inspection", strength: 0.8 }] }
-				: {}),
+			advice:
+				event.kind === "question"
+					? [
+							{
+								adviceId: `question:${event.id}`,
+								action: "answer-inspection",
+								strength: 0.8,
+							},
+						]
+					: [],
 			valence: event.kind === "lesson" ? 0.3 : 0,
 			summary,
-		},
-	]);
-	if (!attended.length) return false;
+		}),
+	);
+	if (!attended) return false;
 	const received = {
 		...event,
-		at: resident.person.now,
+		at: event.at,
 		text: summary,
-		targetId: resident.person.id,
+		targetId: resident.id,
 	};
 	if (!resident.received?.some((e) => e.id === event.id))
 		resident.received = [...(resident.received ?? []), received].slice(-12);
@@ -83,11 +98,27 @@ export function waitingAtHall(resident: Resident, now: number): boolean {
 }
 
 /** Minutes both people were awake at the destination during this interaction. */
-export function overlapMinutes(job: Job, other: Resident, now: number): number {
+export function overlapMinutes(
+	job: Job,
+	other: PhysicalWitness,
+	now: number,
+): number {
+	const first = other.owner.actor(job.personId);
 	if (
-		!other.person.body.alive ||
-		other.person.body.asleep ||
-		other.person.body.downed
+		!first.body.alive ||
+		first.body.asleep ||
+		first.body.downed ||
+		job.offer.mode === "sleep"
+	)
+		return 0;
+	const awakeFrom = Math.max(
+		first.body.since,
+		other.owner.actor(other.id).body.since,
+	);
+	if (
+		!other.owner.actor(other.id).body.alive ||
+		other.owner.actor(other.id).body.asleep ||
+		other.owner.actor(other.id).body.downed
 	)
 		return 0;
 	const dest = job.offer.placeId;
@@ -97,13 +128,28 @@ export function overlapMinutes(job: Job, other: Resident, now: number): number {
 			return 0;
 		return Math.max(
 			0,
-			Math.min(job.end, other.job.end, now) -
-				Math.max(job.arrive, other.job.arrive),
+			(Math.min(
+				nativeMilliseconds(job.end),
+				nativeMilliseconds(other.job.end),
+				nativeMilliseconds(now),
+			) -
+				Math.max(
+					nativeMilliseconds(job.arrive),
+					nativeMilliseconds(other.job.arrive),
+					awakeFrom,
+				)) /
+				MINUTE,
 		);
 	}
 	if (other.place !== dest) return 0;
 	return Math.max(
 		0,
-		Math.min(job.end, now) - Math.max(job.arrive, other.idleSince ?? 480),
+		(Math.min(nativeMilliseconds(job.end), nativeMilliseconds(now)) -
+			Math.max(
+				nativeMilliseconds(job.arrive),
+				nativeMilliseconds(other.idleSince ?? 480),
+				awakeFrom,
+			)) /
+			MINUTE,
 	);
 }

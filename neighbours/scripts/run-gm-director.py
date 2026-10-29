@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""One native upstream Concordia GM proposal, then exact zero-call replay."""
+"""Bounded current-checkpoint proposal; historical HF3 fresh capture refuses.
+
+Current component protocol replay is distinct from the immutable old reports.
+"""
 import argparse
 from datetime import datetime, timezone
 import json
@@ -8,36 +11,22 @@ import importlib.metadata
 from pathlib import Path
 import subprocess
 import sys
-import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from concordia.contrib.neighbours.bridge import NodeBridge
-from concordia.contrib.neighbours.engine import TownEngine
 from concordia.contrib.neighbours.gm_director import (
     ClaudeCliModel, UPSTREAM_SHA, digest, replay_report, run_director, runtime_sources,
     verify_upstream_sources)
+from concordia.contrib.neighbours.bridge import NodeBridge
+from concordia.contrib.neighbours.engine import TownEngine
 
 
 def capture_checkpoint(node, seed):
-  """Obtain and canonicalize actual fictional HF progression without a model."""
-  # Advance a fresh fictional HF town until its actual progression produces a
-  # weekly opportunity. Never inject hall progress or import an owner save.
-  with tempfile.TemporaryDirectory(prefix='neighbours-gm-checkpoint-') as directory:
-    subprocess.run([
-        node, str(ROOT / 'neighbours/scripts/capture-weekly.ts'),
-        '--output-directory', directory, '--seed', str(seed)],
-        cwd=ROOT / 'neighbours', check=True, timeout=180)
-    candidate = json.loads((Path(directory) / 'candidate.json').read_text())
-    with NodeBridge(seed=seed, population=8, node=node, timeout=100) as bridge:
-      engine = TownEngine(bridge)
-      engine.restore(candidate)
-      checkpoint = engine.save()
-  if (checkpoint['runtime']['hallSafe'] is not True
-      or checkpoint['runtime']['seed'] != seed
-      or len(checkpoint['runtime']['people']) != 8):
-    raise RuntimeError('Captured town is not the requested genuine eight-person opened-hall checkpoint')
-  return checkpoint
+  """Refuse the archived HF3 weekly hall experiment before any provider call."""
+  del node, seed
+  raise RuntimeError(
+      'Historical HF3 weekly hall capture is unsupported on current HF4; '
+      'the archived experiment is not current evidence. No provider was invoked.')
 
 
 def main():
@@ -46,6 +35,8 @@ def main():
   parser.add_argument('--seed', type=int, default=42)
   parser.add_argument('--node', default='node')
   parser.add_argument('--replay', type=Path)
+  parser.add_argument('--checkpoint', type=Path,
+                      help='A complete current Concordia checkpoint; validated by native cold restore before a model call.')
   parser.add_argument('--output', type=Path, default=Path('/tmp/neighbours-native-gm.json'))
   args = parser.parse_args()
   if args.replay:
@@ -53,7 +44,21 @@ def main():
     return
   sources = runtime_sources(ROOT)
   verify_upstream_sources(ROOT)
-  checkpoint = capture_checkpoint(args.node, args.seed)
+  if args.checkpoint:
+    if args.checkpoint.stat().st_size > 50 * 1024 * 1024:
+      raise ValueError('Current checkpoint exceeds the 50 MiB file bound')
+    checkpoint = json.loads(args.checkpoint.read_text())
+    runtime = checkpoint['runtime']
+    if runtime.get('format') != 'neighbours-native':
+      raise ValueError('A current native checkpoint is required')
+    physical = runtime['physical']
+    with NodeBridge(seed=physical['seed'], population=len(physical['people']), node=args.node) as bridge:
+      engine = TownEngine(bridge)
+      engine.restore(checkpoint)
+      if engine.save() != checkpoint:
+        raise ValueError('Current checkpoint cold restore differs')
+  else:
+    checkpoint = capture_checkpoint(args.node, args.seed)
   model = ClaudeCliModel(args.model, max_calls=1)
   result = run_director(model, checkpoint)
   report = {

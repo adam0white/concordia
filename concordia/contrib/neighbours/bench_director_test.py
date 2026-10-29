@@ -108,7 +108,9 @@ class BenchDirectorTest(unittest.TestCase):
               'requestedModel': 'test-only', 'cliVersion': 'test-only-cli',
               'seeds': [42, 73], 'noNaturalCaseSeeds': [101], 'cases': cases, 'modelCalls': 2}
     self.assertEqual(replay_report(report, root), {'replayExact': True, 'modelCalls': 0, 'caseCount': 2})
-    self.assertIn('neighbours/scripts/capture-bench.ts', sources['files'])
+    self.assertIn('neighbours/scripts/run-bench-director.py', sources['files'])
+    self.assertIn('neighbours/scripts/check-hf4-continuation.ts', sources['files'])
+    self.assertNotIn('neighbours/scripts/capture-bench.ts', sources['files'])
     for mutation in (
         lambda r: r.update(upstreamSha='bad'),
         lambda r: r.update(modelCalls=3),

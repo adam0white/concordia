@@ -1,4 +1,4 @@
-import { expect, postStep, step, test } from "./clock-fixture";
+import { expect, nextRoundAt, postStep, step, test } from "./clock-fixture";
 import { enterLocalTown } from "./local-fixture";
 import { closeSaves, openSaves } from "./session-helpers";
 
@@ -23,7 +23,7 @@ test("automatic pacing hides clock controls and the menu holds", async ({
 		await page.evaluate(
 			() => (window as unknown as { townNow: number }).townNow,
 		),
-	).toBe(before + 15);
+	).toBe(nextRoundAt(before));
 	await openSaves(page);
 	const held = await page.evaluate(
 		() => (window as unknown as { townNow: number }).townNow,
@@ -40,7 +40,7 @@ test("automatic pacing hides clock controls and the menu holds", async ({
 		await page.evaluate(
 			() => (window as unknown as { townNow: number }).townNow,
 		),
-	).toBe(held + 15);
+	).toBe(nextRoundAt(held));
 });
 
 test("the menu drains an in-flight story round and preserves its remaining reading time", async ({

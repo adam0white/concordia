@@ -56,34 +56,30 @@ jobs:
         env:
           PYTHONPATH: .
           NEIGHBOURS_NATIVE_TEST: '1'
-      - name: Real social episode milestones and restored continuation
-        run: node scripts/profile-evenings.ts --seeds 42 --population 206 --days 25 --output "$RUNNER_TEMP/evenings.json" --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
+      # HF3 numeric/model research is preserved byte-for-byte. Its mutator
+      # generators and source-equality gates are historical, not runnable HF4
+      # evidence. See docs/neighbours/hf4-port.md for the per-stage mapping.
+      - name: Complete current HF4 206-person first boundary and cold continuation
+        run: node scripts/check-hf4-continuation.ts "$RUNNER_TEMP/neighbours-hf4-continuation"
         working-directory: neighbours
-      - name: Actual WASM and native parity and restored continuation
-        run: |
-          node scripts/capture-weekly.ts --output-directory "$RUNNER_TEMP/neighbours-weekly"
-          npm run test:parity -- --checkpoint-directory "$RUNNER_TEMP/neighbours-weekly" --checkpoint-directory "$RUNNER_TEMP/neighbours-milestones"
+      - name: Actual current WASM and native parity and restored continuation
+        run: npm run test:parity
         working-directory: neighbours
         env:
           PYTHON: python
-      - name: Recorded mixed-town replay (zero model calls)
-        run: python neighbours/scripts/run-mixed-town.py --node node --replay neighbours/public/experiments/native-mixed-town.json
-      - name: Recorded upstream game-master replay (zero model calls)
-        run: python neighbours/scripts/run-gm-director.py --replay neighbours/public/experiments/gm-director.json
-      - name: Natural bench choice and physical continuation controls
-        run: node scripts/probe-bench-choice.ts --output "$RUNNER_TEMP/bench-choices.json" --summary-output "$RUNNER_TEMP/bench-choices-summary.json" --checkpoint-directory "$RUNNER_TEMP/bench-choices"
-        working-directory: neighbours
-      - name: Published HF received-route controls
-        run: node scripts/probe-received-routes.ts "$RUNNER_TEMP/received-routes.json"
-        working-directory: neighbours
-      - name: Recorded upstream bench-premise replay (zero model calls)
-        run: python neighbours/scripts/run-bench-director.py --replay neighbours/public/experiments/bench-director.json
-      - name: Isolated HF configuration controls
-        run: node scripts/probe-hf-config.ts --output "$RUNNER_TEMP/hf-config.json"
-        working-directory: neighbours
-      - name: Recorded episode and project source provenance
+          NEIGHBOURS_PARITY_PROOF_DIR: ${{ runner.temp }}/neighbours-hf4-parity
+      - name: Historical research byte custody without regeneration or current4 relabelling
         run: node scripts/check-evidence.mjs
         working-directory: neighbours
+      - name: Retain complete current native inputs and outputs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: neighbours-hf4-native
+          path: |
+            ${{ runner.temp }}/neighbours-hf4-continuation/
+            ${{ runner.temp }}/neighbours-hf4-parity/
+          retention-days: 7
       - name: Cloudflare build without deployment
         run: npm run build:cloudflare
         working-directory: neighbours

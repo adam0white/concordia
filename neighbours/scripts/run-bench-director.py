@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Frozen two-case upstream bench proposals and exact zero-call replay.
+"""Historical HF3 experiment launcher. Fresh capture refuses before a provider.
 
-Running without --replay makes exactly one real provider call for each of the
-two fresh HF checkpoints (seed 101 has no natural case). It retains invalid proposals; there is no retry.
+Current component protocol replay is distinct from the immutable old reports.
 """
 import argparse
 from datetime import datetime, timezone
@@ -10,7 +9,6 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -18,32 +16,16 @@ from concordia.contrib.neighbours.bench_director import (
     ClaudeCliModel, UPSTREAM_SHA, digest, replay_report, run_director,
     runtime_sources, verify_upstream_sources)
 from concordia.contrib.neighbours.bench_director import BENCH_SEEDS, NO_NATURAL_CASE_SEEDS
-from concordia.contrib.neighbours.bridge import NodeBridge
-from concordia.contrib.neighbours.engine import TownEngine
 
 SEEDS = list(BENCH_SEEDS)
 
 
 def capture_checkpoint(node, seed):
-  with tempfile.TemporaryDirectory(prefix='neighbours-bench-checkpoint-') as directory:
-    subprocess.run([node, str(ROOT / 'neighbours/scripts/capture-bench.ts'),
-                    '--output-directory', directory, '--seed', str(seed)],
-                   cwd=ROOT / 'neighbours', check=True, timeout=240)
-    checkpoint = json.loads((Path(directory) / 'checkpoint.json').read_text())
-    evidence = json.loads((Path(directory) / 'capture-evidence.json').read_text())
-    with NodeBridge(seed=seed, population=8, node=node, timeout=100) as bridge:
-      engine = TownEngine(bridge)
-      engine.restore(checkpoint)
-      canonical = engine.save()
-  if (canonical != checkpoint or checkpoint['runtime']['seed'] != seed or
-      len(checkpoint['runtime']['people']) != 8 or checkpoint['runtime']['pending'] or
-      checkpoint['runtime']['handcart']['progress'] >= 3 or
-      'cart-ask' not in evidence.get('raviLegalOfferIds', []) or
-      evidence.get('premiseAdmissibleAtBoundary') is not True or
-      evidence.get('premiseAdmissibleAtNextDecision') is not True or
-      evidence.get('raviPhysicalPlaceAtBoundary') != 'workshop'):
-    raise RuntimeError('Capture is not a genuine complete eight-person next-decision checkpoint')
-  return checkpoint, evidence
+  """Refuse the archived HF3 bench experiment before any provider call."""
+  del node, seed
+  raise RuntimeError(
+      'Historical HF3 bench capture is unsupported on current HF4; '
+      'the archived experiment is not current evidence. No provider was invoked.')
 
 
 def main():

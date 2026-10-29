@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import gzip
 from pathlib import Path
 import sys
 import time
@@ -20,10 +21,38 @@ def main():
   parser.add_argument('--output', type=Path)
   parser.add_argument('--restore', type=Path)
   parser.add_argument('--node')
+  parser.add_argument('--proof-directory', type=Path,
+                      help='Retain every actual engine/bridge request and response; no simulation changes.')
   args = parser.parse_args()
   start = time.perf_counter()
+  proof_records = []
+  if args.proof_directory:
+    args.proof_directory.mkdir(parents=True, exist_ok=False)
   with NodeBridge(seed=args.seed, population=args.population, node=args.node) as bridge:
-    engine = TownEngine(bridge)
+    def call(request):
+      index = len(proof_records) + 1
+      record = {'request': request}
+      try:
+        response = bridge(request)
+        record['response'] = response
+        return response
+      except Exception as exc:
+        record['error'] = {'type': type(exc).__name__, 'message': str(exc)}
+        raise
+      finally:
+        if args.proof_directory:
+          raw = json.dumps(record, ensure_ascii=False, allow_nan=False).encode()
+          name = f'rpc-{index:06d}.json.gz'
+          with gzip.open(args.proof_directory / name, 'wb') as stream:
+            stream.write(raw)
+          with gzip.open(args.proof_directory / name, 'rb') as stream:
+            assert stream.read() == raw
+          proof_records.append({'path': name, 'bytes': len(raw),
+                                'sha256': hashlib.sha256(raw).hexdigest()})
+          (args.proof_directory / 'manifest.json').write_text(
+              json.dumps({'scope': 'Actual engine/bridge request and response bodies',
+                          'records': proof_records}, indent=2) + '\n')
+    engine = TownEngine(call)
     if args.restore:
       source = json.loads(args.restore.read_text())
       engine.restore(source.get('checkpoint', source))

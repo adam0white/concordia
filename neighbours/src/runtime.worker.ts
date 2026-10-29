@@ -130,15 +130,10 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 				case "cast-capture": {
 					castRequests.set(q.requestId, q.actorId);
 					port.wanted.add(q.actorId);
-					const r = (
-						port.runtime.export() as import("./core/state.ts").Save
-					).people.find((r) => r.person.id === q.actorId);
-					if (
-						r &&
-						(!r.person.body.alive ||
-							(r.person.nextDecision > 0 && !r.job && !r.person.activity))
-					)
-						port.boundaries.set(q.actorId, r.person);
+					const archive =
+						port.runtime.export() as import("./core/runtime.ts").NativeTownArchive;
+					const actor = archive.owner.run.current.people[q.actorId];
+					if (actor && !actor.activity) port.boundaries.set(q.actorId, actor);
 					await flushCastCaptures();
 					break;
 				}
@@ -149,7 +144,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						q,
 						(value) => {
 							const minute = value.now % 1440;
-							const time = `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+							const time = `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;
 							send({
 								type: "progress",
 								message: `Advancing the town: ${value.rounds} of ${value.maxRounds} rounds. Day ${value.day}, ${time}.`,

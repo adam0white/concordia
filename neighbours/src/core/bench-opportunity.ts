@@ -1,7 +1,9 @@
-import {
-	perceive,
-	type ReceivedConsequence,
-} from "@adam0white/human-framework";
+import type { PerceptData } from "@adam0white/human-framework";
+import { minutePercept } from "./hf4-owner.ts";
+import { MINUTE, nativeMilliseconds } from "./hf4-run.ts";
+
+type ReceivedConsequence = PerceptData["consequences"][number];
+
 import { parseProposalOrigin } from "./assistance.ts";
 import { benchWindow, validateBenchProposal } from "./bench-window.ts";
 import { holder, requireHolder } from "./cast.ts";
@@ -25,9 +27,9 @@ export function canProposeBench(s: HandcartSave): boolean {
 		!c.requests.some((q) => !q.reply && s.now < q.proposedUntil) &&
 		ravi &&
 		presentAt(ravi, "workshop", s.now) &&
-		ravi.person.agenda.goals.some(
-			(g) => g.id === c.raviGoalId && g.status === "active",
-		)
+		ravi.owner
+			.actor(ravi.id)
+			.agenda.goals.some((g) => g.id === c.raviGoalId && g.status === "active")
 	);
 }
 /** Frozen engineering probabilities, not a fitted prediction of the lender's agreement. HF applies live source trust. */
@@ -43,12 +45,12 @@ export function benchConsequence(
 		successor: {
 			action: "cart-fast",
 			placeId: "workshop",
-			duration: 60,
+			durationMs: 60 * MINUTE,
 			effort: 0.15,
 		},
-		availableFrom: p.from,
-		availableUntil: p.until,
-		expiresAt: p.until,
+		availableFrom: nativeMilliseconds(p.from),
+		availableUntil: nativeMilliseconds(p.until),
+		expiresAt: nativeMilliseconds(p.until),
 		chance: 0.5,
 		confidence: 0.8,
 	};
@@ -68,13 +70,15 @@ export function proposeBenchWindow(
 	if (!c) throw Error("Missing handcart");
 	const ravi = holder(s, "cartRepairer"),
 		ada = requireHolder(s, "benchHolder");
-	const goal = ravi?.person.agenda.goals.find((g) => g.id === c.raviGoalId);
+	const goal = (ravi ? s.owner.actor(ravi.id).agenda.goals : []).find(
+		(g) => g.id === c.raviGoalId,
+	);
 	if (!ravi || !goal || !c.observation)
 		throw Error("Missing observed cart purpose");
 	const window = benchWindow(s.now, slot);
 	const id = host.event(
 		"intervention",
-		`Town bulletin: ${ravi.person.name} could ask ${ada.person.name} to use the main bench during ${benchWindowLabel(window)}. One cart section takes an hour there. ${ada.person.name} still decides whether to lend it. She also uses the bench for her paid work.`,
+		`Town bulletin: ${ravi.name} could ask ${ada.name} to use the main bench during ${benchWindowLabel(window)}. One cart section takes an hour there. ${ada.name} still decides whether to lend it. She also uses the bench for her paid work.`,
 		undefined,
 		"workshop",
 		[c.observation.id],
@@ -82,7 +86,7 @@ export function proposeBenchWindow(
 	const event = s.events.find((e) => e.id === id);
 	if (!event) throw Error("Missing bench premise event");
 	event.source = "town-bulletin";
-	event.targetId = ravi.person.id;
+	event.targetId = ravi.id;
 	const premise = {
 		slot,
 		at: s.now,
@@ -92,22 +96,21 @@ export function proposeBenchWindow(
 		origin,
 	};
 	// Explicit host scenario configuration, not claimed learning or goal progress.
-	goal.temporal = { halfLifeMinutes: BENCH_HALF_LIFE };
+	// Completion discount is ordinary always-on HF4 goal state; no actor mutation.
 	s.controls--;
-	const attended = perceive(ravi.person, [
-		{
-			at: s.now,
+	premise.received = ravi.owner.observe(
+		ravi.id,
+		minutePercept(`town:${event.id}:${ravi.id}`, s.now, {
 			channel: "told",
 			actorId: "town-bulletin",
-			targetId: ravi.person.id,
+			targetId: ravi.id,
 			placeId: "workshop",
 			kind: "bench-window",
 			salience: 0.9,
 			summary: event.text,
-			consequences: [benchConsequence(premise, ada.person.id)],
-		},
-	]);
-	premise.received = attended.length > 0;
+			consequences: [benchConsequence(premise, ada.id)],
+		}),
+	);
 	if (premise.received)
 		ravi.received = [...(ravi.received ?? []), structuredClone(event)].slice(
 			-12,
@@ -130,6 +133,6 @@ export function benchWindowLabel(window: {
 	until: number;
 }): string {
 	const time = (at: number) =>
-		`${String(Math.floor((at % 1440) / 60)).padStart(2, "0")}:${String(at % 60).padStart(2, "0")}`;
+		`${String(Math.floor((at % 1440) / 60)).padStart(2, "0")}:${String(Math.floor(at % 60)).padStart(2, "0")}`;
 	return `Day ${Math.floor(window.from / 1440) + 1}, ${time(window.from)}–${time(window.until)}`;
 }

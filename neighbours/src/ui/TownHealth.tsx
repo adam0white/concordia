@@ -42,7 +42,7 @@ export function sampleHealth(
 	return { seed: town.seed, samples: samples.slice(-160) };
 }
 const time = (minute: number) =>
-	`Day ${Math.floor(minute / 1440) + 1} ${String(Math.floor(minute / 60) % 24).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+	`Day ${Math.floor(minute / 1440) + 1} ${String(Math.floor(minute / 60) % 24).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;
 const number = (value: number) =>
 	Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
 export default function TownHealth({

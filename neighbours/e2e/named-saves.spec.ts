@@ -286,7 +286,7 @@ test("public saved towns retain complete native packets, deterministic continuat
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	const initial = await exported(page);
-	expect(initial.runtime.people).toHaveLength(206);
+	expect(initial.runtime.physical.people).toHaveLength(206);
 	await page.getByText("Saved towns", { exact: true }).click();
 	await page.getByLabel("Town copy name").fill("Before the work <one>");
 	await page

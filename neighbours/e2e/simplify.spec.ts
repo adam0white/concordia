@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { createRuntime } from "../src/core/scenario";
 
 const packet = {
-	schema: "neighbours/concordia@1",
+	schema: "neighbours/concordia@2",
 	rounds: 0,
 	runtime: createRuntime(73, 206).export(),
 };
@@ -108,24 +108,26 @@ for (const [width, height] of [
 		).toHaveCount(0);
 		const save = await page.evaluate(
 			async () =>
-				new Promise<{ runtime: { seed: number } }>((resolve, reject) => {
-					const r = indexedDB.open("alder-quay", 1);
-					r.onerror = () => reject(r.error);
-					r.onsuccess = () => {
-						const db = r.result;
-						const q = db
-							.transaction("saves")
-							.objectStore("saves")
-							.get("latest");
-						q.onsuccess = () => {
-							db.close();
-							resolve(q.result);
+				new Promise<{ runtime: { physical: { seed: number } } }>(
+					(resolve, reject) => {
+						const r = indexedDB.open("alder-quay", 1);
+						r.onerror = () => reject(r.error);
+						r.onsuccess = () => {
+							const db = r.result;
+							const q = db
+								.transaction("saves")
+								.objectStore("saves")
+								.get("latest");
+							q.onsuccess = () => {
+								db.close();
+								resolve(q.result);
+							};
+							q.onerror = () => reject(q.error);
 						};
-						q.onerror = () => reject(q.error);
-					};
-				}),
+					},
+				),
 		);
-		expect(save.runtime.seed).toBe(73);
+		expect(save.runtime.physical.seed).toBe(73);
 		expect(
 			await page.evaluate(
 				() => document.documentElement.scrollWidth <= innerWidth,

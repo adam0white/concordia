@@ -78,14 +78,20 @@ export async function postStep(page: Page) {
 		.toBe(before.posts + 1);
 	return before;
 }
+export function nextRoundAt(now: number): number {
+	// Logical rounds stay on the 08:00 fifteen-minute grid. Actual native
+	// initialization/ingress milliseconds do not move that target.
+	return 480 + 15 * (Math.floor((now - 480) / 15) + 1);
+}
 export async function step(page: Page) {
 	const before = await postStep(page);
+	const target = nextRoundAt(before.now);
 	await base.expect
 		.poll(() =>
 			page.evaluate(() => (window as unknown as { townNow: number }).townNow),
 		)
-		.toBe(before.now + 15);
-	const minute = (before.now + 15) % 1440;
+		.toBe(target);
+	const minute = target % 1440;
 	await base
 		.expect(page.locator(".town-time strong"))
 		.toHaveText(

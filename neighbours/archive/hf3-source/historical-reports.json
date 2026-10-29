@@ -1,0 +1,94 @@
+{
+  "scope": "Exact original public historical research bytes. No current4 regeneration, source parity, numerical parity, passed native policy or model response is claimed. Original failures and authorization receipts remain historical.",
+  "frozenTree": "164b3088edbcb7a1ebd70d7f370cb8bfda6220ad",
+  "records": [
+    {
+      "path": "public/experiments/bench-choices-summary.json",
+      "bytes": 11908,
+      "sha256": "6afabdacca25dcc2119d0c0373b1de61479dc3be4793764817b27fc141a90574",
+      "mode": "100644",
+      "gitObject": "f62471ac4f0032396f3f547355fc2ec0ec9645ec",
+      "gitPath": "neighbours/public/experiments/bench-choices-summary.json"
+    },
+    {
+      "path": "public/experiments/bench-choices.json",
+      "bytes": 15285186,
+      "sha256": "b053ae5225bbc29d67ca8d98af8b4309d2225d75a26ef3bd9cb9f291c5a2e7e4",
+      "mode": "100644",
+      "gitObject": "53510e85d4d12ac7a3a8071a3c43ff3dd9e71339",
+      "gitPath": "neighbours/public/experiments/bench-choices.json"
+    },
+    {
+      "path": "public/experiments/bench-director.json",
+      "bytes": 4270068,
+      "sha256": "f6d94784f5db66fcbfdc69e1518efdd50873934df2674f1aa571b578c31a1c33",
+      "mode": "100644",
+      "gitObject": "261118284862bd19b3f5ec46aa89b7f9e8d15124",
+      "gitPath": "neighbours/public/experiments/bench-director.json"
+    },
+    {
+      "path": "public/experiments/cart-choice-probe.json",
+      "bytes": 5268,
+      "sha256": "142d766b51bb2e3a785948fda4b768f018577cd807d295a5d4ca19b5b5386a52",
+      "mode": "100644",
+      "gitObject": "b545623014dc9832b6295143feb7e5f3383b099a",
+      "gitPath": "neighbours/public/experiments/cart-choice-probe.json"
+    },
+    {
+      "path": "public/experiments/gm-director.json",
+      "bytes": 1951001,
+      "sha256": "62c4a9b1d5a4dfb214651eb43a66b98b9d0fa43039e1ec0a65705b93fba1d6cf",
+      "mode": "100644",
+      "gitObject": "808d5f3e2a55882317020a133f7637e0bacbae89",
+      "gitPath": "neighbours/public/experiments/gm-director.json"
+    },
+    {
+      "path": "public/experiments/hf-config.json",
+      "bytes": 2201354,
+      "sha256": "968537ce03e00dc32a94eb606e7d85566a2d753b9ebc9c2dc9c366546dad0b62",
+      "mode": "100644",
+      "gitObject": "5e95e8186e143a1ddd254fb14fa70e9d9525227f",
+      "gitPath": "neighbours/public/experiments/hf-config.json"
+    },
+    {
+      "path": "public/experiments/inspection-comparison.json",
+      "bytes": 43261,
+      "sha256": "cc5ab22ea391fd046c3ffe11e42dceb75a86829fdb9dfbfaaa49aae3a85a705c",
+      "mode": "100644",
+      "gitObject": "c659fe383c38295a010c17fbc4562c471b9e867c",
+      "gitPath": "neighbours/public/experiments/inspection-comparison.json"
+    },
+    {
+      "path": "public/experiments/native-mixed-town.json",
+      "bytes": 512984,
+      "sha256": "4e6df9b11227bc6051ea483d35ee5fd5e26b5eb479d50a58ecd8e1f0e8ad044d",
+      "mode": "100644",
+      "gitObject": "b535b0635bb0a351c72d7ee5fe290403038b2fe0",
+      "gitPath": "neighbours/public/experiments/native-mixed-town.json"
+    },
+    {
+      "path": "public/experiments/received-assistance.json",
+      "bytes": 33114,
+      "sha256": "7dab5998b96e85ac29681c711484aa183e1d34c4d8d6e208c70039c07dbacbfd",
+      "mode": "100644",
+      "gitObject": "8bd40d424f0b97db71514ed6c59e046089279269",
+      "gitPath": "neighbours/public/experiments/received-assistance.json"
+    },
+    {
+      "path": "public/experiments/received-routes.json",
+      "bytes": 33703,
+      "sha256": "79435e53a4f22898bc5bcb7268b4c18719d654a388d1673ca91653c3d972a8e3",
+      "mode": "100644",
+      "gitObject": "6921bdd287d877464632f7259f890f9a84b5fba6",
+      "gitPath": "neighbours/public/experiments/received-routes.json"
+    },
+    {
+      "path": "public/experiments/social-episodes.json",
+      "bytes": 90245,
+      "sha256": "a2d096cd42f926ff81382279a0ccf57cd9a7af26ef3fdb945e863fbc85173a58",
+      "mode": "100644",
+      "gitObject": "cb772518d3ef42e3d5b27f10eeb546ac2fdf15e6",
+      "gitPath": "neighbours/public/experiments/social-episodes.json"
+    }
+  ]
+}

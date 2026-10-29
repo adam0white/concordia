@@ -144,7 +144,7 @@ NO_NATURAL_CASE_SEEDS = (101,)
 def runtime_sources(root):
   sources = gm_runtime_sources(root)
   files = dict(sources['files'])
-  for path in ('neighbours/scripts/run-bench-director.py', 'neighbours/scripts/capture-bench.ts'):
+  for path in ('neighbours/scripts/run-bench-director.py',):
     files[path] = hashlib.sha256((root / path).read_bytes()).hexdigest()
   identity = {'files': files, 'hf': sources['hf']}
   return {**identity, 'sha256': digest(identity)}

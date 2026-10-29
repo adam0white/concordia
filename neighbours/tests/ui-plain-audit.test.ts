@@ -5,7 +5,7 @@ import PersonPanel from "../src/ui/PersonPanel";
 import { needWords, trustWords } from "../src/ui/person-status";
 import TownInspector from "../src/ui/TownInspector";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
-import { createRuntime } from "./historical-runtime";
+import { createRuntime } from "./current-town";
 
 afterEach(() => vi.unstubAllGlobals());
 

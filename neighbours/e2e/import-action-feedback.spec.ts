@@ -43,7 +43,7 @@ async function importPacket(page: Page, value: unknown) {
 		value &&
 		typeof value === "object" &&
 		"schema" in value &&
-		value.schema === "neighbours/concordia@1"
+		value.schema === "neighbours/concordia@2"
 	)
 		await expect
 			.poll(() =>
@@ -194,7 +194,9 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 	});
 	await expect(close).toBeVisible();
 	const pending = await exportPacket(page, info, "acknowledged-tools");
-	expect(pending.runtime.controls).toBe(original.runtime.controls - 1);
+	expect(pending.runtime.physical.controls).toBe(
+		original.runtime.physical.controls - 1,
+	);
 	if (await close.isVisible()) await page.keyboard.press("Escape");
 	await showTab(page, "Help");
 	await expect(page.locator(".intervention-result")).toContainText(
@@ -218,5 +220,7 @@ test("one pending intervention spends one credit and a later deliberate repeat r
 		"The tools were added",
 	);
 	const repeated = await exportPacket(page, info, "deliberate-repeat");
-	expect(repeated.runtime.controls).toBe(original.runtime.controls - 2);
+	expect(repeated.runtime.physical.controls).toBe(
+		original.runtime.physical.controls - 2,
+	);
 });

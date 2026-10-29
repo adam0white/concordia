@@ -6,6 +6,7 @@ import {
 	type Page,
 	test,
 } from "@playwright/test";
+import { canonicalHash } from "../src/core/hf4-canonical.ts";
 
 test("built entry refuses invalid selectors and preserves missing-identity memory play", async ({
 	page,
@@ -87,19 +88,23 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 	const runtime = createRuntime(
 		42,
 		206,
-	).export() as import("../src/core/state.ts").Save;
-	const person = runtime.people[0]?.person;
+	).export() as import("../src/core/runtime.ts").NativeTownArchive;
+	const person = runtime.owner.run.current.people.ada;
 	if (!person) throw Error("Missing complete source person");
 	const original = canonicalPersona(person);
 	const sha = createHash("sha256").update(original).digest("hex");
 	const packet = {
-		schema: "neighbours/concordia@1",
-		rounds: runtime.round,
+		schema: "neighbours/concordia@2",
+		rounds: runtime.physical.round,
 		runtime,
 		castLocal: {
 			heads: [],
 			sources: { [sha]: person },
-			chapter: canonicalPersona([runtime.seed, runtime.chapter]),
+			chapter: canonicalHash({
+				seed: runtime.physical.seed,
+				hf: runtime.hf,
+				initial: runtime.owner.run.initial,
+			}),
 			file: true,
 			localOnly: true,
 		},
@@ -298,7 +303,7 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			.click();
 		const continued = await exportFile();
 		expect(continued).toEqual(fullContinued);
-		expect(continued.runtime.player).toBeDefined();
+		expect(continued.runtime.physical.player).toBeDefined();
 		expect(canonicalPersona(continued.castLocal.sources[sha])).toBe(original);
 		await page.evaluate(() =>
 			window.dispatchEvent(new PageTransitionEvent("pagehide")),
@@ -579,10 +584,10 @@ async function lifecycleFile({
 
 	const runtime = (await import("../src/core/index"))
 		.createRuntime(42, 206)
-		.export() as import("../src/core/state.ts").Save;
+		.export() as import("../src/core/runtime.ts").NativeTownArchive;
 	const packet = {
-		schema: "neighbours/concordia@1",
-		rounds: runtime.round,
+		schema: "neighbours/concordia@2",
+		rounds: runtime.physical.round,
 		runtime,
 	};
 	await page.goto(`${origin}/file/?labRunSource=agent`);
@@ -707,14 +712,14 @@ test("regression: pagehide invalidates an outstanding canonical file read", asyn
 	});
 	const runtime = (await import("../src/core/index"))
 		.createRuntime(42, 206)
-		.export() as import("../src/core/state.ts").Save;
+		.export() as import("../src/core/runtime.ts").NativeTownArchive;
 	await page.getByLabel("Town file", { exact: true }).setInputFiles({
 		name: "full.json",
 		mimeType: "application/json",
 		buffer: Buffer.from(
 			JSON.stringify({
-				schema: "neighbours/concordia@1",
-				rounds: runtime.round,
+				schema: "neighbours/concordia@2",
+				rounds: runtime.physical.round,
 				runtime,
 			}),
 		),
@@ -811,8 +816,10 @@ test("regression: pending player reply must not enqueue a checkpoint after pageh
 			"retired player reply enqueued SDK checkpoint after pagehide",
 		).toBe(before);
 		const final = await finalQueuedRun(page);
-		expect(final.runtime.people).toHaveLength(runtime.people.length);
-		expect(final.runtime.player).toBeDefined();
+		expect(final.runtime.physical.people).toHaveLength(
+			runtime.physical.people.length,
+		);
+		expect(final.runtime.physical.player).toBeDefined();
 		expect((await saves()).length).toBe(before);
 	} finally {
 		await context.close();

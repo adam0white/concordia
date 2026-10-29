@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { knownOpenNeeds } from "../src/ui/known-needs";
 import TownMap from "../src/ui/TownMap";
 import { NeighbourStrip } from "../src/ui/TownOverview";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 const town = () => createRuntime(42, 8).view();
 

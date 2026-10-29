@@ -1,7 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
-import { FRAMEWORK_VERSION } from "@adam0white/human-framework";
 import { transformWithOxc } from "vite";
+import { HF_VERSION as FRAMEWORK_VERSION } from "../src/core/hf-version.ts";
+import type { NativeTownArchive } from "../src/core/runtime.ts";
 import {
 	expect,
 	type Page,
@@ -20,16 +21,8 @@ import {
 	showTab,
 } from "./session-helpers";
 
-type Packet = {
-	schema: string;
-	rounds: number;
-	runtime: {
-		seed: number;
-		now: number;
-		hf: string;
-		people: { person: { trace: unknown[] } }[];
-	};
-};
+type Packet = { schema: string; rounds: number; runtime: NativeTownArchive };
+
 async function pause(page: Page) {
 	await closeSaves(page);
 	await closeSaves(page);
@@ -65,8 +58,8 @@ async function packet(
 	const result = JSON.parse(
 		gunzipSync(await readFile(path)).toString("utf8"),
 	) as Packet;
-	expect(result.schema).toBe("neighbours/concordia@1");
-	expect(result.runtime.people).toHaveLength(206);
+	expect(result.schema).toBe("neighbours/concordia@2");
+	expect(result.runtime.physical.people).toHaveLength(206);
 	expect(result.runtime.hf).toBe(FRAMEWORK_VERSION);
 	return result;
 }
@@ -91,30 +84,32 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "initial");
-	expect(initial.runtime.seed).toBe(42);
+	expect(initial.runtime.physical.seed).toBe(42);
 	let current = initial;
 	// Cross the autosave cadence; each export must own its request despite pause/step save traffic.
 	for (let i = 0; i < 7; i++) {
 		await closeSaves(page);
 		await step(page);
 		const next = await packet(page, info, `step-${i}`);
-		expect(next.runtime.now).toBe(current.runtime.now + 15);
+		expect(next.runtime.physical.now).toBe(480 + 15 * (current.rounds + 1));
 		expect(next.rounds).toBe(current.rounds + 1);
 		current = next;
 	}
 	expect(
-		current.runtime.people.every(
-			(resident) => resident.person.trace.length > 0,
+		Object.values(current.runtime.owner.run.current.people).every(
+			(resident) => resident.trace.length > 0,
 		),
 	).toBe(true);
 	await importPacket(page, initial);
 	await expect
-		.poll(async () => (await packet(page, info, "imported")).runtime.now)
-		.toBe(initial.runtime.now);
+		.poll(
+			async () => (await packet(page, info, "imported")).runtime.physical.now,
+		)
+		.toBe(initial.runtime.physical.now);
 	await closeSaves(page);
 	await step(page);
 	const continued = await packet(page, info, "continued");
-	expect(continued.runtime.now).toBe(initial.runtime.now + 15);
+	expect(continued.runtime.physical.now).toBe(480 + 15 * (initial.rounds + 1));
 
 	await page.reload();
 	await enterLocalTown(page);
@@ -131,14 +126,14 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	await showResources(page);
 	await expect(page.getByText("73", { exact: true })).toBeVisible();
 	await pause(page);
-	expect((await packet(page, info, "seed73")).runtime.seed).toBe(73);
+	expect((await packet(page, info, "seed73")).runtime.physical.seed).toBe(73);
 	await openOtherWays(page);
 	await page
 		.getByRole("button", { name: "Restore the previous town", exact: true })
 		.click();
 	await showResources(page);
 	await expect(page.getByText("42", { exact: true })).toBeVisible();
-	expect((await packet(page, info, "previous")).runtime.seed).toBe(42);
+	expect((await packet(page, info, "previous")).runtime.physical.seed).toBe(42);
 	const previousTown = await packet(page, info, "before-invalid");
 	await openSaves(page);
 	await openOtherWays(page);
@@ -152,8 +147,8 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	expect(before).toEqual(previousTown);
 	await closeSaves(page);
 	await step(page);
-	expect((await packet(page, info, "usable")).runtime.now).toBe(
-		before.runtime.now + 15,
+	expect((await packet(page, info, "usable")).runtime.physical.now).toBe(
+		480 + 15 * (before.rounds + 1),
 	);
 	expect(errors).toEqual([]);
 });
@@ -294,9 +289,9 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	).toBeVisible();
 	await closeSaves(other);
 	await step(other);
-	expect((await packet(other, info, "new-owner-continued")).runtime.now).toBe(
-		advanced.runtime.now + 15,
-	);
+	expect(
+		(await packet(other, info, "new-owner-continued")).runtime.physical.now,
+	).toBe(480 + 15 * (advanced.rounds + 1));
 	await other.close();
 });
 
@@ -342,8 +337,8 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 		other.getByRole("button", { name: "Load the saved town", exact: true }),
 	).toBeVisible();
 	const staleExport = await packet(other, info, "cas-stale-export");
-	expect(staleExport.runtime.now).toBeGreaterThanOrEqual(
-		initial.runtime.now + 75,
+	expect(staleExport.runtime.physical.now).toBeGreaterThanOrEqual(
+		480 + 15 * (initial.rounds + 5),
 	);
 	expect(await deviceCheckpoint(page)).toEqual(beforeConflict);
 	// Export remains usable after the rejected write and cannot alter either slot.

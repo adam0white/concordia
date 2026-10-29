@@ -1,3 +1,7 @@
+# HF4 recovery candidate — 2026-10-28
+
+Remaining: final lane, actual current native/Pyodide and206day/thirty-day stress results, one hosted review, signed PR/exact CI/deploy/live and cleanup. This section supersedes the historical review/signing workflow below. Owner directs one combined PR and one hosted Codex review, no extra local reviews. The surviving candidate and every prior untracked source file are retained. Published HF4.8.1 is always on; client0.5.7/kit0.5.24 is the current compatible pair. Shared six-person Neighbours bindings are absent in published SDK; nonempty shared admission refuses before writes. DESIGN Deferred records exact dependencies and dated targets. The old full96 run stopped voluntarily at780 native minutes, not a deadline failure or completed day. Its original evidence remains immutable. Current model auth succeeded; an actual current six-person checkpoint produced one genuine GM proposal and zero-call exact replay, with no host application. See [the port boundary](docs/neighbours/hf4-port.md). Player/friends/Show HN stay paused; Adam accepts feel.
+
 # Local UI trace and service specification — 2026-10-28
 
 Remaining: director's ONE independent review of the exact frozen combined candidate, signed source, exact CI, integration and clean deployment/live checks if the App changes. No source commit, delivery or whole-issue acceptance is claimed. Root alone owns STATUS. Broader `.37`/`.10` contexts remain2026-10-29; original `.53` cause remains unknown. Player/source-unread/Adam feel stay paused to2026-11-03.

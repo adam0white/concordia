@@ -1,9 +1,11 @@
 /** Exercise actual WASM Python, native Python, the shared bridge and restore. */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
+import { gzipSync } from "node:zlib";
 import { loadPyodide } from "pyodide";
 import { advanceTown } from "../src/advance-town.ts";
 import { RuntimePort } from "../src/bridge-port.ts";
@@ -12,6 +14,20 @@ import { restoreCheckpoint } from "../src/python-session.ts";
 
 const app = resolve(import.meta.dirname, "..");
 const root = resolve(app, "..");
+const proof = process.env.NEIGHBOURS_PARITY_PROOF_DIR;
+if (proof) mkdirSync(proof, { recursive: false });
+let proofSequence = 0;
+function retainProof(kind, value) {
+	if (proof)
+		writeFileSync(
+			resolve(
+				proof,
+				`${String(++proofSequence).padStart(6, "0")}-${kind}.json.gz`,
+			),
+			gzipSync(Buffer.from(JSON.stringify(value))),
+			{ flag: "wx" },
+		);
+}
 const temporary = await mkdtemp(resolve(tmpdir(), "neighbours-parity-"));
 try {
 	const packetPath = resolve(temporary, "native.json");
@@ -27,6 +43,7 @@ try {
 			"206",
 			"--output",
 			packetPath,
+			...(proof ? ["--proof-directory", resolve(proof, "native-rpc")] : []),
 		],
 		{
 			cwd: root,
@@ -35,6 +52,7 @@ try {
 		},
 	);
 	const native = JSON.parse(await readFile(packetPath, "utf8"));
+	retainProof("native-final", native);
 	const py = await loadPyodide({
 		indexURL: `${resolve(app, "public/runtime")}/`,
 		stdout: () => {},
@@ -53,7 +71,13 @@ try {
 		await readFile(resolve(app, "public/runtime/absl.whl")),
 	);
 	const port = new RuntimePort(77, 206);
-	py.registerJsModule("town_bridge", { call: (text) => port.call(text) });
+	py.registerJsModule("town_bridge", {
+		call: (request) => {
+			const response = port.call(request);
+			retainProof("wasm-rpc", { request, response });
+			return response;
+		},
+	});
 	await py.runPythonAsync(
 		"import sys, zipfile, json\nsys.path.insert(0, '/town')\nzipfile.ZipFile('/town/absl.whl').extractall('/town')\nfrom concordia.contrib.neighbours.engine import TownEngine\nfrom town_bridge import call\ne = TownEngine(call)\ne.advance(6)\nNone",
 	);
@@ -182,6 +206,9 @@ try {
 				String(rounds),
 				"--output",
 				expectedPath,
+				...(proof
+					? ["--proof-directory", resolve(proof, `native-advance-${label}-rpc`)]
+					: []),
 			],
 			{
 				cwd: root,
@@ -190,6 +217,7 @@ try {
 			},
 		);
 		const expected = JSON.parse(await readFile(expectedPath, "utf8"));
+		retainProof("native-continued", expected);
 		assert.deepEqual(
 			JSON.parse(
 				String(await py.runPythonAsync("json.dumps(town_engine.save())")),
@@ -290,8 +318,8 @@ try {
 	for (const [i, sourcePath] of checkpointPaths.entries()) {
 		const source = JSON.parse(await readFile(sourcePath, "utf8"));
 		const checkpoint = source.checkpoint ?? source;
-		assert.equal(checkpoint.schema, "neighbours/concordia@1");
-		assert.equal(checkpoint.runtime.pending.length, 0);
+		assert.equal(checkpoint.schema, "neighbours/concordia@2");
+		assert.equal(checkpoint.runtime.physical.pending.length, 0);
 		const expectedPath = resolve(temporary, `continued-${i}.json`);
 		execFileSync(
 			process.env.PYTHON ?? "python3",
@@ -303,6 +331,9 @@ try {
 				"16",
 				"--output",
 				expectedPath,
+				...(proof
+					? ["--proof-directory", resolve(proof, `native-context-${i}-rpc`)]
+					: []),
 			],
 			{
 				cwd: root,
@@ -311,6 +342,7 @@ try {
 			},
 		);
 		const expected = JSON.parse(await readFile(expectedPath, "utf8"));
+		retainProof("native-continued", expected);
 		await restoreCheckpoint(py, port, checkpoint);
 		const contextualView = port.runtime.view();
 		for (const [kind, eligibility] of [

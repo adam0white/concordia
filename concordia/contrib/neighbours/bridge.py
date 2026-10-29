@@ -9,7 +9,7 @@ from concordia.contrib.neighbours.engine import BridgeError
 
 class NodeBridge:
   """One Node process, sequenced replies, bounded wait, no automatic retries."""
-  def __init__(self, seed=42, population=208, node=None, timeout=30, script=None, args=()):
+  def __init__(self, seed=42, population=206, node=None, timeout=30, script=None, args=()):
     self.timeout = timeout
     self.sequence = 0
     self.failed = False

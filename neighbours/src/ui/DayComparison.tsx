@@ -4,7 +4,7 @@ import { comparisonOutcomes } from "./comparison-outcomes";
 import { plainText } from "./plain-english";
 
 const at = (minutes: number) =>
-	`Day ${Math.floor(minutes / 1440) + 1}, ${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+	`Day ${Math.floor(minutes / 1440) + 1}, ${String(Math.floor(minutes / 60) % 24).padStart(2, "0")}:${String(Math.floor(minutes % 60)).padStart(2, "0")}`;
 const numeric = (value: number) =>
 	Number.isInteger(value) ? value.toLocaleString() : value.toFixed(1);
 const names: Record<string, string> = {

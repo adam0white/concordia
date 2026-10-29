@@ -1,8 +1,8 @@
-import type { Person } from "@adam0white/human-framework";
 import type { PersonView } from "../contracts.ts";
+import type { NativeActor } from "./host-types.ts";
 
 /** Retained explained cases, not inferred skill or a claim about present timber. */
-export function personLessons(person: Person): PersonView["lessons"] {
+export function personLessons(person: NativeActor): PersonView["lessons"] {
 	const lessons: NonNullable<PersonView["lessons"]> = [];
 	for (const rule of person.methods?.rules ?? []) {
 		if (
@@ -27,7 +27,7 @@ export function personLessons(person: Person): PersonView["lessons"] {
 		lessons.push({
 			id: `${rule.id}:${rule.action}`,
 			label,
-			at: Math.max(...rule.evidence.map((e) => e.at)),
+			at: Math.max(...rule.evidence.map((e) => e.at)) / 60000,
 			sourceIds: [...new Set(rule.evidence.map((e) => e.sourceId))].sort(),
 			successes: rule.evidence.filter((e) => e.outcome === "success").length,
 			failures: rule.evidence.filter((e) => e.outcome === "failure").length,
