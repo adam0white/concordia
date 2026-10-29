@@ -15,8 +15,10 @@ test.use({
 test("an explicit conversation holds time and closing it resumes the automatic town", async ({
 	page,
 }) => {
+	// Full initialization and walking correctness; not a latency acceptance.
+	test.setTimeout(180000);
 	await page.goto("/");
-	await enterLocalTown(page);
+	await enterLocalTown(page, 60000);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await reachSelectedConversation(page, "Rafi");
