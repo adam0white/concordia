@@ -185,7 +185,7 @@ async function deviceRequests(page: Page) {
 					.get("latest");
 				request.onsuccess = () => {
 					db.close();
-					resolve(request.result?.runtime?.player?.requests ?? []);
+					resolve(request.result?.runtime?.physical?.player?.requests ?? []);
 				};
 				request.onerror = () => reject(request.error);
 			},
@@ -196,7 +196,8 @@ async function deviceRequests(page: Page) {
 test("an answered request is on the device before it is shown and survives an immediate reload", async ({
 	page,
 }) => {
-	test.setTimeout(180_000);
+	// Six real rounds, answer-before-display persistence and complete cold reload.
+	test.setTimeout(300_000);
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
 	await page.goto("/");
@@ -229,7 +230,7 @@ test("an answered request is on the device before it is shown and survives an im
 
 	// Reload at once: the answered request and its answer come back from the device.
 	await page.reload();
-	await enterLocalTown(page);
+	await enterLocalTown(page, 120000);
 	await closeSaves(page);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60_000 });
 	expect(await deviceRequests(page)).toEqual(stored);

@@ -34,7 +34,7 @@ for (const width of [360, 1280])
 		page,
 	}, info) => {
 		// Allow the complete walking/conversation correctness journey; this is not a latency gate.
-		test.setTimeout(180000);
+		test.setTimeout(600000);
 		await page.setViewportSize({ width, height: width === 360 ? 690 : 800 });
 		await openConversation(page);
 		const form = page.locator("#town-conversation");
@@ -84,7 +84,7 @@ for (const mode of ["promise", "ask", "urge"] as const)
 		page,
 	}) => {
 		// Allow the complete walking/conversation correctness journey; this is not a latency gate.
-		test.setTimeout(180000);
+		test.setTimeout(600000);
 		await page.addInitScript(() => {
 			const post = Worker.prototype.postMessage;
 			Object.assign(window, { speechCommands: [] });

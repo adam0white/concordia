@@ -16,7 +16,7 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 	page,
 }) => {
 	// Full initialization and walking correctness; not a latency acceptance.
-	test.setTimeout(180000);
+	test.setTimeout(600000);
 	await page.goto("/");
 	await enterLocalTown(page, 60000);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });

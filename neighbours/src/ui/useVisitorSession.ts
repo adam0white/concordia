@@ -975,12 +975,13 @@ export function useVisitorSession({
 				const replacement = replaceAfterSave.current;
 				const replace =
 					replacement?.requestId === reply.requestId ? replacement : null;
+				let persistence = Promise.resolve();
 				if (
 					!request.journalFile &&
 					!saveConflictRef.current &&
 					(autosaveEnabled.current || replace)
 				)
-					void (
+					persistence = (
 						saves
 							? saves.write(reply.save, replace ? "previous" : "latest", () =>
 									owns(generation),
@@ -1045,46 +1046,60 @@ export function useVisitorSession({
 				) {
 					const requestId = reply.requestId;
 					const revision = errorRevision.current;
-					void encodeSave(reply.save).then(
-						(blob) => {
-							if (
-								!hostActive() ||
-								exportRequest.current !== requestId ||
-								generation < acceptedGeneration.current
-							)
-								return;
-							downloadGeneration.current = generation;
-							const packet = reply.save as {
-								runtime?: { now?: number };
-							} | null;
-							const at = packet?.runtime?.now;
-							setDownloadLabel(
-								typeof at === "number" ? datedClock(at) : "Current checkpoint",
-							);
-							setDownloadUrl(URL.createObjectURL(blob));
-							exportRequest.current = null;
-						},
-						(failure: unknown) => {
-							if (
-								!hostActive() ||
-								exportRequest.current !== requestId ||
-								generation < acceptedGeneration.current
-							)
-								return;
-							exportRequest.current = null;
-							if (revision !== errorRevision.current) return;
-							errorRevision.current++;
-							const message =
-								failure instanceof SaveFileError
-									? failure.message
-									: "This save could not be compressed. The current town is unchanged.";
-							lastExportFailure.current = {
-								revision: errorRevision.current,
-								message,
-							};
-							setError(message);
-						},
-					);
+					// Ordinary exports keep the native device checkpoint and download its
+					// complete journal from the same worker FIFO slot. File sessions stay
+					// journal-only. Do not publish before the native write has settled.
+					const filePacket = request.journalFile ? reply.save : reply.recording;
+					void persistence
+						.then(() => {
+							if (filePacket === undefined)
+								throw new SaveFileError(
+									"The complete town checkpoint is unavailable. Try again.",
+								);
+							return encodeSave(filePacket);
+						})
+						.then(
+							(blob) => {
+								if (
+									!hostActive() ||
+									exportRequest.current !== requestId ||
+									generation < acceptedGeneration.current
+								)
+									return;
+								downloadGeneration.current = generation;
+								const packet = filePacket as {
+									runtime?: { physical?: { now?: number } };
+								} | null;
+								const at = packet?.runtime?.physical?.now;
+								setDownloadLabel(
+									typeof at === "number"
+										? datedClock(at)
+										: "Current checkpoint",
+								);
+								setDownloadUrl(URL.createObjectURL(blob));
+								exportRequest.current = null;
+							},
+							(failure: unknown) => {
+								if (
+									!hostActive() ||
+									exportRequest.current !== requestId ||
+									generation < acceptedGeneration.current
+								)
+									return;
+								exportRequest.current = null;
+								if (revision !== errorRevision.current) return;
+								errorRevision.current++;
+								const message =
+									failure instanceof SaveFileError
+										? failure.message
+										: "This save could not be compressed. The current town is unchanged.";
+								lastExportFailure.current = {
+									revision: errorRevision.current,
+									message,
+								};
+								setError(message);
+							},
+						);
 				}
 			}
 		};
@@ -1780,7 +1795,7 @@ export function useVisitorSession({
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;
-		send({ type: "save-journal", requestId });
+		send({ type: fileSession ? "save-journal" : "save", requestId });
 	};
 	const requestRun = (format: "native" | "journal"): Promise<unknown> => {
 		if (

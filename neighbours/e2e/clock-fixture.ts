@@ -60,20 +60,18 @@ export async function postStep(page: Page) {
 		posts: (window as unknown as { townStepPosts: number }).townStepPosts,
 		now: (window as unknown as { townNow: number }).townNow,
 	}));
-	for (let i = 0; i < 200; i++) {
-		await page.clock.fastForward(100);
-		if (
-			(await page.evaluate(
-				() => (window as unknown as { townStepPosts: number }).townStepPosts,
-			)) > before.posts
-		)
-			break;
-	}
+	// Worker replies and persistence use real time. Keep ticking the real UI
+	// timer until it can submit, rather than spending all ticks while a walk
+	// reply is pending and then polling a clock that has stopped advancing.
 	await base.expect
-		.poll(() =>
-			page.evaluate(
-				() => (window as unknown as { townStepPosts: number }).townStepPosts,
-			),
+		.poll(
+			async () => {
+				await page.clock.fastForward(100);
+				return page.evaluate(
+					() => (window as unknown as { townStepPosts: number }).townStepPosts,
+				);
+			},
+			{ intervals: [1, 5, 10] },
 		)
 		.toBe(before.posts + 1);
 	return before;
@@ -83,12 +81,14 @@ export function nextRoundAt(now: number): number {
 	// initialization/ingress milliseconds do not move that target.
 	return 480 + 15 * (Math.floor((now - 480) / 15) + 1);
 }
-export async function step(page: Page) {
+export async function step(page: Page, responseTimeout?: number) {
 	const before = await postStep(page);
 	const target = nextRoundAt(before.now);
 	await base.expect
-		.poll(() =>
-			page.evaluate(() => (window as unknown as { townNow: number }).townNow),
+		.poll(
+			() =>
+				page.evaluate(() => (window as unknown as { townNow: number }).townNow),
+			{ timeout: responseTimeout },
 		)
 		.toBe(target);
 	const minute = target % 1440;

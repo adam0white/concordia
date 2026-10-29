@@ -2,7 +2,11 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import { transformWithOxc } from "vite";
 import { HF_VERSION as FRAMEWORK_VERSION } from "../src/core/hf-version.ts";
-import type { NativeTownArchive } from "../src/core/runtime.ts";
+import { restoreRuntime } from "../src/core/index.ts";
+import type {
+	JournalTownArchive,
+	NativeTownArchive,
+} from "../src/core/runtime.ts";
 import {
 	expect,
 	type Page,
@@ -21,7 +25,11 @@ import {
 	showTab,
 } from "./session-helpers";
 
-type Packet = { schema: string; rounds: number; runtime: NativeTownArchive };
+type Packet = {
+	schema: string;
+	rounds: number;
+	runtime: NativeTownArchive | JournalTownArchive;
+};
 
 async function pause(page: Page) {
 	await closeSaves(page);
@@ -76,6 +84,9 @@ async function importPacket(page: Page, value: unknown) {
 test("real WASM town preserves requested exports, imports, reloads and previous seed", async ({
 	page,
 }, info) => {
+	// Seven complete exports, strict journal/native cold equality, imports and
+	// reloads compose a correctness control; each original operation stays.
+	test.setTimeout(600000);
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
 	await page.goto("/");
@@ -95,8 +106,13 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 		expect(next.rounds).toBe(current.rounds + 1);
 		current = next;
 	}
+	// Files carry the complete public journal. Admit it through the shipped
+	// journal reader and strict host replay before inspecting native people.
+	const native = restoreRuntime(current.runtime).export() as NativeTownArchive;
+	expect(Object.keys(native.owner.run.current.people)).toHaveLength(206);
+	expect(restoreRuntime(native).export()).toEqual(native);
 	expect(
-		Object.values(current.runtime.owner.run.current.people).every(
+		Object.values(native.owner.run.current.people).every(
 			(resident) => resident.trace.length > 0,
 		),
 	).toBe(true);
