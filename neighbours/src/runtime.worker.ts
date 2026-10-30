@@ -142,9 +142,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 				case "cast-capture": {
 					castRequests.set(q.requestId, q.actorId);
 					port.wanted.add(q.actorId);
-					const archive =
-						port.runtime.export() as import("./core/runtime.ts").NativeTownArchive;
-					const actor = archive.owner.run.current.people[q.actorId];
+					const actor = port.runtime.currentActors()[q.actorId];
 					if (actor && !actor.activity) port.boundaries.set(q.actorId, actor);
 					await flushCastCaptures();
 					break;

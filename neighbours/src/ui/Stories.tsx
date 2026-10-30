@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { TownEvent, TownView } from "../contracts";
 import type { EveningEvent } from "../core/evenings.ts";
+import { HF_VERSION } from "../core/hf-version.ts";
 import { datedClock } from "./format";
 import type { StoryGroup } from "./observations";
 import { plainText } from "./plain-english";
@@ -55,7 +56,7 @@ export function projectEveningReading(
 		fields.some((field) => !Object.hasOwn(native, field)) ||
 		native.format !== "neighbours-native" ||
 		native.schema !== "neighbours-hf4/1" ||
-		native.hf !== "4.10.0"
+		native.hf !== HF_VERSION
 	)
 		return undefined;
 	const s = native.physical as HostSnapshot | undefined;

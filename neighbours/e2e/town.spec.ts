@@ -232,6 +232,15 @@ async function deviceCheckpoint(page: Page) {
 	});
 }
 
+/** Device saves are native; downloads are journals. Strictly restore the full
+ * downloaded journal before comparing every field with the native device save. */
+function nativeDevicePacket(packet: Packet): Packet {
+	return {
+		...packet,
+		runtime: restoreRuntime(packet.runtime).export() as NativeTownArchive,
+	};
+}
+
 test("another tab's checkpoint locks stale saves, preserves export and resumes through reload", async ({
 	page,
 	context,
@@ -242,9 +251,10 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "owner-initial");
+	const initialNative = nativeDevicePacket(initial);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
-		.toEqual(initial);
+		.toEqual(initialNative);
 	// Pre-protection saves remain raw packets. Adopt one only after reading it.
 	await page.evaluate(async () => {
 		await new Promise<void>((resolve, reject) => {
@@ -268,7 +278,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 	expect(await packet(page, info, "legacy-adopted")).toEqual(initial);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
-		.toEqual(initial);
+		.toEqual(initialNative);
 	const other = await context.newPage();
 	await prepareClock(other);
 	await other.goto("/");
@@ -288,7 +298,7 @@ test("another tab's checkpoint locks stale saves, preserves export and resumes t
 		other.getByRole("button", { name: /^Game menu(?: · day \d+)?$/ }),
 	).toBeEnabled();
 	const beforeExport = await deviceCheckpoint(page);
-	expect(beforeExport.latest).toEqual(advanced);
+	expect(beforeExport.latest).toEqual(nativeDevicePacket(advanced));
 	expect(await packet(other, info, "stale-tab-export")).toEqual(initial);
 	expect(await deviceCheckpoint(page)).toEqual(beforeExport);
 	await closeSaves(other);
@@ -324,9 +334,10 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const initial = await packet(page, info, "cas-initial");
+	const initialNative = nativeDevicePacket(initial);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
-		.toEqual(initial);
+		.toEqual(initialNative);
 	const other = await context.newPage();
 	await prepareClock(other);
 	await other.goto("/");
@@ -338,9 +349,10 @@ test("IndexedDB rejects a stale autosave even without cross-tab notifications", 
 	await closeSaves(page);
 	await step(page);
 	const advanced = await packet(page, info, "cas-owner-advanced");
+	const advancedNative = nativeDevicePacket(advanced);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
-		.toEqual(advanced);
+		.toEqual(advancedNative);
 	const beforeConflict = await deviceCheckpoint(page);
 	// Reach the real autosave cadence without Pause or Export issuing a save first.
 
@@ -374,9 +386,10 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await pause(page);
 	const valid = await packet(page, info, "recovery-original");
+	const validNative = nativeDevicePacket(valid);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
-		.toEqual(valid);
+		.toEqual(validNative);
 	await page.evaluate(async () => {
 		await new Promise<void>((resolve, reject) => {
 			const request = indexedDB.open("alder-quay", 1);
@@ -416,9 +429,10 @@ test("a corrupt startup checkpoint stays protected until deliberate recovery", a
 	);
 	await step(page);
 	const recovered = await packet(page, info, "deliberate-recovery");
+	const recoveredNative = nativeDevicePacket(recovered);
 	await expect
 		.poll(async () => (await deviceCheckpoint(page)).latest)
-		.toEqual(recovered);
+		.toEqual(recoveredNative);
 });
 
 test("closed visitor sessions cannot commit queued or already-started saves", async ({

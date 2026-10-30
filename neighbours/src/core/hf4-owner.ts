@@ -53,7 +53,10 @@ export class TownRunOwner {
 	private nextInput = 1;
 	private attended = new Map<string, number>();
 	private receivedTimes = new Map<string, number>();
-	private snapshot: DeepReadonly<RunArchive>;
+	private snapshot: DeepReadonly<RunArchive> | undefined;
+	private currentState: DeepReadonly<RunArchive["current"]> | undefined;
+	private currentCursor: RunJournalCursor | undefined;
+	private effective!: DeepReadonly<RunArchive["initial"]["effective"]>;
 	private snapshotCursor: RunJournalCursor | undefined;
 	private frameAvailability = new Map<
 		string,
@@ -64,8 +67,7 @@ export class TownRunOwner {
 	lastRequest: { until: number; inputs: Input[] } | null = null;
 	constructor(run: Run) {
 		this.run = run;
-		this.snapshot = exportRun(run);
-		this.snapshotCursor = need(exportRunJournal(run)).cursor;
+		this.readCurrent();
 	}
 	static restore(value: OwnerArchive): TownRunOwner {
 		const owner = new TownRunOwner(need(restoreRun(value.run)));
@@ -75,7 +77,7 @@ export class TownRunOwner {
 		const restored = need(
 			inspect(owner.run, {
 				perspective: { kind: "host" },
-				people: Object.keys(owner.snapshot.current.people),
+				people: Object.keys(owner.current.people),
 				select: ["events"],
 			}),
 		);
@@ -105,13 +107,13 @@ export class TownRunOwner {
 		return `neighbours:${String(this.nextInput++).padStart(16, "0")}:${kind}`;
 	}
 	get pending() {
-		return this.snapshot.current.pending;
+		return this.current.pending;
 	}
 	offers(person: string) {
-		return this.snapshot.current.offers[person]?.offers ?? [];
+		return this.current.offers[person]?.offers ?? [];
 	}
 	offerRevision(person: string) {
-		return this.snapshot.current.offers[person]?.revision ?? 0;
+		return this.current.offers[person]?.revision ?? 0;
 	}
 	queuedGoal(person: string, label: string) {
 		return this.queued.find(
@@ -123,21 +125,20 @@ export class TownRunOwner {
 		);
 	}
 	accepted(id: string) {
-		return this.snapshot.current.receipts.inputs.some(
-			(input) => input.id === id,
-		);
+		return this.current.receipts.inputs.some((input) => input.id === id);
 	}
 	get parameters() {
-		return this.snapshot.initial.effective;
+		this.readCurrent();
+		return this.effective;
 	}
 	get at() {
-		return this.snapshot.current.at;
+		return this.current.at;
 	}
 	get revision() {
-		return this.snapshot.current.world.revision;
+		return this.current.world.revision;
 	}
 	actor(id: string): NativeActor {
-		const actor = this.snapshot.current.people[id];
+		const actor = this.current.people[id];
 		if (!actor) throw Error("Unknown Run actor");
 		return actor;
 	}
@@ -192,10 +193,8 @@ export class TownRunOwner {
 				: [],
 		);
 		const revision =
-			Math.max(
-				this.snapshot.current.offers[person]?.revision ?? 0,
-				...queuedRevision,
-			) + 1;
+			Math.max(this.current.offers[person]?.revision ?? 0, ...queuedRevision) +
+			1;
 		return [
 			{
 				id: this.allocate("offers"),
@@ -276,7 +275,7 @@ export class TownRunOwner {
 		reason: string,
 		suggestion?: Suggestion,
 	): DecisionRecord {
-		if (this.snapshot.current.pending.length)
+		if (this.current.pending.length)
 			throw Error("Finish the reached physical boundary before speaking");
 		const inputs = this.decisionInputs(person, offers, reason, suggestion);
 		this.queued.push(...inputs);
@@ -315,7 +314,7 @@ export class TownRunOwner {
 		offers: readonly Affordance[],
 		suggestion: Suggestion,
 	): SuggestionResolution {
-		if (this.snapshot.current.pending.length)
+		if (this.current.pending.length)
 			throw Error("Finish the reached physical boundary before previewing");
 		const before = this.nextInput;
 		const inputs = this.decisionInputs(
@@ -400,7 +399,8 @@ export class TownRunOwner {
 		resolutions: readonly Input[] = [],
 	): DeepReadonly<StepResult> {
 		// Pending resolutions retain their exact reached time. Other inputs enter only a later open frame.
-		const pending = this.snapshot.current.pending;
+		const current = this.current;
+		const pending = current.pending;
 		const inputs: Input[] = [...resolutions];
 		const eligible =
 			pending.length === 0 ? this.queued.filter((x) => x.at <= until) : [];
@@ -408,7 +408,7 @@ export class TownRunOwner {
 		this.lastRequest = structuredClone({ until, inputs });
 		TownRunOwner.onStepRequest?.(structuredClone(this.lastRequest));
 		this.frameAvailability = new Map(
-			Object.entries(this.snapshot.current.people).map(([id, actor]) => [
+			Object.entries(current.people).map(([id, actor]) => [
 				id,
 				{
 					alive: actor.body.alive,
@@ -421,8 +421,7 @@ export class TownRunOwner {
 		this.queued = this.queued.filter(
 			(x) => !eligible.some((y) => y.id === x.id),
 		);
-		this.snapshot = exportRun(this.run);
-		this.snapshotCursor = this.snapshotJournal().cursor;
+		this.readCurrent();
 		this.last = result;
 		for (const event of result.events)
 			if (event.person && event.data.kind === "observation-attended") {
@@ -509,11 +508,11 @@ export class TownRunOwner {
 			nextInput: this.nextInput,
 		};
 	}
-	/** The public opaque cursor detects external steps at the same time and changes
-	 * to initial authoring. It is only an in-memory invalidation witness, never a
-	 * persisted journal cursor or a replacement for the complete native archive. */
-	private snapshotJournal() {
-		const journal = exportRunJournal(this.run, this.snapshotCursor);
+	/** SCOPE: exact detached public current, reused only while the public journal
+	 * confirms the same transaction prefix and initial authoring. Time/revision
+	 * alone are not freshness witnesses. This cursor never advances archive reuse. */
+	private journalSince(cursor: RunJournalCursor | undefined) {
+		const journal = exportRunJournal(this.run, cursor);
 		if (
 			!journal.ok &&
 			journal.error.code === "invalid-admission" &&
@@ -522,9 +521,31 @@ export class TownRunOwner {
 			return need(exportRunJournal(this.run));
 		return need(journal);
 	}
+	private readCurrent(): DeepReadonly<RunArchive["current"]> {
+		const journal = this.journalSince(this.currentCursor);
+		if (!this.currentState || journal.chunk || journal.opening) {
+			const reading = need(
+				inspect(this.run, {
+					perspective: { kind: "host" },
+					people: [],
+					select: ["current"],
+				}),
+			);
+			if (!reading.current) throw Error("Missing public Run current");
+			this.currentState = reading.current;
+		}
+		if (journal.opening) this.effective = journal.opening.initial.effective;
+		this.currentCursor = journal.cursor;
+		return this.currentState;
+	}
+	get current() {
+		return this.readCurrent();
+	}
+
 	export(): OwnerArchive {
-		const journal = this.snapshotJournal();
-		if (journal.chunk || journal.opening) this.snapshot = exportRun(this.run);
+		const journal = this.journalSince(this.snapshotCursor);
+		if (!this.snapshot || journal.chunk || journal.opening)
+			this.snapshot = exportRun(this.run);
 		this.snapshotCursor = journal.cursor;
 		return {
 			lessons: structuredClone(this.lessons),

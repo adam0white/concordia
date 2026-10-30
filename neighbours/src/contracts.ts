@@ -1,4 +1,5 @@
 import type { DeepReadonly, HostRequest } from "@adam0white/human-framework";
+import type { NativeActor } from "./core/host-types.ts";
 export type Policy = "hf" | "table" | "random" | "llm";
 export interface TownEvent {
 	id: number;
@@ -386,6 +387,8 @@ export interface Choice {
 	label: string;
 }
 export interface TownRuntime {
+	/** Exact current public actors; complete checkpoints remain a separate boundary. */
+	currentActors(): Readonly<Record<string, NativeActor>>;
 	prepareBoundary(): {
 		at: number;
 		done: boolean;
