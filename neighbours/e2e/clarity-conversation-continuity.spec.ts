@@ -1,4 +1,10 @@
-import { expect, reachSelectedConversation, step, test } from "./clock-fixture";
+import {
+	expect,
+	nextRoundAt,
+	reachSelectedConversation,
+	step,
+	test,
+} from "./clock-fixture";
 import { enterLocalTown } from "./local-fixture";
 
 test.use({
@@ -9,8 +15,10 @@ test.use({
 test("an explicit conversation holds time and closing it resumes the automatic town", async ({
 	page,
 }) => {
+	// Full initialization and walking correctness; not a latency acceptance.
+	test.setTimeout(600000);
 	await page.goto("/");
-	await enterLocalTown(page);
+	await enterLocalTown(page, 60000);
 	await expect(page.locator(".state-words")).toBeVisible({ timeout: 60000 });
 	await page.locator('.neighbour-strip [data-person-id="ravi"]').click();
 	await reachSelectedConversation(page, "Rafi");
@@ -33,5 +41,5 @@ test("an explicit conversation holds time and closing it resumes the automatic t
 		await page.evaluate(
 			() => (window as unknown as { townNow: number }).townNow,
 		),
-	).toBe(held + 15);
+	).toBe(nextRoundAt(held));
 });

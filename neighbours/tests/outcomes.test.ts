@@ -1,13 +1,5 @@
-import {
-	type Affordance,
-	begin,
-	createPerson,
-	decide,
-	finish,
-	readPerson,
-	tick,
-} from "@adam0white/human-framework";
 import { expect, it } from "vitest";
+import type { Affordance } from "../src/core/host-types.ts";
 import { realizedOutcome } from "../src/core/outcomes.ts";
 
 const evidence = {
@@ -29,32 +21,13 @@ function offer(
 		advertises,
 	};
 }
-it("lets HF measure actual sleep recovery instead of learning the advertised promise", () => {
-	const p = createPerson({
-		id: "sleeper",
-		name: "Sleeper",
-		sex: "female",
-		seed: 42,
-		now: 480,
-		bornAt: -10000000,
-	});
+it("leaves sleep and rest recovery to the actual native body instead of the advertised promise", () => {
 	const a = {
 		...offer("sleep", { sleep: 0.6, rest: 0.4 }),
 		mode: "sleep" as const,
 	};
-	const before = readPerson(p).needs.find((n) => n.id === "sleep")?.level ?? 0;
-	begin(p, a, decide(p, [a]));
-	tick(p, 600);
-	const after = readPerson(p).needs.find((n) => n.id === "sleep")?.level ?? 0;
-	const result = finish(p, {
-		affordanceId: a.id,
-		action: a.action,
-		status: "completed",
-		at: 600,
-		...realizedOutcome(a, evidence),
-	});
-	expect(result?.realized.sleep).toBeCloseTo(after - before, 12);
-	expect(result?.realized.sleep).not.toBe(0.6);
+	expect(realizedOutcome(a, evidence).needs).not.toHaveProperty("sleep");
+	expect(realizedOutcome(a, evidence).needs).not.toHaveProperty("rest");
 });
 it("an empty hall gives no social relief while a shared meal still feeds its eater", () => {
 	const a = offer("gather", { food: 0.65, belonging: 0.65, meaning: 0.3 });

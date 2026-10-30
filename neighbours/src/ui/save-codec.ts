@@ -1,3 +1,6 @@
+import { sha256 } from "@noble/hashes/sha2.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
+
 // Shareable files contain the complete runtime JSON. Device saves stay unchanged.
 export const MAX_SAVE_BYTES = 50 * 1024 * 1024;
 export const MAX_COMPRESSED_SAVE_BYTES = 50 * 1024 * 1024;
@@ -76,8 +79,120 @@ export async function decodeSave(
 		}
 	}
 	try {
-		return JSON.parse(await json.text());
-	} catch {
+		return await decodeRecording(JSON.parse(await json.text()));
+	} catch (error) {
+		if (error instanceof SaveFileError) throw error;
 		throw new SaveFileError("This file is not valid JSON.");
+	}
+}
+
+const RECORDING_SCHEMA = "neighbours/recording@1";
+const object = (value: unknown): Record<string, unknown> | undefined =>
+	value !== null && typeof value === "object" && !Array.isArray(value)
+		? (value as Record<string, unknown>)
+		: undefined;
+function recording(value: unknown) {
+	const schema = object(value)?.schema;
+	return (
+		typeof schema === "string" && schema.startsWith("neighbours/recording@")
+	);
+}
+export interface RecordingExport {
+	schema: typeof RECORDING_SCHEMA;
+	codec: "gzip-base64";
+	decodedBytes: number;
+	sha256: string;
+	data: string;
+}
+/** Full JSON only. This transport wrapper grants no source trust or admission. */
+export async function encodeRecording(
+	packet: unknown,
+): Promise<RecordingExport> {
+	if (recording(packet) || recording(object(packet)?.packet))
+		throw new SaveFileError("Nested recordings are not supported.");
+	const raw = new TextEncoder().encode(JSON.stringify(packet));
+	const compressed = new Uint8Array(
+		await (await encodeSave(packet)).arrayBuffer(),
+	);
+	let binary = "";
+	for (let offset = 0; offset < compressed.length; offset += 32768)
+		binary += String.fromCharCode(
+			...compressed.subarray(offset, offset + 32768),
+		);
+	return {
+		schema: RECORDING_SCHEMA,
+		codec: "gzip-base64",
+		decodedBytes: raw.byteLength,
+		sha256: bytesToHex(sha256(raw)),
+		data: btoa(binary),
+	};
+}
+/** One decoded layer, then the ordinary strict journal/native/host admission. */
+async function decodeRecording(value: unknown): Promise<unknown> {
+	let r = object(value);
+	if (r && recording(r.packet)) {
+		const keys = Object.keys(r).sort().join(",");
+		if (
+			!(
+				(keys === "packet,slot" &&
+					typeof r.slot === "string" &&
+					["latest", "previous"].includes(r.slot)) ||
+				(keys === "file,packet" && r.file === true)
+			)
+		)
+			throw new SaveFileError("Invalid recorded save wrapper.");
+		r = object(r.packet);
+	}
+	if (!recording(r)) return value;
+	if (
+		!r ||
+		Object.keys(r).sort().join(",") !==
+			"codec,data,decodedBytes,schema,sha256" ||
+		r.schema !== RECORDING_SCHEMA ||
+		r.codec !== "gzip-base64" ||
+		typeof r.decodedBytes !== "number" ||
+		!Number.isSafeInteger(r.decodedBytes) ||
+		r.decodedBytes < 1 ||
+		r.decodedBytes > MAX_SAVE_BYTES ||
+		typeof r.sha256 !== "string" ||
+		!/^[a-f0-9]{64}$/.test(r.sha256) ||
+		typeof r.data !== "string" ||
+		r.data.length > 4 * Math.ceil(MAX_COMPRESSED_SAVE_BYTES / 3) ||
+		r.data.length % 4 !== 0 ||
+		/[^A-Za-z0-9+/=]/.test(r.data)
+	)
+		throw new SaveFileError(
+			"Invalid recording or decoded size beyond the 50 MiB limit.",
+		);
+	try {
+		const binary = atob(r.data);
+		if (btoa(binary) !== r.data)
+			throw new SaveFileError("Invalid recording base64.");
+		const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+		if (typeof DecompressionStream === "undefined")
+			throw Error("No gzip support");
+		const decoded = await boundedBlob(
+			new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip")),
+			MAX_SAVE_BYTES,
+			"This recording expands beyond the 50 MiB import limit.",
+			"application/json",
+		);
+		const raw = new Uint8Array(await decoded.arrayBuffer());
+		if (
+			raw.byteLength !== r.decodedBytes ||
+			bytesToHex(sha256(raw)) !== r.sha256
+		)
+			throw new SaveFileError(
+				"Recording size or hash does not match its complete JSON.",
+			);
+		const packet: unknown = JSON.parse(
+			new TextDecoder("utf-8", { fatal: true }).decode(raw),
+		);
+		if (recording(packet) || recording(object(packet)?.packet))
+			throw new SaveFileError("Nested recordings are not supported.");
+		return packet;
+	} catch (error) {
+		if (error instanceof SaveFileError) throw error;
+		throw new SaveFileError("This recording is invalid or incomplete.");
 	}
 }

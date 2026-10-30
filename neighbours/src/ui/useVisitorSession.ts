@@ -30,7 +30,12 @@ import {
 	skipStopReason,
 	storyReadingKey,
 } from "./playback-rate";
-import { decodeSave, encodeSave, SaveFileError } from "./save-codec";
+import {
+	decodeSave,
+	encodeRecording,
+	encodeSave,
+	SaveFileError,
+} from "./save-codec";
 import { type HealthHistory, sampleHealth } from "./TownHealth";
 import { advanceStoryWatch, type StoryWatchState } from "./useStoryWatch";
 
@@ -231,7 +236,10 @@ export function useVisitorSession({
 	>([]);
 	// Save replies may arrive after a replacement or its canceled backup.
 	const saveRequests = useRef(
-		new Map<number, { generation: number; backup: boolean }>(),
+		new Map<
+			number,
+			{ generation: number; backup: boolean; journalFile: boolean }
+		>(),
 	);
 	const menuHeld = useRef(false);
 	const menuWaiting = useRef(false);
@@ -263,11 +271,12 @@ export function useVisitorSession({
 	}, []);
 	const dispatch = useCallback((command: UiCommand) => {
 		if (fileRetired.current) return;
-		if (command.type === "save") {
+		if (command.type === "save" || command.type === "save-journal") {
 			const requestId = command.requestId ?? ++saveRequestId.current;
 			saveRequests.current.set(requestId, {
 				generation: worldGeneration.current,
 				backup: replaceAfterSave.current?.requestId === requestId,
+				journalFile: command.type === "save-journal",
 			});
 			client.current?.send({ ...command, requestId });
 			return;
@@ -404,17 +413,37 @@ export function useVisitorSession({
 			| {
 					generation: number;
 					data: { slot: "latest" | "previous"; packet: unknown };
+					recording?: Promise<unknown>;
 			  }
 			| undefined;
 		const recordCommittedSave = (
 			packet: unknown,
 			slot: "latest" | "previous",
 			generation: number,
+			recording?: unknown,
 		) => {
 			if (!hostActive()) return;
 			const data = { slot, packet: structuredClone(packet) };
-			committedSave = { generation, data };
-			lab.captureSave(fileSession ? { file: true, packet: data.packet } : data);
+			const committed = {
+				generation,
+				data,
+				recording: recording
+					? encodeRecording(recording).catch(() => null)
+					: undefined,
+			};
+			committedSave = committed;
+			void committed.recording?.then((packet) => {
+				if (
+					packet &&
+					hostActive() &&
+					!saveConflictRef.current &&
+					committedSave === committed &&
+					generation === acceptedGeneration.current
+				)
+					lab.captureSave(
+						fileSession ? { file: true, packet } : { slot, packet },
+					);
+			});
 		};
 		const telemetryRequests = new Map<
 			number,
@@ -447,23 +476,39 @@ export function useVisitorSession({
 									resolve,
 									timer,
 								});
-								runtime?.send({ type: "save", requestId });
+								// Capture the full replayable journal, including every host/native input.
+								runtime?.send({ type: "save-journal", requestId });
 							});
 							// The SDK still has to serialize and enqueue this returned packet.
 							// Retire only the host runtime; do not dispose the registered live SDK.
-							if (hiding) retireTimer = setTimeout(retireRuntime, 0);
+
 							if (!active || generation !== acceptedGeneration.current)
 								return null;
 							// Retry only checkpoints committed by this visitor's accepted world,
 							// after identity is settled. Never attach a prior town's device save.
-							if (!hiding && committedSave?.generation === generation)
+							const committed = committedSave;
+							const encoded = packet
+								? await encodeRecording(packet).catch(() => null)
+								: null;
+							const savedRecording =
+								!hiding && committed?.generation === generation
+									? await committed.recording
+									: null;
+							if (
+								active &&
+								generation === acceptedGeneration.current &&
+								committedSave === committed &&
+								savedRecording &&
+								!saveConflictRef.current
+							)
 								lab.captureSave(
 									fileSession
-										? { file: true, packet: committedSave.data.packet }
-										: committedSave.data,
+										? { file: true, packet: savedRecording }
+										: { ...committed?.data, packet: savedRecording },
 								);
+							if (hiding) retireTimer = setTimeout(retireRuntime, 0);
 							return active && generation === acceptedGeneration.current
-								? packet
+								? encoded
 								: null;
 						},
 						{
@@ -930,8 +975,13 @@ export function useVisitorSession({
 				const replacement = replaceAfterSave.current;
 				const replace =
 					replacement?.requestId === reply.requestId ? replacement : null;
-				if (!saveConflictRef.current && (autosaveEnabled.current || replace))
-					void (
+				let persistence = Promise.resolve();
+				if (
+					!request.journalFile &&
+					!saveConflictRef.current &&
+					(autosaveEnabled.current || replace)
+				)
+					persistence = (
 						saves
 							? saves.write(reply.save, replace ? "previous" : "latest", () =>
 									owns(generation),
@@ -949,6 +999,7 @@ export function useVisitorSession({
 								reply.save,
 								replace ? "previous" : "latest",
 								generation,
+								reply.recording,
 							);
 							setSaved(
 								fileSession
@@ -995,46 +1046,60 @@ export function useVisitorSession({
 				) {
 					const requestId = reply.requestId;
 					const revision = errorRevision.current;
-					void encodeSave(reply.save).then(
-						(blob) => {
-							if (
-								!hostActive() ||
-								exportRequest.current !== requestId ||
-								generation < acceptedGeneration.current
-							)
-								return;
-							downloadGeneration.current = generation;
-							const packet = reply.save as {
-								runtime?: { now?: number };
-							} | null;
-							const at = packet?.runtime?.now;
-							setDownloadLabel(
-								typeof at === "number" ? datedClock(at) : "Current checkpoint",
-							);
-							setDownloadUrl(URL.createObjectURL(blob));
-							exportRequest.current = null;
-						},
-						(failure: unknown) => {
-							if (
-								!hostActive() ||
-								exportRequest.current !== requestId ||
-								generation < acceptedGeneration.current
-							)
-								return;
-							exportRequest.current = null;
-							if (revision !== errorRevision.current) return;
-							errorRevision.current++;
-							const message =
-								failure instanceof SaveFileError
-									? failure.message
-									: "This save could not be compressed. The current town is unchanged.";
-							lastExportFailure.current = {
-								revision: errorRevision.current,
-								message,
-							};
-							setError(message);
-						},
-					);
+					// Ordinary exports keep the native device checkpoint and download its
+					// complete journal from the same worker FIFO slot. File sessions stay
+					// journal-only. Do not publish before the native write has settled.
+					const filePacket = request.journalFile ? reply.save : reply.recording;
+					void persistence
+						.then(() => {
+							if (filePacket === undefined)
+								throw new SaveFileError(
+									"The complete town checkpoint is unavailable. Try again.",
+								);
+							return encodeSave(filePacket);
+						})
+						.then(
+							(blob) => {
+								if (
+									!hostActive() ||
+									exportRequest.current !== requestId ||
+									generation < acceptedGeneration.current
+								)
+									return;
+								downloadGeneration.current = generation;
+								const packet = filePacket as {
+									runtime?: { physical?: { now?: number } };
+								} | null;
+								const at = packet?.runtime?.physical?.now;
+								setDownloadLabel(
+									typeof at === "number"
+										? datedClock(at)
+										: "Current checkpoint",
+								);
+								setDownloadUrl(URL.createObjectURL(blob));
+								exportRequest.current = null;
+							},
+							(failure: unknown) => {
+								if (
+									!hostActive() ||
+									exportRequest.current !== requestId ||
+									generation < acceptedGeneration.current
+								)
+									return;
+								exportRequest.current = null;
+								if (revision !== errorRevision.current) return;
+								errorRevision.current++;
+								const message =
+									failure instanceof SaveFileError
+										? failure.message
+										: "This save could not be compressed. The current town is unchanged.";
+								lastExportFailure.current = {
+									revision: errorRevision.current,
+									message,
+								};
+								setError(message);
+							},
+						);
 				}
 			}
 		};
@@ -1049,7 +1114,9 @@ export function useVisitorSession({
 		};
 		// A player input's state reply carries its checkpoint; store it before the answer is shown.
 		// The head of the state FIFO is this reply's command, because replies are delivered in order.
-		const persistAnswer = (reply: UiReply & { save: unknown }) => {
+		const persistAnswer = (
+			reply: UiReply & { save: unknown; recording?: unknown },
+		) => {
 			const command = stateCommands.current[0];
 			if (
 				!hostActive() ||
@@ -1072,7 +1139,12 @@ export function useVisitorSession({
 						generation < acceptedGeneration.current
 					)
 						return;
-					recordCommittedSave(reply.save, "latest", generation);
+					recordCommittedSave(
+						reply.save,
+						"latest",
+						generation,
+						reply.recording,
+					);
 					setSaved(
 						fileSession
 							? "File session · changes stay in memory"
@@ -1097,11 +1169,14 @@ export function useVisitorSession({
 			const current = () => owns(generation, owner);
 			if (!current() || !saves)
 				throw Error("Device ownership save unavailable.");
-			const packet = owner.cast.decorate(await owner.capture());
+			const native = await owner.capture();
+			const packet = owner.cast.decorate(native);
+			const journal = owner.recordingFor(native);
+			const recording = journal ? owner.cast.decorate(journal) : undefined;
 			if (!current()) throw Error("Run changed before ownership save.");
 			await saves.write(packet, "latest", current);
 			if (!current()) throw Error("Run changed during ownership save.");
-			recordCommittedSave(packet, "latest", generation);
+			recordCommittedSave(packet, "latest", generation, recording);
 			setHasSave(true);
 			setSaved(savedLabel(packet));
 		};
@@ -1146,7 +1221,9 @@ export function useVisitorSession({
 					await saves.settled();
 					if (!current())
 						throw Error("The town changed before saving its copy.");
-					const packet = owner.cast.decorate(await owner.capture());
+					const packet = owner.cast.decorate(
+						await owner.capture(undefined, "journal"),
+					);
 					if (!current()) throw Error("The town changed during capture.");
 					await saves.saveNamed(name, packet, current);
 					if (!current()) return;
@@ -1422,7 +1499,9 @@ export function useVisitorSession({
 		if (
 			!comparisonPending.current &&
 			advancePending.current === null &&
-			(!saveConflictRef.current || command.type === "save")
+			(!saveConflictRef.current ||
+				command.type === "save" ||
+				command.type === "save-journal")
 		) {
 			if (
 				command.type === "step" ||
@@ -1716,9 +1795,9 @@ export function useVisitorSession({
 		setDownloadUrl("");
 		const requestId = ++saveRequestId.current;
 		exportRequest.current = requestId;
-		send({ type: "save", requestId });
+		send({ type: fileSession ? "save-journal" : "save", requestId });
 	};
-	const getRun = (): Promise<unknown> => {
+	const requestRun = (format: "native" | "journal"): Promise<unknown> => {
 		if (
 			fileRetired.current ||
 			!client.current ||
@@ -1745,8 +1824,25 @@ export function useVisitorSession({
 				reject,
 				timer,
 			});
-			client.current?.send({ type: "save", requestId });
+			client.current?.send({
+				type: format === "journal" ? "save-journal" : "save",
+				requestId,
+			});
 		});
+	};
+	const getRun = () => requestRun("native");
+	const getRecording = async () => {
+		const generation = worldGeneration.current,
+			owner = client.current;
+		const packet = await requestRun("journal");
+		const encoded = await encodeRecording(packet);
+		if (
+			fileRetired.current ||
+			generation !== worldGeneration.current ||
+			owner !== client.current
+		)
+			throw Error("The town changed before its recording was ready.");
+		return encoded;
 	};
 	const exportSave = () => requestExport();
 	const reportLocalError = (message: string) => {
@@ -1881,7 +1977,7 @@ export function useVisitorSession({
 		sendFeedback: (note: string, name: string, sharePlay = false) => {
 			const current = client.current;
 			if (!current) return sendFeedbackWithoutRun(note, name, sharePlay);
-			return current.cast.feedback(note, name, getRun, sharePlay);
+			return current.cast.feedback(note, name, getRecording, sharePlay);
 		},
 		allowCastRecording: (allow: boolean) =>
 			client.current?.cast.recording(allow),

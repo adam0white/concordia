@@ -16,7 +16,22 @@ export interface BenchRequest {
 	benefitReceived?: boolean;
 	benefitEvent?: TownEvent;
 }
+export type PendingCartReceipt = {
+	person: string;
+	event: TownEvent;
+	effect:
+		| {
+				type: "request";
+				from: number;
+				until: number;
+				opportunityEventId?: number;
+		  }
+		| { type: "reply"; requestId: number; reply: "agree" | "refuse" | "later" }
+		| { type: "benefit"; requestId: number }
+		| { type: "handover" };
+};
 export interface Handcart {
+	pending?: PendingCartReceipt[];
 	version: 1;
 	activatedAt: number;
 	progress: number;

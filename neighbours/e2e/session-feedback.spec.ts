@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { gunzipSync } from "node:zlib";
 import {
 	expect,
+	nextRoundAt,
 	type Page,
 	postStep,
 	type TestInfo,
@@ -17,7 +18,7 @@ import {
 } from "./session-helpers";
 
 type Packet = {
-	runtime: { seed: number; now: number };
+	runtime: { physical: { seed: number; now: number; round: number } };
 	castLocal?: Record<string, unknown>;
 };
 type SaveGate = {
@@ -168,7 +169,7 @@ test("world replacement clears feedback and rejects delayed exports and supersed
 	await expect(page.getByRole("link", { name: /Download save/ })).toHaveCount(
 		0,
 	);
-	expect((await packet(page, info, "new-seed")).runtime.seed).toBe(73);
+	expect((await packet(page, info, "new-seed")).runtime.physical.seed).toBe(73);
 	await page.evaluate(() => {
 		(window as unknown as { sessionSaveGate: SaveGate }).sessionSaveGate.hold =
 			true;
@@ -333,9 +334,9 @@ test("exports survive rejected imports and exports from a replacement survive it
 		for (const deliver of gate.heldState.splice(0)) deliver();
 	});
 
-	expect((await packet(page, info, "after-delayed-step")).runtime.now).toBe(
-		original.runtime.now + 15,
-	);
+	expect(
+		(await packet(page, info, "after-delayed-step")).runtime.physical.now,
+	).toBe(480 + 15 * (original.runtime.physical.round + 1));
 	await expect(page.getByRole("alert")).toContainText(
 		"The town could not complete that action.",
 	);
@@ -362,6 +363,6 @@ test("a rejected local JSON file resumes automatic time without another action",
 		.poll(() =>
 			page.evaluate(() => (window as unknown as { townNow: number }).townNow),
 		)
-		.toBe(before.now + 15);
+		.toBe(nextRoundAt(before.now));
 	await expect(page.locator(".town-time strong")).toHaveText("08:15");
 });

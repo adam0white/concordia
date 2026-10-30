@@ -250,6 +250,25 @@ export const PHRASES: readonly Phrase[] = [
 		),
 	},
 	{
+		kind: "private-share",
+		match: /^Share something private about this matter$/,
+		...fixed(
+			"I want to tell you something privately first",
+			"share something private",
+			"sharing something private",
+		),
+	},
+	{
+		kind: "private-decline",
+		match: /^Keep the matter private$/,
+		...fixed(
+			"I want to keep this private first",
+			"keep this private",
+			"keeping this private",
+		),
+	},
+
+	{
 		kind: "wait-inspector",
 		match: /^Wait for (.+?) beside the hall noticeboard/,
 		first: (m) => `I’m waiting for ${g(m)} by the noticeboard first`,

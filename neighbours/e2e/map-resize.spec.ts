@@ -110,19 +110,24 @@ test("shared measurements follow current map lifetime without owning focus or hi
 	await expect(
 		page.getByRole("dialog", { name: /^Game menu/ }),
 	).not.toBeVisible();
-	const hit = await page
-		.locator(".map-person,.map-cluster")
-		.first()
-		.evaluate((element) => {
-			const rect = element.getBoundingClientRect();
-			return element.contains(
-				document.elementFromPoint(
-					rect.x + rect.width / 2,
-					rect.y + rect.height / 2,
-				),
-			);
-		});
-	expect(hit).toBe(true);
+	// Closing the person sheet changes the measured map; markers animate to
+	// their new positions and can cross before their final hit targets separate.
+	await expect
+		.poll(() =>
+			page
+				.locator(".map-person,.map-cluster")
+				.first()
+				.evaluate((element) => {
+					const rect = element.getBoundingClientRect();
+					return element.contains(
+						document.elementFromPoint(
+							rect.x + rect.width / 2,
+							rect.y + rect.height / 2,
+						),
+					);
+				}),
+		)
+		.toBe(true);
 	await openSaves(page);
 	await page.locator(".session-menu .menu-debug > summary").click();
 	await page

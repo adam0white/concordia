@@ -1,12 +1,14 @@
-import { type Person, snapshot } from "@adam0white/human-framework";
+import type { TownPacket } from "./cast-session.ts";
+import { checkpointSources } from "./checkpoint-source.ts";
 import type { Intervention, TownRuntime } from "./contracts.ts";
+import type { NativeActor } from "./core/host-types.ts";
 import { createRuntime, restoreRuntime } from "./core/index.ts";
-import type { Save } from "./core/state.ts";
+import type { Runtime } from "./core/runtime.ts";
 /** Shared transport boundary for CPython/Node and browser Pyodide. */
 export class RuntimePort {
 	runtime: TownRuntime;
 	readonly wanted = new Set<string>();
-	readonly boundaries = new Map<string, Person>();
+	readonly boundaries = new Map<string, NativeActor>();
 	constructor(seed = 42, population = 206) {
 		this.runtime = createRuntime(seed, population);
 	}
@@ -17,33 +19,42 @@ export class RuntimePort {
 		const actorId = request.actorId as string;
 		switch (request.op) {
 			case "prepare": {
-				const ready = this.runtime.prepareRound();
+				const ready = this.runtime.prepareBoundary();
 				if (this.wanted.size) {
-					const save = this.runtime.export() as Save;
-					for (const r of save.people)
+					const people = this.runtime.currentActors();
+					for (const request of ready.requests)
 						if (
-							this.wanted.has(r.person.id) &&
-							r.person.nextDecision > 0 &&
-							!r.job &&
-							!r.person.activity
-						)
-							this.boundaries.set(r.person.id, snapshot(r.person));
+							request.kind === "action" &&
+							request.stage === "start" &&
+							this.wanted.has(request.person)
+						) {
+							const actor = people[request.person];
+							if (actor) this.boundaries.set(request.person, actor);
+						}
 				}
 				return ready;
 			}
 			case "observe":
 				return this.runtime.getObservation(actorId);
 			case "offers":
-				return this.runtime.getChoices(actorId);
+				return this.runtime.getChoices(request.requestId as string);
 			case "choose":
-				return this.runtime.choose(actorId);
+				return this.runtime.choose(request.requestId as string);
 			case "apply":
-				this.runtime.apply(actorId, request.actionId as string);
+				this.runtime.apply(
+					request.requestId as string,
+					request.actionId as string,
+				);
 				return null;
 			case "view":
 				return this.runtime.view();
+			case "save-journal":
+				return (this.runtime as Runtime).exportJournal();
 			case "save":
 				return this.runtime.export();
+			case "validate-checkpoint-source":
+				checkpointSources(request.packet as TownPacket);
+				return true;
 			case "restore":
 				this.runtime = restoreRuntime(request.save);
 				return null;

@@ -6,7 +6,8 @@ test("a cancelled second comparison keeps the first report selectable and byte-i
 	page,
 }) => {
 	await page.goto("/");
-	await enterLocalTown(page);
+	// Complete initialization is setup for this comparison correctness control.
+	await enterLocalTown(page, 60000);
 	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	await showTab(page, "Compare");
 	const panel = page.locator(".day-comparison");

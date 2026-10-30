@@ -1,9 +1,3 @@
-import {
-	type Affordance,
-	adoptGoal,
-	perceive,
-	promise,
-} from "@adam0white/human-framework";
 import type { TownEvent } from "../contracts.ts";
 import { parseProposalOrigin } from "./assistance.ts";
 import {
@@ -13,9 +7,16 @@ import {
 } from "./bench-opportunity.ts";
 import { benchWindow, validateBenchProposal } from "./bench-window.ts";
 import { requireHolder } from "./cast.ts";
-import { overlapMinutes, presentAt, receiveEvent } from "./encounters.ts";
+import {
+	overlapMinutes,
+	type PhysicalWitness,
+	presentAt,
+	receiveEvent,
+} from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import type { BenchRequest, HandcartSave } from "./handcart-state.ts";
+import { addCommitment, addGoal } from "./hf4-effects.ts";
+import type { Affordance } from "./host-types.ts";
 import { placeOf } from "./invariants.ts";
 import type { Resident, Save } from "./state.ts";
 import { validateEvent } from "./validation.ts";
@@ -39,7 +40,7 @@ export const HANDCART_MINUTES: Record<string, number> = {
 	"cart-handover": 15,
 };
 function resident(s: Save, id: string) {
-	const r = s.people.find((p) => p.person.id === id);
+	const r = s.people.find((p) => p.id === id);
 	if (!r) throw Error(`Missing ${id}`);
 	return r;
 }
@@ -77,25 +78,109 @@ function socialReceipt(
 	channel: "social" | "saw" = "social",
 ) {
 	const receiver = resident(s, to);
-	const attended = perceive(receiver.person, [
-		{
-			at: s.now,
-			channel,
-			kind,
-			actorId: from,
-			targetId: to,
-			placeId: event.placeId,
-			salience: 0.85,
-			valence: ["help", "gift"].includes(kind) ? 0.35 : 0,
-			summary: event.text,
-		},
-	]);
-	if (!attended.length) return false;
-	receiver.received = [
-		...(receiver.received ?? []),
-		{ ...event, targetId: to },
-	].slice(-12);
-	return true;
+	return receiveEvent(
+		receiver,
+		{ ...event, actorId: from, targetId: to, kind },
+		channel,
+	);
+}
+
+/** Only this domain's received meeting effects wait for actual attention. Ordinary
+ * actions and time continue. No ingress is re-delivered during settlement. */
+export function settleCartReceipts(s: HandcartSave): void {
+	const c = s.handcart;
+	if (!c?.pending) return;
+	c.pending = c.pending.filter((pending) => {
+		const attention = s.owner.attention(
+			pending.person,
+			`town:${pending.event.id}:${pending.person}`,
+		);
+		if (attention === null) return true;
+		if (attention <= 0) return false;
+		const { event, effect } = pending;
+		const deliveredAt = s.owner.attentionTime(
+			pending.person,
+			`town:${event.id}:${pending.person}`,
+		);
+		if (deliveredAt === null)
+			throw Error("Attended cart event lacks delivery time");
+		const cast = cartCast(s);
+		if (effect.type === "request") {
+			if (!c.requests.some((request) => request.event.id === event.id))
+				c.requests.push({
+					id: c.requests.length + 1,
+					event,
+					heardAt: deliveredAt / 60000,
+					proposedFrom: effect.from,
+					proposedUntil: effect.until,
+					...(effect.opportunityEventId === undefined
+						? {}
+						: { opportunityEventId: effect.opportunityEventId }),
+				});
+		} else if (effect.type === "reply") {
+			const request = c.requests.find(
+				(request) => request.id === effect.requestId,
+			);
+			if (request && !request.reply) {
+				request.reply = effect.reply;
+				request.replyEvent = event;
+				if (effect.reply === "agree") {
+					const window = {
+						from: request.proposedFrom,
+						until: request.proposedUntil,
+					};
+					const commitment = addCommitment(s, cast.lender.id, {
+						kind: "abstain",
+						toId: cast.repairer.id,
+						actions: [],
+						violatedBy: ["work"],
+						...window,
+						importance: 0.6,
+						label: request.opportunityEventId
+							? `Leave the main bench for ${cast.repairer.name}’s cart work ${benchWindowLabel(window)}`
+							: `Leave the main bench for ${cast.repairer.name}’s cart work from 08:00 to 12:00`,
+					});
+					Object.assign(request, window, { commitmentId: commitment.id });
+					c.bench = {
+						requestId: request.id,
+						...window,
+						commitmentId: commitment.id,
+					};
+				}
+			}
+		} else if (effect.type === "benefit") {
+			const request = c.requests.find(
+				(request) => request.id === effect.requestId,
+			);
+			if (request && !request.benefitReceived) {
+				request.benefitReceived = true;
+				request.benefitEvent = event;
+			}
+		} else if (!c.handover) c.handover = event;
+		return false;
+	});
+	if (!c.pending.length) delete c.pending;
+}
+function pendingCart(
+	s: HandcartSave,
+	person: string,
+	event: TownEvent,
+	effect: import("./handcart-state.ts").PendingCartReceipt["effect"],
+): void {
+	const c = s.handcart;
+	if (!c) throw Error("No cart for receipt");
+	c.pending ??= [];
+	if (
+		!c.pending.some(
+			(pending) => pending.person === person && pending.event.id === event.id,
+		)
+	)
+		c.pending.push({
+			person,
+			event: structuredClone(event),
+			effect: structuredClone(effect),
+		});
+	settleCartReceipts(s);
 }
 function nextWindow(now: number) {
 	const day = Math.floor(now / 1440);
@@ -110,17 +195,21 @@ function meeting(
 	r: Resident,
 	otherId: string,
 	place: string,
+	people: readonly PhysicalWitness[],
 ): boolean {
+	const other = people.find((person) => person.id === otherId);
+	if (!other) return false;
 	return (
 		!!r.job &&
 		presentAt(r, place, s.now) &&
-		presentAt(resident(s, otherId), place, s.now) &&
-		overlapMinutes(r.job, resident(s, otherId), s.now) >= 15
+		presentAt(other, place, s.now) &&
+		overlapMinutes(r.job, other, s.now) >= 15
 	);
 }
 /** Activation follows the first scheduled evening; only seeing the cart creates its purpose. */
 export function updateHandcart(host: HandcartHost): void {
 	const s = host.s;
+	settleCartReceipts(s);
 	if (
 		!s.handcart &&
 		allEvenings(s).some((e) => e.stage === "closed" && e.endsAt < s.now)
@@ -143,8 +232,8 @@ export function updateHandcart(host: HandcartHost): void {
 					p.job.end === s.now &&
 					p.job.end <= (c.bench?.until ?? -1),
 			)) ||
-			!cartCast(s).repairer.person.body.alive ||
-			!cartCast(s).lender.person.body.alive)
+			!cartCast(s).repairer.owner.actor(cartCast(s).repairer.id).body.alive ||
+			!cartCast(s).lender.owner.actor(cartCast(s).lender.id).body.alive)
 	)
 		delete c.bench;
 	if (c.handover) return;
@@ -153,45 +242,37 @@ export function updateHandcart(host: HandcartHost): void {
 		c.observation ??= retained(
 			host,
 			"cart-observed",
-			`${owner.person.name}’s flood-damaged handcart stands in the workshop. Repairing its axle, load platform and handles takes three work periods.`,
-			ravi.person.id,
+			`${owner.name}’s flood-damaged handcart stands in the workshop. Repairing its axle, load platform and handles takes three work periods.`,
+			ravi.id,
 			"workshop",
 		);
 		if (receiveEvent(ravi, c.observation, "saw"))
-			c.raviGoalId = adoptGoal(
-				ravi.person,
-				{
-					label: `Restore ${owner.person.name}’s handcart and return it`,
-					serves: ["competence", "meaning"],
-					importance: 0.6,
-					advancedBy: [
-						{ action: "cart-fast", amount: 0.25 },
-						{ action: "cart-slow", amount: 0.25 },
-						{ action: "cart-handover", amount: 0.25 },
-					],
-				},
-				s.now,
-			).id;
+			c.raviGoalId = addGoal(s, ravi.id, {
+				label: `Restore ${owner.name}’s handcart and return it`,
+				serves: ["competence", "meaning"],
+				importance: 0.6,
+				advancedBy: [
+					{ action: "cart-fast", amount: 0.25 },
+					{ action: "cart-slow", amount: 0.25 },
+					{ action: "cart-handover", amount: 0.25 },
+				],
+			}).id;
 	}
 	if (presentAt(ada, "workshop", s.now) && !c.adaGoalId) {
 		c.adaObservation ??= retained(
 			host,
 			"bench-work",
-			`${ada.person.name} can earn two paid carpentry shifts each day at the main bench. Lending it means she must wait to work those shifts. It does not necessarily mean she will lose income.`,
-			ada.person.id,
+			`${ada.name} can earn two paid carpentry shifts each day at the main bench. Lending it means she must wait to work those shifts. It does not necessarily mean she will lose income.`,
+			ada.id,
 			"workshop",
 		);
 		if (receiveEvent(ada, c.adaObservation, "saw"))
-			c.adaGoalId = adoptGoal(
-				ada.person,
-				{
-					label: "Finish my own two paid carpentry shifts",
-					serves: ["competence", "security"],
-					importance: 0.6,
-					advancedBy: [{ action: "work", amount: 0.5 }],
-				},
-				s.now,
-			).id;
+			c.adaGoalId = addGoal(s, ada.id, {
+				label: "Finish my own two paid carpentry shifts",
+				serves: ["competence", "security"],
+				importance: 0.6,
+				advancedBy: [{ action: "work", amount: 0.5 }],
+			}).id;
 	}
 }
 /** The host filters new paid workshop actions; existing jobs always finish normally. */
@@ -203,7 +284,7 @@ export function blocksMainBench(
 	const b = s.handcart?.bench;
 	if (
 		!b ||
-		actorId === cartCast(s).repairer.person.id ||
+		actorId === cartCast(s).repairer.id ||
 		offer.action !== "work" ||
 		offer.placeId !== "workshop"
 	)
@@ -218,7 +299,10 @@ export function handcartOffers(
 	historical?: Affordance,
 ): Affordance[] {
 	const c = s.handcart;
-	if (!c || (!historical && (r.job || !r.person.body.alive || c.handover)))
+	if (
+		!c ||
+		(!historical && (r.job || !r.owner.actor(r.id).body.alive || c.handover))
+	)
 		return [];
 	const result: Affordance[] = [];
 	const add = (
@@ -269,7 +353,7 @@ export function handcartOffers(
 	};
 	const request = latest(s),
 		{ repairer: ravi, lender: ada, owner: jo } = cartCast(s);
-	if (r.person.id === ravi.person.id) {
+	if (r.id === ravi.id) {
 		if (
 			historical ||
 			(c.progress < 3 &&
@@ -285,11 +369,11 @@ export function handcartOffers(
 			add(
 				"cart-ask",
 				receivedBenchWindow(s)
-					? `Ask ${ada.person.name} for the main bench ${benchWindowLabel(receivedBenchWindow(s) ?? nextWindow(s.now + 15))}; her paid work needs it too`
-					: `Ask ${ada.person.name} for tomorrow’s 08:00–12:00 main bench; her paid work needs it too`,
+					? `Ask ${ada.name} for the main bench ${benchWindowLabel(receivedBenchWindow(s) ?? nextWindow(s.now + 15))}; her paid work needs it too`
+					: `Ask ${ada.name} for tomorrow’s 08:00–12:00 main bench; her paid work needs it too`,
 				"workshop",
 				{ meaning: 0.2 },
-				{ targetId: ada.person.id, tags: ["social"] },
+				{ targetId: ada.id, tags: ["social"] },
 			);
 		if (historical || (c.progress < 3 && c.raviGoalId)) {
 			add(
@@ -302,7 +386,7 @@ export function handcartOffers(
 			const fastOffer: Affordance = {
 				id: "cart-fast",
 				action: "cart-fast",
-				label: `Restore one cart section on ${ada.person.name}’s main bench · one hour`,
+				label: `Restore one cart section on ${ada.name}’s main bench · one hour`,
 				placeId: "workshop",
 				duration: 60,
 				effort: 0.15,
@@ -324,7 +408,7 @@ export function handcartOffers(
 				end = arrival + 60;
 			const busy = s.people.some(
 				(o) =>
-					o.person.id !== r.person.id &&
+					o.id !== r.id &&
 					o.job?.offer.placeId === "workshop" &&
 					["work", "cart-fast"].includes(o.job.offer.action) &&
 					o.job.arrive < end &&
@@ -338,18 +422,20 @@ export function handcartOffers(
 		}
 		if (
 			historical ||
-			(c.progress === 3 && jo.person.body.alive && presentAt(jo, "quay", s.now))
+			(c.progress === 3 &&
+				jo.owner.actor(jo.id).body.alive &&
+				presentAt(jo, "quay", s.now))
 		)
 			add(
 				"cart-handover",
-				`Return the restored handcart to ${jo.person.name}`,
+				`Return the restored handcart to ${jo.name}`,
 				"quay",
 				{ meaning: 0.45, belonging: 0.2 },
-				{ targetId: jo.person.id, tags: ["help"] },
+				{ targetId: jo.id, tags: ["help"] },
 			);
 	}
 	if (
-		r.person.id === ada.person.id &&
+		r.id === ada.id &&
 		(historical ||
 			(request &&
 				!request.reply &&
@@ -361,28 +447,40 @@ export function handcartOffers(
 		add(
 			"cart-agree",
 			request?.opportunityEventId
-				? `Lend ${ravi.person.name} the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}; postpone my paid carpentry`
-				: `Lend ${ravi.person.name} the main bench tomorrow 08:00–12:00; postpone my paid carpentry`,
+				? `Lend ${ravi.name} the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}; postpone my paid carpentry`
+				: `Lend ${ravi.name} the main bench tomorrow 08:00–12:00; postpone my paid carpentry`,
 			"workshop",
 			{ meaning: 0.25, belonging: 0.2 },
-			{ targetId: ravi.person.id, tags: ["social"] },
+			{ targetId: ravi.id, tags: ["social"] },
 		);
 		add(
 			"cart-refuse",
 			"Keep the main bench for my paid work",
 			"workshop",
 			{ autonomy: 0.25 },
-			{ targetId: ravi.person.id, tags: ["social"] },
+			{ targetId: ravi.id, tags: ["social"] },
 		);
 		add(
 			"cart-later",
-			`Tell ${ravi.person.name} to ask again another day`,
+			`Tell ${ravi.name} to ask again another day`,
 			"workshop",
 			{ autonomy: 0.15 },
-			{ targetId: ravi.person.id, tags: ["social"] },
+			{ targetId: ravi.id, tags: ["social"] },
 		);
 	}
-	return result;
+	return result.filter(
+		(offer) =>
+			!c.pending?.some(
+				(receipt) =>
+					(receipt.effect.type === "request" && offer.action === "cart-ask") ||
+					(receipt.effect.type === "reply" &&
+						["cart-agree", "cart-refuse", "cart-later"].includes(
+							offer.action,
+						)) ||
+					(receipt.effect.type === "handover" &&
+						offer.action === "cart-handover"),
+			),
+	);
 }
 export function interruptHandcart(_s: HandcartSave, _r: Resident): void {
 	// Interrupting one work period does not revoke a received agreement.
@@ -390,7 +488,13 @@ export function interruptHandcart(_s: HandcartSave, _r: Resident): void {
 export function finishHandcart(
 	host: HandcartHost,
 	r: Resident,
-): { handled: boolean; delivered: boolean; companions: string[] } {
+	people: readonly PhysicalWitness[] = host.s.people,
+): {
+	handled: boolean;
+	delivered: boolean;
+	companions: string[];
+	pending?: boolean;
+} {
 	const s = host.s,
 		c = s.handcart,
 		j = r.job,
@@ -398,12 +502,13 @@ export function finishHandcart(
 	if (!c || !j || !action?.startsWith("cart-"))
 		return { handled: false, delivered: false, companions: [] };
 	let delivered = false;
+	let pending = false;
 	const companions: string[] = [];
 	const { repairer: ravi, lender: ada, owner: jo } = cartCast(s);
 	if (
 		action === "cart-ask" &&
-		r.person.id === ravi.person.id &&
-		meeting(s, r, ada.person.id, "workshop") &&
+		r.id === ravi.id &&
+		meeting(s, r, ada.id, "workshop", people) &&
 		c.requests.length < 8
 	) {
 		const proposedWindow = receivedBenchWindow(s, true);
@@ -412,29 +517,26 @@ export function finishHandcart(
 			host,
 			"bench-request",
 			proposedWindow
-				? `${ravi.person.name} asked ${ada.person.name} to borrow the main bench ${benchWindowLabel(window)} for ${jo.person.name}’s handcart. ${ada.person.name}’s paid carpentry needs that bench too.`
-				: `${ravi.person.name} asked ${ada.person.name} to borrow the main bench tomorrow from 08:00 to 12:00 for ${jo.person.name}’s handcart. ${ada.person.name}’s paid carpentry needs that bench too.`,
-			ravi.person.id,
+				? `${ravi.name} asked ${ada.name} to borrow the main bench ${benchWindowLabel(window)} for ${jo.name}’s handcart. ${ada.name}’s paid carpentry needs that bench too.`
+				: `${ravi.name} asked ${ada.name} to borrow the main bench tomorrow from 08:00 to 12:00 for ${jo.name}’s handcart. ${ada.name}’s paid carpentry needs that bench too.`,
+			ravi.id,
 			"workshop",
 			[j.event, ...(proposedWindow && c.premise ? [c.premise.event.id] : [])],
 		);
-		if (socialReceipt(s, ravi.person.id, ada.person.id, e, "bench-request")) {
-			c.requests.push({
-				id: c.requests.length + 1,
-				event: e,
-				heardAt: s.now,
-				proposedFrom: window.from,
-				proposedUntil: window.until,
-				...(proposedWindow && c.premise
-					? { opportunityEventId: c.premise.event.id }
-					: {}),
-			});
-			delivered = true;
-			companions.push(ada.person.id);
-		}
+		socialReceipt(s, ravi.id, ada.id, e, "bench-request");
+		pendingCart(s, ada.id, e, {
+			type: "request",
+			...window,
+			...(proposedWindow && c.premise
+				? { opportunityEventId: c.premise.event.id }
+				: {}),
+		});
+		delivered = c.requests.some((request) => request.event.id === e.id);
+		pending = !!c.pending?.some((receipt) => receipt.event.id === e.id);
+		if (delivered) companions.push(ada.id);
 	} else if (
 		["cart-agree", "cart-refuse", "cart-later"].includes(action) &&
-		r.person.id === ada.person.id
+		r.id === ada.id
 	) {
 		const request = latest(s);
 		if (
@@ -443,7 +545,7 @@ export function finishHandcart(
 			(s.now < request.proposedFrom ||
 				(request.opportunityEventId !== undefined &&
 					s.now === request.proposedFrom)) &&
-			meeting(s, r, ravi.person.id, "workshop")
+			meeting(s, r, ravi.id, "workshop", people)
 		) {
 			const reply =
 				action === "cart-agree"
@@ -456,58 +558,37 @@ export function finishHandcart(
 				"bench-reply",
 				reply === "agree"
 					? request.opportunityEventId
-						? `${ada.person.name} agreed to lend ${ravi.person.name} the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}. Her paid carpentry must wait.`
-						: `${ada.person.name} agreed to lend ${ravi.person.name} the main bench tomorrow from 08:00 to 12:00. Her paid carpentry must wait.`
+						? `${ada.name} agreed to lend ${ravi.name} the main bench ${benchWindowLabel({ from: request.proposedFrom, until: request.proposedUntil })}. Her paid carpentry must wait.`
+						: `${ada.name} agreed to lend ${ravi.name} the main bench tomorrow from 08:00 to 12:00. Her paid carpentry must wait.`
 					: reply === "refuse"
-						? `${ada.person.name} kept the main bench for her paid carpentry. ${ravi.person.name} can use the slower side bench.`
-						: `${ada.person.name} asked ${ravi.person.name} to discuss the bench another day.`,
-				ada.person.id,
+						? `${ada.name} kept the main bench for her paid carpentry. ${ravi.name} can use the slower side bench.`
+						: `${ada.name} asked ${ravi.name} to discuss the bench another day.`,
+				ada.id,
 				"workshop",
 				[request.event.id, j.event],
 			);
-			if (socialReceipt(s, ada.person.id, ravi.person.id, e, "bench-reply")) {
-				request.reply = reply;
-				request.replyEvent = e;
-				delivered = true;
-				companions.push(ravi.person.id);
-				if (reply === "agree") {
-					const window = {
-						from: request.proposedFrom,
-						until: request.proposedUntil,
-					};
-					const commitment = promise(r.person, {
-						kind: "abstain",
-						toId: ravi.person.id,
-						actions: [],
-						violatedBy: ["work"],
-						from: window.from,
-						until: window.until,
-						importance: 0.6,
-						label: request.opportunityEventId
-							? `Leave the main bench for ${ravi.person.name}’s cart work ${benchWindowLabel(window)}`
-							: `Leave the main bench for ${ravi.person.name}’s cart work from 08:00 to 12:00`,
-					});
-					Object.assign(request, window, { commitmentId: commitment.id });
-					c.bench = {
-						requestId: request.id,
-						...window,
-						commitmentId: commitment.id,
-					};
-				}
-			}
+			socialReceipt(s, ada.id, ravi.id, e, "bench-reply");
+			pendingCart(s, ravi.id, e, {
+				type: "reply",
+				requestId: request.id,
+				reply,
+			});
+			delivered = !!request.reply;
+			pending = !!c.pending?.some((receipt) => receipt.event.id === e.id);
+			if (delivered) companions.push(ravi.id);
 		}
 	} else if (action === "cart-slow" || action === "cart-fast") {
 		const b = c.bench;
 		const legal =
 			action === "cart-slow" || (b && j.arrive >= b.from && j.end <= b.until);
-		if (r.person.id === ravi.person.id && c.progress < 3 && legal) {
+		if (r.id === ravi.id && c.progress < 3 && legal) {
 			c.progress++;
 			delivered = true;
 			const workEvent = retained(
 				host,
 				"cart-progress",
-				`${ravi.person.name} restored ${c.progress} of three cart sections using the ${action === "cart-fast" ? "main" : "side"} bench.`,
-				ravi.person.id,
+				`${ravi.name} restored ${c.progress} of three cart sections using the ${action === "cart-fast" ? "main" : "side"} bench.`,
+				ravi.id,
 				"workshop",
 				[
 					j.event,
@@ -531,43 +612,47 @@ export function finishHandcart(
 					const e = retained(
 						host,
 						"bench-used",
-						`${ravi.person.name} saw the main bench was free during the period ${ada.person.name} had agreed to lend him, and completed his cart work there.`,
-						ada.person.id,
+						`${ravi.name} saw the main bench was free during the period ${ada.name} had agreed to lend him, and completed his cart work there.`,
+						ada.id,
 						"workshop",
 						[request.replyEvent?.id ?? request.event.id, workEvent.id],
 					);
-					if (
-						socialReceipt(s, ada.person.id, ravi.person.id, e, "help", "saw")
-					) {
-						request.benefitReceived = true;
-						request.benefitEvent = structuredClone(e);
-					}
+					socialReceipt(s, ada.id, ravi.id, e, "help", "saw");
+					pendingCart(s, ravi.id, e, {
+						type: "benefit",
+						requestId: request.id,
+					});
 				}
 			}
 			if (c.bench && s.now >= c.bench.until) delete c.bench;
 		}
 	} else if (
 		action === "cart-handover" &&
-		r.person.id === ravi.person.id &&
+		r.id === ravi.id &&
 		c.progress === 3 &&
 		!c.handover &&
-		meeting(s, r, jo.person.id, "quay")
+		meeting(s, r, jo.id, "quay", people)
 	) {
 		const e = retained(
 			host,
 			"cart-returned",
-			`${ravi.person.name} returned the restored handcart to ${jo.person.name}. It can carry one extra unit of food on each supply trip ${jo.person.name} completes.`,
-			ravi.person.id,
+			`${ravi.name} returned the restored handcart to ${jo.name}. It can carry one extra unit of food on each supply trip ${jo.name} completes.`,
+			ravi.id,
 			"quay",
 			[j.event],
 		);
-		if (socialReceipt(s, ravi.person.id, jo.person.id, e, "gift")) {
-			c.handover = e;
-			delivered = true;
-			companions.push(jo.person.id);
-		}
+		socialReceipt(s, ravi.id, jo.id, e, "gift");
+		pendingCart(s, jo.id, e, { type: "handover" });
+		delivered = !!c.handover;
+		pending = !!c.pending?.some((receipt) => receipt.event.id === e.id);
+		if (delivered) companions.push(jo.id);
 	}
-	return { handled: true, delivered, companions };
+	return {
+		handled: true,
+		delivered,
+		companions,
+		...(pending ? { pending: true } : {}),
+	};
 }
 /** Called only after a physical supply trip completes; the cart is reusable. */
 export function cartSupplyBonus(
@@ -577,7 +662,7 @@ export function cartSupplyBonus(
 ): number {
 	return action === "supply" &&
 		s.handcart?.handover &&
-		id === cartCast(s).owner.person.id
+		id === cartCast(s).owner.id
 		? 1
 		: 0;
 }
@@ -595,6 +680,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid handcart fields");
 	};
 	fields(c, [
+		"pending",
 		"version",
 		"activatedAt",
 		"progress",
@@ -625,12 +711,12 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		throw Error("Invalid handcart state");
 	const cast = cartCast(s);
 	for (const [key, id] of [
-		["raviGoalId", cast.repairer.person.id],
-		["adaGoalId", cast.lender.person.id],
+		["raviGoalId", cast.repairer.id],
+		["adaGoalId", cast.lender.id],
 	] as const) {
 		if (
 			c[key] !== undefined &&
-			!resident(s, id).person.agenda.goals.some((g) => g.id === c[key])
+			!s.owner.actor(id).agenda.goals.some((g) => g.id === c[key])
 		)
 			throw Error("Invalid cart purpose");
 	}
@@ -650,14 +736,9 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid cart evidence");
 	};
 	if (c.observation)
-		evidence(
-			c.observation,
-			"cart-observed",
-			cast.repairer.person.id,
-			"workshop",
-		);
+		evidence(c.observation, "cart-observed", cast.repairer.id, "workshop");
 	if (c.adaObservation)
-		evidence(c.adaObservation, "bench-work", cast.lender.person.id, "workshop");
+		evidence(c.adaObservation, "bench-work", cast.lender.id, "workshop");
 	if (c.premise) {
 		const p = c.premise;
 		fields(p, ["slot", "at", "from", "until", "event", "received", "origin"]);
@@ -669,13 +750,13 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		parseProposalOrigin(p.origin);
 		validateEvent(p.event, s, ids);
 		const window = benchWindow(p.at, p.slot);
-		const goal = cast.repairer.person.agenda.goals.find(
-			(g) => g.id === c.raviGoalId,
-		);
+		const goal = cast.repairer.owner
+			.actor(cast.repairer.id)
+			.agenda.goals.find((g) => g.id === c.raviGoalId);
 		if (
 			!c.observation ||
 			!goal ||
-			goal.temporal?.halfLifeMinutes !== BENCH_HALF_LIFE ||
+			goal.completionHalfLifeMs !== BENCH_HALF_LIFE * 60000 ||
 			!["cart-fast", "cart-slow", "cart-handover"].every((action) =>
 				goal.advancedBy.some(
 					(rule) => rule.action === action && rule.amount === 0.25,
@@ -688,7 +769,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			typeof p.received !== "boolean" ||
 			p.event.kind !== "intervention" ||
 			p.event.source !== "town-bulletin" ||
-			p.event.targetId !== cast.repairer.person.id ||
+			p.event.targetId !== cast.repairer.id ||
 			p.event.placeId !== "workshop" ||
 			p.event.actorId !== undefined ||
 			!p.event.causes.includes(c.observation.id)
@@ -713,7 +794,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			"benefitReceived",
 			"benefitEvent",
 		]);
-		evidence(q.event, "bench-request", cast.repairer.person.id, "workshop");
+		evidence(q.event, "bench-request", cast.repairer.id, "workshop");
 		const proposed =
 			q.opportunityEventId === undefined
 				? nextWindow(q.event.at)
@@ -738,7 +819,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid bench request");
 		if (q.reply) {
 			if (!q.replyEvent) throw Error("Missing bench reply");
-			evidence(q.replyEvent, "bench-reply", cast.lender.person.id, "workshop");
+			evidence(q.replyEvent, "bench-reply", cast.lender.id, "workshop");
 			if (
 				q.replyEvent.at < q.heardAt ||
 				q.replyEvent.at > q.proposedFrom ||
@@ -757,15 +838,15 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Unanswered bench request");
 		if (q.reply === "agree") {
 			const expected = { from: q.proposedFrom, until: q.proposedUntil };
-			const promise = cast.lender.person.agenda.commitments.find(
-				(p) => p.id === q.commitmentId,
-			);
+			const promise = cast.lender.owner
+				.actor(cast.lender.id)
+				.agenda.commitments.find((p) => p.id === q.commitmentId);
 			if (
 				q.from !== expected.from ||
 				q.until !== expected.until ||
 				!promise ||
 				promise.kind !== "abstain" ||
-				promise.toId !== cast.repairer.person.id ||
+				promise.toId !== cast.repairer.id ||
 				promise.from !== q.from ||
 				promise.until !== q.until ||
 				promise.actions.length !== 0 ||
@@ -786,7 +867,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 	const workIds = new Set<number>();
 	for (const w of c.work) {
 		fields(w, ["event", "mode", "startedAt", "endedAt"]);
-		evidence(w.event, "cart-progress", cast.repairer.person.id, "workshop");
+		evidence(w.event, "cart-progress", cast.repairer.id, "workshop");
 		if (
 			!["main", "side"].includes(w.mode) ||
 			!Number.isSafeInteger(w.startedAt) ||
@@ -818,7 +899,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 		)
 			throw Error("Invalid retained bench benefit");
 		if (q.benefitEvent) {
-			evidence(q.benefitEvent, "bench-used", cast.lender.person.id, "workshop");
+			evidence(q.benefitEvent, "bench-used", cast.lender.id, "workshop");
 			const w = c.work.find(
 				(w) =>
 					w.mode === "main" &&
@@ -859,7 +940,7 @@ export function validateHandcart(s: HandcartSave, ids: Set<string>): void {
 			throw Error("Invalid current bench reservation");
 	}
 	if (c.handover) {
-		evidence(c.handover, "cart-returned", cast.repairer.person.id, "quay");
+		evidence(c.handover, "cart-returned", cast.repairer.id, "quay");
 		if (
 			c.progress !== 3 ||
 			c.handover.at < (c.work.at(-1)?.endedAt ?? Infinity)

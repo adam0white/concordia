@@ -1,36 +1,23 @@
+import { observeFacts } from "./hf4-evidence.ts";
+import type {
+	Affordance,
+	DecisionRecord,
+	Suggestion,
+	SuggestionResolution,
+} from "./host-types.ts";
 /**
- * SCOPE: the visitor as a resident ("you"). The host owns the player's place, travel, two working hours a day,
- * pledges and the bounded record of what the player said and did. HF owns how residents hear and answer:
- * `predict` is a pure telegraph, `answerNow` books an immediate refusal, and any other verdict becomes a
- * standing suggestion resolved by `decide` at that person's next decision, brought forward with an HF
- * interrupt (an activity review, never a cancel). The player sees offers and a worded read (impression.ts),
- * never a predicted verdict. A promise binds at once only on a yes; after "not now" or "I'd rather …" it is
- * `offered`, reserves that day's hour, and binds only if their own decision follows the request (otherwise it
- * is released). The player chooses the work and the deadline. Pledge outcomes reach HF through `noteVoicePromise`
- * (version 2 player state, HF 2.8.0); version 1 saves keep the earlier `learnFromVoice` report.
- * Only awake people at the player's place hear. There is no host speech credit, no synthetic reward for
- * asking, no inferred consent and no scripted cooperation. A save without `player` is byte-identical to a
- * town where the visitor never acted; the first player input creates this state. No canonical
- * person starts with an authored family or neighbour relationship to the player. Not covered: bringing named things, group speech, speech while travelling,
- * persuasion beyond HF's suggestion strength, or remembering what the player said beyond HF's own memory.
+ * SCOPE: the host owns the visitor's location, travel, two working hours per day,
+ * physical work, pledges and journal. The sole public HF4 Run owns residents'
+ * advice, coercion, choices and voice learning. Preview reads hypothetical public
+ * results without changing the Run. Actual speech enters public inputs and its
+ * real selected alternative reaches the ordinary physical boundary.
+ * A promised hour binds only through the recorded response or a later matching
+ * chosen action. Physical completion queues one voice.promise-received input;
+ * the UI reports remembrance only after that exact input is accepted. Awake,
+ * present people can hear. No inferred consent or scripted cooperation occurs.
+ * Not covered: named objects, group speech or speech during travel.
  */
-import {
-	type Affordance,
-	answerNow,
-	type DecisionRecord,
-	decide,
-	interrupt,
-	learnFromVoice,
-	noteVoicePromise,
-	perceive,
-	predict,
-	readPerson,
-	resolutionsOf,
-	type Suggestion,
-	type SuggestionResolution,
-	seedVoice,
-	vetoFor,
-} from "@adam0white/human-framework";
+
 import type {
 	Intervention,
 	PlayerView,
@@ -38,7 +25,7 @@ import type {
 	TownEvent,
 } from "../contracts.ts";
 import { reviewOffers } from "./activity-reviews.ts";
-import { presentAt } from "./encounters.ts";
+import { locatedAt, presentAt } from "./encounters.ts";
 import { allEvenings } from "./evenings.ts";
 import { speechRead } from "./impression.ts";
 import { placeOf, required } from "./invariants.ts";
@@ -108,12 +95,11 @@ type Answer = Pick<
 	| "verdict"
 	| "kind"
 	| "reason"
-	| "says"
 	| "counterOffer"
 	| "insteadAffordanceId"
 	| "likelihood"
 	| "insisted"
->;
+> & { says: string };
 export type PlayerRequest = {
 	id: number;
 	at: number;
@@ -168,6 +154,7 @@ export type Pledge = {
 	dueNoticed?: boolean;
 	resolvedEvent?: number;
 	hfReported?: boolean;
+	hfInputId?: string;
 };
 export type PlayerJob = {
 	kind: "travel" | "work";
@@ -182,7 +169,7 @@ export type PlayerJob = {
 	forId?: string;
 };
 export type PlayerState = {
-	/** 1: legacy pledge reporting through `learnFromVoice`; 2 (HF 2.8.0): `seedVoice` and `noteVoicePromise`. */
+	/** Host physical ledger version. Current towns author version 2; HF state is in the Run. */
 	version: 1 | 2;
 	place: string;
 	job?: PlayerJob;
@@ -207,10 +194,10 @@ export interface PlayerHost {
 
 export function clock(at: number): string {
 	const minute = ((at % 1440) + 1440) % 1440;
-	return `Day ${Math.floor(at / 1440) + 1}, ${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+	return `Day ${Math.floor(at / 1440) + 1}, ${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;
 }
 function nameOf(s: Save, id: string): string {
-	return s.people.find((r) => r.person.id === id)?.person.name ?? id;
+	return s.people.find((r) => r.id === id)?.name ?? id;
 }
 export function placeName(s: Save, id: string): string {
 	return s.places.find((p) => p.id === id)?.name ?? id;
@@ -291,10 +278,8 @@ function activate(host: PlayerHost): PlayerState {
 		notices: 0,
 		goals: [],
 	};
-	for (const [id, trust] of PLAYER_VOICES) {
-		const r = s.people.find((o) => o.person.id === id);
-		if (r) seedVoice(r.person, PLAYER_VOICE, trust);
-	}
+	// The current Run authors the player voice once; arrival grants no new familiarity.
+
 	playerEvent(
 		host,
 		"player-returned",
@@ -306,18 +291,8 @@ function activate(host: PlayerHost): PlayerState {
 
 /** The person's actual legal offers now (their review set when busy), as `decide` would see them. */
 export function speechOffers(s: Save, r: Resident): Affordance[] {
-	const offers = r.job ? reviewOffers(s, r) : buildOffers(s, r.person.id);
-	const readout = readPerson(r.person);
-	return offers
-		.filter(
-			(offer) =>
-				vetoFor(r.person, offer, {
-					now: s.now,
-					affordances: offers,
-					...readout,
-				})?.kind !== "cannot",
-		)
-		.map((offer) => socialPreview(s, r.person.id, offer));
+	const offers = r.job ? reviewOffers(s, r) : buildOffers(s, r.id);
+	return offers.map((offer) => socialPreview(s, r.id, offer));
 }
 /** The player's standing suggestion for this decision; one taken up "after" waits until they are free. */
 export function heldSuggestion(s: Save, id: string): Suggestion | undefined {
@@ -325,8 +300,7 @@ export function heldSuggestion(s: Save, id: string): Suggestion | undefined {
 		(x) => x.targetId === id && x.status === "held",
 	);
 	if (!q) return undefined;
-	if (q.waits && s.people.find((r) => r.person.id === id)?.job)
-		return undefined;
+	if (q.waits && s.people.find((r) => r.id === id)?.job) return undefined;
 	return {
 		voiceId: PLAYER_VOICE,
 		affordanceId: q.affordanceId,
@@ -351,7 +325,7 @@ function answerOf(r: SuggestionResolution): Answer {
 			verdict: r.verdict,
 			kind: r.kind,
 			reason: r.reason,
-			says: r.says,
+			says: r.reason,
 			counterOffer: r.counterOffer,
 			insteadAffordanceId: r.insteadAffordanceId,
 			likelihood: r.likelihood,
@@ -361,14 +335,14 @@ function answerOf(r: SuggestionResolution): Answer {
 }
 function hearable(s: Save, targetId: unknown): Resident {
 	if (typeof targetId !== "string") throw Error("Choose someone to speak to");
-	const r = s.people.find((o) => o.person.id === targetId);
+	const r = s.people.find((o) => o.id === targetId);
 	if (!r) throw Error("Unknown resident");
 	const at = playerLocation(s);
 	if (!at) throw Error("You are still travelling. Nobody can hear you yet.");
 	if (!presentAt(r, at, s.now))
-		throw Error(`${r.person.name} is not here and awake to hear you`);
+		throw Error(`${r.name} is not here and awake to hear you`);
 	if (r.policy !== "hf")
-		throw Error(`${r.person.name} is not controlled by HF in this town`);
+		throw Error(`${r.name} is not controlled by HF in this town`);
 	return r;
 }
 
@@ -416,12 +390,11 @@ export function predictAnswers(
 ): SpeechAnswers {
 	const r = hearable(s, targetId);
 	const offers = speechOffers(s, r);
-	const opts = {
-		scarcity: Math.max(0, 1 - r.wealth / 8),
-		others: others(r),
-	};
+	void others;
 	const answer = (mode: PlayerMode, id: string) =>
-		answerOf(predict(r.person, offers, suggestionFor(mode, id, s.now), opts));
+		answerOf(
+			r.owner.previewAdvice(r.id, offers, suggestionFor(mode, id, s.now)),
+		);
 	return {
 		targetId,
 		at: s.now,
@@ -456,7 +429,7 @@ function validDueBy(madeAt: number, dueBy: number): boolean {
 function workPlace(s: Save, work: PlayerWork, forId: string): string {
 	if (work !== "cover-shift") return required(PLAYER_WORK[work].placeId, "");
 	const r = required(
-		s.people.find((o) => o.person.id === forId),
+		s.people.find((o) => o.id === forId),
 		"Unknown resident",
 	);
 	return required(WORKPLACE[r.role], "Unknown workplace role")[0];
@@ -501,11 +474,11 @@ function checkPledgeable(
 		throw Error("There is no damp hall timber to air");
 	if (work === "cover-shift") {
 		const r = required(
-			s.people.find((o) => o.person.id === toId),
+			s.people.find((o) => o.id === toId),
 			"Unknown resident",
 		);
 		if (shiftsLeft(r, day) <= 0)
-			throw Error(`${r.person.name} has no paid shift left to cover that day`);
+			throw Error(`${r.name} has no paid shift left to cover that day`);
 	}
 	return { work: work as PlayerWork, dueBy };
 }
@@ -513,98 +486,134 @@ function checkPledgeable(
 export function playerIntervene(
 	host: PlayerHost,
 	input: Intervention,
-	others: (r: Resident) => Suggestion[],
+	_others: (r: Resident) => Suggestion[],
 ): void {
 	if (input.kind === "player-private") privateConversation(host, input);
 	else if (input.kind === "player-move") move(host, input.placeId);
-	else if (input.kind === "player-speak") speak(host, input, others);
+	else if (input.kind === "player-speak") speak(host, input, _others);
 	else if (input.kind === "player-help") directHelp(host, input);
 	else if (input.kind === "player-work")
 		startWork(host, input.pledgeId, input.work, input.actorId);
 	else throw Error("Unknown player action");
 }
 
+export function privateConversationOffers(
+	r: Resident,
+	now: number,
+): Affordance[] {
+	// A job can already be at its destination while r.place still holds departure.
+	const destination = r.job?.offer.placeId;
+	const placeId =
+		destination && locatedAt(r, destination, now) ? destination : r.place;
+	return [
+		{
+			id: "private-share",
+			action: "talk",
+			label: "Share something private about this matter",
+			placeId,
+			duration: 1,
+			effort: 0.05,
+			tags: ["floor"],
+			advertises: { belonging: 0.25, meaning: 0.1 },
+		},
+		{
+			id: "private-decline",
+			action: "rest",
+			label: "Keep the matter private",
+			placeId,
+			duration: 1,
+			effort: 0,
+			tags: ["floor"],
+			advertises: { rest: 0.08 },
+		},
+	];
+}
 function privateConversation(host: PlayerHost, input: Intervention) {
 	const r = hearable(host.s, input.actorId),
-		clue = PRIVATE_DISCOVERIES[r.person.id];
+		clue = PRIVATE_DISCOVERIES[r.id];
 	if (!r.known || !clue) throw Error("This person has no such conversation.");
 	if (
 		(r.job &&
 			!["rest", "talk", "gather", "eat", "drink"].includes(
 				r.job.offer.action,
 			)) ||
-		(!r.job && r.person.activity)
+		(!r.job && r.owner.actor(r.id).activity)
 	)
 		throw Error(
-			`Wait until ${r.person.name} finishes the current work, or visit during a break.`,
+			`Wait until ${r.name} finishes the current work, or visit during a break.`,
 		);
 	if (Object.keys(input).some((k) => k !== "kind" && k !== "actorId"))
 		throw Error("A private conversation takes only a person.");
-	const episode = `private-discovery:${r.person.id}`;
-	if (r.person.memory.episodes.some((e) => e.id === episode))
+	if (r.disclosures?.length)
 		throw Error(
-			`${r.person.name} already chose to share this with you. Read your journal.`,
+			`${r.name} already chose to share this with you. Read your journal.`,
 		);
+	if (r.privateConversation)
+		throw Error("This conversation is already in progress.");
 	activate(host);
-	const choice = decide(
-		r.person,
-		[
-			{
-				id: "share",
-				action: "talk",
-				label: "Share something private about this matter",
-				duration: 1,
-				effort: 0.05,
-				advertises: { belonging: 0.25, meaning: 0.1 },
-			},
-			{
-				id: "decline",
-				action: "rest",
-				label: "Keep the matter private",
-				duration: 1,
-				effort: 0,
-				advertises: { rest: 0.08 },
-			},
-		],
-		{ reconsider: true },
+	const offers = privateConversationOffers(r, host.s.now);
+	const decision = r.owner.requestDecision(
+		r.id,
+		offers,
+		"private conversation",
 	);
-	const shared = choice.chosenAffordanceId === "share";
-	const text = shared
-		? clue.fact
-		: `${r.person.name} keeps the matter private for now. You have learned no private fact.`;
+	if (!decision.chosenAffordanceId) throw Error("Run chose no private answer");
+	r.privateConversation = {
+		offerId: decision.chosenAffordanceId,
+		text:
+			decision.chosenAffordanceId === "private-share"
+				? clue.fact
+				: `${r.name} keeps the matter private for now. You have learned no private fact.`,
+	};
+}
+
+/** A native decision is not a completed disclosure. Only the physical finish publishes it. */
+export function finishPrivateConversation(
+	host: PlayerHost,
+	r: Resident,
+	offerId: string,
+	eventId: number,
+): void {
+	const pending = r.privateConversation;
+	if (!pending || pending.offerId !== offerId) return;
+	const shared = offerId === "private-share";
 	const event = playerEvent(
 		host,
 		"player-answer",
-		text,
+		pending.text,
 		r.place,
-		[],
-		r.person.id,
+		[eventId],
+		r.id,
 	);
-	notify(host.s, text, event.id);
+	notify(host.s, pending.text, event.id);
 	if (shared)
-		r.person.memory.episodes.push({
-			id: episode,
+		r.disclosures = [
+			...(r.disclosures ?? []),
+			{ event: event.id, text: pending.text },
+		];
+	observeFacts(r.owner, r.id, [
+		{
 			at: host.s.now,
+			channel: "felt",
 			kind: "private-conversation",
-			actorId: PLAYER_VOICE,
-			valence: 0.1,
+			actorId: "player",
 			salience: 0.5,
-			summary: text,
-			tags: ["social"],
-		});
+			summary: pending.text,
+		},
+	]);
+	delete r.privateConversation;
 }
 
 /** Available capacity is a host fact; helping does not demand a resident decision. */
 function directHelpReason(s: Save, r: Resident): string | undefined {
 	if (s.player?.version === 1)
 		return "This older town does not support direct help";
-	const reason = workRefusal(s, "cover-shift", r.person.id);
+	const reason = workRefusal(s, "cover-shift", r.id);
 	if (reason) return reason;
 	const day = Math.floor(s.now / 1440);
 	if (hoursUsed(s.player, day) + openOnDay(s.player, day) >= PLAYER_WORK_HOURS)
 		return "Your working hours are already promised or used";
-	if (shiftsLeft(r, day) <= 0)
-		return `${r.person.name} has no paid shift left today`;
+	if (shiftsLeft(r, day) <= 0) return `${r.name} has no paid shift left today`;
 	return undefined;
 }
 function directHelp(host: PlayerHost, input: Intervention): void {
@@ -619,16 +628,16 @@ function directHelp(host: PlayerHost, input: Intervention): void {
 	const made = playerEvent(
 		host,
 		"player-pledge",
-		`You offered to cover one paid shift for ${r.person.name} and set off to do it.`,
+		`You offered to cover one paid shift for ${r.name} and set off to do it.`,
 		playerLocation(s),
 		[],
-		r.person.id,
+		r.id,
 	);
 	const pledge: Pledge = {
 		id: `pledge-${made.id}`,
 		requestId: made.id,
 		direct: true,
-		toId: r.person.id,
+		toId: r.id,
 		work: "cover-shift",
 		madeAt: s.now,
 		dueBy: dueByFor(s.now),
@@ -669,7 +678,7 @@ function move(host: PlayerHost, placeId: unknown): void {
 function speak(
 	host: PlayerHost,
 	input: Intervention,
-	others: (r: Resident) => Suggestion[],
+	_others: (r: Resident) => Suggestion[],
 ): void {
 	const s = host.s;
 	const mode = input.mode;
@@ -683,11 +692,8 @@ function speak(
 			o.id === input.affordanceId &&
 			(o.id !== r.job?.offer.id || input.acceptCounter === true),
 	);
-	if (!offer)
-		throw Error(`That is not something ${r.person.name} can do right now`);
-	const previous = s.player?.requests.findLast(
-		(x) => x.targetId === r.person.id,
-	);
+	if (!offer) throw Error(`That is not something ${r.name} can do right now`);
+	const previous = s.player?.requests.findLast((x) => x.targetId === r.id);
 	if (
 		input.acceptCounter !== undefined &&
 		(input.acceptCounter !== true ||
@@ -695,11 +701,11 @@ function speak(
 			previous?.answer.counterOffer?.affordanceId !== offer.id ||
 			!["deferred", "modified"].includes(previous.answer.verdict))
 	)
-		throw Error(`There is no counter-offer from ${r.person.name} to accept`);
+		throw Error(`There is no counter-offer from ${r.name} to accept`);
 	const accepted = input.acceptCounter ? previous : undefined;
 	const pledged =
 		mode === "promise"
-			? checkPledgeable(s, input.pledge?.work, r.person.id, input.pledge?.by)
+			? checkPledgeable(s, input.pledge?.work, r.id, input.pledge?.by)
 			: undefined;
 	const work = pledged?.work;
 	if (mode !== "promise" && input.pledge !== undefined)
@@ -707,12 +713,9 @@ function speak(
 	const at = required(playerLocation(s), "Player location missing");
 	const p = activate(host);
 	const suggestion = suggestionFor(mode, offer.id, s.now);
-	const trustBefore = playerTrust(s, r.person.id);
-	const { resolution } = answerNow(r.person, offers, suggestion, {
-		scarcity: Math.max(0, 1 - r.wealth / 8),
-		others: others(r),
-	});
-	const trustAfter = playerTrust(s, r.person.id);
+	const trustBefore = playerTrust(s, r.id);
+	const resolution = r.owner.requestAdvice(r.id, offers, suggestion);
+	const trustAfter = playerTrust(s, r.id);
 	// HF books a refusal now, with its own 'pushed'/'worn' trust costs; say so when trust actually fell.
 	const wore =
 		trustBefore !== undefined &&
@@ -724,13 +727,13 @@ function speak(
 		host,
 		"player-request",
 		accepted?.answer.counterOffer
-			? `You accepted ${r.person.name}’s offer to ${counterWords(accepted.answer.counterOffer)}.`
+			? `You accepted ${r.name}’s offer to ${counterWords(accepted.answer.counterOffer)}.`
 			: mode === "promise" && work
-				? `You asked ${r.person.name} to ${actionWords(label)} and offered to ${work === "cover-shift" ? "cover a paid shift" : PLAYER_WORK[work].label} in return.`
-				: `You ${verb} ${r.person.name} to ${actionWords(label)}.`,
+				? `You asked ${r.name} to ${actionWords(label)} and offered to ${work === "cover-shift" ? "cover a paid shift" : PLAYER_WORK[work].label} in return.`
+				: `You ${verb} ${r.name} to ${actionWords(label)}.`,
 		at,
 		[],
-		r.person.id,
+		r.id,
 	);
 	const answer = answerOf(resolution);
 	// "After I …" (theirs now, or one taken up) waits for their next own decision instead of bringing it forward.
@@ -740,21 +743,21 @@ function speak(
 	const answerEvent = playerEvent(
 		host,
 		"player-answer",
-		`${r.person.name} answered: “${voicedLine(answer)}”${wore ? ` Your pressure reduced ${r.person.name}’s trust in you.` : ""}`,
+		`${r.name} answered: “${voicedLine(answer)}”${wore ? ` Your pressure reduced ${r.name}’s trust in you.` : ""}`,
 		at,
 		[request.id],
-		r.person.id,
+		r.id,
 	);
 	for (const old of p.requests)
-		if (old.targetId === r.person.id && old.status === "held") {
+		if (old.targetId === r.id && old.status === "held") {
 			old.status = "replaced";
-			releasePledge(host, old, `you asked ${r.person.name} something else`);
+			releasePledge(host, old, `you asked ${r.name} something else`);
 		}
 	const q: PlayerRequest = {
 		id: request.id,
 		at: s.now,
 		placeId: at,
-		targetId: r.person.id,
+		targetId: r.id,
 		affordanceId: offer.id,
 		label,
 		mode,
@@ -770,21 +773,21 @@ function speak(
 		// Only a yes binds now; "not now" or "I'd rather …" binds once their own decision follows the request.
 		const binding =
 			answer.verdict === "assented" || answer.verdict === "complied";
-		const hour = `one hour to ${work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[work].label}, by ${clock(dueBy)}`;
+		const hour = `one hour to ${work === "cover-shift" ? `cover a paid shift for ${r.name}` : PLAYER_WORK[work].label}, by ${clock(dueBy)}`;
 		const made = playerEvent(
 			host,
 			"player-pledge",
 			binding
-				? `You are now committed to your promise to ${r.person.name}: ${hour}.`
-				: `If ${r.person.name} acts on your request, you must give ${hour}.`,
+				? `You are now committed to your promise to ${r.name}: ${hour}.`
+				: `If ${r.name} acts on your request, you must give ${hour}.`,
 			at,
 			[request.id, answerEvent.id],
-			r.person.id,
+			r.id,
 		);
 		p.pledges.push({
 			id: pledgeId,
 			requestId: request.id,
-			toId: r.person.id,
+			toId: r.id,
 			work,
 			madeAt: s.now,
 			dueBy,
@@ -794,13 +797,13 @@ function speak(
 		});
 		bound(p.pledges, LIMITS.pledges);
 		q.pledgeId = pledgeId;
-		perceive(r.person, [
+		observeFacts(r.owner, r.id, [
 			{
 				at: s.now,
 				channel: "told",
 				kind: "player-pledge",
 				actorId: PLAYER_VOICE,
-				targetId: r.person.id,
+				targetId: r.id,
 				placeId: at,
 				salience: 0.7,
 				summary: `The visitor promised to give an hour of work by ${clock(dueBy)}.`,
@@ -810,9 +813,7 @@ function speak(
 	}
 	p.requests.push(q);
 	bound(p.requests, LIMITS.requests);
-	// A non-refusal means switching activity: HF resolves it at the next decision, brought forward now.
-	if (q.status === "held" && !waits && r.job && r.person.activity)
-		interrupt(r.person, s.now, "player-request");
+	// The actual HF4 decision already carries any staged interruption; the host does not cancel it here.
 	advanceGoals(s);
 }
 
@@ -874,7 +875,7 @@ function startWork(
 		throw Error("Choose one hour of work");
 	const kind = work as PlayerWork;
 	const forId = pledge?.toId ?? (typeof actorId === "string" ? actorId : "");
-	if (kind === "cover-shift" && !s.people.some((r) => r.person.id === forId))
+	if (kind === "cover-shift" && !s.people.some((r) => r.id === forId))
 		throw Error("Choose whose shift to cover");
 	const refusal = workRefusal(s, kind, forId, pledge?.dueBy);
 	if (refusal) throw Error(refusal);
@@ -883,12 +884,10 @@ function startWork(
 	const travel = travelMinutes(s, from, to);
 	const day = Math.floor(s.now / 1440);
 	const end = s.now + travel + 60;
-	const target = s.people.find((r) => r.person.id === forId);
+	const target = s.people.find((r) => r.id === forId);
 	if (kind === "cover-shift") {
 		if (!target || shiftsLeft(target, day) <= 0)
-			throw Error(
-				`${target?.person.name ?? "This person"} has no shift left today`,
-			);
+			throw Error(`${target?.name ?? "This person"} has no shift left today`);
 	}
 	const state = activate(host);
 	if (state.work.day !== day) state.work = { day, starts: 0 };
@@ -929,9 +928,8 @@ function startWork(
 }
 
 function playerTrust(s: Save, id: string): number | undefined {
-	return s.people
-		.find((o) => o.person.id === id)
-		?.person.will.voices.find((v) => v.voiceId === PLAYER_VOICE)?.trust;
+	return s.owner.actor(id).will.voices.find((v) => v.voiceId === PLAYER_VOICE)
+		?.trust;
 }
 /** An offered pledge whose request was not taken up closes without binding; nothing reaches HF. */
 function releasePledge(
@@ -957,43 +955,19 @@ function releasePledge(
 	pledge.resolvedEvent = e.id;
 }
 function reportPledge(s: Save, pledge: Pledge, kept: boolean): void {
-	const r = s.people.find((o) => o.person.id === pledge.toId);
-	// HF 2.8.0: the player's word is evidence about the player, judged by whether the hour was given. It needs
-	// no suggestion resolution, so a bound pledge after "not now" reaches HF too. Version 1 saves (made before
-	// 2.8.0) keep the borrowed-resolution path so their continuation stays exact.
-	if (s.player?.version === 2) {
-		if (!r?.person.body.alive) {
-			pledge.hfReported = false;
-			return;
-		}
-		noteVoicePromise(r.person, PLAYER_VOICE, {
-			kept,
-			at: s.now,
-			action: `pledge:${pledge.work}`,
-		});
-		pledge.hfReported = true;
-		return;
-	}
-	const q = s.player?.requests.find((x) => x.id === pledge.requestId);
-	const accepted = [q?.decision?.answer, q?.answer].find(
-		(a) => a?.verdict === "assented" || a?.verdict === "complied",
-	);
-	// learnFromVoice only learns from assented/complied/commanded resolutions; a deferred answer reports nothing.
-	if (!r || !accepted || !r.person.body.alive) {
+	const r = s.people.find((person) => person.id === pledge.toId);
+	if (!r?.owner.actor(r.id).body.alive) {
 		pledge.hfReported = false;
 		return;
 	}
-	learnFromVoice(
-		r.person,
-		{ ...accepted, voiceId: PLAYER_VOICE } as SuggestionResolution,
-		kept ? PLEDGE_FELT.kept : PLEDGE_FELT.lapsed,
-		{
-			at: s.now,
-			action: `pledge:${pledge.work}`,
-			reason: kept ? "pledge-kept" : "pledge-broken",
-		},
-	);
-	pledge.hfReported = true;
+	if (!pledge.hfInputId)
+		pledge.hfInputId = s.owner.enqueue("voice.promise-received", {
+			person: r.id,
+			evidenceId: `player-pledge:${pledge.id}`,
+			voiceId: PLAYER_VOICE,
+			promise: { kept, action: `pledge:${pledge.work}` },
+		});
+	pledge.hfReported = s.owner.accepted(pledge.hfInputId);
 }
 
 /** Round boundary: arrivals, finished work, falling-due and lapsed pledges, goals. */
@@ -1001,6 +975,25 @@ export function playerRound(host: PlayerHost): void {
 	const s = host.s;
 	const p = s.player;
 	if (!p) return;
+	for (const pledge of p.pledges)
+		if (pledge.hfInputId)
+			// SCOPE: retain actual public input acceptance, not a resident response.
+			// A complete step can apply more inputs than the current64 receipt window.
+			pledge.hfReported =
+				pledge.hfReported === true ||
+				s.owner.accepted(pledge.hfInputId) ||
+				(s.owner.last?.events.some(
+					(e) =>
+						e.person === pledge.toId &&
+						e.data.kind === "input-disposed" &&
+						e.data.disposition.inputId === pledge.hfInputId &&
+						e.data.disposition.kind === "consumed" &&
+						e.data.disposition.reason === "applied" &&
+						e.data.disposition.evidenceIds.includes(
+							`player-pledge:${pledge.id}`,
+						),
+				) ??
+					false);
 	const job = p.job;
 	if (job && job.kind === "travel" && job.arriveAt <= s.now) {
 		p.place = job.to;
@@ -1049,10 +1042,7 @@ export function playerRound(host: PlayerHost): void {
 				);
 		}
 	for (const q of p.requests)
-		if (
-			q.status === "held" &&
-			!s.people.find((r) => r.person.id === q.targetId)?.person.body.alive
-		) {
+		if (q.status === "held" && !s.owner.actor(q.targetId).body.alive) {
 			q.status = "dropped";
 			releasePledge(
 				host,
@@ -1066,7 +1056,7 @@ function arrived(host: PlayerHost, job: PlayerJob): void {
 	const s = host.s;
 	const here = hearers(s)
 		.filter((r) => r.known)
-		.map((r) => r.person.name);
+		.map((r) => r.name);
 	const seen =
 		job.to === "hall"
 			? s.hallSafe
@@ -1120,14 +1110,14 @@ function finishWork(host: PlayerHost, job: PlayerJob): void {
 			result = "The hall was already open. There was no timber left to air.";
 	} else {
 		const target = required(
-			s.people.find((r) => r.person.id === job.forId),
+			s.people.find((r) => r.id === job.forId),
 			"Covered resident missing",
 		);
 		const ledger = required(target.paidWork, "Covered shift ledger missing");
 		ledger.minutes += 60;
 		ledger.totalMinutes += 60;
 		target.wealth += 2;
-		result = `You covered a paid shift for ${target.person.name} at ${placeName(s, job.to)}; ${target.person.name} received 2 coins in wages.`;
+		result = `You covered a paid shift for ${target.name} at ${placeName(s, job.to)}; ${target.name} received 2 coins in wages.`;
 	}
 	const pledge = s.player?.pledges.find(
 		(x) => x.id === job.pledgeId && x.status === "open",
@@ -1158,11 +1148,13 @@ export function playerDecided(
 ): void {
 	const s = host.s;
 	const q = s.player?.requests.find(
-		(x) => x.targetId === r.person.id && x.status === "held",
+		(x) => x.targetId === r.id && x.status === "held",
 	);
 	if (!q || (q.waits && r.job)) return;
 	const resolution = record
-		? resolutionsOf(record).find((x) => x.voiceId === PLAYER_VOICE)
+		? (
+				record.suggestions ?? (record.suggestion ? [record.suggestion] : [])
+			).find((x) => x.voiceId === PLAYER_VOICE)
 		: undefined;
 	if (!record || !resolution) {
 		q.status = "dropped";
@@ -1176,8 +1168,9 @@ export function playerDecided(
 		chosen;
 	const answer = answerOf(resolution);
 	const followed = chosen === q.affordanceId;
-	const pushed = r.person.will.voices
-		.find((v) => v.voiceId === PLAYER_VOICE)
+	const pushed = r.owner
+		.actor(r.id)
+		.will.voices.find((v) => v.voiceId === PLAYER_VOICE)
 		?.history.some(
 			(h) =>
 				h.at === s.now &&
@@ -1190,13 +1183,13 @@ export function playerDecided(
 		`${
 			followed
 				? answer.verdict === "complied"
-					? `${r.person.name} gave in to your pressure and chose to ${actionWords(chosenLabel)}, under protest.`
-					: `${r.person.name} acted on your request and chose to ${actionWords(chosenLabel)}.`
-				: `${r.person.name} considered your request and chose to ${actionWords(chosenLabel)} instead.`
-		}${pushed ? ` Your pressure reduced ${r.person.name}’s trust in you.` : ""}`,
+					? `${r.name} gave in to your pressure and chose to ${actionWords(chosenLabel)}, under protest.`
+					: `${r.name} acted on your request and chose to ${actionWords(chosenLabel)}.`
+				: `${r.name} considered your request and chose to ${actionWords(chosenLabel)} instead.`
+		}${pushed ? ` Your pressure reduced ${r.name}’s trust in you.` : ""}`,
 		r.job?.offer.placeId ?? r.place,
 		[q.id, q.answerEvent],
-		r.person.id,
+		r.id,
 	);
 	q.status = "decided";
 	q.decision = {
@@ -1215,21 +1208,19 @@ export function playerDecided(
 		playerEvent(
 			host,
 			"player-pledge",
-			`${r.person.name} acted on your request, so you are now committed to your promise: one hour to ${pledge.work === "cover-shift" ? `cover a paid shift for ${r.person.name}` : PLAYER_WORK[pledge.work].label}, by ${clock(pledge.dueBy)}.`,
+			`${r.name} acted on your request, so you are now committed to your promise: one hour to ${pledge.work === "cover-shift" ? `cover a paid shift for ${r.name}` : PLAYER_WORK[pledge.work].label}, by ${clock(pledge.dueBy)}.`,
 			r.job?.offer.placeId ?? r.place,
 			[pledge.event, e.id],
-			r.person.id,
+			r.id,
 		);
 	} else if (pledge)
-		releasePledge(host, q, `${r.person.name} chose something else`, [e.id]);
+		releasePledge(host, q, `${r.name} chose something else`, [e.id]);
 }
 /** Called after apply: link the person's actual action to the decided request. */
 export function playerApplied(s: Save, r: Resident, continued: boolean): void {
 	const q = s.player?.requests.find(
 		(x) =>
-			x.targetId === r.person.id &&
-			x.status === "decided" &&
-			x.decision?.at === s.now,
+			x.targetId === r.id && x.status === "decided" && x.decision?.at === s.now,
 	);
 	if (!q || !r.job || q.decision?.chosenAffordanceId !== r.job.offer.id) return;
 	if (continued) {
@@ -1367,9 +1358,7 @@ export function playerView(s: Save): PlayerView {
 	const at = playerLocation(s);
 	const day = Math.floor(s.now / 1440);
 	const present = hearers(s).sort(
-		(a, b) =>
-			Number(b.known) - Number(a.known) ||
-			a.person.name.localeCompare(b.person.name),
+		(a, b) => Number(b.known) - Number(a.known) || a.name.localeCompare(b.name),
 	);
 	const from = p?.place ?? PLAYER_HOME;
 	const minute = s.now - day * 1440;
@@ -1396,18 +1385,18 @@ export function playerView(s: Save): PlayerView {
 		helpOffers: present
 			.filter((r) => r.known && r.policy === "hf" && shiftsLeft(r, day) > 0)
 			.map((r) => {
-				const placeId = workPlace(s, "cover-shift", r.person.id);
+				const placeId = workPlace(s, "cover-shift", r.id);
 				const minutes = travelMinutes(s, from, placeId) + 60;
 				const blocked = directHelpReason(s, r);
 				return {
-					toId: r.person.id,
-					toName: r.person.name,
+					toId: r.id,
+					toName: r.name,
 					work: "cover-shift" as const,
 					placeId,
 					placeName: placeName(s, placeId),
 					minutes,
 					endsAt: s.now + minutes,
-					label: `Cover one paid shift for ${r.person.name}`,
+					label: `Cover one paid shift for ${r.name}`,
 					...(blocked ? { blocked } : {}),
 				};
 			}),
@@ -1423,14 +1412,18 @@ export function playerView(s: Save): PlayerView {
 		pledgeDeadlines: pledgeDeadlines(s.now),
 		canMove: !p?.job,
 		present: present.slice(0, 16).map((r) => ({
-			id: r.person.id,
-			name: r.person.name,
+			id: r.id,
+			name: r.name,
 			known: r.known,
 			activity: r.job?.offer.label ?? "Free to choose",
-			...(r.person.will.voices.some((v) => v.voiceId === PLAYER_VOICE)
+			...(r.owner
+				.actor(r.id)
+				.will.voices.some((v) => v.voiceId === PLAYER_VOICE)
 				? {
 						trust: required(
-							r.person.will.voices.find((v) => v.voiceId === PLAYER_VOICE),
+							r.owner
+								.actor(r.id)
+								.will.voices.find((v) => v.voiceId === PLAYER_VOICE),
 							"",
 						).trust,
 					}
@@ -1676,7 +1669,7 @@ export function validatePlayer(s: Save, ids: Set<string>): void {
 						)) ||
 					(j.work === "cover-shift" &&
 						(() => {
-							const w = s.people.find((r) => r.person.id === j.forId)?.paidWork;
+							const w = s.people.find((r) => r.id === j.forId)?.paidWork;
 							return !w || w.day !== p.work.day || w.minutes >= w.starts * 60;
 						})())))
 		)
@@ -1790,6 +1783,7 @@ export function validatePlayer(s: Save, ids: Set<string>): void {
 			"dueNoticed",
 			"resolvedEvent",
 			"hfReported",
+			"hfInputId",
 			"direct",
 		]);
 		if (

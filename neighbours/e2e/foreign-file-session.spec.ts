@@ -23,7 +23,7 @@ test("foreign file preserves occupied native slots through full export and reimp
 			"Bind NEIGHBOURS_FOREIGN_FIXTURE to the complete retained packet",
 		);
 	const original = JSON.parse(await readFile(file, "utf8"));
-	expect(original.runtime.people).toHaveLength(206);
+	expect(original.runtime.physical.people).toHaveLength(206);
 	const profile = info.outputPath("source-test-profile");
 	const baseURL = info.project.use.baseURL;
 	if (
@@ -180,7 +180,7 @@ test("foreign file preserves occupied native slots through full export and reimp
 			.getByRole("button", { name: "Market kitchen about 30 min", exact: true })
 			.click();
 		const played = await exportPacket();
-		expect(played.packet.runtime.player).toBeDefined();
+		expect(played.packet.runtime.physical.player).toBeDefined();
 		// Independent full restore, identical ordinary input, whole packet replay equality.
 		await page
 			.getByRole("button", { name: "Close file session", exact: true })

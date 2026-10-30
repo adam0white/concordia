@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import TownMap from "../src/ui/TownMap";
 import { NeighbourStrip } from "../src/ui/TownOverview";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 it("makes buildings selectable with a visible selected outline", () => {
 	const town = createRuntime(42, 8).view();
@@ -97,12 +97,12 @@ it("offers Talk only for host-present company and Meet otherwise", async () => {
 		close: () => {},
 	};
 	expect(renderToStaticMarkup(createElement(PlacePanel, props))).toContain(
-		"Meet Ada",
+		"Meet Nora",
 	);
 	town.player.present = [
-		{ id: "ada", name: "Ada", known: true, activity: "Free to choose" },
+		{ id: "ada", name: "Nora", known: true, activity: "Free to choose" },
 	];
 	expect(renderToStaticMarkup(createElement(PlacePanel, props))).toContain(
-		"Talk to Ada",
+		"Talk to Nora",
 	);
 });

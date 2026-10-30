@@ -69,8 +69,11 @@ for (const width of [360, 1280])
 		);
 		// Leave default speed/story-watch on. Resuming a story is a visible player input.
 		const started = Date.now();
+		// Keep driving the real timer while the actual hour is pending. The
+		// unchanged120s case bound still rejects slow completion; stopping this
+		// paused test clock at45s otherwise prevents the next real round entirely.
 		while (
-			Date.now() - started < 45000 &&
+			Date.now() - started < 90000 &&
 			!(await page.locator(".pledge-receipt").count())
 		) {
 			await step(page);

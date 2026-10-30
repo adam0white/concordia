@@ -25,9 +25,10 @@ export const BOTCHABLE: ReadonlySet<string> = new Set([
 ]);
 
 export function botchedUnderProtest(s: Save, r: Resident, j: Job): boolean {
+	const activity = r.owner.actor(r.id).activity;
 	return (
-		!!r.person.activity?.protest &&
-		r.person.activity.affordance.id === j.offer.id &&
+		!!activity?.protest &&
+		activity.offer.id === j.offer.id &&
 		BOTCHABLE.has(j.offer.action) &&
 		keyed(s.seed, j.event, "protest-botch") < PROTEST_BOTCH
 	);

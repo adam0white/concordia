@@ -17,8 +17,9 @@ class InterventionRejected(ValueError):
 
 
 class _Person(Entity):
-  def __init__(self, actor_id, request):
+  def __init__(self, actor_id, request_id, request):
     self._name = actor_id
+    self.request_id = request_id
     self.request = request
     self.observation = None
 
@@ -32,7 +33,7 @@ class _Person(Entity):
   def act(self, action_spec):
     if self.observation is None:
       raise RuntimeError('Actor must receive an observation before choosing.')
-    action = self.request('choose', actorId=self.name)
+    action = self.request('choose', actorId=self.name, requestId=self.request_id)
     if not isinstance(action, str):
       raise BridgeError('choose must return an action ID string.')
     action_spec.validate(action)
@@ -102,7 +103,7 @@ class TownEngine(Engine):
   def next_acting(self, game_master, entities):
     del game_master
     actor = entities[0]
-    offers = self._request('offers', actorId=actor.name)
+    offers = self._request('offers', actorId=actor.name, requestId=actor.request_id)
     if (not isinstance(offers, list) or not offers or
         any(not isinstance(o, dict) or not isinstance(o.get('id'), str) or
             not o['id'] or not isinstance(o.get('label'), str) for o in offers)):
@@ -131,18 +132,33 @@ class TownEngine(Engine):
     self._require_ready()
     for _ in range(rounds):
       self._ready = False
-      ids = self._request('prepare')
-      if (not isinstance(ids, list) or
-          any(not isinstance(i, str) or not i for i in ids) or
-          len(set(ids)) != len(ids)):
-        raise BridgeError('prepare must return unique actor ID strings.')
+      # A logical round may stop repeatedly at actual HF physical boundaries.
+      # Person identity stays stable while each start/finish/interrupt has its own request ID.
       gm = self.next_game_master(self.game_master, [self.game_master])
-      for actor_id in ids:
-        actor = _Person(actor_id, self._request)
-        actor.observe(self.make_observation(gm, actor))
-        actor, spec = self.next_acting(gm, [actor])
-        action = actor.act(spec)
-        self.resolve(gm, json.dumps({'actorId': actor.name, 'actionId': action}))
+      for _boundary in range(10000):
+        boundary = self._request('prepare')
+        if (not isinstance(boundary, dict) or type(boundary.get('done')) is not bool
+            or not isinstance(boundary.get('requests'), list)):
+          raise BridgeError('prepare must return a native boundary object.')
+        requests = boundary['requests']
+        ids = [r.get('id') if isinstance(r, dict) else None for r in requests]
+        if (any(not isinstance(i, str) or not i for i in ids)
+            or len(set(ids)) != len(ids) or (boundary['done'] and requests)):
+          raise BridgeError('prepare must return unique native request IDs.')
+        for reached in requests:
+          actor_id = reached.get('person') if reached.get('kind') == 'action' else reached.get('speaker')
+          if not isinstance(actor_id, str) or not actor_id:
+            raise BridgeError('Native request must name its actual actor.')
+          actor = _Person(actor_id, reached['id'], self._request)
+          actor.observe(self.make_observation(gm, actor))
+          actor, spec = self.next_acting(gm, [actor])
+          action = actor.act(spec)
+          self.resolve(gm, json.dumps({'actorId': actor.name,
+                                      'requestId': actor.request_id, 'actionId': action}))
+        if boundary['done']:
+          break
+      else:
+        raise BridgeError('Native boundary pump exceeded 10000 boundaries.')
       self.rounds += 1
       self._ready = True
       if checkpoint_callback is not None:
@@ -168,16 +184,27 @@ class TownEngine(Engine):
 
   def save(self):
     self._require_ready()
-    return {'schema': 'neighbours/concordia@1', 'rounds': self.rounds,
+    return {'schema': 'neighbours/concordia@2', 'rounds': self.rounds,
             'runtime': self._request('save')}
 
+  def save_journal(self):
+    """Complete local file; the default native checkpoint stays unchanged."""
+    self._require_ready()
+    return {'schema': 'neighbours/concordia@2', 'rounds': self.rounds,
+            'runtime': self._request('save-journal')}
+
   def restore(self, save):
-    if (not isinstance(save, dict) or save.get('schema') != 'neighbours/concordia@1'
+    if (not isinstance(save, dict) or save.get('schema') != 'neighbours/concordia@2'
         or type(save.get('rounds')) is not int or save['rounds'] < 0
         or not isinstance(save.get('runtime'), dict)
-        or type(save['runtime'].get('round')) is not int
-        or save['runtime']['round'] != save['rounds']
-        or save['runtime'].get('pending') != []):
+        or not isinstance(save['runtime'].get('physical'), dict)
+        or type(save['runtime']['physical'].get('round')) is not int
+        or save['runtime']['physical']['round'] != save['rounds']
+        or save['runtime']['physical'].get('pending') != []
+        or not isinstance(save['runtime'].get('boundary'), dict)
+        or save['runtime']['boundary'].get('complete') is not True
+        or save['runtime']['boundary'].get('requests') != []
+        or save['runtime']['boundary'].get('resolutions') != []):
       raise ValueError('Invalid Concordia town checkpoint.')
     self._ready = False
     if self._request('restore', save=save['runtime']) is not None:

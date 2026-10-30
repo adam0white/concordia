@@ -1,4 +1,4 @@
-import type { Affordance, Outcome } from "@adam0white/human-framework";
+import type { Affordance, Outcome } from "./host-types.ts";
 
 export interface CompletionEvidence {
 	/** Awake people sharing the activity interval, excluding the actor. */

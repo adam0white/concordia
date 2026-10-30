@@ -1,3 +1,4 @@
+import { abandonHostGoal, addGoal } from "./hf4-effects.ts";
 /**
  * Hall care (Phase D, nbh-01z.37): wet timber can work a repaired section loose, and a resident who sees the loose
  * section can take it on as their own aim.
@@ -19,7 +20,7 @@
  * Not covered: which section came loose, rot, residents hearing about a loose section without seeing it, or
  * whether real people return to shared work. The rates are engineering assumptions, not timber measurements.
  */
-import { abandonGoal, adoptGoal } from "@adam0white/human-framework";
+
 import { presentAt } from "./encounters.ts";
 import { keyed } from "./hash.ts";
 import type { Resident, Save } from "./state.ts";
@@ -51,23 +52,21 @@ export function loosenHall(s: Save): boolean {
 export function noticeLooseHall(s: Save, r: Resident): boolean {
 	const care = s.timber?.care;
 	if (!care || care.loosened === 0 || s.hall >= 12) return false;
-	if (!r.person.body.alive || r.person.body.asleep) return false;
+	if (!r.owner.actor(r.id).body.alive || r.owner.actor(r.id).body.asleep)
+		return false;
 	if (!presentAt(r, "hall", s.now)) return false;
-	const goals = r.person.agenda.goals;
+	if (s.owner.queuedGoal(r.id, HALL_GOAL_LABEL)) return false;
+	const goals = r.owner.actor(r.id).agenda.goals;
 	if (goals.some((g) => g.label === HALL_GOAL_LABEL && g.status === "active"))
 		return false;
-	const benevolence = r.person.values.benevolence ?? 0.5;
-	adoptGoal(
-		r.person,
-		{
-			label: HALL_GOAL_LABEL,
-			serves: ["meaning", "belonging"],
-			importance: Math.round((0.3 + 0.4 * benevolence) * 1000) / 1000,
-			deadline: s.now + GOAL_DAYS * 1440,
-			advancedBy: [{ action: "repair", amount: 1 }],
-		},
-		s.now,
-	);
+	const benevolence = r.owner.actor(r.id).values.benevolence ?? 0.5;
+	addGoal(s, r.id, {
+		label: HALL_GOAL_LABEL,
+		serves: ["meaning", "belonging"],
+		importance: Math.round((0.3 + 0.4 * benevolence) * 1000) / 1000,
+		deadline: s.now + GOAL_DAYS * 1440,
+		advancedBy: [{ action: "repair", amount: 1 }],
+	});
 	return true;
 }
 
@@ -75,9 +74,9 @@ export function noticeLooseHall(s: Save, r: Resident): boolean {
 export function settleHallGoals(s: Save): void {
 	if (!hallCare(s) || s.hall < 12) return;
 	for (const r of s.people)
-		for (const g of r.person.agenda.goals)
+		for (const g of r.owner.actor(r.id).agenda.goals)
 			if (g.label === HALL_GOAL_LABEL && g.status === "active")
-				abandonGoal(r.person, g.id);
+				abandonHostGoal(s, r.id, g.id);
 }
 
 export function validateHallCare(care: unknown): void {

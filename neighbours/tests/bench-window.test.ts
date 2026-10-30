@@ -46,7 +46,12 @@ describe("typed main-bench proposals", () => {
 		expect(window.from).toBe(645);
 	});
 	it("rejects invalid clocks instead of normalizing imported premises", () => {
-		for (const now of [-1, Infinity, NaN, 480.5])
+		for (const now of [-1, Infinity, NaN, 480 + 1 / 7])
 			expect(() => benchWindow(now, "soon")).toThrow();
 	});
+});
+
+it("preserves an actual millisecond ingress in the physical window", () => {
+	const now = 480 + 1 / 60000;
+	expect(benchWindow(now, "soon").from).toBe(now + 45);
 });

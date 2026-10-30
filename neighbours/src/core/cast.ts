@@ -1,3 +1,4 @@
+import type { NativeActor } from "./host-types.ts";
 /**
  * Who can do what in the town, derived from host facts and HF state rather than person ids.
  *
@@ -12,7 +13,7 @@
  * occupation, the lowest id holds a single-holder position; the seeded town has exactly one of each. Knowledge is
  * read from retained HF method evidence and never inferred from labels, prose or outcomes.
  */
-import type { Person } from "@adam0white/human-framework";
+
 import type { Resident, Save } from "./state.ts";
 
 /** Occupations that hold a town position (scenario host facts). */
@@ -32,7 +33,7 @@ export type Position = keyof typeof POSITION_ROLES;
 export const INSPECTION_METHOD = "hall-section-inspection";
 
 const byId = (a: Resident, b: Resident) =>
-	a.person.id < b.person.id ? -1 : a.person.id > b.person.id ? 1 : 0;
+	a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 export function holds(r: Resident, position: Position): boolean {
 	return (
 		r.role === POSITION_ROLES[position] ||
@@ -65,27 +66,25 @@ export function requireHolder(
 	return r;
 }
 export function nameOf(s: Pick<Save, "people">, id: string): string {
-	return s.people.find((r) => r.person.id === id)?.person.name ?? id;
+	return s.people.find((r) => r.id === id)?.name ?? id;
 }
 /** Retained HF method evidence, not a claim about present timber. */
-export function retainsInspectionMethod(person: Person): boolean {
+export function retainsInspectionMethod(person: NativeActor): boolean {
 	return (person.methods?.rules ?? []).some(
 		(rule) => rule.id === INSPECTION_METHOD && rule.evidence.length > 0,
 	);
 }
 /** Answers hall-inspection questions: teaches by occupation and retains the method. */
 export function inspectionInstructor(r: Resident): boolean {
-	return holds(r, "teacher") && retainsInspectionMethod(r.person);
+	return holds(r, "teacher") && retainsInspectionMethod(r.owner.actor(r.id));
 }
 export function inspectionInstructors(s: Pick<Save, "people">): Resident[] {
 	return s.people.filter(inspectionInstructor).sort(byId);
 }
 /** Retains inspection evidence demonstrated by another resident (a lesson from a neighbour). */
 export function taughtByNeighbour(s: Pick<Save, "people">, r: Resident) {
-	const residents = new Set(s.people.map((o) => o.person.id));
-	return (r.person.methods?.rules ?? []).some((rule) =>
-		rule.evidence.some(
-			(e) => e.sourceId !== r.person.id && residents.has(e.sourceId),
-		),
+	const residents = new Set(s.people.map((o) => o.id));
+	return (r.owner.actor(r.id).methods?.rules ?? []).some((rule) =>
+		rule.evidence.some((e) => e.sourceId !== r.id && residents.has(e.sourceId)),
 	);
 }

@@ -6,6 +6,18 @@ import {
 	type Page,
 	test,
 } from "@playwright/test";
+import type { TownPacket } from "../src/cast-session.ts";
+import { checkpointSources } from "../src/checkpoint-source.ts";
+import { canonicalHash } from "../src/core/hf4-canonical.ts";
+import { decodeSave } from "../src/ui/save-codec.ts";
+
+/** SDK chunks carry the complete encoded journal. Decode with the shipped reader;
+ * keep the original whole-packet assertions and strict cold replay below. */
+async function recordedCheckpoint(json: string) {
+	const packet = (await decodeSave(new Blob([json]))) as TownPacket;
+	checkpointSources(packet);
+	return packet;
+}
 
 test("built entry refuses invalid selectors and preserves missing-identity memory play", async ({
 	page,
@@ -79,27 +91,35 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 	request,
 	baseURL,
 }) => {
+	// Two complete cold file restores plus lifecycle correctness; not a latency gate.
+	test.setTimeout(180000);
 	const { createHash } = await import("node:crypto");
 	const { gzipSync } = await import("node:zlib");
-	const { createRuntime } = await import("../src/core/index.ts");
+	const { createRuntime, restoreRuntime } = await import(
+		"../src/core/index.ts"
+	);
 	const { canonicalPersona } = await import("@adam0white/lab-client");
 	const { openDebug } = await import("./session-helpers");
 	const runtime = createRuntime(
 		42,
 		206,
-	).export() as import("../src/core/state.ts").Save;
-	const person = runtime.people[0]?.person;
+	).export() as import("../src/core/runtime.ts").NativeTownArchive;
+	const person = runtime.owner.run.current.people.ada;
 	if (!person) throw Error("Missing complete source person");
 	const original = canonicalPersona(person);
 	const sha = createHash("sha256").update(original).digest("hex");
 	const packet = {
-		schema: "neighbours/concordia@1",
-		rounds: runtime.round,
+		schema: "neighbours/concordia@2",
+		rounds: runtime.physical.round,
 		runtime,
 		castLocal: {
 			heads: [],
 			sources: { [sha]: person },
-			chapter: canonicalPersona([runtime.seed, runtime.chapter]),
+			chapter: canonicalHash({
+				seed: runtime.physical.seed,
+				hf: runtime.hf,
+				initial: runtime.owner.run.initial,
+			}),
 			file: true,
 			localOnly: true,
 		},
@@ -232,9 +252,10 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			mimeType: "application/json",
 			buffer: Buffer.from(JSON.stringify(packet)),
 		});
-		await expect(page.locator(".town-ready")).toBeVisible();
+		// Cold file replay correctness; not a startup latency acceptance.
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		const full = await exportFile();
-		expect(full.runtime).toEqual(runtime);
+		expect(restoreRuntime(full.runtime).export()).toEqual(runtime);
 		expect(canonicalPersona(full.castLocal.sources[sha])).toBe(original);
 		await page
 			.getByRole("button", { name: "Close Game menu", exact: true })
@@ -257,7 +278,8 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			mimeType: "application/gzip",
 			buffer: gzipSync(JSON.stringify(packet)),
 		});
-		await expect(page.locator(".town-ready")).toBeVisible();
+		// Cold file replay correctness; not a startup latency acceptance.
+		await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 		expect(await exportFile()).toEqual(full);
 		// Privacy signals suppress recording until the real switch explicitly opts in.
 		await page.evaluate(() => {
@@ -298,7 +320,7 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			.click();
 		const continued = await exportFile();
 		expect(continued).toEqual(fullContinued);
-		expect(continued.runtime.player).toBeDefined();
+		expect(continued.runtime.physical.player).toBeDefined();
 		expect(canonicalPersona(continued.castLocal.sources[sha])).toBe(original);
 		await page.evaluate(() =>
 			window.dispatchEvent(new PageTransitionEvent("pagehide")),
@@ -365,8 +387,14 @@ test("real SDK preserves existing session, OFF and statuses; final pagehide capt
 			.filter((r) => r.data.upload === upload)
 			.sort((a, b) => a.data.index - b.data.index);
 		expect(captured).toHaveLength(captured[0].data.total);
-		const final = JSON.parse(captured.map((r) => r.data.text).join(""));
+		const final = await recordedCheckpoint(
+			captured.map((r) => r.data.text).join(""),
+		);
 		expect(final).toEqual(continued);
+		// Compare complete native state too, including every actor, input and RNG field.
+		expect(restoreRuntime(final.runtime).export()).toEqual(
+			restoreRuntime(continued.runtime).export(),
+		);
 		await test.info().attach("synthetic-local-final-queue-proof", {
 			contentType: "application/json",
 			body: JSON.stringify({
@@ -465,7 +493,7 @@ async function finalQueuedRun(page: Page) {
 		.toBeGreaterThan(0);
 	const pieces = (await queuedPieces(page)).filter((r) => r.kind === "run");
 	expect(pieces).toHaveLength(pieces[0].data.total);
-	return JSON.parse(
+	return recordedCheckpoint(
 		pieces
 			.sort((a, b) => a.data.index - b.data.index)
 			.map((r) => r.data.text)
@@ -579,10 +607,10 @@ async function lifecycleFile({
 
 	const runtime = (await import("../src/core/index"))
 		.createRuntime(42, 206)
-		.export() as import("../src/core/state.ts").Save;
+		.export() as import("../src/core/runtime.ts").NativeTownArchive;
 	const packet = {
-		schema: "neighbours/concordia@1",
-		rounds: runtime.round,
+		schema: "neighbours/concordia@2",
+		rounds: runtime.physical.round,
 		runtime,
 	};
 	await page.goto(`${origin}/file/?labRunSource=agent`);
@@ -591,7 +619,8 @@ async function lifecycleFile({
 		mimeType: "application/json",
 		buffer: Buffer.from(JSON.stringify(packet)),
 	});
-	await expect(page.locator(".town-ready")).toBeVisible();
+	// Cold file replay correctness; not a startup latency acceptance.
+	await expect(page.locator(".town-ready")).toBeVisible({ timeout: 60000 });
 	return { context, page, runtime };
 }
 test("regression: pending export must not publish after file pagehide while final snapshot waits", async ({
@@ -673,7 +702,10 @@ test("regression: pending export must not publish after file pagehide while fina
 			result.download,
 			"retired export callback published a new download after pagehide",
 		).toBeUndefined();
-		expect((await finalQueuedRun(page)).runtime).toEqual(runtime);
+		const { restoreRuntime } = await import("../src/core/index.ts");
+		expect(
+			restoreRuntime((await finalQueuedRun(page)).runtime).export(),
+		).toEqual(runtime);
 		await expect(
 			page.getByRole("link", { name: "Download save", exact: true }),
 		).toHaveCount(0);
@@ -707,14 +739,14 @@ test("regression: pagehide invalidates an outstanding canonical file read", asyn
 	});
 	const runtime = (await import("../src/core/index"))
 		.createRuntime(42, 206)
-		.export() as import("../src/core/state.ts").Save;
+		.export() as import("../src/core/runtime.ts").NativeTownArchive;
 	await page.getByLabel("Town file", { exact: true }).setInputFiles({
 		name: "full.json",
 		mimeType: "application/json",
 		buffer: Buffer.from(
 			JSON.stringify({
-				schema: "neighbours/concordia@1",
-				rounds: runtime.round,
+				schema: "neighbours/concordia@2",
+				rounds: runtime.physical.round,
 				runtime,
 			}),
 		),
@@ -811,8 +843,10 @@ test("regression: pending player reply must not enqueue a checkpoint after pageh
 			"retired player reply enqueued SDK checkpoint after pagehide",
 		).toBe(before);
 		const final = await finalQueuedRun(page);
-		expect(final.runtime.people).toHaveLength(runtime.people.length);
-		expect(final.runtime.player).toBeDefined();
+		expect(final.runtime.physical.people).toHaveLength(
+			runtime.physical.people.length,
+		);
+		expect(final.runtime.physical.player).toBeDefined();
 		expect((await saves()).length).toBe(before);
 	} finally {
 		await context.close();

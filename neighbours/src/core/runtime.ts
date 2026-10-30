@@ -1,23 +1,15 @@
-import {
-	type Affordance,
-	begin,
-	breakAllows,
-	type DecisionRecord,
-	decide,
-	downedAllows,
-	finish,
-	inBreak,
-	perceive,
-	readPerson,
-	reviewed,
-	type Suggestion,
-	snapshot,
-	tick,
-	vetoFor,
+import type {
+	ActionRequest,
+	ActionResolution,
+	DeepReadonly,
+	HostRequest,
+	Input,
+	LifecycleReceipt,
+	ObservedOutcome,
+	StepResult,
 } from "@adam0white/human-framework";
 import type {
 	Intervention,
-	Policy,
 	TownEvent,
 	TownRuntime,
 	TownView,
@@ -26,7 +18,7 @@ import {
 	observeHallInspection,
 	teachHallInspection,
 } from "../experiments/inspection.ts";
-import { reviewDue, reviewOffers } from "./activity-reviews.ts";
+import { reviewOffers } from "./activity-reviews.ts";
 import {
 	assistanceDecision,
 	canReceiveInspectionRequest,
@@ -46,6 +38,7 @@ import {
 	inspectionKey,
 	locatedAt,
 	overlapMinutes,
+	type PhysicalWitness,
 	presentAt,
 	receivedRequest,
 	receiveEvent,
@@ -73,29 +66,35 @@ import {
 	updateHandcart,
 } from "./handcart.ts";
 import { keyed } from "./hash.ts";
-import { HF_SOURCE, isHfSource } from "./hf-version.ts";
+import { HF_SOURCE, HF_VERSION, isHfSource } from "./hf-version.ts";
+import { canonicalHash } from "./hf4-canonical.ts";
+import { observeFacts } from "./hf4-evidence.ts";
+import { physicalOffer } from "./hf4-offers.ts";
+import {
+	minutePercept,
+	type OwnerArchive,
+	type OwnerJournalArchive,
+	type TownRunOwner,
+} from "./hf4-owner.ts";
+import { MINUTE, nativeMilliseconds } from "./hf4-run.ts";
+import type { Affordance, DecisionRecord, Suggestion } from "./host-types.ts";
 import { moodRead } from "./impression.ts";
 import { placeOf, required } from "./invariants.ts";
-import {
-	buildOffers,
-	socialPreview,
-	usesActivitySlot,
-	workMinutesFor,
-} from "./offers.ts";
+import { buildOffers, usesActivitySlot, workMinutesFor } from "./offers.ts";
 import { realizedOutcome } from "./outcomes.ts";
 import { personLessons } from "./person-learning.ts";
 import {
-	heldSuggestion,
+	finishPrivateConversation,
 	placeName,
 	playerApplied,
 	playerDecided,
-	playerHears,
 	playerIntervene,
 	playerJobEnded,
 	playerRound,
 	playerView,
 	predictAnswers,
 	predictSpeech,
+	privateConversationOffers,
 } from "./player.ts";
 import { botchedUnderProtest } from "./protest.ts";
 import { recordSocialContacts } from "./social-contact.ts";
@@ -108,23 +107,51 @@ import { actionWords, ingWords, jobLine } from "./voicing.ts";
 
 function awakeHallNewsListener(r: Save["people"][number]): boolean {
 	return (
-		r.person.body.alive &&
-		!r.person.body.asleep &&
+		r.owner.actor(r.id).body.alive &&
+		!r.owner.actor(r.id).body.asleep &&
 		r.job?.offer.mode !== "sleep"
 	);
 }
 export function canShareHallNews(s: Save): boolean {
 	return s.hall < 12 && s.people.some(awakeHallNewsListener);
 }
+export type PhysicalSave = Omit<Save, "owner" | "people"> & {
+	people: Omit<Resident, "owner">[];
+};
+export type NativeTownArchive = {
+	format: "neighbours-native";
+	schema: typeof SCHEMA;
+	hf: typeof HF_VERSION;
+	physical: PhysicalSave;
+	owner: OwnerArchive;
+	boundary: {
+		targetAt: number | null;
+		resolutions: Input[];
+		projectedRevision: number;
+		requests: DeepReadonly<HostRequest>[];
+		complete: boolean;
+		worldDirty: boolean;
+		witnesses: Omit<PhysicalWitness, "owner">[];
+	};
+	inputs: Record<string, unknown>[];
+};
+export type JournalTownArchive = Omit<NativeTownArchive, "format" | "owner"> & {
+	format: "neighbours-journal";
+	owner: OwnerJournalArchive;
+};
 export class Runtime implements TownRuntime {
 	s: Save;
 	records = new Map<string, DecisionRecord>();
 	offers = new Map<string, Affordance[]>();
 	constructor(s: Save) {
 		this.s = s;
+		this.projectedRevision = s.owner.revision;
+	}
+	currentActors() {
+		return this.s.owner.current.people;
 	}
 	actor(id: string) {
-		const p = this.s.people.find((p) => p.person.id === id);
+		const p = this.s.people.find((p) => p.id === id);
 		if (!p) throw Error("Unknown resident");
 		return p;
 	}
@@ -181,7 +208,7 @@ export class Runtime implements TownRuntime {
 				.slice(-8);
 			const landmarkIds = new Set(landmarks.map((e) => e.id));
 			const familiarActors = new Set(
-				this.s.people.filter((r) => r.known).map((r) => r.person.id),
+				this.s.people.filter((r) => r.known).map((r) => r.id),
 			);
 			const familiar = this.s.events
 				.filter(
@@ -205,9 +232,11 @@ export class Runtime implements TownRuntime {
 		const r = this.actor(id);
 		if (!presentAt(r, "hall", this.s.now))
 			throw Error("Question must be posted at the hall");
-		const learnedDampness = r.person.methods?.rules.some((rule) =>
-			rule.conditions.some((condition) => condition.cue === "hall-moisture"),
-		);
+		const learnedDampness = r.owner
+			.actor(r.id)
+			.methods?.rules.some((rule) =>
+				rule.conditions.some((condition) => condition.cue === "hall-moisture"),
+			);
 		const question =
 			learnedDampness && this.s.hall < 12
 				? "I can compare dry and wet timber, but the loose supports need another opinion."
@@ -216,7 +245,7 @@ export class Runtime implements TownRuntime {
 					: "How can I tell whether the timber is safe?";
 		const qid = this.event(
 			"question",
-			`${r.person.name} left a question on the hall noticeboard: “${question}”`,
+			`${r.name} left a question on the hall noticeboard: “${question}”`,
 			id,
 			"hall",
 			[cause],
@@ -232,10 +261,7 @@ export class Runtime implements TownRuntime {
 			status: "waiting",
 		};
 		for (const instructor of inspectionInstructors(this.s))
-			if (
-				instructor.person.id !== id &&
-				presentAt(instructor, "hall", this.s.now)
-			)
+			if (instructor.id !== id && presentAt(instructor, "hall", this.s.now))
 				receiveEvent(instructor, note, "heard", `Heard ${note.text}`);
 	}
 	lifecycleEvent(kind: string, text: string, actorId: string, placeId: string) {
@@ -256,26 +282,17 @@ export class Runtime implements TownRuntime {
 		this.s.tools += j.tools;
 		placeOf(this.s, "market").stock += j.food;
 		r.wealth += j.food;
-		if ((!r.person.body.alive ? this.s.now - 15 : this.s.now) >= j.arrive)
+		if (this.s.now >= j.arrive)
 			r.place = required(j.offer.placeId, "Missing destination");
-		if (r.person.activity)
-			finish(r.person, {
-				at: this.s.now,
-				status: "interrupted",
-				affordanceId: j.offer.id,
-				action: j.offer.action,
-				needs: {},
-				material: 0,
-			});
-		const travelling =
-			(!r.person.body.alive ? this.s.now - 15 : this.s.now) < j.arrive;
+
+		const travelling = this.s.now < j.arrive;
 		const stopped = this.event(
 			"interrupted",
 			// Towns begun under HF 2.8.0 say it in plain words; older saves keep their recorded wording exactly.
 			this.s.together
-				? `${r.person.name} stopped ${travelling ? `on the way to ${placeName(this.s, required(j.offer.placeId, "Missing destination"))} before starting to ${actionWords(j.offer.label)}` : `${ingWords(j.offer.label)} at ${placeName(this.s, r.place)}`}${reason === "stopped" ? "" : " and did something else"}.`
-				: `${r.person.name}'s ${j.offer.label.toLowerCase()} ${reason} ${travelling ? `before arrival was confirmed, last known at ${j.from} while travelling toward ${j.offer.placeId}` : `at ${r.place}`}; reserved resources were returned.`,
-			r.person.id,
+				? `${r.name} stopped ${travelling ? `on the way to ${placeName(this.s, required(j.offer.placeId, "Missing destination"))} before starting to ${actionWords(j.offer.label)}` : `${ingWords(j.offer.label)} at ${placeName(this.s, r.place)}`}${reason === "stopped" ? "" : " and did something else"}.`
+				: `${r.name}'s ${j.offer.label.toLowerCase()} ${reason} ${travelling ? `before arrival was confirmed, last known at ${j.from} while travelling toward ${j.offer.placeId}` : `at ${r.place}`}; reserved resources were returned.`,
+			r.id,
 			r.place,
 			[j.event],
 		);
@@ -289,427 +306,240 @@ export class Runtime implements TownRuntime {
 		return this.s.people
 			.filter(
 				(o) =>
-					o.person.id !== r.person.id &&
+					o.id !== r.id &&
 					o.question?.status === "waiting" &&
 					receivedRequest(r, o) &&
 					presentAt(o, "hall", this.s.now),
 			)
 			.map((o) => ({
-				voiceId: o.person.id,
-				affordanceId: `answer-inspection:${o.person.id}`,
+				voiceId: o.id,
+				affordanceId: `answer-inspection:${o.id}`,
 				strength: 0.5,
 				appeal: "competence" as const,
 				since: o.question?.at,
 			}));
 	}
-	prepareRound() {
-		if (this.s.pending.length) throw Error("Round has unresolved actors");
-		this.s.now += 15;
-		this.s.round++;
-		weatherTimber(this.s, this.weather(), 15);
-		if (loosenHall(this.s)) {
-			const id = this.event(
-				"hall-loosened",
-				"A repaired section of the hall came loose as the wet timber moved.",
-				undefined,
-				"hall",
+	private targetAt: number | null = null;
+	private resolutions: Input[] = [];
+	private projectedRevision: number;
+	private boundaryRequests: DeepReadonly<HostRequest>[] = [];
+	private wireHistory: Record<string, unknown>[] = [];
+	private complete = true;
+	private worldDirty = false;
+	private witnesses: Omit<PhysicalWitness, "owner">[] = [];
+	private recording = true;
+	static hydrate(archive: NativeTownArchive, owner: TownRunOwner): Runtime {
+		const physical = structuredClone(archive.physical);
+		const runtime = new Runtime({
+			...physical,
+			owner,
+			people: physical.people.map((person) => ({ ...person, owner })),
+		});
+		runtime.targetAt = archive.boundary.targetAt;
+		runtime.resolutions = structuredClone(archive.boundary.resolutions);
+		runtime.projectedRevision = archive.boundary.projectedRevision;
+		runtime.boundaryRequests = structuredClone(archive.boundary.requests);
+		runtime.complete = archive.boundary.complete;
+		runtime.worldDirty = archive.boundary.worldDirty;
+		runtime.witnesses = structuredClone(archive.boundary.witnesses);
+		runtime.wireHistory = structuredClone(archive.inputs);
+		return runtime;
+	}
+	private captureWitnesses(): void {
+		this.witnesses = structuredClone(
+			this.s.people.map((person) => ({
+				id: person.id,
+				name: person.name,
+				place: person.place,
+				...(person.job ? { job: person.job } : {}),
+				...(person.idleSince === undefined
+					? {}
+					: { idleSince: person.idleSince }),
+			})),
+		);
+	}
+	private nativeInput<K extends Input["kind"]>(
+		kind: K,
+		payload: Extract<Input, { kind: K }>["payload"],
+		at: number,
+	): Input {
+		return {
+			id: this.s.owner.allocate("physical-receipt"),
+			at,
+			source: { type: "host", id: "neighbours" },
+			kind,
+			payload,
+		} as Input;
+	}
+	private physicalState(): PhysicalSave {
+		const { owner, people, ...state } = this.s;
+		void owner;
+		return {
+			...state,
+			people: people.map(({ owner, ...resident }) => {
+				void owner;
+				return resident;
+			}),
+		};
+	}
+	private worldChange() {
+		this.worldDirty = false;
+		const expectedRevision = this.projectedRevision++;
+		return {
+			expectedRevision,
+			revision: this.projectedRevision,
+			put: [],
+			remove: [],
+			hostState: {
+				schema: SCHEMA,
+				at: this.s.now * MINUTE,
+				physicalHash: canonicalHash(this.physicalState()),
+			},
+		};
+	}
+	private clock(at: number): void {
+		if (at < this.s.now * MINUTE - 0.00001)
+			throw Error("Native clock moved backward");
+		const elapsed = at / MINUTE - this.s.now;
+		weatherTimber(this.s, this.weather(), elapsed);
+		this.s.now = at / MINUTE;
+	}
+	/** External host lifecycle facts enter the same complete replay journal.
+	 * This is no player control and does not author a natural death. */
+	receiveLifecycle(receipt: LifecycleReceipt): void {
+		if (this.s.owner.pending.length)
+			throw Error(
+				"Resolve the reached native boundary before external lifecycle ingress",
 			);
-			// A visitor who has acted hears of it, so a running advance stops at the crisis instead of passing it.
-			playerHears(
-				this.s,
-				`A repaired section of the hall came loose overnight because the timber was wet. Repairs are now needed for ${12 - this.s.hall} of 12 sections.`,
-				id,
+		if (receipt.type !== "death")
+			throw Error("Only a source-bound death receipt is supported here");
+		if (!this.s.owner.actor(receipt.person.id).body.alive)
+			throw Error("Death already recorded");
+		const inputId = this.s.owner.enqueue("lifecycle.received", receipt);
+		const result = this.s.owner.advance(this.s.owner.at + 1);
+		const accepted = required(
+			result.events.find(
+				(event) =>
+					event.person === receipt.person.id &&
+					event.data.kind === "body-change" &&
+					event.data.change.kind === "died" &&
+					event.data.change.discoveredAt === event.at &&
+					event.causeIds.includes(inputId),
+			),
+			"Native Run did not accept the lifecycle source",
+		);
+		if (this.s.owner.actor(receipt.person.id).body.alive)
+			throw Error("Native lifecycle did not establish death");
+		if (this.recording)
+			this.wireHistory.push({
+				op: "lifecycle",
+				receipt: structuredClone(receipt),
+				accepted: {
+					eventId: accepted.id,
+					person: receipt.person.id,
+					at: accepted.at,
+					evidenceId: receipt.basis.evidence.id,
+				},
+			});
+		this.acceptStep(result);
+	}
+	private recordDeath(
+		resident: Resident,
+		at: number,
+		sourceEvent: string,
+	): void {
+		if (resident.lifeEvent?.kind === "death") return;
+		const minute = at / MINUTE;
+		const place = resident.job
+			? locatedAt(
+					resident,
+					resident.job.offer.placeId ?? resident.place,
+					minute,
+				)
+				? resident.job.offer.placeId
+				: undefined
+			: resident.place;
+		const witnesses = place
+			? this.s.people
+					.filter(
+						(other) =>
+							other.id !== resident.id &&
+							locatedAt(other, place, minute) &&
+							this.s.owner.availableAt(other.id, at),
+					)
+					.map((other) => other.id)
+			: [];
+		this.clock(at);
+		if (resident.job) {
+			this.interruptJob(resident.id, "died");
+			this.worldDirty = true;
+		}
+		const event = this.lifecycleEvent(
+			"death",
+			`${resident.name} was found dead.`,
+			resident.id,
+			place ?? resident.place,
+		);
+		resident.lifeEvent = event;
+		for (const witness of witnesses)
+			this.s.owner.observe(
+				witness,
+				minutePercept(`town:${event.id}:${witness}`, minute, {
+					channel: "saw",
+					kind: "death",
+					actorId: resident.id,
+					targetId: resident.id,
+					...(place ? { placeId: place } : {}),
+					salience: 0.9,
+					valence: -0.8,
+					summary: `Saw ${event.text}`,
+					provenance: [`town-event:${event.id}`, `native-death:${sourceEvent}`],
+				}),
 			);
-		}
-		this.records.clear();
-		this.offers.clear();
-		for (const r of this.s.people) {
-			tick(r.person, this.s.now);
-			const dead = !r.person.body.alive;
-			const downed = !!r.person.body.downed;
-			const interrupted =
-				r.job &&
-				(dead ||
-					!r.person.activity ||
-					(downed && !downedAllows(r.job.offer)) ||
-					(!breakAllows(r.person, r.job.offer) &&
-						vetoFor(r.person, r.job.offer, {
-							now: this.s.now,
-							affordances: [r.job.offer],
-							...readPerson(r.person),
-						})?.reason === "break"));
-			if (interrupted && r.job) this.interruptJob(r.person.id);
-			if (dead && r.lifeEvent?.kind !== "death")
-				r.lifeEvent = this.lifecycleEvent(
-					"death",
-					`${r.person.name} was found dead at the end of this round.`,
-					r.person.id,
-					r.place,
-				);
-			else if (downed && r.lifeEvent?.kind !== "incapacity" && !dead)
-				r.lifeEvent = this.lifecycleEvent(
-					"incapacity",
-					`${r.person.name} has collapsed and can only rest in place.`,
-					r.person.id,
-					r.place,
-				);
-		}
+	}
+	private reconcileHost(): void {
+		for (const resident of this.s.people)
+			if (
+				!resident.owner.actor(resident.id).body.alive &&
+				resident.lifeEvent?.kind !== "death"
+			)
+				throw Error("Native death lacks its public source boundary");
+		for (const resident of this.s.people)
+			for (const event of this.s.events) {
+				if (
+					(this.s.owner.attention(
+						resident.id,
+						`town:${event.id}:${resident.id}`,
+					) ?? 0) > 0 &&
+					!resident.received?.some((item) => item.id === event.id)
+				)
+					resident.received = [
+						...(resident.received ?? []),
+						{ ...event, targetId: resident.id },
+					].slice(-12);
+			}
+		const assistance = this.s.assistance;
+		if (assistance && !assistance.received)
+			assistance.received =
+				(this.s.owner.attention(
+					assistance.actorId,
+					`town:${assistance.request.id}:${assistance.actorId}`,
+				) ?? 0) > 0;
+		const premise = this.s.handcart?.premise;
+		if (premise && !premise.received && premise.event.targetId)
+			premise.received =
+				(this.s.owner.attention(
+					premise.event.targetId,
+					`town:${premise.event.id}:${premise.event.targetId}`,
+				) ?? 0) > 0;
 		recordSocialContacts(this);
 		updateEvenings(this);
 		updateHandcart(this);
-		const boundary = this.s.people.map((r) => ({
-			...r,
-			job: r.job ? { ...r.job, offer: { ...r.job.offer } } : undefined,
-		}));
-		for (const r of this.s.people) {
-			if (r.job && r.job.end <= this.s.now) {
-				const j = r.job,
-					p = placeOf(this.s, j.offer.placeId);
-				// Before finish(): HF still holds the protested activity.
-				const botched = botchedUnderProtest(this.s, r, j);
-				let attendedLesson = false;
-				let socialCompanions = 0;
-				let inspectionEvent: number | undefined;
-				if (usesActivitySlot(j.offer)) p.reserved--;
-				r.place = p.id;
-				const classOrganiser =
-					j.offer.action === "attend-class"
-						? eveningFor(this.s, j.offer)?.organiserId
-						: undefined;
-				const evening = finishEvening(this, r);
-				const cart = finishHandcart(this, r);
-				const assistance = finishAssistance(this, r);
-				this.s.tools += j.tools;
-				if (j.food) {
-					if (evening.handled && !evening.delivered) {
-						placeOf(this.s, "market").stock += j.food;
-						r.wealth += j.food;
-					} else this.s.consumed += j.food;
-				}
-				if (evening.delivered && j.offer.action === "attend-class") {
-					// A lesson passes on only what its organiser actually retains.
-					const organiser = classOrganiser
-						? this.s.people.find((o) => o.person.id === classOrganiser)
-						: undefined;
-					if (organiser && retainsInspectionMethod(organiser.person))
-						teachHallInspection(
-							r.person,
-							organiser.person.id,
-							`evening-lesson-${j.event}`,
-						);
-					attendedLesson = true;
-				}
-				if (evening.handled) socialCompanions = evening.companions.length;
-				if (cart.handled) socialCompanions = cart.companions.length;
-				if (j.offer.action === "grow" && !botched) {
-					placeOf(this.s, "market").stock += 3;
-					this.s.produced += 3;
-				}
-				if (j.offer.action === "supply" && !botched) {
-					const m = placeOf(this.s, "market");
-					const supplied = 5 + cartSupplyBonus(this.s, r.person.id, "supply");
-					m.stock += supplied;
-					this.s.produced += supplied;
-				}
-				if (botched) {
-					// A botched job does nothing to the world.
-				} else if (j.offer.action === "repair" && !repairHolds(this.s, j.event))
-					this.event(
-						"repair-slipped",
-						`${r.person.name}’s repair on the damp timber did not hold.`,
-						r.person.id,
-						"hall",
-						[j.event],
-					);
-				else if (j.offer.action === "repair") {
-					this.s.hall += 1;
-					settleHallGoals(this.s);
-					if (this.s.hall === 12)
-						this.event(
-							"hall-repaired",
-							"All twelve repairs are complete. Someone still needs to inspect the timber before the hall can reopen.",
-							r.person.id,
-							"hall",
-							[j.event],
-						);
-				}
-
-				if (j.offer.action === "open-section" && !assistance) {
-					const safe = this.moisture() === "dry" && this.s.hall >= 12;
-					this.s.hallSafe = safe;
-					inspectionEvent = this.event(
-						safe ? "hall-open" : "inspection-failed",
-						safe
-							? `${r.person.name} found dry timber with sound supports and opened the hall.`
-							: `${r.person.name} found ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports. The hall stayed closed.`,
-						r.person.id,
-						"hall",
-						[j.event],
-					);
-				}
-				if (j.offer.action === "keep-closed" && !assistance) {
-					this.s.hallSafe = false;
-					inspectionEvent = this.event(
-						"hall-closed",
-						`${r.person.name} kept the hall closed after seeing ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports.`,
-						r.person.id,
-						"hall",
-						[j.event],
-					);
-				}
-				if (j.offer.action === "answer-inspection") {
-					const learner = this.s.people.find(
-						(o) => o.person.id === j.offer.targetId,
-					);
-					if (
-						learner?.question?.status === "waiting" &&
-						presentAt(learner, "hall", this.s.now) &&
-						overlapMinutes(
-							j,
-							required(
-								boundary.find((o) => o.person.id === learner.person.id),
-								"Learner boundary missing",
-							),
-							this.s.now,
-						) >= 15 &&
-						presentAt(r, "hall", this.s.now) &&
-						receivedRequest(r, learner)
-					) {
-						socialCompanions = 1;
-						const questionId = learner.question.event;
-						teachHallInspection(
-							learner.person,
-							r.person.id,
-							`hall-explanation-${j.event}`,
-						);
-						const lessonId = this.event(
-							"hall-explanation",
-							`${r.person.name} showed ${learner.person.name} how dry, sound timber differs from wet timber, and when another opinion is needed. ${learner.person.name} can use that method on the next inspection.`,
-							r.person.id,
-							"hall",
-							[questionId, j.event],
-						);
-						const lesson = required(
-							this.s.events.find((e) => e.id === lessonId),
-							"Explanation event missing",
-						);
-						lesson.targetId = learner.person.id;
-						receiveEvent(
-							learner,
-							lesson,
-							"social",
-							`${r.person.name} explained the timber check to me beside the hall.`,
-						);
-						learner.question = {
-							...learner.question,
-							status: "answered",
-							answeredBy: r.person.id,
-							lessonEvent: lessonId,
-						};
-					} else
-						this.event(
-							"missed-encounter",
-							`${r.person.name} went to explain the timber check, but the explanation did not reach the person who asked.`,
-							r.person.id,
-							"hall",
-							[j.event],
-						);
-				}
-				if (
-					(j.offer.action === "open-section" ||
-						j.offer.action === "keep-closed") &&
-					inspectionEvent !== undefined
-				) {
-					const event = required(
-						this.s.events.find((e) => e.id === inspectionEvent),
-						"Inspection event missing",
-					);
-					const record = r.person.trace.find(
-						(t) => t.id === r.person.activity?.decisionId,
-					);
-					const source = r.decision?.source ?? "Host control";
-					const methodTerms = isHfSource(source)
-						? (record?.considered
-								.find((c) => c.affordanceId === j.offer.id)
-								?.terms.filter((t) => t.source.startsWith("method:"))
-								.map((t) => ({ source: t.source, value: t.value })) ?? [])
-						: [];
-					r.inspection = {
-						key: inspectionKey(this.s),
-						action: j.offer.action,
-						at: this.s.now,
-						event: structuredClone(event),
-						observations: j.inspectionCues ?? {
-							moisture: this.moisture(),
-							support: this.s.hall >= 12 ? "sound" : "loose",
-						},
-						result: event.text,
-						source,
-						methodTerms,
-					};
-				}
-
-				if (j.offer.action === "learn") {
-					// The practical class is held by whoever is actually teaching at school.
-					const teacher = boundary.find(
-						(o) =>
-							o.person.id !== r.person.id &&
-							o.job?.offer.action === "teach" &&
-							overlapMinutes(j, o, this.s.now) >= 15,
-					);
-					if (teacher?.job) {
-						attendedLesson = true;
-						socialCompanions = 1;
-					}
-					// The class passes on only what its teacher actually retains.
-					if (teacher?.job && retainsInspectionMethod(teacher.person)) {
-						teachHallInspection(
-							r.person,
-							teacher.person.id,
-							`lesson-${j.event}`,
-						);
-						const eid = this.event(
-							"lesson",
-							`${r.person.name} watched ${teacher.person.name} explain when flood-soaked timber is safe.`,
-							r.person.id,
-							"school",
-							[j.event, teacher.job.event],
-						);
-						const lesson = required(
-							this.s.events.find((e) => e.id === eid),
-							"Lesson event missing",
-						);
-						receiveEvent(
-							r,
-							{ ...lesson, actorId: teacher.person.id, targetId: r.person.id },
-							"heard",
-							`${teacher.person.name} explained timber inspection during the practical class.`,
-						);
-					}
-				}
-				if (j.offer.action === "work") {
-					// A botched shift is still a shift served, but it earns nothing.
-					if (!botched) r.wealth += 2;
-					const work = required(r.paidWork, "Missing paid shift ledger");
-					work.minutes += 60;
-					work.totalMinutes += 60;
-				}
-				if (j.offer.action === "talk" || j.offer.action === "gather") {
-					const companions = boundary.filter(
-						(o) =>
-							o.person.id !== r.person.id &&
-							o.job &&
-							(o.job.offer.action === "talk" ||
-								o.job.offer.action === "gather") &&
-							overlapMinutes(j, o, this.s.now) >= 15,
-					);
-
-					socialCompanions = j.socialContacts?.length ?? 0;
-					// Preview company never enters the physical activity. HF finish must not count it again.
-					if (r.person.activity) delete r.person.activity.affordance.with;
-					if (
-						j.offer.action === "gather" &&
-						this.s.firstMealAt === null &&
-						companions.some((o) => o.job?.offer.action === "gather")
-					) {
-						this.s.firstMealAt = this.s.now;
-						this.event(
-							"shared-meal",
-							`${r.person.name} shared the first meal in the reopened hall.`,
-							r.person.id,
-							"hall",
-							[
-								j.event,
-								...this.s.events
-									.filter((e) => e.kind === "hall-open")
-									.map((e) => e.id),
-							],
-						);
-					}
-				}
-
-				if (j.offer.action === "teach")
-					socialCompanions = boundary.filter(
-						(o) =>
-							o.job?.offer.action === "learn" &&
-							overlapMinutes(j, o, this.s.now) >= 15,
-					).length;
-				const status =
-					botched ||
-					(j.offer.action === "open-section" &&
-						!(assistance ? this.s.assistance?.opened : this.s.hallSafe)) ||
-					(evening.handled && !evening.delivered) ||
-					(cart.handled && !cart.delivered)
-						? ("failed" as const)
-						: ("completed" as const);
-				const actual = realizedOutcome(j.offer, {
-					socialCompanions,
-					attendedLesson,
-					material:
-						j.offer.action === "work"
-							? botched
-								? 0
-								: 2
-							: (j.offer.action === "eat" ||
-										j.offer.action === "gather" ||
-										j.offer.action === "attend-meal") &&
-									(!evening.handled || evening.delivered)
-								? -1
-								: 0,
-					status,
-				});
-				finish(r.person, {
-					affordanceId: j.offer.id,
-					action: j.offer.action,
-					status,
-					at: this.s.now,
-					needs: actual.needs,
-					material: actual.material,
-					summary: `${status === "failed" ? "Could not complete" : "Finished"} ${j.offer.label}`,
-				});
-
-				const eid = this.event(
-					status === "failed" ? "attempt-failed" : "completed",
-					botched
-						? `${jobLine(r.person.name, j.offer.label, true)} The work was done under protest and went wrong.`
-						: jobLine(r.person.name, j.offer.label, status === "failed"),
-					r.person.id,
-					p.id,
-					[j.event],
-				);
-				playerJobEnded(this.s, j.event, eid, status);
-				for (const other of boundary
-					.filter(
-						(o) =>
-							o.person.id !== r.person.id && presentAt(o, p.id, this.s.now),
-					)
-					.sort((a, b) =>
-						a.person.id < b.person.id ? -1 : a.person.id > b.person.id ? 1 : 0,
-					)
-					.slice(0, 12))
-					perceive(other.person, [
-						{
-							at: this.s.now,
-							channel: "saw",
-							kind: "neighbour-completed",
-							actorId: r.person.id,
-							placeId: p.id,
-							salience: 0.6,
-							summary: required(
-								this.s.events.find((e) => e.id === eid),
-								"Completion event missing",
-							).text,
-						},
-					]);
-				delete r.job;
-				r.idleSince = this.s.now;
-			}
-		}
+		playerRound(this);
 		for (const requester of this.s.people.filter(
-			(o) => o.question?.status === "waiting",
+			(person) => person.question?.status === "waiting",
 		)) {
 			const question = requester.question;
-			// An instructor's own note waits for an outside opinion and never lapses here.
 			if (!question || inspectionInstructor(requester)) continue;
 			if (this.s.now - question.at > 120) {
 				question.status = "missed";
@@ -727,294 +557,387 @@ export class Runtime implements TownRuntime {
 						`Read the hall noticeboard: ${question.note.text}`,
 					);
 		}
-		playerRound(this);
-		if (this.s.round % 16 === 0) {
-			const delivery = scheduledFoodDelivery(
-				this.s.seed,
-				this.s.round,
-				this.s.people.length,
-				placeOf(this.s, "market").stock,
-			);
-			placeOf(this.s, "market").stock += delivery;
-			this.s.produced += delivery;
-			this.event(
-				"delivery",
-				`${delivery} ${delivery === 1 ? "meal" : "meals"} arrived by ${this.s.bus ? "bus" : "handcart"}.`,
-				undefined,
-				"market",
-			);
+	}
+	prepareBoundary(): {
+		at: number;
+		done: boolean;
+		requests: DeepReadonly<HostRequest>[];
+	} {
+		if (this.s.pending.length) throw Error("Physical requests are unresolved");
+		if (this.recording) this.wireHistory.push({ op: "prepare" });
+		if (this.targetAt === null) {
+			this.complete = false;
+			this.targetAt = (480 + 15 * (this.s.round + 1)) * MINUTE;
+			this.s.round++;
 		}
-		for (const r of this.s.people.filter(
-			(r) => !r.job && r.person.body.alive,
-		)) {
-			perceive(r.person, [
-				{
-					at: this.s.now,
-					channel: "saw",
-					kind: "local-situation",
-					placeId: r.place,
-					salience: 0.35,
-					summary: `${r.person.name} is at ${placeName(this.s, r.place)}. ${r.place === "hall" ? `${this.s.hall} hall repairs are complete.` : r.place === "market" ? `${this.s.places.find((p) => p.id === "market")?.stock} meals are available.` : "Neighbours are going about their day."}`,
-				},
-			]);
-		}
-		this.s.pending = this.s.people
-			.filter(
-				(r) => r.person.body.alive && (!r.job || reviewDue(r, this.s.now)),
-			)
-			.map((r) => r.person.id)
-			.sort(
-				(a, b) =>
-					keyed(this.s.seed, this.s.round, `ready-priority:${a}`) -
-						keyed(this.s.seed, this.s.round, `ready-priority:${b}`) ||
-					a.localeCompare(b),
-			);
-		return [...this.s.pending];
-	}
-	affordances(id: string) {
-		const r = this.actor(id);
-		const offers =
-			r.job && this.s.pending.includes(id) && reviewDue(r, this.s.now)
-				? reviewOffers(this.s, r)
-				: buildOffers(this.s, id);
-		const readout = readPerson(r.person);
-		return offers.filter(
-			(offer) =>
-				vetoFor(r.person, offer, {
-					now: this.s.now,
-					affordances: offers,
-					...readout,
-				})?.kind !== "cannot",
-		);
-	}
-	getChoices(id: string) {
-		const list = this.affordances(id);
-		this.offers.set(id, list);
-		return list.map((a) => ({ id: a.id, label: a.label }));
-	}
-	getObservation(id: string) {
-		const r = this.actor(id);
-		const location =
-			r.job && r.job.arrive <= this.s.now
-				? (r.job.offer.placeId ?? r.place)
-				: r.place;
-		return JSON.stringify({
-			at: this.s.now,
-			name: r.person.name,
-			place: location,
-			activity: r.job?.offer.label ?? "Free",
-			weather: this.weather(),
-			...(location === "hall"
-				? { hallRepairs: this.s.hall, hallSafe: this.s.hallSafe }
-				: {}),
-			...(location === "market"
-				? { marketMeals: placeOf(this.s, "market").stock }
-				: {}),
-			nearby: this.s.people
-				.filter((o) => presentAt(o, location, this.s.now) && !o.job)
-				.map((o) => o.person.name)
-				.slice(0, 16),
-		});
-	}
-	choose(id: string, policy?: Policy) {
-		policy ??= this.actor(id).policy;
-		if (policy === "llm")
-			throw Error("LLM requires an external model decision");
-		const r = this.actor(id);
-		if (presentAt(r, "hall", this.s.now)) noticeLooseHall(this.s, r);
-		if (presentAt(r, "hall", this.s.now))
-			observeHallInspection(r.person, {
-				contextId: "hall-inspection",
-				sectionId: "hall-floor",
-				moisture: this.moisture(),
-				support: this.s.hall >= 12 ? "sound" : "loose",
-			});
-		observeAssistance(this.s, r);
-		const choices = this.affordances(id).map((offer) =>
-			socialPreview(this.s, id, offer),
-		);
-		if (!choices.length) throw Error("No legal choices");
-		this.offers.set(id, choices);
-		const held = heldSuggestion(this.s, id);
-		const hfRecord =
-			policy === "hf"
-				? decide(r.person, choices, {
-						scarcity: Math.max(0, 1 - r.wealth / 8),
-						suggestions: [
-							...this.instructorSuggestions(r),
-							...(held ? [held] : []),
-						],
-						// HF 2.8.0: a player's request that interrupts a running activity is weighed on its merits,
-						// without the activity's inertia bonus (promise inertia stays). Version 1 player saves keep
-						// the earlier decision exactly.
-						...(held && this.s.player?.version === 2
-							? { reconsider: true }
-							: {}),
-					})
-				: undefined;
-		if (policy === "hf" && !hfRecord?.chosenAffordanceId)
-			throw Error("HF could not choose a legal action");
-		let chosen = hfRecord?.chosenAffordanceId ?? "rest";
-		if (policy === "random")
-			chosen = required(
-				choices[
-					Math.floor(keyed(this.s.seed, this.s.round, id) * choices.length)
-				],
-				"Random choice outside legal offers",
-			).id;
-		if (policy === "table") {
-			const needs = readPerson(r.person).needs;
-			const urgent = ["drink", "eat"].find(
-				(action) =>
-					needs.some(
-						(n) =>
-							n.id === (action === "drink" ? "water" : "food") &&
-							n.urgency > 0.4,
-					) && choices.some((a) => a.id === action),
-			);
-			chosen =
-				urgent ??
-				(r.job && choices.some((a) => a.id === r.job?.offer.id)
-					? r.job.offer.id
-					: (choices.find(
-							(a) => a.id === (this.s.round % 4 === 0 ? "rest" : "grow"),
-						)?.id ??
-						required(choices[0], "Table policy has no legal default").id));
-		}
-		if (!choices.some((a) => a.id === chosen))
-			throw Error(`${policy} selected an unavailable action`);
-
-		const selectedOffer = required(
-			choices.find((a) => a.id === chosen),
-			"Chosen offer missing",
-		);
-		const reason = `${policy} comparison controller selected ${selectedOffer.label.toLowerCase()}.`;
-		const record: DecisionRecord = hfRecord ?? {
-			id: `${policy}-${id}-${this.s.round}`,
-			at: this.s.now,
-			chosenAffordanceId: chosen,
-			chosenAction: selectedOffer.action,
-			considered: [],
-			intention: reason,
-			narration: reason,
-		};
-		this.records.set(id, record);
-		r.record = record;
-		r.policy = policy;
-		r.decision = {
-			chosen,
-			decidedAt: this.s.now,
-			round: this.s.round,
-			label: choices.find((a) => a.id === chosen)?.label ?? chosen,
-			reason:
-				policy === "hf" ? record.narration : `${policy} comparison controller`,
-			options: record.considered.map((c) => ({
-				id: c.affordanceId,
-				label: c.label ?? c.action,
-				utility: c.utility,
-			})),
-			source: policy === "hf" ? HF_SOURCE : policy,
-			...(hfRecord
-				? {
-						offeredCount: choices.length,
-						recordedCount: hfRecord.considered.length,
-					}
-				: {}),
-		};
-		playerDecided(this, r, hfRecord, choices);
-		return chosen;
-	}
-	acceptExternalChoice(
-		id: string,
-		actionId: string,
-		reason: string,
-		source: string,
-	) {
-		if (!this.s.pending.includes(id)) throw Error("Actor is not ready");
-		const r = this.actor(id);
-		const offer = this.affordances(id).find((a) => a.id === actionId);
-		if (
-			!offer ||
-			typeof reason !== "string" ||
-			!reason.trim() ||
-			reason.length > 2000 ||
-			typeof source !== "string" ||
-			!source.trim() ||
-			source.length > 200
-		)
-			throw Error("Invalid external choice");
-		const record: DecisionRecord = {
-			id: `external-${id}-${this.s.round}`,
-			at: this.s.now,
-			chosenAffordanceId: offer.id,
-			chosenAction: offer.action,
-			considered: [],
-			intention: reason,
-			narration: reason,
-		};
-		r.record = record;
-		r.policy = "llm";
-		r.decision = {
-			chosen: offer.id,
-			decidedAt: this.s.now,
-			round: this.s.round,
-			label: offer.label,
-			reason,
-			options: [],
-			source: `LLM policy with HF person state: ${source}`,
-		};
-	}
-	apply(id: string, actionId: string) {
-		if (!this.s.pending.includes(id)) throw Error("Actor is not ready");
-		const r = this.actor(id);
-		const feasible = this.affordances(id).find((a) => a.id === actionId);
-		if (!feasible) throw Error("Action is not currently legal");
-		if (r.job) {
-			if (r.job.offer.id === actionId) {
-				if (r.record?.chosenAffordanceId !== actionId)
-					r.decision = {
-						chosen: actionId,
-						label: r.job.offer.label,
-						reason: "Host continued the current physical activity.",
-						options: [],
-						source: "Host control",
-						decidedAt: this.s.now,
-						round: this.s.round,
-					};
-				reviewed(r.person);
-				playerApplied(this.s, r, true);
-				delete r.record;
-				this.s.pending = this.s.pending.filter((actor) => actor !== id);
-				return;
-			}
-			this.interruptJob(id, "changed plan at an HF review");
-		}
-		const offer = feasible;
-		const proposed = r.record ?? this.records.get(id);
-		const selected: DecisionRecord =
-			proposed?.chosenAffordanceId === offer.id
-				? proposed
-				: {
-						id: `host-${id}-${this.s.round}`,
-						at: this.s.now,
-						chosenAffordanceId: offer.id,
-						chosenAction: offer.action,
-						considered: [],
-						intention: "Host selected a legal action.",
-						narration: "Host selected a legal action.",
-					};
-		if (selected !== proposed)
-			r.decision = {
-				chosen: offer.id,
-				label: offer.label,
-				reason: selected.narration,
-				options: [],
-				source: "Host control",
-				decidedAt: this.s.now,
-				round: this.s.round,
+		const target = this.targetAt;
+		let result: DeepReadonly<StepResult>;
+		if (this.resolutions.length) {
+			result = this.s.owner.advance(this.s.owner.at, this.resolutions);
+			this.resolutions = [];
+		} else if (this.s.owner.pending.length) {
+			this.boundaryRequests = [...this.s.owner.pending];
+			if (!this.witnesses.length) this.captureWitnesses();
+			this.s.pending = this.boundaryRequests.map((request) => request.id);
+			return {
+				at: this.s.owner.at,
+				done: false,
+				requests: this.boundaryRequests,
 			};
-		if (!begin(r.person, offer, selected))
-			throw Error("The person cannot begin this action");
+		} else {
+			this.reconcileHost();
+			if (this.worldDirty) {
+				const expectedRevision = this.s.owner.revision;
+				this.s.owner.enqueue("world.changed", {
+					expectedRevision,
+					revision: expectedRevision + 1,
+					put: [],
+					remove: [],
+					hostState: {
+						schema: SCHEMA,
+						at: nativeMilliseconds(this.s.now),
+						physicalHash: canonicalHash(this.physicalState()),
+					},
+				});
+				this.worldDirty = false;
+			}
+			for (const r of this.s.people) {
+				if (!r.owner.actor(r.id).body.alive) continue;
+				if (presentAt(r, "hall", this.s.now)) {
+					noticeLooseHall(this.s, r);
+					observeHallInspection(r, {
+						contextId: "hall-inspection",
+						sectionId: "hall-floor",
+						moisture: this.moisture(),
+						support: this.s.hall >= 12 ? "sound" : "loose",
+					});
+				}
+				observeAssistance(this.s, r);
+				const offers = r.job
+					? reviewOffers(this.s, r)
+					: buildOffers(this.s, r.id);
+				if (!offers.length) continue;
+				for (const suggestion of this.instructorSuggestions(r)) {
+					const adviceId = `inspection-request:${suggestion.voiceId}:${r.id}:${suggestion.since}`;
+					if (
+						!r.owner
+							.actor(r.id)
+							.will.advice.some((advice) => advice.adviceId === adviceId)
+					)
+						this.s.owner.enqueue("suggestion.received", {
+							person: r.id,
+							received: {
+								kind: "ordinary",
+								suggestion: {
+									...suggestion,
+									adviceId,
+									since: nativeMilliseconds(suggestion.since ?? this.s.now),
+								},
+							},
+						});
+				}
+				const inputs = this.s.owner.offerInputs(r.id, offers);
+				for (const input of inputs) this.s.owner.queue(input);
+				const book = inputs[0];
+				if (!r.job && book?.kind === "offers.received")
+					this.s.owner.enqueue("decision.requested", {
+						person: r.id,
+						reason: "ordinary town opportunities",
+						treatment: "ordinary",
+						offerRevision: book.payload.revision,
+					});
+			}
+			result = this.s.owner.advance(target);
+		}
+		this.acceptStep(result);
+		if (result.reachedUntil && result.at === target && !this.s.pending.length) {
+			if (loosenHall(this.s))
+				this.event(
+					"hall-loosened",
+					"A repaired section of the hall came loose as the wet timber moved.",
+					undefined,
+					"hall",
+				);
+			if (this.s.round % 16 === 0) {
+				const delivery = scheduledFoodDelivery(
+					this.s.seed,
+					this.s.round,
+					this.s.people.length,
+					placeOf(this.s, "market").stock,
+				);
+				placeOf(this.s, "market").stock += delivery;
+				this.s.produced += delivery;
+				this.event(
+					"delivery",
+					`${delivery} meals arrived by ${this.s.bus ? "bus" : "handcart"}.`,
+					undefined,
+					"market",
+				);
+			}
+			this.targetAt = null;
+			this.complete = true;
+		}
+		return {
+			at: result.at,
+			done: this.complete,
+			requests: this.boundaryRequests,
+		};
+	}
+	private acceptStep(result: DeepReadonly<StepResult>): void {
+		// A lifecycle event can occur before the requested time without needing a
+		// physical action reply. Release the host job at its actual public event time.
+		for (const event of [...result.events].sort(
+			(a, b) =>
+				a.at - b.at ||
+				(a.data.kind === "lifecycle" ? -1 : 0) -
+					(b.data.kind === "lifecycle" ? -1 : 0),
+		)) {
+			const dead =
+				event.data.kind === "lifecycle" && event.data.receipt.type === "death"
+					? event.data.receipt.person.id
+					: event.data.kind === "body-change" &&
+							event.data.change.kind === "died"
+						? event.person
+						: undefined;
+			if (dead) this.recordDeath(this.actor(dead), event.at, event.id);
+		}
+		this.clock(result.at);
+		this.projectedRevision = this.s.owner.revision;
+		for (const event of result.events)
+			if (event.person && event.data.kind === "decision") {
+				const r = this.actor(event.person);
+				const record = {
+					...event.data.decision,
+					narration: event.narration.map((line) => line.text).join(" "),
+				};
+				r.record = record;
+				r.decision = {
+					chosen: record.chosenAffordanceId ?? "",
+					decidedAt: event.at / MINUTE,
+					round: this.s.round,
+					label:
+						this.s.owner
+							.offers(r.id)
+							.find((offer) => offer.id === record.chosenAffordanceId)?.label ??
+						"No activity chosen",
+					reason: record.narration,
+					options: record.considered.map((option) => ({
+						id: option.affordanceId,
+						label: option.label ?? option.action,
+						utility: option.utility,
+					})),
+					source: HF_SOURCE,
+					offeredCount: this.s.owner.offers(r.id).length,
+					recordedCount: record.considered.length,
+				};
+				playerDecided(
+					this,
+					r,
+					record,
+					this.s.owner.offers(r.id).map(physicalOffer),
+				);
+			}
+		this.reconcileHost();
+		this.boundaryRequests =
+			result.boundary.type === "world-required"
+				? [...result.boundary.requests]
+				: [];
+		this.s.pending = this.boundaryRequests.map((request) => request.id);
+		if (this.boundaryRequests.length) this.captureWitnesses();
+		else this.witnesses = [];
+	}
+	private settleImmediateBoundary(): void {
+		if (this.s.owner.last) this.acceptStep(this.s.owner.last);
+		for (let budget = 0; budget < 10000; budget++) {
+			if (this.s.owner.pending.length) {
+				this.boundaryRequests = [...this.s.owner.pending];
+				this.s.pending = this.boundaryRequests.map((request) => request.id);
+				for (const request of this.boundaryRequests)
+					this.apply(request.id, this.choose(request.id));
+			}
+			if (!this.resolutions.length) return;
+			const result = this.s.owner.advance(this.s.owner.at, this.resolutions);
+			this.resolutions = [];
+			this.acceptStep(result);
+		}
+		throw Error("Immediate speech boundary exceeded its native request budget");
+	}
+	private completeConversation(person: string): void {
+		let until = this.s.owner.at + MINUTE;
+		for (let budget = 0; budget < 10000; budget++) {
+			if (this.s.owner.pending.length) {
+				this.boundaryRequests = [...this.s.owner.pending];
+				this.s.pending = this.boundaryRequests.map((request) => request.id);
+				for (const request of this.boundaryRequests)
+					this.apply(request.id, this.choose(request.id));
+			}
+			const result = this.resolutions.length
+				? this.s.owner.advance(this.s.owner.at, this.resolutions)
+				: this.s.owner.advance(until);
+			this.resolutions = [];
+			this.acceptStep(result);
+			// Interruption may admit the chosen one-minute activity at a later exact
+			// boundary. Finish at its public end, rather than re-requesting an earlier time.
+			const actor = this.actor(person);
+			const activity = actor.owner.actor(person).activity;
+			if (activity && actor.privateConversation?.offerId === activity.offer.id)
+				until = Math.max(until, activity.endsAt);
+			if (
+				result.at === until &&
+				!this.s.owner.pending.length &&
+				!this.actor(person).privateConversation
+			)
+				return;
+		}
+		throw Error("Conversation exceeded the bounded native request budget");
+	}
+	roundComplete() {
+		return (
+			this.complete &&
+			this.s.pending.length === 0 &&
+			this.resolutions.length === 0
+		);
+	}
+	getChoices(requestId: string) {
+		const request = this.boundaryRequests.find((item) => item.id === requestId);
+		if (!request) throw Error("Unknown physical request");
+		if (request.kind === "communication")
+			return [
+				{ id: "deliver", label: "Deliver the actual emitted communication" },
+			];
+		if (request.stage !== "start")
+			return [
+				{
+					id: request.offerId,
+					label: this.actor(request.person).job?.offer.label ?? request.offerId,
+				},
+			];
+		return this.s.owner
+			.offers(request.person)
+			.map((offer) => ({ id: offer.id, label: offer.label }));
+	}
+	choose(requestId: string) {
+		const request = this.boundaryRequests.find((item) => item.id === requestId);
+		if (!request) throw Error("Unknown physical request");
+		return request.kind === "action" ? request.offerId : "deliver";
+	}
+	apply(requestId: string, actionId: string): void {
+		if (!this.s.pending.includes(requestId))
+			throw Error("Request is not pending");
+		const request = this.boundaryRequests.find((item) => item.id === requestId);
+		if (!request) throw Error("Missing native request");
+		if (this.recording)
+			this.wireHistory.push({ op: "apply", requestId, actionId });
+		if (request.kind === "communication") {
+			if (actionId !== "deliver")
+				throw Error("Unknown communication disposition");
+			const speaker = this.actor(request.speaker);
+			const received = request.recipients
+				.filter((id) => presentAt(this.actor(id), speaker.place, this.s.now))
+				.map((id) => ({
+					recipient: id,
+					evidenceId: `communication:${request.id}:${id}`,
+					attention: 1,
+					itemIds: request.items.map((item) => item.id),
+				}));
+			this.resolutions.push(
+				this.nativeInput(
+					"communication.resolved",
+					{
+						requestId: request.id,
+						requestHash: request.requestHash,
+						worldRevision: this.projectedRevision,
+						speaker: request.speaker,
+						emittedItemIds: request.items.map((item) => item.id),
+						received,
+					},
+					request.boundaryAt,
+				),
+			);
+		} else {
+			if (actionId !== request.offerId)
+				throw Error("Action differs from native selected offer");
+			const r = this.actor(request.person);
+			let disposition: ActionResolution["disposition"];
+			let outcome: ObservedOutcome | undefined;
+			if (request.stage === "start") {
+				const native = this.s.owner
+					.offers(r.id)
+					.find((offer) => offer.id === request.offerId);
+				if (!native) throw Error("Native selected an unregistered offer");
+				const offer = physicalOffer(native);
+				const feasible = this.affordances(r.id).some(
+					(candidate) => candidate.id === offer.id,
+				);
+				if (r.job || !feasible) {
+					disposition = "rejected";
+				} else {
+					this.startPhysical(r, offer, request);
+					disposition = "accepted";
+				}
+			} else if (request.stage === "interrupt") {
+				const job = r.job;
+				if (!job || job.activityId !== request.activityId)
+					throw Error("Interrupted job identity differs");
+				this.interruptJob(r.id, "changed plan at an HF boundary");
+				disposition = "interrupted";
+				outcome = {
+					activityId: request.activityId,
+					offerId: job.offer.id,
+					actionId: job.offer.action,
+					start: job.startedAt,
+					end: request.boundaryAt,
+					status: "interrupted",
+					evidenceId: `interrupted:${request.id}`,
+					actual: { exposures: [], observedProgress: [], material: 0 },
+					fulfills: [],
+					advances: [],
+				};
+			} else {
+				if (r.job?.activityId !== request.activityId)
+					throw Error("Finished job identity differs");
+				outcome = this.finishPhysical(r, request);
+				disposition = outcome.status === "failed" ? "failed" : "completed";
+			}
+			const revision = this.projectedRevision;
+			this.resolutions.push(
+				this.nativeInput(
+					"action.resolved",
+					{
+						requestId: request.id,
+						requestHash: request.requestHash,
+						person: r.id,
+						activityId: request.activityId,
+						stage: request.stage,
+						worldRevision: revision,
+						disposition,
+						observations: [],
+						...(outcome ? { outcome } : {}),
+						...(disposition === "rejected"
+							? {}
+							: { worldChange: this.worldChange() }),
+					},
+					request.boundaryAt,
+				),
+			);
+		}
+		this.s.pending = this.s.pending.filter((id) => id !== requestId);
+	}
+
+	startPhysical(
+		r: Resident,
+		offer: Affordance,
+		request: DeepReadonly<ActionRequest>,
+	): void {
+		const id = r.id;
+		const selected =
+			r.owner
+				.actor(id)
+				.trace.find(
+					(record) => record.id === r.owner.actor(id).activity?.decisionId,
+				) ?? r.owner.actor(id).trace.at(-1);
+		if (!selected || selected.chosenAffordanceId !== offer.id)
+			throw Error("No matching actual Run decision for this action");
 		const p = placeOf(this.s, offer.placeId);
 		const food = ["eat", "gather", "attend-meal"].includes(offer.action)
 			? 1
@@ -1042,13 +965,16 @@ export class Runtime implements TownRuntime {
 		delete r.record;
 		const travel = offer.duration - workMinutesFor(offer);
 		r.job = {
+			personId: r.id,
+			activityId: request.activityId,
+			startedAt: request.boundaryAt,
 			offer,
-			end: this.s.now + offer.duration,
-			arrive: this.s.now + travel,
+			end: (request.boundaryAt + nativeMilliseconds(offer.duration)) / MINUTE,
+			arrive: (request.boundaryAt + nativeMilliseconds(travel)) / MINUTE,
 			from: r.place,
 			event: this.event(
 				"started",
-				`${r.person.name} started to ${actionWords(offer.label)}.`,
+				`${r.name} started to ${actionWords(offer.label)}.`,
 				id,
 				p.id,
 			),
@@ -1071,8 +997,412 @@ export class Runtime implements TownRuntime {
 		playerApplied(this.s, r, false);
 		if (offer.action === "ask-inspector" && offer.targetId !== "hall-annex")
 			this.postQuestion(id, r.job.event);
-		this.s.pending = this.s.pending.filter((a) => a !== id);
 	}
+
+	finishPhysical(
+		r: Resident,
+		request: DeepReadonly<ActionRequest>,
+		boundary: readonly PhysicalWitness[] = this.witnesses.map((person) => ({
+			...person,
+			owner: this.s.owner,
+		})),
+	): ObservedOutcome {
+		if (!r.job) throw Error("Missing physical job at finish");
+		const j = r.job,
+			p = placeOf(this.s, j.offer.placeId);
+		// Before finish(): HF still holds the protested activity.
+		const botched = botchedUnderProtest(this.s, r, j);
+		let attendedLesson = false;
+		let socialCompanions = 0;
+		let inspectionEvent: number | undefined;
+		if (usesActivitySlot(j.offer)) p.reserved--;
+		r.place = p.id;
+		const classOrganiser =
+			j.offer.action === "attend-class"
+				? eveningFor(this.s, j.offer)?.organiserId
+				: undefined;
+		const evening = finishEvening(this, r);
+		const cart = finishHandcart(this, r, boundary);
+		const assistance = finishAssistance(this, r);
+		this.s.tools += j.tools;
+		if (j.food) {
+			if (evening.handled && !evening.delivered) {
+				placeOf(this.s, "market").stock += j.food;
+				r.wealth += j.food;
+			} else this.s.consumed += j.food;
+		}
+		if (evening.delivered && j.offer.action === "attend-class") {
+			// A lesson passes on only what its organiser actually retains.
+			const organiser = classOrganiser
+				? this.s.people.find((o) => o.id === classOrganiser)
+				: undefined;
+			if (
+				organiser &&
+				retainsInspectionMethod(organiser.owner.actor(organiser.id))
+			)
+				teachHallInspection(r, organiser.id, `evening-lesson-${j.event}`);
+			attendedLesson = true;
+		}
+		if (evening.handled) socialCompanions = evening.companions.length;
+		if (cart.handled) socialCompanions = cart.companions.length;
+		if (j.offer.action === "grow" && !botched) {
+			placeOf(this.s, "market").stock += 3;
+			this.s.produced += 3;
+		}
+		if (j.offer.action === "supply" && !botched) {
+			const m = placeOf(this.s, "market");
+			const supplied = 5 + cartSupplyBonus(this.s, r.id, "supply");
+			m.stock += supplied;
+			this.s.produced += supplied;
+		}
+		if (botched) {
+			// A botched job does nothing to the world.
+		} else if (j.offer.action === "repair" && !repairHolds(this.s, j.event))
+			this.event(
+				"repair-slipped",
+				`${r.name}’s repair on the damp timber did not hold.`,
+				r.id,
+				"hall",
+				[j.event],
+			);
+		else if (j.offer.action === "repair") {
+			this.s.hall += 1;
+			settleHallGoals(this.s);
+			if (this.s.hall === 12)
+				this.event(
+					"hall-repaired",
+					"All twelve repairs are complete. Someone still needs to inspect the timber before the hall can reopen.",
+					r.id,
+					"hall",
+					[j.event],
+				);
+		}
+
+		if (j.offer.action === "open-section" && !assistance) {
+			const safe = this.moisture() === "dry" && this.s.hall >= 12;
+			this.s.hallSafe = safe;
+			inspectionEvent = this.event(
+				safe ? "hall-open" : "inspection-failed",
+				safe
+					? `${r.name} found dry timber with sound supports and opened the hall.`
+					: `${r.name} found ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports. The hall stayed closed.`,
+				r.id,
+				"hall",
+				[j.event],
+			);
+		}
+		if (j.offer.action === "keep-closed" && !assistance) {
+			this.s.hallSafe = false;
+			inspectionEvent = this.event(
+				"hall-closed",
+				`${r.name} kept the hall closed after seeing ${this.moisture()} timber and ${this.s.hall >= 12 ? "sound" : "loose"} supports.`,
+				r.id,
+				"hall",
+				[j.event],
+			);
+		}
+		if (j.offer.action === "answer-inspection") {
+			const learner = this.s.people.find((o) => o.id === j.offer.targetId);
+			if (
+				learner?.question?.status === "waiting" &&
+				presentAt(learner, "hall", this.s.now) &&
+				overlapMinutes(
+					j,
+					required(
+						boundary.find((o) => o.id === learner.id),
+						"Learner boundary missing",
+					),
+					this.s.now,
+				) >= 15 &&
+				presentAt(r, "hall", this.s.now) &&
+				receivedRequest(r, learner)
+			) {
+				socialCompanions = 1;
+				const questionId = learner.question.event;
+				teachHallInspection(learner, r.id, `hall-explanation-${j.event}`);
+				const lessonId = this.event(
+					"hall-explanation",
+					`${r.name} showed ${learner.name} how dry, sound timber differs from wet timber, and when another opinion is needed.`,
+					r.id,
+					"hall",
+					[questionId, j.event],
+				);
+				const lesson = required(
+					this.s.events.find((e) => e.id === lessonId),
+					"Explanation event missing",
+				);
+				lesson.targetId = learner.id;
+				receiveEvent(
+					learner,
+					lesson,
+					"social",
+					`${r.name} explained the timber check to me beside the hall.`,
+				);
+				learner.question = {
+					...learner.question,
+					status: "answered",
+					answeredBy: r.id,
+					lessonEvent: lessonId,
+				};
+			} else
+				this.event(
+					"missed-encounter",
+					`${r.name} went to explain the timber check, but the explanation did not reach the person who asked.`,
+					r.id,
+					"hall",
+					[j.event],
+				);
+		}
+		if (
+			(j.offer.action === "open-section" || j.offer.action === "keep-closed") &&
+			inspectionEvent !== undefined
+		) {
+			const event = required(
+				this.s.events.find((e) => e.id === inspectionEvent),
+				"Inspection event missing",
+			);
+			const record = r.owner
+				.actor(r.id)
+				.trace.find((t) => t.id === r.owner.actor(r.id).activity?.decisionId);
+			const source = r.decision?.source ?? "Host control";
+			const methodTerms = isHfSource(source)
+				? (record?.considered
+						.find((c) => c.affordanceId === j.offer.id)
+						?.terms.filter((t) => t.source.startsWith("method:"))
+						.map((t) => ({ source: t.source, value: t.value })) ?? [])
+				: [];
+			r.inspection = {
+				key: inspectionKey(this.s),
+				action: j.offer.action,
+				at: this.s.now,
+				event: structuredClone(event),
+				observations: j.inspectionCues ?? {
+					moisture: this.moisture(),
+					support: this.s.hall >= 12 ? "sound" : "loose",
+				},
+				result: event.text,
+				source,
+				methodTerms,
+			};
+		}
+
+		if (j.offer.action === "learn") {
+			// The practical class is held by whoever is actually teaching at school.
+			const teacher = boundary.find(
+				(o) =>
+					o.id !== r.id &&
+					o.job?.offer.action === "teach" &&
+					overlapMinutes(j, o, this.s.now) >= 15,
+			);
+			if (teacher?.job) {
+				attendedLesson = true;
+				socialCompanions = 1;
+			}
+			// The class passes on only what its teacher actually retains.
+			if (
+				teacher?.job &&
+				retainsInspectionMethod(teacher.owner.actor(teacher.id))
+			) {
+				teachHallInspection(r, teacher.id, `lesson-${j.event}`);
+				const eid = this.event(
+					"lesson",
+					`${r.name} watched ${teacher.name} explain when flood-soaked timber is safe.`,
+					r.id,
+					"school",
+					[j.event, teacher.job.event],
+				);
+				const lesson = required(
+					this.s.events.find((e) => e.id === eid),
+					"Lesson event missing",
+				);
+				receiveEvent(
+					r,
+					{ ...lesson, actorId: teacher.id, targetId: r.id },
+					"heard",
+					`${teacher.name} explained timber inspection during the practical class.`,
+				);
+			}
+		}
+		if (j.offer.action === "work") {
+			// A botched shift is still a shift served, but it earns nothing.
+			if (!botched) r.wealth += 2;
+			const work = required(r.paidWork, "Missing paid shift ledger");
+			work.minutes += 60;
+			work.totalMinutes += 60;
+		}
+		if (j.offer.action === "talk" || j.offer.action === "gather") {
+			const companions = boundary.filter(
+				(o) =>
+					o.id !== r.id &&
+					o.job &&
+					(o.job.offer.action === "talk" || o.job.offer.action === "gather") &&
+					overlapMinutes(j, o, this.s.now) >= 15,
+			);
+
+			socialCompanions = j.socialContacts?.length ?? 0;
+			// Preview company never enters the physical activity. HF finish must not count it again.
+			// HF4 alongside/participants are expectations; physical companions enter only actual evidence.
+			if (
+				j.offer.action === "gather" &&
+				this.s.firstMealAt === null &&
+				companions.some((o) => o.job?.offer.action === "gather")
+			) {
+				this.s.firstMealAt = this.s.now;
+				this.event(
+					"shared-meal",
+					`${r.name} shared the first meal in the reopened hall.`,
+					r.id,
+					"hall",
+					[
+						j.event,
+						...this.s.events
+							.filter((e) => e.kind === "hall-open")
+							.map((e) => e.id),
+					],
+				);
+			}
+		}
+
+		if (j.offer.action === "teach")
+			socialCompanions = boundary.filter(
+				(o) =>
+					o.job?.offer.action === "learn" &&
+					overlapMinutes(j, o, this.s.now) >= 15,
+			).length;
+		const status =
+			botched ||
+			(j.offer.action === "open-section" &&
+				!(assistance ? this.s.assistance?.opened : this.s.hallSafe)) ||
+			(evening.handled && !evening.delivered) ||
+			(cart.handled && !cart.delivered && !cart.pending)
+				? ("failed" as const)
+				: ("completed" as const);
+		const actual = realizedOutcome(j.offer, {
+			socialCompanions,
+			attendedLesson,
+			material:
+				j.offer.action === "work"
+					? botched
+						? 0
+						: 2
+					: (j.offer.action === "eat" ||
+								j.offer.action === "gather" ||
+								j.offer.action === "attend-meal") &&
+							(!evening.handled || evening.delivered)
+						? -1
+						: 0,
+			status,
+		});
+		const psychological = Object.fromEntries(
+			Object.entries(actual.needs).filter(
+				([key]) => !["food", "water", "sleep", "rest", "relief"].includes(key),
+			),
+		);
+		const outcome: ObservedOutcome = {
+			activityId: request.activityId,
+			offerId: j.offer.id,
+			actionId: j.offer.action,
+			...(j.offer.targetId ? { target: j.offer.targetId } : {}),
+			start: j.startedAt,
+			end: request.boundaryAt,
+			status,
+			evidenceId: `physical:${request.id}`,
+			actual: {
+				exposures: [],
+				observedProgress: [],
+				psychological,
+				material: actual.material,
+				...(status === "completed"
+					? {
+							consumed: {
+								...(actual.needs.food === undefined
+									? {}
+									: { food: actual.needs.food }),
+								...(actual.needs.water === undefined
+									? {}
+									: { water: actual.needs.water }),
+							},
+						}
+					: {}),
+			},
+			fulfills: status === "completed" ? (j.offer.fulfills ?? []) : [],
+			advances: status === "completed" ? (j.offer.advances ?? []) : [],
+		};
+
+		const eid = this.event(
+			status === "failed" ? "attempt-failed" : "completed",
+			botched
+				? `${jobLine(r.name, j.offer.label, true)} The work was done under protest and went wrong.`
+				: jobLine(r.name, j.offer.label, status === "failed"),
+			r.id,
+			p.id,
+			[j.event],
+		);
+		playerJobEnded(this.s, j.event, eid, status);
+		if (status === "completed")
+			finishPrivateConversation(this, r, j.offer.id, eid);
+		for (const other of boundary
+			.filter((o) => o.id !== r.id && presentAt(o, p.id, this.s.now))
+			.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+			.slice(0, 12))
+			observeFacts(other.owner, other.id, [
+				{
+					at: this.s.now,
+					channel: "saw",
+					kind: "neighbour-completed",
+					actorId: r.id,
+					placeId: p.id,
+					salience: 0.6,
+					summary: required(
+						this.s.events.find((e) => e.id === eid),
+						"Completion event missing",
+					).text,
+				},
+			]);
+		delete r.job;
+		r.idleSince = this.s.now;
+		return outcome;
+	}
+
+	affordances(id: string): Affordance[] {
+		const r = this.actor(id);
+		return r.job
+			? reviewOffers(this.s, r)
+			: r.privateConversation
+				? privateConversationOffers(r, this.s.now)
+				: buildOffers(this.s, id);
+	}
+
+	getObservation(id: string) {
+		const r = this.actor(id);
+		const location =
+			r.job && r.job.arrive <= this.s.now
+				? (r.job.offer.placeId ?? r.place)
+				: r.place;
+		return JSON.stringify({
+			at: this.s.now,
+			name: r.name,
+			place: location,
+			activity: r.job?.offer.label ?? "Free",
+			weather: this.weather(),
+			...(location === "hall"
+				? { hallRepairs: this.s.hall, hallSafe: this.s.hallSafe }
+				: {}),
+			...(location === "market"
+				? { marketMeals: placeOf(this.s, "market").stock }
+				: {}),
+			nearby: this.s.people
+				.filter((o) => presentAt(o, location, this.s.now) && !o.job)
+				.map((o) => o.name)
+				.slice(0, 16),
+		});
+	}
+	acceptExternalChoice(): never {
+		throw Error(
+			"Historical model/table policies cannot control a current HF4 Run",
+		);
+	}
+
 	/** The hall timber's moisture cue: damp-based with timber physics, else today's weather (timber.ts). */
 	moisture() {
 		return timberMoisture(this.s, this.weather());
@@ -1083,6 +1413,15 @@ export class Runtime implements TownRuntime {
 			: "Clear";
 	}
 	intervene(input: Intervention) {
+		this.recording = false;
+		try {
+			this.applyIntervention(input);
+			this.wireHistory.push({ op: "intervene", input: structuredClone(input) });
+		} finally {
+			this.recording = true;
+		}
+	}
+	private applyIntervention(input: Intervention) {
 		if (
 			input.kind === "player-move" ||
 			input.kind === "player-speak" ||
@@ -1092,6 +1431,10 @@ export class Runtime implements TownRuntime {
 		) {
 			if (this.s.pending.length) throw Error("Round has unresolved actors");
 			playerIntervene(this, input, (r) => this.instructorSuggestions(r));
+			if (input.kind === "player-speak" || input.kind === "player-private")
+				this.settleImmediateBoundary();
+			if (input.kind === "player-private" && input.actorId)
+				this.completeConversation(input.actorId);
 			return;
 		}
 		if (input.kind === "propose-bench-window") {
@@ -1145,40 +1488,49 @@ export class Runtime implements TownRuntime {
 			for (const r of this.s.people) {
 				// This spoken bulletin is delivered to waking listeners; HF owns attention.
 				if (!awakeHallNewsListener(r)) continue;
-				const attended = perceive(r.person, [
-					{
-						at: this.s.now,
+				r.owner.observe(
+					r.id,
+					minutePercept(`town:${event.id}:${r.id}`, this.s.now, {
 						channel: "told",
 						kind: "hall-news",
-						salience: 0.8,
 						actorId: "town-bulletin",
-						advice: [{ action: "repair", strength: 0.7 }],
-						summary: "Neighbours are repairing the flood-damaged hall.",
+						targetId: r.id,
+						salience: 0.8,
+						advice: [
+							{
+								adviceId: `hall-news:${event.id}:${r.id}`,
+								action: "repair",
+								strength: 0.7,
+							},
+						],
 						claims: [{ prop: "hall-needs-help", value: true, confidence: 0.9 }],
-					},
-				]);
-				if (attended.length && !r.received?.some((e) => e.id === eventId))
-					r.received = [
-						...(r.received ?? []),
-						{ ...event, targetId: r.person.id },
-					].slice(-12);
+						summary: event.text,
+					}),
+				);
 			}
 		}
 	}
-	step() {
-		if (this.s.people.some((r) => r.person.body.alive && r.policy === "llm"))
-			throw Error(
-				"LLM people require an external controller; the town has not advanced.",
-			);
-		for (const id of this.prepareRound()) {
-			const chosen = this.choose(id, this.actor(id).policy);
-			this.apply(id, chosen);
+	step(): void {
+		for (let boundary = 0; boundary < 10000; boundary++) {
+			const next = this.prepareBoundary();
+			for (const request of next.requests)
+				this.apply(request.id, this.choose(request.id));
+			if (this.roundComplete()) return;
 		}
+		throw Error("Town round exceeded the bounded physical request budget");
 	}
+
 	inspect(id: string) {
 		const r = this.actor(id);
 		return {
-			person: snapshot(r.person),
+			person: r.owner.inspect(r.id, [
+				"summary",
+				"body",
+				"needs",
+				"agenda",
+				"methods",
+				"events",
+			]),
 			job: r.job,
 			observation: JSON.parse(this.getObservation(id)),
 			controller: r.policy,
@@ -1193,9 +1545,55 @@ export class Runtime implements TownRuntime {
 		if (this.s.pending.length) throw Error("Round has unresolved actors");
 		return predictAnswers(this.s, id, (r) => this.instructorSuggestions(r));
 	}
-	export() {
-		return structuredClone(this.s);
+	export(): NativeTownArchive {
+		return structuredClone({
+			format: "neighbours-native",
+			schema: SCHEMA,
+			hf: HF_VERSION,
+			physical: this.physicalState(),
+			owner: this.s.owner.export(),
+			boundary: {
+				targetAt: this.targetAt,
+				resolutions: this.resolutions,
+				projectedRevision: this.projectedRevision,
+				requests: this.boundaryRequests,
+				complete: this.complete,
+				worldDirty: this.worldDirty,
+				witnesses: this.witnesses,
+			},
+			inputs: structuredClone(this.wireHistory),
+		});
 	}
+	/** SCOPE: local files only. Native/device/recording exports retain their complete format. */
+	exportJournal(): JournalTownArchive {
+		return structuredClone({
+			format: "neighbours-journal",
+			schema: SCHEMA,
+			hf: HF_VERSION,
+			physical: this.physicalState(),
+			owner: this.s.owner.exportJournal(),
+			boundary: {
+				targetAt: this.targetAt,
+				resolutions: this.resolutions,
+				projectedRevision: this.projectedRevision,
+				requests: this.boundaryRequests,
+				complete: this.complete,
+				worldDirty: this.worldDirty,
+				witnesses: this.witnesses,
+			},
+			inputs: structuredClone(this.wireHistory),
+		});
+	}
+	private needs(id: string): Record<string, number> {
+		const person = this.s.owner.inspect(id, ["needs"]).people[0];
+		if (person?.kind !== "host") throw Error("Missing needs reading");
+		const part = person.parts.find((item) => item.select === "needs");
+		if (part?.select !== "needs") throw Error("Missing needs reading");
+		return Object.fromEntries(
+			part.value.map((need) => [need.id, need.urgency]),
+		);
+	}
+
 	view(): TownView {
 		return {
 			schema: SCHEMA,
@@ -1203,8 +1601,8 @@ export class Runtime implements TownRuntime {
 			now: this.s.now,
 			day: Math.floor(this.s.now / 1440) + 1,
 			people: this.s.people.map((r) => ({
-				id: r.person.id,
-				name: r.person.name,
+				id: r.id,
+				name: r.name,
 				known: r.known,
 				role: r.role,
 				description: r.description,
@@ -1226,33 +1624,29 @@ export class Runtime implements TownRuntime {
 							},
 						}
 					: {}),
-				lifeState: !r.person.body.alive
+				lifeState: !r.owner.actor(r.id).body.alive
 					? "dead"
-					: r.person.body.downed
+					: r.owner.actor(r.id).body.downed
 						? "downed"
-						: inBreak(r.person)
+						: r.owner.actor(r.id).affect.crisis.active
 							? "break"
-							: r.person.body.asleep
+							: r.owner.actor(r.id).body.asleep
 								? "asleep"
 								: "awake",
 				lifeEvent: r.lifeEvent,
-				activity: !r.person.body.alive
+				activity: !r.owner.actor(r.id).body.alive
 					? "Dead"
 					: r.job
 						? r.job.offer.label
 						: "Free to choose",
 				until: r.job?.end ?? this.s.now,
-				needs: Object.fromEntries(
-					readPerson(r.person).needs.map((n) => [n.id, n.urgency]),
-				),
-				mood: r.person.affect.mood.valence,
+				needs: this.needs(r.id),
+				mood: r.owner.actor(r.id).affect.mood.valence,
 				read: moodRead(this.s, r),
 				wealth: r.wealth,
-				history: this.s.events
-					.filter((e) => e.actorId === r.person.id)
-					.slice(-8),
+				history: this.s.events.filter((e) => e.actorId === r.id).slice(-8),
 				observations: r.received ?? [],
-				lessons: personLessons(r.person),
+				lessons: personLessons(r.owner.actor(r.id)),
 				...(r.inspection?.event &&
 				r.inspection.observations &&
 				r.inspection.result &&
@@ -1285,13 +1679,13 @@ export class Runtime implements TownRuntime {
 							? r.paidWork.starts
 							: 0),
 				},
-				relationships: r.person.social.relationships.map((rel) => ({
+				relationships: r.owner.actor(r.id).social.relationships.map((rel) => ({
 					id: rel.otherId,
 					name:
 						rel.otherId === "player"
 							? "You"
-							: (this.s.people.find((o) => o.person.id === rel.otherId)?.person
-									.name ?? rel.otherId),
+							: (this.s.people.find((o) => o.id === rel.otherId)?.name ??
+								rel.otherId),
 					trust: rel.trust,
 					summary: rel.roles.join(", "),
 					// Seeded ties carry an authored role; ties HF forms from encounters start without one.
@@ -1300,12 +1694,10 @@ export class Runtime implements TownRuntime {
 						: "observed") as "initial" | "observed",
 				})),
 				invitations: allEvenings(this.s)
-					.filter(
-						(e) => e.replies[r.person.id] && e.organiserId !== r.person.id,
-					)
+					.filter((e) => e.replies[r.id] && e.organiserId !== r.id)
 					.map((e) => {
 						const reply = required(
-							e.replies[r.person.id],
+							e.replies[r.id],
 							"Missing received invitation",
 						);
 						return {
@@ -1323,15 +1715,15 @@ export class Runtime implements TownRuntime {
 											: ("heard" as const),
 						};
 					}),
-				purposes: r.person.agenda.goals.map((g) => ({
+				purposes: r.owner.actor(r.id).agenda.goals.map((g) => ({
 					id: g.id,
 					label: g.label,
 					progress: g.progress,
 					status: g.status,
 				})),
-				commitments: r.person.agenda.commitments.map((c) => ({
+				commitments: r.owner.actor(r.id).agenda.commitments.map((c) => ({
 					label: c.label ?? c.actions.join(", "),
-					at: c.until,
+					at: c.until / MINUTE,
 					status: c.status,
 				})),
 				...(r.decision ? { decision: r.decision } : {}),
@@ -1512,23 +1904,29 @@ export class Runtime implements TownRuntime {
 					this.s.tools +
 					this.s.people.reduce((sum, r) => sum + (r.job?.tools ?? 0), 0),
 				methodLearners: this.s.people.filter(
-					(r) => (r.person.methods?.rules.length ?? 0) > 0,
+					(r) => (r.owner.actor(r.id).methods?.rules.length ?? 0) > 0,
 				).length,
 				taughtNeighbours: this.s.people.filter((r) =>
 					taughtByNeighbour(this.s, r),
 				).length,
 				foodProduced: this.s.produced,
 				foodConsumed: this.s.consumed,
-				alive: this.s.people.filter((r) => r.person.body.alive).length,
-				dead: this.s.people.filter((r) => !r.person.body.alive).length,
+				alive: this.s.people.filter((r) => r.owner.actor(r.id).body.alive)
+					.length,
+				dead: this.s.people.filter((r) => !r.owner.actor(r.id).body.alive)
+					.length,
 				underfed: this.s.people.filter(
-					(r) => r.person.body.alive && r.person.body.satiety < 0.1,
+					(r) =>
+						r.owner.actor(r.id).body.alive &&
+						r.owner.actor(r.id).body.satiety < 0.1,
 				).length,
 				lowHealth: this.s.people.filter(
-					(r) => r.person.body.alive && r.person.body.health < 0.5,
+					(r) =>
+						r.owner.actor(r.id).body.alive &&
+						r.owner.actor(r.id).body.health < 0.5,
 				).length,
 				penniless: this.s.people.filter(
-					(r) => r.person.body.alive && r.wealth === 0,
+					(r) => r.owner.actor(r.id).body.alive && r.wealth === 0,
 				).length,
 				population: this.s.people.length,
 				background: this.s.people.filter((r) => !r.known).length,
