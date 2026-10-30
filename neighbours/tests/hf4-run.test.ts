@@ -16,6 +16,11 @@ describe("HF4 town authoring", () => {
 			"ravi",
 			"noor",
 		]);
+		expect(
+			Object.values(before.current.people)
+				.slice(0, 6)
+				.map((person) => person.name),
+		).toEqual(["Nora", "Derya", "Sam", "Bilal", "Rafi", "Ece"]);
 		expect(exportRun(createTownRun(42, 206)).hashes.full).toBe(
 			before.hashes.full,
 		);

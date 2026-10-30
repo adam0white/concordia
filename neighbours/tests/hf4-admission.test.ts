@@ -8,7 +8,7 @@ import { expect, it } from "vitest";
 import { prepareIncomingTownDurably } from "../src/core/cast-continuity.ts";
 import { createRuntime } from "./current-town.ts";
 
-it("refuses a structurally supported synthetic source passport before durable preparation when the exact published target role is absent", async () => {
+it("refuses a structurally supported synthetic source passport before durable preparation when host Run admission is unavailable", async () => {
 	// Explicit portable-contract fixture. It asserts no played source chapter,
 	// shelf custody, departure, cross-game learning or native actor clone.
 	const actor = createRuntime(42, 6).s.owner.actor("elin"),
@@ -77,7 +77,7 @@ it("refuses a structurally supported synthetic source passport before durable pr
 			},
 			() => true,
 		),
-	).rejects.toThrow(/no matching authored role/);
+	).rejects.toThrow(/Run admission mapping is unavailable/);
 	expect(writes).toBe(0);
 	expect(JSON.stringify(parent)).toBe(before);
 });
