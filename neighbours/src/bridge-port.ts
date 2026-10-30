@@ -1,7 +1,6 @@
 import type { TownPacket } from "./cast-session.ts";
 import { checkpointSources } from "./checkpoint-source.ts";
 import type { Intervention, TownRuntime } from "./contracts.ts";
-import type { OwnerArchive } from "./core/hf4-owner.ts";
 import type { NativeActor } from "./core/host-types.ts";
 import { createRuntime, restoreRuntime } from "./core/index.ts";
 import type { Runtime } from "./core/runtime.ts";
@@ -22,14 +21,14 @@ export class RuntimePort {
 			case "prepare": {
 				const ready = this.runtime.prepareBoundary();
 				if (this.wanted.size) {
-					const save = this.runtime.export() as { owner: OwnerArchive };
+					const people = this.runtime.currentActors();
 					for (const request of ready.requests)
 						if (
 							request.kind === "action" &&
 							request.stage === "start" &&
 							this.wanted.has(request.person)
 						) {
-							const actor = save.owner.run.current.people[request.person];
+							const actor = people[request.person];
 							if (actor) this.boundaries.set(request.person, actor);
 						}
 				}

@@ -5,7 +5,7 @@ import type {
 	Input,
 	ObservedOutcome,
 } from "@adam0white/human-framework";
-import { readRunHistory, replay } from "@adam0white/human-framework";
+import { exportRun, readRunHistory, replay } from "@adam0white/human-framework";
 import { expect, it } from "vitest";
 import {
 	HOST_SOURCE,
@@ -44,6 +44,7 @@ it("withholds every botched work benefit and resolves a real native protest as f
 		);
 		if (start.kind !== "action") throw Error("Expected action");
 		expect(owner.actor(person.id).activity?.protest).toBe(true);
+		expect(owner.current).toStrictEqual(exportRun(owner.run).current);
 		expect(start.offerId).toBe(offer.id);
 		town.s.now = owner.at / MINUTE;
 		town.s.nextEvent = 42;

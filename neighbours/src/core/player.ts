@@ -977,7 +977,23 @@ export function playerRound(host: PlayerHost): void {
 	if (!p) return;
 	for (const pledge of p.pledges)
 		if (pledge.hfInputId)
-			pledge.hfReported = s.owner.accepted(pledge.hfInputId);
+			// SCOPE: retain actual public input acceptance, not a resident response.
+			// A complete step can apply more inputs than the current64 receipt window.
+			pledge.hfReported =
+				pledge.hfReported === true ||
+				s.owner.accepted(pledge.hfInputId) ||
+				(s.owner.last?.events.some(
+					(e) =>
+						e.person === pledge.toId &&
+						e.data.kind === "input-disposed" &&
+						e.data.disposition.inputId === pledge.hfInputId &&
+						e.data.disposition.kind === "consumed" &&
+						e.data.disposition.reason === "applied" &&
+						e.data.disposition.evidenceIds.includes(
+							`player-pledge:${pledge.id}`,
+						),
+				) ??
+					false);
 	const job = p.job;
 	if (job && job.kind === "travel" && job.arriveAt <= s.now) {
 		p.place = job.to;

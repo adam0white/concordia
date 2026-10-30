@@ -16,31 +16,32 @@ import { floodTimber } from "./timber.ts";
 
 export function createRuntime(seed = 42, population = 206): TownRuntime {
 	const owner = new TownRunOwner(createTownRun(seed, population));
-	const people: Resident[] = Object.values(
-		owner.export().run.current.people,
-	).map((actor, i) => {
-		const k = known[i];
-		const ordinal = k ? i : i + 2;
-		return {
-			id: actor.id,
-			name: actor.name,
-			owner,
-			role:
-				k?.[2] ??
-				required(
-					["shop assistant", "parent", "retired neighbour", "student"][
-						ordinal % 4
-					],
-					"Missing resident role",
-				),
-			description:
-				k?.[4] ?? "This neighbour needs food, rest and time with other people.",
-			known: !!k,
-			place: k?.[3] ?? "homes",
-			wealth: 3 + (ordinal % 6),
-			policy: "hf",
-		};
-	});
+	const people: Resident[] = Object.values(owner.current.people).map(
+		(actor, i) => {
+			const k = known[i];
+			const ordinal = k ? i : i + 2;
+			return {
+				id: actor.id,
+				name: actor.name,
+				owner,
+				role:
+					k?.[2] ??
+					required(
+						["shop assistant", "parent", "retired neighbour", "student"][
+							ordinal % 4
+						],
+						"Missing resident role",
+					),
+				description:
+					k?.[4] ??
+					"This neighbour needs food, rest and time with other people.",
+				known: !!k,
+				place: k?.[3] ?? "homes",
+				wealth: 3 + (ordinal % 6),
+				policy: "hf",
+			};
+		},
+	);
 	const places: Place[] = placeSpecs.map(
 		([id, name, x, y, capacity, kind]) => ({
 			id,

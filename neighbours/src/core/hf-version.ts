@@ -1,4 +1,4 @@
-const FRAMEWORK_VERSION = "4.10.0";
+const FRAMEWORK_VERSION = "4.15.0";
 export const HF_VERSION = FRAMEWORK_VERSION;
 export const HF_SOURCE = `HF ${FRAMEWORK_VERSION}`;
 /** Retained records keep their actual historical policy version after migration. */

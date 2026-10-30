@@ -66,7 +66,7 @@ import {
 	updateHandcart,
 } from "./handcart.ts";
 import { keyed } from "./hash.ts";
-import { HF_SOURCE, isHfSource } from "./hf-version.ts";
+import { HF_SOURCE, HF_VERSION, isHfSource } from "./hf-version.ts";
 import { canonicalHash } from "./hf4-canonical.ts";
 import { observeFacts } from "./hf4-evidence.ts";
 import { physicalOffer } from "./hf4-offers.ts";
@@ -121,7 +121,7 @@ export type PhysicalSave = Omit<Save, "owner" | "people"> & {
 export type NativeTownArchive = {
 	format: "neighbours-native";
 	schema: typeof SCHEMA;
-	hf: "4.10.0";
+	hf: typeof HF_VERSION;
 	physical: PhysicalSave;
 	owner: OwnerArchive;
 	boundary: {
@@ -146,6 +146,9 @@ export class Runtime implements TownRuntime {
 	constructor(s: Save) {
 		this.s = s;
 		this.projectedRevision = s.owner.revision;
+	}
+	currentActors() {
+		return this.s.owner.current.people;
 	}
 	actor(id: string) {
 		const p = this.s.people.find((p) => p.id === id);
@@ -1546,7 +1549,7 @@ export class Runtime implements TownRuntime {
 		return structuredClone({
 			format: "neighbours-native",
 			schema: SCHEMA,
-			hf: "4.10.0",
+			hf: HF_VERSION,
 			physical: this.physicalState(),
 			owner: this.s.owner.export(),
 			boundary: {
@@ -1566,7 +1569,7 @@ export class Runtime implements TownRuntime {
 		return structuredClone({
 			format: "neighbours-journal",
 			schema: SCHEMA,
-			hf: "4.10.0",
+			hf: HF_VERSION,
 			physical: this.physicalState(),
 			owner: this.s.owner.exportJournal(),
 			boundary: {
