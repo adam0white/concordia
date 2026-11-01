@@ -47,6 +47,11 @@ for (const width of [360, 1280])
 		await visibleTarget(submit);
 		await form.locator("[data-affordance-id]").first().click();
 		await form.locator('[data-work-id="help-repair"]').click();
+		// R1 guard: real selections enter the offer && work render branch. UNRUN.
+		await expect(form.locator(".promise-meaning")).toContainText("Ask Rafi to");
+		await expect(form.locator(".promise-meaning")).toContainText(
+			"You offer one hour to help repair the hall",
+		);
 		await expect(submit).toBeEnabled();
 		await page.getByRole("button", { name: "Urge", exact: true }).click();
 		await expect(form).toContainText("can reduce Rafi’s trust");

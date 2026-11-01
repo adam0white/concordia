@@ -1,4 +1,5 @@
 import type { TownView } from "../contracts";
+import { currentGuide } from "./current-promises";
 import { datedClock } from "./format";
 import { inkLine, jitter } from "./ink";
 
@@ -48,11 +49,11 @@ const repairWords = (repairs: number) =>
 			? "At least half the repairs are done. An inspection comes next."
 			: repairs > 0
 				? "The repairs have begun. An inspection comes next."
-				: "Nobody has started the repairs yet.";
+				: "No repairs have finished yet.";
 
 /**
  * The margin note on the map. While the player has a current step, it names
- * that step first, worded by the runtime's goal sequence; the hall line sits
+ * that step first, projected from the public goal and promise records; the hall line sits
  * beneath it. It names actual milestones and never predicts a resident's
  * decision.
  */
@@ -65,7 +66,7 @@ export default function TownGoal({
 	help: () => void;
 	openJournal: () => void;
 }) {
-	const step = town.player?.goals.find((goal) => goal.status === "current");
+	const step = currentGuide(town.player);
 	const hall = town.places.find((place) => place.id === "hall");
 	const repairs = Math.min(12, town.stats.hallRepairs ?? 0);
 	const next = town.evenings

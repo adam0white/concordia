@@ -1,22 +1,19 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { PlayerView, PlayerWorkKind, TownView } from "../contracts";
 import { PRIVATE_DISCOVERIES } from "../core/private-discoveries.ts";
-import { actionWords, counterWords, voicedLine } from "../core/voicing";
+import { actionWords, counterWords } from "../core/voicing";
+import { currentGuide, pledgePresentation } from "./current-promises";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
 import { personRead, plainText } from "./plain-english";
+import RequestRecord from "./RequestRecord";
 import type { useVisitorSession } from "./useVisitorSession";
 import "./conversation.css";
 
 type Session = ReturnType<typeof useVisitorSession>;
 type Mode = "ask" | "urge" | "promise";
-/** A reply stays on the panel while it is this fresh (minutes) and you are still where it was given. */
+/** A reply offers its alternative only while this fresh (minutes) and at its original place. */
 export const FRESH_REPLY = 180;
-const SAID: Record<Mode, string> = {
-	ask: "asked",
-	urge: "urged",
-	promise: "made a promise and asked",
-};
 const WORK: { id: PlayerWorkKind; label: string }[] = [
 	{ id: "carry-meals", label: "Carry food up from the quay" },
 	{ id: "help-repair", label: "Help repair the hall" },
@@ -47,27 +44,53 @@ export function freshReply(
 	return samePlace && now - last <= FRESH_REPLY ? latest : undefined;
 }
 
-/** The player's own journal: recorded lines only, each traceable to its source events. */
+/** Current public promise status and retained exchanges precede the unchanged historical log. */
 export function PlayerJournal({ player }: { player: PlayerView }) {
-	if (player.journal.length === 0)
-		return (
-			<p>
-				{plainText(
-					"You have not taken any actions yet. Your actions will appear here.",
-				)}
-			</p>
-		);
 	return (
-		<ol className="player-journal">
-			{[...player.journal].reverse().map((entry) => (
-				<li key={entry.id} data-events={entry.sourceEventIds.join(" ")}>
-					<small>
-						{datedClock(entry.at)} · {entry.label}
-					</small>{" "}
-					{plainText(entry.text)}
-				</li>
-			))}
-		</ol>
+		<>
+			<section aria-label="Current promises">
+				<h4>Your promises now</h4>
+				{player.pledges.length === 0 ? (
+					<p>You have no recorded promise to keep.</p>
+				) : (
+					<ul>
+						{player.pledges.map((pledge) => (
+							<li key={pledge.id}>{pledgePresentation(pledge).detail}</li>
+						))}
+					</ul>
+				)}
+			</section>
+			{player.requests.length > 0 && (
+				<details>
+					<summary>Your recent conversations</summary>
+					{[...player.requests].reverse().map((request) => (
+						<RequestRecord
+							key={request.id}
+							request={request}
+							pledges={player.pledges}
+						/>
+					))}
+				</details>
+			)}
+			{player.journal.length === 0 ? (
+				<p>
+					{plainText(
+						"You have not taken any actions yet. Your actions will appear here.",
+					)}
+				</p>
+			) : (
+				<ol className="player-journal">
+					{[...player.journal].reverse().map((entry) => (
+						<li key={entry.id} data-events={entry.sourceEventIds.join(" ")}>
+							<small>
+								{datedClock(entry.at)} · {entry.label}
+							</small>{" "}
+							{plainText(entry.text)}
+						</li>
+					))}
+				</ol>
+			)}
+		</>
 	);
 }
 
@@ -118,7 +141,7 @@ export function PlayerAction({
 	const town = session.town;
 	const player = town?.player;
 	if (!town || !player) return null;
-	const goal = player.goals.find((g) => g.status === "current");
+	const goal = currentGuide(player);
 	const busy =
 		session.playerPending ||
 		session.advancing ||
@@ -413,13 +436,14 @@ export function SpeakPanel({
 	const inspector =
 		person?.activity?.includes("question for an inspector") &&
 		person.placeId === "hall";
-	const latest = freshReply(player, personId, town.now);
+	const latest = recordedAnswer;
+	const currentReply = freshReply(player, personId, town.now);
 	const company = player.present.filter((p) => p.known && p.id !== personId);
 	const counter =
-		latest &&
-		latest.mode === "ask" &&
-		(latest.verdict === "deferred" || latest.verdict === "modified")
-			? latest.counterOffer
+		currentReply &&
+		currentReply.mode === "ask" &&
+		(currentReply.verdict === "deferred" || currentReply.verdict === "modified")
+			? currentReply.counterOffer
 			: undefined;
 	const counterId = counter?.affordanceId;
 	const receipt =
@@ -427,9 +451,7 @@ export function SpeakPanel({
 		player.pledges.findLast(
 			(p) => p.toId === personId && p.status === "kept" && p.remembered,
 		);
-	const pledges = player.pledges.filter(
-		(pledge) => pledge.status === "open" || pledge.status === "offered",
-	);
+	const pledges = player.pledges;
 	return (
 		<section className="speak-panel" aria-label="You">
 			{receipt && <HelpReceipt key={receipt.id} pledge={receipt} />}
@@ -480,30 +502,7 @@ export function SpeakPanel({
 
 			{latest && (
 				<div className="latest-answer" ref={answerPanel}>
-					<p className="said">
-						You {SAID[latest.mode]} {name} to {actionWords(latest.label)}.
-					</p>
-					<p>
-						{name}:{" "}
-						<span
-							className={`voice ${latest.verdict === "refused" ? "refusal" : ""}`}
-						>
-							“{plainText(voicedLine(latest))}”
-						</span>
-					</p>
-					{latest.why && <p className="refusal-why">{plainText(latest.why)}</p>}
-					{latest.decision && (
-						<p>
-							Later:{" "}
-							<span className="voice">
-								“{plainText(voicedLine(latest.decision))}”
-							</span>{" "}
-							{plainText(
-								`${name} chose to ${actionWords(latest.decision.chosenLabel)}.`,
-							)}
-						</p>
-					)}
-					{latest.result && <p className="said">{plainText(latest.result)}</p>}
+					<RequestRecord request={latest} pledges={player.pledges} />
 					{counter && (
 						<p>
 							{name} offered to {counterWords(counter)}.{" "}
@@ -529,19 +528,12 @@ export function SpeakPanel({
 			)}
 			{pledges.length > 0 && (
 				<div className="pledges">
-					<h4>Your promises</h4>
+					<h4>Your promises now</h4>
 					<ul>
 						{pledges.map((pledge) => (
 							<li key={pledge.id}>
-								To {pledge.toName}: {pledge.label}, by{" "}
-								{datedClock(pledge.dueBy)}.{" "}
-								{pledge.status === "offered" ? (
-									<small>
-										You do not owe this hour yet. Your offer becomes a
-										commitment if {pledge.toName} agrees now or later acts on
-										your request.
-									</small>
-								) : pledge.canStart ? (
+								<p>{pledgePresentation(pledge).detail}</p>
+								{pledge.status === "open" && pledge.canStart ? (
 									<button
 										type="button"
 										disabled={busy}
@@ -550,6 +542,7 @@ export function SpeakPanel({
 										Start the hour
 									</button>
 								) : (
+									pledge.status === "open" &&
 									pledge.blocked && <small>{pledge.blocked}</small>
 								)}
 							</li>

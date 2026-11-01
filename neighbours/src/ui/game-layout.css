@@ -283,9 +283,31 @@ body,
 	background: var(--paper);
 	z-index: 5;
 }
+.skip-controls {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 8px;
+}
 .game-frame .skip-action {
 	width: 100%;
 	min-height: 52px;
+}
+.skip-explanation {
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 0.8rem;
+}
+.skip-explanation summary {
+	min-height: 52px;
+	display: flex;
+	align-items: center;
+}
+.skip-explanation[open] {
+	grid-column: 1 / -1;
+	max-height: 30dvh;
+	overflow: auto;
 }
 .town-verbs {
 	display: grid;
@@ -872,8 +894,9 @@ body,
 		grid-template-columns: minmax(0, 1fr) 440px;
 		grid-template-rows: minmax(0, 1fr) 52px minmax(0, 1fr) auto;
 	}
-	.welcome-screen > :first-child {
-		position: absolute;
+	/* The welcome layout below uses flex flow. Keep the artwork in that flow. */
+	.game-frame .welcome-screen > .welcome-scene {
+		position: relative;
 	}
 	.welcome-scene {
 		grid-column: 1;

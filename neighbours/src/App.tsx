@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Intervention } from "./contracts";
 import { HF_VERSION } from "./core/hf-version";
 import { hasHallChoice } from "./hall-choice";
+import { currentGuide } from "./ui/current-promises";
 import ErrorMessage from "./ui/ErrorMessage";
 import { clock, placeName } from "./ui/format";
 import HelpPanel from "./ui/HelpPanel";
@@ -106,7 +107,7 @@ export default function App() {
 	const study = sheet === "compare" || sheet === "studies";
 	const context = sheet === "town" && Boolean(person || place);
 	const stories = town ? groupStories(town, observed) : [];
-	const goal = town?.player?.goals.find((g) => g.status === "current");
+	const goal = currentGuide(town?.player);
 	const busy =
 		session.advancing ||
 		session.comparing ||
@@ -322,22 +323,41 @@ export default function App() {
 				)
 			) : (
 				<>
-					{(skipAvailable || session.advancing) && (
-						<button
-							type="button"
-							className="skip-action"
-							aria-label={
-								session.advancing ? "Stop advancing" : "Skip to the next event"
-							}
-							onClick={() =>
-								session.advancing
-									? session.stopAdvancing()
-									: session.advanceUntil()
-							}
-						>
-							{session.advancing ? "Stop" : "Skip ⏩"}
-						</button>
-					)}
+					<div className="skip-controls">
+						{(skipAvailable || session.advancing) && (
+							<button
+								type="button"
+								className="skip-action"
+								aria-label={
+									session.advancing
+										? "Stop advancing"
+										: "Skip to the next event"
+								}
+								onClick={() =>
+									session.advancing
+										? session.stopAdvancing()
+										: session.advanceUntil()
+								}
+							>
+								{session.advancing ? "Stop" : "Skip ⏩"}
+							</button>
+						)}
+						<details className="skip-explanation">
+							<summary>How Skip works</summary>
+							<p>
+								Skip runs real town rounds. It stops for a new story, the end of
+								your walk or work, a familiar neighbour arriving where you are,
+								a new reply or request, new hall choices, or the next morning.
+								It also has a limit of 672 rounds (seven days).
+							</p>
+							<p>
+								Stop ends Skip after the current round. Ordinary time then
+								continues after the reading break. Looking at a person slows
+								time; it does not stop Skip. A neighbour may leave before you
+								arrive. Talking pauses time.
+							</p>
+						</details>
+					</div>
 					<nav className="town-verbs" aria-label="Town navigation">
 						{(
 							[
@@ -583,7 +603,7 @@ export default function App() {
 							{conversation ? (
 								"Time pauses while you talk"
 							) : session.advancing ? (
-								session.advanceProgress || "Skipping…"
+								`${session.advanceProgress || "Skipping…"} · The town is advancing.`
 							) : session.playerPending || town.player?.job ? (
 								<QueuedWalkNotice
 									town={town}
