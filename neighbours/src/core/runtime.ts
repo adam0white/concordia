@@ -328,6 +328,28 @@ export class Runtime implements TownRuntime {
 	private worldDirty = false;
 	private witnesses: Omit<PhysicalWitness, "owner">[] = [];
 	private recording = true;
+	/** Host lifetime branch, never an archive admission path. No mutable state is shared. */
+	fork(): Runtime {
+		const owner = this.s.owner.fork();
+		const physical = structuredClone(this.physicalState());
+		const runtime = new Runtime({
+			...physical,
+			owner,
+			people: physical.people.map((person) => ({ ...person, owner })),
+		});
+		runtime.targetAt = this.targetAt;
+		runtime.resolutions = structuredClone(this.resolutions);
+		runtime.projectedRevision = this.projectedRevision;
+		runtime.boundaryRequests = structuredClone(this.boundaryRequests);
+		runtime.complete = this.complete;
+		runtime.worldDirty = this.worldDirty;
+		runtime.witnesses = structuredClone(this.witnesses);
+		runtime.wireHistory = structuredClone(this.wireHistory);
+		runtime.recording = this.recording;
+		runtime.records = structuredClone(this.records);
+		runtime.offers = structuredClone(this.offers);
+		return runtime;
+	}
 	static hydrate(archive: NativeTownArchive, owner: TownRunOwner): Runtime {
 		const physical = structuredClone(archive.physical);
 		const runtime = new Runtime({

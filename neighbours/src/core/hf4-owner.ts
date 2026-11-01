@@ -2,6 +2,7 @@ import {
 	type DeepReadonly,
 	exportRun,
 	exportRunJournal,
+	forkRun,
 	type Input,
 	inspect,
 	type PerceptData,
@@ -68,6 +69,19 @@ export class TownRunOwner {
 	constructor(run: Run) {
 		this.run = run;
 		this.readCurrent();
+	}
+	/** Branch only an owned live Run. External archives still require strict replay. */
+	fork(): TownRunOwner {
+		const owner = new TownRunOwner(forkRun(this.run));
+		owner.queued = structuredClone(this.queued);
+		owner.lessons = structuredClone(this.lessons);
+		owner.nextInput = this.nextInput;
+		owner.attended = new Map(this.attended);
+		owner.receivedTimes = new Map(this.receivedTimes);
+		owner.frameAvailability = structuredClone(this.frameAvailability);
+		owner.last = structuredClone(this.last);
+		owner.lastRequest = structuredClone(this.lastRequest);
+		return owner;
 	}
 	static restore(value: OwnerArchive): TownRunOwner {
 		const owner = new TownRunOwner(need(restoreRun(value.run)));

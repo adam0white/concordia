@@ -57,6 +57,20 @@ class TownEngineTest(unittest.TestCase):
     self.bridge = FakeBridge()
     self.engine = TownEngine(self.bridge)
 
+  def test_fork_preserves_ready_orchestration_without_bridge_restore(self):
+    self.engine.advance()
+    before_calls = list(self.bridge.calls)
+    branch = self.engine.fork()
+    self.assertEqual(branch.rounds, self.engine.rounds)
+    self.assertIsNot(branch.game_master, self.engine.game_master)
+    self.assertIs(branch.game_master.request.__self__, branch)
+    self.assertEqual(self.bridge.calls, before_calls)
+    branch.rounds += 1
+    self.assertEqual(self.engine.rounds, 1)
+    self.engine._ready = False
+    with self.assertRaises(RuntimeError):
+      self.engine.fork()
+
   def test_real_engine_validates_and_resolves_each_actor(self):
     self.assertIsInstance(self.engine, Engine)
     self.assertEqual(self.engine.advance()['actions'], [['native:start:ada', 'ada', 'rest'], ['native:start:ben', 'ben', 'rest'], ['native:finish:ada', 'ada', 'rest']])

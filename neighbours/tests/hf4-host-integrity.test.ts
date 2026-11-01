@@ -14,6 +14,51 @@ beforeAll(() => {
 });
 const mutants: readonly [string, (packet: NativeTownArchive) => void][] = [
 	[
+		"non-JSON native archive field",
+		(packet) => {
+			Object.assign(packet.owner.run, { untrusted: undefined });
+		},
+	],
+	[
+		"native hash accessor",
+		(packet) => {
+			Object.defineProperty(packet.owner.run.hashes, "full", {
+				enumerable: true,
+				get: () => baseline.owner.run.hashes.full,
+			});
+		},
+	],
+	[
+		"forged native full hash",
+		(packet) => {
+			Object.assign(packet.owner.run.hashes, { full: "forged" });
+		},
+	],
+	[
+		"omitted native accepted history",
+		(packet) => {
+			Object.assign(packet.owner.run, { history: {} });
+		},
+	],
+	[
+		"replaced native RNG",
+		(packet) => {
+			Object.assign(packet.owner.run.current, { rng: {} });
+		},
+	],
+	[
+		"unsupported native engine",
+		(packet) => {
+			Object.assign(packet.owner.run, { engine: "untrusted" });
+		},
+	],
+	[
+		"extra native archive field",
+		(packet) => {
+			Object.assign(packet.owner.run, { untrusted: true });
+		},
+	],
+	[
 		"impossible repair progress",
 		(packet) => {
 			packet.physical.hall = 13;

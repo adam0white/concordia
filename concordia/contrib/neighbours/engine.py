@@ -3,6 +3,7 @@
 Only Concordia's core interfaces are imported, so this engine also runs inside
 Pyodide. The callable transport is synchronous and returns one JSON value.
 """
+import copy
 import json
 from concordia.environment.engine import Engine
 from concordia.typing.entity import Entity, ActionSpec, OutputType
@@ -186,6 +187,14 @@ class TownEngine(Engine):
     self._require_ready()
     return {'schema': 'neighbours/concordia@2', 'rounds': self.rounds,
             'runtime': self._request('save')}
+
+  def fork(self):
+    """Branch ready orchestration; the host must independently branch its live runtime."""
+    self._require_ready()
+    candidate = TownEngine(self.call)
+    candidate.rounds = self.rounds
+    candidate.game_master.event = copy.deepcopy(self.game_master.event)
+    return candidate
 
   def save_journal(self):
     """Complete local file; the default native checkpoint stays unchanged."""

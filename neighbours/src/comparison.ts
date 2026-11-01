@@ -1,7 +1,7 @@
 import type { RuntimePort } from "./bridge-port.ts";
 import type { Intervention, TownComparison, TownView } from "./contracts.ts";
-import { type PythonSession, restoreCheckpoint } from "./python-session.ts";
-import { restoreReceivingRuntime as restoreRuntime } from "./received-town.ts";
+import { forkRuntime } from "./core/fork.ts";
+import type { PythonSession } from "./python-session.ts";
 
 function project(view: TownView): TownComparison["baseline"] {
 	const known = view.people
@@ -65,7 +65,7 @@ export async function compareTown(
 	// Validate the actual host operation on an isolated clone before spending time
 	// on either future. The disposable intervention cannot spend live allowance,
 	// deliver a live observation or consume a live person's random draws.
-	restoreRuntime(originalRuntime.export()).intervene(intervention);
+	forkRuntime(originalRuntime).intervene(intervention);
 	const packet = String(
 		await py.runPythonAsync("json.dumps(town_engine.save())"),
 	);
@@ -95,11 +95,13 @@ export async function compareTown(
 	};
 	try {
 		progress("Comparing the unchanged conditions…");
-		await restoreCheckpoint(py, port, JSON.parse(packet));
+		port.runtime = forkRuntime(originalRuntime);
+		await py.runPythonAsync("town_engine = comparison_original_engine.fork()");
 		await advance("Unchanged conditions");
 		const baseline = project(port.runtime.view());
 		progress("Comparing the intervention from the same checkpoint…");
-		await restoreCheckpoint(py, port, JSON.parse(packet));
+		port.runtime = forkRuntime(originalRuntime);
+		await py.runPythonAsync("town_engine = comparison_original_engine.fork()");
 		await py.runPythonAsync(
 			"town_engine.intervene(json.loads(comparison_intervention))\nNone",
 		);
