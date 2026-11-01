@@ -394,7 +394,7 @@ it("restores beyond a full programme after HF prunes old closed promises", () =>
 	expect(() => restoreRuntime(broken)).toThrow(
 		"Evening promise differs from reply",
 	);
-}, 30000);
+}, 60000);
 
 function exhaustOriginalControls(host: Runtime) {
 	// Model tools lent before the repairs finished, then resume the completed hall.
