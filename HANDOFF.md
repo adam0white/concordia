@@ -1,3 +1,29 @@
+# HF3 clarity verification — 2026-11-01 20:16 UTC
+
+Remaining: signed source, exact-commit Codex CLEAR, source and target CI, normal deployment, clean live two-size verification and cleanup. The paired final synthetic retest and Adam's acceptance remain separate. HF4 composition and port gates remain open.
+
+Normal frozen install passed. The unchanged full `check:lane` passed: lint, three typechecks,614 tests in91 files, node-import check and build. The final guarded run returned0 in25.941seconds;104 observed process identities were absent and source was unchanged. Earlier lint/layout and two offered/released guidance failures remain preserved outside the repo. Corrected guidance exposes Start only for an open pledge; tests cover offered and released absence plus open presence without changing pledge or action semantics. Browser/live checks are unrun. No core, Python, dependency, schema or engine changes; this remains a3.x presentation patch with exact native continuation controls retained.
+
+The source-only checkpoint below records the earlier proposal; this verification supersedes its unrun status. Fourteen literal asks and five return intentions remain open inspection leads, with no bulk closure or player acceptance.
+
+# Bounded HF3 clarity source proposal — 2026-11-01
+
+Remaining: root-controlled focused checks, full normal/native/replay/save continuation
+checks, independent exact-source review, signing, CI, integration and delivery.
+Then the final fixed retest uses the same four returning testers and one new cold
+tester, without resetting the cap. Adam accepts feel. HF4 composition remains open.
+
+The uncommitted proposal against f6a0dcc addresses F3031/F3032/F3034/F3040/F3042/F3043.
+Acceptance uses an actual correlated public Journal record. Notices name their
+recorded target when the source event remains public. First speech, later choice
+and work remain separate. Public journey/activity facts guide personal questions.
+The Journal and hall expose the existing pledge-ID start command; own work stays
+separate from conditional exchanges. No host, canonical state, hash, schema,
+engine, seed, Python or dependency file changes. No runtime validation, browser,
+review, commit, push or deployment was run by this source-only writer. These are
+source candidates, not verified fixes or accepted player outcomes. The dated
+DESIGN follow-up retains all fourteen asks, five returns and method qualifications.
+
 # Presentation candidate verification checkpoint — 2026-11-01 UTC
 
 Remaining: signed source commit, exact commit review and CI, required exact-SHA

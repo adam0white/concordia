@@ -1,6 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
+import ConversationRoute, { PlayerNotice } from "../src/ui/ConversationRoute";
 import PersonPanel from "../src/ui/PersonPanel";
 import { PlayerAction, SpeakPanel } from "../src/ui/SpeakPanel";
 import TownGoal from "../src/ui/TownGoal";
@@ -325,4 +326,81 @@ it("states that an offered hour is not owed before assent or later action", () =
 	expect(html).toContain("You do not owe this hour yet.");
 	expect(html).toContain("later acts on your request");
 	expect(html).not.toContain("Start the hour");
+});
+
+it("routes to the public journey destination without promising a meeting or a break", () => {
+	const current = session();
+	const town = current.town;
+	const person = town?.people.find((item) => item.id === "ada");
+	if (!town?.player || !person) throw Error("Missing public person");
+	person.journey = {
+		fromId: "workshop",
+		toId: "hall",
+		departedAt: town.now,
+		arriveAt: town.now + 30,
+	};
+	const before = JSON.stringify(town);
+	const html = renderToStaticMarkup(
+		createElement(ConversationRoute, {
+			session: current,
+			personId: person.id,
+			leave: () => {},
+		}),
+	);
+	expect(html).toContain("Walk to Flooded hall");
+	expect(html).toContain("not an appointment");
+	expect(html).toContain("may leave again or be busy");
+	expect(html).not.toContain(">Ask about the prototype handle</button>");
+	expect(JSON.stringify(town)).toBe(before);
+	delete person.journey;
+	person.until = town.now + 45;
+	town.player.present = [
+		{
+			id: person.id,
+			name: person.name,
+			known: true,
+			activity: person.activity,
+		},
+	];
+	const present = renderToStaticMarkup(
+		createElement(ConversationRoute, { session: current, personId: person.id }),
+	);
+	expect(present).toContain(">Ask about the prototype handle</button>");
+	expect(present).toContain("That does not promise a break or a conversation");
+	expect(present).toContain("can still keep the matter private");
+});
+
+it("labels a retained global notice with its actual target and does not turn it into Ece's answer", () => {
+	const current = session();
+	const town = current.town;
+	if (!town?.player) throw Error("Missing player");
+	town.player.latestNotice = {
+		at: town.now,
+		eventId: 9876,
+		text: "Nora chose other work.",
+	};
+	town.events = [
+		...town.events,
+		{
+			id: 9876,
+			at: town.now,
+			kind: "player-decided",
+			text: "Nora chose other work.",
+			targetId: "ada",
+			causes: [],
+			importance: 0.5,
+		},
+	];
+	const html = renderToStaticMarkup(
+		createElement(PlayerNotice, { town, personId: "noor" }),
+	);
+	expect(html).toContain("about Ada");
+	expect(html).toContain("separate from the selected person");
+	expect(html).not.toContain('open=""');
+	town.events = [];
+	const pruned = renderToStaticMarkup(
+		createElement(PlayerNotice, { town, personId: "ada" }),
+	);
+	expect(pruned).toContain("source event is no longer in this view");
+	expect(pruned).not.toContain("about Ada");
 });

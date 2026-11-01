@@ -85,12 +85,23 @@ test("the player walks, speaks with a promise and keeps it; the journal records 
 			(p: { id: string }) => p.id === request.pledgeId,
 		)?.status === "open";
 	if (pledged) {
-		const start = panel.getByRole("button", {
+		await page.getByRole("button", { name: "Done", exact: true }).click();
+		// Reached reminder -> mounted Journal -> original pledge-id dispatch.
+		await page.locator(".next-step").click();
+		await expect(page.locator(".game-sheet h2")).toHaveText("Journal");
+		const start = page.getByRole("button", {
 			name: "Start the hour",
 			exact: true,
 		});
-		if (await start.isVisible()) await start.click();
-		else await page.getByRole("button", { name: "Done", exact: true }).click();
+		await expect(start).toBeVisible();
+		if (await start.isEnabled()) {
+			await start.click();
+			const working = await exportPacket(page, info, "pledged-hour-started");
+			expect(working.runtime.player.job).toMatchObject({
+				kind: "work",
+				pledgeId: request.pledgeId,
+			});
+		}
 		await step(page, 16);
 	}
 	await showTab(page, "Town");
