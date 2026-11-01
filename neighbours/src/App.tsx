@@ -323,37 +323,41 @@ export default function App() {
 				)
 			) : (
 				<>
-					{(skipAvailable || session.advancing) && (
-						<button
-							type="button"
-							className="skip-action"
-							aria-label={
-								session.advancing ? "Stop advancing" : "Skip to the next event"
-							}
-							onClick={() =>
-								session.advancing
-									? session.stopAdvancing()
-									: session.advanceUntil()
-							}
-						>
-							{session.advancing ? "Stop" : "Skip ⏩"}
-						</button>
-					)}
-					<details className="skip-explanation">
-						<summary>How Skip works</summary>
-						<p>
-							Skip runs real town rounds. It stops for a new story, the end of
-							your walk or work, a familiar neighbour arriving where you are, a
-							new reply or request, new hall choices, or the next morning. It
-							also has a limit of 672 rounds (seven days).
-						</p>
-						<p>
-							Stop ends Skip after the current round. Ordinary time then
-							continues after the reading break. Looking at a person slows time;
-							it does not stop Skip. A neighbour may leave before you arrive.
-							Talking pauses time.
-						</p>
-					</details>
+					<div className="skip-controls">
+						{(skipAvailable || session.advancing) && (
+							<button
+								type="button"
+								className="skip-action"
+								aria-label={
+									session.advancing
+										? "Stop advancing"
+										: "Skip to the next event"
+								}
+								onClick={() =>
+									session.advancing
+										? session.stopAdvancing()
+										: session.advanceUntil()
+								}
+							>
+								{session.advancing ? "Stop" : "Skip ⏩"}
+							</button>
+						)}
+						<details className="skip-explanation">
+							<summary>How Skip works</summary>
+							<p>
+								Skip runs real town rounds. It stops for a new story, the end of
+								your walk or work, a familiar neighbour arriving where you are,
+								a new reply or request, new hall choices, or the next morning.
+								It also has a limit of 672 rounds (seven days).
+							</p>
+							<p>
+								Stop ends Skip after the current round. Ordinary time then
+								continues after the reading break. Looking at a person slows
+								time; it does not stop Skip. A neighbour may leave before you
+								arrive. Talking pauses time.
+							</p>
+						</details>
+					</div>
 					<nav className="town-verbs" aria-label="Town navigation">
 						{(
 							[
