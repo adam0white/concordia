@@ -1,3 +1,57 @@
+# Presentation candidate verification checkpoint — 2026-11-01 UTC
+
+Remaining: signed source commit, exact commit review and CI, required exact-SHA
+Opus clearance, integration, deployment and live verification. All fifteen initial
+player asks remain open. Adam accepts feel. This candidate is not delivered.
+
+The bounded presentation changes received independent Codex source clearance.
+The normal lane passed lint, three TypeScript scopes, 608 tests in 91 files,
+45 clean-HEAD Node imports, runtime preparation and the production build.
+The two-size engineering check passed the original selected conversation controls
+at 360×690 and 1280×800. Both normal-clock title images show the introduction
+clear of the artwork. The final Ask control is visible in both conversation
+images. These are local checks of the selected controls and layouts, not the
+normal Playwright CLI, a whole-form survey, native/Python parity, shared-cast,
+natural-clock conversation, live delivery or player acceptance.
+
+The unavailable-repair cause, Nia's actual promise history, moving-neighbour
+reachability and the unmounted TownGoal remain unproved. The dated source
+preparation notes below describe their earlier, unrun checkpoints.
+
+# Initial presentation correction 1 — 2026-10-31
+
+Remaining: same-reviewer successor review and every execution/delivery gate.
+R1/R2 self-corrections are prepared, UNRUN and not CLEAR: restore the promise
+form's existing actionWords import; describe linked job status as the chosen
+activity, which may differ from the requested work. Initial/later speech, results
+and host status fields stay unchanged. Synthetic differing-ID status guards and
+an existing real selected-offer/work browser control are prepared but UNRUN.
+No actual Bilal history was reproduced. His specific unavailable-repair cause
+remains open. TownGoal's default component has no production importer identified;
+its wording change does not establish a mounted public-screen change.
+
+# Initial presentation source candidate — 2026-10-31
+
+Remaining: independent exact-source review and all normal, native, causal/replay,
+layout and live gates. This candidate is UNRUN and undelivered. No dependencies
+were installed. Adam's reading and feel acceptance remain separate.
+
+The bounded source plan is presentation only: keep desktop title artwork in
+normal flow; share current promise guidance across the App, map and player
+drawer; group retained first/later answers in person details and the Journal;
+explain existing Skip/Stop limits and progress. Current promise status reads the
+public status, work label and deadline. Historical speech and Journal entries
+remain historical. No simulation, goal progress, promise binding/release, input,
+Save, Python, runtime policy or HF dependency changes are intended.
+
+By 2026-11-03, root must assess this candidate and establish the actual physical
+reason for the reported unavailable repair before closing that explanation.
+Public generic refusal words and a later chosen activity do not establish it.
+Reaching a moving neighbour and deliberate inspection cancellation need separate
+assessment; this candidate changes no pace or cancellation behavior. Phone form
+survey, post-inspection next actions and partial repair progress remain source
+investigations for 2026-11-10. No player ask is marked fixed or accepted here.
+
 # Local UI trace and service specification — 2026-10-28
 
 Remaining: director's ONE independent review of the exact frozen combined candidate, signed source, exact CI, integration and clean deployment/live checks if the App changes. No source commit, delivery or whole-issue acceptance is claimed. Root alone owns STATUS. Broader `.37`/`.10` contexts remain2026-10-29; original `.53` cause remains unknown. Player/source-unread/Adam feel stay paused to2026-11-03.
