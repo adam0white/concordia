@@ -1,3 +1,10 @@
+# HF3 clarity corrected-layout verification — 2026-11-01 20:47 UTC
+
+Remaining: signed successor, same-reviewer exact CLEAR and green source/target CI, normal deployment and live proof. No panel is admitted. HF4 port gates and Adam's acceptance remain separate.
+
+Source12813d47 CI41346070321 failed four real viewport assertions: Who is around and the people list were outside the viewport at360 and1280. The new work content preceded those elements. Source now puts work after all existing place content, restoring the prior heading/list/description order. The unchanged full normal lane passed614 tests/91 files, lint, three typechecks,45 clean-HEAD imports and build. All four original failed viewport cases then passed at360/1280, including the real covered-hour receipt. Node process.version was26.12.0 at the explicit Homebrew executable. Whole42.468seconds within600;107 observed process identities absent and source unchanged. Eight original screenshots stayed within the10-file allowance; root inspected the actual phone and desktop hall frames. Assertions, cases,30-second expectations,120-second test caps and the45-second helping trajectory are unchanged. This is local technical proof, not a live or player result. The old source review applies only to12813d47; the successor requires review. Historical failures are retained.
+
+
 # HF3 clarity verification — 2026-11-01 20:16 UTC
 
 Remaining: signed source, exact-commit Codex CLEAR, source and target CI, normal deployment, clean live two-size verification and cleanup. The paired final synthetic retest and Adam's acceptance remain separate. HF4 composition and port gates remain open.

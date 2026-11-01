@@ -92,7 +92,6 @@ export default function PlacePanel({
 				</div>
 			)}
 			{need && <p className="place-known-need">{need}</p>}
-			{work}
 			<h3>Who is around</h3>
 			{company.length ? (
 				<ul className="place-company">
@@ -119,6 +118,7 @@ export default function PlacePanel({
 				<p>No familiar neighbours are here now.</p>
 			)}
 			<p className="description">{plainText(place.description)}</p>
+			{work}
 		</section>
 	);
 }
