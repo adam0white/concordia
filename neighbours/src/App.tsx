@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Intervention } from "./contracts";
 import { HF_VERSION } from "./core/hf-version";
 import { hasHallChoice } from "./hall-choice";
+import ConversationRoute from "./ui/ConversationRoute";
 import { currentGuide } from "./ui/current-promises";
 import ErrorMessage from "./ui/ErrorMessage";
 import { clock, placeName } from "./ui/format";
@@ -15,7 +16,12 @@ import { plainText } from "./ui/plain-english";
 import QueuedWalkNotice from "./ui/QueuedWalkNotice";
 import SendWord from "./ui/SendWord";
 import SessionMenu from "./ui/SessionMenu";
-import { OwnWork, PlayerJournal, SpeakPanel } from "./ui/SpeakPanel";
+import {
+	OwnWork,
+	PlayerJournal,
+	PromisedWork,
+	SpeakPanel,
+} from "./ui/SpeakPanel";
 import Stories from "./ui/Stories";
 import StoryHeadline, { storyAnchor } from "./ui/StoryHeadline";
 import { decodeSave } from "./ui/save-codec";
@@ -753,6 +759,13 @@ export default function App() {
 											person={person}
 											town={town}
 											observed={observed}
+											playerAction={
+												<ConversationRoute
+													session={session}
+													personId={person.id}
+													leave={closeSelection}
+												/>
+											}
 											speak={
 												<SpeakPanel
 													session={session}
@@ -773,6 +786,14 @@ export default function App() {
 										move={session.movePlayer}
 										busy={busy}
 										showWalkAction={false}
+										work={
+											place.id === "hall" ? (
+												<>
+													<PromisedWork session={session} />
+													<OwnWork session={session} open />
+												</>
+											) : undefined
+										}
 									/>
 								) : sheet === "help" ? (
 									<>
@@ -829,6 +850,7 @@ export default function App() {
 												</li>
 											))}
 										</ul>
+										<PromisedWork session={session} />
 										<OwnWork session={session} />
 									</>
 								) : sheet === "journal" ? (
@@ -838,7 +860,9 @@ export default function App() {
 											close={() => setSheet("town")}
 										/>
 										<h3>Your actions</h3>
-										{town.player && <PlayerJournal player={town.player} />}
+										{town.player && (
+											<PlayerJournal player={town.player} session={session} />
+										)}
 										<h3>The town's record</h3>
 										<Stories
 											stories={stories}

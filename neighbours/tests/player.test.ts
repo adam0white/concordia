@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { presentAt } from "../src/core/encounters.ts";
 import type { Runtime } from "../src/core/runtime.ts";
 import type { Save } from "../src/core/state.ts";
+import { recordedAcceptance } from "../src/ui/recorded-acceptance.ts";
 import {
 	createRuntime,
 	restoreRuntime,
@@ -384,6 +385,23 @@ describe("player as a neighbour", () => {
 			const second = r.view().player?.requests.at(-1);
 			expect(["assented", "complied"]).toContain(second?.verdict);
 			expect(r.s.player?.requests.at(-1)?.accepts).toBe(first?.id);
+			// Actual producer -> public journal -> UI confirmation, before any step.
+			if (!second) throw Error("Missing accepted request");
+			const view = r.view().player;
+			const unchanged = hash(r);
+			const receipt = recordedAcceptance(second, view?.journal ?? []);
+			expect(receipt?.sourceEventIds[0]).toBe(second.id);
+			const actualIntent = r.s.player?.log.find((e) => e.id === second.id);
+			if (!actualIntent) throw Error("Missing recorded request event");
+			expect(receipt?.text).toContain(actualIntent.text);
+			expect(recordedAcceptance(second, [])).toBeUndefined();
+			expect(
+				recordedAcceptance(
+					{ ...second, id: second.id + 1000 },
+					view?.journal ?? [],
+				),
+			).toBeUndefined();
+			expect(hash(r)).toBe(unchanged);
 			expect(
 				r.view().player?.requests.find((q) => q.id === first?.id)?.status,
 			).toBe("replaced");
@@ -421,6 +439,14 @@ describe("player as a neighbour", () => {
 			});
 			const stored = r.s.player?.requests.at(-1);
 			expect(stored?.waits).toBe(true);
+			const publicPlayer = r.view().player;
+			const accepted = publicPlayer?.requests.at(-1);
+			if (!accepted || !publicPlayer) throw Error("Missing public request");
+			expect(
+				recordedAcceptance(accepted, publicPlayer.journal)?.sourceEventIds[0],
+			).toBe(accepted.id);
+			expect(accepted.status).toBe("held");
+			expect(accepted.decision).toBeUndefined();
 			// Not brought forward: Ada's current activity is not interrupted for it.
 			expect(r.actor("ada").job?.event).toBe(job);
 			expect(r.actor("ada").person.activity?.interrupt).toBeUndefined();

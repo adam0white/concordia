@@ -3,6 +3,7 @@ import { actionWords, voicedLine } from "../core/voicing";
 import { pledgePresentation } from "./current-promises";
 import { datedClock } from "./format";
 import { plainText } from "./plain-english";
+import { recordedAcceptance } from "./recorded-acceptance";
 
 const SAID = {
 	ask: "asked",
@@ -28,19 +29,29 @@ const STATUS: Record<string, string> = {
 export default function RequestRecord({
 	request,
 	pledges,
+	journal = [],
 }: {
 	request: PlayerView["requests"][number];
 	pledges: PlayerView["pledges"];
+	journal?: PlayerView["journal"];
 }) {
 	const pledge = pledges.find((item) => item.id === request.pledgeId);
 	const later = request.decision;
+	const acceptance = recordedAcceptance(request, journal);
 	const unspecified =
 		later &&
 		["That is not available here now.", "I cannot do that here now."].includes(
 			later.says,
 		);
 	return (
-		<div className="request-record">
+		<div className="request-record" data-request-id={request.id}>
+			{acceptance && (
+				<div className="recorded-acceptance" role="status">
+					<strong>Your acceptance is recorded.</strong>
+					<p>{plainText(acceptance.text)}</p>
+					<p>Your acceptance does not guarantee their later choice or work.</p>
+				</div>
+			)}
 			<p className="said">
 				{datedClock(request.at)}: You {SAID[request.mode]} {request.targetName}{" "}
 				to {actionWords(request.label)}.
@@ -53,6 +64,14 @@ export default function RequestRecord({
 					{plainText(voicedLine(request))}
 				</q>
 			</p>
+			{request.status === "held" && (
+				<p>
+					This first answer is what {request.targetName} said to your request.
+					No later choice or start is recorded for this request yet. Close any
+					open conversation to let time move. {request.targetName} still chooses
+					what to do.
+				</p>
+			)}
 			{request.why && <p className="refusal-why">{plainText(request.why)}</p>}
 			{later && (
 				<p>
@@ -63,6 +82,9 @@ export default function RequestRecord({
 					)}{" "}
 					{unspecified && "A specific reason is not recorded here."}
 				</p>
+			)}
+			{later && later.chosenAffordanceId !== request.affordanceId && (
+				<p>The chosen activity differs from what you requested.</p>
 			)}
 			<p>
 				Recorded status:{" "}

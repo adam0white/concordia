@@ -4,10 +4,16 @@ import { expect, it } from "vitest";
 import type { PlayerView, TownView } from "../src/contracts";
 import { currentGuide, pledgePresentation } from "../src/ui/current-promises";
 import RequestRecord from "../src/ui/RequestRecord";
-import { PlayerJournal, SpeakPanel } from "../src/ui/SpeakPanel";
+import { recordedAcceptance } from "../src/ui/recorded-acceptance";
+import {
+	OwnWork,
+	PlayerJournal,
+	PromisedWork,
+	SpeakPanel,
+} from "../src/ui/SpeakPanel";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
 
-// Source-only candidate: these guards have NOT been run.
+// Public host/UI records exercise presentation without writing simulation state.
 const pledge: PlayerView["pledges"][number] = {
 	id: "hour-1",
 	toId: "nora",
@@ -46,6 +52,36 @@ it("names the actual owed work and deadline before a later closed pledge", () =>
 		"You do not owe this hour yet.",
 	);
 	expect(JSON.stringify(player)).toBe(before);
+});
+
+it("waits for an offered hour in the guide and does not expose a start control in the Journal", () => {
+	const offered = { ...pledge, status: "offered" as const, canStart: true };
+	const player: PlayerView = {
+		active: true,
+		placeId: "market",
+		workHoursLeft: 2,
+		canMove: true,
+		present: [],
+		presentCount: 0,
+		destinations: [],
+		requests: [],
+		pledges: [offered],
+		goals: [guide],
+		journal: [],
+		notices: 0,
+	};
+	const session = {
+		town: { now: 750, player, people: [], places: [] } as unknown as TownView,
+	} as ReturnType<typeof useVisitorSession>;
+	const hint = currentGuide(player)?.hint;
+	const journal = renderToStaticMarkup(
+		createElement(PlayerJournal, { player, session }),
+	);
+	expect(hint).toContain("You do not owe this hour yet.");
+	expect(hint).toContain("Wait for an actual agreement or action.");
+	expect(hint).not.toContain("Start the hour");
+	expect(journal).toContain("You do not owe this hour yet.");
+	expect(journal).not.toContain("Start the hour");
 });
 
 it("keeps an earlier answer and later refusal together without inventing a cause", () => {
@@ -198,4 +234,132 @@ it("still reports completion when the chosen activity matches the requested repa
 	);
 	expect(html).toContain("Bilal chose to repair the hall.");
 	expect(html).toContain("The chosen activity finished.");
+});
+
+// Source-only retest guards. No runtime execution has been authorized for this batch.
+it("confirms only the acceptance whose recorded request event is correlated", () => {
+	const request: PlayerView["requests"][number] = {
+		id: 31,
+		at: 540,
+		targetId: "noor",
+		targetName: "Ece",
+		affordanceId: "repair",
+		label: "repair the hall",
+		mode: "ask",
+		verdict: "assented",
+		says: "I will do it.",
+		status: "held",
+	};
+	const entry: PlayerView["journal"][number] = {
+		id: "journal-31",
+		at: 540,
+		day: 1,
+		label: "recorded",
+		sourceEventIds: [31, 32],
+		text: "You accepted Ece’s offer to repair the hall after visiting. Ece answered: “I will do it.”",
+	};
+	const render = (journal: PlayerView["journal"]) =>
+		renderToStaticMarkup(
+			createElement(RequestRecord, { request, pledges: [], journal }),
+		);
+	const before = JSON.stringify({ request, entry });
+	const confirmed = render([entry]);
+	expect(confirmed).toContain("Your acceptance is recorded.");
+	expect(confirmed).toContain("does not guarantee their later choice or work");
+	expect(confirmed).toContain("No later choice or start is recorded");
+	expect(confirmed).toContain("I will do it.");
+	for (const journal of [
+		[],
+		[{ ...entry, sourceEventIds: [99, 31] }],
+		[{ ...entry, at: 555 }],
+		[{ ...entry, text: "You asked Ece to repair the hall." }],
+	]) {
+		expect(render(journal)).not.toContain("Your acceptance is recorded.");
+	}
+	expect(
+		recordedAcceptance({ ...request, targetId: "ada", targetName: "Nora" }, [
+			entry,
+		]),
+	).toBeUndefined();
+	expect(JSON.stringify({ request, entry })).toBe(before);
+});
+
+it("makes the same open hour startable in the Journal and hall, and keeps own work separate", () => {
+	const open: PlayerView["pledges"][number] = {
+		...pledge,
+		status: "open",
+		canStart: true,
+	};
+	const player = {
+		pledges: [open],
+		requests: [],
+		journal: [],
+		workHoursLeft: 2,
+		canMove: true,
+		canAirTimber: false,
+	} as unknown as PlayerView;
+	const session = { town: { player } } as ReturnType<typeof useVisitorSession>;
+	const before = JSON.stringify(player);
+	for (const element of [
+		createElement(PlayerJournal, { player, session }),
+		createElement(PromisedWork, { session }),
+	]) {
+		const html = renderToStaticMarkup(element);
+		expect(html).toContain("Start the hour");
+		expect(html).not.toContain('disabled=""');
+		expect(html).toContain("including the walk");
+	}
+	open.canStart = false;
+	Object.assign(open, { blocked: "You have no working hours left today." });
+	const blocked = renderToStaticMarkup(
+		createElement(PlayerJournal, { player, session }),
+	);
+	expect(blocked).toContain('disabled=""');
+	expect(blocked).toContain("You have no working hours left today.");
+	open.status = "released";
+	// Closed status overrides stale canStart; no start action is exposed.
+	expect(
+		renderToStaticMarkup(createElement(PromisedWork, { session })),
+	).not.toContain("Start the hour");
+	const own = renderToStaticMarkup(createElement(OwnWork, { session }));
+	expect(own).toContain("Start your own hour: help repair the hall");
+	expect(own).toContain("You ask for nothing in return");
+	expect(own).toContain("This does not keep a separately promised hour.");
+	expect(own).not.toContain("Start the hour");
+	// Only the explicit fixture mutations differ; rendering did not write to it.
+	player.pledges = [{ ...pledge, status: "open", canStart: true }];
+	expect(renderToStaticMarkup(createElement(OwnWork, { session }))).toContain(
+		"Use Start the hour for that promise.",
+	);
+	expect(JSON.stringify(player)).toBe(before);
+});
+
+it("keeps another person's recorded answer out of the selected conversation", () => {
+	const request: PlayerView["requests"][number] = {
+		id: 40,
+		at: 540,
+		targetId: "ada",
+		targetName: "Nora",
+		affordanceId: "rest",
+		label: "rest at home",
+		mode: "ask",
+		verdict: "deferred",
+		says: "I will finish my current work first.",
+		status: "held",
+	};
+	const player = {
+		requests: [request],
+		pledges: [],
+		journal: [],
+		present: [],
+	} as unknown as PlayerView;
+	const session = {
+		town: { now: 555, player, people: [], places: [], events: [] },
+	} as unknown as ReturnType<typeof useVisitorSession>;
+	const render = (personId: string) =>
+		renderToStaticMarkup(
+			createElement(SpeakPanel, { session, personId, recordOnly: true }),
+		);
+	expect(render("ada")).toContain("I will finish my current work first.");
+	expect(render("noor")).not.toContain("I will finish my current work first.");
 });

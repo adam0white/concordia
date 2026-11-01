@@ -50,6 +50,6 @@ export function currentGuide(
 		...goal,
 		id: "pledge",
 		title: presentation.title,
-		hint: `${presentation.detail}${active ? " Check your promises in the Journal." : " You can walk, talk, or help the town."}`,
+		hint: `${presentation.detail}${active?.status === "open" ? " Open the Journal. Under Your promises now, use Start the hour or read why it cannot start." : active?.status === "offered" ? " Wait for an actual agreement or action. You can check the status in the Journal." : " You can walk, talk, or help the town."}`,
 	};
 }

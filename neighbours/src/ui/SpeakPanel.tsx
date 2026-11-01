@@ -1,12 +1,13 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import type { PlayerView, PlayerWorkKind, TownView } from "../contracts";
-import { PRIVATE_DISCOVERIES } from "../core/private-discoveries.ts";
 import { actionWords, counterWords } from "../core/voicing";
+import ConversationRoute, { PlayerNotice } from "./ConversationRoute";
 import { currentGuide, pledgePresentation } from "./current-promises";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
 import { personRead, plainText } from "./plain-english";
 import RequestRecord from "./RequestRecord";
+import { recordedAcceptance } from "./recorded-acceptance";
 import type { useVisitorSession } from "./useVisitorSession";
 import "./conversation.css";
 
@@ -45,17 +46,29 @@ export function freshReply(
 }
 
 /** Current public promise status and retained exchanges precede the unchanged historical log. */
-export function PlayerJournal({ player }: { player: PlayerView }) {
+export function PlayerJournal({
+	player,
+	session,
+}: {
+	player: PlayerView;
+	session?: Session;
+}) {
 	return (
 		<>
 			<section aria-label="Current promises">
 				<h4>Your promises now</h4>
+				{session?.playerError && (
+					<p role="alert">{plainText(session.playerError)}</p>
+				)}
 				{player.pledges.length === 0 ? (
 					<p>You have no recorded promise to keep.</p>
 				) : (
 					<ul>
 						{player.pledges.map((pledge) => (
-							<li key={pledge.id}>{pledgePresentation(pledge).detail}</li>
+							<li key={pledge.id}>
+								<p>{pledgePresentation(pledge).detail}</p>
+								{session && <PledgeStart session={session} pledge={pledge} />}
+							</li>
 						))}
 					</ul>
 				)}
@@ -68,6 +81,7 @@ export function PlayerJournal({ player }: { player: PlayerView }) {
 							key={request.id}
 							request={request}
 							pledges={player.pledges}
+							journal={player.journal}
 						/>
 					))}
 				</details>
@@ -283,8 +297,70 @@ export function PlayerAction({
 	);
 }
 
+/** Start only the host's open pledge; own work never substitutes for this command. */
+function PledgeStart({
+	session,
+	pledge,
+}: {
+	session: Session;
+	pledge: PlayerView["pledges"][number];
+}) {
+	if (pledge.status !== "open") return null;
+	const busy =
+		session.playerPending ||
+		session.advancing ||
+		session.comparing ||
+		session.saveConflict ||
+		session.intervening ||
+		session.commandPending;
+	return (
+		<>
+			<button
+				type="button"
+				disabled={busy || !pledge.canStart}
+				onClick={() => session.playerWork(pledge.id)}
+			>
+				Start the hour
+			</button>
+			<p className="hand">
+				{busy
+					? "The town is finishing another action. Wait for it to finish."
+					: (pledge.blocked ??
+						(pledge.canStart
+							? "Start this promised hour now, including the walk to the work."
+							: "The current view does not say this hour can start. Check again when the town updates."))}
+			</p>
+		</>
+	);
+}
+
+/** The same promises and host start controls on the hall and walking sheets. */
+export function PromisedWork({ session }: { session: Session }) {
+	const player = session.town?.player;
+	if (!player?.pledges.some((pledge) => pledge.status === "open")) return null;
+	return (
+		<section className="pledges" aria-label="Your promised work">
+			<h3>Your promised work</h3>
+			{player.pledges
+				.filter((pledge) => pledge.status === "open")
+				.map((pledge) => (
+					<div key={pledge.id}>
+						<p>{pledgePresentation(pledge).detail}</p>
+						<PledgeStart session={session} pledge={pledge} />
+					</div>
+				))}
+		</section>
+	);
+}
+
 /** Work controls shared by the conversation and the walking sheet. */
-export function OwnWork({ session }: { session: Session }) {
+export function OwnWork({
+	session,
+	open = false,
+}: {
+	session: Session;
+	open?: boolean;
+}) {
 	const player = session.town?.player;
 	if (!player) return null;
 	const busy =
@@ -292,13 +368,25 @@ export function OwnWork({ session }: { session: Session }) {
 		session.advancing ||
 		session.comparing ||
 		session.saveConflict ||
-		session.intervening;
+		session.intervening ||
+		session.commandPending;
 	return (
 		<>
-			{" "}
+			{session.playerError && (
+				<p role="alert">{plainText(session.playerError)}</p>
+			)}
+			{player.workHoursLeft <= 0 && (
+				<p>You have no working hours left today.</p>
+			)}
 			{player.workHoursLeft > 0 && (
-				<details className="own-work">
+				<details className="own-work" open={open}>
 					<summary>Your work ▸</summary>
+					<p>
+						Start an hour yourself. You ask for nothing in return. This does not
+						keep a separately promised hour.
+						{player.pledges.some((pledge) => pledge.status === "open") &&
+							" Use Start the hour for that promise."}
+					</p>
 					<p className="hand">
 						You can still give {player.workHoursLeft} hour
 						{player.workHoursLeft === 1 ? "" : "s"} of work today, between 08:00
@@ -320,7 +408,7 @@ export function OwnWork({ session }: { session: Session }) {
 										}
 										onClick={() => session.playerWork({ work: w.id })}
 									>
-										<span>{w.label}</span>
+										<span>Start your own hour: {w.label.toLowerCase()}</span>
 									</button>
 									{player.workBlocked?.[
 										w.id as keyof NonNullable<PlayerView["workBlocked"]>
@@ -402,7 +490,8 @@ export function SpeakPanel({
 		session.advancing ||
 		session.comparing ||
 		session.saveConflict ||
-		session.intervening;
+		session.intervening ||
+		session.commandPending;
 	const prediction =
 		session.speechPrediction?.actorId === personId
 			? session.speechPrediction
@@ -446,6 +535,8 @@ export function SpeakPanel({
 			? currentReply.counterOffer
 			: undefined;
 	const counterId = counter?.affordanceId;
+	const acceptance =
+		currentReply && recordedAcceptance(currentReply, player.journal);
 	const receipt =
 		personId &&
 		player.pledges.findLast(
@@ -491,10 +582,10 @@ export function SpeakPanel({
 							</ul>
 						</div>
 					)}
-					{player.latestNotice && <p>{plainText(player.latestNotice.text)}</p>}
+					{!personId && <PlayerNotice town={town} />}
 				</>
 			)}
-			{!recordOnly && session.playerError && (
+			{!recordOnly && !personId && session.playerError && (
 				<p className="player-error" role="alert">
 					{plainText(session.playerError)}
 				</p>
@@ -502,8 +593,13 @@ export function SpeakPanel({
 
 			{latest && (
 				<div className="latest-answer" ref={answerPanel}>
-					<RequestRecord request={latest} pledges={player.pledges} />
-					{counter && (
+					<h4>Your latest recorded request to {latest.targetName}</h4>
+					<RequestRecord
+						request={latest}
+						pledges={player.pledges}
+						journal={player.journal}
+					/>
+					{counter && !acceptance && (
 						<p>
 							{name} offered to {counterWords(counter)}.{" "}
 							{counterId && here && personId && (
@@ -533,31 +629,15 @@ export function SpeakPanel({
 						{pledges.map((pledge) => (
 							<li key={pledge.id}>
 								<p>{pledgePresentation(pledge).detail}</p>
-								{pledge.status === "open" && pledge.canStart ? (
-									<button
-										type="button"
-										disabled={busy}
-										onClick={() => session.playerWork(pledge.id)}
-									>
-										Start the hour
-									</button>
-								) : (
-									pledge.status === "open" &&
-									pledge.blocked && <small>{pledge.blocked}</small>
-								)}
+								<PledgeStart session={session} pledge={pledge} />
 							</li>
 						))}
 					</ul>
 				</div>
 			)}
-			{!recordOnly && personId && here && PRIVATE_DISCOVERIES[personId] && (
-				<button
-					type="button"
-					disabled={busy}
-					onClick={() => session.askPrivate(personId)}
-				>
-					{PRIVATE_DISCOVERIES[personId]?.cue}
-				</button>
+			{!recordOnly && !journalOpen && <OwnWork session={session} />}
+			{!recordOnly && personId && (
+				<ConversationRoute session={session} personId={personId} />
 			)}
 			{recordOnly || !personId ? null : !here ? (
 				<p>
@@ -760,11 +840,10 @@ export function SpeakPanel({
 					an hour of work while {name} waits.
 				</p>
 			)}
-			{!recordOnly && !journalOpen && <OwnWork session={session} />}
 			{!recordOnly && journalOpen ? (
 				<section className="your-journal" aria-label="Your journal">
 					<h4>Your actions</h4>
-					<PlayerJournal player={player} />
+					<PlayerJournal player={player} session={session} />
 				</section>
 			) : null}
 		</section>

@@ -13,6 +13,7 @@ export default function PlacePanel({
 	select,
 	close,
 	walkNotice,
+	work,
 	showWalkAction = true,
 }: {
 	town: TownView;
@@ -22,6 +23,8 @@ export default function PlacePanel({
 	select: (id: string, talk?: boolean) => void;
 	close: () => void;
 	walkNotice?: ReactNode;
+	/** Existing player work controls supplied by the public App. */
+	work?: ReactNode;
 	/** Disable when the parent pins the walk button in its action bar. */
 	showWalkAction?: boolean;
 }) {
@@ -115,6 +118,7 @@ export default function PlacePanel({
 				<p>No familiar neighbours are here now.</p>
 			)}
 			<p className="description">{plainText(place.description)}</p>
+			{work}
 		</section>
 	);
 }
