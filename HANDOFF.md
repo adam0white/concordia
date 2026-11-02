@@ -1,3 +1,9 @@
+# Final ordinary retest record — 2026-11-02
+
+Remaining: HF4 port and engineering gates, the separate pending canonical HF packet import, and Adam's acceptance of feel. The closing dated Deferred record preserves ten qualified asks and five complete return statements; the two-iteration cap does not establish acceptance or request a third ordinary panel. Earlier asks remain open.
+
+HF3 clarity at `6077ea23f5307ca02da1001c0f840bdb6826eee6` was delivered. The historical delivery receipt is `games-deferred/neighbours10-delivery1102.md` and its JSON companion outside this repository: source review and target CI are root-reported; corrected live proof observed the matching clean release, assets and two opening sizes, with the original failed proof retained. That proof does not establish simulation behavior or Adam's feel acceptance. The parked HF4 port is separate from this record.
+
 # HF3 clarity corrected-layout verification — 2026-11-01 20:47 UTC
 
 Remaining: signed successor, same-reviewer exact CLEAR and green source/target CI, normal deployment and live proof. No panel is admitted. HF4 port gates and Adam's acceptance remain separate.
