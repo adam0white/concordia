@@ -474,9 +474,9 @@ export default function App() {
 						<>
 							<p>
 								A riverside town is recovering after a flood. You can get to
-								know six neighbours. Two hundred more live here. They decide for
-								themselves. This town runs live on this device; nothing is
-								played back. Each resident makes decisions independently.
+								know six neighbours. They decide for themselves. This town runs
+								live on this device; nothing is played back. Each resident makes
+								decisions independently.
 							</p>
 							<p>
 								Human Framework {HF_VERSION} supplies perceptions, memories and

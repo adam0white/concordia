@@ -1,0 +1,75 @@
+it("books a real refusal without a held request or pledge", () => {
+	const runtime = atHall();
+	const offer = speechCandidate(runtime, "urge", ["refused"], undefined, {
+		actorId: "ada",
+		affordanceId: "open-section",
+	});
+	const refusedBefore =
+		runtime.s.owner
+			.actor(offer.actorId)
+			.will.voices.find((voice) => voice.voiceId === "player")?.refused ?? 0;
+	const before = readRunHistory(runtime.export().owner.run).flatMap(
+		(entry) => entry.inputs,
+	);
+	const suggestionsBefore = before.filter(
+		(input) =>
+			input.kind === "suggestion.received" &&
+			input.payload.person === offer.actorId &&
+			input.payload.received.kind === "ordinary" &&
+			input.payload.received.suggestion.voiceId === "player" &&
+			input.payload.received.suggestion.affordanceId === offer.affordanceId &&
+			input.payload.received.suggestion.insist === true,
+	).length;
+	const coercionsBefore = before.filter(
+		(input) => input.kind === "coercion.received",
+	).length;
+	runtime.intervene({
+		kind: "player-speak",
+		actorId: offer.actorId,
+		affordanceId: offer.affordanceId,
+		mode: "urge",
+	});
+	const { request, decision } = nativeAnswer(runtime);
+	assertSpeechTrial(runtime, offer);
+	expect(request.answer.verdict).toBe("refused");
+	expect(request.status).toBe("refused");
+	expect(
+		runtime.s.owner
+			.actor(offer.actorId)
+			.will.voices.find((voice) => voice.voiceId === "player")?.refused,
+	).toBe(refusedBefore + 1);
+	expect(
+		runtime.s.owner
+			.actor(offer.actorId)
+			.will.advice.filter((advice) => advice.sourceId === "player"),
+	).toEqual([]);
+	expect(request.pledgeId).toBeUndefined();
+	expect(
+		runtime.s.player?.requests.filter(
+			(item) => item.targetId === offer.actorId && item.status === "held",
+		),
+	).toEqual([]);
+	expect(runtime.s.player?.pledges).toEqual([]);
+	const inputs = readRunHistory(runtime.export().owner.run).flatMap(
+		(entry) => entry.inputs,
+	);
+	const suggestions = inputs.filter(
+		(input) =>
+			input.kind === "suggestion.received" &&
+			input.payload.person === offer.actorId &&
+			input.payload.received.kind === "ordinary" &&
+			input.payload.received.suggestion.voiceId === "player" &&
+			input.payload.received.suggestion.affordanceId === offer.affordanceId &&
+			input.payload.received.suggestion.insist === true,
+	);
+	expect(suggestions).toHaveLength(suggestionsBefore + 1);
+	expect(suggestions.filter((input) => input.at === decision.at)).toHaveLength(
+		1,
+	);
+	expect(
+		inputs.filter((input) => input.kind === "coercion.received"),
+	).toHaveLength(coercionsBefore);
+	expect(runtime.view().player?.journal.at(-1)?.text).toMatch(
+		/It was a refusal\./,
+	);
+});

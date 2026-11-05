@@ -1,0 +1,181 @@
+/** Stranded GD preparation. Executed on HF 4.17.0 on 2026-11-05.
+ * Paired prerequisites not reached in seed42/16 rounds. UNQUALIFIED, not active CI. */
+/** SOURCE PREPARATION: UNRUN. Actual six-person producer controls, not a
+ * natural whole-world acceptance run. Missing real choices fail prerequisites.
+ * The pure outcomes helper suite remains useful but cannot prove these paths. */
+import { expect, it } from "vitest";
+import { required } from "../src/core/invariants.ts";
+import { createRuntime } from "./current-town.ts";
+import { finishObserver, stepUntil } from "./producer-controls.ts";
+
+it("binds solitary and shared meal relief to actual physical social contacts", () => {
+	const runtime = createRuntime(42, 6);
+	// Explicit initial host fixture: an open hall. No claimed natural reopening,
+	// native state authoring, forced resident choice or synthetic job/log.
+	runtime.s.hall = 12;
+	runtime.s.hallSafe = true;
+	expect(
+		runtime.s.people.some((person) =>
+			runtime.affordances(person.id).some((offer) => offer.action === "gather"),
+		),
+	).toBe(true);
+	const observer = finishObserver(runtime, "authored-open-hall");
+	const meals = () =>
+		observer.finishes.filter(
+			(finish) =>
+				finish.job.offer.action === "gather" &&
+				finish.outcome.status === "completed",
+		);
+	try {
+		stepUntil(
+			runtime,
+			() =>
+				meals().some((finish) => !finish.job.socialContacts?.length) &&
+				meals().some((finish) => (finish.job.socialContacts?.length ?? 0) > 0),
+			16,
+			() =>
+				observer.failure([
+					...(!meals().some((finish) => !finish.job.socialContacts?.length)
+						? ["solitary meal"]
+						: []),
+					...(!meals().some(
+						(finish) => (finish.job.socialContacts?.length ?? 0) > 0,
+					)
+						? ["shared meal"]
+						: []),
+				]),
+		);
+		const alone = required(
+			meals().find((finish) => !finish.job.socialContacts?.length),
+			"Missing real solitary meal",
+		);
+		const shared = required(
+			meals().find((finish) => (finish.job.socialContacts?.length ?? 0) > 0),
+			"Missing real shared meal",
+		);
+		for (const finish of [alone, shared]) {
+			observer.assertNative(finish);
+			expect(finish.outcome.actual.consumed?.food).toBe(
+				finish.job.offer.advertises.food,
+			);
+			expect(finish.outcome.actual.material).toBe(-1);
+			// Food was charged at the real start, never a second time at finish.
+			expect(finish.wealthAfter).toBe(finish.wealthBefore);
+		}
+		expect(alone.outcome.actual.psychological).not.toHaveProperty("belonging");
+		expect(alone.outcome.actual.psychological).not.toHaveProperty("meaning");
+		expect(shared.outcome.actual.psychological).toMatchObject({
+			belonging: 0.65,
+			meaning: 0.3,
+		});
+	} finally {
+		observer.stop();
+	}
+});
+
+it("requires actual overlapping teaching before a learner receives classroom relief", () => {
+	const runtime = createRuntime(42, 6);
+	expect(
+		runtime.affordances("ada").some((offer) => offer.action === "teach"),
+	).toBe(true);
+	expect(
+		runtime.affordances("ravi").some((offer) => offer.action === "learn"),
+	).toBe(true);
+	const observer = finishObserver(runtime, "ordinary");
+	const lessons = () =>
+		observer.finishes.filter((finish) => finish.job.offer.action === "learn");
+	try {
+		stepUntil(
+			runtime,
+			() =>
+				lessons().some((finish) => finish.teachers.length > 0) &&
+				lessons().some((finish) => finish.teachers.length === 0),
+			16,
+			() =>
+				observer.failure([
+					...(!lessons().some((finish) => finish.teachers.length > 0)
+						? ["taught lesson"]
+						: []),
+					...(!lessons().some((finish) => finish.teachers.length === 0)
+						? ["untaught lesson"]
+						: []),
+				]),
+		);
+		const taught = required(
+			lessons().find((finish) => finish.teachers.length > 0),
+			"Missing real taught finish",
+		);
+		const untaught = required(
+			lessons().find((finish) => finish.teachers.length === 0),
+			"Missing real untaught finish",
+		);
+		for (const finish of [taught, untaught]) observer.assertNative(finish);
+		expect(taught.teachers.length).toBeGreaterThan(0);
+		expect(untaught.teachers).toEqual([]);
+		expect(taught.outcome.actual.psychological).toEqual({
+			competence: 0.3,
+			belonging: 0.2,
+		});
+		expect(untaught.outcome.actual.psychological).toEqual({});
+	} finally {
+		observer.stop();
+	}
+});
+
+it("reports the actual paid finish and zero money for growing through native receipts", () => {
+	const runtime = createRuntime(42, 6);
+	const offers = runtime.affordances("ada");
+	expect(offers.some((offer) => offer.action === "work")).toBe(true);
+	expect(offers.some((offer) => offer.action === "grow")).toBe(true);
+	const observer = finishObserver(runtime, "ordinary");
+	try {
+		stepUntil(
+			runtime,
+			() =>
+				["work", "grow"].every((action) =>
+					observer.finishes.some(
+						(finish) =>
+							finish.job.offer.action === action &&
+							finish.outcome.status === "completed",
+					),
+				),
+			16,
+			() =>
+				observer.failure(
+					["work", "grow"].filter(
+						(action) =>
+							!observer.finishes.some(
+								(finish) =>
+									finish.job.offer.action === action &&
+									finish.outcome.status === "completed",
+							),
+					),
+				),
+		);
+		const work = required(
+			observer.finishes.find(
+				(finish) =>
+					finish.job.offer.action === "work" &&
+					finish.outcome.status === "completed",
+			),
+			"Missing real paid finish",
+		);
+		const grow = required(
+			observer.finishes.find(
+				(finish) =>
+					finish.job.offer.action === "grow" &&
+					finish.outcome.status === "completed",
+			),
+			"Missing real growing finish",
+		);
+		observer.assertNative(work);
+		observer.assertNative(grow);
+		expect(work.wealthAfter - work.wealthBefore).toBe(2);
+		expect(work.outcome.actual.material).toBe(2);
+		expect(grow.wealthAfter).toBe(grow.wealthBefore);
+		expect(grow.outcome.actual.material).toBe(0);
+	} finally {
+		observer.stop();
+	}
+});
+

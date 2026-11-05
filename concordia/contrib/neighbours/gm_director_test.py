@@ -1,10 +1,13 @@
 """Actual upstream GM contracts and hostile proposal boundary controls."""
 import copy
 import json
+import hashlib
+import runpy
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 from concordia.components.game_master import make_observation
 from concordia.contrib.neighbours.gm_director import (
@@ -65,6 +68,41 @@ class GmDirectorTest(unittest.TestCase):
   def test_runtime_fingerprint_covers_actual_inspection_semantics(self):
     root = Path(__file__).resolve().parents[3]
     self.assertIn('neighbours/src/experiments/inspection.ts', runtime_sources(root)['files'])
+
+  def test_current_fingerprint_and_historical_capture_refusal(self):
+    root = Path(__file__).resolve().parents[3]
+    sources = runtime_sources(root)['files']
+    for path in ('neighbours/scripts/bridge.ts', 'neighbours/scripts/run-town.py',
+                 'neighbours/scripts/check-hf4-continuation.ts',
+                 'neighbours/scripts/check-parity.mjs', 'neighbours/scripts/profile-town.ts'):
+      self.assertEqual(sources[path], hashlib.sha256((root / path).read_bytes()).hexdigest())
+    self.assertNotIn('neighbours/scripts/capture-weekly.ts', sources)
+    for filename in ('run-gm-director.py', 'run-bench-director.py'):
+      script = root / 'neighbours/scripts' / filename
+      main = runpy.run_path(str(script))['main']
+      with self.subTest(script=filename), mock.patch.object(sys, 'argv', [str(script)]):
+        with mock.patch.dict(main.__globals__, {'ClaudeCliModel': mock.Mock(side_effect=AssertionError('Provider must not be constructed'))}):
+          with self.assertRaisesRegex(RuntimeError, 'Historical HF3 .* capture is unsupported'):
+            main()
+
+  def test_current_native_context_reads_host_and_matching_run_people_without_mutation(self):
+    checkpoint = {'runtime': {'format': 'neighbours-native', 'physical': {
+        'now': 495, 'hall': 2, 'hallSafe': False,
+        'places': [{'id': 'hall', 'capacity': 10}],
+        'people': [{'id': 'ada', 'name': 'Ada', 'role': 'carpenter',
+                    'place': 'workshop', 'job': None}]},
+        'owner': {'run': {'current': {'people': {'ada': {
+            'id': 'ada', 'name': 'Ada', 'methods': {'rules': [
+                {'id': 'hall-section-inspection', 'evidence': [{'id': 'actual'}]}]}}}}}}}}
+    original = copy.deepcopy(checkpoint)
+    context = checkpoint_context(checkpoint)
+    self.assertEqual(context['time']['minute'], 495)
+    self.assertEqual(context['hall'], {'repairUnits': 2, 'safe': False, 'capacity': 10})
+    self.assertEqual(context['residents'][0]['retainedInspectionEvidenceCount'], 1)
+    self.assertEqual(checkpoint, original)
+    del checkpoint['runtime']['owner']['run']['current']['people']['ada']
+    with self.assertRaisesRegex(ValueError, 'matching native person'):
+      checkpoint_context(checkpoint)
 
   def test_model_receives_actual_saved_facts_with_knowledge_and_stage_limits(self):
     future = {'id': 'class-1', 'kind': 'class', 'organiserId': 'lea',

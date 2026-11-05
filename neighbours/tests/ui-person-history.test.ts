@@ -5,7 +5,7 @@ import type { TownEvent } from "../src/contracts";
 import PersonPanel from "../src/ui/PersonPanel";
 import { personHistory } from "../src/ui/person-history";
 import Stories from "../src/ui/Stories";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 function event(id: number, kind: string, at: number, text: string): TownEvent {
 	return { id, kind, at, text, actorId: "sam", importance: 0.15, causes: [] };

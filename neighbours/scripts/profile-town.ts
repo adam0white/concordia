@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { writeFileSync } from "node:fs";
 import { performance } from "node:perf_hooks";
-import { createRuntime, restoreRuntime, type Save } from "../src/core/index.ts";
+import { createRuntime, restoreRuntime } from "../src/core/index.ts";
+import type { NativeTownArchive } from "../src/core/runtime.ts";
 
 function option(name: string, fallback: string): string {
 	const index = process.argv.indexOf(name);
@@ -20,7 +21,7 @@ function integer(name: string, fallback: number, min: number, max: number) {
 }
 const days = integer("--days", 30, 1, 365);
 const seed = integer("--seed", 42, 0, 0xffff_ffff);
-const population = integer("--population", 206, 8, 300);
+const population = integer("--population", 206, 6, 300);
 const maxDeaths = integer("--max-deaths", population, 0, population);
 const runtime = createRuntime(seed, population);
 const started = performance.now();
@@ -33,8 +34,10 @@ for (let day = 1; day <= days; day++) {
 		`Host invariant failure after ${day} elapsed days`,
 	);
 	if (day % 5 === 0 || day === days) {
-		const save = runtime.export() as Save;
-		const body = save.people.map((p) => p.person.body);
+		const save = runtime.export() as NativeTownArchive;
+		const body = Object.values(save.owner.run.current.people).map(
+			(p) => p.body,
+		);
 		console.log(
 			JSON.stringify({
 				seed,
@@ -44,7 +47,7 @@ for (let day = 1; day <= days; day++) {
 				checkpointBytes: Buffer.byteLength(JSON.stringify(save)),
 				dead: body.filter((b) => !b.alive).length,
 				veryHungry: body.filter((b) => b.alive && b.satiety < 0.1).length,
-				marketMeals: save.places.find((p) => p.id === "market")?.stock,
+				marketMeals: save.physical.places.find((p) => p.id === "market")?.stock,
 				stats: view.stats,
 			}),
 		);
@@ -52,8 +55,9 @@ for (let day = 1; day <= days; day++) {
 }
 const checkpoint = runtime.export();
 assert(
-	(checkpoint as Save).people.filter((p) => !p.person.body.alive).length <=
-		maxDeaths,
+	Object.values(
+		(checkpoint as NativeTownArchive).owner.run.current.people,
+	).filter((p) => !p.body.alive).length <= maxDeaths,
 	`The scenario exceeded its expected maximum of ${maxDeaths} deaths`,
 );
 const restoredAt = performance.now();

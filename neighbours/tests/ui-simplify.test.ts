@@ -227,7 +227,12 @@ it("uses owner pronouns through every generated evening job phase", () => {
 				expect(projected.startsWith(name)).toBe(true);
 				const other = name === "Nora" ? "Sam" : "Nora";
 				const differentOwner = line.replaceAll(`${name}’s `, `${other}’s `);
-				expect(plainText(differentOwner)).toBe(differentOwner);
+				expect(plainText(differentOwner)).toBe(
+					differentOwner.replaceAll(
+						" acted on your request and chose to ",
+						" considered your request and chose to ",
+					),
+				);
 			}
 		}
 	}

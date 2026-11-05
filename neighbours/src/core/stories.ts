@@ -48,7 +48,7 @@ function storyTitle(s: Save, e: TownEvent): string {
 		"shared-meal": "Neighbours shared a meal again",
 	};
 	if (e.kind === "cart-returned")
-		return `${cartCast(s).owner.person.name}’s repaired handcart returned to the quay`;
+		return `${cartCast(s).owner.name}’s repaired handcart returned to the quay`;
 	return titles[e.kind] ?? "A town event";
 }
 /** Kinds that can recur unchanged; repeats between two hall milestones read as one story. */
@@ -61,7 +61,7 @@ const REPEATING = new Set([
 const MILESTONES = new Set(["hall-open", "hall-repaired"]);
 function when(at: number): string {
 	const minute = ((at % 1440) + 1440) % 1440;
-	return `Day ${Math.floor(at / 1440) + 1}, ${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+	return `Day ${Math.floor(at / 1440) + 1}, ${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;
 }
 type Story = TownView["stories"][number];
 /**

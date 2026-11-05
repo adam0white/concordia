@@ -1,0 +1,65 @@
+import assert from "node:assert/strict";
+import { expect, it } from "vitest";
+import { createRuntime, restoreRuntime } from "../src/core/index.ts";
+import type { Save } from "../src/core/state.ts";
+
+// Synthetic host control: no native trajectory or learned-method claim.
+function classCheckpoint() {
+	const runtime = createRuntime(42, 6);
+	for (const id of runtime.prepareRound())
+		runtime.apply(id, id === "sam" ? "learn" : "rest");
+	return runtime.export() as Save;
+}
+
+it("restores the complete town when JSON object keys are reordered", () => {
+	const original = classCheckpoint();
+	assert.deepStrictEqual(restoreRuntime(original).export(), original);
+	const reordered = JSON.parse(
+		JSON.stringify(original, (_key, value) =>
+			value && typeof value === "object" && !Array.isArray(value)
+				? Object.fromEntries(
+						Object.entries(value).sort(([a], [b]) => a.localeCompare(b)),
+					)
+				: value,
+		),
+	);
+	assert.deepStrictEqual(restoreRuntime(reordered).export(), original);
+});
+
+it("still refuses a separately forged numeric advertisement", () => {
+	const synthetic = classCheckpoint();
+	const sam = synthetic.people.find((r) => r.person.id === "sam");
+	assert(sam?.job && sam.person.activity);
+	sam.job.offer.advertises.competence = 0.31;
+	sam.person.activity.affordance.advertises.competence = 0.31;
+	expect(() => restoreRuntime(synthetic)).toThrow(
+		"Activity differs from host rules",
+	);
+});
+
+it("refuses a missing array entry instead of skipping its value", () => {
+	const runtime = createRuntime(42, 6);
+	for (const id of runtime.prepareRound())
+		runtime.apply(id, id === "sam" ? "repair" : "rest");
+	const synthetic = runtime.export() as Save;
+	const sam = synthetic.people.find((r) => r.person.id === "sam");
+	assert(sam?.job && sam.person.activity);
+	// A sparse one-slot array must not compare equal to the legal ["work"].
+	sam.job.offer.tags = new Array<string>(1);
+	sam.person.activity.affordance.tags = new Array<string>(1);
+	expect(() => restoreRuntime(synthetic)).toThrow(
+		"Activity differs from host rules",
+	);
+});
+
+it("keeps signed zero distinct in saved offer scalars", () => {
+	const synthetic = classCheckpoint();
+	const nora = synthetic.people.find((r) => r.person.id === "ada");
+	assert(nora?.job && nora.person.activity);
+	assert(Object.is(nora.job.offer.effort, 0));
+	nora.job.offer.effort = -0;
+	nora.person.activity.affordance.effort = -0;
+	expect(() => restoreRuntime(synthetic)).toThrow(
+		"Activity differs from host rules",
+	);
+});

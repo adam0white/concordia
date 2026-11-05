@@ -54,7 +54,7 @@ export default function Welcome({
 			<div className="welcome-premise">
 				<h2>A town is rebuilding after a flood.</h2>
 				<p className="welcome-goal">
-					Help your neighbours reopen the flooded hall. They decide for
+					Help six neighbours reopen the flooded hall. They decide for
 					themselves.
 				</p>
 			</div>

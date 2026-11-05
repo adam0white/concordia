@@ -1,21 +1,7 @@
-/**
- * SCOPE: the player's vague read of a resident, worded from HF state. `moodRead` words what a look at someone
- * shows: their strongest current emotion (or their mood when no emotion stands out), visible tiredness or pain,
- * needs HF reads as at least noticeable, and a pending commitment (not worship) that falls due within three
- * hours. `speechRead` adds, when the player is about to speak to them, what they are set on (their current
- * activity, or the offer HF would pick with no voice pushing) and how they stand toward the player's voice
- * (trust, recent pressure, a recent broken pledge, work done under protest). Both are presentation only: they
- * never change HF state, consume no RNG and never show a verdict, a likelihood or an answer line. Not covered:
- * what other residents think of the person, or anything the player has not had a chance to see.
+import type { Affordance, Suggestion } from "./host-types.ts";
+/** SCOPE: presentation of actual public HF4 condition/need readings and known commitments.
+ * Speech reads describe current work and actual voice history, never an invented predicted answer.
  */
-import {
-	type Affordance,
-	outwardSigns,
-	predict,
-	readAffect,
-	readPerson,
-	type Suggestion,
-} from "@adam0white/human-framework";
 import type { Resident, Save } from "./state.ts";
 import { ingWords } from "./voicing.ts";
 
@@ -23,24 +9,6 @@ const PLAYER_VOICE = "player";
 /** A commitment is "coming up" this many minutes before its window opens. */
 const AHEAD = 180;
 
-const EMOTION_WORDS: Record<string, string> = {
-	joy: "cheerful",
-	distress: "upset",
-	hope: "hopeful",
-	fear: "afraid",
-	relief: "relieved",
-	disappointment: "disappointed",
-	pride: "proud",
-	shame: "ashamed",
-	gratitude: "grateful",
-	anger: "angry",
-	guilt: "guilty",
-	love: "warm",
-	grief: "grieving",
-	awe: "full of wonder",
-	boredom: "bored",
-	loneliness: "lonely",
-};
 const NEED_WORDS: Record<string, string> = {
 	food: "hungry",
 	water: "thirsty",
@@ -82,21 +50,23 @@ function moodWord(valence: number): string {
 
 /** What a look at this person shows now, as one or two short sentences. */
 export function moodRead(s: Save, r: Resident): string {
-	const p = r.person;
+	const p = r.owner.actor(r.id);
 	if (!p.body.alive) return `${p.name} has died.`;
 	if (p.body.asleep) return `${p.name} is asleep.`;
-	const signs = outwardSigns(p);
-	const affect = readAffect(p);
-	const top = affect.dominant.find((e) => e.intensity >= 0.15);
-	const feeling = top
-		? `${top.intensity >= 0.5 ? "very " : ""}${EMOTION_WORDS[top.id] ?? top.id}${top.targetId === PLAYER_VOICE && top.id === "anger" ? " with you" : ""}`
-		: moodWord(signs.mood ?? affect.valence);
+	const parts = r.owner.inspect(r.id, ["condition", "needs"]).people[0];
+	if (parts?.kind !== "host") throw Error("Missing condition reading");
+	const condition = parts.parts.find((part) => part.select === "condition");
+	const needPart = parts.parts.find((part) => part.select === "needs");
+	if (condition?.select !== "condition" || needPart?.select !== "needs")
+		throw Error("Missing public readings");
+	const signs = condition.value.outwardSigns;
+	const feeling = moodWord(signs.mood ?? 0);
 	const body = [
 		graded(signs.fatigue, "tired", [0.3, 0.5, 0.75]),
 		signs.pain >= 0.3 ? "in pain" : undefined,
-		signs.fear >= 0.3 && top?.id !== "fear" ? "frightened" : undefined,
-		...readPerson(p)
-			.needs.filter((n) => n.urgency >= 0.25)
+		signs.fear >= 0.3 ? "frightened" : undefined,
+		...needPart.value
+			.filter((n) => n.urgency >= 0.25)
 			.toSorted((a, b) => b.urgency - a.urgency || a.id.localeCompare(b.id))
 			.slice(0, 2)
 			.map((n) =>
@@ -111,8 +81,8 @@ export function moodRead(s: Save, r: Resident): string {
 				c.kind !== "worship" &&
 				c.kind !== "abstain" &&
 				c.label &&
-				c.from <= s.now + AHEAD &&
-				c.until >= s.now,
+				c.from <= (s.now + AHEAD) * 60000 &&
+				c.until >= s.now * 60000,
 		)
 		.toSorted((a, b) => a.from - b.from || a.id.localeCompare(b.id))[0];
 	if (!due?.label) return first;
@@ -135,38 +105,20 @@ export function moodRead(s: Save, r: Resident): string {
 export function speechRead(
 	s: Save,
 	r: Resident,
-	offers: readonly Affordance[],
-	others: readonly Suggestion[],
+	_offers: readonly Affordance[],
+	_others: readonly Suggestion[],
 ): string[] {
-	const p = r.person;
+	const p = r.owner.actor(r.id);
 	const out: string[] = [];
 	if (r.job)
 		out.push(`${p.name} plans to keep ${ingWords(r.job.offer.label)}.`);
-	else if (offers[0]) {
-		const own = predict(
-			p,
-			offers,
-			{
-				voiceId: PLAYER_VOICE,
-				affordanceId: offers[0].id,
-				strength: 0,
-				since: s.now,
-			},
-			{ scarcity: Math.max(0, 1 - r.wealth / 8), others },
-		);
-		const pick =
-			offers.find((o) => o.id === own.insteadAffordanceId) ??
-			(own.verdict === "assented" ? offers[0] : undefined);
-		if (pick)
-			out.push(
-				`${p.name} seems to prefer ${ingWords(pick.label ?? pick.action)}.`,
-			);
-	}
 	if (p.activity?.protest) out.push(`${p.name} is doing this under protest.`);
 	const voice = p.will.voices.find((v) => v.voiceId === PLAYER_VOICE);
 	if (!voice) out.push(`${p.name} does not know you well.`);
 	else {
-		const recent = voice.history.filter((h) => s.now - h.at <= 2 * 1440);
+		const recent = voice.history.filter(
+			(h) => s.now * 60000 - h.at <= 2 * 1440 * 60000,
+		);
 		if (voice.pressure >= 0.3)
 			out.push(`${p.name} is annoyed by your pressure.`);
 		// "pledge-*" reasons are version 1 saves; HF 2.8.0 noteVoicePromise records "promise-*".

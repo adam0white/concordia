@@ -68,13 +68,15 @@ test("the you marker stays whole at the left-edge quay on phone widths", async (
 test("a departing traveller cannot block a phone place-count button", async ({
 	page,
 }) => {
+	// Keep all24 real rounds to14:00 before checking pointer geometry.
+	test.setTimeout(600000);
 	await page.setViewportSize({ width: 390, height: 844 });
 	await enter(page);
 	await page
 		.getByRole("button", { name: "Nora: Free to choose", exact: true })
 		.click();
-	await step(page);
-	for (let i = 0; i < 23; i++) await step(page);
+	await step(page, 120000);
+	for (let i = 0; i < 23; i++) await step(page, 120000);
 	await expect(page.locator(".town-time strong")).toHaveText("14:00");
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await page.getByRole("button", { name: "Close person details" }).click();

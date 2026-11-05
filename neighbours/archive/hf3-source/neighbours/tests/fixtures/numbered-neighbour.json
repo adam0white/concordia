@@ -1,0 +1,4556 @@
+{
+	"initialBackground": {
+		"person": {
+			"schema": "human/person@1",
+			"engine": "2.2.0",
+			"id": "resident-1",
+			"name": "Resident 1",
+			"now": 480,
+			"rng": {
+				"a": -940307064,
+				"b": 2389084938,
+				"c": 756710175,
+				"d": 650853852
+			},
+			"life": { "bornAt": -16293600, "sex": "female" },
+			"body": {
+				"satiety": 0.8,
+				"hydration": 0.85,
+				"sleepPressure": 0.2,
+				"exertion": 0,
+				"circadianPeak": 960,
+				"pain": 0,
+				"health": 1,
+				"fitness": 0.5,
+				"sleepDebt": 0,
+				"alive": true,
+				"asleep": false,
+				"since": 480,
+				"injuries": [],
+				"illnesses": [],
+				"nextId": 0
+			},
+			"needs": {
+				"safety": 0.8,
+				"belonging": 0.7,
+				"esteem": 0.6,
+				"autonomy": 0.7,
+				"competence": 0.6,
+				"leisure": 0.6,
+				"meaning": 0.6
+			},
+			"traits": {
+				"honesty": 0.5,
+				"emotionality": 0.5,
+				"extraversion": 0.5,
+				"agreeableness": 0.5,
+				"conscientiousness": 0.5,
+				"openness": 0.5
+			},
+			"values": {
+				"benevolence": 0.5695861727232113,
+				"universalism": 0.5,
+				"tradition": 0.5,
+				"conformity": 0.5,
+				"security": 0.5,
+				"achievement": 0.5,
+				"power": 0.5,
+				"hedonism": 0.5,
+				"stimulation": 0.5,
+				"selfDirection": 0.5
+			},
+			"conscience": {
+				"norms": [
+					{ "normId": "salah", "standing": "obligatory", "conviction": 0.475 },
+					{
+						"normId": "sawm-ramadan",
+						"standing": "obligatory",
+						"conviction": 0.475
+					},
+					{ "normId": "zakat", "standing": "obligatory", "conviction": 0.475 },
+					{
+						"normId": "charity",
+						"standing": "recommended",
+						"conviction": 0.475
+					},
+					{ "normId": "lying", "standing": "forbidden", "conviction": 0.75 },
+					{ "normId": "theft", "standing": "forbidden", "conviction": 0.75 },
+					{
+						"normId": "keep-promise",
+						"standing": "obligatory",
+						"conviction": 0.75
+					},
+					{
+						"normId": "kindness-to-parents",
+						"standing": "obligatory",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "backbiting",
+						"standing": "forbidden",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "help-neighbor",
+						"standing": "recommended",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "gratitude",
+						"standing": "recommended",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "harm-others",
+						"standing": "forbidden",
+						"conviction": 0.75
+					},
+					{
+						"normId": "intoxicants",
+						"standing": "forbidden",
+						"conviction": 0.475
+					},
+					{
+						"normId": "forbidden-food",
+						"standing": "forbidden",
+						"conviction": 0.475
+					},
+					{
+						"normId": "fairness",
+						"standing": "obligatory",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "care-dependents",
+						"standing": "obligatory",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "punctuality",
+						"standing": "recommended",
+						"conviction": 0.6000000000000001
+					},
+					{
+						"normId": "eid-prayer",
+						"standing": "recommended",
+						"conviction": 0.475
+					}
+				],
+				"breaches": [],
+				"intentions": [],
+				"nextBreach": 0
+			},
+			"affect": {
+				"mood": { "valence": 0, "arousal": 0.3 },
+				"emotions": [],
+				"regulation": 0.3,
+				"lastUpdated": 480
+			},
+			"skills": {
+				"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+			},
+			"habits": [],
+			"memory": {
+				"episodes": [],
+				"beliefs": [],
+				"expectations": [],
+				"sourceTrust": {},
+				"nextEpisode": 0
+			},
+			"social": { "relationships": [] },
+			"agenda": {
+				"commitments": [],
+				"goals": [],
+				"nextId": 1,
+				"lastProposalDay": -1
+			},
+			"will": {
+				"voices": [],
+				"precommitments": [],
+				"switchMargin": 0.15,
+				"temperature": 0
+			},
+			"activity": null,
+			"trace": [],
+			"nextDecision": 0,
+			"retention": { "trace": 4, "chronicleDays": 31 }
+		},
+		"role": "shop assistant",
+		"description": "A persistent neighbour with food, rest and social needs.",
+		"known": false,
+		"place": "homes",
+		"wealth": 5,
+		"policy": "hf"
+	},
+	"checkpoint": {
+		"schema": "neighbours-1",
+		"hf": "2.2.1",
+		"seed": 42,
+		"now": 510,
+		"round": 2,
+		"controls": 3,
+		"bus": false,
+		"tools": 3,
+		"hall": 0,
+		"hallSafe": false,
+		"firstMealAt": null,
+		"events": [
+			{
+				"id": 1,
+				"at": 495,
+				"kind": "started",
+				"text": "Sam: Carry food from the quay.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "sam",
+				"placeId": "quay"
+			},
+			{
+				"id": 2,
+				"at": 495,
+				"kind": "started",
+				"text": "Ada: Go and inspect the hall timber.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "ada",
+				"placeId": "hall"
+			},
+			{
+				"id": 3,
+				"at": 495,
+				"kind": "started",
+				"text": "Ravi: Work a paid workshop shift.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "ravi",
+				"placeId": "workshop"
+			},
+			{
+				"id": 4,
+				"at": 495,
+				"kind": "started",
+				"text": "Noor: Work a paid coordination shift by the hall.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "noor",
+				"placeId": "hall"
+			},
+			{
+				"id": 5,
+				"at": 495,
+				"kind": "started",
+				"text": "Elin: Help neighbours at the clinic.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "elin",
+				"placeId": "clinic"
+			},
+			{
+				"id": 6,
+				"at": 495,
+				"kind": "started",
+				"text": "Musa: Work a paid garden shift.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "musa",
+				"placeId": "garden"
+			},
+			{
+				"id": 7,
+				"at": 495,
+				"kind": "started",
+				"text": "Lea: Go and inspect the hall timber.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "lea",
+				"placeId": "hall"
+			},
+			{
+				"id": 8,
+				"at": 495,
+				"kind": "started",
+				"text": "Resident 1: Work a paid market shift.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "resident-1",
+				"placeId": "market"
+			},
+			{
+				"id": 9,
+				"at": 495,
+				"kind": "started",
+				"text": "Jo: Carry food from the quay.",
+				"causes": [],
+				"importance": 0.15,
+				"actorId": "jo",
+				"placeId": "quay"
+			}
+		],
+		"nextEvent": 10,
+		"people": [
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "ada",
+					"name": "Ada",
+					"now": 510,
+					"rng": {
+						"a": 525187462,
+						"b": 1481333944,
+						"c": 1177879824,
+						"d": 3317318729
+					},
+					"life": { "bornAt": -12088800, "sex": "female" },
+					"body": {
+						"satiety": 0.772707940685428,
+						"hydration": 0.8221014504852975,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.6,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.3847046082606539,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817308328901266, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.8, "practice": 57809, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At workshop. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "workshop",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": {
+						"relationships": [
+							{
+								"otherId": "lea",
+								"affection": 0.25,
+								"trust": 0.65,
+								"respect": 0,
+								"familiarity": 0.5999881311588214,
+								"roles": ["neighbour"],
+								"ledger": 0,
+								"lastInteraction": 480
+							}
+						]
+					},
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "musa",
+								"actions": ["repair"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Repair doors before evening",
+								"id": "c1",
+								"status": "pending"
+							},
+							{
+								"kind": "appointment",
+								"toId": "lea",
+								"actions": ["inspect"],
+								"from": 660,
+								"until": 840,
+								"importance": 0.7,
+								"label": "Be at the hall after Lea’s class to compare the flood damage",
+								"id": "c3",
+								"status": "pending"
+							}
+						],
+						"goals": [
+							{
+								"label": "Understand the flood-damaged timber before reopening",
+								"serves": ["competence", "meaning"],
+								"importance": 0.7,
+								"deadline": 1200,
+								"advancedBy": [
+									{ "action": "inspect", "amount": 0.1 },
+									{ "action": "ask-inspector", "amount": 0.75 },
+									{ "action": "answer-inspection", "amount": 0.75 },
+									{ "action": "open-section", "amount": 0.75 },
+									{ "action": "keep-closed", "amount": 0.75 }
+								],
+								"baseImportance": 0.7,
+								"id": "g2",
+								"status": "active",
+								"progress": 0,
+								"adoptedAt": 480,
+								"lastAdvancedAt": 480
+							}
+						],
+						"nextId": 4,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "inspect",
+						"action": "inspect",
+						"affordance": {
+							"id": "inspect",
+							"action": "inspect",
+							"label": "Go and inspect the hall timber",
+							"placeId": "hall",
+							"duration": 45,
+							"effort": 0.15,
+							"advertises": { "competence": 0.45, "meaning": 0.3 },
+							"fulfills": ["c3"]
+						},
+						"needsAtStart": {
+							"food": 0.7871120827552313,
+							"water": 0.8369604601994103,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 540,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to Understand the flood damaged timber before reopening",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "inspect",
+							"chosenAction": "inspect",
+							"considered": [
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.3592,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "goal:g2", "value": 0.3539 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid carpentry shift",
+									"utility": 0.2368,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2524 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.2204,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "commitment:c1", "value": 0.2201 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": -0.0103,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								},
+								{
+									"affordanceId": "grow",
+									"action": "grow",
+									"label": "Tend and harvest the garden",
+									"utility": -0.0132,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0162 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.35 },
+									"believed": { "competence": 0.35 }
+								}
+							],
+							"intention": "to Understand the flood damaged timber before reopening",
+							"narration": "Keeping at it."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "carpenter",
+				"description": "Kept the hall tables dry; wants to repair its doors.",
+				"known": true,
+				"place": "workshop",
+				"wealth": 3,
+				"policy": "hf",
+				"decision": {
+					"chosen": "inspect",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Go and inspect the hall timber",
+					"reason": "Keeping at it.",
+					"options": [
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.3592
+						},
+						{
+							"id": "work",
+							"label": "Work a paid carpentry shift",
+							"utility": 0.2368
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.2204
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": -0.0103
+						},
+						{
+							"id": "grow",
+							"label": "Tend and harvest the garden",
+							"utility": -0.0132
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"job": {
+					"offer": {
+						"id": "inspect",
+						"action": "inspect",
+						"label": "Go and inspect the hall timber",
+						"placeId": "hall",
+						"duration": 45,
+						"effort": 0.15,
+						"advertises": { "competence": 0.45, "meaning": 0.3 },
+						"fulfills": ["c3"]
+					},
+					"end": 540,
+					"arrive": 525,
+					"from": "workshop",
+					"event": 2,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "musa",
+					"name": "Musa",
+					"now": 510,
+					"rng": {
+						"a": -960630940,
+						"b": 1183077784,
+						"c": 3281785314,
+						"d": 1265778712
+					},
+					"life": { "bornAt": -12614400, "sex": "male" },
+					"body": {
+						"satiety": 0.7727527771276307,
+						"hydration": 0.8221472832918294,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.5896923591271506,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.680784952850081,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817393969216439, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At garden. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "garden",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "elin",
+								"actions": ["grow"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Harvest food for Sam",
+								"id": "c1",
+								"status": "pending"
+							}
+						],
+						"goals": [],
+						"nextId": 2,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "work",
+						"action": "work",
+						"affordance": {
+							"id": "work",
+							"action": "work",
+							"label": "Work a paid garden shift",
+							"placeId": "garden",
+							"duration": 60,
+							"effort": 0.15,
+							"advertises": { "competence": 0.3 },
+							"fulfills": [],
+							"material": 2,
+							"tags": ["work"]
+						},
+						"needsAtStart": {
+							"food": 0.7871332555727559,
+							"water": 0.836981882108906,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 555,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to earn",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "work",
+							"chosenAction": "work",
+							"considered": [
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid garden shift",
+									"utility": 0.2185,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2341 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "grow",
+									"action": "grow",
+									"label": "Tend and harvest the garden",
+									"utility": 0.2084,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0162 },
+										{ "source": "commitment:c1", "value": 0.2216 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.35 },
+									"believed": { "competence": 0.35 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.0053,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": -0.0103,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								}
+							],
+							"intention": "to earn",
+							"narration": "It pays. It was a close call."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "gardener",
+				"description": "Lost seedlings in the flood; grows food for neighbours.",
+				"known": true,
+				"place": "garden",
+				"wealth": 4,
+				"policy": "hf",
+				"decision": {
+					"chosen": "work",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Work a paid garden shift",
+					"reason": "It pays. It was a close call.",
+					"options": [
+						{
+							"id": "work",
+							"label": "Work a paid garden shift",
+							"utility": 0.2185
+						},
+						{
+							"id": "grow",
+							"label": "Tend and harvest the garden",
+							"utility": 0.2084
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.0053
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": -0.0103
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"paidWork": { "day": 0, "starts": 1, "minutes": 0, "totalMinutes": 0 },
+				"job": {
+					"offer": {
+						"id": "work",
+						"action": "work",
+						"label": "Work a paid garden shift",
+						"placeId": "garden",
+						"duration": 60,
+						"effort": 0.15,
+						"advertises": { "competence": 0.3 },
+						"fulfills": [],
+						"material": 2,
+						"tags": ["work"]
+					},
+					"end": 555,
+					"arrive": 495,
+					"from": "garden",
+					"event": 6,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "elin",
+					"name": "Elin",
+					"now": 510,
+					"rng": {
+						"a": 1254313033,
+						"b": 1061033341,
+						"c": 215739932,
+						"d": 3765034368
+					},
+					"life": { "bornAt": -13140000, "sex": "female" },
+					"body": {
+						"satiety": 0.7727907303565644,
+						"hydration": 0.8221860799249591,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.6,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.6682272656122222,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.01181746646164522, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At clinic. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "clinic",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "sam",
+								"actions": ["care"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Keep the clinic open",
+								"id": "c1",
+								"status": "pending"
+							}
+						],
+						"goals": [],
+						"nextId": 2,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "care",
+						"action": "care",
+						"affordance": {
+							"id": "care",
+							"action": "care",
+							"label": "Help neighbours at the clinic",
+							"placeId": "clinic",
+							"duration": 60,
+							"effort": 0.15,
+							"advertises": { "belonging": 0.3, "competence": 0.25 },
+							"fulfills": ["c1"]
+						},
+						"needsAtStart": {
+							"food": 0.7871511779758551,
+							"water": 0.8370000153638063,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 555,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to keep my promise to sam",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "care",
+							"chosenAction": "care",
+							"considered": [
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": 0.2123,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "commitment:c1", "value": 0.2222 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid clinic shift",
+									"utility": 0.2026,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2182 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.0053,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": -0.0103,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								},
+								{
+									"affordanceId": "grow",
+									"action": "grow",
+									"label": "Tend and harvest the garden",
+									"utility": -0.0132,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0162 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.35 },
+									"believed": { "competence": 0.35 }
+								}
+							],
+							"intention": "to keep my promise to sam",
+							"narration": "I have to keep to it. It was a close call."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "nurse",
+				"description": "Moved evening care into a small clinic.",
+				"known": true,
+				"place": "clinic",
+				"wealth": 5,
+				"policy": "hf",
+				"decision": {
+					"chosen": "care",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Help neighbours at the clinic",
+					"reason": "I have to keep to it. It was a close call.",
+					"options": [
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": 0.2123
+						},
+						{
+							"id": "work",
+							"label": "Work a paid clinic shift",
+							"utility": 0.2026
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.0053
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": -0.0103
+						},
+						{
+							"id": "grow",
+							"label": "Tend and harvest the garden",
+							"utility": -0.0132
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"job": {
+					"offer": {
+						"id": "care",
+						"action": "care",
+						"label": "Help neighbours at the clinic",
+						"placeId": "clinic",
+						"duration": 60,
+						"effort": 0.15,
+						"advertises": { "belonging": 0.3, "competence": 0.25 },
+						"fulfills": ["c1"]
+					},
+					"end": 555,
+					"arrive": 495,
+					"from": "clinic",
+					"event": 5,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "sam",
+					"name": "Sam",
+					"now": 510,
+					"rng": {
+						"a": -794651975,
+						"b": 3020559002,
+						"c": 3055548892,
+						"d": 2935518347
+					},
+					"life": { "bornAt": -13665600, "sex": "male" },
+					"body": {
+						"satiety": 0.7728228570712574,
+						"hydration": 0.8222189205658905,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.5896923591271506,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.7311356779187917,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817527824779683, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At market. 80 meals available.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "market",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "jo",
+								"actions": ["supply"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Collect food for the shared meal",
+								"id": "c1",
+								"status": "pending"
+							}
+						],
+						"goals": [],
+						"nextId": 2,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "supply",
+						"action": "supply",
+						"affordance": {
+							"id": "supply",
+							"action": "supply",
+							"label": "Carry food from the quay",
+							"placeId": "quay",
+							"duration": 90,
+							"effort": 0.15,
+							"advertises": { "competence": 0.25 },
+							"fulfills": ["c1"],
+							"tags": ["work"]
+						},
+						"needsAtStart": {
+							"food": 0.7871663489625447,
+							"water": 0.8370153648326921,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 585,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to keep my promise to jo",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "supply",
+							"chosenAction": "supply",
+							"considered": [
+								{
+									"affordanceId": "supply",
+									"action": "supply",
+									"label": "Carry food from the quay",
+									"utility": 0.2043,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "commitment:c1", "value": 0.2222 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.25 },
+									"believed": { "competence": 0.25 }
+								},
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid kitchen shift",
+									"utility": 0.1887,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2043 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.0053,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": -0.0103,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								}
+							],
+							"intention": "to keep my promise to jo",
+							"narration": "I have to keep to it. It was a close call."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "cook",
+				"description": "Promised a shared meal when the hall opens.",
+				"known": true,
+				"place": "market",
+				"wealth": 6,
+				"policy": "hf",
+				"decision": {
+					"chosen": "supply",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Carry food from the quay",
+					"reason": "I have to keep to it. It was a close call.",
+					"options": [
+						{
+							"id": "supply",
+							"label": "Carry food from the quay",
+							"utility": 0.2043
+						},
+						{
+							"id": "work",
+							"label": "Work a paid kitchen shift",
+							"utility": 0.1887
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.0053
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": -0.0103
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"job": {
+					"offer": {
+						"id": "supply",
+						"action": "supply",
+						"label": "Carry food from the quay",
+						"placeId": "quay",
+						"duration": 90,
+						"effort": 0.15,
+						"advertises": { "competence": 0.25 },
+						"fulfills": ["c1"],
+						"tags": ["work"]
+					},
+					"end": 585,
+					"arrive": 525,
+					"from": "market",
+					"event": 1,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "jo",
+					"name": "Jo",
+					"now": 510,
+					"rng": {
+						"a": 1921223815,
+						"b": 2827132505,
+						"c": 384853288,
+						"d": 2505876061
+					},
+					"life": { "bornAt": -14191200, "sex": "female" },
+					"body": {
+						"satiety": 0.7728500517481258,
+						"hydration": 0.8222467195682729,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.5896923591271506,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.4888869066722691,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817579767278041, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At quay. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "quay",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "lea",
+								"actions": ["supply"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Bring food ashore",
+								"id": "c1",
+								"status": "pending"
+							}
+						],
+						"goals": [],
+						"nextId": 2,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "supply",
+						"action": "supply",
+						"affordance": {
+							"id": "supply",
+							"action": "supply",
+							"label": "Carry food from the quay",
+							"placeId": "quay",
+							"duration": 60,
+							"effort": 0.15,
+							"advertises": { "competence": 0.25 },
+							"fulfills": ["c1"],
+							"tags": ["work"]
+						},
+						"needsAtStart": {
+							"food": 0.7871791909255259,
+							"water": 0.8370283578775909,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 555,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to keep my promise to lea",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "supply",
+							"chosenAction": "supply",
+							"considered": [
+								{
+									"affordanceId": "supply",
+									"action": "supply",
+									"label": "Carry food from the quay",
+									"utility": 0.2043,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "commitment:c1", "value": 0.2222 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.25 },
+									"believed": { "competence": 0.25 }
+								},
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid quay shift",
+									"utility": 0.1765,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.1921 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.0053,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": -0.0103,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								}
+							],
+							"intention": "to keep my promise to lea",
+							"narration": "I have to keep to it. It was a close call."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "ferry keeper",
+				"description": "Carries supplies from the quay.",
+				"known": true,
+				"place": "quay",
+				"wealth": 7,
+				"policy": "hf",
+				"decision": {
+					"chosen": "supply",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Carry food from the quay",
+					"reason": "I have to keep to it. It was a close call.",
+					"options": [
+						{
+							"id": "supply",
+							"label": "Carry food from the quay",
+							"utility": 0.2043
+						},
+						{
+							"id": "work",
+							"label": "Work a paid quay shift",
+							"utility": 0.1765
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.0053
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": -0.0103
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"job": {
+					"offer": {
+						"id": "supply",
+						"action": "supply",
+						"label": "Carry food from the quay",
+						"placeId": "quay",
+						"duration": 60,
+						"effort": 0.15,
+						"advertises": { "competence": 0.25 },
+						"fulfills": ["c1"],
+						"tags": ["work"]
+					},
+					"end": 555,
+					"arrive": 495,
+					"from": "quay",
+					"event": 9,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "lea",
+					"name": "Lea",
+					"now": 510,
+					"rng": {
+						"a": 1145296930,
+						"b": 3760808591,
+						"c": 2116896823,
+						"d": 1121641155
+					},
+					"life": { "bornAt": -14716800, "sex": "male" },
+					"body": {
+						"satiety": 0.7728730715451092,
+						"hydration": 0.8222702509157596,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.6,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.5520619559334591,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817623735457694, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At school. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "school",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": {
+						"relationships": [
+							{
+								"otherId": "ada",
+								"affection": 0.25,
+								"trust": 0.65,
+								"respect": 0,
+								"familiarity": 0.5999881311588214,
+								"roles": ["neighbour"],
+								"ledger": 0,
+								"lastInteraction": 480
+							}
+						]
+					},
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "ravi",
+								"actions": ["teach"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Hold the displaced class",
+								"id": "c1",
+								"status": "pending"
+							},
+							{
+								"kind": "promise",
+								"actions": ["inspect", "open-section", "keep-closed"],
+								"from": 900,
+								"until": 3000,
+								"importance": 0.6,
+								"label": "Inspect the hall before resuming classes there",
+								"id": "c3",
+								"status": "pending"
+							}
+						],
+						"goals": [
+							{
+								"label": "Help neighbours understand the hall inspection",
+								"serves": ["competence", "meaning"],
+								"importance": 0.7,
+								"deadline": 1200,
+								"advancedBy": [
+									{ "action": "inspect", "amount": 0.1 },
+									{ "action": "ask-inspector", "amount": 0.75 },
+									{ "action": "answer-inspection", "amount": 0.75 },
+									{ "action": "open-section", "amount": 0.75 },
+									{ "action": "keep-closed", "amount": 0.75 }
+								],
+								"baseImportance": 0.7,
+								"id": "g2",
+								"status": "active",
+								"progress": 0,
+								"adoptedAt": 480,
+								"lastAdvancedAt": 480
+							}
+						],
+						"nextId": 4,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "inspect",
+						"action": "inspect",
+						"affordance": {
+							"id": "inspect",
+							"action": "inspect",
+							"label": "Go and inspect the hall timber",
+							"placeId": "hall",
+							"duration": 45,
+							"effort": 0.15,
+							"advertises": { "competence": 0.45, "meaning": 0.3 },
+							"fulfills": ["c3"]
+						},
+						"needsAtStart": {
+							"food": 0.7871900614125013,
+							"water": 0.8370393562526482,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 540,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to Help neighbours understand the hall inspection",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "inspect",
+							"chosenAction": "inspect",
+							"considered": [
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.3626,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "goal:g2", "value": 0.3573 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "teach",
+									"action": "teach",
+									"label": "Teach the displaced evening class",
+									"utility": 0.2119,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "commitment:c1", "value": 0.2222 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								},
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid school shift",
+									"utility": 0.1657,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.1813 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "grow",
+									"action": "grow",
+									"label": "Tend and harvest the garden",
+									"utility": -0.0132,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0162 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.35 },
+									"believed": { "competence": 0.35 }
+								}
+							],
+							"intention": "to Help neighbours understand the hall inspection",
+							"narration": "Keeping at it."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"methods": {
+						"rules": [
+							{
+								"id": "hall-section-inspection",
+								"action": "open-section",
+								"conditions": [
+									{ "cue": "hall-moisture", "value": "dry" },
+									{ "cue": "hall-support", "value": "sound" }
+								],
+								"evidence": [
+									{
+										"id": "lea-background-training-0-0",
+										"sourceId": "prior-trade-course",
+										"at": 480,
+										"attention": 1,
+										"outcome": "success"
+									},
+									{
+										"id": "lea-background-training-0-1",
+										"sourceId": "prior-trade-course",
+										"at": 480,
+										"attention": 1,
+										"outcome": "success"
+									}
+								]
+							},
+							{
+								"id": "hall-section-inspection",
+								"action": "keep-closed",
+								"conditions": [
+									{ "cue": "hall-moisture", "value": "wet" },
+									{ "cue": "hall-support", "value": "sound" }
+								],
+								"evidence": [
+									{
+										"id": "lea-background-training-1-0",
+										"sourceId": "prior-trade-course",
+										"at": 480,
+										"attention": 1,
+										"outcome": "success"
+									},
+									{
+										"id": "lea-background-training-1-1",
+										"sourceId": "prior-trade-course",
+										"at": 480,
+										"attention": 1,
+										"outcome": "success"
+									}
+								]
+							}
+						],
+						"recentDemonstrations": [
+							"lea-background-training-0-0",
+							"lea-background-training-0-1",
+							"lea-background-training-1-0",
+							"lea-background-training-1-1"
+						]
+					},
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "teacher",
+				"description": "Evening classes need somewhere dry.",
+				"known": true,
+				"place": "school",
+				"wealth": 8,
+				"policy": "hf",
+				"decision": {
+					"chosen": "inspect",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Go and inspect the hall timber",
+					"reason": "Keeping at it.",
+					"options": [
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.3626
+						},
+						{
+							"id": "teach",
+							"label": "Teach the displaced evening class",
+							"utility": 0.2119
+						},
+						{
+							"id": "work",
+							"label": "Work a paid school shift",
+							"utility": 0.1657
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "grow",
+							"label": "Tend and harvest the garden",
+							"utility": -0.0132
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"job": {
+					"offer": {
+						"id": "inspect",
+						"action": "inspect",
+						"label": "Go and inspect the hall timber",
+						"placeId": "hall",
+						"duration": 45,
+						"effort": 0.15,
+						"advertises": { "competence": 0.45, "meaning": 0.3 },
+						"fulfills": ["c3"]
+					},
+					"end": 540,
+					"arrive": 525,
+					"from": "school",
+					"event": 7,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "ravi",
+					"name": "Ravi",
+					"now": 510,
+					"rng": {
+						"a": 1153930524,
+						"b": 2092434514,
+						"c": 1388832247,
+						"d": 3892150503
+					},
+					"life": { "bornAt": -15242400, "sex": "female" },
+					"body": {
+						"satiety": 0.7728925573825663,
+						"hydration": 0.8222901697713693,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.5896923591271506,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.4975456285988912,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817660953577891, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At workshop. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "workshop",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "noor",
+								"actions": ["work"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Earn money for workshop supplies",
+								"id": "c1",
+								"status": "pending"
+							},
+							{
+								"kind": "appointment",
+								"toId": "lea",
+								"actions": ["learn"],
+								"from": 480,
+								"until": 615,
+								"importance": 0.7,
+								"label": "Attend Lea’s displaced practical class",
+								"id": "c2",
+								"status": "pending"
+							}
+						],
+						"goals": [],
+						"nextId": 3,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "work",
+						"action": "work",
+						"affordance": {
+							"id": "work",
+							"action": "work",
+							"label": "Work a paid workshop shift",
+							"placeId": "workshop",
+							"duration": 60,
+							"effort": 0.15,
+							"advertises": { "competence": 0.3 },
+							"fulfills": ["c1"],
+							"material": 2,
+							"tags": ["work"]
+						},
+						"needsAtStart": {
+							"food": 0.7871992630810666,
+							"water": 0.8370486661761379,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 555,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to earn",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "work",
+							"chosenAction": "work",
+							"considered": [
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid workshop shift",
+									"utility": 0.459,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "commitment:c1", "value": 0.2222 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2524 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": 0.2979,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "commitment:c2", "value": 0.3082 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.0053,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "grow",
+									"action": "grow",
+									"label": "Tend and harvest the garden",
+									"utility": -0.0132,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0162 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.35 },
+									"believed": { "competence": 0.35 }
+								}
+							],
+							"intention": "to earn",
+							"narration": "It pays."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "mechanic",
+				"description": "Shares a crowded workshop with Ada.",
+				"known": true,
+				"place": "workshop",
+				"wealth": 3,
+				"policy": "hf",
+				"decision": {
+					"chosen": "work",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Work a paid workshop shift",
+					"reason": "It pays.",
+					"options": [
+						{
+							"id": "work",
+							"label": "Work a paid workshop shift",
+							"utility": 0.459
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": 0.2979
+						},
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.0053
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "grow",
+							"label": "Tend and harvest the garden",
+							"utility": -0.0132
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"paidWork": { "day": 0, "starts": 1, "minutes": 0, "totalMinutes": 0 },
+				"job": {
+					"offer": {
+						"id": "work",
+						"action": "work",
+						"label": "Work a paid workshop shift",
+						"placeId": "workshop",
+						"duration": 60,
+						"effort": 0.15,
+						"advertises": { "competence": 0.3 },
+						"fulfills": ["c1"],
+						"material": 2,
+						"tags": ["work"]
+					},
+					"end": 555,
+					"arrive": 495,
+					"from": "workshop",
+					"event": 3,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "noor",
+					"name": "Noor",
+					"now": 510,
+					"rng": {
+						"a": 989472789,
+						"b": 129336177,
+						"c": 74790350,
+						"d": 2096861283
+					},
+					"life": { "bornAt": -15768000, "sex": "male" },
+					"body": {
+						"satiety": 0.772909051787868,
+						"hydration": 0.8223070307186235,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.5896923591271506,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.7944752825656906,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.011817692457935847, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At homes. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "homes",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [
+							{
+								"kind": "promise",
+								"toId": "ada",
+								"actions": ["talk"],
+								"from": 480,
+								"until": 1080,
+								"importance": 0.6,
+								"label": "Meet neighbours at the hall",
+								"id": "c1",
+								"status": "pending"
+							}
+						],
+						"goals": [],
+						"nextId": 2,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "work",
+						"action": "work",
+						"affordance": {
+							"id": "work",
+							"action": "work",
+							"label": "Work a paid coordination shift by the hall",
+							"placeId": "hall",
+							"duration": 105,
+							"effort": 0.15,
+							"advertises": { "competence": 0.3 },
+							"fulfills": [],
+							"material": 2,
+							"tags": ["work"]
+						},
+						"needsAtStart": {
+							"food": 0.7872070521253456,
+							"water": 0.837056546856232,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 600,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to earn",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "work",
+							"chosenAction": "work",
+							"considered": [
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid coordination shift by the hall",
+									"utility": 0.2185,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2341 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "talk",
+									"action": "talk",
+									"label": "Visit neighbours at the hall",
+									"utility": 0.2047,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0119 },
+										{ "source": "commitment:c1", "value": 0.2222 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.45 },
+									"believed": { "belonging": 0.45 }
+								},
+								{
+									"affordanceId": "sleep",
+									"action": "sleep",
+									"label": "Sleep at home",
+									"utility": 0.0232,
+									"terms": [{ "source": "need:sleep", "value": 0.0232 }],
+									"advertised": { "sleep": 0.6 },
+									"believed": { "sleep": 0.6 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "inspect",
+									"action": "inspect",
+									"label": "Go and inspect the hall timber",
+									"utility": 0.0053,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0208 },
+										{ "source": "need:meaning", "value": 0.0139 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.45, "meaning": 0.3 },
+									"believed": { "competence": 0.45, "meaning": 0.3 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								}
+							],
+							"intention": "to earn",
+							"narration": "It pays. It was a close call."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "organiser",
+				"description": "Visits neighbours who have not heard the hall news.",
+				"known": true,
+				"place": "homes",
+				"wealth": 4,
+				"policy": "hf",
+				"decision": {
+					"chosen": "work",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Work a paid coordination shift by the hall",
+					"reason": "It pays. It was a close call.",
+					"options": [
+						{
+							"id": "work",
+							"label": "Work a paid coordination shift by the hall",
+							"utility": 0.2185
+						},
+						{
+							"id": "talk",
+							"label": "Visit neighbours at the hall",
+							"utility": 0.2047
+						},
+						{ "id": "sleep", "label": "Sleep at home", "utility": 0.0232 },
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "inspect",
+							"label": "Go and inspect the hall timber",
+							"utility": 0.0053
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"paidWork": { "day": 0, "starts": 1, "minutes": 0, "totalMinutes": 0 },
+				"job": {
+					"offer": {
+						"id": "work",
+						"action": "work",
+						"label": "Work a paid coordination shift by the hall",
+						"placeId": "hall",
+						"duration": 105,
+						"effort": 0.15,
+						"advertises": { "competence": 0.3 },
+						"fulfills": [],
+						"material": 2,
+						"tags": ["work"]
+					},
+					"end": 600,
+					"arrive": 540,
+					"from": "homes",
+					"event": 4,
+					"food": 0,
+					"tools": 0
+				}
+			},
+			{
+				"person": {
+					"schema": "human/person@1",
+					"engine": "2.2.0",
+					"id": "resident-1",
+					"name": "Resident 1",
+					"now": 510,
+					"rng": {
+						"a": -940307064,
+						"b": 2389084938,
+						"c": 756710175,
+						"d": 650853852
+					},
+					"life": { "bornAt": -16293600, "sex": "female" },
+					"body": {
+						"satiety": 0.7729230140005188,
+						"hydration": 0.8223213032023385,
+						"sleepPressure": 0.22856833682822042,
+						"exertion": 0.04208074641706036,
+						"circadianPeak": 960,
+						"pain": 0,
+						"health": 1,
+						"fitness": 0.4999598905338225,
+						"sleepDebt": 0,
+						"alive": true,
+						"asleep": false,
+						"since": 480,
+						"injuries": [],
+						"illnesses": [],
+						"nextId": 0
+					},
+					"needs": {
+						"safety": 0.8,
+						"belonging": 0.6932934032267785,
+						"esteem": 0.5992805720491269,
+						"autonomy": 0.7,
+						"competence": 0.5992805720491269,
+						"leisure": 0.5896923591271506,
+						"meaning": 0.5982696320007536
+					},
+					"traits": {
+						"honesty": 0.5,
+						"emotionality": 0.5,
+						"extraversion": 0.5,
+						"agreeableness": 0.5,
+						"conscientiousness": 0.5,
+						"openness": 0.5
+					},
+					"values": {
+						"benevolence": 0.5695861727232113,
+						"universalism": 0.5,
+						"tradition": 0.5,
+						"conformity": 0.5,
+						"security": 0.5,
+						"achievement": 0.5,
+						"power": 0.5,
+						"hedonism": 0.5,
+						"stimulation": 0.5,
+						"selfDirection": 0.5
+					},
+					"conscience": {
+						"norms": [
+							{
+								"normId": "salah",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "sawm-ramadan",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "zakat",
+								"standing": "obligatory",
+								"conviction": 0.475
+							},
+							{
+								"normId": "charity",
+								"standing": "recommended",
+								"conviction": 0.475
+							},
+							{
+								"normId": "lying",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "theft",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "keep-promise",
+								"standing": "obligatory",
+								"conviction": 0.75
+							},
+							{
+								"normId": "kindness-to-parents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "backbiting",
+								"standing": "forbidden",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "help-neighbor",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "gratitude",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "harm-others",
+								"standing": "forbidden",
+								"conviction": 0.75
+							},
+							{
+								"normId": "intoxicants",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "forbidden-food",
+								"standing": "forbidden",
+								"conviction": 0.475
+							},
+							{
+								"normId": "fairness",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "care-dependents",
+								"standing": "obligatory",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "punctuality",
+								"standing": "recommended",
+								"conviction": 0.6000000000000001
+							},
+							{
+								"normId": "eid-prayer",
+								"standing": "recommended",
+								"conviction": 0.475
+							}
+						],
+						"breaches": [],
+						"intentions": [],
+						"nextBreach": 0
+					},
+					"affect": {
+						"mood": { "valence": 0.0118177191257271, "arousal": 0.3 },
+						"emotions": [],
+						"regulation": 0.3,
+						"lastUpdated": 510
+					},
+					"skills": {
+						"repair": { "level": 0.1, "practice": 174, "lastPracticed": 480 }
+					},
+					"habits": [],
+					"memory": {
+						"episodes": [
+							{
+								"at": 495,
+								"kind": "witnessed",
+								"action": "local-situation",
+								"valence": 0,
+								"summary": "At homes. Neighbours are going about their day.",
+								"tags": ["local-situation", "saw"],
+								"placeId": "homes",
+								"id": "e0",
+								"salience": 0.2992788398650861
+							}
+						],
+						"beliefs": [],
+						"expectations": [],
+						"sourceTrust": {},
+						"nextEpisode": 1
+					},
+					"social": { "relationships": [] },
+					"agenda": {
+						"commitments": [],
+						"goals": [],
+						"nextId": 1,
+						"lastProposalDay": -1
+					},
+					"will": {
+						"voices": [],
+						"precommitments": [],
+						"switchMargin": 0.15,
+						"temperature": 0
+					},
+					"activity": {
+						"affordanceId": "work",
+						"action": "work",
+						"affordance": {
+							"id": "work",
+							"action": "work",
+							"label": "Work a paid market shift",
+							"placeId": "market",
+							"duration": 90,
+							"effort": 0.15,
+							"advertises": { "competence": 0.3 },
+							"fulfills": [],
+							"material": 2,
+							"tags": ["work"]
+						},
+						"needsAtStart": {
+							"food": 0.7872136454089822,
+							"water": 0.8370632177079113,
+							"sleep": 0.6335668794461407,
+							"rest": 0.9908858312181499,
+							"relief": 1,
+							"safety": 0.8,
+							"belonging": 0.6966386310410476,
+							"esteem": 0.5996396367160814,
+							"autonomy": 0.7,
+							"competence": 0.5996396367160814,
+							"leisure": 0.6,
+							"meaning": 0.5991341913131416
+						},
+						"startedAt": 495,
+						"endsAt": 585,
+						"effort": 0.15,
+						"focus": 0,
+						"mode": "awake",
+						"decisionId": "d0",
+						"intention": "to earn",
+						"reviewAt": 525
+					},
+					"trace": [
+						{
+							"id": "d0",
+							"at": 495,
+							"chosenAffordanceId": "work",
+							"chosenAction": "work",
+							"considered": [
+								{
+									"affordanceId": "work",
+									"action": "work",
+									"label": "Work a paid market shift",
+									"utility": 0.2026,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 },
+										{ "source": "material", "value": 0.2182 }
+									],
+									"advertised": { "competence": 0.3 },
+									"believed": { "competence": 0.3 }
+								},
+								{
+									"affordanceId": "sleep",
+									"action": "sleep",
+									"label": "Sleep at home",
+									"utility": 0.0232,
+									"terms": [{ "source": "need:sleep", "value": 0.0232 }],
+									"advertised": { "sleep": 0.6 },
+									"believed": { "sleep": 0.6 }
+								},
+								{
+									"affordanceId": "rest",
+									"action": "rest",
+									"label": "Rest at home",
+									"utility": 0.0138,
+									"terms": [{ "source": "need:leisure", "value": 0.0138 }],
+									"advertised": { "leisure": 0.3 },
+									"believed": { "leisure": 0.3 }
+								},
+								{
+									"affordanceId": "drink",
+									"action": "drink",
+									"label": "Drink water at home",
+									"utility": 0.0054,
+									"terms": [{ "source": "need:water", "value": 0.0054 }],
+									"advertised": { "water": 0.7 },
+									"believed": { "water": 0.7 }
+								},
+								{
+									"affordanceId": "repair",
+									"action": "repair",
+									"label": "Repair the flood-damaged hall",
+									"utility": 0.0003,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0066 },
+										{ "source": "need:competence", "value": 0.0231 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.5, "belonging": 0.25 },
+									"believed": { "belonging": 0.25, "competence": 0.5 }
+								},
+								{
+									"affordanceId": "care",
+									"action": "care",
+									"label": "Help neighbours at the clinic",
+									"utility": -0.0099,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.008 },
+										{ "source": "need:competence", "value": 0.0115 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "belonging": 0.3, "competence": 0.25 },
+									"believed": { "belonging": 0.3, "competence": 0.25 }
+								},
+								{
+									"affordanceId": "learn",
+									"action": "learn",
+									"label": "Attend a practical class at school",
+									"utility": -0.0103,
+									"terms": [
+										{ "source": "need:belonging", "value": 0.0053 },
+										{ "source": "need:competence", "value": 0.0138 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.3, "belonging": 0.2 },
+									"believed": { "belonging": 0.2, "competence": 0.3 }
+								},
+								{
+									"affordanceId": "grow",
+									"action": "grow",
+									"label": "Tend and harvest the garden",
+									"utility": -0.0132,
+									"terms": [
+										{ "source": "need:competence", "value": 0.0162 },
+										{ "source": "effort", "value": -0.0294 }
+									],
+									"advertised": { "competence": 0.35 },
+									"believed": { "competence": 0.35 }
+								}
+							],
+							"intention": "to earn",
+							"narration": "It pays."
+						}
+					],
+					"nextDecision": 1,
+					"retention": { "trace": 4, "chronicleDays": 31 },
+					"chronicleDay": {
+						"day": 0,
+						"baseline": {
+							"habits": {},
+							"trust": {},
+							"illnesses": {},
+							"openBreaches": []
+						},
+						"kept": [],
+						"broken": [],
+						"released": [],
+						"actions": [],
+						"verdicts": [],
+						"material": 0,
+						"moodSum": 0,
+						"moodSamples": 0,
+						"decisions": 1
+					}
+				},
+				"role": "shop assistant",
+				"description": "A persistent neighbour with food, rest and social needs.",
+				"known": false,
+				"place": "homes",
+				"wealth": 5,
+				"policy": "hf",
+				"decision": {
+					"chosen": "work",
+					"decidedAt": 495,
+					"round": 1,
+					"label": "Work a paid market shift",
+					"reason": "It pays.",
+					"options": [
+						{
+							"id": "work",
+							"label": "Work a paid market shift",
+							"utility": 0.2026
+						},
+						{ "id": "sleep", "label": "Sleep at home", "utility": 0.0232 },
+						{ "id": "rest", "label": "Rest at home", "utility": 0.0138 },
+						{
+							"id": "drink",
+							"label": "Drink water at home",
+							"utility": 0.0054
+						},
+						{
+							"id": "repair",
+							"label": "Repair the flood-damaged hall",
+							"utility": 0.0003
+						},
+						{
+							"id": "care",
+							"label": "Help neighbours at the clinic",
+							"utility": -0.0099
+						},
+						{
+							"id": "learn",
+							"label": "Attend a practical class at school",
+							"utility": -0.0103
+						},
+						{
+							"id": "grow",
+							"label": "Tend and harvest the garden",
+							"utility": -0.0132
+						}
+					],
+					"source": "HF 2.2.1"
+				},
+				"paidWork": { "day": 0, "starts": 1, "minutes": 0, "totalMinutes": 0 },
+				"job": {
+					"offer": {
+						"id": "work",
+						"action": "work",
+						"label": "Work a paid market shift",
+						"placeId": "market",
+						"duration": 90,
+						"effort": 0.15,
+						"advertises": { "competence": 0.3 },
+						"fulfills": [],
+						"material": 2,
+						"tags": ["work"]
+					},
+					"end": 585,
+					"arrive": 525,
+					"from": "homes",
+					"event": 8,
+					"food": 0,
+					"tools": 0
+				}
+			}
+		],
+		"places": [
+			{
+				"id": "homes",
+				"name": "Riverside homes",
+				"x": 12,
+				"y": 65,
+				"capacity": 300,
+				"kind": "home",
+				"stock": 0,
+				"reserved": 0
+			},
+			{
+				"id": "market",
+				"name": "Market kitchen",
+				"x": 42,
+				"y": 60,
+				"capacity": 16,
+				"kind": "food",
+				"stock": 80,
+				"reserved": 1
+			},
+			{
+				"id": "clinic",
+				"name": "Clinic",
+				"x": 68,
+				"y": 62,
+				"capacity": 6,
+				"kind": "care",
+				"stock": 0,
+				"reserved": 1
+			},
+			{
+				"id": "workshop",
+				"name": "Workshop",
+				"x": 74,
+				"y": 35,
+				"capacity": 8,
+				"kind": "work",
+				"stock": 0,
+				"reserved": 1
+			},
+			{
+				"id": "quay",
+				"name": "Quay",
+				"x": 14,
+				"y": 35,
+				"capacity": 12,
+				"kind": "supply",
+				"stock": 0,
+				"reserved": 2
+			},
+			{
+				"id": "garden",
+				"name": "Community garden",
+				"x": 30,
+				"y": 18,
+				"capacity": 18,
+				"kind": "grow",
+				"stock": 0,
+				"reserved": 1
+			},
+			{
+				"id": "school",
+				"name": "School",
+				"x": 58,
+				"y": 18,
+				"capacity": 14,
+				"kind": "learn",
+				"stock": 0,
+				"reserved": 0
+			},
+			{
+				"id": "hall",
+				"name": "Flooded hall",
+				"x": 47,
+				"y": 39,
+				"capacity": 10,
+				"kind": "community",
+				"stock": 0,
+				"reserved": 3
+			}
+		],
+		"pending": [],
+		"initialFood": 80,
+		"produced": 0,
+		"consumed": 0
+	}
+}
