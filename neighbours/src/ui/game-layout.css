@@ -1291,3 +1291,29 @@ body,
 	flex-direction: column;
 	gap: 8px;
 }
+
+.first-steps {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 4px 8px;
+	background: #f7e7bd;
+	color: #243b38;
+	font-size: 0.8rem;
+	line-height: 1.25;
+}
+.first-steps button {
+	flex: none;
+	min-height: 44px;
+	padding: 4px 8px;
+	border: 1px solid #784331;
+	background: #fffaf0;
+	color: #243b38;
+}
+
+@media (max-width: 767px) {
+	.game-frame[data-screen="town"]:has([data-first-steps]) .neighbour-strip {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}

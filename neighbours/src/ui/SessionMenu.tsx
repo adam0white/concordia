@@ -18,11 +18,13 @@ export default function SessionMenu({
 	open,
 	close,
 	onNavigate,
+	onReplayGuide,
 }: {
 	session: Session;
 	open: boolean;
 	close: () => void;
 	onNavigate: (destination: MenuDestination) => void;
+	onReplayGuide?: () => void;
 }) {
 	const dialog = useRef<HTMLDialogElement>(null);
 	const debug = useRef<HTMLDetailsElement>(null);
@@ -61,6 +63,16 @@ export default function SessionMenu({
 			</div>
 			<div className="menu-scroll">
 				<p className="tiny muted">Time pauses while this menu is open.</p>
+				<button
+					type="button"
+					disabled={!session.town || !onReplayGuide}
+					onClick={() => {
+						onReplayGuide?.();
+						close();
+					}}
+				>
+					Replay first steps
+				</button>
 				{session.fileSession && (
 					<p>
 						File session. Device saves, people checkpoints and forks are

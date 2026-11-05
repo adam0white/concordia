@@ -227,6 +227,7 @@ for (const width of [360, 1280]) {
 		expect(
 			rows.map((s) => s.trim()).filter((s) => s !== "Full screen"),
 		).toEqual([
+			"Replay first steps",
 			"Read the journal ▸",
 			"Switch light or dark colours",
 			"Compare possible outcomes ▸",
