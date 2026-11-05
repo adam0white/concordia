@@ -185,7 +185,7 @@ test("390px town has no horizontal overflow and keyboard can open a person", asy
 	).toBe(true);
 	const ada = page
 		.getByRole("navigation", { name: "Familiar neighbours" })
-		.getByRole("button", { name: /Nora/ });
+		.getByRole("button", { name: /^Nora ·/ });
 	await ada.focus();
 	await page.keyboard.press("Enter");
 	await expect(
@@ -527,7 +527,7 @@ test("closing a person preserves a newer keyboard focus before deferred focus re
 	const neighbours = page.getByRole("navigation", {
 		name: "Familiar neighbours",
 	});
-	const ada = neighbours.getByRole("button", { name: /Nora/ });
+	const ada = neighbours.getByRole("button", { name: /^Nora ·/ });
 	await neighbours.getByRole("button", { name: /Ece/ }).click();
 	await expect(page.getByLabel("Ece's details", { exact: true })).toBeVisible();
 	await page.evaluate(() => {
@@ -635,7 +635,7 @@ test("map selection keeps 44px targets and places clusters truthfully on narrow 
 		}
 		const ada = page
 			.getByRole("navigation", { name: "Familiar neighbours" })
-			.getByRole("button", { name: /Nora/ });
+			.getByRole("button", { name: /^Nora ·/ });
 		await ada.focus();
 		await page.keyboard.press("Enter");
 		await expect(
@@ -687,7 +687,7 @@ test("retained outcomes stay near the clock and promise results survive into the
 	await pause(page);
 	await page
 		.getByRole("navigation", { name: "Familiar neighbours" })
-		.getByRole("button", { name: /Nora/ })
+		.getByRole("button", { name: /^Nora ·/ })
 		.click();
 	const ada = page.getByLabel("Nora's details", { exact: true });
 	await expect(ada.locator(".promise-result")).toContainText(

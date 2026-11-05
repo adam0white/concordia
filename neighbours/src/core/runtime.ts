@@ -1779,11 +1779,16 @@ export class Runtime implements TownRuntime {
 					progress: g.progress,
 					status: g.status,
 				})),
-				commitments: r.owner.actor(r.id).agenda.commitments.map((c) => ({
-					label: c.label ?? c.actions.join(", "),
-					at: c.until / MINUTE,
-					status: c.status,
-				})),
+				// This view feeds promise cards and promise-result observations. Other
+				// native commitments remain in the Run, but are not promises to people.
+				commitments: r.owner
+					.actor(r.id)
+					.agenda.commitments.filter((c) => c.kind === "promise")
+					.map((c) => ({
+						label: c.label ?? c.actions.join(", "),
+						at: c.until / MINUTE,
+						status: c.status,
+					})),
 				...(r.decision ? { decision: r.decision } : {}),
 			})),
 			places: this.s.places.map((p) => ({

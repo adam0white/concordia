@@ -9,7 +9,7 @@ import { groupStories } from "../src/ui/observations";
 import PersonPanel from "../src/ui/PersonPanel";
 import PersonPromises from "../src/ui/PersonPromises";
 import StoryHeadline from "../src/ui/StoryHeadline";
-import { createRuntime } from "./current-town.ts";
+import { createRuntime, restoreRuntime } from "./current-town.ts";
 
 const event = (
 	id: number,
@@ -341,4 +341,28 @@ it("keeps one person link per story and removes repeated actor and participant c
 	expect(html).not.toContain("Recorded participants:");
 	expect(html).toContain("Recorded teaching");
 	expect(html).toContain("Day 1 · 10:00");
+});
+
+it("projects native promises without calling worship commitments promises or changing the archive", () => {
+	const town = createRuntime(42, 6);
+	const before = town.export();
+	const native = town.s.owner.actor("ada").agenda.commitments;
+	expect(native.some((c) => c.kind === "worship")).toBe(true);
+	const expected = native
+		.filter((c) => c.kind === "promise")
+		.map((c) => ({
+			label: c.label ?? c.actions.join(", "),
+			at: c.until / 60000,
+			status: c.status,
+		}));
+	expect(expected).toHaveLength(1);
+	expect(town.view().people.find((p) => p.id === "ada")?.commitments).toEqual(
+		expected,
+	);
+	expect(town.export()).toEqual(before);
+	const cold = restoreRuntime(before);
+	expect(cold.view().people.find((p) => p.id === "ada")?.commitments).toEqual(
+		expected,
+	);
+	expect(cold.export()).toEqual(before);
 });

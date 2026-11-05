@@ -115,7 +115,7 @@ test("actual tools and bus branches retain setup, separate history and mark a sa
 	await comparisonReady(page);
 	const checkpoint =
 		(await comparison.locator(".comparison-checkpoint").textContent()) ?? "";
-	expect(checkpoint).toContain("24 rounds (6 hours)");
+	expect(checkpoint).toContain("24 rounds (6.0 hours)");
 	expect(checkpoint).toContain("Day 1, 08:00");
 	await expect(
 		comparison.getByRole("region", { name: "Changed resources" }),
