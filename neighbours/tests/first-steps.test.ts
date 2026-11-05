@@ -53,7 +53,7 @@ describe("first steps follows the visitor's actual actions", () => {
 		expect(
 			restoredBaseline(full, 42, 500, [9, 10, 11, 12, 13, 14, 15, 16]),
 		).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
-		expect(requestOutcome("held")).toContain("Waiting");
+		expect(requestOutcome("held")).toContain("waiting");
 		expect(requestOutcome("refused")).toContain("refused");
 		expect(requestOutcome("started")).toContain("not finished");
 	});

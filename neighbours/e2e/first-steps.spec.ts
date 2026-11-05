@@ -38,6 +38,14 @@ for (const width of [360, 1280]) {
 		const person = page.locator(".neighbour-strip [data-person-id]").first();
 		await exposed(guide);
 		await exposed(guide.getByRole("button", { name: "Skip guide" }));
+		for (const choice of await page.locator(".neighbour-strip button").all()) {
+			await exposed(choice);
+			expect(
+				await choice.evaluate(
+					(element) => element.getBoundingClientRect().height,
+				),
+			).toBeGreaterThanOrEqual(44);
+		}
 		await exposed(person);
 		await page.screenshot({ path: info.outputPath(`opening-${width}.png`) });
 		const hall = page

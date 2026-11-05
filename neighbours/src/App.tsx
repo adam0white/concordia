@@ -354,13 +354,13 @@ export default function App() {
 	const routeHint =
 		person &&
 		(town?.player?.job?.kind === "travel"
-			? `🚶 You are walking${walkingTo ? ` to ${walkingTo.name}` : ""} · ${person.name} may move.`
+			? `🚶 You are walking${walkingTo ? ` to ${walkingTo.name}` : ""}. ${person.name} may move.`
 			: person.lifeState === "asleep"
-				? `🌙 ${person.name} is asleep · wait or choose someone else.`
+				? `🌙 ${person.name} is asleep. Wait or choose someone else.`
 				: here
-					? `👆 Talk to ${person.name} · they may say no.`
+					? `👆 Talk to ${person.name}. They may say no.`
 					: person.journey
-						? `📍 ${ownPlace ? `You: ${ownPlace.name}` : "Your location is not shown"} · ${person.name} is travelling.`
+						? `📍 ${ownPlace ? `You are at ${ownPlace.name}` : "Your location is not shown"}. ${person.name} is travelling.`
 						: destination
 							? `👆 Walk to ${destination.name} to meet ${person.name}.`
 							: `👆 Find ${person.name} on the map.`);
@@ -799,8 +799,8 @@ export default function App() {
 											town.places.some(
 												(place) => place.id === "hall" && place.open,
 											)
-												? "🏠 Hall open · 👆 Choose a neighbour."
-												: "🏚️ Hall closed until repairs and inspection · 👆 Choose a neighbour."
+												? "🏠 The hall is open. 👆 Choose a neighbour."
+												: "🏚️ The hall is closed. Its repairs must pass inspection. 👆 Choose a neighbour."
 										}
 										skip={skipGuide}
 									/>
@@ -934,7 +934,7 @@ export default function App() {
 										/>
 										{guideEnabled && guideKnownIds !== null && (
 											<FirstSteps
-												text="👆 Choose a way to help · neighbours still decide."
+												text="👆 Choose a way to help. Neighbours still decide."
 												skip={skipGuide}
 											/>
 										)}
@@ -964,7 +964,7 @@ export default function App() {
 										/>
 										{guideEnabled && guideKnownIds !== null && (
 											<FirstSteps
-												text="👆 Choose where to walk · travel takes time."
+												text="👆 Choose where to walk. Travel takes time."
 												skip={skipGuide}
 											/>
 										)}

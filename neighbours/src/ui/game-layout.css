@@ -1311,3 +1311,9 @@ body,
 	background: #fffaf0;
 	color: #243b38;
 }
+
+@media (max-width: 767px) {
+	.game-frame[data-screen="town"]:has([data-first-steps]) .neighbour-strip {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}

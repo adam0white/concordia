@@ -50,17 +50,17 @@ export function restoredBaseline(
 /** Summarize only the request's public recorded status, not a predicted outcome. */
 export function requestOutcome(status: string): string {
 	const text: Record<string, string> = {
-		held: "⏳ Waiting for a decision · no later work recorded.",
-		refused: "✋ Request refused · the neighbour decides.",
-		decided: "💬 Decision recorded · work not confirmed.",
-		started: "🔨 Work started · not finished.",
-		"counter-started": "🔨 Alternative started · not finished.",
-		completed: "✓ Chosen work finished.",
-		failed: "⚠ Chosen work failed.",
-		interrupted: "⚠ Chosen work interrupted.",
+		held: "⏳ The request is waiting. No later work is recorded.",
+		refused: "✋ The neighbour refused the request.",
+		decided: "💬 A decision is recorded. Work is not confirmed.",
+		started: "🔨 The work started. It is not finished.",
+		"counter-started": "🔨 The alternative started. It is not finished.",
+		completed: "✓ The chosen work finished.",
+		failed: "⚠ The chosen work failed.",
+		interrupted: "⚠ The chosen work was interrupted.",
 		continued: "↪ The activity continued.",
 		replaced: "↪ A later request replaced this one.",
-		dropped: "✋ Request ended without being taken up.",
+		dropped: "✋ The request ended without being taken up.",
 	};
 	return text[status] ?? "💬 See the recorded answer.";
 }

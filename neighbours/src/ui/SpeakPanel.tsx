@@ -697,7 +697,7 @@ export function SpeakPanel({
 				>
 					{guideStep === "request" && skipGuide && (
 						<FirstSteps
-							text="👆 Choose how to ask, then a request · They may say no."
+							text="👆 Choose how to ask, then choose a request. They may say no."
 							skip={skipGuide}
 						/>
 					)}
