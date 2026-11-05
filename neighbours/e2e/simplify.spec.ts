@@ -12,7 +12,7 @@ for (const [width, height] of [
 	[1180, 820],
 	[1280, 800],
 ] as const) {
-	test(`ordinary controls, readable feedback and protected failed admission at ${width}`, async ({
+	test(`ordinary controls, readable feedback, protected research save and local fresh start at ${width}`, async ({
 		page,
 	}) => {
 		await page.setViewportSize({ width, height });
@@ -92,7 +92,7 @@ for (const [width, height] of [
 			.getByRole("button", { name: "Close Feedback", exact: true })
 			.click();
 		await page.getByRole("button", { name: "Game menu", exact: true }).click();
-		const now = await page.locator(".town-time strong").textContent();
+
 		await menu.getByRole("button", { name: "New game", exact: true }).click();
 		await expect(
 			menu.getByText("Your current town will be kept as the previous town."),
@@ -100,10 +100,35 @@ for (const [width, height] of [
 		await menu
 			.getByRole("button", { name: "Start new game", exact: true })
 			.click();
-		await expect(page.locator('.game-sheet [role="alert"]')).toContainText(
-			"Shared people are unavailable. Choose Start a fresh local town in Other ways in.",
-		);
-		await expect(page.locator(".town-time strong")).toHaveText(now ?? "");
+		await expect(page.locator(".town-ready")).toBeVisible();
+		await expect(
+			page.getByText("Shared people are unavailable", { exact: false }),
+		).toHaveCount(0);
+		await expect
+			.poll(() =>
+				page.evaluate(
+					() =>
+						new Promise<number>((resolve, reject) => {
+							const open = indexedDB.open("alder-quay", 1);
+							open.onerror = () => reject(open.error);
+							open.onsuccess = () => {
+								const db = open.result;
+								const request = db
+									.transaction("saves")
+									.objectStore("saves")
+									.get("latest");
+								request.onerror = () => reject(request.error);
+								request.onsuccess = () => {
+									db.close();
+									resolve(
+										request.result?.runtime?.physical?.people?.length ?? 0,
+									);
+								};
+							};
+						}),
+				),
+			)
+			.toBe(6);
 		await expect(
 			page.getByText("Shelf unavailable. Use a local file.", { exact: false }),
 		).toHaveCount(0);
@@ -118,7 +143,7 @@ for (const [width, height] of [
 							const q = db
 								.transaction("saves")
 								.objectStore("saves")
-								.get("latest");
+								.get("previous");
 							q.onsuccess = () => {
 								db.close();
 								resolve(q.result);

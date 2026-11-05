@@ -2,7 +2,7 @@
 
 [Play Neighbours](https://neighbours.adamwhite.work) · [Design and milestones](docs/neighbours/DESIGN.md) · [Current handoff](HANDOFF.md) · [Prior art](docs/neighbours/PRIOR_ART.md)
 
-Help a riverside town reopen its flooded community hall. Nora, Derya, Sam, Bilal, Rafi and Ece live alongside 200 persistent background residents: 206 people in a fresh canonical town. Residents choose for themselves. Help can be refused, delayed or left unfinished.
+Help a riverside town reopen its flooded community hall. A fresh browser town has six residents. The 206-person model remains a separate research workload. Residents choose for themselves. Help can be refused, delayed or left unfinished.
 
 ## How to play
 
@@ -14,7 +14,7 @@ Use **Help the town** for support actions that change conditions and spend town 
 
 | Part | Current responsibility |
 | --- | --- |
-| Published Human Framework library **3.0.0** | HF people’s perceptions, acquired state and decisions; saved Person engine version **2.23.0** |
+| Published Human Framework library **4.17.0** | HF people’s perceptions, acquired state and decisions; complete public Run archives and deterministic replay |
 | TypeScript host in `neighbours/` | World facts, feasible actions, travel, resources, physical outcomes, player inputs and saves |
 | Custom Python engine in `concordia/contrib/neighbours/` | Actual Concordia Entity/ActionSpec observation, choice, resolution and checkpoint orchestration |
 | Browser worker | Runs that Python engine through Pyodide and calls the TypeScript runtime on this device |
@@ -27,7 +27,7 @@ Diagnostics require exact `?lab=1`. They expose hypothetical comparisons, record
 
 The town autosaves to IndexedDB in this browser. A conflicting tab pauses rather than overwriting a newer checkpoint. Reload restores saved state. Current-version exports preserve runtime state and player inputs for deterministic continuation. Export produces lossless `.json.gz`; import accepts gzip or plain JSON, with a 50 MiB limit on both compressed input and expanded JSON. These diagnostic file tools are not ordinary menu choices: Other ways in is on the title with `?lab=1`, and Feedback supplies **Keep a copy of this run** in lab mode. Unsupported older saves or continuing-person obligations may be refused. A loaded chapter stays pinned to its admitted people; it does not pull newer shelf state into an existing run. Imported files remain file-origin, rather than becoming locally owned history.
 
-Recording is separate from device saving. The one Recording switch controls lab recording and automatic cross-game linkage on this device. DNT/GPC sets the initial default off; turning recording on opts in. Feedback remains available with recording off. Its optional sharing checkbox can opt in when submitting; character analysis keeps its separate opt-in. Current source consumes immutable lab-client **0.4.11** and lab-kit **0.5.12**. Feedback
+Recording is separate from device saving. The one Recording switch controls lab recording and automatic cross-game linkage on this device. DNT/GPC sets the initial default off; turning recording on opts in. Feedback remains available with recording off. Its optional sharing checkbox can opt in when submitting; character analysis keeps its separate opt-in. Current source consumes immutable lab-client **0.5.15** and lab-kit **0.5.32**. Feedback
 also offers **I'm stopping** and **I'm confused**. Selecting or clearing one sends nothing
 and leaves your edited note unchanged. **Submit** combines the selected words, optional
 verdict and note. See HANDOFF for source versus live-delivery status.
@@ -246,3 +246,11 @@ This is not an officially supported Google product.
 For a complete interactive authoring walkthrough and explicit editor/CLI
 coverage, see the
 [GUI and CLI entity-component guide](concordia/command_line_interface/README.md).
+
+## Current public scope — 2026-11-05
+
+The owner authorized simplifying port blockers. Fresh and restarted browser towns now start six people; every native faculty remains active. Complete current native and host files, journal downloads and replay remain supported. The simulation can continue; there is no new day cap. A bounded seed42/no-intervention96-round measurement produced a complete1,292,872-byte journal and249,522-byte gzip file, with full cold native/host and same-next equality in26.101seconds. This proves that workload only; it is not an unlimited-horizon or every-player-path bound. Current public CI repeats this full-day proof and actual six-person native/WASM parity.
+
+The original206 full-day/2700-second,30-day,50MiB and larger recording gates remain unqualified. Their scripts and historical public206 sources are preserved; `Neighbours research` can run the original research commands manually under its unchanged45-minute job budget. A valid206 imported research file remains a206 file and carries those limits; it is not silently shrunk. File admission still refuses expanded JSON above50MiB. No multiplayer or account transfer is included.
+
+The manual research gates run sequentially within the original45-minute job. An early failure or timeout leaves later stages unrun; each result must be read separately. No research pass is inferred from a green public-game job.

@@ -67,7 +67,7 @@ async function packet(
 		gunzipSync(await readFile(path)).toString("utf8"),
 	) as Packet;
 	expect(result.schema).toBe("neighbours/concordia@2");
-	expect(result.runtime.physical.people).toHaveLength(206);
+	expect(result.runtime.physical.people).toHaveLength(6);
 	expect(result.runtime.hf).toBe(FRAMEWORK_VERSION);
 	return result;
 }
@@ -109,7 +109,7 @@ test("real WASM town preserves requested exports, imports, reloads and previous 
 	// Files carry the complete public journal. Admit it through the shipped
 	// journal reader and strict host replay before inspecting native people.
 	const native = restoreRuntime(current.runtime).export() as NativeTownArchive;
-	expect(Object.keys(native.owner.run.current.people)).toHaveLength(206);
+	expect(Object.keys(native.owner.run.current.people)).toHaveLength(6);
 	expect(restoreRuntime(native).export()).toEqual(native);
 	expect(
 		Object.values(native.owner.run.current.people).every(

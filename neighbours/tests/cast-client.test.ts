@@ -106,28 +106,20 @@ it("keeps both explicit and ordinary fresh towns local across startup and restar
 		73,
 	);
 	worker.onmessage?.({ data: { type: "ready", view } });
-	await vi.waitFor(() =>
-		expect(fake.fresh).toHaveBeenCalledWith(73, 206, true),
-	);
+	await vi.waitFor(() => expect(fake.fresh).toHaveBeenCalledWith(73, 6, true));
 	expect(fake.postMessage.mock.calls.at(-1)?.[0]).toMatchObject({
 		type: "new",
 		seed: 73,
 	});
 	local.send({ type: "new", seed: 99 });
-	await vi.waitFor(() =>
-		expect(fake.fresh).toHaveBeenCalledWith(99, 206, true),
-	);
+	await vi.waitFor(() => expect(fake.fresh).toHaveBeenCalledWith(99, 6, true));
 	local.close();
 	fake.fresh.mockClear();
 	const automatic = new RuntimeClient(() => {});
 	worker.onmessage?.({ data: { type: "ready", view } });
-	await vi.waitFor(() =>
-		expect(fake.fresh).toHaveBeenCalledWith(42, 206, true),
-	);
+	await vi.waitFor(() => expect(fake.fresh).toHaveBeenCalledWith(42, 6, true));
 	automatic.send({ type: "new", seed: 71 });
-	await vi.waitFor(() =>
-		expect(fake.fresh).toHaveBeenCalledWith(71, 206, true),
-	);
+	await vi.waitFor(() => expect(fake.fresh).toHaveBeenCalledWith(71, 6, true));
 	automatic.close();
 });
 

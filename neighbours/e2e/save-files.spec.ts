@@ -66,7 +66,7 @@ test("actual browser gzip export preserves the complete town across import and d
 	page.on("pageerror", (error) => errors.push(error.message));
 	await startPaused(page);
 	const original = await exportFile(page, info, "complete-original");
-	expect(original.packet.runtime.physical.people).toHaveLength(206);
+	expect(original.packet.runtime.physical.people).toHaveLength(6);
 	expect(original.compressed.byteLength).toBeLessThan(
 		original.json.byteLength / 2,
 	);

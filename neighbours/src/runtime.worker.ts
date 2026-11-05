@@ -16,7 +16,7 @@ interface PythonRuntime {
 	globals: { set(name: string, value: unknown): void };
 }
 const send = (reply: UiReply) => postMessage(reply);
-const port = new RuntimePort();
+const port = new RuntimePort(42, 6);
 const dispatch = (text: string) => port.call(text);
 let py: PythonRuntime;
 const castRequests = new Map<number, string>();
@@ -202,7 +202,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						});
 						break;
 					}
-					port.reset(q.seed, q.population ?? 206);
+					port.reset(q.seed, q.population ?? 6);
 					await py.runPythonAsync("town_engine = TownEngine(call)");
 					send({
 						type: "ready",

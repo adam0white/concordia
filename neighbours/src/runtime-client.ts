@@ -83,7 +83,7 @@ export class RuntimeClient {
 				this.enqueue(async () => {
 					const initial = await this.cast.fresh(
 						initialSeed,
-						206,
+						6,
 						this.explicitLocal,
 					);
 					this.pendingNew = ++this.newSequence;
@@ -168,7 +168,7 @@ export class RuntimeClient {
 			this.enqueue(async () => {
 				const initial = await this.cast.fresh(
 					command.seed,
-					command.population ?? 206,
+					command.population ?? 6,
 					this.explicitLocal,
 				);
 				this.pendingNew = ++this.newSequence;

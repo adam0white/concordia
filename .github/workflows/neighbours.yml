@@ -33,8 +33,8 @@ jobs:
       - run: python -m pip install -r neighbours/native-gm-requirements.txt
       - run: npm run check
         working-directory: neighbours
-      - name: Thirty-day population and restored-continuation stress check
-        run: node scripts/profile-town.ts --days 30 --population 206 --seed 42 --max-deaths 0
+      - name: Complete public six-person day and file replay
+        run: node scripts/check-public-day.ts "$RUNNER_TEMP/neighbours-public-day"
         working-directory: neighbours
       - name: Actual native HF bridge and upstream ActionSpec controls
         run: python -m unittest concordia.environment.engine_test concordia.contrib.neighbours.engine_test concordia.contrib.neighbours.bridge_test concordia.contrib.neighbours.gm_director_test concordia.contrib.neighbours.bench_director_test
@@ -44,15 +44,12 @@ jobs:
       # HF3 numeric/model research is preserved byte-for-byte. Its mutator
       # generators and source-equality gates are historical, not runnable HF4
       # evidence. See docs/neighbours/hf4-port.md for the per-stage mapping.
-      - name: Complete current HF4 206-person first boundary and cold continuation
-        run: node scripts/check-hf4-continuation.ts "$RUNNER_TEMP/neighbours-hf4-continuation"
-        working-directory: neighbours
       - name: Actual current WASM and native parity and restored continuation
-        run: npm run test:parity
+        run: node scripts/check-parity-public.mjs
         working-directory: neighbours
         env:
           PYTHON: python
-          NEIGHBOURS_PARITY_PROOF_DIR: ${{ runner.temp }}/neighbours-hf4-parity
+          NEIGHBOURS_PARITY_PROOF_DIR: ${{ runner.temp }}/neighbours-public-six-parity
       - name: Historical research byte custody without regeneration or current4 relabelling
         run: node scripts/check-evidence.mjs
         working-directory: neighbours
@@ -60,10 +57,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
-          name: neighbours-hf4-native
+          name: neighbours-public-six-native
           path: |
-            ${{ runner.temp }}/neighbours-hf4-continuation/
-            ${{ runner.temp }}/neighbours-hf4-parity/
+            ${{ runner.temp }}/neighbours-public-day/
+            ${{ runner.temp }}/neighbours-public-six-parity/
           retention-days: 7
       - name: Cloudflare build without deployment
         run: npm run build:cloudflare
@@ -117,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require all original verification and browser shards
+      - name: Require current public-game verification and all browser shards
         env:
           QUALITY_RESULT: ${{ needs.quality.result }}
           BROWSER_RESULT: ${{ needs.browser.result }}

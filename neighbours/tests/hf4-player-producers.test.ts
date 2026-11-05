@@ -5,7 +5,7 @@
  * make no broader world-qualification claim. These controls do not replace the
  * 206-person, browser or whole-budget gates. */
 import { readRunHistory } from "@adam0white/human-framework";
-import { expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { required } from "../src/core/invariants.ts";
 import type { Pledge } from "../src/core/player.ts";
 import type { Runtime } from "../src/core/runtime.ts";
@@ -599,36 +599,51 @@ it("records the current urged choice without inventing refusal or a physical sta
 	);
 });
 
-it("keeps a real hour through physical work, native trust and complete cold continuation", () => {
-	const runtime = atHall();
-	const hour = promise(runtime);
-	const cold = restoreRuntime(runtime.export());
-	const produced = runtime.s.produced;
-	for (const town of [runtime, cold]) {
-		town.intervene({ kind: "player-work", pledgeId: hour.id });
-		expect(town.view().player?.job?.pledgeId).toBe(hour.id);
-		const working = town.export();
-		expect(() =>
-			town.intervene({ kind: "player-move", placeId: "market" }),
-		).toThrow();
-		expect(town.export()).toEqual(working);
-		stepUntil(town, () => !town.view().player?.job, 12);
-		expect(pledge(town).status).toBe("kept");
-		expect(town.s.produced).toBeGreaterThanOrEqual(produced + 5);
-		const done = required(
-			town.s.player?.log.find(
-				(event) => event.id === pledge(town).resolvedEvent,
-			),
-			"Missing physical work receipt",
-		);
-		expect(done.kind).toBe("player-work-done");
-		expect(done.text).toMatch(/You delivered 5 meals/);
-		expect(done.causes).toContain(hour.event);
-		reportedPromise(town, pledge(town), true);
-		journalAncestry(town);
+// Separate complete correctness controls retain the original five-second cap.
+// The combined two-path + two-restore case exceeded it on CI; no assertion,
+// actual action, continuation, physical deadline or product budget is removed.
+describe("a kept real hour and complete cold continuation", () => {
+	let runtime: Runtime;
+	let cold: Runtime;
+	let hour: ReturnType<typeof promise>;
+	let produced: number;
+	beforeAll(() => {
+		runtime = atHall();
+		hour = promise(runtime);
+		cold = restoreRuntime(runtime.export());
+		produced = runtime.s.produced;
+	}, 5000);
+	for (const mode of ["original", "cold"] as const) {
+		it(`keeps physical work, native trust and receipt ancestry: ${mode}`, () => {
+			const town = mode === "original" ? runtime : cold;
+
+			town.intervene({ kind: "player-work", pledgeId: hour.id });
+			expect(town.view().player?.job?.pledgeId).toBe(hour.id);
+			const working = town.export();
+			expect(() =>
+				town.intervene({ kind: "player-move", placeId: "market" }),
+			).toThrow();
+			expect(town.export()).toEqual(working);
+			stepUntil(town, () => !town.view().player?.job, 12);
+			expect(pledge(town).status).toBe("kept");
+			expect(town.s.produced).toBeGreaterThanOrEqual(produced + 5);
+			const done = required(
+				town.s.player?.log.find(
+					(event) => event.id === pledge(town).resolvedEvent,
+				),
+				"Missing physical work receipt",
+			);
+			expect(done.kind).toBe("player-work-done");
+			expect(done.text).toMatch(/You delivered 5 meals/);
+			expect(done.causes).toContain(hour.event);
+			reportedPromise(town, pledge(town), true);
+			journalAncestry(town);
+		});
 	}
-	expect(cold.export()).toEqual(runtime.export());
-	expect(restoreRuntime(runtime.export()).export()).toEqual(runtime.export());
+	it("compares the entire original and cold outcomes and a new full restore", () => {
+		expect(cold.export()).toEqual(runtime.export());
+		expect(restoreRuntime(runtime.export()).export()).toEqual(runtime.export());
+	});
 });
 
 it("lapses an unworked real hour with neutral wording and an accepted native broken-promise input", () => {

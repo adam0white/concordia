@@ -312,7 +312,7 @@ test("public saved towns retain complete checkpoints, deterministic continuation
 	const initial = await exported(page);
 	const initialNative = nativePacket(initial);
 	stage("initial complete native equivalence");
-	expect(initial.runtime.physical.people).toHaveLength(206);
+	expect(initial.runtime.physical.people).toHaveLength(6);
 	await page.getByText("Saved towns", { exact: true }).click();
 	await page.getByLabel("Town copy name").fill("Before the work <one>");
 	await page

@@ -7,6 +7,7 @@ import { presentAt } from "./encounters.ts";
 import type { EveningHost } from "./evenings.ts";
 import { isHfSource } from "./hf-version.ts";
 import { minutePercept } from "./hf4-owner.ts";
+import { nativeMilliseconds } from "./hf4-run.ts";
 import type { Affordance, DecisionRecord } from "./host-types.ts";
 import { placeOf } from "./invariants.ts";
 import { placeSpecs, type Resident, type Save } from "./state.ts";
@@ -87,10 +88,11 @@ export function canReceiveInspectionRequest(r: Resident): boolean {
 export function assistanceDecision(
 	r: Resident,
 	record: DecisionRecord,
-): NonNullable<Resident["job"]>["assistanceDecision"] {
+): NonNullable<NonNullable<Resident["job"]>["assistanceDecision"]> {
 	const source =
-		r.decision?.chosen === record.chosenAffordanceId &&
-		r.decision.decidedAt === record.at &&
+		r.decision?.decidedAt !== undefined &&
+		r.decision.chosen === record.chosenAffordanceId &&
+		nativeMilliseconds(r.decision.decidedAt) === record.at &&
 		!record.id.startsWith("host-")
 			? r.decision.source
 			: "Host control";

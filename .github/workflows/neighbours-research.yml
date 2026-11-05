@@ -1,0 +1,47 @@
+name: Neighbours research
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: neighbours-research-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - run: npm install --global pnpm@12.16.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '26.12.0'
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12.13'
+      - run: pnpm install --frozen-lockfile
+        working-directory: neighbours
+      - run: python -m pip install -r neighbours/native-gm-requirements.txt
+      - name: Original thirty-day 206-person stress gate (unqualified)
+        run: node scripts/profile-town.ts --days 30 --population 206 --seed 42 --max-deaths 0
+        working-directory: neighbours
+      - name: Original 206-person first boundary and cold continuation
+        run: node scripts/check-hf4-continuation.ts "$RUNNER_TEMP/neighbours-hf4-continuation"
+        working-directory: neighbours
+      - name: Original 206-person native and WASM parity
+        run: npm run test:parity
+        working-directory: neighbours
+        env:
+          PYTHON: python
+          NEIGHBOURS_PARITY_PROOF_DIR: ${{ runner.temp }}/neighbours-hf4-parity
+      - name: Retain actual research evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: neighbours-research-unqualified-until-results-reviewed
+          path: |
+            ${{ runner.temp }}/neighbours-hf4-continuation/
+            ${{ runner.temp }}/neighbours-hf4-parity/
+          retention-days: 7

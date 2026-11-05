@@ -27,3 +27,18 @@ it("retains every frozen historical test/fixture body without relabelling it as 
 		);
 	}
 });
+
+it("retains the previous public206 workflow and browser bodies byte for byte", () => {
+	const base = new URL("../archive/hf417-public206-source/", import.meta.url);
+	const files = JSON.parse(
+		readFileSync(new URL("manifest.json", base), "utf8"),
+	) as { path: string; capturePath: string; bytes: number; sha256: string }[];
+	expect(files.length).toBeGreaterThan(5);
+	for (const file of files) {
+		const raw = readFileSync(new URL(file.capturePath, base));
+		expect(raw.length, file.path).toBe(file.bytes);
+		expect(createHash("sha256").update(raw).digest("hex"), file.path).toBe(
+			file.sha256,
+		);
+	}
+});
