@@ -96,7 +96,7 @@ it("opens recording only after UI accepts the exact fresh or restored worker vie
 	client.close();
 });
 
-it("keeps explicit local seeds local across new towns and preserves automatic admission by default", async () => {
+it("keeps both explicit and ordinary fresh towns local across startup and restart", async () => {
 	const local = new RuntimeClient(
 		() => {},
 		false,
@@ -122,11 +122,35 @@ it("keeps explicit local seeds local across new towns and preserves automatic ad
 	const automatic = new RuntimeClient(() => {});
 	worker.onmessage?.({ data: { type: "ready", view } });
 	await vi.waitFor(() =>
-		expect(fake.fresh).toHaveBeenCalledWith(42, 206, false),
+		expect(fake.fresh).toHaveBeenCalledWith(42, 206, true),
 	);
 	automatic.send({ type: "new", seed: 71 });
 	await vi.waitFor(() =>
-		expect(fake.fresh).toHaveBeenCalledWith(71, 206, false),
+		expect(fake.fresh).toHaveBeenCalledWith(71, 206, true),
 	);
 	automatic.close();
+});
+
+it("retains the same-reply journal for a captured native checkpoint without requesting a later world", async () => {
+	const client = new RuntimeClient(() => {}, true);
+	const pending = client.capture();
+	await vi.waitFor(() => expect(fake.postMessage).toHaveBeenCalled());
+	const request = fake.postMessage.mock.calls.at(-1)?.[0] as {
+		requestId: number;
+	};
+	const native = { schema: "native", at: 495 };
+	const journal = { schema: "journal", at: 495 };
+	worker.onmessage?.({
+		data: {
+			type: "save",
+			requestId: request.requestId,
+			save: native,
+			recording: journal,
+		} as UiReply,
+	});
+	expect(await pending).toBe(native);
+	expect(client.recordingFor(native)).toBe(journal);
+	expect(client.recordingFor({ ...native })).toBeUndefined();
+	expect(fake.postMessage).toHaveBeenCalledTimes(1);
+	client.close();
 });

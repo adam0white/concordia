@@ -25,6 +25,15 @@ export function plainText(text: string): string {
 		return "You arrived in Mill Bridge after the flood. You are staying in the riverside homes for a limited visit.";
 	return (
 		text
+			// A recorded decision is not a physical start. Preserve the saved sentence.
+			.replaceAll(
+				" acted on your request and chose to ",
+				" considered your request and chose to ",
+			)
+			.replaceAll(
+				" acted on your request, so you are now committed to your promise:",
+				" chose the action you requested, so you are now committed to your promise:",
+			)
 			.replace(
 				/([^.!?]+) (ate with the host at|received the practical lesson at) ([^.!?]+)’s (shared supper|practical class)\./g,
 				(_all, names: string, action: string, host: string, activity: string) =>

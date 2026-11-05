@@ -20,6 +20,8 @@ const STATUS: Record<string, string> = {
 	continued: "The resident continued an activity already in progress.",
 	// The host links these statuses to the chosen job, which may be an alternative.
 	started: "The chosen activity started. It is not recorded as finished.",
+	"counter-started":
+		"The alternative you accepted started. It is not recorded as finished.",
 	completed: "The chosen activity finished.",
 	failed: "The chosen activity failed.",
 	interrupted: "The chosen activity was interrupted.",

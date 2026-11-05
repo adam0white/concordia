@@ -46,7 +46,7 @@ export function journalEntries(s: Save): JournalEntry[] {
 			entry(
 				e,
 				answer
-					? `${e.text} ${answer.text}${verdictNote(s.people.find((r) => r.person.id === request.targetId)?.person.name ?? "This person", request.answer.verdict, request.answer.counterOffer)}`
+					? `${e.text} ${answer.text}${verdictNote(s.people.find((r) => r.id === request.targetId)?.name ?? "This person", request.answer.verdict, request.answer.counterOffer)}`
 					: e.text,
 				answer ? [e.id, answer.id] : [e.id],
 			);
@@ -55,7 +55,7 @@ export function journalEntries(s: Save): JournalEntry[] {
 		const started = p.requests.find((q) => q.startedEvent === e.id);
 		if (started?.decision && e.kind === "started") {
 			const name =
-				s.people.find((r) => r.person.id === started.targetId)?.person.name ??
+				s.people.find((r) => r.id === started.targetId)?.name ??
 				started.targetId;
 			entry(
 				e,

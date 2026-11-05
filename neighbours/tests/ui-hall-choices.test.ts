@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { expect, it } from "vitest";
 import type { TownView } from "../src/contracts";
 import HallChoices from "../src/ui/HallChoices";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 function town(): TownView {
 	const view = createRuntime(42, 8).view();
@@ -11,8 +11,8 @@ function town(): TownView {
 		{
 			id: "weekly-0-class",
 			kind: "class",
-			organiserId: "lea",
-			title: "Lea’s class",
+			organiserId: "ada",
+			title: "Nora’s class",
 			startsAt: 18000,
 			endsAt: 18060,
 			stage: "candidate",
@@ -54,7 +54,7 @@ it("hides future choices until an actual evening opportunity exists", () => {
 it("exposes scarce alternative-slot and notice choices without implying acceptance", () => {
 	const content = html(town());
 	expect(content).toContain("Hall choices");
-	expect(content).toContain("Fund another time for Lea");
+	expect(content).toContain("Fund another time for Nora");
 	expect(content).toContain("Advertise Sam’s invitation");
 	expect(content).toContain("1 town credit");
 	expect(content).toContain("Each person decides whether to attend");

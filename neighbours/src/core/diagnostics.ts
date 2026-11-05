@@ -1,4 +1,5 @@
 import type { TownView } from "../contracts.ts";
+import { nativeMilliseconds } from "./hf4-run.ts";
 import { usesActivitySlot } from "./offers.ts";
 import type { Save } from "./state.ts";
 
@@ -9,8 +10,13 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 	const error = (code: string, message: string) =>
 		out.push({ code, message, severity: "error" });
 	if (
-		s.now !== 480 + s.round * 15 ||
-		s.people.some((r) => r.person.now !== s.now)
+		nativeMilliseconds(s.now) !== s.owner.at ||
+		s.people.some((r) => {
+			const actor = r.owner.actor(r.id);
+			return actor.body.alive
+				? actor.now !== s.owner.at
+				: actor.now > s.owner.at;
+		})
 	)
 		error("CLOCK_DIVERGENCE", "The town and resident clocks disagree.");
 	const reservedFood = s.people.reduce((n, r) => n + (r.job?.food ?? 0), 0);
@@ -47,8 +53,11 @@ export function townDiagnostics(s: Save): Diagnostic[] {
 	if (
 		s.people.some(
 			(r) =>
-				Boolean(r.job) !== Boolean(r.person.activity) ||
-				(r.job && r.job.end <= s.now),
+				(Boolean(r.job) !== Boolean(r.owner.actor(r.id).activity) ||
+					(r.job && r.job.end <= s.now)) &&
+				!s.owner.pending.some(
+					(request) => request.kind === "action" && request.person === r.id,
+				),
 		)
 	)
 		error(

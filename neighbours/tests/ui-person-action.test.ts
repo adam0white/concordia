@@ -6,7 +6,7 @@ import PersonPanel from "../src/ui/PersonPanel";
 import { PlayerAction, SpeakPanel } from "../src/ui/SpeakPanel";
 import TownGoal from "../src/ui/TownGoal";
 import type { useVisitorSession } from "../src/ui/useVisitorSession";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 type Session = ReturnType<typeof useVisitorSession>;
 const session = () => ({ town: createRuntime(42, 8).view() }) as Session;
@@ -120,7 +120,7 @@ it("keeps a held answer and open promise when the listener departs", () => {
 			id: 1,
 			at: 480,
 			targetId: "ada",
-			targetName: "Ada",
+			targetName: "Nora",
 			affordanceId: "repair",
 			label: "Help repair the hall",
 			mode: "ask",
@@ -133,7 +133,7 @@ it("keeps a held answer and open promise when the listener departs", () => {
 		{
 			id: "pledge-1",
 			toId: "ada",
-			toName: "Ada",
+			toName: "Nora",
 			work: "carry-meals",
 			label: "Carry food",
 			placeId: "quay",
@@ -168,7 +168,7 @@ it("keeps promise inputs together with explicit work and a visible evening deadl
 	const player = current.town?.player;
 	if (!player) throw new Error("Missing player");
 	player.present = [
-		{ id: "ada", name: "Ada", known: true, activity: "working" },
+		{ id: "ada", name: "Nora", known: true, activity: "working" },
 	];
 	player.pledgeDeadlines = [1080];
 	current.speechPrediction = {
@@ -189,22 +189,22 @@ it("keeps promise inputs together with explicit work and a visible evening deadl
 	);
 	expect(html).not.toContain("<select");
 	expect(html).not.toContain("speech-alternatives");
-	expect(html).toContain("Ask Ada to</legend>");
+	expect(html).toContain("Ask Nora to</legend>");
 	expect(html).toContain('aria-pressed="false">Rest at home');
 	expect(html).toContain('aria-pressed="true">Offer an hour');
 	expect(html).toContain('aria-pressed="false">Ask');
 	expect(html).toContain('aria-pressed="false">Urge');
 	expect(html).toContain('aria-pressed="true">Day 1 · 18:00');
-	expect(html).toContain("Ask Ada");
+	expect(html).toContain("Ask Nora");
 	expect(html).toContain(
-		"Offer your own work. If Ada agrees now, or later acts on your request, you must do it.",
+		"Offer your own work. If Nora agrees now, or later acts on your request, you must do it.",
 	);
 });
 it("reserves the same promise form while predictions load", () => {
 	const current = session();
 	if (!current.town?.player) throw new Error("Missing player");
 	current.town.player.present = [
-		{ id: "ada", name: "Ada", known: true, activity: "working" },
+		{ id: "ada", name: "Nora", known: true, activity: "working" },
 	];
 	const html = renderToStaticMarkup(
 		createElement(SpeakPanel, {
@@ -216,7 +216,7 @@ it("reserves the same promise form while predictions load", () => {
 	expect(html).toContain('class="conversation-request speech"');
 	expect(html).toContain("Your hour");
 	expect(html).toContain("Done by");
-	expect(html).toContain("Ask Ada");
+	expect(html).toContain("Ask Nora");
 });
 
 it("puts a bound hour before another offer so the player can start helping", () => {
@@ -224,13 +224,13 @@ it("puts a bound hour before another offer so the player can start helping", () 
 	const player = current.town?.player;
 	if (!player) throw Error("Missing player");
 	player.present = [
-		{ id: "ada", name: "Ada", known: true, activity: "working" },
+		{ id: "ada", name: "Nora", known: true, activity: "working" },
 	];
 	player.pledges = [
 		{
 			id: "hour",
 			toId: "ada",
-			toName: "Ada",
+			toName: "Nora",
 			work: "carry-meals",
 			label: "Carry food",
 			placeId: "quay",
@@ -255,7 +255,7 @@ it("connects the pinned submit without duplicating a primary or journal", () => 
 	const current = session();
 	if (!current.town?.player) throw new Error("Missing player");
 	current.town.player.present = [
-		{ id: "ada", name: "Ada", known: true, activity: "working" },
+		{ id: "ada", name: "Nora", known: true, activity: "working" },
 	];
 	const html = renderToStaticMarkup(
 		createElement(SpeakPanel, {
@@ -311,7 +311,7 @@ it("states that an offered hour is not owed before assent or later action", () =
 		{
 			id: "offered-hour",
 			toId: "ada",
-			toName: "Ada",
+			toName: "Nora",
 			work: "carry-meals",
 			label: "Carry food",
 			placeId: "quay",
@@ -394,7 +394,7 @@ it("labels a retained global notice with its actual target and does not turn it 
 	const html = renderToStaticMarkup(
 		createElement(PlayerNotice, { town, personId: "noor" }),
 	);
-	expect(html).toContain("about Ada");
+	expect(html).toContain("about Nora");
 	expect(html).toContain("separate from the selected person");
 	expect(html).not.toContain('open=""');
 	town.events = [];
@@ -402,5 +402,5 @@ it("labels a retained global notice with its actual target and does not turn it 
 		createElement(PlayerNotice, { town, personId: "ada" }),
 	);
 	expect(pruned).toContain("source event is no longer in this view");
-	expect(pruned).not.toContain("about Ada");
+	expect(pruned).not.toContain("about Nora");
 });

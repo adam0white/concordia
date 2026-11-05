@@ -1,11 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { townDiagnostics } from "../src/core/diagnostics.ts";
-import type { Save } from "../src/core/state.ts";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 describe("derived diagnostics", () => {
 	it("catches conservation and clock defects without mutating its input", () => {
-		const s = createRuntime(42, 8).export() as Save;
+		const s = createRuntime(42, 8).s;
 		s.tools = -1;
 		if (s.places[0]) s.places[0].stock = 9;
 		s.now += 15;
@@ -17,7 +16,7 @@ describe("derived diagnostics", () => {
 		expect(JSON.stringify(s)).toBe(before);
 	});
 	it("keeps a valid delayed reopening distinct from an invariant failure", () => {
-		const s = createRuntime(42, 8).export() as Save;
+		const s = createRuntime(42, 8).s;
 		s.hall = 12;
 		const result = townDiagnostics(s);
 		expect(result.some((d) => d.severity === "error")).toBe(false);

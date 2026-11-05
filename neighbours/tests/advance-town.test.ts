@@ -15,13 +15,21 @@ const request = (changes: Partial<AdvanceRequest> = {}): AdvanceRequest => ({
 	...changes,
 });
 function engine(change: (view: TownView, round: number) => void = () => {}) {
-	const port = new RuntimePort(42, 8);
+	const port = new RuntimePort(42, 6);
+	const initial = port.runtime.export();
 	let round = 0;
 	let failAt = 0;
 	const globals = new Map<string, unknown>();
-	const actualView = port.runtime.view.bind(port.runtime);
+	const baseView = port.runtime.view();
+	vi.spyOn(port.runtime, "export").mockImplementation(() => ({
+		fixture: "timestamped-public-advance/4",
+		round,
+		initial,
+	}));
 	vi.spyOn(port.runtime, "view").mockImplementation(() => {
-		const view = actualView();
+		const view = structuredClone(baseView);
+		view.now = round === 0 ? baseView.now : 480 + round * 15;
+		view.day = Math.floor(view.now / 1440) + 1;
 		view.stories = [];
 		change(view, round);
 		return view;
@@ -32,12 +40,10 @@ function engine(change: (view: TownView, round: number) => void = () => {}) {
 			if (code === "json.dumps(town_engine.save())")
 				return JSON.stringify({ world: port.runtime.export(), round });
 			if (code.startsWith("town_engine.advance(")) {
-				port.runtime.step();
 				round++;
 				if (round === failAt) throw Error("broken engine");
 			} else if (code.startsWith("candidate_engine =")) {
 				const packet = JSON.parse(String(globals.get("import_packet")));
-				port.dispatch({ op: "restore", save: packet.world });
 				round = packet.round;
 			}
 			return undefined;
@@ -64,7 +70,7 @@ function story(view: TownView, id: string, actorId?: string) {
 	});
 }
 
-describe("actual town advance", () => {
+describe("public advance controls with timestamped host fixtures; native pump is checked separately", () => {
 	it("does not stop for an old result, another person's result or a pending deadline passing", async () => {
 		const e = engine((view, round) => {
 			const elin = view.people.find((p) => p.id === "elin"),

@@ -1,8 +1,3 @@
-import {
-	type Affordance,
-	type DecisionRecord,
-	perceive,
-} from "@adam0white/human-framework";
 import type { ProposalOrigin, TownEvent } from "../contracts.ts";
 import {
 	hallInspectionOffers,
@@ -11,6 +6,8 @@ import {
 import { presentAt } from "./encounters.ts";
 import type { EveningHost } from "./evenings.ts";
 import { isHfSource } from "./hf-version.ts";
+import { minutePercept } from "./hf4-owner.ts";
+import type { Affordance, DecisionRecord } from "./host-types.ts";
 import { placeOf } from "./invariants.ts";
 import { placeSpecs, type Resident, type Save } from "./state.ts";
 import { validateEvent } from "./validation.ts";
@@ -82,8 +79,8 @@ export function parseProposalOrigin(input: unknown): ProposalOrigin {
 }
 export function canReceiveInspectionRequest(r: Resident): boolean {
 	return (
-		r.person.body.alive &&
-		!r.person.body.asleep &&
+		r.owner.actor(r.id).body.alive &&
+		!r.owner.actor(r.id).body.asleep &&
 		r.job?.offer.mode !== "sleep"
 	);
 }
@@ -145,7 +142,7 @@ function validateMatchingTrace(
 	source: string,
 	terms: { source: string; value: number }[],
 ): void {
-	const trace = r.person.trace.find((t) => t.id === id);
+	const trace = r.owner.actor(r.id).trace.find((t) => t.id === id);
 	if (!isHfSource(source) || !trace) return;
 	const chosen = trace.considered.find(
 		(c) => c.affordanceId === `annex-${action}`,
@@ -175,7 +172,7 @@ export function requestInspection(
 	const origin = parseProposalOrigin(proposalOrigin);
 	const proposal = parseInspectionProposal(input),
 		s = host.s;
-	const resident = s.people.find((r) => r.person.id === actorId);
+	const resident = s.people.find((r) => r.id === actorId);
 	if (
 		s.assistance ||
 		!s.hallSafe ||
@@ -185,30 +182,38 @@ export function requestInspection(
 		throw Error("Inspection assistance is not available");
 	const id = host.event(
 		"intervention",
-		`A visitor asks ${resident.person.name} to inspect the hall annex within ${proposal.windowMinutes} minutes. The request does not explain how to inspect the timber and does not promise help.`,
+		`A visitor asks ${resident.name} to inspect the hall annex within ${proposal.windowMinutes} minutes. The request does not explain how to inspect the timber and does not promise help.`,
 		undefined,
 		"hall",
 	);
 	const event = s.events.find((e) => e.id === id);
 	if (!event) throw Error("Missing request");
-	event.targetId = resident.person.id;
+	event.targetId = resident.id;
 	event.source = "town-bulletin";
-	const attended =
-		resident.person.body.asleep || resident.job?.offer.mode === "sleep"
-			? []
-			: perceive(resident.person, [
-					{
-						at: s.now,
+	const received =
+		resident.owner.actor(resident.id).body.asleep ||
+		resident.job?.offer.mode === "sleep"
+			? false
+			: resident.owner.observe(
+					resident.id,
+					minutePercept(`town:${event.id}:${resident.id}`, s.now, {
 						channel: "told",
 						kind: "inspection-request",
 						actorId: "town-bulletin",
 						placeId: "hall",
+						targetId: resident.id,
 						salience: 0.8,
-						advice: [{ action: "inspect", strength: 0.5 }],
+						advice: [
+							{
+								adviceId: `inspection-request:${event.id}`,
+								action: "inspect",
+								strength: 0.5,
+							},
+						],
 						summary: event.text,
-					},
-				]);
-	if (attended.length)
+					}),
+				);
+	if (received)
 		resident.received = [
 			...(resident.received ?? []),
 			structuredClone(event),
@@ -217,10 +222,10 @@ export function requestInspection(
 		version: 1,
 		origin,
 		proposal,
-		actorId: resident.person.id,
+		actorId: resident.id,
 		expiresAt: s.now + proposal.windowMinutes,
 		request: structuredClone(event),
-		received: attended.length > 0,
+		received,
 		opened: false,
 	};
 }
@@ -244,10 +249,10 @@ export function observeAssistance(s: Save, r: Resident): void {
 		a?.received &&
 		a.visit &&
 		!a.result &&
-		a.actorId === r.person.id &&
+		a.actorId === r.id &&
 		presentAt(r, "hall", s.now)
 	)
-		observeHallInspection(r.person, {
+		observeHallInspection(r, {
 			...cues(a),
 			contextId: `annex-${a.request.id}`,
 			sectionId: "hall-annex",
@@ -261,13 +266,13 @@ export function assistanceOffers(
 	const a = s.assistance;
 	if (
 		!a ||
-		a.actorId !== r.person.id ||
+		a.actorId !== r.id ||
 		(!historical &&
 			(!a.received ||
 				a.result ||
 				s.now >= a.expiresAt ||
 				r.job ||
-				!r.person.body.alive))
+				!r.owner.actor(r.id).body.alive))
 	)
 		return [];
 	const dest = placeOf(s, "hall"),
@@ -318,20 +323,15 @@ export function finishAssistance(host: EveningHost, r: Resident): boolean {
 	const a = host.s.assistance,
 		j = r.job;
 	if (!a || !j || j.offer.targetId !== "hall-annex") return false;
-	if (
-		a.actorId !== r.person.id ||
-		!a.received ||
-		j.end > a.expiresAt ||
-		a.result
-	)
+	if (a.actorId !== r.id || !a.received || j.end > a.expiresAt || a.result)
 		return true;
 	if (j.offer.id === "annex-visit") {
 		a.visit = retain(
 			host,
 			host.event(
 				"annex-observed",
-				`${r.person.name} checked the annex timber. The timber was ${cues(a).moisture}. The supports were ${cues(a).support}. The decision to open it is still pending.`,
-				r.person.id,
+				`${r.name} checked the annex timber. The timber was ${cues(a).moisture}. The supports were ${cues(a).support}. The decision to open it is still pending.`,
+				r.id,
 				"hall",
 				[a.request.id, j.event],
 			),
@@ -353,11 +353,11 @@ export function finishAssistance(host: EveningHost, r: Resident): boolean {
 		host.event(
 			"annex-inspected",
 			a.opened
-				? `${r.person.name} checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.`
+				? `${r.name} checked the annex and found dry timber with sound supports. Four extra places in the hall are now open.`
 				: a.action === "ask-inspector"
-					? `${r.person.name} asked for an experienced annex inspector. The annex stays closed.`
-					: `${r.person.name} ${a.action === "keep-closed" ? "kept" : "could not open"} the annex after checking ${cues(a).moisture} timber and ${cues(a).support} supports. No extra places opened.`,
-			r.person.id,
+					? `${r.name} asked for an experienced annex inspector. The annex stays closed.`
+					: `${r.name} ${a.action === "keep-closed" ? "kept" : "could not open"} the annex after checking ${cues(a).moisture} timber and ${cues(a).support} supports. No extra places opened.`,
+			r.id,
 			"hall",
 			[a.request.id, a.visit.id, j.event],
 		),
@@ -435,10 +435,10 @@ export function validateAssistance(s: Save, ids: Set<string>): void {
 	for (const resident of s.people) {
 		const job = resident.job;
 		if (job?.offer.targetId !== "hall-annex") continue;
-		const startedAt = resident.person.activity?.startedAt;
+		const startedAt = resident.owner.actor(resident.id).activity?.startedAt;
 		const isVisit = job.offer.id === "annex-visit";
 		if (
-			resident.person.id !== a.actorId ||
+			resident.id !== a.actorId ||
 			!a.received ||
 			a.result ||
 			startedAt === undefined ||
@@ -466,7 +466,7 @@ export function validateAssistance(s: Save, ids: Set<string>): void {
 			if (
 				!evidence ||
 				Object.keys(evidence).sort().join() !== "id,methodTerms,source" ||
-				evidence.id !== resident.person.activity?.decisionId
+				evidence.id !== resident.owner.actor(resident.id).activity?.decisionId
 			)
 				throw Error("Missing active annex decision provenance");
 			validateDecisionEvidence(
@@ -485,7 +485,7 @@ export function validateAssistance(s: Save, ids: Set<string>): void {
 	}
 	if (a.result) {
 		validateDecisionEvidence(a.decisionId, a.decisionSource, a.methodTerms);
-		const actor = s.people.find((r) => r.person.id === a.actorId);
+		const actor = s.people.find((r) => r.id === a.actorId);
 		if (actor)
 			validateMatchingTrace(
 				actor,

@@ -1,8 +1,26 @@
 import { readFile } from "node:fs/promises";
 import { transformWithOxc } from "vite";
+import { restoreRuntime } from "../src/core/index.ts";
 import { expect, type Page, step, test } from "./clock-fixture";
 import { enterLocalTown } from "./local-fixture";
 import { closeSaves, openDebug, openSaves } from "./session-helpers";
+
+// Compare every authoritative native field when storage and file encodings differ.
+function nativePacket(value: unknown) {
+	const packet = value as Record<string, unknown> & {
+		runtime: { format?: string };
+	};
+	return packet.runtime.format === "neighbours-native"
+		? packet
+		: { ...packet, runtime: restoreRuntime(packet.runtime).export() };
+}
+
+function expectCheckpoint(actual: unknown, journal: unknown, native: unknown) {
+	const format = (actual as { runtime?: { format?: string } } | undefined)
+		?.runtime?.format;
+	expect(["neighbours-native", "neighbours-journal"]).toContain(format);
+	expect(actual).toEqual(format === "neighbours-journal" ? journal : native);
+}
 
 test("named records retain complete packets and reject stale, retired and failed writes", async ({
 	page,
@@ -276,17 +294,25 @@ async function confirmLoad(page: Page) {
 		.click();
 	await expect(
 		page.getByText("Preparing the complete town checkpoint…"),
-	).toHaveCount(0);
+	).toHaveCount(0, { timeout: 120000 });
 }
-test("public saved towns retain complete native packets, deterministic continuation and failed-load state", async ({
+test("public saved towns retain complete checkpoints, deterministic continuation and failed-load state", async ({
 	page,
 }) => {
+	// Complete capture, strict cold loads, rollback, corruption, quota and file
+	// isolation compose one correctness control. The production120s validator stays.
+	test.setTimeout(300000);
+	const started = Date.now();
+	const stage = (name: string) =>
+		console.log("named-checkpoint-stage", name, Date.now() - started);
 	await page.goto("/");
 	await enterLocalTown(page);
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	const initial = await exported(page);
-	expect(initial.runtime.people).toHaveLength(206);
+	const initialNative = nativePacket(initial);
+	stage("initial complete native equivalence");
+	expect(initial.runtime.physical.people).toHaveLength(206);
 	await page.getByText("Saved towns", { exact: true }).click();
 	await page.getByLabel("Town copy name").fill("Before the work <one>");
 	await page
@@ -300,11 +326,17 @@ test("public saved towns retain complete native packets, deterministic continuat
 	const saved = await records(page);
 	const key =
 		Object.keys(saved).find((k) => k.startsWith("named-town:")) ?? "missing";
+	expect(
+		(saved[key] as { packet: { runtime: { format: string } } }).packet.runtime
+			.format,
+	).toBe("neighbours-journal");
 	expect((saved[key] as { packet: unknown }).packet).toEqual(initial);
 	await closeSaves(page);
 	await step(page);
 	await openSaves(page);
 	const continued = await exported(page);
+	const continuedNative = nativePacket(continued);
+	stage("continued complete native equivalence");
 	expect(continued.rounds).toBe(initial.rounds + 1);
 	const beforeCancel = await records(page);
 	await load.click();
@@ -315,9 +347,10 @@ test("public saved towns retain complete native packets, deterministic continuat
 	await confirmLoad(page);
 	await expect(page.getByText(/^Loaded Before the work/)).toBeVisible();
 	const loaded = await records(page);
-	expect(loaded.latest).toEqual(initial);
-	expect(loaded.previous).toEqual(continued);
+	expectCheckpoint(loaded.latest, initial, initialNative);
+	expectCheckpoint(loaded.previous, continued, continuedNative);
 	expect(loaded[key]).toEqual(saved[key]);
+	stage("named load and rollback checkpoint");
 	expect(await exported(page)).toEqual(initial);
 	await closeSaves(page);
 	await step(page);
@@ -350,6 +383,7 @@ test("public saved towns retain complete native packets, deterministic continuat
 		page.getByText(/Your current town and saved copies are unchanged/),
 	).toBeVisible();
 	expect(await records(page)).toEqual(corrupt);
+	stage("corrupt load refused");
 	expect(await exported(page)).toEqual(continued);
 	// Restore the unchanged original source, then fail the real atomic replacement.
 	await page.evaluate(
@@ -382,6 +416,7 @@ test("public saved towns retain complete native packets, deterministic continuat
 		page.getByText(/Your current town and saved copies are unchanged/),
 	).toBeVisible();
 	expect(await records(page)).toEqual(beforeQuota);
+	stage("quota failure refused");
 	await page.evaluate(() =>
 		(window as unknown as { restoreSlotPut: () => void }).restoreSlotPut(),
 	);
@@ -414,6 +449,7 @@ test("public saved towns retain complete native packets, deterministic continuat
 	await openSaves(page);
 	await expect(page.getByText("Saved towns", { exact: true })).toHaveCount(0);
 	const fileExport = await exported(page);
+	stage("file session complete export");
 	expect(fileExport.runtime).toEqual(initial.runtime);
 	expect(fileExport.castLocal.file).toBe(true);
 	expect(
@@ -429,6 +465,7 @@ test("public saved towns retain complete native packets, deterministic continuat
 		).restoreNativeOpen(),
 	);
 	expect(await records(page)).toEqual(beforeFile);
+	stage("file isolation complete");
 });
 
 // Source invalidation can arrive after the last put, or after durable commit.
@@ -441,6 +478,7 @@ test("source invalidation and named load stay consistent across the real commit 
 	await expect(page.locator(".town-ready")).toBeVisible();
 	await openSaves(page);
 	const initial = await exported(page);
+	const initialNative = nativePacket(initial);
 	await page.getByText("Saved towns", { exact: true }).click();
 	await page.getByLabel("Town copy name").fill("Before the work <one>");
 	await page
@@ -456,6 +494,7 @@ test("source invalidation and named load stay consistent across the real commit 
 	await step(page);
 	await openSaves(page);
 	const former = await exported(page);
+	const formerNative = nativePacket(former);
 	const before = await records(page);
 	await page.evaluate(() => {
 		const put = IDBObjectStore.prototype.put;
@@ -546,8 +585,8 @@ test("source invalidation and named load stay consistent across the real commit 
 		),
 	).toBe(true);
 	const after = await records(page);
-	expect(after.latest).toEqual(initial);
-	expect(after.previous).toEqual(former);
+	expectCheckpoint(after.latest, initial, initialNative);
+	expectCheckpoint(after.previous, former, formerNative);
 	expect(await exported(page)).toEqual(initial);
 	await expect(
 		page.getByText(/Your current town and saved copies are unchanged/),

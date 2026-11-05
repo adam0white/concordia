@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { expect, it } from "vitest";
 import type { TownEvent } from "../src/contracts.ts";
 import type { EveningEvent } from "../src/core/evenings.ts";
-import { createRuntime, type Save } from "../src/core/index.ts";
-import { Runtime } from "../src/core/runtime.ts";
+import { createRuntime } from "../src/core/index.ts";
+import type { Runtime } from "../src/core/runtime.ts";
 import { groupStories } from "../src/ui/observations.ts";
 import {
 	captureEveningReading,
@@ -13,7 +13,7 @@ import {
 // Scope: synthetic UI boundary sensitivity/purity. Actual unchanged native source and
 // Ece/Derya/Nora trajectories use the immutable independently reviewed R1 proof.
 function fixture() {
-	const runtime = new Runtime(createRuntime(42).export() as Save);
+	const runtime = createRuntime(42, 6) as Runtime;
 	runtime.s.now = 1215;
 	const event = (
 		id: number,
@@ -72,7 +72,7 @@ function fixture() {
 		return found;
 	};
 	const packet = () => ({
-		schema: "neighbours/concordia@1",
+		schema: "neighbours/concordia@2",
 		rounds: runtime.s.round,
 		runtime: runtime.export(),
 	});

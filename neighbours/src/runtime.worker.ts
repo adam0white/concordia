@@ -20,6 +20,18 @@ const port = new RuntimePort();
 const dispatch = (text: string) => port.call(text);
 let py: PythonRuntime;
 const castRequests = new Map<number, string>();
+
+// Both public exports run in one FIFO slot without an intervening town command.
+async function checkpointPair() {
+	return JSON.parse(
+		String(
+			await py.runPythonAsync(
+				"json.dumps({'save': town_engine.save(), 'recording': town_engine.save_journal()})",
+			),
+		),
+	) as { save: unknown; recording: unknown };
+}
+
 async function flushCastCaptures() {
 	for (const [requestId, id] of castRequests) {
 		const person = port.boundaries.get(id);
@@ -130,15 +142,8 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 				case "cast-capture": {
 					castRequests.set(q.requestId, q.actorId);
 					port.wanted.add(q.actorId);
-					const r = (
-						port.runtime.export() as import("./core/state.ts").Save
-					).people.find((r) => r.person.id === q.actorId);
-					if (
-						r &&
-						(!r.person.body.alive ||
-							(r.person.nextDecision > 0 && !r.job && !r.person.activity))
-					)
-						port.boundaries.set(q.actorId, r.person);
+					const actor = port.runtime.currentActors()[q.actorId];
+					if (actor && !actor.activity) port.boundaries.set(q.actorId, actor);
 					await flushCastCaptures();
 					break;
 				}
@@ -149,7 +154,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						q,
 						(value) => {
 							const minute = value.now % 1440;
-							const time = `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+							const time = `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;
 							send({
 								type: "progress",
 								message: `Advancing the town: ${value.rounds} of ${value.maxRounds} rounds. Day ${value.day}, ${time}.`,
@@ -209,8 +214,19 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 					send({
 						type: "save",
 						...(q.requestId === undefined ? {} : { requestId: q.requestId }),
+						...(await checkpointPair()),
+					});
+					break;
+				case "save-journal":
+					send({
+						type: "save",
+						...(q.requestId === undefined ? {} : { requestId: q.requestId }),
 						save: JSON.parse(
-							String(await py.runPythonAsync("json.dumps(town_engine.save())")),
+							String(
+								await py.runPythonAsync(
+									"json.dumps(town_engine.save_journal())",
+								),
+							),
 						),
 					});
 					break;
@@ -239,13 +255,7 @@ self.onmessage = (event: MessageEvent<UiCommand>) => {
 						type: "state",
 						view: port.runtime.view(),
 						...(q.intervention.kind.startsWith("player-")
-							? {
-									save: JSON.parse(
-										String(
-											await py.runPythonAsync("json.dumps(town_engine.save())"),
-										),
-									),
-								}
+							? await checkpointPair()
 							: {}),
 					});
 					break;

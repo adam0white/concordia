@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { TownEvent, TownView } from "../contracts";
 import type { EveningEvent } from "../core/evenings.ts";
+import { HF_VERSION } from "../core/hf-version.ts";
 import { datedClock } from "./format";
 import type { StoryGroup } from "./observations";
 import { plainText } from "./plain-english";
@@ -22,7 +23,7 @@ type HostSnapshot = {
 };
 function when(at: number): string {
 	const minute = ((at % 1440) + 1440) % 1440;
-	return `Day ${Math.floor(at / 1440) + 1}, ${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`;
+	return `Day ${Math.floor(at / 1440) + 1}, ${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(Math.floor(minute % 60)).padStart(2, "0")}`;
 }
 /** A native snapshot must match the exact settled public view and retained story. */
 export function projectEveningReading(
@@ -35,10 +36,30 @@ export function projectEveningReading(
 		typeof packet !== "object" ||
 		!("runtime" in packet) ||
 		!("schema" in packet) ||
-		packet.schema !== "neighbours/concordia@1"
+		packet.schema !== "neighbours/concordia@2"
 	)
 		return undefined;
-	const s = packet.runtime as HostSnapshot | undefined;
+	const native = packet.runtime as Record<string, unknown> | undefined;
+	const fields = [
+		"format",
+		"schema",
+		"hf",
+		"physical",
+		"owner",
+		"boundary",
+		"inputs",
+	];
+	if (
+		!native ||
+		typeof native !== "object" ||
+		Object.keys(native).length !== fields.length ||
+		fields.some((field) => !Object.hasOwn(native, field)) ||
+		native.format !== "neighbours-native" ||
+		native.schema !== "neighbours-hf4/1" ||
+		native.hf !== HF_VERSION
+	)
+		return undefined;
+	const s = native.physical as HostSnapshot | undefined;
 	if (
 		!s ||
 		s.now !== town.now ||

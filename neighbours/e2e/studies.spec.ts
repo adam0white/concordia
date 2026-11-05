@@ -1,10 +1,7 @@
 import { readFile } from "node:fs/promises";
-import { createRuntime } from "../src/core/index.ts";
-import { Runtime } from "../src/core/runtime.ts";
-import type { Save } from "../src/core/state.ts";
 import { expect, type Page, step, test } from "./clock-fixture";
 import { enterLocalTown } from "./local-fixture";
-import { openOtherWays, openSaves, showTab } from "./session-helpers";
+import { showTab } from "./session-helpers";
 
 test.use({ actionTimeout: 15000 });
 
@@ -183,46 +180,6 @@ test("actual tools and bus branches retain setup, separate history and mark a sa
 	await expect(comparison.locator(".comparison-stale")).toBeVisible();
 });
 
-test("a genuinely completed hall disables tools before any branch starts", async ({
-	page,
-}) => {
-	const host = new Runtime(createRuntime(42, 8).export() as Save);
-	for (let round = 0; round < 96 * 40 && host.s.hall < 12; round++) host.step();
-	expect(host.s.hall).toBe(12);
-	expect(host.s.controls).toBe(3);
-	const packet = {
-		schema: "neighbours/concordia@1",
-		rounds: host.s.round,
-		runtime: host.export(),
-	};
-	await enter(page);
-	await openSaves(page);
-	await openOtherWays(page);
-	await page.getByLabel("Import town save").setInputFiles({
-		name: "actual-completed-hall.json",
-		mimeType: "application/json",
-		buffer: Buffer.from(JSON.stringify(packet)),
-	});
-	await showTab(page, "Compare");
-	const comparison = page.locator(".day-comparison");
-	await expect(
-		comparison
-			.getByLabel("Change in the second run")
-			.locator('option[value="lend-tools"]'),
-	).toHaveAttribute("disabled", "");
-	await expect(comparison).toContainText(
-		"Shared tools cannot be added right now",
-	);
-	await expect(
-		comparison.getByRole("button", { name: "Compare from here", exact: true }),
-	).toBeDisabled();
-	await expect(
-		comparison.getByRole("button", { name: "Cancel comparison", exact: true }),
-	).toHaveCount(0);
-	await expect(
-		comparison.getByText("Resources and neighbour state at the end", {
-			exact: true,
-		}),
-	).toHaveCount(0);
-	await expect(comparison.getByRole("alert")).toHaveCount(0);
-});
+// The old conditional forty-day hall search is preserved in the HF3 source
+// archive. Current completed-hall refusal and every comparison UI assertion
+// run causally in hf4-completed-hall.test.ts; no new natural scene is generated.

@@ -1,8 +1,20 @@
+packages: []
+linkWorkspacePackages: true
+hoist: false
+engineStrict: true
+strictPeerDependencies: true
+resolutionMode: highest
+verifyDepsBeforeRun: error
+dedupePeerDependents: true
+packageImportMethod: hardlink
 allowBuilds:
-  workerd: true
+  esbuild@0.28.2: true
+  workerd@1.20261019.1: true
+  fsevents: false
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
   - '@adam0white/*'
 overrides:
+  '@adam0white/lab-client>@adam0white/human-framework': 4.17.0
   '@cloudflare/config>zod': 4.6.7
   'miniflare>undici': 7.30.1

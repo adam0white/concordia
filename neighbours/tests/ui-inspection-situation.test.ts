@@ -2,11 +2,10 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, expect, it, vi } from "vitest";
 import { Runtime } from "../src/core/runtime.ts";
-import type { Save } from "../src/core/state.ts";
 import InspectionSituation, {
 	recordedProposal,
 } from "../src/ui/InspectionSituation";
-import { createRuntime } from "./historical-runtime.ts";
+import { createRuntime } from "./current-town.ts";
 
 afterEach(() => vi.unstubAllGlobals());
 const good = {
@@ -62,12 +61,12 @@ it("keeps new situations absent before the hall opens, with no invented receipt"
 	expect(html).not.toContain('open=""');
 });
 it("reports an unheard request without inventing assistance or teaching", () => {
-	const r = new Runtime(createRuntime(42, 8).export() as Save);
+	const r = new Runtime(createRuntime(42, 8).s);
 	r.s.hall = 12;
 	r.s.hallSafe = true;
 	r.intervene({
 		kind: "request-inspection",
-		actorId: "lea",
+		actorId: "ravi",
 		proposal: good.proposal,
 	});
 	const town = r.view();
@@ -80,6 +79,6 @@ it("reports an unheard request without inventing assistance or teaching", () => 
 			onCompare: () => {},
 		}),
 	);
-	expect(html).toContain("Lea did not receive the request");
+	expect(html).toContain("Rafi did not receive the request");
 	expect(html).not.toContain("Four extra hall places are now available");
 });

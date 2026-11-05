@@ -10,6 +10,7 @@ class FakeBridge:
   def __init__(self):
     self.state = {'now': 0, 'round': 0, 'pending': [], 'actions': []}
     self.calls = []
+    self.phase = 0
     self.invalid_choice = False
     self.drop = None
     self.reject = None
@@ -21,20 +22,30 @@ class FakeBridge:
     if op == self.drop:
       return ''
     if op == 'prepare':
-      self.state['now'] += 1
-      self.state['round'] += 1
-      self.state['pending'] = ['ada', 'ben']
-      result = ['ada', 'ben']
+      if self.phase == 0:
+        self.state['round'] += 1
+        requests = [{'id': 'native:start:ada', 'kind': 'action', 'person': 'ada'},
+                    {'id': 'native:start:ben', 'kind': 'action', 'person': 'ben'}]
+      elif self.phase == 1:
+        requests = [{'id': 'native:finish:ada', 'kind': 'action', 'person': 'ada'}]
+      else:
+        requests = []
+        self.state['now'] += 1
+      self.state['pending'] = [r['id'] for r in requests]
+      result = {'at': self.state['now'], 'done': self.phase == 2, 'requests': requests}
+      self.phase = (self.phase + 1) % 3
     elif op == 'observe': result = 'Only your received information.'
     elif op == 'offers': result = [{'id': 'rest', 'label': 'Rest'}]
     elif op == 'choose': result = 'steal' if self.invalid_choice else 'rest'
     elif op == 'apply':
-      self.state['actions'].append([req['actorId'], req['actionId']])
-      self.state['pending'].remove(req['actorId'])
+      self.state['actions'].append([req['requestId'], req['actorId'], req['actionId']])
+      self.state['pending'].remove(req['requestId'])
       result = None
-    elif op in ('save', 'view'): result = copy.deepcopy(self.state)
+    elif op == 'view': result = copy.deepcopy(self.state)
+    elif op == 'save': result = {'schema': 'neighbours-hf4/1', 'physical': copy.deepcopy(self.state), 'boundary': {'complete': True, 'requests': [], 'resolutions': []}}
     elif op == 'restore':
-      self.state = copy.deepcopy(req['save'])
+      self.state = copy.deepcopy(req['save']['physical'])
+      self.phase = 0
       result = None
     elif op == 'intervene' and self.reject: result = {'rejected': self.reject}
     else: result = None
@@ -46,10 +57,29 @@ class TownEngineTest(unittest.TestCase):
     self.bridge = FakeBridge()
     self.engine = TownEngine(self.bridge)
 
+  def test_fork_preserves_ready_orchestration_without_bridge_restore(self):
+    self.engine.advance()
+    before_calls = list(self.bridge.calls)
+    branch = self.engine.fork()
+    self.assertEqual(branch.rounds, self.engine.rounds)
+    self.assertIsNot(branch.game_master, self.engine.game_master)
+    self.assertIs(branch.game_master.request.__self__, branch)
+    self.assertEqual(self.bridge.calls, before_calls)
+    branch.rounds += 1
+    self.assertEqual(self.engine.rounds, 1)
+    self.engine._ready = False
+    with self.assertRaises(RuntimeError):
+      self.engine.fork()
+
   def test_real_engine_validates_and_resolves_each_actor(self):
     self.assertIsInstance(self.engine, Engine)
-    self.assertEqual(self.engine.advance()['actions'], [['ada', 'rest'], ['ben', 'rest']])
+    self.assertEqual(self.engine.advance()['actions'], [['native:start:ada', 'ada', 'rest'], ['native:start:ben', 'ben', 'rest'], ['native:finish:ada', 'ada', 'rest']])
     self.assertEqual(self.bridge.calls[:9], ['prepare', 'observe', 'offers', 'choose', 'apply', 'observe', 'offers', 'choose', 'apply'])
+
+  def test_real_actor_identity_is_distinct_from_each_native_request(self):
+    self.engine.advance()
+    self.assertEqual([a[1] for a in self.bridge.state['actions']], ['ada', 'ben', 'ada'])
+    self.assertEqual(len(set(a[0] for a in self.bridge.state['actions'])), 3)
 
   def test_illegal_choice_never_resolves_and_poisoned_round_needs_restore(self):
     checkpoint = self.engine.save()
@@ -96,7 +126,7 @@ class TownEngineTest(unittest.TestCase):
   def test_restore_rejects_round_mismatch_and_unfinished_round(self):
     for runtime in ({'round': 1, 'pending': []}, {'round': 0, 'pending': ['ada']}, {'pending': []}):
       with self.assertRaises(ValueError):
-        self.engine.restore({'schema': 'neighbours/concordia@1', 'rounds': 0, 'runtime': runtime})
+        self.engine.restore({'schema': 'neighbours/concordia@2', 'rounds': 0, 'runtime': runtime})
     self.assertEqual(self.bridge.calls, [])
 
   def test_invalid_rounds_rejected_before_mutation(self):

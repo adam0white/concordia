@@ -60,32 +60,38 @@ export async function postStep(page: Page) {
 		posts: (window as unknown as { townStepPosts: number }).townStepPosts,
 		now: (window as unknown as { townNow: number }).townNow,
 	}));
-	for (let i = 0; i < 200; i++) {
-		await page.clock.fastForward(100);
-		if (
-			(await page.evaluate(
-				() => (window as unknown as { townStepPosts: number }).townStepPosts,
-			)) > before.posts
-		)
-			break;
-	}
+	// Worker replies and persistence use real time. Keep ticking the real UI
+	// timer until it can submit, rather than spending all ticks while a walk
+	// reply is pending and then polling a clock that has stopped advancing.
 	await base.expect
-		.poll(() =>
-			page.evaluate(
-				() => (window as unknown as { townStepPosts: number }).townStepPosts,
-			),
+		.poll(
+			async () => {
+				await page.clock.fastForward(100);
+				return page.evaluate(
+					() => (window as unknown as { townStepPosts: number }).townStepPosts,
+				);
+			},
+			{ intervals: [1, 5, 10] },
 		)
 		.toBe(before.posts + 1);
 	return before;
 }
-export async function step(page: Page) {
+export function nextRoundAt(now: number): number {
+	// Logical rounds stay on the 08:00 fifteen-minute grid. Actual native
+	// initialization/ingress milliseconds do not move that target.
+	return 480 + 15 * (Math.floor((now - 480) / 15) + 1);
+}
+export async function step(page: Page, responseTimeout?: number) {
 	const before = await postStep(page);
+	const target = nextRoundAt(before.now);
 	await base.expect
-		.poll(() =>
-			page.evaluate(() => (window as unknown as { townNow: number }).townNow),
+		.poll(
+			() =>
+				page.evaluate(() => (window as unknown as { townNow: number }).townNow),
+			{ timeout: responseTimeout },
 		)
-		.toBe(before.now + 15);
-	const minute = (before.now + 15) % 1440;
+		.toBe(target);
+	const minute = target % 1440;
 	await base
 		.expect(page.locator(".town-time strong"))
 		.toHaveText(
@@ -105,8 +111,14 @@ export async function reachSelectedConversation(page: Page, name: string) {
 			return;
 		}
 		const walk = page.getByRole("button", { name: /^Walk to .* to talk/ });
-		if ((await walk.isVisible()) && (await walk.isEnabled()))
+		if ((await walk.isVisible()) && (await walk.isEnabled())) {
 			await walk.click();
+			// The real player reply persists before playback resumes. Do not spend
+			// the paused browser clock while that worker command is still pending.
+			await base
+				.expect(page.getByText(/^You (start|keep) walking automatically$/))
+				.toBeVisible();
+		}
 		await step(page);
 	}
 	throw Error(

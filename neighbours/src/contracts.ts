@@ -1,3 +1,5 @@
+import type { DeepReadonly, HostRequest } from "@adam0white/human-framework";
+import type { NativeActor } from "./core/host-types.ts";
 export type Policy = "hf" | "table" | "random" | "llm";
 export interface TownEvent {
 	id: number;
@@ -385,7 +387,14 @@ export interface Choice {
 	label: string;
 }
 export interface TownRuntime {
-	prepareRound(): string[];
+	/** Exact current public actors; complete checkpoints remain a separate boundary. */
+	currentActors(): Readonly<Record<string, NativeActor>>;
+	prepareBoundary(): {
+		at: number;
+		done: boolean;
+		requests: DeepReadonly<HostRequest>[];
+	};
+	roundComplete(): boolean;
 	getObservation(id: string): string;
 	getChoices(id: string): Choice[];
 	choose(id: string, policy?: Policy): string;
@@ -459,7 +468,7 @@ export type UiCommand =
 	| { type: "intervene"; intervention: Intervention }
 	| { type: "cast-capture"; requestId: number; actorId: string }
 	| { type: "cast-cancel"; requestId: number }
-	| { type: "save"; requestId?: number }
+	| { type: "save" | "save-journal"; requestId?: number }
 	| {
 			type: "restore";
 			save: unknown;
@@ -480,10 +489,12 @@ export type UiReply =
 			advance?: AdvanceResult;
 			/** A player input's checkpoint, taken in the same FIFO slot; the UI stores it before showing the view. */
 			save?: unknown;
+			/** Complete journal taken in the same worker queue slot as save. */
+			recording?: unknown;
 	  }
 	| { type: "progress"; message: string; advance?: AdvanceProgress }
 	| { type: "cast-snapshot"; requestId: number; save: unknown }
-	| { type: "save"; save: unknown; requestId?: number }
+	| { type: "save"; save: unknown; recording?: unknown; requestId?: number }
 	| { type: "inspection"; actorId: string; data: unknown }
 	| {
 			type: "speech-predictions";

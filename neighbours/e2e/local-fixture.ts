@@ -1,4 +1,4 @@
-import { test as base, type Page } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
 
 export * from "@playwright/test";
 /** Local regression fixture: explicitly select the public local controller.
@@ -23,7 +23,7 @@ export const test = base.extend({
 /** Local seeded controls are separate from automatic cast admission. Resume keeps
  * the saved chapter; a fresh run uses the same public local-start action as a visitor.
  */
-export async function enterLocalTown(page: Page) {
+export async function enterLocalTown(page: Page, readyTimeout = 30000) {
 	const other = page.locator(".other-ways-in");
 	if (!(await other.isVisible())) {
 		// Welcome reads IndexedDB asynchronously. Read the same save before choosing
@@ -56,6 +56,9 @@ export async function enterLocalTown(page: Page) {
 		});
 		if (saved) {
 			await resume.click();
+			await expect(page.locator(".town-ready")).toBeVisible({
+				timeout: readyTimeout,
+			});
 			return;
 		}
 		await page.getByRole("button", { name: /^Other ways in/ }).click();
@@ -63,4 +66,7 @@ export async function enterLocalTown(page: Page) {
 	await page
 		.getByRole("button", { name: "Start a fresh local town", exact: true })
 		.click();
+	await expect(page.locator(".town-ready")).toBeVisible({
+		timeout: readyTimeout,
+	});
 }
