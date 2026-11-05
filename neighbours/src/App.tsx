@@ -5,6 +5,8 @@ import { hasHallChoice } from "./hall-choice";
 import ConversationRoute from "./ui/ConversationRoute";
 import { currentGuide } from "./ui/current-promises";
 import ErrorMessage from "./ui/ErrorMessage";
+import FirstSteps from "./ui/FirstSteps";
+import { firstStep, restoredBaseline } from "./ui/first-steps";
 import { clock, placeName } from "./ui/format";
 import HelpPanel from "./ui/HelpPanel";
 import { LabNotice, lab } from "./ui/lab";
@@ -104,12 +106,103 @@ export default function App() {
 	const [hallExpanded, setHallExpanded] = useState(false);
 	const pendingEntry = useRef<Entry | null>(null);
 	const [storyFocus, setStoryFocus] = useState<string>();
+	const [guideEnabled, setGuideEnabled] = useState(() => {
+		try {
+			return localStorage.getItem("neighbours-guide-skipped") !== "1";
+		} catch {
+			return true;
+		}
+	});
+	const [guideKnownIds, setGuideKnownIds] = useState<number[] | null>(null);
+	const guideEpoch = useRef<number | null>(null);
 	const { town, selected, setSelected, observed } = session;
 	const person = town?.people.find((p) => p.id === selected);
 	const place = town?.places.find((p) => p.id === selectedPlace);
 	const conversation = Boolean(
 		person && session.conversationPerson === person.id && sheet === "town",
 	);
+	useEffect(() => {
+		if (
+			town &&
+			(guideKnownIds === null || guideEpoch.current !== session.townEpoch)
+		) {
+			const current = town.player?.requests.map((request) => request.id) ?? [];
+			let baseline: number[] | null = null;
+			if (guideEpoch.current === null) {
+				try {
+					baseline = restoredBaseline(
+						sessionStorage.getItem("neighbours-guide-baseline"),
+						town.seed,
+						town.now,
+						current,
+					);
+				} catch {
+					/* Storage is optional. */
+				}
+			}
+			guideEpoch.current = session.townEpoch;
+			baseline ??= current;
+			setGuideKnownIds(baseline);
+			try {
+				sessionStorage.setItem(
+					"neighbours-guide-baseline",
+					JSON.stringify({ seed: town.seed, at: town.now, ids: baseline }),
+				);
+			} catch {
+				/* Storage is optional. */
+			}
+		}
+	}, [town, guideKnownIds, session.townEpoch]);
+	const skipGuide = () => {
+		setGuideEnabled(false);
+		requestAnimationFrame(() => {
+			if (document.activeElement !== document.body) return;
+			document
+				.querySelector<HTMLElement>(
+					".conversation-request button, .game-actions button, .neighbour-strip [data-person-id]",
+				)
+				?.focus({ preventScroll: true });
+		});
+		try {
+			localStorage.setItem("neighbours-guide-skipped", "1");
+		} catch {
+			/* Storage is optional. */
+		}
+	};
+	const replayGuide = () => {
+		const baseline = town?.player?.requests.map((request) => request.id) ?? [];
+		setGuideKnownIds(baseline);
+		setGuideEnabled(true);
+		try {
+			if (town)
+				sessionStorage.setItem(
+					"neighbours-guide-baseline",
+					JSON.stringify({ seed: town.seed, at: town.now, ids: baseline }),
+				);
+		} catch {
+			/* Storage is optional. */
+		}
+		try {
+			localStorage.removeItem("neighbours-guide-skipped");
+		} catch {
+			/* Storage is optional. */
+		}
+	};
+	const guideStep = firstStep({
+		enabled:
+			guideEnabled &&
+			guideKnownIds !== null &&
+			guideEpoch.current === session.townEpoch &&
+			inTown &&
+			sheet === "town",
+		selected: person?.id ?? "",
+		conversation,
+		requestIds:
+			town?.player?.requests
+				.filter((request) => request.targetId === person?.id)
+				.map((request) => request.id) ?? [],
+		knownIds: guideKnownIds ?? [],
+	});
 	const study = sheet === "compare" || sheet === "studies";
 	const context = sheet === "town" && Boolean(person || place);
 	const stories = town ? groupStories(town, observed) : [];
@@ -256,6 +349,21 @@ export default function App() {
 	const destination = town?.player?.destinations.find(
 		(p) => p.id === (person?.placeId ?? place?.id),
 	);
+	const ownPlace = town?.places.find((p) => p.id === town.player?.placeId);
+	const walkingTo = town?.places.find((p) => p.id === town.player?.job?.toId);
+	const routeHint =
+		person &&
+		(town?.player?.job?.kind === "travel"
+			? `🚶 You are walking${walkingTo ? ` to ${walkingTo.name}` : ""} · ${person.name} may move.`
+			: person.lifeState === "asleep"
+				? `🌙 ${person.name} is asleep · wait or choose someone else.`
+				: here
+					? `👆 Talk to ${person.name} · they may say no.`
+					: person.journey
+						? `📍 ${ownPlace ? `You: ${ownPlace.name}` : "Your location is not shown"} · ${person.name} is travelling.`
+						: destination
+							? `👆 Walk to ${destination.name} to meet ${person.name}.`
+							: `👆 Find ${person.name} on the map.`);
 	const menuOpen = session.menuOpen || titleMenu;
 	const openMenu = () => {
 		setInfo(false);
@@ -276,6 +384,15 @@ export default function App() {
 		!town?.player?.requests.some((r) => r.status === "held");
 	const actions = town && (
 		<footer className="game-actions">
+			{guideStep === "select" && place && (
+				<FirstSteps
+					text="👆 Close this place to choose a neighbour."
+					skip={skipGuide}
+				/>
+			)}
+			{guideStep === "route" && routeHint && (
+				<FirstSteps text={routeHint} skip={skipGuide} />
+			)}
 			{conversation && person ? (
 				<button
 					type="submit"
@@ -676,6 +793,18 @@ export default function App() {
 							aria-label="Your part in Mill Bridge"
 						>
 							<div className="town-guidance lk-strip">
+								{guideStep === "select" && !place && (
+									<FirstSteps
+										text={
+											town.places.some(
+												(place) => place.id === "hall" && place.open,
+											)
+												? "🏠 Hall open · 👆 Choose a neighbour."
+												: "🏚️ Hall closed until repairs and inspection · 👆 Choose a neighbour."
+										}
+										skip={skipGuide}
+									/>
+								)}
 								<button
 									type="button"
 									className="next-step"
@@ -752,6 +881,8 @@ export default function App() {
 												showAction={false}
 												formId="town-conversation"
 												onReadyChange={setConversationReady}
+												guideStep={guideStep}
+												skipGuide={skipGuide}
 											/>
 										</>
 									) : (
@@ -801,6 +932,12 @@ export default function App() {
 											title="Help the town"
 											close={() => setSheet("town")}
 										/>
+										{guideEnabled && guideKnownIds !== null && (
+											<FirstSteps
+												text="👆 Choose a way to help · neighbours still decide."
+												skip={skipGuide}
+											/>
+										)}
 										<button type="button" onClick={() => setSheet("compare")}>
 											Compare possible outcomes
 										</button>
@@ -825,6 +962,12 @@ export default function App() {
 											title="Walk somewhere"
 											close={() => setSheet("town")}
 										/>
+										{guideEnabled && guideKnownIds !== null && (
+											<FirstSteps
+												text="👆 Choose where to walk · travel takes time."
+												skip={skipGuide}
+											/>
+										)}
 										<p>
 											You are at{" "}
 											{
@@ -896,6 +1039,7 @@ export default function App() {
 			</footer>
 			<SessionMenu
 				session={session}
+				onReplayGuide={replayGuide}
 				open={menuOpen}
 				close={() => {
 					session.closeMenu();

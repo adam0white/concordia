@@ -3,6 +3,8 @@ import type { PlayerView, PlayerWorkKind, TownView } from "../contracts";
 import { actionWords, counterWords } from "../core/voicing";
 import ConversationRoute, { PlayerNotice } from "./ConversationRoute";
 import { currentGuide, pledgePresentation } from "./current-promises";
+import FirstSteps from "./FirstSteps";
+import { type FirstStep, requestOutcome } from "./first-steps";
 import { clock, datedClock } from "./format";
 import { InkPortrait } from "./Notebook";
 import { personRead, plainText } from "./plain-english";
@@ -445,6 +447,8 @@ export function SpeakPanel({
 	formId,
 	onReadyChange,
 	recordOnly = false,
+	guideStep,
+	skipGuide,
 }: {
 	session: Session;
 	personId?: string;
@@ -456,6 +460,8 @@ export function SpeakPanel({
 	onReadyChange?: (ready: boolean) => void;
 	/** Preserve recorded exchanges after work or travel ends the conversation. */
 	recordOnly?: boolean;
+	guideStep?: FirstStep;
+	skipGuide?: () => void;
 }) {
 	const town = session.town;
 	const player = town?.player;
@@ -543,8 +549,8 @@ export function SpeakPanel({
 			(p) => p.toId === personId && p.status === "kept" && p.remembered,
 		);
 	const pledges = player.pledges;
-	return (
-		<section className="speak-panel" aria-label="You">
+	const contextBeforeForm = (
+		<>
 			{receipt && <HelpReceipt key={receipt.id} pledge={receipt} />}
 			{!recordOnly && showAction && <h3>You</h3>}
 			{!recordOnly && showAction && (
@@ -594,6 +600,9 @@ export function SpeakPanel({
 			{latest && (
 				<div className="latest-answer" ref={answerPanel}>
 					<h4>Your latest recorded request to {latest.targetName}</h4>
+					{guideStep === "answer" && skipGuide && (
+						<FirstSteps text={requestOutcome(latest.status)} skip={skipGuide} />
+					)}
 					<RequestRecord
 						request={latest}
 						pledges={player.pledges}
@@ -639,6 +648,11 @@ export function SpeakPanel({
 			{!recordOnly && personId && (
 				<ConversationRoute session={session} personId={personId} />
 			)}
+		</>
+	);
+	return (
+		<section className="speak-panel" aria-label="You">
+			{guideStep !== "request" && contextBeforeForm}
 			{recordOnly || !personId ? null : !here ? (
 				<p>
 					{name} is not with you. Only people at the same place, and awake, can
@@ -681,8 +695,38 @@ export function SpeakPanel({
 						}
 					}}
 				>
+					{guideStep === "request" && skipGuide && (
+						<FirstSteps
+							text="👆 Choose how to ask, then a request · They may say no."
+							skip={skipGuide}
+						/>
+					)}
 					<fieldset
-						className="conversation-choices"
+						className="conversation-choices request-mode"
+						disabled={busy || !!player.job}
+					>
+						<legend>How</legend>
+						<div className="conversation-modes">
+							{(
+								[
+									{ id: "promise", label: "Offer an hour" },
+									{ id: "ask", label: "Ask" },
+									{ id: "urge", label: "Urge" },
+								] as const
+							).map((item) => (
+								<button
+									type="button"
+									key={item.id}
+									aria-pressed={mode === item.id}
+									onClick={() => setMode(item.id)}
+								>
+									{item.label}
+								</button>
+							))}
+						</div>
+					</fieldset>
+					<fieldset
+						className="conversation-choices request-options"
 						disabled={busy || !!player.job}
 					>
 						<legend>Ask {name} to</legend>
@@ -705,30 +749,6 @@ export function SpeakPanel({
 										: `Checking ${name}’s available choices…`}
 								</p>
 							)}
-						</div>
-					</fieldset>
-					<fieldset
-						className="conversation-choices"
-						disabled={busy || !!player.job}
-					>
-						<legend>How</legend>
-						<div className="conversation-modes">
-							{(
-								[
-									{ id: "promise", label: "Offer an hour" },
-									{ id: "ask", label: "Ask" },
-									{ id: "urge", label: "Urge" },
-								] as const
-							).map((item) => (
-								<button
-									type="button"
-									key={item.id}
-									aria-pressed={mode === item.id}
-									onClick={() => setMode(item.id)}
-								>
-									{item.label}
-								</button>
-							))}
 						</div>
 					</fieldset>
 					{mode === "promise" && (
@@ -814,6 +834,7 @@ export function SpeakPanel({
 					)}
 				</form>
 			)}
+			{guideStep === "request" && contextBeforeForm}
 			{!recordOnly && personId && here && help && (
 				<details className="resident-help" aria-label={`Help ${name}`}>
 					<summary>Cover an hour for {name} ▸</summary>
