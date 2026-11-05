@@ -3,9 +3,22 @@ import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const FRAMEWORK_VERSION = "4.15.1";
-
 const app = resolve(import.meta.dirname, "..");
+const framework = JSON.parse(
+	await readFile(
+		resolve(app, "node_modules/@adam0white/human-framework/package.json"),
+		"utf8",
+	),
+);
+const manifest = JSON.parse(
+	await readFile(resolve(app, "package.json"), "utf8"),
+);
+if (
+	framework.name !== "@adam0white/human-framework" ||
+	framework.version !== manifest.dependencies["@adam0white/human-framework"]
+)
+	throw Error("Installed HF does not match the exact game pin");
+const FRAMEWORK_VERSION = framework.version;
 const root = resolve(app, "..");
 const output = resolve(app, "public/runtime");
 await mkdir(output, { recursive: true });

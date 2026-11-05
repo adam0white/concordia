@@ -16,14 +16,14 @@
 	},
 	"scripts": {
 		"dev": "vite --host 127.0.0.1",
-		"build": "node scripts/prepare-runtime.mjs && tsc --noEmit && vite build",
+		"build": "node scripts/prepare-runtime.mjs && tsc --noEmit && vite build && node scripts/check-release.mjs dist/release.json",
 		"typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json && tsc --noEmit -p e2e/tsconfig.json",
 		"test": "vitest run tests --maxWorkers=1",
 		"lint": "biome check --error-on-warnings src tests scripts e2e *.ts *.json",
 		"check": "npm run lint && npm run typecheck && npm test && npm run test:node-imports && npm run build",
 		"test:parity": "node scripts/check-parity.mjs",
-		"build:cloudflare": "node scripts/prepare-runtime.mjs && tsc --noEmit && CF_BUILD=1 cf build",
-		"deploy": "cf deploy --prebuilt --mode production",
+		"build:cloudflare": "node scripts/prepare-runtime.mjs && tsc --noEmit && CF_BUILD=1 cf build && node scripts/check-release.mjs .cloudflare/output/v0/workers/default/assets/release.json",
+		"deploy": "node scripts/check-release.mjs .cloudflare/output/v0/workers/default/assets/release.json --clean && cf deploy --prebuilt --mode production",
 		"test:e2e": "playwright test",
 		"test:node-imports": "node scripts/check-node-imports.mjs",
 		"check:lane": "npm run check"
